@@ -1684,9 +1684,9 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <!-- ====== 命令详解 ====== -->
-  <h3 id="cmd-0x00">MoveToHue —— 移动到指定色相(0x00)</h3>
+  <h3 id="cmd-0x00">MoveToHue (0x00)</h3>
   <p>
-    将灯光色相平滑过渡到目标值。Hue 取值 0~254，映射到 0°~360° 色环。<code>Direction</code> 参数控制色环上的过渡方向。
+    Smoothly transitions the light's hue to a target value. Hue ranges from 0~254, mapping to the 0°~360° color wheel. The <code>Direction</code> parameter controls the transition direction on the color wheel.
   </p>
   <div class="table-wrap">
     <table>
@@ -1694,181 +1694,181 @@ export const clusters: Record<string, ClusterContent> = {
         <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
       </thead>
       <tbody>
-        <tr><td>Hue</td><td>uint8</td><td>目标色相值，0~254</td></tr>
-        <tr><td>Direction</td><td>DirectionEnum</td><td>过渡方向：ShortestDistance / LongestDistance / Up / Down</td></tr>
-        <tr><td>TransitionTime</td><td>uint16</td><td>过渡时间，单位 1/10 秒</td></tr>
-        <tr><td>OptionsMask</td><td>bitmap8</td><td>选项掩码</td></tr>
-        <tr><td>OptionsOverride</td><td>bitmap8</td><td>选项覆盖</td></tr>
+        <tr><td>Hue</td><td>uint8</td><td>Target hue value, 0~254</td></tr>
+        <tr><td>Direction</td><td>DirectionEnum</td><td>Transition direction: ShortestDistance / LongestDistance / Up / Down</td></tr>
+        <tr><td>TransitionTime</td><td>uint16</td><td>Transition time in 1/10 seconds</td></tr>
+        <tr><td>OptionsMask</td><td>bitmap8</td><td>Options mask</td></tr>
+        <tr><td>OptionsOverride</td><td>bitmap8</td><td>Options override</td></tr>
       </tbody>
     </table>
   </div>
   <details class="scenario">
     <summary>Usage Scenarios & Parameters</summary>
     <div class="scenario-content">
-      <p>用户在 App 色环上选择一个颜色时调用。先将选中的角度换算为 0~254 的 Hue 值（<code>hue = angle * 254 / 360</code>），Direction 通常用 <code>Shortest (0)</code> 取最短路径。TransitionTime 设 10 表示 1 秒平滑过渡。</p>
+      <p>Called when the user selects a color on the app's color wheel. Convert the selected angle to a Hue value of 0~254 (<code>hue = angle * 254 / 360</code>). Direction is typically <code>Shortest (0)</code> for the shortest path. TransitionTime of 10 means a 1-second smooth transition.</p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x01">MoveHue —— 持续移动色相(0x01)</h3>
-  <p>以恒定速率持续移动色相值，直到收到 StopMoveStep 或色相到达自然边界。</p>
+  <h3 id="cmd-0x01">MoveHue (0x01)</h3>
+  <p>Continuously moves the hue at a constant rate until a StopMoveStep command is received or the hue reaches its natural boundary.</p>
   <div class="table-wrap">
     <table>
       <thead>
         <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
       </thead>
       <tbody>
-        <tr><td>MoveMode</td><td>MoveModeEnum</td><td>移动模式：Stop / Up / Down</td></tr>
-        <tr><td>Rate</td><td>uint8</td><td>每秒变化的色相步数</td></tr>
-        <tr><td>OptionsMask</td><td>bitmap8</td><td>选项掩码</td></tr>
-        <tr><td>OptionsOverride</td><td>bitmap8</td><td>选项覆盖</td></tr>
+        <tr><td>MoveMode</td><td>MoveModeEnum</td><td>Move mode: Stop / Up / Down</td></tr>
+        <tr><td>Rate</td><td>uint8</td><td>Hue steps per second</td></tr>
+        <tr><td>OptionsMask</td><td>bitmap8</td><td>Options mask</td></tr>
+        <tr><td>OptionsOverride</td><td>bitmap8</td><td>Options override</td></tr>
       </tbody>
     </table>
   </div>
   <details class="scenario">
     <summary>Usage Scenarios & Parameters</summary>
     <div class="scenario-content">
-      <p>用户按住色相调节按钮时持续调节。松开按钮后发送 <code>StopMoveStep (0x47)</code> 停止。</p>
+      <p>Continuous adjustment while the user holds down the hue adjustment button. Send <code>StopMoveStep (0x47)</code> to stop when the button is released.</p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x02">StepHue —— 色相步进(0x02)</h3>
-  <p>将色相增加或减少一个指定的步长值。</p>
+  <h3 id="cmd-0x02">StepHue (0x02)</h3>
+  <p>Increases or decreases the hue by a specified step value.</p>
   <div class="table-wrap">
     <table>
       <thead>
         <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
       </thead>
       <tbody>
-        <tr><td>StepMode</td><td>StepModeEnum</td><td>步进方向：Up / Down</td></tr>
-        <tr><td>StepSize</td><td>uint8</td><td>每次步进的色相变化量</td></tr>
+        <tr><td>StepMode</td><td>StepModeEnum</td><td>Step direction: Up / Down</td></tr>
+        <tr><td>StepSize</td><td>uint8</td><td>Hue change per step</td></tr>
         <tr><td>TransitionTime</td><td>uint8</td><td>过渡时间，单位 1/10 秒</td></tr>
-        <tr><td>OptionsMask</td><td>bitmap8</td><td>选项掩码</td></tr>
-        <tr><td>OptionsOverride</td><td>bitmap8</td><td>选项覆盖</td></tr>
+        <tr><td>OptionsMask</td><td>bitmap8</td><td>Options mask</td></tr>
+        <tr><td>OptionsOverride</td><td>bitmap8</td><td>Options override</td></tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x03">MoveToSaturation —— 移动到指定饱和度(0x03)</h3>
-  <p>将灯光饱和度平滑过渡到目标值。Saturation 取值 0~254，0 为无色（白光），254 为最高饱和度。</p>
+  <h3 id="cmd-0x03">MoveToSaturation (0x03)</h3>
+  <p>Smoothly transitions the light's saturation to a target value. Saturation ranges from 0~254, where 0 is colorless (white light) and 254 is maximum saturation.</p>
   <div class="table-wrap">
     <table>
       <thead>
         <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
       </thead>
       <tbody>
-        <tr><td>Saturation</td><td>uint8</td><td>目标饱和度，0~254</td></tr>
+        <tr><td>Saturation</td><td>uint8</td><td>Target saturation, 0~254</td></tr>
         <tr><td>TransitionTime</td><td>uint16</td><td>过渡时间，单位 1/10 秒</td></tr>
-        <tr><td>OptionsMask</td><td>bitmap8</td><td>选项掩码</td></tr>
-        <tr><td>OptionsOverride</td><td>bitmap8</td><td>选项覆盖</td></tr>
+        <tr><td>OptionsMask</td><td>bitmap8</td><td>Options mask</td></tr>
+        <tr><td>OptionsOverride</td><td>bitmap8</td><td>Options override</td></tr>
       </tbody>
     </table>
   </div>
   <details class="scenario">
     <summary>Usage Scenarios & Parameters</summary>
     <div class="scenario-content">
-      <p>用户拖动饱和度滑条时调用。Saturation 值 0~254 对应 UI 上的 0%~100%。通常配合 MoveToHue 一起使用，也可以用 MoveToHueAndSaturation 一次设置两者。</p>
+      <p>Called when the user drags the saturation slider. Saturation values 0~254 correspond to 0%~100% on the UI. Typically used alongside MoveToHue, or use MoveToHueAndSaturation to set both at once.</p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x04">MoveSaturation —— 持续移动饱和度(0x04)</h3>
-  <p>以恒定速率持续移动饱和度值，直到收到 StopMoveStep。参数结构同 MoveHue。</p>
+  <h3 id="cmd-0x04">MoveSaturation (0x04)</h3>
+  <p>Continuously moves the saturation at a constant rate until a StopMoveStep is received. Parameter structure is the same as MoveHue.</p>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x05">StepSaturation —— 饱和度步进(0x05)</h3>
-  <p>将饱和度增加或减少一个指定的步长值。参数结构同 StepHue。</p>
+  <h3 id="cmd-0x05">StepSaturation (0x05)</h3>
+  <p>Increases or decreases saturation by a specified step value. Parameter structure is the same as StepHue.</p>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x06">MoveToHueAndSaturation —— 同时设置色相和饱和度(0x06)</h3>
-  <p>一次命令同时设置色相和饱和度，比分开发送两个命令更高效，过渡更平滑。</p>
+  <h3 id="cmd-0x06">MoveToHueAndSaturation (0x06)</h3>
+  <p>Sets both hue and saturation in a single command, more efficient and smoother than sending two separate commands.</p>
   <div class="table-wrap">
     <table>
       <thead>
         <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
       </thead>
       <tbody>
-        <tr><td>Hue</td><td>uint8</td><td>目标色相值，0~254</td></tr>
-        <tr><td>Saturation</td><td>uint8</td><td>目标饱和度，0~254</td></tr>
+        <tr><td>Hue</td><td>uint8</td><td>Target hue value, 0~254</td></tr>
+        <tr><td>Saturation</td><td>uint8</td><td>Target saturation, 0~254</td></tr>
         <tr><td>TransitionTime</td><td>uint16</td><td>过渡时间，单位 1/10 秒</td></tr>
-        <tr><td>OptionsMask</td><td>bitmap8</td><td>选项掩码</td></tr>
-        <tr><td>OptionsOverride</td><td>bitmap8</td><td>选项覆盖</td></tr>
+        <tr><td>OptionsMask</td><td>bitmap8</td><td>Options mask</td></tr>
+        <tr><td>OptionsOverride</td><td>bitmap8</td><td>Options override</td></tr>
       </tbody>
     </table>
   </div>
   <details class="scenario">
     <summary>Usage Scenarios & Parameters</summary>
     <div class="scenario-content">
-      <p>用户在色盘（Color Wheel）上直接选择一个颜色点时调用，一次命令完成色相 + 饱和度的设置。推荐优先使用此命令而非分别调用 MoveToHue + MoveToSaturation。</p>
+      <p>Called when the user selects a color point directly on the Color Wheel, completing both hue and saturation setting in one command. Recommended over calling MoveToHue + MoveToSaturation separately.</p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x07">MoveToColor —— 移动到指定 XY 色坐标(0x07)</h3>
-  <p>将灯光颜色过渡到指定的 CIE 1931 XY 色坐标。X 和 Y 取值 0~0xFEFF，映射到 0.0~1.0 的色度坐标。</p>
+  <h3 id="cmd-0x07">MoveToColor (0x07)</h3>
+  <p>Transitions the light's color to specified CIE 1931 XY chromaticity coordinates. X and Y range from 0~0xFEFF, mapping to 0.0~1.0 chromaticity values.</p>
   <div class="table-wrap">
     <table>
       <thead>
         <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
       </thead>
       <tbody>
-        <tr><td>ColorX</td><td>uint16</td><td>CIE x 坐标，0~0xFEFF（实际值 = ColorX / 65536）</td></tr>
-        <tr><td>ColorY</td><td>uint16</td><td>CIE y 坐标，0~0xFEFF（实际值 = ColorY / 65536）</td></tr>
+        <tr><td>ColorX</td><td>uint16</td><td>CIE x coordinate, 0~0xFEFF (actual value = ColorX / 65536)</td></tr>
+        <tr><td>ColorY</td><td>uint16</td><td>CIE y coordinate, 0~0xFEFF (actual value = ColorY / 65536)</td></tr>
         <tr><td>TransitionTime</td><td>uint16</td><td>过渡时间，单位 1/10 秒</td></tr>
-        <tr><td>OptionsMask</td><td>bitmap8</td><td>选项掩码</td></tr>
-        <tr><td>OptionsOverride</td><td>bitmap8</td><td>选项覆盖</td></tr>
+        <tr><td>OptionsMask</td><td>bitmap8</td><td>Options mask</td></tr>
+        <tr><td>OptionsOverride</td><td>bitmap8</td><td>Options override</td></tr>
       </tbody>
     </table>
   </div>
   <details class="scenario">
     <summary>Usage Scenarios & Parameters</summary>
     <div class="scenario-content">
-      <p>需要精确控制颜色（如匹配品牌色或灯光设计方案）时使用。XY 色坐标是设备无关的绝对颜色表示，不同厂商的灯在相同 XY 值下理论上会呈现相同颜色。</p>
+      <p>Used when precise color control is needed (e.g. matching brand colors or lighting design schemes). XY chromaticity is a device-independent absolute color representation -- different manufacturers' lights should theoretically produce the same color at the same XY values.</p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x08">MoveColor —— 持续移动 XY 色坐标(0x08)</h3>
-  <p>以恒定速率在 XY 色度平面上持续移动。</p>
+  <h3 id="cmd-0x08">MoveColor (0x08)</h3>
+  <p>Continuously moves at a constant rate on the XY chromaticity plane.</p>
   <div class="table-wrap">
     <table>
       <thead>
         <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
       </thead>
       <tbody>
-        <tr><td>RateX</td><td>int16</td><td>X 坐标每秒变化量（有符号）</td></tr>
-        <tr><td>RateY</td><td>int16</td><td>Y 坐标每秒变化量（有符号）</td></tr>
-        <tr><td>OptionsMask</td><td>bitmap8</td><td>选项掩码</td></tr>
-        <tr><td>OptionsOverride</td><td>bitmap8</td><td>选项覆盖</td></tr>
+        <tr><td>RateX</td><td>int16</td><td>X coordinate change per second (signed)</td></tr>
+        <tr><td>RateY</td><td>int16</td><td>Y coordinate change per second (signed)</td></tr>
+        <tr><td>OptionsMask</td><td>bitmap8</td><td>Options mask</td></tr>
+        <tr><td>OptionsOverride</td><td>bitmap8</td><td>Options override</td></tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x09">StepColor —— XY 色坐标步进(0x09)</h3>
-  <p>将 X 和 Y 坐标各增加/减少一个步长值。</p>
+  <h3 id="cmd-0x09">StepColor (0x09)</h3>
+  <p>Increases/decreases both X and Y coordinates by a step value.</p>
   <div class="table-wrap">
     <table>
       <thead>
         <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
       </thead>
       <tbody>
-        <tr><td>StepX</td><td>int16</td><td>X 坐标步进量（有符号）</td></tr>
-        <tr><td>StepY</td><td>int16</td><td>Y 坐标步进量（有符号）</td></tr>
+        <tr><td>StepX</td><td>int16</td><td>X coordinate step amount (signed)</td></tr>
+        <tr><td>StepY</td><td>int16</td><td>Y coordinate step amount (signed)</td></tr>
         <tr><td>TransitionTime</td><td>uint16</td><td>过渡时间，单位 1/10 秒</td></tr>
-        <tr><td>OptionsMask</td><td>bitmap8</td><td>选项掩码</td></tr>
-        <tr><td>OptionsOverride</td><td>bitmap8</td><td>选项覆盖</td></tr>
+        <tr><td>OptionsMask</td><td>bitmap8</td><td>Options mask</td></tr>
+        <tr><td>OptionsOverride</td><td>bitmap8</td><td>Options override</td></tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x0A">MoveToColorTemperature —— 移动到指定色温(0x0A)</h3>
+  <h3 id="cmd-0x0A">MoveToColorTemperature (0x0A)</h3>
   <p>
-    将灯光色温平滑过渡到目标值。目标值会被裁剪到 <code>[ColorTempPhysicalMinMireds, ColorTempPhysicalMaxMireds]</code> 范围内。
-    这是色温灯最常用的命令。
+    Smoothly transitions the light's color temperature to a target value. The target is clamped to the <code>[ColorTempPhysicalMinMireds, ColorTempPhysicalMaxMireds]</code> range.
+    This is the most commonly used command for color temperature lights.
   </p>
   <div class="table-wrap">
     <table>
@@ -1876,23 +1876,23 @@ export const clusters: Record<string, ClusterContent> = {
         <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
       </thead>
       <tbody>
-        <tr><td>ColorTemperatureMireds</td><td>uint16</td><td>目标色温值（Mireds）</td></tr>
+        <tr><td>ColorTemperatureMireds</td><td>uint16</td><td>Target color temperature (Mireds)</td></tr>
         <tr><td>TransitionTime</td><td>uint16</td><td>过渡时间，单位 1/10 秒</td></tr>
-        <tr><td>OptionsMask</td><td>bitmap8</td><td>选项掩码</td></tr>
-        <tr><td>OptionsOverride</td><td>bitmap8</td><td>选项覆盖</td></tr>
+        <tr><td>OptionsMask</td><td>bitmap8</td><td>Options mask</td></tr>
+        <tr><td>OptionsOverride</td><td>bitmap8</td><td>Options override</td></tr>
       </tbody>
     </table>
   </div>
   <details class="scenario">
     <summary>Usage Scenarios & Parameters</summary>
     <div class="scenario-content">
-      <p>用户拖动色温滑条时调用。UI 通常显示 Kelvin（2700K ~ 6500K），发送命令前需转换：<code>mireds = 1000000 / kelvin</code>。设备会自动将超出物理范围的值裁剪到 Min/Max Mireds。</p>
+      <p>Called when the user drags the color temperature slider. The UI typically displays Kelvin (2700K ~ 6500K); convert before sending: <code>mireds = 1000000 / kelvin</code>. The device automatically clamps values outside the physical range to Min/Max Mireds.</p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x4B">MoveColorTemperature —— 持续移动色温(0x4B)</h3>
-  <p>以恒定速率持续移动色温值，并可指定移动的上下限范围。</p>
+  <h3 id="cmd-0x4B">MoveColorTemperature (0x4B)</h3>
+  <p>Continuously moves the color temperature at a constant rate, with configurable upper and lower bounds.</p>
   <div class="table-wrap">
     <table>
       <thead>
@@ -1900,18 +1900,18 @@ export const clusters: Record<string, ClusterContent> = {
       </thead>
       <tbody>
         <tr><td>MoveMode</td><td>MoveModeEnum</td><td>移动模式：Stop / Up / Down</td></tr>
-        <tr><td>Rate</td><td>uint16</td><td>每秒变化的 Mireds 值</td></tr>
-        <tr><td>ColorTemperatureMinimumMireds</td><td>uint16</td><td>移动下限</td></tr>
-        <tr><td>ColorTemperatureMaximumMireds</td><td>uint16</td><td>移动上限</td></tr>
-        <tr><td>OptionsMask</td><td>bitmap8</td><td>选项掩码</td></tr>
-        <tr><td>OptionsOverride</td><td>bitmap8</td><td>选项覆盖</td></tr>
+        <tr><td>Rate</td><td>uint16</td><td>Mireds change per second</td></tr>
+        <tr><td>ColorTemperatureMinimumMireds</td><td>uint16</td><td>Minimum bound for movement</td></tr>
+        <tr><td>ColorTemperatureMaximumMireds</td><td>uint16</td><td>Maximum bound for movement</td></tr>
+        <tr><td>OptionsMask</td><td>bitmap8</td><td>Options mask</td></tr>
+        <tr><td>OptionsOverride</td><td>bitmap8</td><td>Options override</td></tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x4C">StepColorTemperature —— 色温步进(0x4C)</h3>
-  <p>将色温增加或减少一个指定的步长值，并可指定步进的上下限范围。</p>
+  <h3 id="cmd-0x4C">StepColorTemperature (0x4C)</h3>
+  <p>Increases or decreases the color temperature by a specified step value, with configurable upper and lower bounds.</p>
   <div class="table-wrap">
     <table>
       <thead>
@@ -1919,21 +1919,21 @@ export const clusters: Record<string, ClusterContent> = {
       </thead>
       <tbody>
         <tr><td>StepMode</td><td>StepModeEnum</td><td>步进方向：Up / Down</td></tr>
-        <tr><td>StepSize</td><td>uint16</td><td>每次步进的 Mireds 变化量</td></tr>
+        <tr><td>StepSize</td><td>uint16</td><td>Mireds change per step</td></tr>
         <tr><td>TransitionTime</td><td>uint16</td><td>过渡时间，单位 1/10 秒</td></tr>
-        <tr><td>ColorTemperatureMinimumMireds</td><td>uint16</td><td>步进下限</td></tr>
-        <tr><td>ColorTemperatureMaximumMireds</td><td>uint16</td><td>步进上限</td></tr>
-        <tr><td>OptionsMask</td><td>bitmap8</td><td>选项掩码</td></tr>
-        <tr><td>OptionsOverride</td><td>bitmap8</td><td>选项覆盖</td></tr>
+        <tr><td>ColorTemperatureMinimumMireds</td><td>uint16</td><td>Minimum bound for stepping</td></tr>
+        <tr><td>ColorTemperatureMaximumMireds</td><td>uint16</td><td>Maximum bound for stepping</td></tr>
+        <tr><td>OptionsMask</td><td>bitmap8</td><td>Options mask</td></tr>
+        <tr><td>OptionsOverride</td><td>bitmap8</td><td>Options override</td></tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x40">EnhancedMoveToHue —— 移动到指定 Enhanced Hue(0x40)</h3>
+  <h3 id="cmd-0x40">EnhancedMoveToHue (0x40)</h3>
   <p>
-    与 MoveToHue 类似，但使用 16-bit Enhanced Hue（0~0xFFFF），精度是标准 Hue 的 256 倍。
-    适用于需要精细颜色控制的场景。
+    Similar to MoveToHue, but uses 16-bit Enhanced Hue (0~0xFFFF) with 256 times the precision of standard Hue.
+    Suitable for scenarios requiring fine-grained color control.
   </p>
   <div class="table-wrap">
     <table>
@@ -1941,52 +1941,52 @@ export const clusters: Record<string, ClusterContent> = {
         <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
       </thead>
       <tbody>
-        <tr><td>EnhancedHue</td><td>uint16</td><td>目标 Enhanced Hue 值，0~0xFFFF</td></tr>
-        <tr><td>Direction</td><td>DirectionEnum</td><td>过渡方向</td></tr>
+        <tr><td>EnhancedHue</td><td>uint16</td><td>Target Enhanced Hue value, 0~0xFFFF</td></tr>
+        <tr><td>Direction</td><td>DirectionEnum</td><td>Transition direction</td></tr>
         <tr><td>TransitionTime</td><td>uint16</td><td>过渡时间，单位 1/10 秒</td></tr>
-        <tr><td>OptionsMask</td><td>bitmap8</td><td>选项掩码</td></tr>
-        <tr><td>OptionsOverride</td><td>bitmap8</td><td>选项覆盖</td></tr>
+        <tr><td>OptionsMask</td><td>bitmap8</td><td>Options mask</td></tr>
+        <tr><td>OptionsOverride</td><td>bitmap8</td><td>Options override</td></tr>
       </tbody>
     </table>
   </div>
   <details class="scenario">
     <summary>Usage Scenarios & Parameters</summary>
     <div class="scenario-content">
-      <p>当 8-bit Hue 的 254 级精度不够时使用（例如大型 LED 灯带需要极致平滑过渡）。Enhanced Hue = 标准 Hue * 256，但范围更大（0~65535）。发送前需检查设备是否支持 EHUE feature。</p>
+      <p>Used when 254-step precision of 8-bit Hue is insufficient (e.g. large LED strips requiring ultra-smooth transitions). Enhanced Hue = standard Hue * 256, but with a larger range (0~65535). Check for EHUE feature support before sending.</p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x41">EnhancedMoveHue —— 持续移动 Enhanced Hue(0x41)</h3>
-  <p>以恒定速率持续移动 Enhanced Hue 值。参数结构类似 MoveHue，但 Rate 为 uint16。</p>
+  <h3 id="cmd-0x41">EnhancedMoveHue (0x41)</h3>
+  <p>Continuously moves the Enhanced Hue at a constant rate. Parameter structure is similar to MoveHue, but Rate is uint16.</p>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x42">EnhancedStepHue —— Enhanced Hue 步进(0x42)</h3>
-  <p>将 Enhanced Hue 增加或减少一个指定的步长值。参数结构类似 StepHue，但 StepSize 为 uint16。</p>
+  <h3 id="cmd-0x42">EnhancedStepHue (0x42)</h3>
+  <p>Increases or decreases Enhanced Hue by a specified step value. Parameter structure is similar to StepHue, but StepSize is uint16.</p>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x43">EnhancedMoveToHueAndSaturation —— 同时设置 Enhanced Hue 和 Saturation(0x43)</h3>
-  <p>一次命令同时设置 16-bit Enhanced Hue 和 8-bit Saturation。</p>
+  <h3 id="cmd-0x43">EnhancedMoveToHueAndSaturation (0x43)</h3>
+  <p>Sets 16-bit Enhanced Hue and 8-bit Saturation in a single command.</p>
   <div class="table-wrap">
     <table>
       <thead>
         <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
       </thead>
       <tbody>
-        <tr><td>EnhancedHue</td><td>uint16</td><td>目标 Enhanced Hue 值</td></tr>
+        <tr><td>EnhancedHue</td><td>uint16</td><td>Target Enhanced Hue value</td></tr>
         <tr><td>Saturation</td><td>uint8</td><td>目标饱和度，0~254</td></tr>
         <tr><td>TransitionTime</td><td>uint16</td><td>过渡时间，单位 1/10 秒</td></tr>
-        <tr><td>OptionsMask</td><td>bitmap8</td><td>选项掩码</td></tr>
-        <tr><td>OptionsOverride</td><td>bitmap8</td><td>选项覆盖</td></tr>
+        <tr><td>OptionsMask</td><td>bitmap8</td><td>Options mask</td></tr>
+        <tr><td>OptionsOverride</td><td>bitmap8</td><td>Options override</td></tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x44">ColorLoopSet —— 配置 Color Loop(0x44)</h3>
+  <h3 id="cmd-0x44">ColorLoopSet (0x44)</h3>
   <p>
-    配置并激活/关闭 Color Loop（自动循环变色）。通过 UpdateFlags 位图控制本次命令要更新哪些参数。
-    激活后，灯光会按设定的时间周期在色环上自动循环。
+    Configures and activates/deactivates the Color Loop (automatic color cycling). The UpdateFlags bitmap controls which parameters this command updates.
+    Once activated, the light automatically cycles through the color wheel at the configured time period.
   </p>
   <div class="table-wrap">
     <table>
@@ -1994,28 +1994,28 @@ export const clusters: Record<string, ClusterContent> = {
         <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
       </thead>
       <tbody>
-        <tr><td>UpdateFlags</td><td>UpdateFlagsBitmap</td><td>指定本次更新哪些字段（见下方位图）</td></tr>
-        <tr><td>Action</td><td>ColorLoopActionEnum</td><td>循环动作：关闭 / 从起始色开始 / 从当前色开始</td></tr>
-        <tr><td>Direction</td><td>ColorLoopDirectionEnum</td><td>循环方向：递减 / 递增</td></tr>
-        <tr><td>Time</td><td>uint16</td><td>完成一圈循环的时间（秒）</td></tr>
-        <tr><td>StartHue</td><td>uint16</td><td>循环起始的 Enhanced Hue 值</td></tr>
-        <tr><td>OptionsMask</td><td>bitmap8</td><td>选项掩码</td></tr>
-        <tr><td>OptionsOverride</td><td>bitmap8</td><td>选项覆盖</td></tr>
+        <tr><td>UpdateFlags</td><td>UpdateFlagsBitmap</td><td>Specifies which fields to update (see bitmap below)</td></tr>
+        <tr><td>Action</td><td>ColorLoopActionEnum</td><td>Loop action: Deactivate / Start from start hue / Start from current hue</td></tr>
+        <tr><td>Direction</td><td>ColorLoopDirectionEnum</td><td>Loop direction: Decrement / Increment</td></tr>
+        <tr><td>Time</td><td>uint16</td><td>Time to complete one loop cycle (seconds)</td></tr>
+        <tr><td>StartHue</td><td>uint16</td><td>Starting Enhanced Hue value for the loop</td></tr>
+        <tr><td>OptionsMask</td><td>bitmap8</td><td>Options mask</td></tr>
+        <tr><td>OptionsOverride</td><td>bitmap8</td><td>Options override</td></tr>
       </tbody>
     </table>
   </div>
   <details class="scenario">
     <summary>Usage Scenarios & Parameters</summary>
     <div class="scenario-content">
-      <p>氛围灯、派对模式等需要灯光自动变色的场景。UpdateFlags 设为 <code>0x0F</code>（全部更新），Action 设为 <code>2</code>（从当前色开始循环），Time 设为 <code>30</code>（30 秒一圈），Direction 设为 <code>1</code>（递增方向）。关闭时 Action 设为 <code>0</code>。</p>
+      <p>Ambient lighting, party mode, and other scenarios requiring automatic color changes. Set UpdateFlags to <code>0x0F</code> (update all), Action to <code>2</code> (start cycling from current hue), Time to <code>30</code> (30 seconds per cycle), Direction to <code>1</code> (increment). Set Action to <code>0</code> to deactivate.</p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x47">StopMoveStep —— 停止过渡(0x47)</h3>
+  <h3 id="cmd-0x47">StopMoveStep (0x47)</h3>
   <p>
-    立即停止当前正在进行的 Move 或 Step 颜色过渡。灯光保持在当前颜色状态。
-    适用于所有颜色模型（HS、XY、CT）。
+    Immediately stops any ongoing Move or Step color transition. The light remains at its current color state.
+    Applies to all color models (HS, XY, CT).
   </p>
   <div class="table-wrap">
     <table>
@@ -2023,22 +2023,22 @@ export const clusters: Record<string, ClusterContent> = {
         <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
       </thead>
       <tbody>
-        <tr><td>OptionsMask</td><td>bitmap8</td><td>选项掩码</td></tr>
-        <tr><td>OptionsOverride</td><td>bitmap8</td><td>选项覆盖</td></tr>
+        <tr><td>OptionsMask</td><td>bitmap8</td><td>Options mask</td></tr>
+        <tr><td>OptionsOverride</td><td>bitmap8</td><td>Options override</td></tr>
       </tbody>
     </table>
   </div>
   <details class="scenario">
     <summary>Usage Scenarios & Parameters</summary>
     <div class="scenario-content">
-      <p>用户松开持续调节按钮（如色温滑条的长按箭头）时发送，用于停止 MoveHue / MoveSaturation / MoveColor / MoveColorTemperature 等持续移动类命令。</p>
+      <p>Sent when the user releases a continuous adjustment button (such as long-pressing the color temperature slider arrow). Used to stop continuous move commands like MoveHue / MoveSaturation / MoveColor / MoveColorTemperature.</p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
   <!-- ====== 属性详解 ====== -->
   <h2 id="attributes">Attributes</h2>
-  <p>ColorControl Cluster 共有 52 个属性，按功能分为六组。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+  <p>The ColorControl Cluster has 52 attributes organized into six groups. Click an attribute ID in the summary table below to jump to its detailed description.</p>
 
   <!-- 属性汇总表 -->
   <div class="table-wrap">
@@ -2058,174 +2058,174 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>CurrentHue</td>
           <td>uint8</td>
-          <td><a href="#attr-current">当前颜色状态</a></td>
-          <td>当前色相值（0~254）</td>
+          <td><a href="#attr-current">Current Color State</a></td>
+          <td>Current hue value (0~254)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>CurrentSaturation</td>
           <td>uint8</td>
-          <td><a href="#attr-current">当前颜色状态</a></td>
-          <td>当前饱和度（0~254）</td>
+          <td><a href="#attr-current">Current Color State</a></td>
+          <td>Current saturation (0~254)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
           <td>RemainingTime</td>
           <td>uint16</td>
-          <td><a href="#attr-current">当前颜色状态</a></td>
-          <td>当前过渡的剩余时间（1/10 秒）</td>
+          <td><a href="#attr-current">Current Color State</a></td>
+          <td>Remaining time of current transition (1/10 seconds)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
           <td>CurrentX</td>
           <td>uint16</td>
-          <td><a href="#attr-current">当前颜色状态</a></td>
-          <td>当前 CIE x 坐标</td>
+          <td><a href="#attr-current">Current Color State</a></td>
+          <td>Current CIE x coordinate</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0004">
           <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
           <td>CurrentY</td>
           <td>uint16</td>
-          <td><a href="#attr-current">当前颜色状态</a></td>
-          <td>当前 CIE y 坐标</td>
+          <td><a href="#attr-current">Current Color State</a></td>
+          <td>Current CIE y coordinate</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0007">
           <td><a href="#attr-0x0007"><code>0x0007</code></a></td>
           <td>ColorTemperatureMireds</td>
           <td>uint16</td>
-          <td><a href="#attr-current">当前颜色状态</a></td>
-          <td>当前色温（Mireds）</td>
+          <td><a href="#attr-current">Current Color State</a></td>
+          <td>Current color temperature (Mireds)</td>
         </tr>
         <!-- 颜色模式与选项 -->
         <tr class="clickable-row" data-href="#attr-0x0008">
           <td><a href="#attr-0x0008"><code>0x0008</code></a></td>
           <td>ColorMode</td>
           <td>enum8</td>
-          <td><a href="#attr-mode">颜色模式</a></td>
-          <td>当前颜色模式</td>
+          <td><a href="#attr-mode">Color Mode</a></td>
+          <td>Current color mode</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x000F">
           <td><a href="#attr-0x000F"><code>0x000F</code></a></td>
           <td>Options</td>
           <td>bitmap8</td>
-          <td><a href="#attr-mode">颜色模式</a></td>
-          <td>ExecuteIfOff 选项</td>
+          <td><a href="#attr-mode">Color Mode</a></td>
+          <td>ExecuteIfOff option</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x4001">
           <td><a href="#attr-0x4001"><code>0x4001</code></a></td>
           <td>EnhancedColorMode</td>
           <td>enum8</td>
-          <td><a href="#attr-mode">颜色模式</a></td>
-          <td>增强颜色模式（含 Enhanced Hue）</td>
+          <td><a href="#attr-mode">Color Mode</a></td>
+          <td>Enhanced color mode (includes Enhanced Hue)</td>
         </tr>
         <!-- Enhanced Hue & Color Loop -->
         <tr class="clickable-row" data-href="#attr-0x4000">
           <td><a href="#attr-0x4000"><code>0x4000</code></a></td>
           <td>EnhancedCurrentHue</td>
           <td>uint16</td>
-          <td><a href="#attr-enhanced">Enhanced Hue 与 Color Loop</a></td>
-          <td>当前 Enhanced Hue 值（16-bit）</td>
+          <td><a href="#attr-enhanced">Enhanced Hue &amp; Color Loop</a></td>
+          <td>Current Enhanced Hue value (16-bit)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x4002">
           <td><a href="#attr-0x4002"><code>0x4002</code></a></td>
           <td>ColorLoopActive</td>
           <td>uint8</td>
-          <td><a href="#attr-enhanced">Enhanced Hue 与 Color Loop</a></td>
-          <td>Color Loop 是否激活</td>
+          <td><a href="#attr-enhanced">Enhanced Hue &amp; Color Loop</a></td>
+          <td>Whether Color Loop is active</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x4003">
           <td><a href="#attr-0x4003"><code>0x4003</code></a></td>
           <td>ColorLoopDirection</td>
           <td>uint8</td>
-          <td><a href="#attr-enhanced">Enhanced Hue 与 Color Loop</a></td>
-          <td>Color Loop 循环方向</td>
+          <td><a href="#attr-enhanced">Enhanced Hue &amp; Color Loop</a></td>
+          <td>Color Loop direction</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x4004">
           <td><a href="#attr-0x4004"><code>0x4004</code></a></td>
           <td>ColorLoopTime</td>
           <td>uint16</td>
-          <td><a href="#attr-enhanced">Enhanced Hue 与 Color Loop</a></td>
-          <td>循环一圈的时间（秒）</td>
+          <td><a href="#attr-enhanced">Enhanced Hue &amp; Color Loop</a></td>
+          <td>Time to complete one loop (seconds)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x4005">
           <td><a href="#attr-0x4005"><code>0x4005</code></a></td>
           <td>ColorLoopStartEnhancedHue</td>
           <td>uint16</td>
-          <td><a href="#attr-enhanced">Enhanced Hue 与 Color Loop</a></td>
-          <td>循环起始 Enhanced Hue</td>
+          <td><a href="#attr-enhanced">Enhanced Hue &amp; Color Loop</a></td>
+          <td>Loop start Enhanced Hue</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x4006">
           <td><a href="#attr-0x4006"><code>0x4006</code></a></td>
           <td>ColorLoopStoredEnhancedHue</td>
           <td>uint16</td>
-          <td><a href="#attr-enhanced">Enhanced Hue 与 Color Loop</a></td>
-          <td>循环关闭时恢复的 Enhanced Hue</td>
+          <td><a href="#attr-enhanced">Enhanced Hue &amp; Color Loop</a></td>
+          <td>Enhanced Hue restored when loop deactivates</td>
         </tr>
         <!-- 能力与色温范围 -->
         <tr class="clickable-row" data-href="#attr-0x400A">
           <td><a href="#attr-0x400A"><code>0x400A</code></a></td>
           <td>ColorCapabilities</td>
           <td>bitmap16</td>
-          <td><a href="#attr-capability">能力与色温范围</a></td>
-          <td>设备支持的颜色能力</td>
+          <td><a href="#attr-capability">Capabilities &amp; CT Range</a></td>
+          <td>Color capabilities supported by the device</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x400B">
           <td><a href="#attr-0x400B"><code>0x400B</code></a></td>
           <td>ColorTempPhysicalMinMireds</td>
           <td>uint16</td>
-          <td><a href="#attr-capability">能力与色温范围</a></td>
-          <td>物理最小色温（Mireds）</td>
+          <td><a href="#attr-capability">Capabilities &amp; CT Range</a></td>
+          <td>Physical minimum color temperature (Mireds)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x400C">
           <td><a href="#attr-0x400C"><code>0x400C</code></a></td>
           <td>ColorTempPhysicalMaxMireds</td>
           <td>uint16</td>
-          <td><a href="#attr-capability">能力与色温范围</a></td>
-          <td>物理最大色温（Mireds）</td>
+          <td><a href="#attr-capability">Capabilities &amp; CT Range</a></td>
+          <td>Physical maximum color temperature (Mireds)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x400D">
           <td><a href="#attr-0x400D"><code>0x400D</code></a></td>
           <td>CoupleColorTempToLevelMinMireds</td>
           <td>uint16</td>
-          <td><a href="#attr-capability">能力与色温范围</a></td>
-          <td>色温联动亮度的最小 Mireds</td>
+          <td><a href="#attr-capability">Capabilities &amp; CT Range</a></td>
+          <td>Minimum Mireds for color temp to level coupling</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x4010">
           <td><a href="#attr-0x4010"><code>0x4010</code></a></td>
           <td>StartUpColorTemperatureMireds</td>
           <td>uint16 / null</td>
-          <td><a href="#attr-capability">能力与色温范围</a></td>
-          <td>开机默认色温</td>
+          <td><a href="#attr-capability">Capabilities &amp; CT Range</a></td>
+          <td>Power-on default color temperature</td>
         </tr>
         <!-- 漂移补偿 & 灯具信息 -->
         <tr class="clickable-row" data-href="#attr-0x0005">
           <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
           <td>DriftCompensation</td>
           <td>enum8</td>
-          <td><a href="#attr-info">漂移补偿与灯具信息</a></td>
-          <td>颜色漂移补偿类型</td>
+          <td><a href="#attr-info">Drift Compensation &amp; Fixture Info</a></td>
+          <td>Color drift compensation type</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0006">
           <td><a href="#attr-0x0006"><code>0x0006</code></a></td>
           <td>CompensationText</td>
           <td>string</td>
-          <td><a href="#attr-info">漂移补偿与灯具信息</a></td>
-          <td>补偿机制描述文本</td>
+          <td><a href="#attr-info">Drift Compensation &amp; Fixture Info</a></td>
+          <td>Compensation mechanism description text</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0010">
           <td><a href="#attr-0x0010"><code>0x0010</code></a></td>
           <td>NumberOfPrimaries</td>
           <td>uint8 / null</td>
-          <td><a href="#attr-info">漂移补偿与灯具信息</a></td>
-          <td>灯具原色（Primary）数量</td>
+          <td><a href="#attr-info">Drift Compensation &amp; Fixture Info</a></td>
+          <td>Number of fixture primaries</td>
         </tr>
         <!-- Primary 色坐标（折叠） -->
         <tr class="clickable-row" data-href="#attr-primary">
           <td><a href="#attr-primary"><code>0x0011~0x002A</code></a></td>
           <td>Primary1~6 (X/Y/Intensity)</td>
           <td>uint16 / uint8</td>
-          <td><a href="#attr-primary">原色坐标</a></td>
-          <td>6 组原色的 CIE XY 坐标与强度</td>
+          <td><a href="#attr-primary">Primary Coordinates</a></td>
+          <td>CIE XY coordinates and intensity for 6 primaries</td>
         </tr>
         <!-- 白点 & 色点 -->
         <tr class="clickable-row" data-href="#attr-colorpoint">
@@ -2242,8 +2242,8 @@ export const clusters: Record<string, ClusterContent> = {
   <!-- ====== 属性分组详解 ====== -->
 
   <!-- 当前颜色状态 -->
-  <h3 id="attr-current">当前颜色状态</h3>
-  <p>反映灯光当前的颜色参数，是 App UI 展示和状态同步的核心数据源。</p>
+  <h3 id="attr-current">Current Color State</h3>
+  <p>Reflects the light's current color parameters and serves as the core data source for app UI display and state synchronization.</p>
 
   <div class="table-wrap">
     <table>
@@ -2253,56 +2253,56 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0000">
           <td><code>0x0000</code></td>
-          <td>CurrentHue<br/><span class="attr-cn">当前色相</span></td>
+          <td>CurrentHue<br/><span class="attr-cn">Current Hue</span></td>
           <td>uint8</td>
-          <td>当前色相值，0~254 映射到 0°~360° 色环。需 HS feature</td>
+          <td>Current hue value, 0~254 mapping to the 0°~360° color wheel. Requires HS feature</td>
         </tr>
         <tr id="attr-0x0001">
           <td><code>0x0001</code></td>
-          <td>CurrentSaturation<br/><span class="attr-cn">当前饱和度</span></td>
+          <td>CurrentSaturation<br/><span class="attr-cn">Current Saturation</span></td>
           <td>uint8</td>
-          <td>当前饱和度，0~254。0 = 白光，254 = 最高饱和度。需 HS feature</td>
+          <td>Current saturation, 0~254. 0 = white light, 254 = maximum saturation. Requires HS feature</td>
         </tr>
         <tr id="attr-0x0002">
           <td><code>0x0002</code></td>
-          <td>RemainingTime<br/><span class="attr-cn">剩余过渡时间</span></td>
+          <td>RemainingTime<br/><span class="attr-cn">Remaining Transition Time</span></td>
           <td>uint16</td>
-          <td>当前颜色过渡的剩余时间，单位 1/10 秒。0 表示无过渡进行中</td>
+          <td>Remaining time for the current color transition, in 1/10 seconds. 0 means no transition in progress</td>
         </tr>
         <tr id="attr-0x0003">
           <td><code>0x0003</code></td>
-          <td>CurrentX<br/><span class="attr-cn">当前 X 坐标</span></td>
+          <td>CurrentX<br/><span class="attr-cn">Current X</span></td>
           <td>uint16</td>
-          <td>当前 CIE 1931 x 色坐标，0~0xFEFF。实际值 = CurrentX / 65536。需 XY feature</td>
+          <td>Current CIE 1931 x chromaticity coordinate, 0~0xFEFF. Actual value = CurrentX / 65536. Requires XY feature</td>
         </tr>
         <tr id="attr-0x0004">
           <td><code>0x0004</code></td>
-          <td>CurrentY<br/><span class="attr-cn">当前 Y 坐标</span></td>
+          <td>CurrentY<br/><span class="attr-cn">Current Y</span></td>
           <td>uint16</td>
-          <td>当前 CIE 1931 y 色坐标，0~0xFEFF。实际值 = CurrentY / 65536。需 XY feature</td>
+          <td>Current CIE 1931 y chromaticity coordinate, 0~0xFEFF. Actual value = CurrentY / 65536. Requires XY feature</td>
         </tr>
         <tr id="attr-0x0007">
           <td><code>0x0007</code></td>
-          <td>ColorTemperatureMireds<br/><span class="attr-cn">当前色温</span></td>
+          <td>ColorTemperatureMireds<br/><span class="attr-cn">Current CT</span></td>
           <td>uint16</td>
-          <td>当前色温值，单位 Mireds。范围由物理限制属性决定。需 CT feature</td>
+          <td>Current color temperature in Mireds. Range is determined by the physical limit attributes. Requires CT feature</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">Hue 值映射注意</div>
+    <div class="callout-title">Hue Value Mapping Note</div>
     <p>
-      Matter 的 Hue 取值范围是 <strong>0~254</strong>（不是 0~255 或 0~360）。换算公式：<code>角度 = Hue * 360 / 254</code>，<code>Hue = 角度 * 254 / 360</code>。
-      同理 Saturation 也是 0~254。UI 上通常显示百分比：<code>百分比 = Saturation * 100 / 254</code>。
+      Matter's Hue value range is <strong>0~254</strong> (not 0~255 or 0~360). Conversion formulas: <code>angle = Hue * 360 / 254</code>, <code>Hue = angle * 254 / 360</code>.
+      Similarly, Saturation is also 0~254. The UI typically shows a percentage: <code>percentage = Saturation * 100 / 254</code>.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
   <!-- 颜色模式 -->
-  <h3 id="attr-mode">颜色模式与选项</h3>
-  <p>标识设备当前使用的颜色控制模型以及命令执行选项。</p>
+  <h3 id="attr-mode">Color Mode &amp; Options</h3>
+  <p>Identifies the color control model currently in use and command execution options.</p>
 
   <div class="table-wrap">
     <table>
@@ -2312,21 +2312,21 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0008">
           <td><code>0x0008</code></td>
-          <td>ColorMode<br/><span class="attr-cn">颜色模式</span></td>
+          <td>ColorMode<br/><span class="attr-cn">Color Mode</span></td>
           <td>enum8</td>
-          <td>当前颜色模式，只读。发送不同颜色命令后设备自动切换</td>
+          <td>Current color mode, read-only. The device switches automatically after different color commands are sent</td>
         </tr>
         <tr id="attr-0x000F">
           <td><code>0x000F</code></td>
-          <td>Options<br/><span class="attr-cn">选项</span></td>
+          <td>Options<br/><span class="attr-cn">Options</span></td>
           <td>bitmap8</td>
-          <td>Bit 0 = ExecuteIfOff：灯关着时是否仍然执行颜色命令。可写</td>
+          <td>Bit 0 = ExecuteIfOff: whether color commands are still executed when the light is off. Read/Write</td>
         </tr>
         <tr id="attr-0x4001">
           <td><code>0x4001</code></td>
-          <td>EnhancedColorMode<br/><span class="attr-cn">增强颜色模式</span></td>
+          <td>EnhancedColorMode<br/><span class="attr-cn">Enhanced Color Mode</span></td>
           <td>enum8</td>
-          <td>比 ColorMode 多一个状态：Enhanced Hue and Saturation。只读</td>
+          <td>Has one more state than ColorMode: Enhanced Hue and Saturation. Read-only</td>
         </tr>
       </tbody>
     </table>
@@ -2338,21 +2338,21 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">CurrentHueAndCurrentSaturation</span>
-        <span class="enum-desc">色相/饱和度模式</span>
+        <span class="enum-desc">Hue/Saturation mode</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">CurrentXAndCurrentY</span>
-        <span class="enum-desc">CIE XY 色坐标模式</span>
+        <span class="enum-desc">CIE XY chromaticity mode</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">ColorTemperatureMireds</span>
-        <span class="enum-desc">色温模式</span>
+        <span class="enum-desc">Color Temperature mode</span>
       </div>
     </div>
   </div>
@@ -2384,7 +2384,7 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">EnhancedCurrentHueAndCurrentSaturation</span>
-        <span class="enum-desc">Enhanced Hue + 饱和度模式（16-bit 高精度）</span>
+        <span class="enum-desc">Enhanced Hue + Saturation mode (16-bit high-precision)</span>
       </div>
     </div>
   </div>
@@ -2392,15 +2392,15 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">ColorMode vs EnhancedColorMode</div>
     <p>
-      <code>ColorMode</code> 只有 3 种值（0/1/2），是旧版兼容属性。<code>EnhancedColorMode</code> 多了第 4 种值（3 = Enhanced Hue），是实际判断设备当前颜色模式时应该优先读取的属性。
-      发送 MoveToHue 命令后 ColorMode 变为 0，发送 EnhancedMoveToHue 后 EnhancedColorMode 变为 3。
+      <code>ColorMode</code> only has 3 values (0/1/2) and is a legacy compatibility attribute. <code>EnhancedColorMode</code> adds a 4th value (3 = Enhanced Hue) and is the attribute you should read first to determine the device's current color mode.
+      After sending MoveToHue, ColorMode becomes 0; after sending EnhancedMoveToHue, EnhancedColorMode becomes 3.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
   <!-- Enhanced Hue & Color Loop -->
-  <h3 id="attr-enhanced">Enhanced Hue 与 Color Loop</h3>
-  <p>高精度色相控制和自动循环变色的状态属性。</p>
+  <h3 id="attr-enhanced">Enhanced Hue &amp; Color Loop</h3>
+  <p>State attributes for high-precision hue control and automatic color cycling.</p>
 
   <div class="table-wrap">
     <table>
@@ -2410,39 +2410,39 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x4000">
           <td><code>0x4000</code></td>
-          <td>EnhancedCurrentHue<br/><span class="attr-cn">增强色相</span></td>
+          <td>EnhancedCurrentHue<br/><span class="attr-cn">Enhanced Hue</span></td>
           <td>uint16</td>
-          <td>当前 16-bit Enhanced Hue 值，0~0xFFFF。精度是标准 Hue 的 256 倍</td>
+          <td>Current 16-bit Enhanced Hue value, 0~0xFFFF. 256 times the precision of standard Hue</td>
         </tr>
         <tr id="attr-0x4002">
           <td><code>0x4002</code></td>
-          <td>ColorLoopActive<br/><span class="attr-cn">循环激活</span></td>
+          <td>ColorLoopActive<br/><span class="attr-cn">Loop Active</span></td>
           <td>uint8</td>
-          <td>0 = 未激活，1 = 已激活。需 CL feature</td>
+          <td>0 = inactive, 1 = active. Requires CL feature</td>
         </tr>
         <tr id="attr-0x4003">
           <td><code>0x4003</code></td>
-          <td>ColorLoopDirection<br/><span class="attr-cn">循环方向</span></td>
+          <td>ColorLoopDirection<br/><span class="attr-cn">Loop Direction</span></td>
           <td>uint8</td>
-          <td>0 = Decrement（递减），1 = Increment（递增）</td>
+          <td>0 = Decrement, 1 = Increment</td>
         </tr>
         <tr id="attr-0x4004">
           <td><code>0x4004</code></td>
-          <td>ColorLoopTime<br/><span class="attr-cn">循环时间</span></td>
+          <td>ColorLoopTime<br/><span class="attr-cn">Loop Time</span></td>
           <td>uint16</td>
-          <td>完成一圈色相循环的时间，单位秒</td>
+          <td>Time to complete one hue loop cycle, in seconds</td>
         </tr>
         <tr id="attr-0x4005">
           <td><code>0x4005</code></td>
-          <td>ColorLoopStartEnhancedHue<br/><span class="attr-cn">循环起始色</span></td>
+          <td>ColorLoopStartEnhancedHue<br/><span class="attr-cn">Loop Start Hue</span></td>
           <td>uint16</td>
-          <td>Color Loop 开始时的 Enhanced Hue 值</td>
+          <td>Enhanced Hue value at the start of the Color Loop</td>
         </tr>
         <tr id="attr-0x4006">
           <td><code>0x4006</code></td>
-          <td>ColorLoopStoredEnhancedHue<br/><span class="attr-cn">循环存储色</span></td>
+          <td>ColorLoopStoredEnhancedHue<br/><span class="attr-cn">Stored Loop Hue</span></td>
           <td>uint16</td>
-          <td>Color Loop 关闭时恢复到的 Enhanced Hue 值</td>
+          <td>Enhanced Hue value restored when Color Loop is deactivated</td>
         </tr>
       </tbody>
     </table>

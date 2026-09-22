@@ -892,8 +892,8 @@ export const clusters: Record<string, ClusterContent> = {
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
   <!-- 用户与凭据 0x10-0x1B -->
-  <h3 id="attr-credential">用户与凭据(0x10-0x1B)</h3>
-  <p>描述门锁支持的用户数量、凭据类型容量以及时间表调度能力。</p>
+  <h3 id="attr-credential">Users & Credentials (0x10-0x1B)</h3>
+  <p>Describes the number of users supported by the door lock, credential type capacities, and schedule capabilities.</p>
 
   <div class="table-wrap">
     <table>
@@ -903,117 +903,117 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x10">
           <td><code>0x10</code></td>
-          <td>NumberOfTotalUsersSupported<br/><span class="attr-cn">最大用户总数</span></td>
+          <td>NumberOfTotalUsersSupported<br/><span class="attr-cn">Total Users Supported</span></td>
           <td>uint16</td>
-          <td>设备支持的最大用户总数</td>
+          <td>Maximum total number of users supported by the device</td>
         </tr>
         <tr id="attr-0x11">
           <td><code>0x11</code></td>
-          <td>NumberOfPINUsersSupported<br/><span class="attr-cn">PIN 用户数</span></td>
+          <td>NumberOfPINUsersSupported<br/><span class="attr-cn">PIN Users</span></td>
           <td>uint16</td>
-          <td>支持 PIN 码的最大用户数</td>
+          <td>Maximum number of users with PIN codes</td>
         </tr>
         <tr id="attr-0x12">
           <td><code>0x12</code></td>
-          <td>NumberOfRFIDUsersSupported<br/><span class="attr-cn">RFID 用户数</span></td>
+          <td>NumberOfRFIDUsersSupported<br/><span class="attr-cn">RFID Users</span></td>
           <td>uint16</td>
-          <td>支持 RFID 的最大用户数</td>
+          <td>Maximum number of users with RFID credentials</td>
         </tr>
         <tr id="attr-0x13">
           <td><code>0x13</code></td>
-          <td>NumberOfWeekDaySchedulesSupportedPerUser<br/><span class="attr-cn">工作日时间表数</span></td>
+          <td>NumberOfWeekDaySchedulesSupportedPerUser<br/><span class="attr-cn">Week Day Schedules</span></td>
           <td>uint8</td>
-          <td>每个用户支持的工作日时间表数量（如周一至周五特定时段可开锁）</td>
+          <td>Number of week day schedules per user (e.g., specific time slots on Monday through Friday when unlocking is allowed)</td>
         </tr>
         <tr id="attr-0x14">
           <td><code>0x14</code></td>
-          <td>NumberOfYearDaySchedulesSupportedPerUser<br/><span class="attr-cn">年度时间表数</span></td>
+          <td>NumberOfYearDaySchedulesSupportedPerUser<br/><span class="attr-cn">Year Day Schedules</span></td>
           <td>uint8</td>
-          <td>每个用户支持的年度时间表数量（指定日期范围可开锁）</td>
+          <td>Number of year day schedules per user (specified date ranges when unlocking is allowed)</td>
         </tr>
         <tr id="attr-0x15">
           <td><code>0x15</code></td>
-          <td>NumberOfHolidaySchedulesSupported<br/><span class="attr-cn">假日时间表数</span></td>
+          <td>NumberOfHolidaySchedulesSupported<br/><span class="attr-cn">Holiday Schedules</span></td>
           <td>uint8</td>
-          <td>设备支持的假日时间表总数（全局生效，覆盖常规时间表）</td>
+          <td>Total number of holiday schedules supported by the device (applies globally, overrides regular schedules)</td>
         </tr>
         <tr id="attr-0x16">
           <td><code>0x16</code></td>
-          <td>MaxPINCodeLength<br/><span class="attr-cn">PIN 码最大长度</span></td>
+          <td>MaxPINCodeLength<br/><span class="attr-cn">Max PIN Length</span></td>
           <td>uint8</td>
-          <td>设备支持的 PIN 码最大字符数</td>
+          <td>Maximum number of characters for a PIN code</td>
         </tr>
         <tr id="attr-0x17">
           <td><code>0x17</code></td>
-          <td>MinPINCodeLength<br/><span class="attr-cn">PIN 码最小长度</span></td>
+          <td>MinPINCodeLength<br/><span class="attr-cn">Min PIN Length</span></td>
           <td>uint8</td>
-          <td>设备要求的 PIN 码最小字符数</td>
+          <td>Minimum number of characters required for a PIN code</td>
         </tr>
         <tr id="attr-0x18">
           <td><code>0x18</code></td>
-          <td>MaxRFIDCodeLength<br/><span class="attr-cn">RFID 码最大长度</span></td>
+          <td>MaxRFIDCodeLength<br/><span class="attr-cn">Max RFID Length</span></td>
           <td>uint8</td>
-          <td>设备支持的 RFID 码最大字节数</td>
+          <td>Maximum number of bytes for an RFID code</td>
         </tr>
         <tr id="attr-0x19">
           <td><code>0x19</code></td>
-          <td>MinRFIDCodeLength<br/><span class="attr-cn">RFID 码最小长度</span></td>
+          <td>MinRFIDCodeLength<br/><span class="attr-cn">Min RFID Length</span></td>
           <td>uint8</td>
-          <td>设备要求的 RFID 码最小字节数</td>
+          <td>Minimum number of bytes required for an RFID code</td>
         </tr>
         <tr id="attr-0x1A">
           <td><code>0x1A</code></td>
-          <td>CredentialRulesSupport<br/><span class="attr-cn">凭据规则支持</span></td>
+          <td>CredentialRulesSupport<br/><span class="attr-cn">Credential Rules</span></td>
           <td>bitmap8</td>
-          <td>设备支持的凭据验证规则（见下方位图）</td>
+          <td>Supported credential verification rules (see bitmap below)</td>
         </tr>
         <tr id="attr-0x1B">
           <td><code>0x1B</code></td>
-          <td>NumberOfCredentialsSupportedPerUser<br/><span class="attr-cn">每用户凭据数</span></td>
+          <td>NumberOfCredentialsSupportedPerUser<br/><span class="attr-cn">Credentials Per User</span></td>
           <td>uint8</td>
-          <td>每个用户可绑定的最大凭据数量</td>
+          <td>Maximum number of credentials that can be bound to each user</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <h4>CredentialRulesSupport 位图</h4>
+  <h4>CredentialRulesSupport Bitmap</h4>
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">Bit 0</span>
       <div>
         <span class="enum-name">Single</span>
-        <span class="enum-desc">支持单一凭据即可开锁</span>
+        <span class="enum-desc">Supports single credential to unlock</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 1</span>
       <div>
         <span class="enum-name">Dual</span>
-        <span class="enum-desc">支持双重凭据验证（如 PIN + 指纹）</span>
+        <span class="enum-desc">Supports dual credential verification (e.g., PIN + fingerprint)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 2</span>
       <div>
         <span class="enum-name">Tri</span>
-        <span class="enum-desc">支持三重凭据验证</span>
+        <span class="enum-desc">Supports triple credential verification</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">凭据类型说明</div>
+    <div class="callout-title">Credential Types</div>
     <p>
-      Matter 定义的凭据类型包括：PIN（数字密码）、RFID（卡片）、Fingerprint（指纹）、FingerVein（指静脉）、Face（人脸）。
-      具体支持哪些凭据类型取决于门锁硬件实现。凭据通过 <code>SetCredential</code> 命令管理。
+      Matter-defined credential types include: PIN (numeric passcode), RFID (card), Fingerprint, FingerVein, and Face.
+      Which credential types are actually supported depends on the door lock hardware. Credentials are managed via the <code>SetCredential</code> command.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
   <!-- 操作与显示 0x1C-0x27 -->
-  <h3 id="attr-operating">操作与显示(0x1C-0x27)</h3>
-  <p>控制门锁的操作行为、界面显示和本地编程功能。</p>
+  <h3 id="attr-operating">Operation & Display (0x1C-0x27)</h3>
+  <p>Controls the door lock's operating behavior, display settings, and local programming features.</p>
 
   <div class="table-wrap">
     <table>
@@ -1023,75 +1023,75 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x1C">
           <td><code>0x1C</code></td>
-          <td>Language<br/><span class="attr-cn">界面语言</span></td>
+          <td>Language<br/><span class="attr-cn">Interface Language</span></td>
           <td>string</td>
-          <td>锁界面显示语言，2 字符 ISO 639-1 编码（如 "en"、"zh"）</td>
+          <td>Lock interface display language, 2-character ISO 639-1 code (e.g., "en", "zh")</td>
         </tr>
         <tr id="attr-0x1D">
           <td><code>0x1D</code></td>
-          <td>LEDSettings<br/><span class="attr-cn">LED 设置</span></td>
+          <td>LEDSettings<br/><span class="attr-cn">LED Settings</span></td>
           <td>uint8</td>
-          <td>LED 指示灯在什么操作下点亮（见下方枚举）</td>
+          <td>Which operations cause the LED indicator to light up (see enum below)</td>
         </tr>
         <tr id="attr-0x1E">
           <td><code>0x1E</code></td>
-          <td>AutoRelockTime<br/><span class="attr-cn">自动回锁时间</span></td>
+          <td>AutoRelockTime<br/><span class="attr-cn">Auto Re-lock Time</span></td>
           <td>uint32</td>
-          <td>解锁后自动回锁的等待时间，单位秒。<code>0</code> 表示不自动回锁</td>
+          <td>Wait time before automatic re-locking after unlock, in seconds. <code>0</code> means no automatic re-locking</td>
         </tr>
         <tr id="attr-0x1F">
           <td><code>0x1F</code></td>
-          <td>SoundVolume<br/><span class="attr-cn">操作音量</span></td>
+          <td>SoundVolume<br/><span class="attr-cn">Sound Volume</span></td>
           <td>uint8</td>
-          <td>门锁操作提示音的音量级别（见下方枚举）</td>
+          <td>Volume level of the door lock's operation notification sound (see enum below)</td>
         </tr>
         <tr id="attr-0x20">
           <td><code>0x20</code></td>
-          <td>OperatingMode<br/><span class="attr-cn">操作模式</span></td>
+          <td>OperatingMode<br/><span class="attr-cn">Operating Mode</span></td>
           <td>enum8</td>
-          <td>门锁当前的操作模式（见下方枚举）</td>
+          <td>The door lock's current operating mode (see enum below)</td>
         </tr>
         <tr id="attr-0x21">
           <td><code>0x21</code></td>
-          <td>SupportedOperatingModes<br/><span class="attr-cn">支持的操作模式</span></td>
+          <td>SupportedOperatingModes<br/><span class="attr-cn">Supported Operating Modes</span></td>
           <td>bitmap16</td>
-          <td>设备支持哪些操作模式（位掩码，对应 OperatingMode 枚举值）</td>
+          <td>Which operating modes the device supports (bitmask corresponding to OperatingMode enum values)</td>
         </tr>
         <tr id="attr-0x22">
           <td><code>0x22</code></td>
-          <td>DefaultConfigurationRegister<br/><span class="attr-cn">默认配置寄存器</span></td>
+          <td>DefaultConfigurationRegister<br/><span class="attr-cn">Default Config Register</span></td>
           <td>bitmap16</td>
-          <td>标识哪些配置项已从出厂默认值被修改过</td>
+          <td>Indicates which configuration items have been modified from factory defaults</td>
         </tr>
         <tr id="attr-0x23">
           <td><code>0x23</code></td>
-          <td>EnableLocalProgramming<br/><span class="attr-cn">本地编程</span></td>
+          <td>EnableLocalProgramming<br/><span class="attr-cn">Local Programming</span></td>
           <td>bool</td>
-          <td>是否允许通过门锁面板本地添加/修改用户和凭据</td>
+          <td>Whether local adding/modifying of users and credentials via the lock panel is allowed</td>
         </tr>
         <tr id="attr-0x24">
           <td><code>0x24</code></td>
-          <td>EnableOneTouchLocking<br/><span class="attr-cn">一键上锁</span></td>
+          <td>EnableOneTouchLocking<br/><span class="attr-cn">One-Touch Locking</span></td>
           <td>bool</td>
-          <td>是否启用一键上锁功能（触摸面板即可锁门）</td>
+          <td>Whether one-touch locking is enabled (touch the panel to lock the door)</td>
         </tr>
         <tr id="attr-0x25">
           <td><code>0x25</code></td>
-          <td>EnableInsideStatusLED<br/><span class="attr-cn">内侧状态 LED</span></td>
+          <td>EnableInsideStatusLED<br/><span class="attr-cn">Inside Status LED</span></td>
           <td>bool</td>
-          <td>是否启用门锁内侧的状态指示 LED</td>
+          <td>Whether the status indicator LED on the inside of the door lock is enabled</td>
         </tr>
         <tr id="attr-0x26">
           <td><code>0x26</code></td>
-          <td>EnablePrivacyModeButton<br/><span class="attr-cn">隐私模式按钮</span></td>
+          <td>EnablePrivacyModeButton<br/><span class="attr-cn">Privacy Mode Button</span></td>
           <td>bool</td>
-          <td>是否启用物理隐私模式按钮（按下后拒绝远程操作）</td>
+          <td>Whether the physical privacy mode button is enabled (when pressed, remote operations are rejected)</td>
         </tr>
         <tr id="attr-0x27">
           <td><code>0x27</code></td>
-          <td>LocalProgrammingFeatures<br/><span class="attr-cn">本地编程功能</span></td>
+          <td>LocalProgrammingFeatures<br/><span class="attr-cn">Local Programming Features</span></td>
           <td>bitmap8</td>
-          <td>允许通过本地编程执行的具体功能（添加用户、修改时间表等）</td>
+          <td>Specific features allowed via local programming (adding users, modifying schedules, etc.)</td>
         </tr>
       </tbody>
     </table>
@@ -1103,28 +1103,28 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">Never</span>
-        <span class="enum-desc">LED 从不亮起</span>
+        <span class="enum-desc">LED never lights up</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">AccessLockUnlock</span>
-        <span class="enum-desc">仅在开锁/上锁操作时亮起</span>
+        <span class="enum-desc">Lights up only during lock/unlock operations</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">NotAccessLockUnlock</span>
-        <span class="enum-desc">仅在非开关锁操作时亮起</span>
+        <span class="enum-desc">Lights up only during non-lock/unlock operations</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">All</span>
-        <span class="enum-desc">所有操作都亮起</span>
+        <span class="enum-desc">Lights up for all operations</span>
       </div>
     </div>
   </div>
@@ -1135,21 +1135,21 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">Silent</span>
-        <span class="enum-desc">静音</span>
+        <span class="enum-desc">Silent</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">Low</span>
-        <span class="enum-desc">低音量</span>
+        <span class="enum-desc">Low volume</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">High</span>
-        <span class="enum-desc">高音量</span>
+        <span class="enum-desc">High volume</span>
       </div>
     </div>
   </div>
@@ -1160,43 +1160,43 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">Normal</span>
-        <span class="enum-desc">正常模式，所有用户可正常使用</span>
+        <span class="enum-desc">Normal mode, all users can operate normally</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">Vacation</span>
-        <span class="enum-desc">度假模式，限制远程操作</span>
+        <span class="enum-desc">Vacation mode, remote operations restricted</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">Privacy</span>
-        <span class="enum-desc">隐私模式，只允许本地操作</span>
+        <span class="enum-desc">Privacy mode, only local operations allowed</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">NoRemoteLockUnlock</span>
-        <span class="enum-desc">禁止远程开关锁</span>
+        <span class="enum-desc">Remote lock/unlock disabled</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">4</span>
       <div>
         <span class="enum-name">Passage</span>
-        <span class="enum-desc">通行模式，门保持解锁状态</span>
+        <span class="enum-desc">Passage mode, door remains unlocked</span>
       </div>
     </div>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
   <!-- 远程操作 0x30-0x33 -->
-  <h3 id="attr-remote">远程操作(0x30-0x33)</h3>
-  <p>与远程（网络/无线）操作安全策略相关的属性。</p>
+  <h3 id="attr-remote">Remote Operation (0x30-0x33)</h3>
+  <p>Attributes related to remote (network/wireless) operation security policies.</p>
 
   <div class="table-wrap">
     <table>
@@ -1206,27 +1206,27 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x30">
           <td><code>0x30</code></td>
-          <td>WrongCodeEntryLimit<br/><span class="attr-cn">错误码次数限制</span></td>
+          <td>WrongCodeEntryLimit<br/><span class="attr-cn">Wrong Code Limit</span></td>
           <td>uint8</td>
-          <td>连续输入错误码的最大允许次数，超过后触发临时锁定</td>
+          <td>Maximum number of consecutive incorrect code entries before triggering a temporary lockout</td>
         </tr>
         <tr id="attr-0x31">
           <td><code>0x31</code></td>
-          <td>UserCodeTemporaryDisableTime<br/><span class="attr-cn">错误码锁定时间</span></td>
+          <td>UserCodeTemporaryDisableTime<br/><span class="attr-cn">Lockout Duration</span></td>
           <td>uint8</td>
-          <td>触发临时锁定后的禁用时间，单位秒</td>
+          <td>Disable time after temporary lockout is triggered, in seconds</td>
         </tr>
         <tr id="attr-0x32">
           <td><code>0x32</code></td>
-          <td>SendPINOverTheAir<br/><span class="attr-cn">无线传输 PIN</span></td>
+          <td>SendPINOverTheAir<br/><span class="attr-cn">Send PIN Over Air</span></td>
           <td>bool</td>
-          <td>是否允许通过无线网络发送 PIN 码（安全相关，通常建议关闭）</td>
+          <td>Whether sending PIN codes over wireless networks is allowed (security-related, generally recommended to disable)</td>
         </tr>
         <tr id="attr-0x33">
           <td><code>0x33</code></td>
-          <td>RequirePINforRemoteOperation<br/><span class="attr-cn">远程操作需 PIN</span></td>
+          <td>RequirePINforRemoteOperation<br/><span class="attr-cn">Require PIN for Remote</span></td>
           <td>bool</td>
-          <td>远程（App/网络）操作是否必须附带 PIN 码。为 <code>true</code> 时，LockDoor/UnlockDoor 必须在命令中携带有效 PIN</td>
+          <td>Whether remote (app/network) operations must include a PIN code. When <code>true</code>, LockDoor/UnlockDoor commands must carry a valid PIN</td>
         </tr>
       </tbody>
     </table>
@@ -1235,17 +1235,17 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-warning">
     <div class="callout-title">Security Note</div>
     <p>
-      <code>WrongCodeEntryLimit</code> 和 <code>UserCodeTemporaryDisableTime</code> 构成门锁的防暴力破解机制。
-      典型配置为 5 次错误后锁定 60 秒。App 端应在用户达到限制前给出提示，避免误触发锁定。
+      <code>WrongCodeEntryLimit</code> and <code>UserCodeTemporaryDisableTime</code> together form the door lock's brute-force protection mechanism.
+      A typical configuration is lockout for 60 seconds after 5 wrong entries. The app should warn the user before reaching the limit to avoid accidentally triggering a lockout.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
   <!-- Aliro NFC 门禁 0x80-0x88 -->
-  <h3 id="attr-aliro">Aliro NFC 门禁(0x80-0x88)</h3>
+  <h3 id="attr-aliro">Aliro NFC Access (0x80-0x88)</h3>
   <p>
-    Aliro 是 Matter 为门锁新增的 NFC 无感开锁标准。支持手机靠近门锁自动解锁，类似 Apple 数字车钥匙的体验。
-    通过 <code>SetAliroReaderConfig</code> / <code>ClearAliroReaderConfig</code> 命令管理。
+    Aliro is a new NFC tap-to-unlock standard introduced by Matter for door locks. It supports automatic unlocking when a phone is brought near the door lock, similar to the Apple digital car key experience.
+    Managed via <code>SetAliroReaderConfig</code> / <code>ClearAliroReaderConfig</code> commands.
   </p>
 
   <div class="table-wrap">

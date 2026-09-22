@@ -1111,30 +1111,30 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">Failure</span>
-        <span class="enum-desc">操作失败（如下载中断、校验失败）</span>
+        <span class="enum-desc">Operation failed (e.g., download interrupted, verification failed)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">TimeOut</span>
-        <span class="enum-desc">操作超时（如 Provider 无响应）</span>
+        <span class="enum-desc">Operation timed out (e.g., Provider not responding)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">4</span>
       <div>
         <span class="enum-name">DelayByProvider</span>
-        <span class="enum-desc">Provider 要求延迟 —— Provider 返回了 Busy 或指定了重试等待时间</span>
+        <span class="enum-desc">Delay requested by Provider — the Provider returned Busy or specified a retry wait time</span>
       </div>
     </div>
   </div>
 
-  <!-- ====== 事件 ====== -->
+  <!-- ====== Events ====== -->
   <h2 id="events">Events</h2>
   <p>
-    OtaSoftwareUpdateRequestor 定义了 3 个事件，覆盖了 OTA 生命周期的关键节点。
-    订阅这些事件可以实时跟踪设备的更新流程，比轮询属性更及时。
+    OtaSoftwareUpdateRequestor defines 3 events covering the key milestones of the OTA lifecycle.
+    Subscribing to these events allows real-time tracking of the device's update process, which is more timely than polling attributes.
   </p>
 
   <div class="table-wrap">
@@ -1152,29 +1152,29 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#event-0x00"><code>0x00</code></a></td>
           <td>StateTransition</td>
           <td>Info</td>
-          <td>OTA 状态机发生状态转移时触发</td>
+          <td>Triggered when the OTA state machine transitions between states</td>
         </tr>
         <tr class="clickable-row" data-href="#event-0x01">
           <td><a href="#event-0x01"><code>0x01</code></a></td>
           <td>VersionApplied</td>
           <td>Critical</td>
-          <td>新固件版本成功应用后触发</td>
+          <td>Triggered after a new firmware version is successfully applied</td>
         </tr>
         <tr class="clickable-row" data-href="#event-0x02">
           <td><a href="#event-0x02"><code>0x02</code></a></td>
           <td>DownloadError</td>
           <td>Info</td>
-          <td>固件下载过程中发生错误时触发</td>
+          <td>Triggered when an error occurs during firmware download</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- StateTransition 事件详解 -->
-  <h3 id="event-0x00">StateTransition —— 状态转移事件(0x00)</h3>
+  <!-- StateTransition Event Details -->
+  <h3 id="event-0x00">StateTransition — State Transition Event (0x00)</h3>
   <p>
-    每当 OTA 状态机从一个状态转移到另一个状态时触发。这是追踪更新流程最核心的事件 ——
-    通过监听它可以知道设备从空闲到查询、从下载到应用的每一步。
+    Triggered whenever the OTA state machine transitions from one state to another. This is the most critical event for tracking the update flow —
+    by listening to it, you can follow every step from idle to querying, from downloading to applying.
   </p>
   <div class="table-wrap">
     <table>
@@ -1186,30 +1186,30 @@ export const clusters: Record<string, ClusterContent> = {
           <td>PreviousState</td>
           <td><code>0x00</code></td>
           <td>UpdateStateEnum</td>
-          <td>转移前的状态</td>
+          <td>State before the transition</td>
         </tr>
         <tr>
           <td>NewState</td>
           <td><code>0x01</code></td>
           <td>UpdateStateEnum</td>
-          <td>转移后的新状态</td>
+          <td>New state after the transition</td>
         </tr>
         <tr>
           <td>Reason</td>
           <td><code>0x02</code></td>
           <td>ChangeReasonEnum</td>
-          <td>触发此次转移的原因</td>
+          <td>Reason that triggered this transition</td>
         </tr>
         <tr>
           <td>TargetSoftwareVersion</td>
           <td><code>0x03</code></td>
           <td>uint32 / null</td>
-          <td>目标固件版本号。null 表示尚未确定（例如从 Idle 到 Querying 时还不知道目标版本）</td>
+          <td>Target firmware version number. null means not yet determined (e.g., when transitioning from Idle to Querying, the target version is unknown)</td>
         </tr>
       </tbody>
     </table>
   </div>
-  <p>事件上报示例 —— 从 Idle 转入 Downloading：</p>
+  <p>Event report example — transitioning from Idle to Downloading:</p>
   <pre><code>{
   "eventReports": [{
     "eventData": {
@@ -1223,7 +1223,7 @@ export const clusters: Record<string, ClusterContent> = {
       "data": {
         "0": 1,                    // PreviousState = Idle
         "1": 4,                    // NewState = Downloading
-        "2": 1,                    // Reason = Success（查询成功，开始下载）
+        "2": 1,                    // Reason = Success (query succeeded, starting download)
         "3": 5                     // TargetSoftwareVersion = 5
       }
     }
@@ -1231,11 +1231,11 @@ export const clusters: Record<string, ClusterContent> = {
 }</code></pre>
   <p class="back-link"><a href="#events">&#8593; Back to Events</a></p>
 
-  <!-- VersionApplied 事件详解 -->
-  <h3 id="event-0x01">VersionApplied —— 版本已应用事件(0x01)</h3>
+  <!-- VersionApplied Event Details -->
+  <h3 id="event-0x01">VersionApplied — Version Applied Event (0x01)</h3>
   <p>
-    新固件版本成功应用后触发（通常在设备重启后上报）。这个事件是确认「更新真正完成」的标志。
-    优先级为 Critical，确保即使在事件队列满时也不会被丢弃。
+    Triggered after a new firmware version is successfully applied (typically reported after device reboot). This event confirms that the update is truly complete.
+    Its priority is Critical, ensuring it is not discarded even when the event queue is full.
   </p>
   <div class="table-wrap">
     <table>
@@ -1247,18 +1247,18 @@ export const clusters: Record<string, ClusterContent> = {
           <td>SoftwareVersion</td>
           <td><code>0x00</code></td>
           <td>uint32</td>
-          <td>刚刚应用的新固件版本号</td>
+          <td>Version number of the newly applied firmware</td>
         </tr>
         <tr>
           <td>ProductID</td>
           <td><code>0x01</code></td>
           <td>uint16</td>
-          <td>设备的产品 ID</td>
+          <td>Product ID of the device</td>
         </tr>
       </tbody>
     </table>
   </div>
-  <p>事件上报示例：</p>
+  <p>Event report example:</p>
   <pre><code>{
   "eventReports": [{
     "eventData": {
@@ -1270,19 +1270,19 @@ export const clusters: Record<string, ClusterContent> = {
       "eventNumber": 18,
       "priority": "CRITICAL",
       "data": {
-        "0": 5,                    // SoftwareVersion = 5（刚刚应用的版本号）
-        "1": 4                     // ProductID = 4（产品 ID）
+        "0": 5,                    // SoftwareVersion = 5 (newly applied version number)
+        "1": 4                     // ProductID = 4 (product ID)
       }
     }
   }]
 }</code></pre>
   <p class="back-link"><a href="#events">&#8593; Back to Events</a></p>
 
-  <!-- DownloadError 事件详解 -->
-  <h3 id="event-0x02">DownloadError —— 下载错误事件(0x02)</h3>
+  <!-- DownloadError Event Details -->
+  <h3 id="event-0x02">DownloadError — Download Error Event (0x02)</h3>
   <p>
-    固件下载过程中遇到错误时触发。此事件提供了出错时的上下文信息（已下载量、进度等），
-    有助于诊断网络问题或 Provider 端故障。
+    Triggered when an error is encountered during firmware download. This event provides contextual information at the time of failure (bytes downloaded, progress, etc.),
+    which helps diagnose network issues or Provider-side faults.
   </p>
   <div class="table-wrap">
     <table>
@@ -1294,30 +1294,30 @@ export const clusters: Record<string, ClusterContent> = {
           <td>SoftwareVersion</td>
           <td><code>0x00</code></td>
           <td>uint32</td>
-          <td>正在下载的目标固件版本号</td>
+          <td>Target firmware version being downloaded</td>
         </tr>
         <tr>
           <td>BytesDownloaded</td>
           <td><code>0x01</code></td>
           <td>uint64</td>
-          <td>出错前已成功下载的字节数</td>
+          <td>Number of bytes successfully downloaded before the error</td>
         </tr>
         <tr>
           <td>ProgressPercent</td>
           <td><code>0x02</code></td>
           <td>uint8 / null</td>
-          <td>出错时的下载进度百分比（0-100），null 表示无法计算</td>
+          <td>Download progress percentage (0-100) at the time of error; null means unable to calculate</td>
         </tr>
         <tr>
           <td>PlatformCode</td>
           <td><code>0x03</code></td>
           <td>int64 / null</td>
-          <td>平台特定的错误码，null 表示无额外信息。具体含义由设备厂商定义</td>
+          <td>Platform-specific error code; null means no additional information. Specific meaning is defined by the device vendor</td>
         </tr>
       </tbody>
     </table>
   </div>
-  <p>事件上报示例 —— 下载到 75% 时出错：</p>
+  <p>Event report example — error occurred at 75% download:</p>
   <pre><code>{
   "eventReports": [{
     "eventData": {
@@ -1331,104 +1331,104 @@ export const clusters: Record<string, ClusterContent> = {
       "data": {
         "0": 5,                    // SoftwareVersion = 5
         "1": 512,                  // BytesDownloaded = 512
-        "2": 75,                   // ProgressPercent = 75（下载到 75% 时出错）
-        "3": -1                    // PlatformCode = -1（平台错误码，nullable）
+        "2": 75,                   // ProgressPercent = 75 (error occurred at 75% download)
+        "3": -1                    // PlatformCode = -1 (platform error code, nullable)
       }
     }
   }]
 }</code></pre>
   <p class="back-link"><a href="#events">&#8593; Back to Events</a></p>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一个处于空闲状态的设备的 OtaSoftwareUpdateRequestor Cluster 属性读取结果：</p>
+  <p>Attribute read results from an idle device's OtaSoftwareUpdateRequestor Cluster:</p>
 
   <pre><code>{
-  // --- 默认 OTA 提供者 ---
-  "0x0000": [                     // DefaultOTAProviders（可配置多个）
+  // --- Default OTA Providers ---
+  "0x0000": [                     // DefaultOTAProviders (can configure multiple)
     {
-      "providerNodeID": 12345,    // Provider 的 Node ID
-      "endpoint": 0,              // Provider 上 OTA Provider Cluster 所在的 Endpoint
-      "fabricIndex": 1            // 所属 Fabric 索引
+      "providerNodeID": 12345,    // Provider's Node ID
+      "endpoint": 0,              // Endpoint on the Provider where the OTA Provider Cluster resides
+      "fabricIndex": 1            // Fabric index this entry belongs to
     }
   ],
 
-  // --- 更新能力 ---
-  "0x0001": true,                 // UpdatePossible = true（设备当前可以接受更新）
+  // --- Update Capability ---
+  "0x0001": true,                 // UpdatePossible = true (device can currently accept updates)
 
-  // --- 更新状态 ---
-  "0x0002": 0,                    // UpdateState = Idle（当前空闲，未在更新流程中）
-  "0x0003": null                  // UpdateStateProgress = null（无进度信息）
+  // --- Update State ---
+  "0x0002": 0,                    // UpdateState = Idle (currently idle, not in an update flow)
+  "0x0003": null                  // UpdateStateProgress = null (no progress information)
 }</code></pre>
 
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      OTA Requestor Cluster 位于 <code>Endpoint 0</code>（Root Endpoint），不在功能端点上。
-      读取属性时注意指定正确的 Endpoint。此外，<code>DefaultOTAProviders</code> 是 Fabric-scoped 列表，
-      你只能看到当前 Fabric 的条目。
+      The OTA Requestor Cluster resides on <code>Endpoint 0</code> (Root Endpoint), not on functional endpoints.
+      Make sure to specify the correct Endpoint when reading attributes. Also, <code>DefaultOTAProviders</code> is a Fabric-scoped list,
+      so you can only see entries for the current Fabric.
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
-    <summary>场景 1：正常 OTA 更新流程</summary>
+    <summary>Scenario 1: Normal OTA Update Flow</summary>
     <div class="scenario-content">
-      <p>一次完整的 OTA 更新从通告到应用的典型流程：</p>
+      <p>Typical flow of a complete OTA update from announcement to application:</p>
       <ol>
-        <li>管理节点向设备发送 <code>AnnounceOTAProvider (0x00)</code>，告知有可用的 Provider</li>
-        <li>设备向 Provider 发起 QueryImage 请求 —— UpdateState 从 Idle 变为 <strong>Querying</strong></li>
-        <li>Provider 返回可用更新 —— 设备开始下载，UpdateState 变为 <strong>Downloading</strong></li>
-        <li>下载过程中，UpdateStateProgress 从 0 逐渐增长到 100</li>
-        <li>下载完成，设备验证固件并开始写入 —— UpdateState 变为 <strong>Applying</strong></li>
-        <li>写入完成，设备重启应用新固件 —— 重启后触发 <strong>VersionApplied</strong> 事件</li>
-        <li>UpdateState 回到 <strong>Idle</strong>，整个流程结束</li>
+        <li>Management node sends <code>AnnounceOTAProvider (0x00)</code> to the device, informing it of an available Provider</li>
+        <li>Device sends QueryImage request to the Provider — UpdateState changes from Idle to <strong>Querying</strong></li>
+        <li>Provider returns available update — device starts downloading, UpdateState changes to <strong>Downloading</strong></li>
+        <li>During download, UpdateStateProgress gradually increases from 0 to 100</li>
+        <li>Download complete, device verifies firmware and starts writing — UpdateState changes to <strong>Applying</strong></li>
+        <li>Write complete, device reboots to apply new firmware — <strong>VersionApplied</strong> event is triggered after reboot</li>
+        <li>UpdateState returns to <strong>Idle</strong>, ending the entire flow</li>
       </ol>
     </div>
   </details>
 
   <details class="scenario">
-    <summary>场景 2：Provider 通告触发更新</summary>
+    <summary>Scenario 2: Provider Announcement Triggers Update</summary>
     <div class="scenario-content">
-      <p>通过 AnnounceOTAProvider 命令的不同原因触发不同的设备行为：</p>
+      <p>Different announcement reasons in the AnnounceOTAProvider command trigger different device behaviors:</p>
       <ol>
-        <li><strong>SimpleAnnouncement (0)</strong>：设备可以在方便时查询，不急迫。适合常规固件发布场景</li>
-        <li><strong>UpdateAvailable (1)</strong>：明确告知有新版本，设备应尽快查询。适合功能更新</li>
-        <li><strong>UrgentUpdateAvailable (2)</strong>：紧急安全补丁，设备应立即查询并优先下载。
-          此时设备可能跳过 DelayedOnUserConsent 直接进入下载，确保安全漏洞尽快修补</li>
+        <li><strong>SimpleAnnouncement (0)</strong>: Device can query at its convenience, not urgent. Suitable for regular firmware releases</li>
+        <li><strong>UpdateAvailable (1)</strong>: Explicitly states a new version is available; device should query soon. Suitable for feature updates</li>
+        <li><strong>UrgentUpdateAvailable (2)</strong>: Urgent security patch; device should query immediately and prioritize download.
+          The device may skip DelayedOnUserConsent and proceed directly to download to ensure the security vulnerability is patched ASAP</li>
       </ol>
       <p>
-        App 端在收到 StateTransition 事件时，可根据 Reason 字段判断是否需要向用户展示通知。
-        UrgentUpdateAvailable 触发的更新建议弹出醒目提示。
+        When the app receives a StateTransition event, it can use the Reason field to determine whether to show a notification to the user.
+        Updates triggered by UrgentUpdateAvailable should display a prominent alert.
       </p>
     </div>
   </details>
 
   <details class="scenario">
-    <summary>场景 3：更新进度跟踪</summary>
+    <summary>Scenario 3: Update Progress Tracking</summary>
     <div class="scenario-content">
-      <p>App 端实时展示 OTA 更新进度的实现方式：</p>
+      <p>How to implement real-time OTA update progress display in an app:</p>
       <ol>
-        <li>订阅 <code>UpdateState (0x0002)</code> 和 <code>UpdateStateProgress (0x0003)</code> 属性</li>
-        <li>同时订阅 <code>StateTransition</code>、<code>VersionApplied</code>、<code>DownloadError</code> 三个事件</li>
-        <li>根据 UpdateState 的值显示不同的 UI 状态：
+        <li>Subscribe to <code>UpdateState (0x0002)</code> and <code>UpdateStateProgress (0x0003)</code> attributes</li>
+        <li>Also subscribe to the <code>StateTransition</code>, <code>VersionApplied</code>, and <code>DownloadError</code> events</li>
+        <li>Display different UI states based on UpdateState values:
           <ul>
-            <li>Idle → 显示「固件已是最新」或「检查更新」按钮</li>
-            <li>Querying → 显示「正在检查更新...」</li>
-            <li>Downloading → 显示下载进度条，数值来自 UpdateStateProgress</li>
-            <li>Applying → 显示「正在安装更新，请勿断电...」</li>
-            <li>DelayedOnUserConsent → 显示确认对话框，等待用户同意</li>
-            <li>RollingBack → 显示「更新失败，正在恢复...」</li>
+            <li>Idle → Show "Firmware is up to date" or a "Check for Updates" button</li>
+            <li>Querying → Show "Checking for updates..."</li>
+            <li>Downloading → Show download progress bar with value from UpdateStateProgress</li>
+            <li>Applying → Show "Installing update, do not power off..."</li>
+            <li>DelayedOnUserConsent → Show confirmation dialog, waiting for user consent</li>
+            <li>RollingBack → Show "Update failed, restoring..."</li>
           </ul>
         </li>
-        <li>收到 VersionApplied 事件 → 显示「更新成功！已升级到版本 X」</li>
-        <li>收到 DownloadError 事件 → 显示「下载失败」并展示已下载进度，提供重试按钮</li>
+        <li>On VersionApplied event → Show "Update successful! Upgraded to version X"</li>
+        <li>On DownloadError event → Show "Download failed" with downloaded progress and a retry button</li>
       </ol>
       <p>
-        <strong>注意</strong>：UpdateStateProgress 在状态切换时可能变为 null 或重置为 0，
-        UI 应处理好 null 的情况（例如隐藏进度条或显示不确定进度指示器）。
+        <strong>Note</strong>: UpdateStateProgress may become null or reset to 0 during state transitions.
+        The UI should handle the null case gracefully (e.g., hide the progress bar or show an indeterminate progress indicator).
       </p>
     </div>
   </details>
@@ -2827,7 +2827,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <p>事件上报示例：</p>
+  <p>Event report example:</p>
   <pre><code>{
   "eventReports": [{
     "eventData": {

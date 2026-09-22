@@ -903,99 +903,99 @@ export const clusters: Record<string, ClusterContent> = {
     </table>
   </div>
 
-  <!-- ====== Feature 位图 ====== -->
+  <!-- ====== Feature Bitmap ====== -->
   <h2 id="features">Feature Bitmap</h2>
-  <p>MediaPlayback Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持哪些高级能力：</p>
+  <p>The MediaPlayback Cluster declares which advanced capabilities the device supports via <code>FeatureMap</code> (0xFFFC):</p>
 
   <div class="enum-cards enum-cards-grid">
     <div class="enum-card">
       <span class="enum-badge">Bit 0</span>
       <div>
-        <span class="enum-name">AS（AdvancedSeek）</span>
-        <span class="enum-desc">高级跳转 —— 启用 Seek 命令、StartTime、Duration、SampledPosition、PlaybackSpeed、SeekRange 等属性</span>
+        <span class="enum-name">AS (AdvancedSeek)</span>
+        <span class="enum-desc">Advanced Seek — Enables the Seek command, StartTime, Duration, SampledPosition, PlaybackSpeed, SeekRange, and related attributes</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 1</span>
       <div>
-        <span class="enum-name">VS（VariableSpeed）</span>
-        <span class="enum-desc">变速播放 —— 允许 Rewind/FastForward 以多档速度播放（2x、4x 等）</span>
+        <span class="enum-name">VS (VariableSpeed)</span>
+        <span class="enum-desc">Variable Speed — Allows Rewind/FastForward at multiple speed tiers (2x, 4x, etc.)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 2</span>
       <div>
-        <span class="enum-name">TT（TextTracks）</span>
-        <span class="enum-desc">字幕轨道 —— 启用字幕相关属性和 ActivateTextTrack / DeactivateTextTrack 命令</span>
+        <span class="enum-name">TT (TextTracks)</span>
+        <span class="enum-desc">Text Tracks — Enables text track related attributes and the ActivateTextTrack / DeactivateTextTrack commands</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 3</span>
       <div>
-        <span class="enum-name">AT（AudioTracks）</span>
-        <span class="enum-desc">音轨切换 —— 启用音轨相关属性和 ActivateAudioTrack 命令</span>
+        <span class="enum-name">AT (AudioTracks)</span>
+        <span class="enum-desc">Audio Tracks — Enables audio track related attributes and the ActivateAudioTrack command</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 4</span>
       <div>
-        <span class="enum-name">AA（AudioAdvance）</span>
-        <span class="enum-desc">高级音频 —— 支持音频输出路由等高级音频管理能力</span>
+        <span class="enum-name">AA (AudioAdvance)</span>
+        <span class="enum-desc">Audio Advance — Supports advanced audio management capabilities such as audio output routing</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">Feature 组合示例</div>
+    <div class="callout-title">Feature Combination Examples</div>
     <p>
-      简单蓝牙音箱：<code>FeatureMap = 0x00</code>（仅基础播控）。
-      智能电视：<code>FeatureMap = 0x0F</code>（AS + VS + TT + AT = 0b01111），支持进度条、变速、字幕、多音轨。
-      流媒体盒子：<code>FeatureMap = 0x1F</code>（全部特性），完整媒体播放体验。
+      Simple Bluetooth speaker: <code>FeatureMap = 0x00</code> (basic playback control only).
+      Smart TV: <code>FeatureMap = 0x0F</code> (AS + VS + TT + AT = 0b01111), supports progress bar, variable speed, subtitles, and multi-audio tracks.
+      Streaming box: <code>FeatureMap = 0x1F</code> (all features), complete media playback experience.
     </p>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一台正在播放电影的智能电视（启用 AS + VS + AT + TT 特性）的 MediaPlayback Cluster 读取结果：</p>
+  <p>Read results of the MediaPlayback Cluster from a smart TV currently playing a movie (with AS + VS + AT + TT features enabled):</p>
 
   <pre><code>{
-  // --- 播放状态 ---
-  "0x0000": 0,                // CurrentState = Playing（正在播放）
+  // --- Playback State ---
+  "0x0000": 0,                // CurrentState = Playing
 
-  // --- 时间信息（需要 AS 特性）---
-  "0x0001": 1695400000000000,  // StartTime（媒体起始时间，微秒级 epoch）
-  "0x0002": 5400000,           // Duration = 5,400,000 毫秒（90 分钟）
-  "0x0003": {                  // SampledPosition（采样位置）
+  // --- Time Information (requires AS feature) ---
+  "0x0001": 1695400000000000,  // StartTime (media start time, microsecond-precision epoch)
+  "0x0002": 5400000,           // Duration = 5,400,000 ms (90 minutes)
+  "0x0003": {                  // SampledPosition
     "UpdatedAt": 1695401200000000,
     "Position": 1230000
   },
-  "0x0004": 1.0,               // PlaybackSpeed = 1.0（正常速度）
-  "0x0005": 5400000,           // SeekRangeEnd = 5,400,000 毫秒
-  "0x0006": 0,                 // SeekRangeStart = 0 毫秒
+  "0x0004": 1.0,               // PlaybackSpeed = 1.0 (normal speed)
+  "0x0005": 5400000,           // SeekRangeEnd = 5,400,000 ms
+  "0x0006": 0,                 // SeekRangeStart = 0 ms
 
-  // --- 音轨信息（需要 AT 特性）---
+  // --- Audio Track Information (requires AT feature) ---
   "0x0007": {                  // ActiveAudioTrack
     "ID": "audio-zh",
     "TrackAttributes": {
       "LanguageCode": "zh",
-      "DisplayName": "中文"
+      "DisplayName": "Chinese"
     }
   },
   "0x0008": [                  // AvailableAudioTracks
-    { "ID": "audio-zh", "TrackAttributes": { "LanguageCode": "zh", "DisplayName": "中文" } },
+    { "ID": "audio-zh", "TrackAttributes": { "LanguageCode": "zh", "DisplayName": "Chinese" } },
     { "ID": "audio-en", "TrackAttributes": { "LanguageCode": "en", "DisplayName": "English" } }
   ],
 
-  // --- 字幕信息（需要 TT 特性）---
+  // --- Text Track Information (requires TT feature) ---
   "0x0009": {                  // ActiveTextTrack
     "ID": "sub-zh",
     "TrackAttributes": {
       "LanguageCode": "zh",
-      "DisplayName": "中文字幕"
+      "DisplayName": "Chinese Subtitles"
     }
   },
   "0x000A": [                  // AvailableTextTracks
-    { "ID": "sub-zh", "TrackAttributes": { "LanguageCode": "zh", "DisplayName": "中文字幕" } },
+    { "ID": "sub-zh", "TrackAttributes": { "LanguageCode": "zh", "DisplayName": "Chinese Subtitles" } },
     { "ID": "sub-en", "TrackAttributes": { "LanguageCode": "en", "DisplayName": "English Subtitles" } }
   ]
 }</code></pre>
@@ -1003,44 +1003,44 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      大部分属性都是 <strong>Nullable</strong> 的，简单设备可能只上报 <code>CurrentState (0x0000)</code>。
-      读取前可先检查 <code>FeatureMap (0xFFFC)</code> 判断设备支持哪些特性，
-      再按需读取对应属性，避免读取不存在的属性导致错误。
+      Most attributes are <strong>Nullable</strong>; simple devices may only report <code>CurrentState (0x0000)</code>.
+      Before reading, check <code>FeatureMap (0xFFFC)</code> to determine which features the device supports,
+      then read the corresponding attributes as needed to avoid errors from reading non-existent attributes.
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
-    <summary>场景 1：智能电视播放控制与进度条</summary>
+    <summary>Scenario 1: Smart TV Playback Control and Progress Bar</summary>
     <div class="scenario-content">
       <ol>
-        <li>读取 <code>FeatureMap (0xFFFC)</code>，确认设备支持 AdvancedSeek（AS）特性</li>
-        <li>发送 <code>Play (0x00)</code> 开始播放，订阅 <code>CurrentState (0x0000)</code> 同步播放按钮状态</li>
-        <li>读取 <code>Duration (0x0002)</code> 获取总时长，渲染进度条</li>
-        <li>定期读取 <code>SampledPosition (0x0003)</code>，结合 <code>PlaybackSpeed (0x0004)</code> 推算当前进度，更新进度条位置</li>
-        <li>用户拖动进度条时，读取 <code>SeekRangeStart (0x0006)</code> 和 <code>SeekRangeEnd (0x0005)</code> 确认范围，然后发送 <code>Seek (0x0B)</code> 跳转</li>
-        <li>用户点击暂停按钮，发送 <code>Pause (0x01)</code>；再次点击播放，发送 <code>Play (0x00)</code></li>
+        <li>Read <code>FeatureMap (0xFFFC)</code> to confirm the device supports the AdvancedSeek (AS) feature</li>
+        <li>Send <code>Play (0x00)</code> to start playback; subscribe to <code>CurrentState (0x0000)</code> to sync the play button state</li>
+        <li>Read <code>Duration (0x0002)</code> to get the total duration and render the progress bar</li>
+        <li>Periodically read <code>SampledPosition (0x0003)</code> and combine it with <code>PlaybackSpeed (0x0004)</code> to estimate the current position and update the progress bar</li>
+        <li>When the user drags the progress bar, read <code>SeekRangeStart (0x0006)</code> and <code>SeekRangeEnd (0x0005)</code> to confirm the range, then send <code>Seek (0x0B)</code> to jump</li>
+        <li>When the user taps the pause button, send <code>Pause (0x01)</code>; tapping play again sends <code>Play (0x00)</code></li>
       </ol>
     </div>
   </details>
 
   <details class="scenario">
-    <summary>场景 2：多语言电影的音轨和字幕切换</summary>
+    <summary>Scenario 2: Multi-Language Movie Audio and Subtitle Switching</summary>
     <div class="scenario-content">
       <ol>
-        <li>读取 <code>FeatureMap</code>，确认设备支持 AudioTracks（AT）和 TextTracks（TT）</li>
-        <li>读取 <code>AvailableAudioTracks (0x0008)</code>，在 App 中展示音轨选择列表（如「中文配音」「英文原声」「日语」）</li>
-        <li>读取 <code>AvailableTextTracks (0x000A)</code>，在 App 中展示字幕选择列表（如「中文字幕」「英文字幕」「关闭」）</li>
-        <li>用户选择英文原声 + 中文字幕：
+        <li>Read <code>FeatureMap</code> to confirm the device supports AudioTracks (AT) and TextTracks (TT)</li>
+        <li>Read <code>AvailableAudioTracks (0x0008)</code> and display an audio track selection list in the app (e.g., "Chinese Dub," "English Original," "Japanese")</li>
+        <li>Read <code>AvailableTextTracks (0x000A)</code> and display a subtitle selection list in the app (e.g., "Chinese Subtitles," "English Subtitles," "Off")</li>
+        <li>User selects English original audio + Chinese subtitles:
           <ul>
-            <li>发送 <code>ActivateAudioTrack (0x0C)</code>，TrackID 设为英文音轨 ID</li>
-            <li>发送 <code>ActivateTextTrack (0x0D)</code>，TrackID 设为中文字幕 ID</li>
+            <li>Send <code>ActivateAudioTrack (0x0C)</code> with TrackID set to the English audio track ID</li>
+            <li>Send <code>ActivateTextTrack (0x0D)</code> with TrackID set to the Chinese subtitle track ID</li>
           </ul>
         </li>
-        <li>用户想关闭字幕：发送 <code>DeactivateTextTrack (0x0E)</code></li>
-        <li>订阅 <code>ActiveAudioTrack (0x0007)</code> 和 <code>ActiveTextTrack (0x0009)</code> 同步 App 显示的当前选中项</li>
+        <li>User wants to turn off subtitles: send <code>DeactivateTextTrack (0x0E)</code></li>
+        <li>Subscribe to <code>ActiveAudioTrack (0x0007)</code> and <code>ActiveTextTrack (0x0009)</code> to keep the app's current selections in sync</li>
       </ol>
     </div>
   </details>
@@ -1110,7 +1110,7 @@ export const clusters: Record<string, ClusterContent> = {
     <span class="nav-sep">|</span>
     <a href="#attributes">Attributes</a>
     <span class="nav-sep">|</span>
-    <a href="#structs">结构体定义</a>
+    <a href="#structs">Struct Definitions</a>
     <span class="nav-sep">|</span>
     <a href="#features">Feature Bitmap</a>
     <span class="nav-sep">|</span>
@@ -1119,7 +1119,7 @@ export const clusters: Record<string, ClusterContent> = {
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
     MediaInput Cluster 共有 4 个命令。SelectInput 用于切换输入源，ShowInputStatus / HideInputStatus 控制输入源信息的 OSD 显示，
@@ -1142,19 +1142,19 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>SelectInput</td>
           <td>切换到指定输入源</td>
-          <td class="col-optional">无</td>
+          <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x01">
           <td><a href="#cmd-0x01"><code>0x01</code></a></td>
           <td>ShowInputStatus</td>
           <td>在屏幕上显示输入源信息</td>
-          <td class="col-optional">无</td>
+          <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x02">
           <td><a href="#cmd-0x02"><code>0x02</code></a></td>
           <td>HideInputStatus</td>
           <td>隐藏输入源信息的屏幕显示</td>
-          <td class="col-optional">无</td>
+          <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x03">
           <td><a href="#cmd-0x03"><code>0x03</code></a></td>
@@ -1166,7 +1166,7 @@ export const clusters: Record<string, ClusterContent> = {
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
+  <!-- ====== Command Details ====== -->
   <h3 id="cmd-0x00">SelectInput —— 切换输入源(0x00)</h3>
   <p>
     将设备切换到指定的输入源。<code>Index</code> 必须是 <code>InputList</code> 中某个
@@ -1269,11 +1269,11 @@ export const clusters: Record<string, ClusterContent> = {
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attributes ====== -->
   <h2 id="attributes">Attributes</h2>
   <p>MediaInput Cluster 共有 2 个属性。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute summary table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -1477,7 +1477,7 @@ export const clusters: Record<string, ClusterContent> = {
     </div>
   </div>
 
-  <!-- ====== Feature 位图 ====== -->
+  <!-- ====== Feature Bitmap ====== -->
   <h2 id="features">Feature Bitmap</h2>
   <p>MediaInput Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持的可选能力：</p>
 
@@ -1499,7 +1499,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
   <p>一台智能电视的 MediaInput Cluster 读取结果 —— 当前选中 HDMI 1，共有 4 个输入源：</p>
 
@@ -1546,7 +1546,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
@@ -1644,7 +1644,7 @@ export const clusters: Record<string, ClusterContent> = {
     <span class="nav-sep">|</span>
     <a href="#attributes">Attributes</a>
     <span class="nav-sep">|</span>
-    <a href="#structs">结构体定义</a>
+    <a href="#structs">Struct Definitions</a>
     <span class="nav-sep">|</span>
     <a href="#features">Feature Bitmap</a>
     <span class="nav-sep">|</span>
@@ -1653,7 +1653,7 @@ export const clusters: Record<string, ClusterContent> = {
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
     AudioOutput Cluster 共有 2 个命令。SelectOutput 用于切换音频输出目的地，
@@ -1676,7 +1676,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>SelectOutput</td>
           <td>切换到指定音频输出</td>
-          <td class="col-optional">无</td>
+          <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x01">
           <td><a href="#cmd-0x01"><code>0x01</code></a></td>
@@ -1688,7 +1688,7 @@ export const clusters: Record<string, ClusterContent> = {
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
+  <!-- ====== Command Details ====== -->
   <h3 id="cmd-0x00">SelectOutput —— 切换音频输出(0x00)</h3>
   <p>
     将设备的音频输出切换到指定目的地。<code>Index</code> 必须是 <code>OutputList</code> 中某个
@@ -1765,11 +1765,11 @@ export const clusters: Record<string, ClusterContent> = {
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attributes ====== -->
   <h2 id="attributes">Attributes</h2>
   <p>AudioOutput Cluster 共有 2 个属性。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute summary table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -1934,7 +1934,7 @@ export const clusters: Record<string, ClusterContent> = {
     </div>
   </div>
 
-  <!-- ====== Feature 位图 ====== -->
+  <!-- ====== Feature Bitmap ====== -->
   <h2 id="features">Feature Bitmap</h2>
   <p>AudioOutput Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持的可选能力：</p>
 
@@ -1956,7 +1956,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
   <p>一台智能电视的 AudioOutput Cluster 读取结果 —— 当前音频输出到 HDMI ARC，共有 4 个输出源：</p>
 
@@ -1999,7 +1999,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
@@ -2098,9 +2098,9 @@ export const clusters: Record<string, ClusterContent> = {
     <span class="nav-sep">|</span>
     <a href="#attributes">Attributes</a>
     <span class="nav-sep">|</span>
-    <a href="#structs">结构体定义</a>
+    <a href="#structs">Struct Definitions</a>
     <span class="nav-sep">|</span>
-    <a href="#enums">枚举值</a>
+    <a href="#enums">Enum Values</a>
     <span class="nav-sep">|</span>
     <a href="#features">Feature Bitmap</a>
     <span class="nav-sep">|</span>
@@ -2109,7 +2109,7 @@ export const clusters: Record<string, ClusterContent> = {
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
     Channel Cluster 共有 6 个客户端命令和 2 个响应命令。
@@ -2139,13 +2139,13 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#cmd-0x02"><code>0x02</code></a></td>
           <td>ChangeChannelByNumber</td>
           <td>按主号 + 副号精确切台</td>
-          <td class="col-optional">无</td>
+          <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x03">
           <td><a href="#cmd-0x03"><code>0x03</code></a></td>
           <td>SkipChannel</td>
           <td>相对当前频道向前 / 向后跳转</td>
-          <td class="col-optional">无</td>
+          <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x04">
           <td><a href="#cmd-0x04"><code>0x04</code></a></td>
@@ -2197,7 +2197,7 @@ export const clusters: Record<string, ClusterContent> = {
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
+  <!-- ====== Command Details ====== -->
   <h3 id="cmd-0x00">ChangeChannel —— 模糊匹配切台(0x00)</h3>
   <p>
     通过一个字符串在频道列表中模糊匹配并切换频道。设备会依次匹配频道的 Name、CallSign、AffiliateCallSign、
@@ -2463,11 +2463,11 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attributes ====== -->
   <h2 id="attributes">Attributes</h2>
   <p>Channel Cluster 共有 3 个属性。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute summary table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -2499,7 +2499,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td>CurrentChannel</td>
           <td><a href="#struct-channel-info">ChannelInfoStruct</a> / null</td>
           <td>当前正在收看的频道</td>
-          <td class="col-optional">无</td>
+          <td class="col-optional">None</td>
         </tr>
       </tbody>
     </table>
@@ -2565,7 +2565,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <th>Field</th>
           <th>Type</th>
-          <th>必选</th>
+          <th>Required</th>
           <th>Description</th>
         </tr>
       </thead>
@@ -2573,43 +2573,43 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>MajorNumber</td>
           <td>uint16</td>
-          <td>是</td>
+          <td>Yes</td>
           <td>频道主号。例如 CCTV-6 对应 <code>6</code>，HBO 对应 <code>100</code></td>
         </tr>
         <tr>
           <td>MinorNumber</td>
           <td>uint16</td>
-          <td>是</td>
+          <td>Yes</td>
           <td>频道副号。同一主号下的子频道用副号区分，大多数频道副号为 <code>1</code></td>
         </tr>
         <tr>
           <td>Name</td>
           <td>string</td>
-          <td>否</td>
+          <td>No</td>
           <td>频道名称，供 UI 显示。例如 <code>"CCTV-6 电影"</code></td>
         </tr>
         <tr>
           <td>CallSign</td>
           <td>string</td>
-          <td>否</td>
+          <td>No</td>
           <td>频道呼号（广播标识符）。例如 <code>"CCTV6"</code>、<code>"HBO"</code></td>
         </tr>
         <tr>
           <td>AffiliateCallSign</td>
           <td>string</td>
-          <td>否</td>
+          <td>No</td>
           <td>附属呼号。用于同一频道在不同地区的分支版本，例如 <code>"HBO East"</code></td>
         </tr>
         <tr>
           <td>Identifier</td>
           <td>string</td>
-          <td>否</td>
+          <td>No</td>
           <td>频道的唯一标识符，用于在 EPG 等系统中定位频道。例如 <code>"cctv6-hd"</code></td>
         </tr>
         <tr>
           <td>Type</td>
           <td><a href="#enum-channel-type">ChannelTypeEnum</a></td>
-          <td>否</td>
+          <td>No</td>
           <td>频道类型 —— 卫星、有线、地面广播还是 OTT 流媒体（见下方枚举）</td>
         </tr>
       </tbody>
@@ -2626,7 +2626,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <th>Field</th>
           <th>Type</th>
-          <th>必选</th>
+          <th>Required</th>
           <th>Description</th>
         </tr>
       </thead>
@@ -2634,25 +2634,25 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>OperatorName</td>
           <td>string</td>
-          <td>是</td>
+          <td>Yes</td>
           <td>运营商名称。例如 <code>"中国广电"</code>、<code>"Comcast"</code></td>
         </tr>
         <tr>
           <td>LineupName</td>
           <td>string</td>
-          <td>否</td>
+          <td>No</td>
           <td>线路套餐名称。例如 <code>"标清数字套餐"</code>、<code>"Premium HD Bundle"</code></td>
         </tr>
         <tr>
           <td>PostalCode</td>
           <td>string</td>
-          <td>否</td>
+          <td>No</td>
           <td>设备所在地区的邮政编码，用于区分同一运营商在不同地区的频道编排差异</td>
         </tr>
         <tr>
           <td>LineupInfoType</td>
           <td><a href="#enum-lineup-info-type">LineupInfoTypeEnum</a></td>
-          <td>是</td>
+          <td>Yes</td>
           <td>线路类型（见下方枚举）</td>
         </tr>
       </tbody>
@@ -2747,7 +2747,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== Feature 位图 ====== -->
+  <!-- ====== Feature Bitmap ====== -->
   <h2 id="features">Feature Bitmap</h2>
   <p>Channel Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持哪些可选能力：</p>
 
@@ -2791,7 +2791,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
   <p>一台启用了 CL + LI 特性的机顶盒，当前正在收看 CCTV-6 的 Channel Cluster 读取结果：</p>
 
@@ -2865,7 +2865,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
@@ -2978,7 +2978,7 @@ export const clusters: Record<string, ClusterContent> = {
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
     KeypadInput Cluster 只有 1 个命令和 1 个响应。控制端发送 <code>SendKey</code>，设备返回 <code>SendKeyResponse</code> 表示处理结果。
@@ -3011,7 +3011,7 @@ export const clusters: Record<string, ClusterContent> = {
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
+  <!-- ====== Command Details ====== -->
   <h3 id="cmd-0x00">SendKey —— 发送按键(0x00)</h3>
   <p>
     向设备发送一个 CEC 按键码，模拟遥控器按键操作。
@@ -3082,7 +3082,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 枚举定义 ====== -->
+  <!-- ====== Enum Definitions ====== -->
   <h2 id="enums">Enum Definitions</h2>
 
   <!-- StatusEnum -->
@@ -3528,7 +3528,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== Feature 位图 ====== -->
+  <!-- ====== Feature Bitmap ====== -->
   <h2 id="features">Feature Bitmap</h2>
   <p>KeypadInput Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持的按键类别：</p>
 
@@ -3567,7 +3567,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
   <p>KeypadInput Cluster 没有应用属性，以下是读取 FeatureMap 判断设备能力的示例：</p>
 
@@ -3589,7 +3589,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
@@ -3698,7 +3698,7 @@ export const clusters: Record<string, ClusterContent> = {
     <span class="nav-sep">|</span>
     <a href="#attributes">Attributes</a>
     <span class="nav-sep">|</span>
-    <a href="#structs">结构体定义</a>
+    <a href="#structs">Struct Definitions</a>
     <span class="nav-sep">|</span>
     <a href="#enums">枚举与位图</a>
     <span class="nav-sep">|</span>
@@ -3709,7 +3709,7 @@ export const clusters: Record<string, ClusterContent> = {
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
     ContentLauncher Cluster 有 2 个请求命令和 1 个响应命令。
@@ -3749,13 +3749,13 @@ export const clusters: Record<string, ClusterContent> = {
           <td>LauncherResponse</td>
           <td>响应</td>
           <td>启动结果（两个命令共用）</td>
-          <td class="col-optional">无</td>
+          <td class="col-optional">None</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
+  <!-- ====== Command Details ====== -->
   <h3 id="cmd-0x00">LaunchContent —— 搜索启动内容(0x00)</h3>
   <p>
     通过搜索条件在设备上查找并启动内容。搜索条件由 <a href="#struct-content-search">ContentSearchStruct</a> 描述，
@@ -3765,37 +3765,37 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="table-wrap">
     <table>
       <thead>
-        <tr><th>Parameter</th><th>Type</th><th>必选</th><th>Description</th></tr>
+        <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
       </thead>
       <tbody>
         <tr>
           <td>Search</td>
           <td><a href="#struct-content-search">ContentSearchStruct</a></td>
-          <td>是</td>
+          <td>Yes</td>
           <td>搜索条件，包含一组搜索参数</td>
         </tr>
         <tr>
           <td>AutoPlay</td>
           <td>bool</td>
-          <td>是</td>
+          <td>Yes</td>
           <td><code>true</code> = 找到后自动播放；<code>false</code> = 只展示搜索结果</td>
         </tr>
         <tr>
           <td>Data</td>
           <td>string</td>
-          <td>否</td>
+          <td>No</td>
           <td>应用特定的附加数据（如季/集信息、播放参数），由设备自行解析</td>
         </tr>
         <tr>
           <td>PlaybackPreferences</td>
           <td><a href="#struct-playback-prefs">PlaybackPreferencesStruct</a></td>
-          <td>否</td>
+          <td>No</td>
           <td>播放偏好：起始位置、字幕语言、音轨选择。<strong>需要 AP 特性</strong></td>
         </tr>
         <tr>
           <td>UseCurrentContext</td>
           <td>bool</td>
-          <td>否</td>
+          <td>No</td>
           <td><code>true</code> = 在当前播放上下文中启动（如当前 App 内搜索）</td>
         </tr>
       </tbody>
@@ -3849,25 +3849,25 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="table-wrap">
     <table>
       <thead>
-        <tr><th>Parameter</th><th>Type</th><th>必选</th><th>Description</th></tr>
+        <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
       </thead>
       <tbody>
         <tr>
           <td>ContentURL</td>
           <td>string</td>
-          <td>是</td>
+          <td>Yes</td>
           <td>要播放的内容 URL，设备需要支持该 URL 指向的内容格式</td>
         </tr>
         <tr>
           <td>DisplayString</td>
           <td>string</td>
-          <td>否</td>
+          <td>No</td>
           <td>在设备屏幕上展示的描述文本（如视频标题）</td>
         </tr>
         <tr>
           <td>BrandingInformation</td>
           <td><a href="#struct-branding">BrandingInformationStruct</a></td>
-          <td>否</td>
+          <td>No</td>
           <td>内容提供商的品牌展示信息（名称、Logo、背景等）</td>
         </tr>
       </tbody>
@@ -3935,11 +3935,11 @@ export const clusters: Record<string, ClusterContent> = {
 }</code></pre>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attributes ====== -->
   <h2 id="attributes">Attributes</h2>
   <p>ContentLauncher Cluster 共有 2 个属性。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute summary table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -4373,7 +4373,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== Feature 位图 ====== -->
+  <!-- ====== Feature Bitmap ====== -->
   <h2 id="features">Feature Bitmap</h2>
   <p>ContentLauncher Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持的能力：</p>
 
@@ -4410,7 +4410,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
   <p>一台支持 DASH 和 HLS 的智能电视的 ContentLauncher Cluster 属性读取结果：</p>
 
@@ -4438,7 +4438,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
@@ -4545,7 +4545,7 @@ export const clusters: Record<string, ClusterContent> = {
     <span class="nav-sep">|</span>
     <a href="#attributes">Attributes</a>
     <span class="nav-sep">|</span>
-    <a href="#structs">结构体定义</a>
+    <a href="#structs">Struct Definitions</a>
     <span class="nav-sep">|</span>
     <a href="#enums">Enum Definitions</a>
     <span class="nav-sep">|</span>
@@ -4554,7 +4554,7 @@ export const clusters: Record<string, ClusterContent> = {
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
     TargetNavigator Cluster 只有 1 个命令和 1 个响应。
@@ -4588,7 +4588,7 @@ export const clusters: Record<string, ClusterContent> = {
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
+  <!-- ====== Command Details ====== -->
   <h3 id="cmd-0x00">NavigateTarget —— 导航到目标(0x00)</h3>
   <p>
     请求设备跳转到指定的目标。<code>Target</code> 必须是 <code>TargetList</code> 中某个
@@ -4599,19 +4599,19 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="table-wrap">
     <table>
       <thead>
-        <tr><th>Parameter</th><th>Type</th><th>必选</th><th>Description</th></tr>
+        <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
       </thead>
       <tbody>
         <tr>
           <td>Target</td>
           <td>uint8</td>
-          <td>是</td>
+          <td>Yes</td>
           <td>目标的标识符，必须存在于 <code>TargetList</code> 中</td>
         </tr>
         <tr>
           <td>Data</td>
           <td>string</td>
-          <td>否</td>
+          <td>No</td>
           <td>传递给目标的应用自定义数据，如深度链接 URL、启动参数等</td>
         </tr>
       </tbody>
@@ -4651,19 +4651,19 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="table-wrap">
     <table>
       <thead>
-        <tr><th>Field</th><th>Type</th><th>必选</th><th>Description</th></tr>
+        <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
       </thead>
       <tbody>
         <tr>
           <td>Status</td>
           <td><a href="#enum-status">StatusEnum</a></td>
-          <td>是</td>
+          <td>Yes</td>
           <td>导航结果状态（见下方枚举）</td>
         </tr>
         <tr>
           <td>Data</td>
           <td>string</td>
-          <td>否</td>
+          <td>No</td>
           <td>设备返回的附加信息，内容由应用自定义</td>
         </tr>
       </tbody>
@@ -4671,11 +4671,11 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attributes ====== -->
   <h2 id="attributes">Attributes</h2>
   <p>TargetNavigator Cluster 共有 2 个属性。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute summary table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -4784,7 +4784,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 枚举定义 ====== -->
+  <!-- ====== Enum Definitions ====== -->
   <h2 id="enums">Enum Definitions</h2>
 
   <h3 id="enum-status">StatusEnum</h3>
@@ -4814,7 +4814,7 @@ export const clusters: Record<string, ClusterContent> = {
     </div>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
   <p>一台智能电视的 TargetNavigator Cluster 读取结果 —— 当前在设置页面，共有 4 个可导航目标：</p>
 
@@ -4853,7 +4853,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
@@ -4966,7 +4966,7 @@ export const clusters: Record<string, ClusterContent> = {
   <h2 id="attributes">Attribute Overview</h2>
   <p>ApplicationBasic 共有 8 个属性，按功能分为四组。点击属性 ID 可跳转到对应的详细说明。</p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute summary table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -5287,7 +5287,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 命令 ====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
     ApplicationBasic 没有定义任何命令。应用的启动和控制由其他 Cluster 负责：
@@ -5298,11 +5298,11 @@ export const clusters: Record<string, ClusterContent> = {
     <li><strong>ContentLauncher</strong>（0x050A）—— 负责启动特定内容（如打开某个视频）</li>
   </ul>
   <p>
-    ApplicationBasic 的定位是<strong>只读的信息查询</strong> —— 它告诉 Controller「这个应用是什么」，
+    ApplicationBasic 的定位是<strong>Read-only的信息查询</strong> —— 它告诉 Controller「这个应用是什么」，
     而不负责「对这个应用做什么」。
   </p>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
   <p>一台智能电视上某个流媒体应用（Endpoint 3）的 ApplicationBasic Cluster 读取结果：</p>
 
@@ -5340,7 +5340,7 @@ export const clusters: Record<string, ClusterContent> = {
     </ol>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
@@ -5417,7 +5417,7 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-info">
     <div class="callout-title">与 ApplicationBasic 的分工</div>
     <p>
-      <a href="/clusters/application-basic/">ApplicationBasic</a>（0x050D）负责<strong>只读的信息查询</strong> —— 告诉 Controller「这个应用是什么、当前什么状态」。
+      <a href="/clusters/application-basic/">ApplicationBasic</a>（0x050D）负责<strong>Read-only的信息查询</strong> —— 告诉 Controller「这个应用是什么、当前什么状态」。
       ApplicationLauncher（0x050C）负责<strong>操作</strong> —— 启动、停止、隐藏应用。
       两者通常部署在同一个 Endpoint 上：先通过 ApplicationBasic 获取应用信息，再通过 ApplicationLauncher 控制应用生命周期。
     </p>
@@ -5429,7 +5429,7 @@ export const clusters: Record<string, ClusterContent> = {
     <span class="nav-sep">|</span>
     <a href="#attributes">Attributes</a>
     <span class="nav-sep">|</span>
-    <a href="#structs">结构体定义</a>
+    <a href="#structs">Struct Definitions</a>
     <span class="nav-sep">|</span>
     <a href="#enums">枚举</a>
     <span class="nav-sep">|</span>
@@ -5440,7 +5440,7 @@ export const clusters: Record<string, ClusterContent> = {
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
     ApplicationLauncher Cluster 有 3 个请求命令和 1 个响应命令。
@@ -5465,34 +5465,34 @@ export const clusters: Record<string, ClusterContent> = {
           <td>LaunchApp</td>
           <td>请求</td>
           <td>启动指定应用</td>
-          <td class="col-optional">无</td>
+          <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x01">
           <td><a href="#cmd-0x01"><code>0x01</code></a></td>
           <td>StopApp</td>
           <td>请求</td>
           <td>停止指定应用</td>
-          <td class="col-optional">无</td>
+          <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x02">
           <td><a href="#cmd-0x02"><code>0x02</code></a></td>
           <td>HideApp</td>
           <td>请求</td>
           <td>隐藏指定应用（退到后台）</td>
-          <td class="col-optional">无</td>
+          <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x03">
           <td><a href="#cmd-0x03"><code>0x03</code></a></td>
           <td>LauncherResponse</td>
           <td>响应</td>
           <td>操作结果（三个命令共用）</td>
-          <td class="col-optional">无</td>
+          <td class="col-optional">None</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
+  <!-- ====== Command Details ====== -->
   <h3 id="cmd-0x00">LaunchApp —— 启动应用(0x00)</h3>
   <p>
     启动设备上的指定应用。如果应用已在运行，则将其带到前台。
@@ -5502,19 +5502,19 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="table-wrap">
     <table>
       <thead>
-        <tr><th>Parameter</th><th>Type</th><th>必选</th><th>Description</th></tr>
+        <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
       </thead>
       <tbody>
         <tr>
           <td>Application</td>
           <td><a href="#struct-application">ApplicationStruct</a></td>
-          <td>否</td>
+          <td>No</td>
           <td>要启动的应用标识。省略时表示启动当前 Endpoint 上的应用</td>
         </tr>
         <tr>
           <td>Data</td>
           <td>octstr</td>
-          <td>否</td>
+          <td>No</td>
           <td>应用特定的附加数据（如 DeepLink、启动参数），由应用自行解析</td>
         </tr>
       </tbody>
@@ -5551,13 +5551,13 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="table-wrap">
     <table>
       <thead>
-        <tr><th>Parameter</th><th>Type</th><th>必选</th><th>Description</th></tr>
+        <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
       </thead>
       <tbody>
         <tr>
           <td>Application</td>
           <td><a href="#struct-application">ApplicationStruct</a></td>
-          <td>否</td>
+          <td>No</td>
           <td>要停止的应用标识。省略时表示停止当前 Endpoint 上的应用</td>
         </tr>
       </tbody>
@@ -5592,13 +5592,13 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="table-wrap">
     <table>
       <thead>
-        <tr><th>Parameter</th><th>Type</th><th>必选</th><th>Description</th></tr>
+        <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
       </thead>
       <tbody>
         <tr>
           <td>Application</td>
           <td><a href="#struct-application">ApplicationStruct</a></td>
-          <td>否</td>
+          <td>No</td>
           <td>要隐藏的应用标识。省略时表示隐藏当前 Endpoint 上的应用</td>
         </tr>
       </tbody>
@@ -5671,11 +5671,11 @@ export const clusters: Record<string, ClusterContent> = {
 }</code></pre>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attributes ====== -->
   <h2 id="attributes">Attributes</h2>
   <p>ApplicationLauncher Cluster 共有 2 个属性。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute summary table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -5769,7 +5769,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <th>Field</th>
           <th>Type</th>
-          <th>必选</th>
+          <th>Required</th>
           <th>Description</th>
         </tr>
       </thead>
@@ -5777,13 +5777,13 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Application</td>
           <td><a href="#struct-application">ApplicationStruct</a></td>
-          <td>是</td>
+          <td>Yes</td>
           <td>应用的唯一标识（目录厂商 ID + 应用 ID）</td>
         </tr>
         <tr>
           <td>Endpoint</td>
           <td>endpoint-no</td>
-          <td>否</td>
+          <td>No</td>
           <td>应用所在的 Endpoint 编号。有了这个编号，Controller 可以直接访问该 Endpoint 上的其他 Cluster（如 MediaPlayback、ContentLauncher）</td>
         </tr>
       </tbody>
@@ -5891,7 +5891,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== Feature 位图 ====== -->
+  <!-- ====== Feature Bitmap ====== -->
   <h2 id="features">Feature Bitmap</h2>
   <p>ApplicationLauncher Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持的能力：</p>
 
@@ -5915,7 +5915,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
   <p>一台启用了 AP（ApplicationPlatform）特性的智能电视的 ApplicationLauncher Cluster 属性读取结果：</p>
 
@@ -5944,7 +5944,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
@@ -6089,7 +6089,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
     AccountLogin Cluster 共有 3 个命令和 1 个响应。
@@ -6137,7 +6137,7 @@ export const clusters: Record<string, ClusterContent> = {
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
+  <!-- ====== Command Details ====== -->
   <h3 id="cmd-0x00">GetSetupPIN —— 请求 Setup PIN(0x00)</h3>
   <p>
     由手机 App（Client）发送给电视端的内容应用（Server），请求一个临时的 Setup PIN。
@@ -6380,7 +6380,7 @@ export const clusters: Record<string, ClusterContent> = {
     普通的 Operate 级别权限不够。
   </p>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
 
   <h3>Cluster 属性读取</h3>
@@ -6483,7 +6483,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
@@ -6588,7 +6588,7 @@ export const clusters: Record<string, ClusterContent> = {
   <p>
     <strong>Cluster ID</strong>: <code>0x0503</code> &nbsp;|&nbsp;
     <strong>所在 Endpoint</strong>: 媒体端点（电视、机顶盒、游戏主机等）&nbsp;|&nbsp;
-    <strong>角色</strong>: Server（只读，无命令）
+    <strong>角色</strong>: Server（Read-only，无命令）
   </p>
   <p>
     WakeOnLan 是 Matter 媒体设备中一个非常简单但实用的 Cluster ——
@@ -6621,14 +6621,14 @@ export const clusters: Record<string, ClusterContent> = {
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attributes ====== -->
   <h2 id="attributes">Attributes</h2>
   <p>
-    WakeOnLan Cluster 只有 <strong>2 个属性</strong>，全部只读，没有任何命令和事件。
+    WakeOnLan Cluster 只有 <strong>2 个属性</strong>，全部Read-only，没有任何命令和事件。
     两个属性都是可选的，但至少要支持其中一个，否则这个 Cluster 没有实际意义。
   </p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute summary table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -6636,7 +6636,7 @@ export const clusters: Record<string, ClusterContent> = {
           <th>ID</th>
           <th>Name</th>
           <th>Type</th>
-          <th>必选</th>
+          <th>Required</th>
           <th>Description</th>
         </tr>
       </thead>
@@ -6786,7 +6786,7 @@ AA BB CC DD EE FF</code></pre>
     用户说「关闭电视」时调用 LowPower 的 Sleep，说「打开电视」时用 WakeOnLan 的地址发送 Magic Packet。
   </p>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
   <p>读取一台智能电视的 WakeOnLan Cluster 属性：</p>
   <pre><code>{
@@ -6804,7 +6804,7 @@ AA BB CC DD EE FF</code></pre>
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
@@ -6923,7 +6923,7 @@ AA BB CC DD EE FF</code></pre>
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
     LowPower Cluster 只有 <strong>1 个命令</strong>，没有参数，也没有专用的返回数据。
@@ -6953,7 +6953,7 @@ AA BB CC DD EE FF</code></pre>
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
+  <!-- ====== Command Details ====== -->
   <h3 id="cmd-0x00">Sleep —— 进入待机(0x00)</h3>
   <p>
     让媒体设备进入低功耗待机（Sleep / Standby）模式。
@@ -7081,7 +7081,7 @@ AA BB CC DD EE FF</code></pre>
     </div>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
   <p>读取一台电视的 LowPower Cluster 属性（几乎没有业务数据）：</p>
   <pre><code>{
@@ -7103,7 +7103,7 @@ AA BB CC DD EE FF</code></pre>
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">

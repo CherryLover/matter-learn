@@ -69,150 +69,150 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
       </thead>
       <tbody>
-        <!-- 基本信息 -->
+        <!-- Basic Information -->
         <tr class="clickable-row" data-href="#attr-0x0000">
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>PowerMode</td>
           <td>PowerModeEnum</td>
-          <td><a href="#group-basic">基本信息</a></td>
-          <td class="col-optional">无</td>
+          <td><a href="#group-basic">Basic Info</a></td>
+          <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>NumberOfMeasurementTypes</td>
           <td>uint8</td>
-          <td><a href="#group-basic">基本信息</a></td>
-          <td class="col-optional">无</td>
+          <td><a href="#group-basic">Basic Info</a></td>
+          <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
           <td>Accuracy</td>
           <td>list&lt;MeasurementAccuracyStruct&gt;</td>
-          <td><a href="#group-basic">基本信息</a></td>
-          <td class="col-optional">无</td>
+          <td><a href="#group-basic">Basic Info</a></td>
+          <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
           <td>Ranges</td>
           <td>list&lt;MeasurementRangeStruct&gt;</td>
-          <td><a href="#group-basic">基本信息</a></td>
-          <td class="col-optional">无</td>
+          <td><a href="#group-basic">Basic Info</a></td>
+          <td class="col-optional">None</td>
         </tr>
-        <!-- 实时测量值 -->
+        <!-- Real-time Measurements -->
         <tr class="clickable-row" data-href="#attr-0x0004">
           <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
           <td>Voltage</td>
           <td>int64 (mV)</td>
-          <td><a href="#group-realtime">实时测量</a></td>
-          <td class="col-optional">无</td>
+          <td><a href="#group-realtime">Real-time</a></td>
+          <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0005">
           <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
           <td>ActiveCurrent</td>
           <td>int64 (mA)</td>
-          <td><a href="#group-realtime">实时测量</a></td>
-          <td class="col-optional">无</td>
+          <td><a href="#group-realtime">Real-time</a></td>
+          <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0006">
           <td><a href="#attr-0x0006"><code>0x0006</code></a></td>
           <td>ReactiveCurrent</td>
           <td>int64 (mA)</td>
-          <td><a href="#group-realtime">实时测量</a></td>
+          <td><a href="#group-realtime">Real-time</a></td>
           <td class="col-required">ALTC</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0007">
           <td><a href="#attr-0x0007"><code>0x0007</code></a></td>
           <td>ApparentCurrent</td>
           <td>int64 (mA)</td>
-          <td><a href="#group-realtime">实时测量</a></td>
+          <td><a href="#group-realtime">Real-time</a></td>
           <td class="col-required">ALTC</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0008">
           <td><a href="#attr-0x0008"><code>0x0008</code></a></td>
           <td>ActivePower</td>
           <td>int64 (mW)</td>
-          <td><a href="#group-realtime">实时测量</a></td>
-          <td class="col-optional">无</td>
+          <td><a href="#group-realtime">Real-time</a></td>
+          <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0009">
           <td><a href="#attr-0x0009"><code>0x0009</code></a></td>
           <td>ReactivePower</td>
           <td>int64 (mW)</td>
-          <td><a href="#group-realtime">实时测量</a></td>
+          <td><a href="#group-realtime">Real-time</a></td>
           <td class="col-required">ALTC</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x000A">
           <td><a href="#attr-0x000A"><code>0x000A</code></a></td>
           <td>ApparentPower</td>
           <td>int64 (mW)</td>
-          <td><a href="#group-realtime">实时测量</a></td>
+          <td><a href="#group-realtime">Real-time</a></td>
           <td class="col-required">ALTC</td>
         </tr>
-        <!-- RMS 测量值 -->
+        <!-- RMS Measurements -->
         <tr class="clickable-row" data-href="#attr-0x000B">
           <td><a href="#attr-0x000B"><code>0x000B</code></a></td>
           <td>RMSVoltage</td>
           <td>int64 (mV)</td>
-          <td><a href="#group-rms">RMS 测量</a></td>
+          <td><a href="#group-rms">RMS</a></td>
           <td class="col-required">ALTC</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x000C">
           <td><a href="#attr-0x000C"><code>0x000C</code></a></td>
           <td>RMSCurrent</td>
           <td>int64 (mA)</td>
-          <td><a href="#group-rms">RMS 测量</a></td>
+          <td><a href="#group-rms">RMS</a></td>
           <td class="col-required">ALTC</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x000D">
           <td><a href="#attr-0x000D"><code>0x000D</code></a></td>
           <td>RMSPower</td>
           <td>int64 (mW)</td>
-          <td><a href="#group-rms">RMS 测量</a></td>
+          <td><a href="#group-rms">RMS</a></td>
           <td class="col-required">ALTC</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x000E">
           <td><a href="#attr-0x000E"><code>0x000E</code></a></td>
           <td>Frequency</td>
           <td>int64 (mHz)</td>
-          <td><a href="#group-rms">RMS 测量</a></td>
+          <td><a href="#group-rms">RMS</a></td>
           <td class="col-required">ALTC</td>
         </tr>
-        <!-- 谐波与功率因数 -->
+        <!-- Harmonics & Power Factor -->
         <tr class="clickable-row" data-href="#attr-0x000F">
           <td><a href="#attr-0x000F"><code>0x000F</code></a></td>
           <td>HarmonicCurrents</td>
           <td>list&lt;HarmonicMeasurementStruct&gt;</td>
-          <td><a href="#group-harmonics">谐波与补充</a></td>
+          <td><a href="#group-harmonics">Harmonics & Supplementary</a></td>
           <td class="col-required">HARM</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0010">
           <td><a href="#attr-0x0010"><code>0x0010</code></a></td>
           <td>HarmonicPhases</td>
           <td>list&lt;HarmonicMeasurementStruct&gt;</td>
-          <td><a href="#group-harmonics">谐波与补充</a></td>
+          <td><a href="#group-harmonics">Harmonics & Supplementary</a></td>
           <td class="col-required">HARM</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0011">
           <td><a href="#attr-0x0011"><code>0x0011</code></a></td>
           <td>PowerFactor</td>
           <td>int64</td>
-          <td><a href="#group-harmonics">谐波与补充</a></td>
+          <td><a href="#group-harmonics">Harmonics & Supplementary</a></td>
           <td class="col-required">ALTC</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0012">
           <td><a href="#attr-0x0012"><code>0x0012</code></a></td>
           <td>NeutralCurrent</td>
           <td>int64 (mA)</td>
-          <td><a href="#group-harmonics">谐波与补充</a></td>
+          <td><a href="#group-harmonics">Harmonics & Supplementary</a></td>
           <td class="col-required">POLY</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 基本信息（0x0000 ~ 0x0003）====== -->
-  <h3 id="group-basic">基本信息(0x0000 ~ 0x0003)</h3>
-  <p>描述设备的供电模式、支持的测量类型数量、精度声明和历史测量范围。</p>
+  <!-- ====== Basic Information (0x0000 ~ 0x0003) ====== -->
+  <h3 id="group-basic">Basic Information (0x0000 ~ 0x0003)</h3>
+  <p>Describes the device's power mode, number of supported measurement types, accuracy declarations, and historical measurement ranges.</p>
 
   <div class="table-wrap">
     <table>
@@ -227,44 +227,44 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0000">
           <td><code>0x0000</code></td>
-          <td>PowerMode（供电模式）</td>
+          <td>PowerMode</td>
           <td>PowerModeEnum</td>
-          <td>设备的供电类型：Unknown / DC / AC（见下方枚举）。必选属性</td>
+          <td>The device's power supply type: Unknown / DC / AC (see enum below). Mandatory</td>
         </tr>
         <tr id="attr-0x0001">
           <td><code>0x0001</code></td>
-          <td>NumberOfMeasurementTypes（测量类型数量）</td>
+          <td>NumberOfMeasurementTypes</td>
           <td>uint8</td>
-          <td>设备支持的测量类型总数，对应 <code>Accuracy</code> 列表的长度。必选属性</td>
+          <td>Total number of measurement types supported by the device, corresponding to the length of the <code>Accuracy</code> list. Mandatory</td>
         </tr>
         <tr id="attr-0x0002">
           <td><code>0x0002</code></td>
-          <td>Accuracy（精度声明）</td>
+          <td>Accuracy</td>
           <td>list&lt;MeasurementAccuracyStruct&gt;</td>
-          <td>列出设备支持的每种测量类型及其精度范围。每个元素包含 MeasurementType、是否被测量、精度区间等。必选属性</td>
+          <td>Lists each measurement type the device supports along with its accuracy range. Each element contains MeasurementType, whether it is measured, accuracy intervals, etc. Mandatory</td>
         </tr>
         <tr id="attr-0x0003">
           <td><code>0x0003</code></td>
-          <td>Ranges（测量范围统计）</td>
+          <td>Ranges</td>
           <td>list&lt;MeasurementRangeStruct&gt;</td>
-          <td>设备在一段时间内记录的各测量类型的最小/最大/起止时间等统计信息。可选属性</td>
+          <td>Statistics of min/max values and start/end timestamps recorded over a period of time for each measurement type. Optional</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">Accuracy 的实际用途</div>
+    <div class="callout-title">Practical Use of Accuracy</div>
     <p>
-      <code>Accuracy</code> 属性告诉你设备能测什么、测得多准。App 端应先读取这个属性，
-      再决定展示哪些测量值。如果某个测量类型不在 Accuracy 列表中，即使属性存在也不应使用。
+      The <code>Accuracy</code> attribute tells you what the device can measure and how precisely. The app should read this attribute first,
+      then decide which measurement values to display. If a measurement type is not in the Accuracy list, the corresponding attribute should not be used even if it exists.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 实时测量值（0x0004 ~ 0x000A）====== -->
-  <h3 id="group-realtime">实时测量值(0x0004 ~ 0x000A)</h3>
-  <p>设备当前的电压、电流和功率瞬时值。所有值均为 Nullable —— 返回 <code>null</code> 表示当前数据无效。</p>
+  <!-- ====== Real-time Measurements (0x0004 ~ 0x000A) ====== -->
+  <h3 id="group-realtime">Real-time Measurements (0x0004 ~ 0x000A)</h3>
+  <p>Instantaneous voltage, current, and power values from the device. All values are Nullable — a <code>null</code> return means the data is currently invalid.</p>
 
   <div class="table-wrap">
     <table>
@@ -272,73 +272,73 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <th>ID</th>
           <th>Name</th>
-          <th>单位</th>
+          <th>Unit</th>
           <th>Description</th>
         </tr>
       </thead>
       <tbody>
         <tr id="attr-0x0004">
           <td><code>0x0004</code></td>
-          <td>Voltage（电压）</td>
+          <td>Voltage</td>
           <td>mV</td>
-          <td>瞬时电压。<code>220300</code> = 220.3 V。可选，Nullable</td>
+          <td>Instantaneous voltage. <code>220300</code> = 220.3 V. Optional, Nullable</td>
         </tr>
         <tr id="attr-0x0005">
           <td><code>0x0005</code></td>
-          <td>ActiveCurrent（有功电流）</td>
+          <td>ActiveCurrent</td>
           <td>mA</td>
-          <td>瞬时有功电流。<code>1520</code> = 1.52 A。可选，Nullable</td>
+          <td>Instantaneous active current. <code>1520</code> = 1.52 A. Optional, Nullable</td>
         </tr>
         <tr id="attr-0x0006">
           <td><code>0x0006</code></td>
-          <td>ReactiveCurrent（无功电流）</td>
+          <td>ReactiveCurrent</td>
           <td>mA</td>
-          <td>瞬时无功电流。仅交流电设备。<strong>需要 ALTC</strong>，Nullable</td>
+          <td>Instantaneous reactive current. AC devices only. <strong>Requires ALTC</strong>, Nullable</td>
         </tr>
         <tr id="attr-0x0007">
           <td><code>0x0007</code></td>
-          <td>ApparentCurrent（视在电流）</td>
+          <td>ApparentCurrent</td>
           <td>mA</td>
-          <td>瞬时视在电流（有功 + 无功的矢量和）。<strong>需要 ALTC</strong>，Nullable</td>
+          <td>Instantaneous apparent current (vector sum of active + reactive). <strong>Requires ALTC</strong>, Nullable</td>
         </tr>
         <tr id="attr-0x0008">
           <td><code>0x0008</code></td>
-          <td>ActivePower（有功功率）</td>
+          <td>ActivePower</td>
           <td>mW</td>
-          <td>瞬时有功功率（实际做功的部分）。<code>334856</code> = 334.856 W。必选属性，Nullable</td>
+          <td>Instantaneous active power (the portion that performs actual work). <code>334856</code> = 334.856 W. Mandatory, Nullable</td>
         </tr>
         <tr id="attr-0x0009">
           <td><code>0x0009</code></td>
-          <td>ReactivePower（无功功率）</td>
+          <td>ReactivePower</td>
           <td>mW</td>
-          <td>瞬时无功功率（不做有效功的部分）。单位实际为 mVAR。<strong>需要 ALTC</strong>，Nullable</td>
+          <td>Instantaneous reactive power (the portion that does no effective work). Actual unit is mVAR. <strong>Requires ALTC</strong>, Nullable</td>
         </tr>
         <tr id="attr-0x000A">
           <td><code>0x000A</code></td>
-          <td>ApparentPower（视在功率）</td>
+          <td>ApparentPower</td>
           <td>mW</td>
-          <td>瞬时视在功率（有功 + 无功的总量）。单位实际为 mVA。<strong>需要 ALTC</strong>，Nullable</td>
+          <td>Instantaneous apparent power (total of active + reactive). Actual unit is mVA. <strong>Requires ALTC</strong>, Nullable</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">有功 / 无功 / 视在功率的关系</div>
+    <div class="callout-title">Relationship Between Active / Reactive / Apparent Power</div>
     <p>
-      <strong>有功功率</strong>（Active Power）= 实际消耗的电能，电费按这个算。<br/>
-      <strong>无功功率</strong>（Reactive Power）= 电感/电容导致的「来回搬运」，不做有效功但占用线路容量。<br/>
-      <strong>视在功率</strong>（Apparent Power）= 两者的矢量和，代表线路的总负载能力。<br/>
-      关系：<code>ApparentPower&sup2; = ActivePower&sup2; + ReactivePower&sup2;</code>
+      <strong>Active Power</strong> = the actual energy consumed, what you pay for on your electricity bill.<br/>
+      <strong>Reactive Power</strong> = the "back and forth" caused by inductors/capacitors; does no effective work but occupies line capacity.<br/>
+      <strong>Apparent Power</strong> = the vector sum of both, representing the total load capacity of the line.<br/>
+      Relationship: <code>ApparentPower&sup2; = ActivePower&sup2; + ReactivePower&sup2;</code>
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== RMS 测量值（0x000B ~ 0x000E）====== -->
-  <h3 id="group-rms">RMS 测量值(0x000B ~ 0x000E)</h3>
+  <!-- ====== RMS Measurements (0x000B ~ 0x000E) ====== -->
+  <h3 id="group-rms">RMS Measurements (0x000B ~ 0x000E)</h3>
   <p>
-    交流电的 RMS（均方根）测量值 —— 交流电的有效值。对于纯正弦波，RMS 值 = 峰值 / &radic;2。
-    这组属性全部需要 <strong>ALTC</strong> 特性。
+    RMS (Root Mean Square) measurements for AC power — the effective values of alternating current. For a pure sine wave, RMS value = peak value / &radic;2.
+    All attributes in this group require the <strong>ALTC</strong> feature.
   </p>
 
   <div class="table-wrap">
@@ -347,43 +347,43 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <th>ID</th>
           <th>Name</th>
-          <th>单位</th>
+          <th>Unit</th>
           <th>Description</th>
         </tr>
       </thead>
       <tbody>
         <tr id="attr-0x000B">
           <td><code>0x000B</code></td>
-          <td>RMSVoltage（RMS 电压）</td>
+          <td>RMSVoltage</td>
           <td>mV</td>
-          <td>交流电压有效值。家用电 220V 对应约 <code>220000</code>。Nullable</td>
+          <td>AC voltage effective value. Household 220V corresponds to approximately <code>220000</code>. Nullable</td>
         </tr>
         <tr id="attr-0x000C">
           <td><code>0x000C</code></td>
-          <td>RMSCurrent（RMS 电流）</td>
+          <td>RMSCurrent</td>
           <td>mA</td>
-          <td>交流电流有效值。Nullable</td>
+          <td>AC current effective value. Nullable</td>
         </tr>
         <tr id="attr-0x000D">
           <td><code>0x000D</code></td>
-          <td>RMSPower（RMS 功率）</td>
+          <td>RMSPower</td>
           <td>mW</td>
-          <td>交流功率有效值。Nullable</td>
+          <td>AC power effective value. Nullable</td>
         </tr>
         <tr id="attr-0x000E">
           <td><code>0x000E</code></td>
-          <td>Frequency（频率）</td>
+          <td>Frequency</td>
           <td>mHz</td>
-          <td>交流电频率。<code>50000</code> = 50.0 Hz（中国标准），<code>60000</code> = 60.0 Hz（美国标准）。Nullable</td>
+          <td>AC frequency. <code>50000</code> = 50.0 Hz (e.g. Europe/China), <code>60000</code> = 60.0 Hz (e.g. US/Japan). Nullable</td>
         </tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 谐波与补充属性（0x000F ~ 0x0012）====== -->
-  <h3 id="group-harmonics">谐波与补充属性(0x000F ~ 0x0012)</h3>
-  <p>谐波分析数据和功率因数、中性线电流。谐波属性需要 HARM 特性，功率因数需要 ALTC，中性线电流需要 POLY。</p>
+  <!-- ====== Harmonics & Supplementary Attributes (0x000F ~ 0x0012) ====== -->
+  <h3 id="group-harmonics">Harmonics & Supplementary Attributes (0x000F ~ 0x0012)</h3>
+  <p>Harmonic analysis data, power factor, and neutral current. Harmonic attributes require the HARM feature, power factor requires ALTC, and neutral current requires POLY.</p>
 
   <div class="table-wrap">
     <table>
@@ -398,59 +398,59 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x000F">
           <td><code>0x000F</code></td>
-          <td>HarmonicCurrents（谐波电流）</td>
+          <td>HarmonicCurrents</td>
           <td class="col-required">HARM</td>
-          <td>各次谐波的电流幅值列表（HarmonicMeasurementStruct），用于电能质量分析。Nullable</td>
+          <td>List of current amplitudes for each harmonic order (HarmonicMeasurementStruct), used for power quality analysis. Nullable</td>
         </tr>
         <tr id="attr-0x0010">
           <td><code>0x0010</code></td>
-          <td>HarmonicPhases（谐波相位）</td>
+          <td>HarmonicPhases</td>
           <td class="col-required">HARM</td>
-          <td>各次谐波的相位角列表（HarmonicMeasurementStruct）。Nullable</td>
+          <td>List of phase angles for each harmonic order (HarmonicMeasurementStruct). Nullable</td>
         </tr>
         <tr id="attr-0x0011">
           <td><code>0x0011</code></td>
-          <td>PowerFactor（功率因数）</td>
+          <td>PowerFactor</td>
           <td class="col-required">ALTC</td>
-          <td>有功功率与视在功率的比值，以百分比的 100 倍表示。<code>9960</code> = 99.60%。范围 -10000 ~ 10000。Nullable</td>
+          <td>Ratio of active power to apparent power, expressed as percentage multiplied by 100. <code>9960</code> = 99.60%. Range: -10000 ~ 10000. Nullable</td>
         </tr>
         <tr id="attr-0x0012">
           <td><code>0x0012</code></td>
-          <td>NeutralCurrent（中性线电流）</td>
+          <td>NeutralCurrent</td>
           <td class="col-required">POLY</td>
-          <td>多相系统中中性线（零线）的电流。三相不平衡时此值较大。Nullable</td>
+          <td>Current in the neutral wire of a polyphase system. This value is significant when three-phase loads are unbalanced. Nullable</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">PowerFactor 实际含义</div>
+    <div class="callout-title">What PowerFactor Actually Means</div>
     <p>
-      功率因数 = 有功功率 / 视在功率。值越接近 100%（即 10000），说明电能利用效率越高。
-      纯电阻负载（电热水壶）接近 100%，带电机的设备（空调、冰箱）通常 80%~95%。
-      负值表示设备在向电网回馈电能（如光伏逆变器）。
+      Power factor = active power / apparent power. The closer to 100% (i.e. 10000), the higher the energy utilization efficiency.
+      Pure resistive loads (electric kettles) are close to 100%, while devices with motors (air conditioners, refrigerators) typically range from 80% to 95%.
+      A negative value indicates the device is feeding energy back to the grid (e.g. a solar inverter).
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 枚举定义 ====== -->
+  <!-- ====== Enum Definitions ====== -->
   <h2 id="enums">Enum Definitions</h2>
 
-  <h3 id="enum-power-mode">PowerModeEnum(供电模式)</h3>
+  <h3 id="enum-power-mode">PowerModeEnum (Power Mode)</h3>
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">Unknown</span>
-        <span class="enum-desc">未知供电模式</span>
+        <span class="enum-desc">Unknown power mode</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">DC</span>
-        <span class="enum-desc">直流电（太阳能面板、电池系统、USB 供电设备）</span>
+        <span class="enum-desc">Direct Current (solar panels, battery systems, USB-powered devices)</span>
       </div>
     </div>
     <div class="enum-card">

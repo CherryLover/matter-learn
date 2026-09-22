@@ -34,7 +34,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 属性总览 ====== -->
+  <!-- ====== Attribute Overview ====== -->
   <h2 id="attributes">Attribute Overview</h2>
   <p>TemperatureMeasurement has only four Attributes, of which <code>MeasuredValue</code> is the most commonly used. Click an Attribute ID to jump to its detailed description.</p>
 
@@ -883,7 +883,7 @@ val displayExt = actualKpa?.let { "%.1f hPa".format(it) } ?: "--"\`}</code></pre
     </p>
   </div>
 
-  <!-- ====== 属性总览 ====== -->
+  <!-- ====== Attribute Overview ====== -->
   <h2 id="attributes">Attribute Overview</h2>
   <p>IlluminanceMeasurement has 5 Attributes, of which <code>MeasuredValue</code> is the most important. Click an Attribute ID to jump to its detailed description.</p>
 
@@ -1154,7 +1154,7 @@ val display = lux?.let { String.format("%.0f lux", it) } ?: "--"\`}</code></pre>
     </p>
   </div>
 
-  <!-- ====== 属性总览 ====== -->
+  <!-- ====== Attribute Overview ====== -->
   <h2 id="attributes">Attribute Overview</h2>
   <p>FlowMeasurement has only four Attributes, of which <code>MeasuredValue</code> is the most commonly used. Click an Attribute ID to jump to its detailed description.</p>
 
@@ -1227,128 +1227,128 @@ val display = lux?.let { String.format("%.0f lux", it) } ?: "--"\`}</code></pre>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x01">MinMeasuredValue(可测最低流量)</h3>
+  <h3 id="attr-0x01">MinMeasuredValue (Minimum Measurable Flow Rate)</h3>
   <p>
-    传感器能够测量的最低流量值，单位 0.1 m³/h。App 可以用它来设置流量显示范围的下限，或判断当前读数是否已经触底。
+    The lowest flow rate the sensor can measure, in units of 0.1 m³/h. The App can use this to set the lower bound of the flow rate display range, or to determine whether the current reading has reached the minimum.
   </p>
   <ul>
-    <li><strong>类型</strong>: uint16，Nullable</li>
-    <li><strong>范围</strong>: 0 到 MaxMeasuredValue - 1</li>
-    <li><strong>Nullable</strong>: 为 <code>null</code> 时表示设备未定义下限</li>
+    <li><strong>Type</strong>: uint16, Nullable</li>
+    <li><strong>Range</strong>: 0 to MaxMeasuredValue - 1</li>
+    <li><strong>Nullable</strong>: <code>null</code> indicates the device has not defined a lower limit</li>
   </ul>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x02">MaxMeasuredValue(可测最高流量)</h3>
+  <h3 id="attr-0x02">MaxMeasuredValue (Maximum Measurable Flow Rate)</h3>
   <p>
-    传感器能够测量的最高流量值，单位 0.1 m³/h。当 <code>MeasuredValue</code> 接近此上限时，可能意味着流量已超出传感器正常工作范围。
+    The highest flow rate the sensor can measure, in units of 0.1 m³/h. When <code>MeasuredValue</code> approaches this upper limit, it may indicate the flow has exceeded the sensor's normal operating range.
   </p>
   <ul>
-    <li><strong>类型</strong>: uint16，Nullable</li>
-    <li><strong>范围</strong>: MinMeasuredValue + 1 到 65534</li>
-    <li><strong>Nullable</strong>: 为 <code>null</code> 时表示设备未定义上限</li>
+    <li><strong>Type</strong>: uint16, Nullable</li>
+    <li><strong>Range</strong>: MinMeasuredValue + 1 to 65534</li>
+    <li><strong>Nullable</strong>: <code>null</code> indicates the device has not defined an upper limit</li>
   </ul>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x03">Tolerance(测量容差)</h3>
+  <h3 id="attr-0x03">Tolerance (Measurement Tolerance)</h3>
   <p>
-    传感器的测量精度容差，单位 0.1 m³/h。例如值为 <code>10</code>，表示测量精度为 <strong>&plusmn;1.0 m³/h</strong>。
-    这个属性是可选的，不是所有设备都上报。
+    The measurement tolerance of the sensor, in units of 0.1 m³/h. For example, a value of <code>10</code> means a measurement accuracy of <strong>&plusmn;1.0 m³/h</strong>.
+    This Attribute is optional and not all devices report it.
   </p>
   <ul>
-    <li><strong>类型</strong>: uint16（无符号，容差不会为负）</li>
-    <li><strong>范围</strong>: 0 到 2048（即 0 到 &plusmn;204.8 m³/h）</li>
+    <li><strong>Type</strong>: uint16 (unsigned, tolerance cannot be negative)</li>
+    <li><strong>Range</strong>: 0 to 2048 (i.e., 0 to &plusmn;204.8 m³/h)</li>
   </ul>
   <div class="callout callout-info">
-    <div class="callout-title">Tolerance 的实际用途</div>
+    <div class="callout-title">Practical Use of Tolerance</div>
     <p>
-      如果传感器报告 <code>MeasuredValue = 150</code>（15.0 m³/h）且 <code>Tolerance = 10</code>（&plusmn;1.0 m³/h），
-      那么实际流量在 14.0 m³/h ~ 16.0 m³/h 之间。做流量阈值触发自动化时，应将容差纳入考量，避免在阈值附近频繁触发报警。
+      If the sensor reports <code>MeasuredValue = 150</code> (15.0 m³/h) and <code>Tolerance = 10</code> (&plusmn;1.0 m³/h),
+      the actual flow rate is between 14.0 m³/h and 16.0 m³/h. When setting up flow rate threshold automations, you should factor in the tolerance to avoid frequent alarm triggering near the threshold.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 命令说明 ====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    FlowMeasurement 是一个<strong>纯只读的 Server Cluster</strong>，没有任何命令。
-    设备负责采集流量数据并更新属性，App 端只需读取（Read）或订阅（Subscribe）即可获取数据。
+    FlowMeasurement is a <strong>read-only Server Cluster</strong> with no Commands.
+    The device is responsible for collecting flow data and updating Attributes; the App only needs to Read or Subscribe to obtain data.
   </p>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>读取一个水流量传感器的 FlowMeasurement Cluster 属性：</p>
+  <p>Reading the FlowMeasurement Cluster Attributes from a water flow sensor:</p>
   <pre><code>{
-  // --- FlowMeasurement Cluster（Endpoint 1）---
-  "0x0": 150,        // MeasuredValue = 150 → 实际 15.0 m³/h
-  "0x1": 0,          // MinMeasuredValue = 0 → 实际 0.0 m³/h
-  "0x2": 5000,       // MaxMeasuredValue = 5000 → 实际 500.0 m³/h
-  "0x3": 10          // Tolerance = 10 → 实际 ±1.0 m³/h
+  // --- FlowMeasurement Cluster (Endpoint 1) ---
+  "0x0": 150,        // MeasuredValue = 150 → actual 15.0 m³/h
+  "0x1": 0,          // MinMeasuredValue = 0 → actual 0.0 m³/h
+  "0x2": 5000,       // MaxMeasuredValue = 5000 → actual 500.0 m³/h
+  "0x3": 10          // Tolerance = 10 → actual ±1.0 m³/h
 }</code></pre>
 
-  <p>读取请求示例 —— 一次性获取 Cluster 全部属性：</p>
+  <p>Read request example — retrieve all Cluster Attributes at once:</p>
   <pre><code>{
-  // 读取流量传感器的所有属性
+  // Read all Attributes of the flow sensor
   "readRequests": [{
     "attributePath": {
       "endpointId": 1,
       "clusterId": "0x0404"
-      // 不指定 attributeId → 读取该 Cluster 全部属性
+      // No attributeId specified → read all Attributes of this Cluster
     }
   }]
 }</code></pre>
 
-  <p>订阅流量变化 —— 实时跟踪流量更新：</p>
+  <p>Subscribe to flow rate changes — track flow updates in real time:</p>
   <pre><code>{
-  // 订阅流量变化（每 10 秒~2 分钟上报一次）
+  // Subscribe to flow rate changes (report every 10 seconds to 2 minutes)
   "subscribeRequests": [{
     "attributePath": {
       "endpointId": 1,
       "clusterId": "0x0404",
       "attributeId": "0x00"        // MeasuredValue
     },
-    "minIntervalFloor": 10,        // 最少 10 秒上报一次
-    "maxIntervalCeiling": 120      // 最多 2 分钟上报一次
+    "minIntervalFloor": 10,        // Report at least every 10 seconds
+    "maxIntervalCeiling": 120      // Report at most every 2 minutes
   }]
 }</code></pre>
 
   <div class="callout callout-tip">
-    <div class="callout-title">流量转换代码参考</div>
+    <div class="callout-title">Flow Rate Conversion Code Reference</div>
     <p>
-      处理设备返回值时的关键逻辑：
+      Key logic for processing device return values:
     </p>
-    <pre><code>{\`// 设备返回 MeasuredValue = 150
-val rawValue: Int? = 150    // Nullable，可能为 null
+    <pre><code>{\`// Device returns MeasuredValue = 150
+val rawValue: Int? = 150    // Nullable, may be null
 val flowRate = rawValue?.let { it / 10.0 }  // → 15.0 m³/h
 val flowLiterPerMin = flowRate?.let { it * 1000.0 / 60.0 }  // → 250.0 L/min
 
-// 显示时处理 null
+// Handle null when displaying
 val display = flowRate?.let { String.format("%.1f m³/h", it) } ?: "--"\`}</code></pre>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
-    <summary>场景 1：家庭水流监测</summary>
+    <summary>Scenario 1: Home Water Flow Monitoring</summary>
     <div class="scenario-content">
       <ol>
-        <li>订阅 <code>MeasuredValue (0x00)</code>，设置合理的上报间隔（如 10 秒 ~ 2 分钟）</li>
-        <li>收到新值后除以 10，得到实际流量：<code>150 → 15.0 m³/h</code></li>
-        <li>处理 <code>null</code> 值 —— 展示「--」或「传感器离线」，不要显示 0</li>
-        <li>设定异常流量阈值 —— 例如凌晨持续检测到流量大于 0，可能存在漏水，触发报警通知</li>
-        <li>可选：累计流量统计，定期读取 <code>MeasuredValue</code> 并按时间积分估算用水量</li>
+        <li>Subscribe to <code>MeasuredValue (0x00)</code> with a reasonable reporting interval (e.g., 10 seconds to 2 minutes)</li>
+        <li>Divide the received value by 10 to get the actual flow rate: <code>150 → 15.0 m³/h</code></li>
+        <li>Handle <code>null</code> values — display "--" or "Sensor offline", do not show 0</li>
+        <li>Set abnormal flow thresholds — e.g., if continuous flow greater than 0 is detected during the early morning hours, a leak may be present; trigger an alarm notification</li>
+        <li>Optional: Cumulative flow statistics — periodically read <code>MeasuredValue</code> and estimate water consumption by time-based integration</li>
       </ol>
     </div>
   </details>
 
   <details class="scenario">
-    <summary>场景 2：HVAC 风量检测</summary>
+    <summary>Scenario 2: HVAC Airflow Detection</summary>
     <div class="scenario-content">
       <ol>
-        <li>订阅 <code>MeasuredValue (0x00)</code>，持续监听风管内气体流量变化</li>
-        <li>读取 <code>MinMeasuredValue</code> / <code>MaxMeasuredValue</code> 确认传感器量程，判断当前风量是否在正常工作范围内</li>
-        <li>考虑 <code>Tolerance</code> 容差 —— 如果容差为 &plusmn;1.0 m³/h，阈值设定时应留出裕量，避免在边界值频繁触发</li>
-        <li>配合 FanControl Cluster（0x0202）实现闭环控制：流量传感器报告实际风量，风扇控制器调整转速以维持目标风量</li>
+        <li>Subscribe to <code>MeasuredValue (0x00)</code> to continuously monitor gas flow changes in the duct</li>
+        <li>Read <code>MinMeasuredValue</code> / <code>MaxMeasuredValue</code> to confirm the sensor range and determine whether the current airflow is within the normal operating range</li>
+        <li>Factor in <code>Tolerance</code> — if the tolerance is &plusmn;1.0 m³/h, leave sufficient margin when setting thresholds to avoid frequent triggering at boundary values</li>
+        <li>Combine with FanControl Cluster (0x0202) for closed-loop control: the flow sensor reports the actual airflow, the fan controller adjusts speed to maintain the target airflow</li>
       </ol>
     </div>
   </details>
@@ -3549,7 +3549,7 @@ val level: Int? = readAttribute(0x000A)  // LevelValueEnum\`}</code></pre>
     </ul>
   </div>
 
-  <!-- ====== Feature 位图 ====== -->
+  <!-- ====== Feature Bitmap ====== -->
   <h2 id="features">Feature Bitmap</h2>
   <p>
     Concentration measurement Clusters share the same set of Feature definitions. Devices declare their supported capabilities via <code>FeatureMap (0xFFFC)</code>.
@@ -3615,7 +3615,7 @@ val level: Int? = readAttribute(0x000A)  // LevelValueEnum\`}</code></pre>
     </p>
   </div>
 
-  <!-- ====== 属性总览 ====== -->
+  <!-- ====== Attribute Overview ====== -->
   <h2 id="attributes">Attribute Overview</h2>
   <p>All attributes are read-only. The App retrieves data via Read / Subscribe.</p>
 
@@ -3712,7 +3712,7 @@ val level: Int? = readAttribute(0x000A)  // LevelValueEnum\`}</code></pre>
     </table>
   </div>
 
-  <!-- ====== 关键枚举 ====== -->
+  <!-- ====== Key Enumerations ====== -->
   <h2 id="enums">Key Enums</h2>
   <p>The following enums are shared across all concentration measurement Clusters. Only the two most commonly used in CO scenarios are listed here.</p>
 
@@ -3815,7 +3815,7 @@ val level: Int? = readAttribute(0x000A)  // LevelValueEnum\`}</code></pre>
     </div>
   </div>
 
-  <!-- ====== CO 安全阈值参考 ====== -->
+  <!-- ====== CO Safety Threshold Reference ====== -->
   <h2 id="thresholds">CO Safety Threshold Reference</h2>
   <p>
     The following thresholds are derived from WHO and UL 2034 standards, provided as a reference for App alarm strategy design.
@@ -3890,7 +3890,7 @@ val level: Int? = readAttribute(0x000A)  // LevelValueEnum\`}</code></pre>
     App alarm logic should primarily follow SmokeCOAlarm's state, with this Cluster's values displayed as supplementary information.
   </p>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
   <p>Reading all attributes from a CO sensor device (FeatureMap = MEA + LEV + AVG):</p>
   <pre><code>{
@@ -3935,7 +3935,7 @@ val level: Int? = readAttribute(0x000A)  // LevelValueEnum\`}</code></pre>
   }]
 }</code></pre>
 
-  <!-- ====== 应用场景 ====== -->
+  <!-- ====== Application Scenarios ====== -->
   <h2 id="scenarios">Usage Scenarios</h2>
 
   <h3 id="scenario-garage">Scenario 1: Garage Ventilation Interlock</h3>
@@ -3973,7 +3973,7 @@ val level: Int? = readAttribute(0x000A)  // LevelValueEnum\`}</code></pre>
     </p>
   </div>
 
-  <!-- ====== 开发建议 ====== -->
+  <!-- ====== Development Recommendations ====== -->
   <h2 id="dev-tips">Developer Tips</h2>
   <div class="callout callout-tip">
     <div class="callout-title">Implementation Notes</div>
