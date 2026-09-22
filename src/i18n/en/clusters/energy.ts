@@ -715,33 +715,33 @@ val powerFactor = pfRaw?.let { it / 100.0 }         // → 99.60%
 val display = voltageV?.let { String.format("%.1f V", it) } ?: "--"\`}</code></pre>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
-    <summary>场景 1：智能插座实时功率监控面板</summary>
+    <summary>Scenario 1: Smart Plug Real-time Power Monitoring Dashboard</summary>
     <div class="scenario-content">
       <ol>
-        <li>读取 <code>FeatureMap (0xFFFC)</code>，确认设备支持 ALTC（交流电）</li>
-        <li>读取 <code>Accuracy (0x0002)</code>，确认设备能测量哪些类型及其精度</li>
-        <li>订阅核心属性：<code>ActivePower (0x0008)</code>、<code>RMSVoltage (0x000B)</code>、<code>RMSCurrent (0x000C)</code>，
-            设置合理的上报间隔（如 5 秒 ~ 30 秒）</li>
-        <li>界面展示：电压 220.3 V、电流 1.52 A、功率 334.9 W、功率因数 99.6%</li>
-        <li>可选：订阅 <code>MeasurementPeriodRanges</code> 事件，记录历史峰值用于绘制趋势图</li>
-        <li>处理 <code>null</code> 值 —— 展示「--」，不要显示 0，因为 0 和「无数据」含义不同</li>
+        <li>Read <code>FeatureMap (0xFFFC)</code> to confirm the device supports ALTC (AC)</li>
+        <li>Read <code>Accuracy (0x0002)</code> to determine which measurement types the device supports and their precision</li>
+        <li>Subscribe to core attributes: <code>ActivePower (0x0008)</code>, <code>RMSVoltage (0x000B)</code>, <code>RMSCurrent (0x000C)</code>,
+            with a reasonable reporting interval (e.g. 5 to 30 seconds)</li>
+        <li>Display on the UI: Voltage 220.3 V, Current 1.52 A, Power 334.9 W, Power Factor 99.6%</li>
+        <li>Optional: Subscribe to the <code>MeasurementPeriodRanges</code> event to record historical peaks for trend charts</li>
+        <li>Handle <code>null</code> values — display "--" instead of 0, since 0 and "no data" have different meanings</li>
       </ol>
     </div>
   </details>
 
   <details class="scenario">
-    <summary>场景 2：家庭用电异常告警</summary>
+    <summary>Scenario 2: Home Power Consumption Anomaly Alerts</summary>
     <div class="scenario-content">
       <ol>
-        <li>订阅 <code>ActivePower (0x0008)</code> 和 <code>RMSCurrent (0x000C)</code>，持续监听</li>
-        <li>设定告警阈值：功率超过 2200 W（10A &times; 220V）或电流超过 10000 mA 时触发</li>
-        <li>参考 <code>Accuracy</code> 中的精度值设置防抖 —— 如果精度为 &plusmn;5%，阈值附近应留出余量</li>
-        <li>触发告警时推送通知，严重时可联动 OnOff Cluster 自动断电保护</li>
-        <li>可选：监听 <code>PowerFactor (0x0011)</code>，功率因数持续低于 70% 可能意味着设备异常</li>
+        <li>Subscribe to <code>ActivePower (0x0008)</code> and <code>RMSCurrent (0x000C)</code> for continuous monitoring</li>
+        <li>Set alert thresholds: trigger when power exceeds 2200 W (10A &times; 220V) or current exceeds 10000 mA</li>
+        <li>Use the precision values in <code>Accuracy</code> for debouncing — if precision is &plusmn;5%, leave margin around the threshold</li>
+        <li>Send push notifications when alerts trigger; in severe cases, link to the OnOff Cluster for automatic power cutoff protection</li>
+        <li>Optional: Monitor <code>PowerFactor (0x0011)</code>; a sustained power factor below 70% may indicate device malfunction</li>
       </ol>
     </div>
   </details>
@@ -782,36 +782,36 @@ val display = voltageV?.let { String.format("%.1f V", it) } ?: "--"\`}</code></p
   },
   'electrical-energy-measurement': {
     title: 'ElectricalEnergyMeasurement Cluster (0x0091)',
-    description: 'Matter ElectricalEnergyMeasurement Cluster(0x0091)完整参考 — 累计/周期电能测量、EnergyMeasurementStruct 数据结构、Feature 位图(IMPE/EXPE/CUME/PERE)、事件订阅、与 ElectricalPowerMeasurement 的关系。',
+    description: 'Complete reference for the Matter ElectricalEnergyMeasurement Cluster (0x0091) — cumulative/periodic energy measurement, EnergyMeasurementStruct data structure, Feature bitmap (IMPE/EXPE/CUME/PERE), event subscriptions, and its relationship with ElectricalPowerMeasurement.',
     prev: { title: 'Cluster Reference', slug: 'clusters' },
     next: undefined,
     content: `<h1>ElectricalEnergyMeasurement Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x0091</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 通常在电气设备端点（如智能插座、电能表、充电桩）
+    <strong>Endpoint</strong>: Typically on an electrical device endpoint (e.g. smart plug, energy meter, EV charger)
   </p>
   <p>
-    ElectricalEnergyMeasurement 负责记录设备随时间累积的电能消耗（或输出）。
-    与实时测量瞬时功率的 <a href="/clusters/electrical-power-measurement/">ElectricalPowerMeasurement（0x0090）</a> 不同，
-    这个 Cluster 关注的是<strong>「一共用了多少电」</strong>和<strong>「这段时间用了多少电」</strong>。
-    两者通常共存于同一个 Endpoint，前者像车速表，后者像里程表。
+    ElectricalEnergyMeasurement is responsible for recording the cumulative energy consumption (or output) of a device over time.
+    Unlike <a href="/clusters/electrical-power-measurement/">ElectricalPowerMeasurement (0x0090)</a> which measures instantaneous power,
+    this Cluster focuses on <strong>"how much total energy has been used"</strong> and <strong>"how much energy was used during this period"</strong>.
+    Both typically coexist on the same Endpoint — the former is like a speedometer, the latter like an odometer.
   </p>
 
   <div class="callout callout-warning">
-    <div class="callout-title">能量单位：毫瓦时(mWh)</div>
+    <div class="callout-title">Energy Unit: Milliwatt-hours (mWh)</div>
     <p>
-      所有能量值的单位都是 <strong>mWh（毫瓦时）</strong>，类型为 int64。
-      设备返回 <code>12345678</code>，实际电能是 <code>12,345.678 Wh</code> 即 <code>12.35 kWh</code>。
-      <strong>展示时需要做单位换算</strong>：除以 1000 得 Wh，再除以 1000 得 kWh。
+      All energy values are in <strong>mWh (milliwatt-hours)</strong>, with type int64.
+      A device returning <code>12345678</code> represents <code>12,345.678 Wh</code>, i.e. <code>12.35 kWh</code>.
+      <strong>Unit conversion is required for display</strong>: divide by 1000 to get Wh, divide again by 1000 to get kWh.
     </p>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">累计 vs 周期</div>
+    <div class="callout-title">Cumulative vs Periodic</div>
     <p>
-      这个 Cluster 有两种计量模式，由 Feature 决定：<br/>
-      <strong>累计（Cumulative）</strong>：从某个起点开始，持续累加的总电能，类似电表读数，只增不减（除非重置）。<br/>
-      <strong>周期（Periodic）</strong>：每个测量周期内消耗的电能，周期结束后归零重新计算，适合统计「过去一小时用了多少电」。
+      This Cluster has two metering modes, determined by Features:<br/>
+      <strong>Cumulative</strong>: Total energy accumulated from a starting point, similar to a utility meter reading — it only increases (unless reset).<br/>
+      <strong>Periodic</strong>: Energy consumed within each measurement period, reset to zero at the end of each period — ideal for tracking "how much energy was used in the past hour."
     </p>
   </div>
 
@@ -830,16 +830,16 @@ val display = voltageV?.let { String.format("%.1f V", it) } ?: "--"\`}</code></p
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 数据结构 ====== -->
+  <!-- ====== Data Structures ====== -->
   <h2 id="structs">Data Structures</h2>
   <p>
-    ElectricalEnergyMeasurement 使用两个核心 Struct 来承载数据。
-    理解这两个结构体是读懂整个 Cluster 的基础。
+    ElectricalEnergyMeasurement uses two core Structs to carry data.
+    Understanding these two structures is fundamental to reading the entire Cluster.
   </p>
 
-  <h3 id="struct-energy">EnergyMeasurementStruct(电能测量数据)</h3>
+  <h3 id="struct-energy">EnergyMeasurementStruct (Energy Measurement Data)</h3>
   <p>
-    每一次能量读数都用这个结构体表示。它包含能量值和对应的时间范围。
+    Every energy reading is represented by this structure. It contains the energy value and the corresponding time range.
   </p>
   <div class="table-wrap">
     <table>
@@ -847,7 +847,7 @@ val display = voltageV?.let { String.format("%.1f V", it) } ?: "--"\`}</code></p
         <tr>
           <th>Field</th>
           <th>Type</th>
-          <th>必选</th>
+          <th>Required</th>
           <th>Description</th>
         </tr>
       </thead>
@@ -855,32 +855,32 @@ val display = voltageV?.let { String.format("%.1f V", it) } ?: "--"\`}</code></p
         <tr>
           <td>Energy</td>
           <td>int64</td>
-          <td>是</td>
-          <td>电能值，单位 mWh（毫瓦时）。累计模式下只增不减，周期模式下每周期重置</td>
+          <td>Yes</td>
+          <td>Energy value in mWh (milliwatt-hours). Only increases in cumulative mode; resets each period in periodic mode</td>
         </tr>
         <tr>
           <td>StartTimestamp</td>
           <td>epoch_s</td>
-          <td>否</td>
-          <td>测量区间的起始 UTC 时间（秒级 Unix 时间戳）</td>
+          <td>No</td>
+          <td>Start UTC time of the measurement interval (second-precision Unix timestamp)</td>
         </tr>
         <tr>
           <td>EndTimestamp</td>
           <td>epoch_s</td>
-          <td>否</td>
-          <td>测量区间的结束 UTC 时间（即最新更新时间）</td>
+          <td>No</td>
+          <td>End UTC time of the measurement interval (i.e. the most recent update time)</td>
         </tr>
         <tr>
           <td>StartSystime</td>
           <td>systime_ms</td>
-          <td>否</td>
-          <td>测量区间的起始系统时间（毫秒，设备本地单调时钟）</td>
+          <td>No</td>
+          <td>Start system time of the measurement interval (milliseconds, device-local monotonic clock)</td>
         </tr>
         <tr>
           <td>EndSystime</td>
           <td>systime_ms</td>
-          <td>否</td>
-          <td>测量区间的结束系统时间（毫秒）</td>
+          <td>No</td>
+          <td>End system time of the measurement interval (milliseconds)</td>
         </tr>
       </tbody>
     </table>
@@ -889,15 +889,15 @@ val display = voltageV?.let { String.format("%.1f V", it) } ?: "--"\`}</code></p
   <div class="callout callout-tip">
     <div class="callout-title">Timestamp vs Systime</div>
     <p>
-      时间字段提供两套来源：<code>Timestamp</code> 是 UTC 墙钟时间（需要设备同步过 NTP），
-      <code>Systime</code> 是设备启动后的单调递增时钟（不依赖网络，但重启会归零）。
-      设备至少提供其中一套；如果两套都有，优先使用 <code>Timestamp</code>。
+      Time fields come in two flavors: <code>Timestamp</code> is UTC wall-clock time (requires the device to have synced via NTP),
+      while <code>Systime</code> is a monotonically increasing clock since device boot (independent of network, but resets on reboot).
+      The device provides at least one set; if both are available, prefer <code>Timestamp</code>.
     </p>
   </div>
 
-  <h3 id="struct-reset">CumulativeEnergyResetStruct(累计重置信息)</h3>
+  <h3 id="struct-reset">CumulativeEnergyResetStruct (Cumulative Reset Information)</h3>
   <p>
-    记录累计电能值上次被重置的时间。用于判断当前累计读数的起算时间。
+    Records the time when the cumulative energy value was last reset. Used to determine the starting point of the current cumulative reading.
   </p>
   <div class="table-wrap">
     <table>
@@ -912,33 +912,33 @@ val display = voltageV?.let { String.format("%.1f V", it) } ?: "--"\`}</code></p
         <tr>
           <td>ImportedResetTimestamp</td>
           <td>epoch_s</td>
-          <td>输入侧累计值上次重置的 UTC 时间</td>
+          <td>UTC time when the import-side cumulative value was last reset</td>
         </tr>
         <tr>
           <td>ExportedResetTimestamp</td>
           <td>epoch_s</td>
-          <td>输出侧累计值上次重置的 UTC 时间</td>
+          <td>UTC time when the export-side cumulative value was last reset</td>
         </tr>
         <tr>
           <td>ImportedResetSystime</td>
           <td>systime_ms</td>
-          <td>输入侧累计值上次重置的系统时间</td>
+          <td>System time when the import-side cumulative value was last reset</td>
         </tr>
         <tr>
           <td>ExportedResetSystime</td>
           <td>systime_ms</td>
-          <td>输出侧累计值上次重置的系统时间</td>
+          <td>System time when the export-side cumulative value was last reset</td>
         </tr>
       </tbody>
     </table>
   </div>
-  <p class="back-link"><a href="#structs">&#8593; 返回数据结构</a></p>
+  <p class="back-link"><a href="#structs">&#8593; Back to Data Structures</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h2 id="attributes">Attributes</h2>
-  <p>ElectricalEnergyMeasurement 共有 6 个应用属性。点击属性 ID 可跳转到详细说明。</p>
+  <p>ElectricalEnergyMeasurement has 6 application-level attributes. Click an attribute ID to jump to its detailed description.</p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute Summary Table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -955,126 +955,126 @@ val display = voltageV?.let { String.format("%.1f V", it) } ?: "--"\`}</code></p
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>Accuracy</td>
           <td>MeasurementAccuracyStruct</td>
-          <td class="col-optional">无（必选）</td>
-          <td>测量精度描述</td>
+          <td class="col-optional">None (Mandatory)</td>
+          <td>Measurement accuracy description</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>CumulativeEnergyImported</td>
           <td>EnergyMeasurementStruct</td>
           <td class="col-required">IMPE &amp; CUME</td>
-          <td>累计输入电能（用电量）</td>
+          <td>Cumulative imported energy (consumption)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
           <td>CumulativeEnergyExported</td>
           <td>EnergyMeasurementStruct</td>
           <td class="col-required">EXPE &amp; CUME</td>
-          <td>累计输出电能（发电量）</td>
+          <td>Cumulative exported energy (generation)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
           <td>PeriodicEnergyImported</td>
           <td>EnergyMeasurementStruct</td>
           <td class="col-required">IMPE &amp; PERE</td>
-          <td>当前周期输入电能</td>
+          <td>Current period imported energy</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0004">
           <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
           <td>PeriodicEnergyExported</td>
           <td>EnergyMeasurementStruct</td>
           <td class="col-required">EXPE &amp; PERE</td>
-          <td>当前周期输出电能</td>
+          <td>Current period exported energy</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0005">
           <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
           <td>CumulativeEnergyReset</td>
           <td>CumulativeEnergyResetStruct</td>
           <td class="col-required">CUME</td>
-          <td>累计值重置时间信息</td>
+          <td>Cumulative value reset time information</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 属性逐项说明 ====== -->
-  <h3 id="attr-0x0000">Accuracy(测量精度)</h3>
+  <!-- ====== Individual Attribute Details ====== -->
+  <h3 id="attr-0x0000">Accuracy (Measurement Accuracy)</h3>
   <p>
-    描述这个电能计量设备的测量精度和量程范围。使用 <code>MeasurementAccuracyStruct</code> 结构体，
-    包含测量类型（固定为 ElectricalEnergy）、量程上下限、以及不同区间的精度描述。
-    这是唯一的必选属性，所有实现此 Cluster 的设备都必须上报。
+    Describes the measurement accuracy and range of this energy metering device. Uses the <code>MeasurementAccuracyStruct</code> structure,
+    containing the measurement type (fixed to ElectricalEnergy), range limits, and accuracy descriptions for different intervals.
+    This is the only mandatory attribute — all devices implementing this Cluster must report it.
   </p>
   <ul>
-    <li><strong>类型</strong>: MeasurementAccuracyStruct</li>
-    <li><strong>读写</strong>: 只读</li>
-    <li><strong>必选</strong>: 是</li>
+    <li><strong>Type</strong>: MeasurementAccuracyStruct</li>
+    <li><strong>Access</strong>: Read-only</li>
+    <li><strong>Required</strong>: Yes</li>
   </ul>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0001">CumulativeEnergyImported(累计输入电能)</h3>
+  <h3 id="attr-0x0001">CumulativeEnergyImported (Cumulative Imported Energy)</h3>
   <p>
-    从设备开始计量（或上次重置）到现在，设备从电网<strong>输入（消耗）</strong>的总电能。
-    这就是日常所说的「总用电量」，类似家用电表的读数。值只增不减，除非通过重置操作归零。
+    The total energy <strong>imported (consumed)</strong> by the device from the grid since metering started (or last reset).
+    This is the everyday "total energy consumption," similar to a household utility meter reading. The value only increases, unless reset to zero.
   </p>
   <ul>
-    <li><strong>类型</strong>: EnergyMeasurementStruct，Nullable</li>
-    <li><strong>所需特性</strong>: IMPE（ImportedEnergy）+ CUME（CumulativeEnergy）</li>
-    <li><strong>换算</strong>: <code>energy / 1000</code> = Wh，<code>energy / 1000000</code> = kWh</li>
+    <li><strong>Type</strong>: EnergyMeasurementStruct, Nullable</li>
+    <li><strong>Required Features</strong>: IMPE (ImportedEnergy) + CUME (CumulativeEnergy)</li>
+    <li><strong>Conversion</strong>: <code>energy / 1000</code> = Wh, <code>energy / 1000000</code> = kWh</li>
   </ul>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0002">CumulativeEnergyExported(累计输出电能)</h3>
+  <h3 id="attr-0x0002">CumulativeEnergyExported (Cumulative Exported Energy)</h3>
   <p>
-    设备向电网<strong>输出（反馈）</strong>的累计总电能。
-    适用于光伏逆变器、储能系统等能向电网回馈电力的设备。普通家用电器不会上报此属性。
+    The cumulative total energy <strong>exported (fed back)</strong> by the device to the grid.
+    Applicable to solar inverters, energy storage systems, and other devices capable of feeding power back to the grid. Ordinary household appliances do not report this attribute.
   </p>
   <ul>
-    <li><strong>类型</strong>: EnergyMeasurementStruct，Nullable</li>
-    <li><strong>所需特性</strong>: EXPE（ExportedEnergy）+ CUME（CumulativeEnergy）</li>
+    <li><strong>Type</strong>: EnergyMeasurementStruct, Nullable</li>
+    <li><strong>Required Features</strong>: EXPE (ExportedEnergy) + CUME (CumulativeEnergy)</li>
   </ul>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0003">PeriodicEnergyImported(周期输入电能)</h3>
+  <h3 id="attr-0x0003">PeriodicEnergyImported (Periodic Imported Energy)</h3>
   <p>
-    当前测量周期内设备输入（消耗）的电能。每个周期结束后自动重置。
-    适合统计「过去一小时用了多少电」「今天用了多少电」等场景。
-    周期长度由设备实现决定，通过 <code>StartTimestamp</code> / <code>EndTimestamp</code> 可以计算。
+    The energy imported (consumed) by the device within the current measurement period. Automatically resets at the end of each period.
+    Ideal for tracking "how much energy was used in the past hour" or "today's usage."
+    The period length is determined by the device implementation and can be calculated from <code>StartTimestamp</code> / <code>EndTimestamp</code>.
   </p>
   <ul>
-    <li><strong>类型</strong>: EnergyMeasurementStruct，Nullable</li>
-    <li><strong>所需特性</strong>: IMPE（ImportedEnergy）+ PERE（PeriodicEnergy）</li>
+    <li><strong>Type</strong>: EnergyMeasurementStruct, Nullable</li>
+    <li><strong>Required Features</strong>: IMPE (ImportedEnergy) + PERE (PeriodicEnergy)</li>
   </ul>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0004">PeriodicEnergyExported(周期输出电能)</h3>
+  <h3 id="attr-0x0004">PeriodicEnergyExported (Periodic Exported Energy)</h3>
   <p>
-    当前测量周期内设备向电网输出（反馈）的电能。与 PeriodicEnergyImported 对称，
-    用于有发电能力的设备统计周期内的发电量。
+    The energy exported (fed back) by the device to the grid within the current measurement period. Symmetric to PeriodicEnergyImported,
+    used by devices with generation capability to track energy output per period.
   </p>
   <ul>
-    <li><strong>类型</strong>: EnergyMeasurementStruct，Nullable</li>
-    <li><strong>所需特性</strong>: EXPE（ExportedEnergy）+ PERE（PeriodicEnergy）</li>
+    <li><strong>Type</strong>: EnergyMeasurementStruct, Nullable</li>
+    <li><strong>Required Features</strong>: EXPE (ExportedEnergy) + PERE (PeriodicEnergy)</li>
   </ul>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0005">CumulativeEnergyReset(累计重置信息)</h3>
+  <h3 id="attr-0x0005">CumulativeEnergyReset (Cumulative Reset Information)</h3>
   <p>
-    记录累计电能值上次被重置的时间。通过这个属性可以知道
-    <code>CumulativeEnergyImported</code> / <code>CumulativeEnergyExported</code>
-    是从什么时候开始累计的。如果设备从未被重置过，此属性为 <code>null</code>。
+    Records when the cumulative energy value was last reset. Through this attribute you can determine
+    when <code>CumulativeEnergyImported</code> / <code>CumulativeEnergyExported</code>
+    started accumulating. If the device has never been reset, this attribute is <code>null</code>.
   </p>
   <ul>
-    <li><strong>类型</strong>: CumulativeEnergyResetStruct，Nullable</li>
-    <li><strong>所需特性</strong>: CUME（CumulativeEnergy）</li>
+    <li><strong>Type</strong>: CumulativeEnergyResetStruct, Nullable</li>
+    <li><strong>Required Features</strong>: CUME (CumulativeEnergy)</li>
   </ul>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 事件 ====== -->
+  <!-- ====== Events ====== -->
   <h2 id="events">Events</h2>
   <p>
-    ElectricalEnergyMeasurement 没有命令（纯只读 Cluster），但定义了两个重要事件。
-    设备通过事件主动通知 App 电能数据的更新，
-    比定时轮询属性更高效，尤其适合需要实时跟踪用电量变化的场景。
+    ElectricalEnergyMeasurement has no commands (read-only Cluster), but defines two important events.
+    Devices proactively notify the app of energy data updates through events,
+    which is more efficient than polling attributes on a timer — especially useful for scenarios that need to track energy consumption changes in real time.
   </p>
 
   <div class="table-wrap">
@@ -1094,22 +1094,22 @@ val display = voltageV?.let { String.format("%.1f V", it) } ?: "--"\`}</code></p
           <td>CumulativeEnergyMeasured</td>
           <td>INFO</td>
           <td class="col-required">CUME</td>
-          <td>累计电能更新</td>
+          <td>Cumulative energy update</td>
         </tr>
         <tr class="clickable-row" data-href="#event-0x01">
           <td><a href="#event-0x01"><code>0x01</code></a></td>
           <td>PeriodicEnergyMeasured</td>
           <td>INFO</td>
           <td class="col-required">PERE</td>
-          <td>周期电能更新</td>
+          <td>Periodic energy update</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <h3 id="event-0x00">CumulativeEnergyMeasured(累计电能更新事件)</h3>
+  <h3 id="event-0x00">CumulativeEnergyMeasured (Cumulative Energy Update Event)</h3>
   <p>
-    当设备的累计电能值发生变化时触发。事件数据中包含最新的累计输入和/或输出电能。
+    Triggered when the device's cumulative energy value changes. The event data contains the latest cumulative imported and/or exported energy.
   </p>
   <div class="table-wrap">
     <table>
@@ -1120,22 +1120,22 @@ val display = voltageV?.let { String.format("%.1f V", it) } ?: "--"\`}</code></p
         <tr>
           <td>EnergyImported</td>
           <td>EnergyMeasurementStruct</td>
-          <td>最新的累计输入电能（可选，取决于 IMPE 特性）</td>
+          <td>Latest cumulative imported energy (optional, depends on IMPE feature)</td>
         </tr>
         <tr>
           <td>EnergyExported</td>
           <td>EnergyMeasurementStruct</td>
-          <td>最新的累计输出电能（可选，取决于 EXPE 特性）</td>
+          <td>Latest cumulative exported energy (optional, depends on EXPE feature)</td>
         </tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#events">&#8593; Back to Events</a></p>
 
-  <h3 id="event-0x01">PeriodicEnergyMeasured(周期电能更新事件)</h3>
+  <h3 id="event-0x01">PeriodicEnergyMeasured (Periodic Energy Update Event)</h3>
   <p>
-    每个测量周期结束时触发。事件数据中包含该周期内的输入和/或输出电能。
-    适合 App 在收到此事件后将数据追加到历史记录中，形成用电曲线图。
+    Triggered at the end of each measurement period. The event data contains the imported and/or exported energy for that period.
+    Ideal for apps to append data to historical records upon receiving this event, building energy consumption charts.
   </p>
   <div class="table-wrap">
     <table>
@@ -1146,70 +1146,70 @@ val display = voltageV?.let { String.format("%.1f V", it) } ?: "--"\`}</code></p
         <tr>
           <td>EnergyImported</td>
           <td>EnergyMeasurementStruct</td>
-          <td>本周期输入电能（可选，取决于 IMPE 特性）</td>
+          <td>Imported energy for this period (optional, depends on IMPE feature)</td>
         </tr>
         <tr>
           <td>EnergyExported</td>
           <td>EnergyMeasurementStruct</td>
-          <td>本周期输出电能（可选，取决于 EXPE 特性）</td>
+          <td>Exported energy for this period (optional, depends on EXPE feature)</td>
         </tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#events">&#8593; Back to Events</a></p>
 
-  <!-- ====== Feature 位图 ====== -->
+  <!-- ====== Feature Bitmap ====== -->
   <h2 id="features">Feature Bitmap</h2>
   <p>
-    ElectricalEnergyMeasurement 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持哪些计量能力。
-    四个 Feature 两两组合，决定了设备能提供哪些属性和事件：
+    ElectricalEnergyMeasurement declares the device's metering capabilities through <code>FeatureMap</code> (0xFFFC).
+    The four Features combine in pairs to determine which attributes and events the device can provide:
   </p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">Bit 0</span>
       <div>
-        <span class="enum-name">IMPE（ImportedEnergy）</span>
-        <span class="enum-desc">支持测量输入电能（消耗） —— 绝大多数设备都有此特性</span>
+        <span class="enum-name">IMPE (ImportedEnergy)</span>
+        <span class="enum-desc">Supports measuring imported energy (consumption) — the vast majority of devices have this feature</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 1</span>
       <div>
-        <span class="enum-name">EXPE（ExportedEnergy）</span>
-        <span class="enum-desc">支持测量输出电能（发电/回馈） —— 光伏、储能设备使用</span>
+        <span class="enum-name">EXPE (ExportedEnergy)</span>
+        <span class="enum-desc">Supports measuring exported energy (generation/feed-back) — used by solar and energy storage devices</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 2</span>
       <div>
-        <span class="enum-name">CUME（CumulativeEnergy）</span>
-        <span class="enum-desc">支持累计计量 —— 提供从起点到当前的总电能</span>
+        <span class="enum-name">CUME (CumulativeEnergy)</span>
+        <span class="enum-desc">Supports cumulative metering — provides total energy from the starting point to the present</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 3</span>
       <div>
-        <span class="enum-name">PERE（PeriodicEnergy）</span>
-        <span class="enum-desc">支持周期计量 —— 提供每个周期内的电能消耗</span>
+        <span class="enum-name">PERE (PeriodicEnergy)</span>
+        <span class="enum-desc">Supports periodic metering — provides energy consumption within each measurement period</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">Feature 组合规则</div>
+    <div class="callout-title">Feature Combination Rules</div>
     <p>
-      设备必须至少支持 IMPE 或 EXPE 其中之一（总得测量某个方向的电能），
-      同时至少支持 CUME 或 PERE 其中之一（总得有一种计量模式）。
-      典型的智能插座通常只有 <code>IMPE + CUME</code>（Bit 0 + Bit 2 = FeatureMap = 5），
-      而光伏逆变器可能四个全开（FeatureMap = 15）。
+      A device must support at least one of IMPE or EXPE (it must measure energy in at least one direction),
+      and at least one of CUME or PERE (it must have at least one metering mode).
+      A typical smart plug usually only has <code>IMPE + CUME</code> (Bit 0 + Bit 2 = FeatureMap = 5),
+      while a solar inverter may have all four enabled (FeatureMap = 15).
     </p>
   </div>
 
-  <!-- ====== 与 ElectricalPowerMeasurement 的关系 ====== -->
-  <h2 id="relationship">与 ElectricalPowerMeasurement 的关系</h2>
+  <!-- ====== Relationship with ElectricalPowerMeasurement ====== -->
+  <h2 id="relationship">Relationship with ElectricalPowerMeasurement</h2>
   <p>
-    Matter 把电气测量拆成了两个 Cluster，各司其职：
+    Matter splits electrical measurement into two Clusters, each serving a distinct role:
   </p>
   <div class="table-wrap">
     <table>
@@ -1222,45 +1222,45 @@ val display = voltageV?.let { String.format("%.1f V", it) } ?: "--"\`}</code></p
       </thead>
       <tbody>
         <tr>
-          <td><strong>测量对象</strong></td>
-          <td>瞬时功率（Power）</td>
-          <td>累积电能（Energy）</td>
+          <td><strong>What it measures</strong></td>
+          <td>Instantaneous power (Power)</td>
+          <td>Accumulated energy (Energy)</td>
         </tr>
         <tr>
-          <td><strong>单位</strong></td>
-          <td>mW（毫瓦）</td>
-          <td>mWh（毫瓦时）</td>
+          <td><strong>Unit</strong></td>
+          <td>mW (milliwatts)</td>
+          <td>mWh (milliwatt-hours)</td>
         </tr>
         <tr>
-          <td><strong>类比</strong></td>
-          <td>汽车的速度表 —— 现在多快</td>
-          <td>汽车的里程表 —— 一共走了多远</td>
+          <td><strong>Analogy</strong></td>
+          <td>A car's speedometer -- how fast right now</td>
+          <td>A car's odometer -- total distance traveled</td>
         </tr>
         <tr>
-          <td><strong>典型读数</strong></td>
-          <td>「当前功率 150W」</td>
-          <td>「本月用电 45.3 kWh」</td>
+          <td><strong>Typical reading</strong></td>
+          <td>"Current power 150W"</td>
+          <td>"This month's consumption 45.3 kWh"</td>
         </tr>
         <tr>
-          <td><strong>数据获取</strong></td>
-          <td>读取属性（实时值）</td>
-          <td>订阅事件（累计/周期更新）</td>
+          <td><strong>Data access</strong></td>
+          <td>Read attributes (real-time values)</td>
+          <td>Subscribe to events (cumulative/periodic updates)</td>
         </tr>
       </tbody>
     </table>
   </div>
   <p>
-    两者通常共存于同一 Endpoint。App 界面上可以同时展示实时功率（来自 0x0090）和累计用电量（来自 0x0091），
-    前者适合实时监控，后者适合用电统计和费用计算。
+    Both Clusters typically coexist on the same Endpoint. The app UI can simultaneously display real-time power (from 0x0090) and cumulative energy consumption (from 0x0091);
+    the former is suited for real-time monitoring, the latter for consumption statistics and cost calculation.
   </p>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一个支持 IMPE + CUME + PERE 特性的智能插座的 ElectricalEnergyMeasurement Cluster 读取结果：</p>
+  <p>Read result of the ElectricalEnergyMeasurement Cluster for a smart plug supporting IMPE + CUME + PERE features:</p>
   <pre><code>{
   // --- ElectricalEnergyMeasurement Cluster（Endpoint 1）---
 
-  // --- 测量精度 ---
+  // --- Measurement Accuracy ---
   "0x0000": {                    // Accuracy（MeasurementAccuracyStruct）
     "measurementType": 1,        // ElectricalEnergy
     "measured": true,
@@ -1269,33 +1269,33 @@ val display = voltageV?.let { String.format("%.1f V", it) } ?: "--"\`}</code></p
     "accuracyRanges": [{
       "rangeMin": 0,
       "rangeMax": 100000000000,
-      "fixedMax": 5000           // 最大固定误差 5000 mWh = 5 Wh
+      "fixedMax": 5000           // Maximum fixed error 5000 mWh = 5 Wh
     }]
   },
 
-  // --- 累计电能（需要 IMPE + CUME 特性）---
+  // --- Cumulative Energy (requires IMPE + CUME features) ---
   "0x0001": {                    // CumulativeEnergyImported
     "energy": 12345678,          // 12,345,678 mWh = 12,345.678 Wh ≈ 12.35 kWh
-    "startTimestamp": 1700000000,// 2023-11-14T22:13:20Z（开始计量时间）
-    "endTimestamp": 1700086400   // 2023-11-15T22:13:20Z（最新更新时间）
+    "startTimestamp": 1700000000,// 2023-11-14T22:13:20Z (metering start time)
+    "endTimestamp": 1700086400   // 2023-11-15T22:13:20Z (latest update time)
   },
 
-  // --- 周期电能（需要 IMPE + PERE 特性）---
+  // --- Periodic Energy (requires IMPE + PERE features) ---
   "0x0003": {                    // PeriodicEnergyImported
-    "energy": 543210,            // 543,210 mWh = 543.21 Wh ≈ 0.54 kWh（本周期用电）
-    "startTimestamp": 1700082800,// 周期开始时间
-    "endTimestamp": 1700086400   // 周期结束时间（1 小时周期）
+    "energy": 543210,            // 543,210 mWh = 543.21 Wh ≈ 0.54 kWh (this period consumption)
+    "startTimestamp": 1700082800,// Period start time
+    "endTimestamp": 1700086400   // Period end time (1-hour period)
   },
 
-  // --- 累计重置信息（需要 CUME 特性）---
+  // --- Cumulative Reset Info (requires CUME feature) ---
   "0x0005": {                    // CumulativeEnergyReset
-    "importedResetTimestamp": 1700000000  // 上次重置累计值的时间
+    "importedResetTimestamp": 1700000000  // Time of last cumulative value reset
   }
 }</code></pre>
 
-  <p>CumulativeEnergyMeasured 事件数据示例：</p>
+  <p>CumulativeEnergyMeasured event data example:</p>
   <pre><code>{
-  // CumulativeEnergyMeasured 事件 —— 累计电能更新通知
+  // CumulativeEnergyMeasured Event — cumulative energy update notification
   "eventId": "0x00",
   "priority": "INFO",
   "data": {
@@ -1304,52 +1304,52 @@ val display = voltageV?.let { String.format("%.1f V", it) } ?: "--"\`}</code></p
       "startTimestamp": 1700000000,
       "endTimestamp": 1700086400
     }
-    // energyExported 省略（此设备不支持反向输出）
+    // energyExported omitted (this device does not support reverse output)
   }
 }</code></pre>
 
   <div class="callout callout-tip">
     <div class="callout-title">Unit Conversion Code Reference</div>
-    <p>处理设备返回的电能值时的关键逻辑：</p>
-    <pre><code>{\`// 设备返回 energy = 12345678 (mWh)
-val rawEnergy: Long? = 12345678    // Nullable，可能为 null
+    <p>Key logic for handling energy values returned by the device:</p>
+    <pre><code>{\`// Device returns energy = 12345678 (mWh)
+val rawEnergy: Long? = 12345678    // Nullable, may be null
 val wattHours = rawEnergy?.let { it / 1000.0 }     // → 12,345.678 Wh
 val kilowattHours = rawEnergy?.let { it / 1_000_000.0 }  // → 12.346 kWh
 
-// 显示时处理 null + 选择合适单位
+// Handle null + choose appropriate unit for display
 val display = kilowattHours?.let {
-    if (it < 1.0) String.format("%.1f Wh", it * 1000)  // 小于 1 kWh 显示 Wh
+    if (it < 1.0) String.format("%.1f Wh", it * 1000)  // Show Wh if less than 1 kWh
     else String.format("%.2f kWh", it)
 } ?: "--"\`}</code></pre>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
-    <summary>场景 1：智能插座用电统计面板</summary>
+    <summary>Scenario 1: Smart Plug Energy Statistics Dashboard</summary>
     <div class="scenario-content">
       <ol>
-        <li>检查 <code>FeatureMap (0xFFFC)</code> 确认设备支持的计量模式（CUME / PERE / IMPE / EXPE）</li>
-        <li>订阅 <code>CumulativeEnergyMeasured (0x00)</code> 事件，实时跟踪累计用电量的变化</li>
-        <li>读取 <code>CumulativeEnergyImported (0x0001)</code> 获取当前总用电量，除以 1,000,000 转换为 kWh</li>
-        <li>如果支持 PERE，同时订阅 <code>PeriodicEnergyMeasured (0x01)</code> 事件，用每个周期的数据绘制用电曲线图</li>
-        <li>结合当地电价计算费用：<code>费用 = kWh x 电价（元/kWh）</code></li>
-        <li>配合 ElectricalPowerMeasurement（0x0090）在界面上同时显示「当前功率」和「累计用电」</li>
+        <li>Check <code>FeatureMap (0xFFFC)</code> to confirm the device's supported metering modes (CUME / PERE / IMPE / EXPE)</li>
+        <li>Subscribe to the <code>CumulativeEnergyMeasured (0x00)</code> event to track cumulative consumption changes in real time</li>
+        <li>Read <code>CumulativeEnergyImported (0x0001)</code> to get the current total consumption; divide by 1,000,000 to convert to kWh</li>
+        <li>If PERE is supported, also subscribe to the <code>PeriodicEnergyMeasured (0x01)</code> event and use each period's data to plot an energy consumption chart</li>
+        <li>Calculate cost using local electricity rates: <code>cost = kWh x rate (currency/kWh)</code></li>
+        <li>Combine with ElectricalPowerMeasurement (0x0090) to simultaneously display "Current Power" and "Cumulative Consumption" in the UI</li>
       </ol>
     </div>
   </details>
 
   <details class="scenario">
-    <summary>场景 2：光伏储能系统的双向电能监控</summary>
+    <summary>Scenario 2: Bidirectional Energy Monitoring for Solar + Storage Systems</summary>
     <div class="scenario-content">
       <ol>
-        <li>确认设备 FeatureMap 包含 IMPE + EXPE（双向计量）+ CUME + PERE（双模式）</li>
-        <li>读取 <code>CumulativeEnergyImported (0x0001)</code> 获取从电网购入的总电量</li>
-        <li>读取 <code>CumulativeEnergyExported (0x0002)</code> 获取回馈电网的总发电量</li>
-        <li>计算净用电量：<code>净用电 = Imported - Exported</code>；负值表示该设备是净发电方</li>
-        <li>订阅 <code>PeriodicEnergyMeasured (0x01)</code> 事件，按周期统计「这一小时发了多少电、用了多少电」</li>
-        <li>读取 <code>CumulativeEnergyReset (0x0005)</code> 确认累计数据的起算时间，避免跨设备或跨周期的数据混淆</li>
+        <li>Confirm the device's FeatureMap includes IMPE + EXPE (bidirectional metering) + CUME + PERE (both modes)</li>
+        <li>Read <code>CumulativeEnergyImported (0x0001)</code> to get the total energy purchased from the grid</li>
+        <li>Read <code>CumulativeEnergyExported (0x0002)</code> to get the total energy fed back to the grid</li>
+        <li>Calculate net consumption: <code>net = Imported - Exported</code>; a negative value indicates the device is a net generator</li>
+        <li>Subscribe to the <code>PeriodicEnergyMeasured (0x01)</code> event to track per-period stats: "how much energy was generated and consumed this hour"</li>
+        <li>Read <code>CumulativeEnergyReset (0x0005)</code> to confirm the starting time of cumulative data, avoiding confusion across devices or periods</li>
       </ol>
     </div>
   </details>
@@ -1390,35 +1390,35 @@ val display = kilowattHours?.let {
   },
   'device-energy-management': {
     title: 'DeviceEnergyManagement Cluster (0x0098)',
-    description: 'Matter DeviceEnergyManagement Cluster(0x0098)完整参考 — PowerAdjustRequest/ModifyForecastRequest 等命令、ESAType/Forecast/PowerAdjustmentCapability 等属性定义、Feature 位图、枚举值速查与数据示例。',
+    description: 'Complete reference for the Matter DeviceEnergyManagement Cluster (0x0098) — commands including PowerAdjustRequest/ModifyForecastRequest, attribute definitions for ESAType/Forecast/PowerAdjustmentCapability, Feature bitmap, enum quick reference, and data examples.',
     prev: undefined,
     next: undefined,
     content: `<h1>DeviceEnergyManagement Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x0098</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 具有能源管理能力的设备端点
+    <strong>Endpoint</strong>: Device endpoint with energy management capabilities
   </p>
   <p>
-    DeviceEnergyManagement（DEM）是 Matter 1.4 引入的能源管理核心 Cluster，
-    用于让能源管理系统（EMS）与各种能源消耗或产生设备协商功率调整、预测用电计划和优化能源使用。
-    它适用于电动车充电桩（EVSE）、热泵、储能电池、太阳能系统、洗碗机、洗衣机等各类 ESA（Energy Smart Appliance）设备。
+    DeviceEnergyManagement (DEM) is a core energy management Cluster introduced in Matter 1.4,
+    enabling Energy Management Systems (EMS) to negotiate power adjustments, forecast energy usage plans, and optimize energy consumption with various energy-consuming or generating devices.
+    It applies to EV chargers (EVSE), heat pumps, battery storage, solar systems, dishwashers, washing machines, and other ESA (Energy Smart Appliance) devices.
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">ESA(Energy Smart Appliance)</div>
+    <div class="callout-title">ESA (Energy Smart Appliance)</div>
     <p>
-      ESA 是 Matter 能源管理体系中的核心概念，指具有能源感知和管理能力的智能设备。
-      每个 ESA 通过 <code>ESAType</code> 标识自己的设备类别，通过 <code>ESAState</code> 报告当前状态，
-      并借助 <strong>Forecast</strong>（预测）向 EMS 声明自己的用电计划。EMS 根据这些信息发出功率调整、时间调整等优化指令。
+      ESA is a core concept in the Matter energy management ecosystem, referring to smart devices with energy awareness and management capabilities.
+      Each ESA identifies its device category via <code>ESAType</code>, reports its current state via <code>ESAState</code>,
+      and declares its energy usage plan to the EMS through <strong>Forecast</strong>. The EMS uses this information to issue power adjustments, time adjustments, and other optimization commands.
     </p>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">功率单位</div>
+    <div class="callout-title">Power Unit</div>
     <p>
-      DeviceEnergyManagement Cluster 中所有功率属性的单位都是 <strong>毫瓦（mW）</strong>。
-      例如 <code>AbsMaxPower = 7200000</code> 表示最大功率 <strong>7.2 kW</strong>（7200 W）。
-      读写功率属性时务必做好单位换算。
+      All power attributes in the DeviceEnergyManagement Cluster are in <strong>milliwatts (mW)</strong>.
+      For example, <code>AbsMaxPower = 7200000</code> means a maximum power of <strong>7.2 kW</strong> (7200 W).
+      Always perform unit conversion when reading or writing power attributes.
     </p>
   </div>
 
@@ -1435,12 +1435,12 @@ val display = kilowattHours?.let {
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    DeviceEnergyManagement Cluster 共有 8 个命令，分别对应不同的 Feature 能力。
-    EMS（能源管理系统）通过这些命令调整设备的功率、启动时间、运行状态和用电预测。
-    点击下方表格中的命令 ID 可跳转到对应的详细说明。
+    DeviceEnergyManagement Cluster has 8 commands, each corresponding to different Feature capabilities.
+    The EMS (Energy Management System) uses these commands to adjust the device's power, start time, operating state, and energy forecast.
+    Click a command ID in the table below to jump to its detailed description.
   </p>
 
   <div class="table-wrap">
@@ -1450,67 +1450,67 @@ val display = kilowattHours?.let {
           <th>ID</th>
           <th>Name</th>
           <th>Description</th>
-          <th>Feature 要求</th>
+          <th>Required Feature</th>
         </tr>
       </thead>
       <tbody>
         <tr class="clickable-row" data-href="#cmd-0x00">
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>PowerAdjustRequest</td>
-          <td>请求设备调整到指定功率</td>
+          <td>Request the device to adjust to a specified power level</td>
           <td class="col-feature">PA</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x01">
           <td><a href="#cmd-0x01"><code>0x01</code></a></td>
           <td>CancelPowerAdjustRequest</td>
-          <td>取消正在进行的功率调整</td>
+          <td>Cancel an ongoing power adjustment</td>
           <td class="col-feature">PA</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x02">
           <td><a href="#cmd-0x02"><code>0x02</code></a></td>
           <td>StartTimeAdjustRequest</td>
-          <td>请求调整预测的启动时间</td>
+          <td>Request adjustment of the forecast start time</td>
           <td class="col-feature">STA</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x03">
           <td><a href="#cmd-0x03"><code>0x03</code></a></td>
           <td>PauseRequest</td>
-          <td>请求设备暂停运行</td>
+          <td>Request the device to pause operation</td>
           <td class="col-feature">PAU</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x04">
           <td><a href="#cmd-0x04"><code>0x04</code></a></td>
           <td>ResumeRequest</td>
-          <td>请求设备恢复运行</td>
+          <td>Request the device to resume operation</td>
           <td class="col-feature">PAU</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x05">
           <td><a href="#cmd-0x05"><code>0x05</code></a></td>
           <td>ModifyForecastRequest</td>
-          <td>修改设备的用电预测</td>
+          <td>Modify the device's energy forecast</td>
           <td class="col-feature">FA</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x06">
           <td><a href="#cmd-0x06"><code>0x06</code></a></td>
           <td>RequestConstraintBasedForecast</td>
-          <td>基于约束条件请求设备重新生成预测</td>
+          <td>Request the device to regenerate its forecast based on constraints</td>
           <td class="col-feature">CON</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x07">
           <td><a href="#cmd-0x07"><code>0x07</code></a></td>
           <td>CancelRequest</td>
-          <td>取消所有进行中的优化请求</td>
+          <td>Cancel all ongoing optimization requests</td>
           <td class="col-feature">STA | PAU | FA | CON</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
-  <h3 id="cmd-0x00">PowerAdjustRequest -- 功率调整请求(0x00)</h3>
+  <!-- ====== Command Details ====== -->
+  <h3 id="cmd-0x00">PowerAdjustRequest -- Power Adjustment Request (0x00)</h3>
   <p>
-    请求设备在指定时间段内调整到目标功率。EMS 用这个命令在电价高峰时段降低设备功率、
-    或在电价低谷时段提高功率来优化用电成本。执行成功后，<code>ESAState</code> 变为 <code>PowerAdjustActive (3)</code>。
+    Requests the device to adjust to a target power level for a specified duration. The EMS uses this command to reduce device power during peak pricing periods
+    or increase power during off-peak periods to optimize energy costs. Upon success, <code>ESAState</code> changes to <code>PowerAdjustActive (3)</code>.
   </p>
   <div class="table-wrap">
     <table>
@@ -1521,17 +1521,17 @@ val display = kilowattHours?.let {
         <tr>
           <td>Power</td>
           <td>int64</td>
-          <td>目标功率，单位 mW。必须在设备的 PowerAdjustmentCapability 范围内</td>
+          <td>Target power in mW. Must be within the device's PowerAdjustmentCapability range</td>
         </tr>
         <tr>
           <td>Duration</td>
           <td>uint32</td>
-          <td>调整持续时间，单位秒。必须在设备声明的 minDuration ~ maxDuration 范围内</td>
+          <td>Adjustment duration in seconds. Must be within the device's declared minDuration ~ maxDuration range</td>
         </tr>
         <tr>
           <td>Cause</td>
           <td>AdjustmentCauseEnum</td>
-          <td>调整原因：<code>0</code> = LocalOptimization，<code>1</code> = GridOptimization</td>
+          <td>Adjustment cause: <code>0</code> = LocalOptimization, <code>1</code> = GridOptimization</td>
         </tr>
       </tbody>
     </table>
@@ -1540,34 +1540,34 @@ val display = kilowattHours?.let {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        电价高峰期间，EMS 向 EVSE 发送 <code>PowerAdjustRequest(Power=1400000, Duration=7200, Cause=1)</code>，
-        将充电功率从 7.2 kW 降到 1.4 kW 持续 2 小时。设备会在功率调整期间持续以低功率充电，
-        到期后自动恢复正常功率。
+        During peak pricing, the EMS sends <code>PowerAdjustRequest(Power=1400000, Duration=7200, Cause=1)</code> to the EVSE,
+        reducing charging power from 7.2 kW to 1.4 kW for 2 hours. The device continues charging at reduced power during the adjustment
+        and automatically restores normal power when the duration expires.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x01">CancelPowerAdjustRequest -- 取消功率调整(0x01)</h3>
+  <h3 id="cmd-0x01">CancelPowerAdjustRequest -- Cancel Power Adjustment (0x01)</h3>
   <p>
-    取消正在进行的功率调整，设备立即恢复到正常运行状态。无参数。
-    执行成功后，<code>ESAState</code> 从 <code>PowerAdjustActive</code> 恢复为 <code>Online</code>。
+    Cancels an ongoing power adjustment; the device immediately returns to normal operating state. No parameters.
+    On success, <code>ESAState</code> changes from <code>PowerAdjustActive</code> back to <code>Online</code>.
   </p>
   <details class="scenario">
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        EMS 之前请求了降功率运行，但电网负荷突然下降，不再需要限制。
-        发送 CancelPowerAdjustRequest 让设备恢复全速运行。
+        The EMS previously requested reduced power operation, but grid load has dropped suddenly and the restriction is no longer needed.
+        Send CancelPowerAdjustRequest to let the device resume full-speed operation.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x02">StartTimeAdjustRequest -- 启动时间调整(0x02)</h3>
+  <h3 id="cmd-0x02">StartTimeAdjustRequest -- Start Time Adjustment (0x02)</h3>
   <p>
-    请求设备将预测（Forecast）中的启动时间调整到指定时刻。
-    用于在不改变总用电量的前提下，将设备的运行时段从高峰移到低谷。
+    Requests the device to shift the start time in its Forecast to a specified time.
+    Used to move the device's operating period from peak to off-peak without changing total energy consumption.
   </p>
   <div class="table-wrap">
     <table>
@@ -1578,12 +1578,12 @@ val display = kilowattHours?.let {
         <tr>
           <td>RequestedStartTime</td>
           <td>epoch-s</td>
-          <td>请求的新启动时间（UTC 时间戳）</td>
+          <td>Requested new start time (UTC timestamp)</td>
         </tr>
         <tr>
           <td>Cause</td>
           <td>AdjustmentCauseEnum</td>
-          <td>调整原因：<code>0</code> = LocalOptimization，<code>1</code> = GridOptimization</td>
+          <td>Adjustment cause: <code>0</code> = LocalOptimization, <code>1</code> = GridOptimization</td>
         </tr>
       </tbody>
     </table>
@@ -1592,18 +1592,18 @@ val display = kilowattHours?.let {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        洗衣机预计 18:00 启动洗涤程序，但 EMS 发现 18:00-20:00 是用电高峰。
-        发送 <code>StartTimeAdjustRequest(RequestedStartTime=22:00的UTC时间戳, Cause=1)</code>，
-        将洗涤推迟到 22:00 低谷时段启动。设备会在新的时间自动开始运行。
+        A washing machine is scheduled to start at 18:00, but the EMS detects that 18:00-20:00 is peak hours.
+        Send <code>StartTimeAdjustRequest(RequestedStartTime=UTC timestamp for 22:00, Cause=1)</code>
+        to defer the wash cycle to the 22:00 off-peak period. The device will automatically start at the new time.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x03">PauseRequest -- 暂停运行(0x03)</h3>
+  <h3 id="cmd-0x03">PauseRequest -- Pause Operation (0x03)</h3>
   <p>
-    请求设备暂停当前运行。仅适用于支持暂停的设备（PAU Feature）。
-    执行成功后，<code>ESAState</code> 变为 <code>Paused (4)</code>。
+    Requests the device to pause its current operation. Only applicable to devices supporting pause (PAU Feature).
+    On success, <code>ESAState</code> changes to <code>Paused (4)</code>.
   </p>
   <div class="table-wrap">
     <table>
@@ -1614,12 +1614,12 @@ val display = kilowattHours?.let {
         <tr>
           <td>Duration</td>
           <td>uint32</td>
-          <td>暂停持续时间，单位秒。到期后设备自动恢复运行</td>
+          <td>Pause duration in seconds. The device automatically resumes operation when expired</td>
         </tr>
         <tr>
           <td>Cause</td>
           <td>AdjustmentCauseEnum</td>
-          <td>暂停原因：<code>0</code> = LocalOptimization，<code>1</code> = GridOptimization</td>
+          <td>Pause cause: <code>0</code> = LocalOptimization, <code>1</code> = GridOptimization</td>
         </tr>
       </tbody>
     </table>
@@ -1628,25 +1628,25 @@ val display = kilowattHours?.let {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        洗碗机正在运行，EMS 检测到电网负荷即将达到峰值。
-        发送 <code>PauseRequest(Duration=1800, Cause=1)</code> 暂停洗碗机 30 分钟。
-        设备在暂停期间保持当前状态，30 分钟后自动恢复洗涤程序。
+        A dishwasher is running and the EMS detects the grid load is about to peak.
+        Send <code>PauseRequest(Duration=1800, Cause=1)</code> to pause the dishwasher for 30 minutes.
+        The device maintains its current state during the pause and automatically resumes the wash cycle after 30 minutes.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x04">ResumeRequest -- 恢复运行(0x04)</h3>
+  <h3 id="cmd-0x04">ResumeRequest -- Resume Operation (0x04)</h3>
   <p>
-    请求设备恢复已暂停的运行。无参数。
-    执行成功后，<code>ESAState</code> 从 <code>Paused</code> 恢复为 <code>Online</code>。
+    Requests the device to resume paused operation. No parameters.
+    On success, <code>ESAState</code> changes from <code>Paused</code> back to <code>Online</code>.
   </p>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x05">ModifyForecastRequest -- 修改预测(0x05)</h3>
+  <h3 id="cmd-0x05">ModifyForecastRequest -- Modify Forecast (0x05)</h3>
   <p>
-    修改设备当前 Forecast 中一个或多个 Slot 的功率和时间参数。
-    EMS 通过此命令直接调整设备的用电计划，比如降低某个时段的预期功率。
+    Modifies the power and time parameters of one or more Slots in the device's current Forecast.
+    The EMS uses this command to directly adjust the device's energy plan, such as reducing the expected power for a certain period.
   </p>
   <div class="table-wrap">
     <table>
@@ -1657,17 +1657,17 @@ val display = kilowattHours?.let {
         <tr>
           <td>ForecastID</td>
           <td>uint32</td>
-          <td>要修改的 Forecast ID，必须与当前 Forecast 属性中的 forecastID 匹配</td>
+          <td>The Forecast ID to modify; must match the forecastID in the current Forecast attribute</td>
         </tr>
         <tr>
           <td>SlotAdjustments</td>
           <td>list</td>
-          <td>Slot 调整列表，每项包含 SlotIndex、NominalPower、Duration 等字段</td>
+          <td>List of Slot adjustments, each containing fields like SlotIndex, NominalPower, Duration</td>
         </tr>
         <tr>
           <td>Cause</td>
           <td>AdjustmentCauseEnum</td>
-          <td>调整原因：<code>0</code> = LocalOptimization，<code>1</code> = GridOptimization</td>
+          <td>Adjustment cause: <code>0</code> = LocalOptimization, <code>1</code> = GridOptimization</td>
         </tr>
       </tbody>
     </table>
@@ -1676,18 +1676,18 @@ val display = kilowattHours?.let {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        EVSE 的 Forecast 显示将在 Slot 0 以 7.2 kW 充电 2 小时。EMS 希望将其分成两段：
-        先以 3.6 kW 充 1 小时（避开高峰），再以 7.2 kW 充 1 小时。
-        通过 ModifyForecastRequest 修改 Slot 参数实现这种分段充电策略。
+        The EVSE's Forecast shows it will charge at 7.2 kW for 2 hours in Slot 0. The EMS wants to split it into two segments:
+        first charge at 3.6 kW for 1 hour (avoiding peak), then at 7.2 kW for 1 hour.
+        Use ModifyForecastRequest to modify the Slot parameters to implement this segmented charging strategy.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x06">RequestConstraintBasedForecast -- 基于约束请求预测(0x06)</h3>
+  <h3 id="cmd-0x06">RequestConstraintBasedForecast -- Constraint-Based Forecast Request (0x06)</h3>
   <p>
-    向设备提供一组功率/能量约束条件，请求设备据此重新生成 Forecast。
-    与 ModifyForecastRequest 直接修改参数不同，这个命令告诉设备"你自己想办法满足这些约束"。
+    Provides the device with a set of power/energy constraints and requests it to regenerate its Forecast accordingly.
+    Unlike ModifyForecastRequest which directly modifies parameters, this command tells the device "figure out how to meet these constraints yourself".
   </p>
   <div class="table-wrap">
     <table>
@@ -1698,12 +1698,12 @@ val display = kilowattHours?.let {
         <tr>
           <td>Constraints</td>
           <td>list</td>
-          <td>约束条件列表。每项包含 StartTime、Duration、NominalPower / MaximumEnergy 等限制</td>
+          <td>List of constraints. Each entry contains limits such as StartTime, Duration, NominalPower / MaximumEnergy</td>
         </tr>
         <tr>
           <td>Cause</td>
           <td>AdjustmentCauseEnum</td>
-          <td>约束原因：<code>0</code> = LocalOptimization，<code>1</code> = GridOptimization</td>
+          <td>Constraint cause: <code>0</code> = LocalOptimization, <code>1</code> = GridOptimization</td>
         </tr>
       </tbody>
     </table>
@@ -1712,36 +1712,36 @@ val display = kilowattHours?.let {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        EMS 知道明天 14:00-16:00 电网可能过载，向热泵发送约束：
-        "14:00-16:00 最大功率不超过 2 kW"。热泵根据约束自行调整内部运行计划，
-        可能选择提前预冷或推迟启动，以确保在约束时段内不超过 2 kW。
+        The EMS knows the grid may be overloaded tomorrow from 14:00-16:00, and sends a constraint to the heat pump:
+        "14:00-16:00 maximum power must not exceed 2 kW". The heat pump adjusts its internal operation plan accordingly,
+        possibly pre-cooling earlier or delaying startup, to ensure it stays within 2 kW during the constrained period.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x07">CancelRequest -- 取消请求(0x07)</h3>
+  <h3 id="cmd-0x07">CancelRequest -- Cancel Request (0x07)</h3>
   <p>
-    取消所有当前进行中的优化请求（StartTimeAdjust、Pause、ModifyForecast、ConstraintBasedForecast），
-    设备恢复到原始的自主运行计划。无参数。
-    需要设备支持 STA、PAU、FA 或 CON 中的至少一个 Feature。
+    Cancels all currently ongoing optimization requests (StartTimeAdjust, Pause, ModifyForecast, ConstraintBasedForecast);
+    the device returns to its original autonomous operation plan. No parameters.
+    Requires the device to support at least one of the STA, PAU, FA, or CON Features.
   </p>
   <details class="scenario">
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        EMS 此前发出了多项优化请求，现在需要释放所有限制让设备恢复自主运行。
-        发送 CancelRequest 一次性清除所有进行中的时间调整、暂停和预测修改。
+        The EMS previously issued multiple optimization requests and now needs to release all restrictions to let the device resume autonomous operation.
+        Send CancelRequest to clear all ongoing time adjustments, pauses, and forecast modifications in one go.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h2 id="attributes">Attributes</h2>
-  <p>DeviceEnergyManagement Cluster 的属性按功能分为三组。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+  <p>DeviceEnergyManagement Cluster attributes are organized into three functional groups. Click an attribute ID in the summary table to jump to its detailed description.</p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute Summary Table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -1754,72 +1754,72 @@ val display = kilowattHours?.let {
         </tr>
       </thead>
       <tbody>
-        <!-- ESA 基本信息 -->
+        <!-- ESA Basic Information -->
         <tr class="clickable-row" data-href="#attr-0x0000">
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>ESAType</td>
           <td>ESATypeEnum</td>
-          <td><a href="#group-esa">ESA 基本信息</a></td>
-          <td>设备类型标识</td>
+          <td><a href="#group-esa">ESA Basic Info</a></td>
+          <td>Device type identifier</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>ESACanGenerate</td>
           <td>bool</td>
-          <td><a href="#group-esa">ESA 基本信息</a></td>
-          <td>设备是否能产生能源</td>
+          <td><a href="#group-esa">ESA Basic Info</a></td>
+          <td>Whether the device can generate energy</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
           <td>ESAState</td>
           <td>ESAStateEnum</td>
-          <td><a href="#group-esa">ESA 基本信息</a></td>
-          <td>设备当前能源管理状态</td>
+          <td><a href="#group-esa">ESA Basic Info</a></td>
+          <td>Current energy management state of the device</td>
         </tr>
-        <!-- 功率范围 -->
+        <!-- Power Range -->
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
           <td>AbsMinPower</td>
           <td>int64</td>
-          <td><a href="#group-power">功率与调整</a></td>
-          <td>设备绝对最小功率 (mW)</td>
+          <td><a href="#group-power">Power & Adjustment</a></td>
+          <td>Absolute minimum power of the device (mW)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0004">
           <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
           <td>AbsMaxPower</td>
           <td>int64</td>
-          <td><a href="#group-power">功率与调整</a></td>
-          <td>设备绝对最大功率 (mW)</td>
+          <td><a href="#group-power">Power & Adjustment</a></td>
+          <td>Absolute maximum power of the device (mW)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0005">
           <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
           <td>PowerAdjustmentCapability</td>
           <td>struct / null</td>
-          <td><a href="#group-power">功率与调整</a></td>
-          <td>功率可调范围和时间限制</td>
+          <td><a href="#group-power">Power & Adjustment</a></td>
+          <td>Adjustable power range and time limits</td>
         </tr>
-        <!-- 预测与优化 -->
+        <!-- Forecast & Optimization -->
         <tr class="clickable-row" data-href="#attr-0x0006">
           <td><a href="#attr-0x0006"><code>0x0006</code></a></td>
           <td>Forecast</td>
           <td>struct / null</td>
-          <td><a href="#group-forecast">预测与优化</a></td>
-          <td>设备的用电/产电预测计划</td>
+          <td><a href="#group-forecast">Forecast & Optimization</a></td>
+          <td>Device's energy consumption/generation forecast plan</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0007">
           <td><a href="#attr-0x0007"><code>0x0007</code></a></td>
           <td>OptOutState</td>
           <td>OptOutStateEnum</td>
-          <td><a href="#group-forecast">预测与优化</a></td>
-          <td>用户退出优化的状态</td>
+          <td><a href="#group-forecast">Forecast & Optimization</a></td>
+          <td>User's optimization opt-out status</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== ESA 基本信息（0x0000-0x0002）====== -->
-  <h3 id="group-esa">ESA 基本信息(0x0000-0x0002)</h3>
-  <p>描述设备的类型、能源产生能力和当前状态。这三个属性是所有 DEM 设备的基础属性。</p>
+  <!-- ====== ESA Basic Information (0x0000-0x0002) ====== -->
+  <h3 id="group-esa">ESA Basic Information (0x0000-0x0002)</h3>
+  <p>Describes the device's type, energy generation capability, and current state. These three attributes are foundational for all DEM devices.</p>
 
   <div class="table-wrap">
     <table>
@@ -1829,21 +1829,21 @@ val display = kilowattHours?.let {
       <tbody>
         <tr id="attr-0x0000">
           <td><code>0x0000</code></td>
-          <td>ESAType<br/><span class="attr-cn">设备类型</span></td>
+          <td>ESAType<br/><span class="attr-cn">Device Type</span></td>
           <td>ESATypeEnum</td>
-          <td>标识 ESA 设备的类型。EMS 根据此值了解设备的能源特性和调度策略。见下方枚举</td>
+          <td>Identifies the ESA device type. The EMS uses this value to understand the device's energy characteristics and scheduling strategy. See enum below</td>
         </tr>
         <tr id="attr-0x0001">
           <td><code>0x0001</code></td>
-          <td>ESACanGenerate<br/><span class="attr-cn">可产生能源</span></td>
+          <td>ESACanGenerate<br/><span class="attr-cn">Can Generate Energy</span></td>
           <td>bool</td>
-          <td><code>true</code> 表示设备可以向电网输出能源（如太阳能逆变器、储能电池放电）。<code>false</code> 表示设备只消耗能源</td>
+          <td><code>true</code> means the device can export energy to the grid (e.g. solar inverter, battery storage discharging). <code>false</code> means it only consumes energy</td>
         </tr>
         <tr id="attr-0x0002">
           <td><code>0x0002</code></td>
-          <td>ESAState<br/><span class="attr-cn">设备状态</span></td>
+          <td>ESAState<br/><span class="attr-cn">Device State</span></td>
           <td>ESAStateEnum</td>
-          <td>设备当前的能源管理状态。见下方枚举</td>
+          <td>Current energy management state of the device. See enum below</td>
         </tr>
       </tbody>
     </table>
@@ -1855,105 +1855,105 @@ val display = kilowattHours?.let {
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">EVSE</span>
-        <span class="enum-desc">电动车充电桩</span>
+        <span class="enum-desc">Electric Vehicle Supply Equipment</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">SpaceHeating</span>
-        <span class="enum-desc">空间加热（暖气）</span>
+        <span class="enum-desc">Space Heating</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">WaterHeating</span>
-        <span class="enum-desc">热水器</span>
+        <span class="enum-desc">Water Heater</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">SpaceCooling</span>
-        <span class="enum-desc">空间制冷（空调）</span>
+        <span class="enum-desc">Space Cooling (Air Conditioning)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">4</span>
       <div>
         <span class="enum-name">SpaceHeatingCooling</span>
-        <span class="enum-desc">冷暖两用（热泵）</span>
+        <span class="enum-desc">Heating and Cooling (Heat Pump)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">5</span>
       <div>
         <span class="enum-name">BatteryStorage</span>
-        <span class="enum-desc">储能电池</span>
+        <span class="enum-desc">Battery Storage</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">6</span>
       <div>
         <span class="enum-name">SolarPV</span>
-        <span class="enum-desc">太阳能光伏</span>
+        <span class="enum-desc">Solar Photovoltaic</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">7</span>
       <div>
         <span class="enum-name">FridgeFreezer</span>
-        <span class="enum-desc">冰箱/冷柜</span>
+        <span class="enum-desc">Fridge / Freezer</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">8</span>
       <div>
         <span class="enum-name">WashingMachine</span>
-        <span class="enum-desc">洗衣机</span>
+        <span class="enum-desc">Washing Machine</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">9</span>
       <div>
         <span class="enum-name">Dishwasher</span>
-        <span class="enum-desc">洗碗机</span>
+        <span class="enum-desc">Dishwasher</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">10</span>
       <div>
         <span class="enum-name">Cooking</span>
-        <span class="enum-desc">烹饪设备</span>
+        <span class="enum-desc">Cooking Appliance</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">11</span>
       <div>
         <span class="enum-name">HomeWaterPump</span>
-        <span class="enum-desc">家用水泵</span>
+        <span class="enum-desc">Home Water Pump</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">12</span>
       <div>
         <span class="enum-name">IrrigationWaterPump</span>
-        <span class="enum-desc">灌溉水泵</span>
+        <span class="enum-desc">Irrigation Water Pump</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">13</span>
       <div>
         <span class="enum-name">PoolPump</span>
-        <span class="enum-desc">泳池水泵</span>
+        <span class="enum-desc">Pool Pump</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">255</span>
       <div>
         <span class="enum-name">Other</span>
-        <span class="enum-desc">其他类型</span>
+        <span class="enum-desc">Other Type</span>
       </div>
     </div>
   </div>
@@ -1964,53 +1964,53 @@ val display = kilowattHours?.let {
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">Offline</span>
-        <span class="enum-desc">离线 -- 设备不参与能源管理</span>
+        <span class="enum-desc">Offline -- device does not participate in energy management</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">Online</span>
-        <span class="enum-desc">在线 -- 正常运行，可接受优化指令</span>
+        <span class="enum-desc">Online -- normal operation, can accept optimization commands</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">Fault</span>
-        <span class="enum-desc">故障 -- 设备发生错误，暂停能源管理</span>
+        <span class="enum-desc">Fault -- device error, energy management suspended</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">PowerAdjustActive</span>
-        <span class="enum-desc">功率调整中 -- 正在执行 PowerAdjustRequest</span>
+        <span class="enum-desc">Power adjusting -- executing PowerAdjustRequest</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">4</span>
       <div>
         <span class="enum-name">Paused</span>
-        <span class="enum-desc">已暂停 -- 因 PauseRequest 暂停运行</span>
+        <span class="enum-desc">Paused -- operation paused due to PauseRequest</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">ESAState 与命令的关系</div>
+    <div class="callout-title">ESAState and Command Relationship</div>
     <p>
-      只有 <code>ESAState = Online (1)</code> 时，设备才接受新的优化命令。
-      处于 <code>Offline</code> 或 <code>Fault</code> 状态时，所有命令都会被拒绝。
-      <code>PowerAdjustActive</code> 状态下只能发送 <code>CancelPowerAdjustRequest</code>，
-      <code>Paused</code> 状态下只能发送 <code>ResumeRequest</code>。
+      The device only accepts new optimization commands when <code>ESAState = Online (1)</code>.
+      When in <code>Offline</code> or <code>Fault</code> state, all commands are rejected.
+      In <code>PowerAdjustActive</code> state, only <code>CancelPowerAdjustRequest</code> can be sent;
+      in <code>Paused</code> state, only <code>ResumeRequest</code> can be sent.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 功率与调整（0x0003-0x0005）====== -->
-  <h3 id="group-power">功率与调整(0x0003-0x0005)</h3>
-  <p>定义设备的功率范围和可调整能力。EMS 在发送 PowerAdjustRequest 之前需要先读取这些属性确认调整范围。</p>
+  <!-- ====== Power & Adjustment (0x0003-0x0005) ====== -->
+  <h3 id="group-power">Power &amp; Adjustment (0x0003-0x0005)</h3>
+  <p>Defines the device's power range and adjustment capabilities. The EMS must read these attributes to confirm the adjustment range before sending a PowerAdjustRequest.</p>
 
   <div class="table-wrap">
     <table>
@@ -2020,39 +2020,39 @@ val display = kilowattHours?.let {
       <tbody>
         <tr id="attr-0x0003">
           <td><code>0x0003</code></td>
-          <td>AbsMinPower<br/><span class="attr-cn">绝对最小功率</span></td>
+          <td>AbsMinPower<br/><span class="attr-cn">Absolute Min Power</span></td>
           <td>int64</td>
-          <td>设备可运行的绝对最小功率，单位 mW。可为负值（表示向电网输出）。<code>0</code> 表示设备可完全停止消耗</td>
+          <td>Absolute minimum power at which the device can operate, in mW. Can be negative (indicating export to grid). <code>0</code> means the device can completely stop consuming</td>
         </tr>
         <tr id="attr-0x0004">
           <td><code>0x0004</code></td>
-          <td>AbsMaxPower<br/><span class="attr-cn">绝对最大功率</span></td>
+          <td>AbsMaxPower<br/><span class="attr-cn">Absolute Max Power</span></td>
           <td>int64</td>
-          <td>设备可运行的绝对最大功率，单位 mW。例如 <code>7200000</code> 表示 7.2 kW</td>
+          <td>Absolute maximum power at which the device can operate, in mW. For example, <code>7200000</code> means 7.2 kW</td>
         </tr>
         <tr id="attr-0x0005">
           <td><code>0x0005</code></td>
-          <td>PowerAdjustmentCapability<br/><span class="attr-cn">功率调整能力</span></td>
+          <td>PowerAdjustmentCapability<br/><span class="attr-cn">Power Adj. Capability</span></td>
           <td>struct / null</td>
-          <td>描述设备当前可接受的功率调整范围和时间限制。<code>null</code> 表示设备当前不接受功率调整。<strong>需要 PA Feature</strong></td>
+          <td>Describes the device's currently acceptable power adjustment range and time limits. <code>null</code> means the device does not currently accept power adjustments. <strong>Requires PA Feature</strong></td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">PowerAdjustmentCapability 结构</div>
+    <div class="callout-title">PowerAdjustmentCapability Structure</div>
     <p>
-      该属性是一个复合结构，包含 <code>powerAdjustCapability</code>（功率调整能力列表）和 <code>cause</code>（原因）。
-      列表中每个条目定义了一组可调范围：<code>minPower</code> / <code>maxPower</code>（功率范围）和 <code>minDuration</code> / <code>maxDuration</code>（时间范围）。
-      设备可以提供多个不连续的功率调整区间。EMS 在发送 PowerAdjustRequest 时，参数必须落在其中一个区间内。
+      This attribute is a composite structure containing <code>powerAdjustCapability</code> (power adjustment capability list) and <code>cause</code> (reason).
+      Each entry in the list defines an adjustment range: <code>minPower</code> / <code>maxPower</code> (power range) and <code>minDuration</code> / <code>maxDuration</code> (time range).
+      The device can provide multiple non-contiguous power adjustment intervals. When sending a PowerAdjustRequest, parameters must fall within one of these intervals.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 预测与优化（0x0006-0x0007）====== -->
-  <h3 id="group-forecast">预测与优化(0x0006-0x0007)</h3>
-  <p>设备的用电预测计划和用户退出优化的状态。Forecast 是 DEM 最核心的数据结构。</p>
+  <!-- ====== Forecast & Optimization (0x0006-0x0007) ====== -->
+  <h3 id="group-forecast">Forecast &amp; Optimization (0x0006-0x0007)</h3>
+  <p>The device's energy forecast plan and user opt-out state. Forecast is the most critical data structure in DEM.</p>
 
   <div class="table-wrap">
     <table>
@@ -2062,29 +2062,29 @@ val display = kilowattHours?.let {
       <tbody>
         <tr id="attr-0x0006">
           <td><code>0x0006</code></td>
-          <td>Forecast<br/><span class="attr-cn">用电预测</span></td>
+          <td>Forecast<br/><span class="attr-cn">Energy Forecast</span></td>
           <td>struct / null</td>
-          <td>设备对未来用电或产电的预测计划。包含多个时间 Slot，每个 Slot 定义了时间段和功率参数。<code>null</code> 表示设备没有可用的预测。<strong>需要 PFR 或 SFR Feature</strong></td>
+          <td>The device's predicted plan for future energy consumption or production. Contains multiple time Slots, each defining a time period and power parameters. <code>null</code> means no forecast is available. <strong>Requires PFR or SFR Feature</strong></td>
         </tr>
         <tr id="attr-0x0007">
           <td><code>0x0007</code></td>
-          <td>OptOutState<br/><span class="attr-cn">退出优化状态</span></td>
+          <td>OptOutState<br/><span class="attr-cn">Opt-Out State</span></td>
           <td>OptOutStateEnum</td>
-          <td>用户是否选择退出能源优化。见下方枚举</td>
+          <td>Whether the user has opted out of energy optimization. See enum below</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">Forecast 结构详解</div>
+    <div class="callout-title">Forecast Structure Details</div>
     <p>
-      Forecast 包含以下关键字段：<br/>
-      <code>forecastID</code> -- 预测的唯一标识，每次更新递增<br/>
-      <code>activeSlotNumber</code> -- 当前正在执行的 Slot 编号（<code>null</code> 表示尚未开始）<br/>
-      <code>startTime</code> / <code>endTime</code> -- 整个预测的起止时间<br/>
-      <code>slots</code> -- 时间段列表，每个 Slot 包含 <code>minDuration</code>、<code>maxDuration</code>、<code>defaultDuration</code>、
-      <code>nominalPower</code>（标称功率）、<code>minPower</code>、<code>maxPower</code> 等参数
+      Forecast contains the following key fields:<br/>
+      <code>forecastID</code> -- unique forecast identifier, incremented on each update<br/>
+      <code>activeSlotNumber</code> -- currently executing Slot number (<code>null</code> means not yet started)<br/>
+      <code>startTime</code> / <code>endTime</code> -- start and end time of the entire forecast<br/>
+      <code>slots</code> -- list of time segments, each Slot contains <code>minDuration</code>, <code>maxDuration</code>, <code>defaultDuration</code>,
+      <code>nominalPower</code> (nominal power), <code>minPower</code>, <code>maxPower</code> and other parameters
     </p>
   </div>
 
@@ -2094,135 +2094,135 @@ val display = kilowattHours?.let {
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">NoOptOut</span>
-        <span class="enum-desc">未退出 -- 接受所有优化请求</span>
+        <span class="enum-desc">No opt-out -- accepts all optimization requests</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">LocalOptOut</span>
-        <span class="enum-desc">退出本地优化 -- 拒绝 LocalOptimization 类型的请求</span>
+        <span class="enum-desc">Local opt-out -- rejects LocalOptimization type requests</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">GridOptOut</span>
-        <span class="enum-desc">退出电网优化 -- 拒绝 GridOptimization 类型的请求</span>
+        <span class="enum-desc">Grid opt-out -- rejects GridOptimization type requests</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">OptOut</span>
-        <span class="enum-desc">全部退出 -- 拒绝所有优化请求</span>
+        <span class="enum-desc">Full opt-out -- rejects all optimization requests</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">OptOutState 的影响</div>
+    <div class="callout-title">Impact of OptOutState</div>
     <p>
-      当用户设置了 <code>OptOutState</code> 退出优化后，EMS 发送的相应类型的命令会被设备拒绝。
-      EMS 在发送命令前应先检查此属性，避免发送注定会失败的请求。
-      <code>OptOut (3)</code> 状态下，除了 <code>CancelPowerAdjustRequest</code> 和 <code>CancelRequest</code> 之外的所有命令都会被拒绝。
+      When the user sets <code>OptOutState</code> to opt out, the device rejects the corresponding type of commands from the EMS.
+      The EMS should check this attribute before sending commands to avoid sending requests that are guaranteed to fail.
+      In <code>OptOut (3)</code> state, all commands except <code>CancelPowerAdjustRequest</code> and <code>CancelRequest</code> are rejected.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== Feature 位图 ====== -->
+  <!-- ====== Feature Bitmap ====== -->
   <h2 id="features">Feature Bitmap</h2>
-  <p>DeviceEnergyManagement Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持的能源管理能力。不同 Feature 组合决定了可用的命令和属性：</p>
+  <p>The DeviceEnergyManagement Cluster declares the device's supported energy management capabilities via <code>FeatureMap</code> (0xFFFC). Different Feature combinations determine the available commands and attributes:</p>
 
   <div class="enum-cards enum-cards-grid">
     <div class="enum-card">
       <span class="enum-badge">Bit 0</span>
       <div>
         <span class="enum-name">PA（PowerAdjustment）</span>
-        <span class="enum-desc">功率调整 -- 支持 PowerAdjustRequest / CancelPowerAdjustRequest 命令，提供 PowerAdjustmentCapability 属性</span>
+        <span class="enum-desc">Power adjustment -- supports PowerAdjustRequest / CancelPowerAdjustRequest commands, provides PowerAdjustmentCapability attribute</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 1</span>
       <div>
         <span class="enum-name">PFR（PowerForecastReporting）</span>
-        <span class="enum-desc">功率预测上报 -- 设备以功率为单位上报 Forecast（每个 Slot 包含功率参数）</span>
+        <span class="enum-desc">Power forecast reporting -- device reports Forecast in power units (each Slot contains power parameters)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 2</span>
       <div>
         <span class="enum-name">SFR（StateForecastReporting）</span>
-        <span class="enum-desc">状态预测上报 -- 设备以运行状态为单位上报 Forecast（每个 Slot 描述运行阶段）</span>
+        <span class="enum-desc">State forecast reporting -- device reports Forecast in operating states (each Slot describes an operating phase)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 3</span>
       <div>
         <span class="enum-name">STA（StartTimeAdjustment）</span>
-        <span class="enum-desc">启动时间调整 -- 支持 StartTimeAdjustRequest 命令，允许 EMS 推迟或提前设备启动</span>
+        <span class="enum-desc">Start time adjustment -- supports StartTimeAdjustRequest command, allows EMS to defer or advance device startup</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 4</span>
       <div>
         <span class="enum-name">PAU（Pausable）</span>
-        <span class="enum-desc">可暂停 -- 支持 PauseRequest / ResumeRequest 命令，设备可在运行中暂停</span>
+        <span class="enum-desc">Pausable -- supports PauseRequest / ResumeRequest commands, device can pause during operation</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 5</span>
       <div>
         <span class="enum-name">FA（ForecastAdjustment）</span>
-        <span class="enum-desc">预测调整 -- 支持 ModifyForecastRequest 命令，允许 EMS 直接修改预测参数</span>
+        <span class="enum-desc">Forecast adjustment -- supports ModifyForecastRequest command, allows EMS to directly modify forecast parameters</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 6</span>
       <div>
         <span class="enum-name">CON（ConstraintBasedAdjustment）</span>
-        <span class="enum-desc">基于约束调整 -- 支持 RequestConstraintBasedForecast 命令，允许 EMS 提供约束让设备自行优化</span>
+        <span class="enum-desc">Constraint-based adjustment -- supports RequestConstraintBasedForecast command, allows EMS to provide constraints for the device to self-optimize</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">PFR 与 SFR 互斥</div>
+    <div class="callout-title">PFR and SFR are Mutually Exclusive</div>
     <p>
-      <strong>PFR</strong>（PowerForecastReporting）和 <strong>SFR</strong>（StateForecastReporting）是互斥的 -- 设备只能选择其中一种预测上报方式。
-      PFR 适用于功率可连续调节的设备（如 EVSE），SFR 适用于按固定程序运行的设备（如洗衣机、洗碗机）。
-      FA 和 CON Feature 需要 PFR 或 SFR 中的至少一个作为前提。
+      <strong>PFR</strong> (PowerForecastReporting) and <strong>SFR</strong> (StateForecastReporting) are mutually exclusive -- a device can only choose one forecast reporting mode.
+      PFR is suitable for devices with continuously adjustable power (e.g. EVSE), while SFR is suitable for devices that run fixed programs (e.g. washing machines, dishwashers).
+      The FA and CON Features require at least one of PFR or SFR as a prerequisite.
     </p>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一个 EVSE（电动车充电桩）在线运行时的 DeviceEnergyManagement Cluster 读取结果：</p>
+  <p>Read result of the DeviceEnergyManagement Cluster for an online EVSE (EV charger):</p>
 
   <pre><code>{
-  // --- ESA 基本信息 ---
-  "0x0000": 0,              // ESAType = EVSE（电动车充电桩）
-  "0x0001": false,          // ESACanGenerate = false（只消耗不产生能源）
-  "0x0002": 1,              // ESAState = Online（在线运行中）
+  // --- ESA Basic Info ---
+  "0x0000": 0,              // ESAType = EVSE (EV charger)
+  "0x0001": false,          // ESACanGenerate = false (consumes only, does not generate)
+  "0x0002": 1,              // ESAState = Online (running)
 
-  // --- 功率范围 ---
-  "0x0003": 0,              // AbsMinPower = 0 mW（可完全停止消耗）
-  "0x0004": 7200000,        // AbsMaxPower = 7200000 mW（最大 7.2 kW）
+  // --- Power Range ---
+  "0x0003": 0,              // AbsMinPower = 0 mW (can completely stop consuming)
+  "0x0004": 7200000,        // AbsMaxPower = 7200000 mW (max 7.2 kW)
 
-  // --- 功率调整能力 ---
+  // --- Power Adjustment Capability ---
   "0x0005": {               // PowerAdjustmentCapability
     "powerAdjustCapability": [
       {
-        "minPower": 1400000,       // 最低可调功率 1.4 kW
-        "maxPower": 7200000,       // 最高可调功率 7.2 kW
-        "minDuration": 60,         // 最短调整持续 60 秒
-        "maxDuration": 28800       // 最长调整持续 8 小时
+        "minPower": 1400000,       // Min adjustable power 1.4 kW
+        "maxPower": 7200000,       // Max adjustable power 7.2 kW
+        "minDuration": 60,         // Min adjustment duration 60 seconds
+        "maxDuration": 28800       // Max adjustment duration 8 hours
       }
     ],
-    "cause": 0                     // NoRateChange（无费率变化触发）
+    "cause": 0                     // NoRateChange (no rate change trigger)
   },
 
-  // --- 预测 ---
+  // --- Forecast ---
   "0x0006": {               // Forecast
     "forecastID": 1,
     "activeSlotNumber": 0,
@@ -2240,45 +2240,45 @@ val display = kilowattHours?.let {
     ]
   },
 
-  // --- 退出状态 ---
-  "0x0007": 0               // OptOutState = NoOptOut（未退出任何优化）
+  // --- Opt-Out State ---
+  "0x0007": 0               // OptOutState = NoOptOut (not opted out of any optimization)
 }</code></pre>
 
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      所有功率值的单位是毫瓦（mW），需除以 1000 得到瓦（W），再除以 1000 得到千瓦（kW）。
-      <code>Forecast</code> 和 <code>PowerAdjustmentCapability</code> 是复合结构体，解析时需要递归处理嵌套字段。
-      <code>null</code> 值表示该能力当前不可用 -- 例如设备处于 Offline 状态时 PowerAdjustmentCapability 可能为 null。
+      All power values are in milliwatts (mW); divide by 1000 to get watts (W), and by another 1000 to get kilowatts (kW).
+      <code>Forecast</code> and <code>PowerAdjustmentCapability</code> are composite structures that require recursive parsing of nested fields.
+      A <code>null</code> value means the capability is currently unavailable -- for example, PowerAdjustmentCapability may be null when the device is in Offline state.
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
-    <summary>场景 1：EVSE 分时充电 -- 错峰降低电费</summary>
+    <summary>Scenario 1: EVSE Time-of-Use Charging -- Off-Peak Cost Reduction</summary>
     <div class="scenario-content">
       <ol>
-        <li>读取 <code>ESAType (0x0000)</code> 确认是 EVSE 设备，读取 <code>ESAState (0x0002)</code> 确认为 <code>Online (1)</code></li>
-        <li>读取 <code>PowerAdjustmentCapability (0x0005)</code> 获取可调功率范围（如 1.4 kW ~ 7.2 kW）</li>
-        <li>电价高峰时段（18:00-22:00）：发送 <code>PowerAdjustRequest(Power=1400000, Duration=14400, Cause=1)</code> 降到最低功率</li>
-        <li>订阅 <code>ESAState</code>，确认变为 <code>PowerAdjustActive (3)</code></li>
-        <li>高峰结束后：发送 <code>CancelPowerAdjustRequest</code> 恢复全速充电，或等待 Duration 到期自动恢复</li>
-        <li>全程订阅 <code>Forecast (0x0006)</code> 变化，监控充电进度和预计完成时间</li>
+        <li>Read <code>ESAType (0x0000)</code> to confirm it is an EVSE device; read <code>ESAState (0x0002)</code> to confirm it is <code>Online (1)</code></li>
+        <li>Read <code>PowerAdjustmentCapability (0x0005)</code> to get the adjustable power range (e.g. 1.4 kW ~ 7.2 kW)</li>
+        <li>During peak pricing (18:00-22:00): send <code>PowerAdjustRequest(Power=1400000, Duration=14400, Cause=1)</code> to reduce to minimum power</li>
+        <li>Subscribe to <code>ESAState</code> and confirm it changes to <code>PowerAdjustActive (3)</code></li>
+        <li>After peak ends: send <code>CancelPowerAdjustRequest</code> to resume full-speed charging, or wait for the Duration to expire for automatic restoration</li>
+        <li>Subscribe to <code>Forecast (0x0006)</code> changes throughout to monitor charging progress and estimated completion time</li>
       </ol>
     </div>
   </details>
 
   <details class="scenario">
-    <summary>场景 2：洗碗机延迟启动 -- 利用低谷电价</summary>
+    <summary>Scenario 2: Dishwasher Delayed Start -- Utilizing Off-Peak Rates</summary>
     <div class="scenario-content">
       <ol>
-        <li>用户设置洗碗机准备运行，设备上报 <code>Forecast</code> 显示预计立即启动</li>
-        <li>EMS 检查电价时间表，发现 23:00 后进入低谷电价</li>
-        <li>发送 <code>StartTimeAdjustRequest(RequestedStartTime=23:00的UTC时间戳, Cause=0)</code> 推迟启动</li>
-        <li>洗碗机在 23:00 自动启动洗涤程序，<code>Forecast</code> 中的 <code>activeSlotNumber</code> 开始更新</li>
-        <li>如果用户需要提前使用洗碗机，检查 <code>OptOutState</code>，用户可以通过设备面板退出优化，或 EMS 发送 <code>CancelRequest</code> 取消延迟</li>
+        <li>The user sets the dishwasher to run; the device reports a <code>Forecast</code> showing it plans to start immediately</li>
+        <li>The EMS checks the electricity rate schedule and finds that off-peak rates begin after 23:00</li>
+        <li>Send <code>StartTimeAdjustRequest(RequestedStartTime=UTC timestamp for 23:00, Cause=0)</code> to defer startup</li>
+        <li>The dishwasher automatically starts the wash cycle at 23:00; <code>activeSlotNumber</code> in <code>Forecast</code> begins updating</li>
+        <li>If the user needs the dishwasher sooner, check <code>OptOutState</code>; the user can opt out via the device panel, or the EMS can send <code>CancelRequest</code> to cancel the delay</li>
       </ol>
     </div>
   </details>

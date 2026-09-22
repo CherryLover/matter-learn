@@ -40,7 +40,7 @@ export const clusters: Record<string, ClusterContent> = {
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
     The OnOff Cluster defines 6 commands. The basic trio (Off / On / Toggle) is supported by all devices,
@@ -99,7 +99,7 @@ export const clusters: Record<string, ClusterContent> = {
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
+  <!-- ====== Command Details ====== -->
   <h3 id="cmd-0x00">Off (0x00)</h3>
   <p>
     Switches the device to the off state. On success, the <code>OnOff</code> attribute becomes <code>false</code>.
@@ -182,7 +182,7 @@ export const clusters: Record<string, ClusterContent> = {
     </div>
   </div>
 
-  <h4>DelayedAllOff 的 EffectVariant</h4>
+  <h4>EffectVariant for DelayedAllOff</h4>
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0</span>
@@ -290,11 +290,11 @@ export const clusters: Record<string, ClusterContent> = {
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h2 id="attributes">Attributes</h2>
   <p>The OnOff Cluster has 5 application attributes. Click an attribute ID in the summary table below to jump to its detailed description.</p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute Summary Table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -307,7 +307,7 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
       </thead>
       <tbody>
-        <!-- 开关状态 -->
+        <!-- On/Off State -->
         <tr class="clickable-row" data-href="#attr-0x0000">
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>OnOff</td>
@@ -349,7 +349,7 @@ export const clusters: Record<string, ClusterContent> = {
     </table>
   </div>
 
-  <!-- ====== 开关状态（0x0000, 0x4000）====== -->
+  <!-- ====== On/Off State (0x0000, 0x4000) ====== -->
   <h3 id="group-state">On/Off State (0x0000, 0x4000)</h3>
   <p>Describes the device's current on/off state and global scene control flag.</p>
 
@@ -381,7 +381,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 定时参数（0x4001, 0x4002）====== -->
+  <!-- ====== Timing Parameters (0x4001, 0x4002) ====== -->
   <h3 id="group-timing">Timing Parameters (0x4001, 0x4002)</h3>
   <p>Countdown control for the OnWithTimedOff command. These two attributes are automatically maintained by the device and typically do not need to be written manually.</p>
 
@@ -421,7 +421,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 上电行为（0x4003）====== -->
+  <!-- ====== Startup Behavior (0x4003) ====== -->
   <h3 id="group-startup">Startup Behavior (0x4003)</h3>
   <p>Controls the initial on/off state after the device powers on (or restarts). This attribute significantly impacts user experience -- whether the light is on or off after a power outage depends on it.</p>
 
@@ -479,7 +479,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">null 与 0xFF</div>
+    <div class="callout-title">null vs 0xFF</div>
     <p>
       StartUpOnOff is a <strong>Nullable</strong> type. In Matter's over-the-wire encoding, <code>null</code> corresponds to <code>0xFF</code>.
       So if you see <code>0xFF</code> in raw protocol data, it actually means "restore the state before power loss", not a valid enum value.
@@ -487,7 +487,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== Feature 位图 ====== -->
+  <!-- ====== Feature Bitmap ====== -->
   <h2 id="features">Feature Bitmap</h2>
   <p>The OnOff Cluster uses <code>FeatureMap</code> (0xFFFC) to declare which advanced capabilities the device supports:</p>
 
@@ -515,7 +515,7 @@ export const clusters: Record<string, ClusterContent> = {
     </div>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
   <p>Read result of an OnOff Cluster from a smart light with the Lighting feature enabled, in the on state:</p>
 
@@ -541,7 +541,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <h3 id="scenario-basic">Scenario 1: Basic On/Off Control</h3>
@@ -652,7 +652,7 @@ export const clusters: Record<string, ClusterContent> = {
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
     LevelControl provides two groups of commands: the basic group (0x00~0x03) and the WithOnOff group (0x04~0x07).
@@ -738,7 +738,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
+  <!-- ====== Command Details ====== -->
   <h3 id="cmd-0x00">MoveToLevel (0x00)</h3>
   <p>
     Smoothly transitions <code>CurrentLevel</code> from its current value to a specified target level. This is the most commonly used command -- it is what gets sent when the user releases the brightness slider in the app.
@@ -888,11 +888,11 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h2 id="attributes">Attributes</h2>
   <p>LevelControl attributes are organized into four groups by function. Click an attribute ID in the summary table below to jump to its detailed description.</p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute Summary Table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -905,7 +905,7 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
       </thead>
       <tbody>
-        <!-- 当前状态 -->
+        <!-- Current State -->
         <tr class="clickable-row" data-href="#attr-0x00">
           <td><a href="#attr-0x00"><code>0x00</code></a></td>
           <td>CurrentLevel</td>
@@ -934,7 +934,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#group-state">Current State</a></td>
           <td>Maximum available level</td>
         </tr>
-        <!-- 频率控制 -->
+        <!-- Frequency Control -->
         <tr class="clickable-row" data-href="#attr-0x04">
           <td><a href="#attr-0x04"><code>0x04</code></a></td>
           <td>CurrentFrequency</td>
@@ -956,7 +956,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#group-frequency">Frequency Control</a></td>
           <td>Maximum frequency</td>
         </tr>
-        <!-- 过渡与开关联动 -->
+        <!-- Transition & OnOff Coupling -->
         <tr class="clickable-row" data-href="#attr-0x0F">
           <td><a href="#attr-0x0F"><code>0x0F</code></a></td>
           <td>Options</td>
@@ -999,7 +999,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#group-transition">Transition &amp; OnOff Coordination</a></td>
           <td>Default move rate</td>
         </tr>
-        <!-- 启动行为 -->
+        <!-- Startup Behavior -->
         <tr class="clickable-row" data-href="#attr-0x4000">
           <td><a href="#attr-0x4000"><code>0x4000</code></a></td>
           <td>StartUpCurrentLevel</td>
@@ -1011,7 +1011,7 @@ export const clusters: Record<string, ClusterContent> = {
     </table>
   </div>
 
-  <!-- ====== 当前状态（0x00-0x03）====== -->
+  <!-- ====== Current State (0x00-0x03) ====== -->
   <h3 id="group-state">Current State (0x00 – 0x03)</h3>
   <p>Describes the device's current level and allowed range. This is the most direct data source for displaying brightness status in the app.</p>
 
@@ -1068,7 +1068,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 频率控制（0x04-0x06）====== -->
+  <!-- ====== Frequency Control (0x04-0x06) ====== -->
   <h3 id="group-frequency">Frequency Control (0x04 – 0x06)</h3>
   <p>Describes the device's frequency control capabilities. These attributes are only present when the device supports the <strong>Frequency</strong> feature (Feature Map Bit 2).</p>
 
@@ -1109,7 +1109,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 过渡与开关联动（0x0F-0x14）====== -->
+  <!-- ====== Transition & OnOff Coupling (0x0F-0x14) ====== -->
   <h3 id="group-transition">Transition &amp; OnOff Coordination (0x0F – 0x14)</h3>
   <p>
     Controls the transition behavior of level changes and how the OnOff Cluster affects brightness when turning on/off.
@@ -1174,7 +1174,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 启动行为（0x4000）====== -->
+  <!-- ====== Startup Behavior (0x4000) ====== -->
   <h3 id="group-startup">Startup Behavior (0x4000)</h3>
   <p>Controls the initial brightness after the device powers on.</p>
 
@@ -1229,7 +1229,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 枚举与位图 ====== -->
+  <!-- ====== Enums & Bitmaps ====== -->
   <h2 id="enums">Enums & Bitmaps</h2>
 
   <h3 id="enum-movemode">MoveModeEnum</h3>
@@ -1338,7 +1338,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
   <p>Read result of a typical dimmable light fixture's LevelControl Cluster:</p>
 
@@ -1374,7 +1374,7 @@ export const clusters: Record<string, ClusterContent> = {
     </ol>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <h3 id="scenario-dimming">Scenario 1: App Dimming</h3>
@@ -1487,7 +1487,7 @@ export const clusters: Record<string, ClusterContent> = {
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== Feature 能力 ====== -->
+  <!-- ====== Features ====== -->
   <h2 id="features">Features (Feature Map)</h2>
   <p>
     ColorControl uses the Feature Map to declare which color control capabilities the device supports. Different capabilities determine the available command and attribute sets.
@@ -1539,7 +1539,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
     ColorControl defines 19 commands, organized into five groups by color model: Hue/Saturation control, XY chromaticity control, Color Temperature control, Enhanced Hue control, and Color Loop control.
@@ -1560,7 +1560,7 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
       </thead>
       <tbody>
-        <!-- Hue/Saturation 组 -->
+        <!-- Hue/Saturation Group -->
         <tr class="clickable-row" data-href="#cmd-0x00">
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>MoveToHue</td>
@@ -1603,7 +1603,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td>Set hue and saturation simultaneously</td>
           <td><span class="feature-tag">HS</span></td>
         </tr>
-        <!-- XY 组 -->
+        <!-- XY Group -->
         <tr class="clickable-row" data-href="#cmd-0x07">
           <td><a href="#cmd-0x07"><code>0x07</code></a></td>
           <td>MoveToColor</td>
@@ -1622,7 +1622,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td>Step XY chromaticity</td>
           <td><span class="feature-tag">XY</span></td>
         </tr>
-        <!-- 色温组 -->
+        <!-- Color Temperature Group -->
         <tr class="clickable-row" data-href="#cmd-0x0A">
           <td><a href="#cmd-0x0A"><code>0x0A</code></a></td>
           <td>MoveToColorTemperature</td>
@@ -1641,7 +1641,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td>Step color temperature</td>
           <td><span class="feature-tag">CT</span></td>
         </tr>
-        <!-- Enhanced Hue 组 -->
+        <!-- Enhanced Hue Group -->
         <tr class="clickable-row" data-href="#cmd-0x40">
           <td><a href="#cmd-0x40"><code>0x40</code></a></td>
           <td>EnhancedMoveToHue</td>
@@ -1683,7 +1683,7 @@ export const clusters: Record<string, ClusterContent> = {
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
+  <!-- ====== Command Details ====== -->
   <h3 id="cmd-0x00">MoveToHue (0x00)</h3>
   <p>
     Smoothly transitions the light's hue to a target value. Hue ranges from 0~254, mapping to the 0°~360° color wheel. The <code>Direction</code> parameter controls the transition direction on the color wheel.
@@ -1743,7 +1743,7 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr><td>StepMode</td><td>StepModeEnum</td><td>Step direction: Up / Down</td></tr>
         <tr><td>StepSize</td><td>uint8</td><td>Hue change per step</td></tr>
-        <tr><td>TransitionTime</td><td>uint8</td><td>过渡时间，单位 1/10 秒</td></tr>
+        <tr><td>TransitionTime</td><td>uint8</td><td>Transition time, in 1/10 seconds</td></tr>
         <tr><td>OptionsMask</td><td>bitmap8</td><td>Options mask</td></tr>
         <tr><td>OptionsOverride</td><td>bitmap8</td><td>Options override</td></tr>
       </tbody>
@@ -1760,7 +1760,7 @@ export const clusters: Record<string, ClusterContent> = {
       </thead>
       <tbody>
         <tr><td>Saturation</td><td>uint8</td><td>Target saturation, 0~254</td></tr>
-        <tr><td>TransitionTime</td><td>uint16</td><td>过渡时间，单位 1/10 秒</td></tr>
+        <tr><td>TransitionTime</td><td>uint16</td><td>Transition time, in 1/10 seconds</td></tr>
         <tr><td>OptionsMask</td><td>bitmap8</td><td>Options mask</td></tr>
         <tr><td>OptionsOverride</td><td>bitmap8</td><td>Options override</td></tr>
       </tbody>
@@ -1792,7 +1792,7 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr><td>Hue</td><td>uint8</td><td>Target hue value, 0~254</td></tr>
         <tr><td>Saturation</td><td>uint8</td><td>Target saturation, 0~254</td></tr>
-        <tr><td>TransitionTime</td><td>uint16</td><td>过渡时间，单位 1/10 秒</td></tr>
+        <tr><td>TransitionTime</td><td>uint16</td><td>Transition time, in 1/10 seconds</td></tr>
         <tr><td>OptionsMask</td><td>bitmap8</td><td>Options mask</td></tr>
         <tr><td>OptionsOverride</td><td>bitmap8</td><td>Options override</td></tr>
       </tbody>
@@ -1816,7 +1816,7 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr><td>ColorX</td><td>uint16</td><td>CIE x coordinate, 0~0xFEFF (actual value = ColorX / 65536)</td></tr>
         <tr><td>ColorY</td><td>uint16</td><td>CIE y coordinate, 0~0xFEFF (actual value = ColorY / 65536)</td></tr>
-        <tr><td>TransitionTime</td><td>uint16</td><td>过渡时间，单位 1/10 秒</td></tr>
+        <tr><td>TransitionTime</td><td>uint16</td><td>Transition time, in 1/10 seconds</td></tr>
         <tr><td>OptionsMask</td><td>bitmap8</td><td>Options mask</td></tr>
         <tr><td>OptionsOverride</td><td>bitmap8</td><td>Options override</td></tr>
       </tbody>
@@ -1857,7 +1857,7 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr><td>StepX</td><td>int16</td><td>X coordinate step amount (signed)</td></tr>
         <tr><td>StepY</td><td>int16</td><td>Y coordinate step amount (signed)</td></tr>
-        <tr><td>TransitionTime</td><td>uint16</td><td>过渡时间，单位 1/10 秒</td></tr>
+        <tr><td>TransitionTime</td><td>uint16</td><td>Transition time, in 1/10 seconds</td></tr>
         <tr><td>OptionsMask</td><td>bitmap8</td><td>Options mask</td></tr>
         <tr><td>OptionsOverride</td><td>bitmap8</td><td>Options override</td></tr>
       </tbody>
@@ -1877,7 +1877,7 @@ export const clusters: Record<string, ClusterContent> = {
       </thead>
       <tbody>
         <tr><td>ColorTemperatureMireds</td><td>uint16</td><td>Target color temperature (Mireds)</td></tr>
-        <tr><td>TransitionTime</td><td>uint16</td><td>过渡时间，单位 1/10 秒</td></tr>
+        <tr><td>TransitionTime</td><td>uint16</td><td>Transition time, in 1/10 seconds</td></tr>
         <tr><td>OptionsMask</td><td>bitmap8</td><td>Options mask</td></tr>
         <tr><td>OptionsOverride</td><td>bitmap8</td><td>Options override</td></tr>
       </tbody>
@@ -1899,7 +1899,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
       </thead>
       <tbody>
-        <tr><td>MoveMode</td><td>MoveModeEnum</td><td>移动模式：Stop / Up / Down</td></tr>
+        <tr><td>MoveMode</td><td>MoveModeEnum</td><td>Move mode: Stop / Up / Down</td></tr>
         <tr><td>Rate</td><td>uint16</td><td>Mireds change per second</td></tr>
         <tr><td>ColorTemperatureMinimumMireds</td><td>uint16</td><td>Minimum bound for movement</td></tr>
         <tr><td>ColorTemperatureMaximumMireds</td><td>uint16</td><td>Maximum bound for movement</td></tr>
@@ -1918,9 +1918,9 @@ export const clusters: Record<string, ClusterContent> = {
         <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
       </thead>
       <tbody>
-        <tr><td>StepMode</td><td>StepModeEnum</td><td>步进方向：Up / Down</td></tr>
+        <tr><td>StepMode</td><td>StepModeEnum</td><td>Step direction: Up / Down</td></tr>
         <tr><td>StepSize</td><td>uint16</td><td>Mireds change per step</td></tr>
-        <tr><td>TransitionTime</td><td>uint16</td><td>过渡时间，单位 1/10 秒</td></tr>
+        <tr><td>TransitionTime</td><td>uint16</td><td>Transition time, in 1/10 seconds</td></tr>
         <tr><td>ColorTemperatureMinimumMireds</td><td>uint16</td><td>Minimum bound for stepping</td></tr>
         <tr><td>ColorTemperatureMaximumMireds</td><td>uint16</td><td>Maximum bound for stepping</td></tr>
         <tr><td>OptionsMask</td><td>bitmap8</td><td>Options mask</td></tr>
@@ -1943,7 +1943,7 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr><td>EnhancedHue</td><td>uint16</td><td>Target Enhanced Hue value, 0~0xFFFF</td></tr>
         <tr><td>Direction</td><td>DirectionEnum</td><td>Transition direction</td></tr>
-        <tr><td>TransitionTime</td><td>uint16</td><td>过渡时间，单位 1/10 秒</td></tr>
+        <tr><td>TransitionTime</td><td>uint16</td><td>Transition time, in 1/10 seconds</td></tr>
         <tr><td>OptionsMask</td><td>bitmap8</td><td>Options mask</td></tr>
         <tr><td>OptionsOverride</td><td>bitmap8</td><td>Options override</td></tr>
       </tbody>
@@ -1974,8 +1974,8 @@ export const clusters: Record<string, ClusterContent> = {
       </thead>
       <tbody>
         <tr><td>EnhancedHue</td><td>uint16</td><td>Target Enhanced Hue value</td></tr>
-        <tr><td>Saturation</td><td>uint8</td><td>目标饱和度，0~254</td></tr>
-        <tr><td>TransitionTime</td><td>uint16</td><td>过渡时间，单位 1/10 秒</td></tr>
+        <tr><td>Saturation</td><td>uint8</td><td>Target saturation, 0~254</td></tr>
+        <tr><td>TransitionTime</td><td>uint16</td><td>Transition time, in 1/10 seconds</td></tr>
         <tr><td>OptionsMask</td><td>bitmap8</td><td>Options mask</td></tr>
         <tr><td>OptionsOverride</td><td>bitmap8</td><td>Options override</td></tr>
       </tbody>
@@ -2036,11 +2036,11 @@ export const clusters: Record<string, ClusterContent> = {
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h2 id="attributes">Attributes</h2>
   <p>The ColorControl Cluster has 52 attributes organized into six groups. Click an attribute ID in the summary table below to jump to its detailed description.</p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute Summary Table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -2053,7 +2053,7 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
       </thead>
       <tbody>
-        <!-- 当前颜色状态 -->
+        <!-- Current Color State -->
         <tr class="clickable-row" data-href="#attr-0x0000">
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>CurrentHue</td>
@@ -2096,7 +2096,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-current">Current Color State</a></td>
           <td>Current color temperature (Mireds)</td>
         </tr>
-        <!-- 颜色模式与选项 -->
+        <!-- Color Mode & Options -->
         <tr class="clickable-row" data-href="#attr-0x0008">
           <td><a href="#attr-0x0008"><code>0x0008</code></a></td>
           <td>ColorMode</td>
@@ -2161,7 +2161,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-enhanced">Enhanced Hue &amp; Color Loop</a></td>
           <td>Enhanced Hue restored when loop deactivates</td>
         </tr>
-        <!-- 能力与色温范围 -->
+        <!-- Capabilities & CT Range -->
         <tr class="clickable-row" data-href="#attr-0x400A">
           <td><a href="#attr-0x400A"><code>0x400A</code></a></td>
           <td>ColorCapabilities</td>
@@ -2197,7 +2197,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-capability">Capabilities &amp; CT Range</a></td>
           <td>Power-on default color temperature</td>
         </tr>
-        <!-- 漂移补偿 & 灯具信息 -->
+        <!-- Drift Compensation & Lamp Info -->
         <tr class="clickable-row" data-href="#attr-0x0005">
           <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
           <td>DriftCompensation</td>
@@ -2219,7 +2219,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-info">Drift Compensation &amp; Fixture Info</a></td>
           <td>Number of fixture primaries</td>
         </tr>
-        <!-- Primary 色坐标（折叠） -->
+        <!-- Primary Coordinates (collapsed) -->
         <tr class="clickable-row" data-href="#attr-primary">
           <td><a href="#attr-primary"><code>0x0011~0x002A</code></a></td>
           <td>Primary1~6 (X/Y/Intensity)</td>
@@ -2227,7 +2227,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-primary">Primary Coordinates</a></td>
           <td>CIE XY coordinates and intensity for 6 primaries</td>
         </tr>
-        <!-- 白点 & 色点 -->
+        <!-- White Point & Color Points -->
         <tr class="clickable-row" data-href="#attr-colorpoint">
           <td><a href="#attr-colorpoint"><code>0x0030~0x003C</code></a></td>
           <td>WhitePoint / ColorPoint R/G/B</td>
@@ -2239,9 +2239,9 @@ export const clusters: Record<string, ClusterContent> = {
     </table>
   </div>
 
-  <!-- ====== 属性分组详解 ====== -->
+  <!-- ====== Attribute Group Details ====== -->
 
-  <!-- 当前颜色状态 -->
+  <!-- Current Color State -->
   <h3 id="attr-current">Current Color State</h3>
   <p>Reflects the light's current color parameters and serves as the core data source for app UI display and state synchronization.</p>
 
@@ -2300,7 +2300,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- 颜色模式 -->
+  <!-- Color Mode -->
   <h3 id="attr-mode">Color Mode &amp; Options</h3>
   <p>Identifies the color control model currently in use and command execution options.</p>
 
@@ -2363,21 +2363,21 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">CurrentHueAndCurrentSaturation</span>
-        <span class="enum-desc">色相/饱和度模式</span>
+        <span class="enum-desc">Hue/Saturation mode</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">CurrentXAndCurrentY</span>
-        <span class="enum-desc">CIE XY 色坐标模式</span>
+        <span class="enum-desc">CIE XY chromaticity mode</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">ColorTemperatureMireds</span>
-        <span class="enum-desc">色温模式</span>
+        <span class="enum-desc">Color Temperature mode</span>
       </div>
     </div>
     <div class="enum-card">
@@ -2449,9 +2449,9 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- 能力与色温范围 -->
-  <h3 id="attr-capability">能力与色温范围</h3>
-  <p>描述设备支持的颜色控制能力和色温物理范围。开发时必须先读取这些属性来确定可用的控制方式。</p>
+  <!-- Capabilities & CT Range -->
+  <h3 id="attr-capability">Capabilities &amp; Color Temperature Range</h3>
+  <p>Describes the device's supported color control capabilities and the physical color temperature range. These attributes must be read during development to determine the available control modes.</p>
 
   <div class="table-wrap">
     <table>
@@ -2461,89 +2461,89 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x400A">
           <td><code>0x400A</code></td>
-          <td>ColorCapabilities<br/><span class="attr-cn">颜色能力</span></td>
+          <td>ColorCapabilities<br/><span class="attr-cn">Color Capabilities</span></td>
           <td>bitmap16</td>
-          <td>设备支持的颜色控制能力位图（见下方 Feature Map 定义）</td>
+          <td>Bitmap of supported color control capabilities (see Feature Map definition below)</td>
         </tr>
         <tr id="attr-0x400B">
           <td><code>0x400B</code></td>
-          <td>ColorTempPhysicalMinMireds<br/><span class="attr-cn">最小色温</span></td>
+          <td>ColorTempPhysicalMinMireds<br/><span class="attr-cn">Min CT</span></td>
           <td>uint16</td>
-          <td>设备支持的最低色温值（Mireds），即最高 Kelvin。范围 1~65279</td>
+          <td>Minimum color temperature supported (Mireds), i.e. highest Kelvin. Range 1~65279</td>
         </tr>
         <tr id="attr-0x400C">
           <td><code>0x400C</code></td>
-          <td>ColorTempPhysicalMaxMireds<br/><span class="attr-cn">最大色温</span></td>
+          <td>ColorTempPhysicalMaxMireds<br/><span class="attr-cn">Max CT</span></td>
           <td>uint16</td>
-          <td>设备支持的最高色温值（Mireds），即最低 Kelvin。范围 1~65279</td>
+          <td>Maximum color temperature supported (Mireds), i.e. lowest Kelvin. Range 1~65279</td>
         </tr>
         <tr id="attr-0x400D">
           <td><code>0x400D</code></td>
-          <td>CoupleColorTempToLevelMinMireds<br/><span class="attr-cn">色温联动亮度最小值</span></td>
+          <td>CoupleColorTempToLevelMinMireds<br/><span class="attr-cn">CT-to-Level Min</span></td>
           <td>uint16</td>
-          <td>当色温联动亮度功能启用时，允许的最小 Mireds 值</td>
+          <td>Minimum Mireds value allowed when color-temperature-to-level coupling is enabled</td>
         </tr>
         <tr id="attr-0x4010">
           <td><code>0x4010</code></td>
-          <td>StartUpColorTemperatureMireds<br/><span class="attr-cn">开机色温</span></td>
+          <td>StartUpColorTemperatureMireds<br/><span class="attr-cn">Startup CT</span></td>
           <td>uint16 / null</td>
-          <td>设备上电后的初始色温。null 表示恢复上次断电前的色温。可写</td>
+          <td>Initial color temperature after power-on. null means restore the last color temperature before power-off. Read/Write</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <h4>ColorCapabilities 位图</h4>
+  <h4>ColorCapabilities Bitmap</h4>
   <div class="enum-cards enum-cards-grid">
     <div class="enum-card">
       <span class="enum-badge">Bit 0</span>
       <div>
         <span class="enum-name">HueSaturation（0x01）</span>
-        <span class="enum-desc">支持 Hue/Saturation 控制</span>
+        <span class="enum-desc">Supports Hue/Saturation control</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 1</span>
       <div>
         <span class="enum-name">EnhancedHue（0x02）</span>
-        <span class="enum-desc">支持 16-bit Enhanced Hue</span>
+        <span class="enum-desc">Supports 16-bit Enhanced Hue</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 2</span>
       <div>
         <span class="enum-name">ColorLoop（0x04）</span>
-        <span class="enum-desc">支持自动循环变色</span>
+        <span class="enum-desc">Supports automatic color cycling</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 3</span>
       <div>
         <span class="enum-name">XY（0x08）</span>
-        <span class="enum-desc">支持 CIE XY 色坐标控制</span>
+        <span class="enum-desc">Supports CIE XY chromaticity control</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 4</span>
       <div>
         <span class="enum-name">ColorTemperature（0x10）</span>
-        <span class="enum-desc">支持色温控制</span>
+        <span class="enum-desc">Supports Color Temperature control</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">色温范围举例</div>
+    <div class="callout-title">Color Temperature Range Example</div>
     <p>
-      一个典型的色温灯泡：<code>MinMireds = 153</code>（≈ 6536K 冷白）、<code>MaxMireds = 500</code>（= 2000K 暖黄）。
-      UI 上色温滑条的两端应该取这两个值。发送 MoveToColorTemperature 时目标值超出此范围，设备会自动裁剪。
+      A typical color temperature bulb: <code>MinMireds = 153</code> (approx. 6536K cool white), <code>MaxMireds = 500</code> (= 2000K warm yellow).
+      The two ends of the UI color temperature slider should use these values. If the target value in a MoveToColorTemperature command exceeds this range, the device will automatically clamp it.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- 漂移补偿与灯具信息 -->
-  <h3 id="attr-info">漂移补偿与灯具信息</h3>
-  <p>描述灯具的颜色漂移补偿机制和原色（Primary）数量。大多数 App 开发无需关注这些属性。</p>
+  <!-- Drift Compensation & Fixture Info -->
+  <h3 id="attr-info">Drift Compensation &amp; Fixture Info</h3>
+  <p>Describes the fixture's color drift compensation mechanism and the number of primaries. Most app development does not need these attributes.</p>
 
   <div class="table-wrap">
     <table>
@@ -2553,21 +2553,21 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0005">
           <td><code>0x0005</code></td>
-          <td>DriftCompensation<br/><span class="attr-cn">漂移补偿</span></td>
+          <td>DriftCompensation<br/><span class="attr-cn">Drift Compensation</span></td>
           <td>enum8</td>
-          <td>灯具使用的颜色漂移补偿类型</td>
+          <td>Color drift compensation type used by the fixture</td>
         </tr>
         <tr id="attr-0x0006">
           <td><code>0x0006</code></td>
-          <td>CompensationText<br/><span class="attr-cn">补偿描述</span></td>
+          <td>CompensationText<br/><span class="attr-cn">Compensation Text</span></td>
           <td>string</td>
-          <td>对漂移补偿机制的文字描述</td>
+          <td>Text description of the drift compensation mechanism</td>
         </tr>
         <tr id="attr-0x0010">
           <td><code>0x0010</code></td>
-          <td>NumberOfPrimaries<br/><span class="attr-cn">原色数量</span></td>
+          <td>NumberOfPrimaries<br/><span class="attr-cn">Number of Primaries</span></td>
           <td>uint8 / null</td>
-          <td>灯具中独立颜色原色（LED 通道）的数量，最大 6。null 表示未知</td>
+          <td>Number of independent color primaries (LED channels) in the fixture, maximum 6. null means unknown</td>
         </tr>
       </tbody>
     </table>
@@ -2579,54 +2579,54 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">None</span>
-        <span class="enum-desc">无漂移补偿</span>
+        <span class="enum-desc">No drift compensation</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">OtherOrUnknown</span>
-        <span class="enum-desc">其他或未知补偿方式</span>
+        <span class="enum-desc">Other or unknown compensation</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">TemperatureMonitoring</span>
-        <span class="enum-desc">温度监测补偿</span>
+        <span class="enum-desc">Temperature monitoring compensation</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">OpticalLuminanceMonitoringAndFeedback</span>
-        <span class="enum-desc">光学亮度监测与反馈</span>
+        <span class="enum-desc">Optical luminance monitoring and feedback</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">4</span>
       <div>
         <span class="enum-name">OpticalColorMonitoringAndFeedback</span>
-        <span class="enum-desc">光学颜色监测与反馈</span>
+        <span class="enum-desc">Optical color monitoring and feedback</span>
       </div>
     </div>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- 原色坐标 -->
-  <h3 id="attr-primary">原色坐标(Primary 1~6)</h3>
+  <!-- Primary Coordinates -->
+  <h3 id="attr-primary">Primary Coordinates (Primary 1~6)</h3>
   <p>
-    灯具最多可以声明 6 组原色（Primary），每组包含 CIE XY 坐标和强度值。这些属性描述灯具 LED 的物理色域，
-    通常由固件设置，App 开发一般不需要读取。
+    A fixture can declare up to 6 primaries, each with CIE XY coordinates and an intensity value. These attributes describe the physical color gamut of the fixture's LEDs,
+    typically set by firmware, and generally do not need to be read during app development.
   </p>
 
   <details class="scenario">
-    <summary>Primary 1~6 属性列表(点击展开)</summary>
+    <summary>Primary 1~6 Attribute List (click to expand)</summary>
     <div class="scenario-content">
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>组</th><th>X 坐标 ID</th><th>Y 坐标 ID</th><th>强度 ID</th></tr>
+            <tr><th>Group</th><th>X Coordinate ID</th><th>Y Coordinate ID</th><th>Intensity ID</th></tr>
           </thead>
           <tbody>
             <tr><td>Primary 1</td><td><code>0x0011</code></td><td><code>0x0012</code></td><td><code>0x0013</code></td></tr>
@@ -2638,20 +2638,20 @@ export const clusters: Record<string, ClusterContent> = {
           </tbody>
         </table>
       </div>
-      <p>所有 X / Y 坐标为 uint16 类型，范围 0~0xFEFF；Intensity 为 uint8 / nullable 类型。</p>
+      <p>All X / Y coordinates are uint16 type, range 0~0xFEFF; Intensity is uint8 / nullable type.</p>
     </div>
   </details>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- 白点与色点 -->
-  <h3 id="attr-colorpoint">白点与色点</h3>
+  <!-- White Point & Color Points -->
+  <h3 id="attr-colorpoint">White Point &amp; Color Points</h3>
   <p>
-    描述灯具的白点坐标和 RGB 三色点坐标，用于色彩校准。这些属性可写，通常由高级校准工具使用，
-    App 开发一般不需要关注。
+    Describes the fixture's white point and RGB color point coordinates for color calibration. These attributes are writable and typically used by advanced calibration tools;
+    app development generally does not need them.
   </p>
 
   <details class="scenario">
-    <summary>白点与色点属性列表(点击展开)</summary>
+    <summary>White Point &amp; Color Points Attribute List (click to expand)</summary>
     <div class="scenario-content">
       <div class="table-wrap">
         <table>
@@ -2659,17 +2659,17 @@ export const clusters: Record<string, ClusterContent> = {
             <tr><th>ID</th><th>Name</th><th>Type</th><th>Description</th></tr>
           </thead>
           <tbody>
-            <tr><td><code>0x0030</code></td><td>WhitePointX</td><td>uint16</td><td>白点 CIE x 坐标</td></tr>
-            <tr><td><code>0x0031</code></td><td>WhitePointY</td><td>uint16</td><td>白点 CIE y 坐标</td></tr>
-            <tr><td><code>0x0032</code></td><td>ColorPointRX</td><td>uint16</td><td>红色点 CIE x 坐标</td></tr>
-            <tr><td><code>0x0033</code></td><td>ColorPointRY</td><td>uint16</td><td>红色点 CIE y 坐标</td></tr>
-            <tr><td><code>0x0034</code></td><td>ColorPointRIntensity</td><td>uint8 / null</td><td>红色点强度</td></tr>
-            <tr><td><code>0x0036</code></td><td>ColorPointGX</td><td>uint16</td><td>绿色点 CIE x 坐标</td></tr>
-            <tr><td><code>0x0037</code></td><td>ColorPointGY</td><td>uint16</td><td>绿色点 CIE y 坐标</td></tr>
-            <tr><td><code>0x0038</code></td><td>ColorPointGIntensity</td><td>uint8 / null</td><td>绿色点强度</td></tr>
-            <tr><td><code>0x003A</code></td><td>ColorPointBX</td><td>uint16</td><td>蓝色点 CIE x 坐标</td></tr>
-            <tr><td><code>0x003B</code></td><td>ColorPointBY</td><td>uint16</td><td>蓝色点 CIE y 坐标</td></tr>
-            <tr><td><code>0x003C</code></td><td>ColorPointBIntensity</td><td>uint8 / null</td><td>蓝色点强度</td></tr>
+            <tr><td><code>0x0030</code></td><td>WhitePointX</td><td>uint16</td><td>White point CIE x coordinate</td></tr>
+            <tr><td><code>0x0031</code></td><td>WhitePointY</td><td>uint16</td><td>White point CIE y coordinate</td></tr>
+            <tr><td><code>0x0032</code></td><td>ColorPointRX</td><td>uint16</td><td>Red color point CIE x coordinate</td></tr>
+            <tr><td><code>0x0033</code></td><td>ColorPointRY</td><td>uint16</td><td>Red color point CIE y coordinate</td></tr>
+            <tr><td><code>0x0034</code></td><td>ColorPointRIntensity</td><td>uint8 / null</td><td>Red color point intensity</td></tr>
+            <tr><td><code>0x0036</code></td><td>ColorPointGX</td><td>uint16</td><td>Green color point CIE x coordinate</td></tr>
+            <tr><td><code>0x0037</code></td><td>ColorPointGY</td><td>uint16</td><td>Green color point CIE y coordinate</td></tr>
+            <tr><td><code>0x0038</code></td><td>ColorPointGIntensity</td><td>uint8 / null</td><td>Green color point intensity</td></tr>
+            <tr><td><code>0x003A</code></td><td>ColorPointBX</td><td>uint16</td><td>Blue color point CIE x coordinate</td></tr>
+            <tr><td><code>0x003B</code></td><td>ColorPointBY</td><td>uint16</td><td>Blue color point CIE y coordinate</td></tr>
+            <tr><td><code>0x003C</code></td><td>ColorPointBIntensity</td><td>uint8 / null</td><td>Blue color point intensity</td></tr>
           </tbody>
         </table>
       </div>
@@ -2677,247 +2677,247 @@ export const clusters: Record<string, ClusterContent> = {
   </details>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 枚举速查 ====== -->
-  <h2 id="enums">命令参数枚举值速查</h2>
-  <p>以下枚举类型在多个命令的参数中复用。</p>
+  <!-- ====== Enum Quick Reference ====== -->
+  <h2 id="enums">Command Parameter Enum Quick Reference</h2>
+  <p>The following enum types are reused across multiple command parameters.</p>
 
-  <h4>DirectionEnum(色相过渡方向)</h4>
+  <h4>DirectionEnum (Hue Transition Direction)</h4>
   <div class="enum-cards enum-cards-grid">
     <div class="enum-card">
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">Shortest</span>
-        <span class="enum-desc">最短路径（在色环上取近路）</span>
+        <span class="enum-desc">Shortest path (shorter arc on the color wheel)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">Longest</span>
-        <span class="enum-desc">最长路径（在色环上绕远路）</span>
+        <span class="enum-desc">Longest path (longer arc on the color wheel)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">Up</span>
-        <span class="enum-desc">数值递增方向</span>
+        <span class="enum-desc">Increasing value direction</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">Down</span>
-        <span class="enum-desc">数值递减方向</span>
+        <span class="enum-desc">Decreasing value direction</span>
       </div>
     </div>
   </div>
 
-  <h4>MoveModeEnum(持续移动模式)</h4>
+  <h4>MoveModeEnum (Continuous Move Mode)</h4>
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">Stop</span>
-        <span class="enum-desc">停止移动</span>
+        <span class="enum-desc">Stop moving</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">Up</span>
-        <span class="enum-desc">向上（数值递增）</span>
+        <span class="enum-desc">Up (increasing value)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">Down</span>
-        <span class="enum-desc">向下（数值递减）</span>
+        <span class="enum-desc">Down (decreasing value)</span>
       </div>
     </div>
   </div>
 
-  <h4>StepModeEnum(步进方向)</h4>
+  <h4>StepModeEnum (Step Direction)</h4>
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">Up</span>
-        <span class="enum-desc">步进增加</span>
+        <span class="enum-desc">Step increase</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">Down</span>
-        <span class="enum-desc">步进减少</span>
+        <span class="enum-desc">Step decrease</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">注意 MoveMode / StepMode 的值间隔</div>
+    <div class="callout-title">Note the Value Gaps in MoveMode / StepMode</div>
     <p>
-      <code>MoveModeEnum</code> 的值是 0、1、3（没有 2），<code>StepModeEnum</code> 的值是 1、3（没有 0 和 2）。
-      这是沿用自 ZCL（ZigBee Cluster Library）的历史设计。传错值（比如 2）设备会返回错误。
+      <code>MoveModeEnum</code> values are 0, 1, 3 (no 2), and <code>StepModeEnum</code> values are 1, 3 (no 0 or 2).
+      This is a historical design inherited from ZCL (ZigBee Cluster Library). Sending an invalid value (e.g. 2) will cause the device to return an error.
     </p>
   </div>
 
-  <h4>ColorLoopActionEnum(循环动作)</h4>
+  <h4>ColorLoopActionEnum (Loop Action)</h4>
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">Deactivate</span>
-        <span class="enum-desc">关闭 Color Loop</span>
+        <span class="enum-desc">Deactivate Color Loop</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">ActivateFromColorLoopStartEnhancedHue</span>
-        <span class="enum-desc">从 ColorLoopStartEnhancedHue 开始循环</span>
+        <span class="enum-desc">Start loop from ColorLoopStartEnhancedHue</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">ActivateFromEnhancedCurrentHue</span>
-        <span class="enum-desc">从当前 Enhanced Hue 开始循环</span>
+        <span class="enum-desc">Start loop from current Enhanced Hue</span>
       </div>
     </div>
   </div>
 
-  <h4>ColorLoopDirectionEnum(循环方向)</h4>
+  <h4>ColorLoopDirectionEnum (Loop Direction)</h4>
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">Decrement</span>
-        <span class="enum-desc">色相递减方向循环</span>
+        <span class="enum-desc">Loop in decreasing hue direction</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">Increment</span>
-        <span class="enum-desc">色相递增方向循环</span>
+        <span class="enum-desc">Loop in increasing hue direction</span>
       </div>
     </div>
   </div>
 
-  <h4>UpdateFlags 位图(ColorLoopSet Commands参数)</h4>
+  <h4>UpdateFlags Bitmap (ColorLoopSet Command Parameter)</h4>
   <div class="enum-cards enum-cards-grid">
     <div class="enum-card">
       <span class="enum-badge">Bit 0</span>
       <div>
         <span class="enum-name">UpdateAction（0x01）</span>
-        <span class="enum-desc">更新 Action 字段</span>
+        <span class="enum-desc">Update the Action field</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 1</span>
       <div>
         <span class="enum-name">UpdateDirection（0x02）</span>
-        <span class="enum-desc">更新 Direction 字段</span>
+        <span class="enum-desc">Update the Direction field</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 2</span>
       <div>
         <span class="enum-name">UpdateTime（0x04）</span>
-        <span class="enum-desc">更新 Time 字段</span>
+        <span class="enum-desc">Update the Time field</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 3</span>
       <div>
         <span class="enum-name">UpdateStartHue（0x08）</span>
-        <span class="enum-desc">更新 StartHue 字段</span>
+        <span class="enum-desc">Update the StartHue field</span>
       </div>
     </div>
   </div>
 
-  <!-- ====== 标准示例 ====== -->
+  <!-- ====== Standard Example ====== -->
   <h2 id="standard-example">Standard Example</h2>
-  <p>以下是一个支持全能力（HS + XY + CT + EHUE + CL）的全彩灯的典型属性数据示例：</p>
+  <p>Below is a typical attribute data example for a full-capability (HS + XY + CT + EHUE + CL) full-color light:</p>
 
   <pre><code>{
-  // --- 当前颜色状态 ---
-  "0x0000": 127,         // CurrentHue = 127（约 180°，青色附近）
-  "0x0001": 200,         // CurrentSaturation = 200（高饱和度）
-  "0x0003": 24939,       // CurrentX = 24939（CIE x ≈ 0.3805）
-  "0x0004": 24701,       // CurrentY = 24701（CIE y ≈ 0.3769）
-  "0x0007": 370,         // ColorTemperatureMireds = 370（≈ 2703K 暖白）
-  "0x0002": 0,           // RemainingTime = 0（无过渡进行中）
+  // --- Current Color State ---
+  "0x0000": 127,         // CurrentHue = 127 (approx. 180°, near cyan)
+  "0x0001": 200,         // CurrentSaturation = 200 (high saturation)
+  "0x0003": 24939,       // CurrentX = 24939 (CIE x ≈ 0.3805)
+  "0x0004": 24701,       // CurrentY = 24701 (CIE y ≈ 0.3769)
+  "0x0007": 370,         // ColorTemperatureMireds = 370 (approx. 2703K warm white)
+  "0x0002": 0,           // RemainingTime = 0 (no transition in progress)
 
-  // --- 颜色模式 ---
-  "0x0008": 2,           // ColorMode = ColorTemperature（当前用色温控制）
+  // --- Color Mode ---
+  "0x0008": 2,           // ColorMode = ColorTemperature (currently using CT control)
   "0x4001": 2,           // EnhancedColorMode = ColorTemperature
-  "0x000F": 0,           // Options = 0（不启用 ExecuteIfOff）
+  "0x000F": 0,           // Options = 0 (ExecuteIfOff not enabled)
 
   // --- Enhanced Hue &amp; Color Loop ---
   "0x4000": 0,           // EnhancedCurrentHue = 0
-  "0x4002": 0,           // ColorLoopActive = 0（未激活循环）
+  "0x4002": 0,           // ColorLoopActive = 0 (loop not active)
   "0x4003": 0,           // ColorLoopDirection = Decrement
-  "0x4004": 25,          // ColorLoopTime = 25 秒
+  "0x4004": 25,          // ColorLoopTime = 25 seconds
   "0x4005": 0,           // ColorLoopStartEnhancedHue = 0
   "0x4006": 0,           // ColorLoopStoredEnhancedHue = 0
 
-  // --- 能力与色温范围 ---
-  "0x400A": 31,          // ColorCapabilities = 0x1F（支持全部五种能力）
-  "0x400B": 153,         // ColorTempPhysicalMinMireds = 153（≈ 6536K）
-  "0x400C": 500,         // ColorTempPhysicalMaxMireds = 500（≈ 2000K）
+  // --- Capabilities & CT Range ---
+  "0x400A": 31,          // ColorCapabilities = 0x1F (all five capabilities supported)
+  "0x400B": 153,         // ColorTempPhysicalMinMireds = 153 (approx. 6536K)
+  "0x400C": 500,         // ColorTempPhysicalMaxMireds = 500 (approx. 2000K)
   "0x400D": 153,         // CoupleColorTempToLevelMinMireds = 153
-  "0x4010": 370          // StartUpColorTemperatureMireds = 370（开机暖白）
+  "0x4010": 370          // StartUpColorTemperatureMireds = 370 (warm white on power-on)
 }</code></pre>
 
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      实际从设备读取数据时，Attribute ID 是十六进制字符串作为 key。<code>"0x0007"</code> 是 ColorTemperatureMireds，<code>"0x400A"</code> 是 ColorCapabilities。
-      位图值 31 = <code>0x1F</code> = 二进制 <code>11111</code>，表示五种能力全部支持。
+      When reading data from the device, Attribute IDs are hexadecimal strings used as keys. <code>"0x0007"</code> is ColorTemperatureMireds, <code>"0x400A"</code> is ColorCapabilities.
+      The bitmap value 31 = <code>0x1F</code> = binary <code>11111</code>, meaning all five capabilities are supported.
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
-  <h3 id="scenario-color-temp">场景 1：色温滑条调节</h3>
+  <h3 id="scenario-color-temp">Scenario 1: Color Temperature Slider</h3>
   <ol>
-    <li>读取 <code>ColorCapabilities (0x400A)</code>，确认 Bit 4（CT）为 1</li>
-    <li>读取 <code>ColorTempPhysicalMinMireds (0x400B)</code> 和 <code>ColorTempPhysicalMaxMireds (0x400C)</code> 确定滑条范围</li>
-    <li>用户拖动滑条时，将 Kelvin 转换为 Mireds：<code>mireds = 1000000 / kelvin</code></li>
-    <li>发送 <code>MoveToColorTemperature (0x0A)</code>，TransitionTime 设为 5（0.5 秒过渡）</li>
-    <li>订阅 <code>ColorTemperatureMireds (0x0007)</code> 确认设备已到达目标色温</li>
+    <li>Read <code>ColorCapabilities (0x400A)</code> and confirm Bit 4 (CT) is 1</li>
+    <li>Read <code>ColorTempPhysicalMinMireds (0x400B)</code> and <code>ColorTempPhysicalMaxMireds (0x400C)</code> to determine the slider range</li>
+    <li>When the user drags the slider, convert Kelvin to Mireds: <code>mireds = 1000000 / kelvin</code></li>
+    <li>Send <code>MoveToColorTemperature (0x0A)</code> with TransitionTime set to 5 (0.5-second transition)</li>
+    <li>Subscribe to <code>ColorTemperatureMireds (0x0007)</code> to confirm the device has reached the target color temperature</li>
   </ol>
 
-  <h3 id="scenario-color-wheel">场景 2：色盘选色(Hue/Saturation)</h3>
+  <h3 id="scenario-color-wheel">Scenario 2: Color Wheel Picker (Hue/Saturation)</h3>
   <ol>
-    <li>读取 <code>ColorCapabilities (0x400A)</code>，确认 Bit 0（HS）为 1</li>
-    <li>用户在色盘上选择一个点，获取角度和半径</li>
-    <li>角度 → Hue：<code>hue = angle * 254 / 360</code></li>
-    <li>半径 → Saturation：<code>saturation = radius * 254 / maxRadius</code></li>
-    <li>发送 <code>MoveToHueAndSaturation (0x06)</code> 一次设置两个值</li>
-    <li>订阅 <code>CurrentHue (0x0000)</code> 和 <code>CurrentSaturation (0x0001)</code> 确认结果</li>
+    <li>Read <code>ColorCapabilities (0x400A)</code> and confirm Bit 0 (HS) is 1</li>
+    <li>User selects a point on the color wheel, obtaining angle and radius</li>
+    <li>Angle to Hue: <code>hue = angle * 254 / 360</code></li>
+    <li>Radius to Saturation: <code>saturation = radius * 254 / maxRadius</code></li>
+    <li>Send <code>MoveToHueAndSaturation (0x06)</code> to set both values at once</li>
+    <li>Subscribe to <code>CurrentHue (0x0000)</code> and <code>CurrentSaturation (0x0001)</code> to confirm the result</li>
   </ol>
 
-  <h3 id="scenario-ui-init">场景 3：灯光控制页面初始化</h3>
+  <h3 id="scenario-ui-init">Scenario 3: Light Control Page Initialization</h3>
   <ol>
-    <li>读取 <code>ColorCapabilities (0x400A)</code> —— 决定 UI 上展示哪些控制组件（色盘、色温滑条等）</li>
-    <li>读取 <code>EnhancedColorMode (0x4001)</code> —— 确定当前是哪种颜色模式，高亮对应的 UI Tab</li>
-    <li>根据模式读取对应属性：色温模式读 <code>ColorTemperatureMireds</code>，HS 模式读 <code>CurrentHue</code> + <code>CurrentSaturation</code></li>
-    <li>如支持 CT，读取 <code>ColorTempPhysicalMinMireds</code> / <code>MaxMireds</code> 设置滑条范围</li>
-    <li>订阅所有相关属性的变化，保持 UI 与设备状态同步</li>
+    <li>Read <code>ColorCapabilities (0x400A)</code> -- determines which control components to show in the UI (color wheel, CT slider, etc.)</li>
+    <li>Read <code>EnhancedColorMode (0x4001)</code> -- determines the current color mode and highlights the corresponding UI tab</li>
+    <li>Read the corresponding attributes based on the mode: CT mode reads <code>ColorTemperatureMireds</code>, HS mode reads <code>CurrentHue</code> + <code>CurrentSaturation</code></li>
+    <li>If CT is supported, read <code>ColorTempPhysicalMinMireds</code> / <code>MaxMireds</code> to set the slider range</li>
+    <li>Subscribe to all relevant attribute changes to keep the UI in sync with device state</li>
   </ol>
 
-  <h3 id="scenario-party-mode">场景 4：氛围灯 / 派对模式(Color Loop)</h3>
+  <h3 id="scenario-party-mode">Scenario 4: Ambient / Party Mode (Color Loop)</h3>
   <ol>
-    <li>读取 <code>ColorCapabilities (0x400A)</code>，确认 Bit 2（CL）为 1</li>
-    <li>发送 <code>ColorLoopSet (0x44)</code>：UpdateFlags = <code>0x0F</code>，Action = <code>2</code>（从当前色开始），Direction = <code>1</code>（递增），Time = <code>30</code>（30 秒一圈）</li>
-    <li>读取 <code>ColorLoopActive (0x4002)</code> 确认循环已激活</li>
-    <li>关闭时再次发送 ColorLoopSet，Action = <code>0</code>（Deactivate）</li>
+    <li>Read <code>ColorCapabilities (0x400A)</code> and confirm Bit 2 (CL) is 1</li>
+    <li>Send <code>ColorLoopSet (0x44)</code>: UpdateFlags = <code>0x0F</code>, Action = <code>2</code> (start from current color), Direction = <code>1</code> (increment), Time = <code>30</code> (30 seconds per cycle)</li>
+    <li>Read <code>ColorLoopActive (0x4002)</code> to confirm the loop is active</li>
+    <li>To stop, send ColorLoopSet again with Action = <code>0</code> (Deactivate)</li>
   </ol>
 
   <script>

@@ -41,7 +41,7 @@ export const clusters: Record<string, ClusterContent> = {
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
     ModeSelect Cluster has only one command — simply specify the target mode number to perform the switch.
@@ -68,7 +68,7 @@ export const clusters: Record<string, ClusterContent> = {
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
+  <!-- ====== Command Details ====== -->
   <h3 id="cmd-0x00">ChangeToMode — Switch Mode (0x00)</h3>
   <p>
     Switches the device to the specified operating mode. The <code>NewMode</code> value must match the <code>Mode</code> field
@@ -101,11 +101,11 @@ export const clusters: Record<string, ClusterContent> = {
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h2 id="attributes">Attributes</h2>
   <p>ModeSelect Cluster has 6 attributes. Click an attribute ID in the summary table below to jump to its detailed description.</p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute Summary Table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -118,7 +118,7 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
       </thead>
       <tbody>
-        <!-- 基本信息 -->
+        <!-- Basic Info -->
         <tr class="clickable-row" data-href="#attr-0x0000">
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>Description</td>
@@ -133,7 +133,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#group-info">Basic Info</a></td>
           <td>Mode namespace identifier</td>
         </tr>
-        <!-- 模式状态 -->
+        <!-- Mode State -->
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
           <td>SupportedModes</td>
@@ -148,7 +148,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#group-modes">Mode List</a></td>
           <td>Current operating mode number</td>
         </tr>
-        <!-- 启动与联动 -->
+        <!-- Startup & Interlock -->
         <tr class="clickable-row" data-href="#attr-0x0004">
           <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
           <td>StartUpMode</td>
@@ -167,7 +167,7 @@ export const clusters: Record<string, ClusterContent> = {
     </table>
   </div>
 
-  <!-- ====== 基本信息（0x0000, 0x0001）====== -->
+  <!-- ====== Basic Info (0x0000, 0x0001) ====== -->
   <h3 id="group-info">Basic Information (0x0000, 0x0001)</h3>
   <p>Describes the purpose of this ModeSelect Cluster instance and its mode namespace.</p>
 
@@ -199,7 +199,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 模式列表（0x0002, 0x0003）====== -->
+  <!-- ====== Mode List (0x0002, 0x0003) ====== -->
   <h3 id="group-modes">Mode List (0x0002, 0x0003)</h3>
   <p>All operating modes supported by the device and the current mode.</p>
 
@@ -239,7 +239,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 启动与联动（0x0004, 0x0005）====== -->
+  <!-- ====== Startup & Interlock (0x0004, 0x0005) ====== -->
   <h3 id="group-startup">Startup & Interlock (0x0004, 0x0005)</h3>
   <p>Controls the mode behavior when the device powers up and turns on.</p>
 
@@ -281,7 +281,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 结构体定义 ====== -->
+  <!-- ====== Struct Definitions ====== -->
   <h2 id="structs">Struct Definitions</h2>
   <p>ModeSelect Cluster uses two structs to describe mode information.</p>
 
@@ -357,7 +357,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== Feature 位图 ====== -->
+  <!-- ====== Feature Bitmap ====== -->
   <h2 id="features">Feature Bitmap</h2>
   <p>ModeSelect Cluster declares optional device capabilities via <code>FeatureMap</code> (0xFFFC):</p>
 
@@ -379,7 +379,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
   <p>Read result from a dryer's ModeSelect Cluster — currently running in "Eco" mode:</p>
 
@@ -424,7 +424,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <h3 id="scenario-switch-mode">Scenario 1: App Switches Device Operating Mode</h3>
@@ -491,27 +491,27 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'operational-state': {
     title: 'OperationalState Cluster (0x0060)',
-    description: 'Matter OperationalState Cluster(0x0060)完整参考 — Pause/Stop/Start/Resume 命令、运行状态机、阶段列表、倒计时、错误处理、事件通知等全部定义及枚举值速查。',
+    description: 'Complete reference for the Matter OperationalState Cluster (0x0060) — Pause/Stop/Start/Resume commands, operational state machine, phase list, countdown, error handling, event notifications, and enum value lookup.',
     prev: { title: 'WindowCovering', slug: 'window-covering' },
     next: undefined,
     content: `<h1>OperationalState Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x0060</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 通常在 <code>Endpoint 1</code>（功能端点）
+    <strong>Endpoint</strong>: Typically on <code>Endpoint 1</code> (application endpoint)
   </p>
   <p>
-    OperationalState 是 Matter 中用于描述家电运行状态的<strong>通用状态机 Cluster</strong>。
-    它为洗衣机、烘干机、烤箱、扫地机器人等需要「启动/暂停/停止/恢复」操作的设备提供统一的控制接口。
-    作为基础 Cluster，设备特定的变体（如 OvenCavityOperationalState、RVCOperationalState）都继承自它。
+    OperationalState is a <strong>general-purpose state machine Cluster</strong> in Matter for describing appliance operational states.
+    It provides a unified control interface for devices requiring Start/Pause/Stop/Resume operations, such as washing machines, dryers, ovens, and robot vacuums.
+    As the base Cluster, device-specific variants (e.g., OvenCavityOperationalState, RVCOperationalState) all inherit from it.
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">通用基础 Cluster</div>
+    <div class="callout-title">General-Purpose Base Cluster</div>
     <p>
-      OperationalState 定义了<strong>通用的</strong>状态和错误枚举。设备特定的 Cluster（如烤箱、扫地机器人）
-      会继承这些基础定义，并在此基础上扩展自己的状态值和错误码。
-      例如，扫地机器人（RVC）会增加 <code>SeekingCharger</code>、<code>Charging</code> 等状态，
-      以及 <code>StuckAtObstacle</code>、<code>DustBinFull</code> 等错误。
+      OperationalState defines <strong>generic</strong> state and error enumerations. Device-specific Clusters (e.g., oven, robot vacuum)
+      inherit these base definitions and extend them with their own state values and error codes.
+      For example, a robot vacuum (RVC) adds states like <code>SeekingCharger</code> and <code>Charging</code>,
+      as well as errors like <code>StuckAtObstacle</code> and <code>DustBinFull</code>.
     </p>
   </div>
 
@@ -525,20 +525,20 @@ export const clusters: Record<string, ClusterContent> = {
     <span class="nav-sep">|</span>
     <a href="#structs">Data Structures</a>
     <span class="nav-sep">|</span>
-    <a href="#events">事件</a>
+    <a href="#events">Events</a>
     <span class="nav-sep">|</span>
     <a href="#example-data">Example Data</a>
     <span class="nav-sep">|</span>
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    OperationalState Cluster 共有 4 个命令，对应家电操作的基本动作。
-    所有命令执行后都会返回 <code>OperationalCommandResponse</code>，包含一个
-    <a href="#struct-errorstate">ErrorStateStruct</a> 用于指示操作是否成功。
-    点击下方表格中的命令 ID 可跳转到对应的详细说明。
+    OperationalState Cluster has 4 commands corresponding to basic appliance operations.
+    All commands return an <code>OperationalCommandResponse</code> containing an
+    <a href="#struct-errorstate">ErrorStateStruct</a> to indicate success or failure.
+    Click a command ID in the table below to jump to its detailed description.
   </p>
 
   <div class="table-wrap">
@@ -548,127 +548,127 @@ export const clusters: Record<string, ClusterContent> = {
           <th>ID</th>
           <th>Name</th>
           <th>Description</th>
-          <th>响应</th>
+          <th>Response</th>
         </tr>
       </thead>
       <tbody>
         <tr class="clickable-row" data-href="#cmd-0x00">
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>Pause</td>
-          <td>暂停当前操作</td>
+          <td>Pause the current operation</td>
           <td>OperationalCommandResponse</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x01">
           <td><a href="#cmd-0x01"><code>0x01</code></a></td>
           <td>Stop</td>
-          <td>停止操作</td>
+          <td>Stop the operation</td>
           <td>OperationalCommandResponse</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x02">
           <td><a href="#cmd-0x02"><code>0x02</code></a></td>
           <td>Start</td>
-          <td>启动操作</td>
+          <td>Start the operation</td>
           <td>OperationalCommandResponse</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x03">
           <td><a href="#cmd-0x03"><code>0x03</code></a></td>
           <td>Resume</td>
-          <td>恢复暂停的操作</td>
+          <td>Resume a paused operation</td>
           <td>OperationalCommandResponse</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
-  <h3 id="cmd-0x00">Pause —— 暂停(0x00)</h3>
+  <!-- ====== Command Details ====== -->
+  <h3 id="cmd-0x00">Pause (0x00)</h3>
   <p>
-    暂停设备当前正在进行的操作。执行成功后，<code>OperationalState</code> 属性变为
-    <code>Paused (2)</code>。设备会保留当前进度，可以通过 Resume 命令恢复。
-    不需要参数。
+    Pauses the device's current operation. On success，<code>OperationalState</code> attribute changes to
+    <code>Paused (2)</code>. The device preserves current progress and can be resumed via the Resume command.
+    No parameters required.
   </p>
   <div class="callout callout-warning">
     <div class="callout-title">State Constraints</div>
     <p>
-      只有当设备处于 <code>Running (1)</code> 状态时才能暂停。
-      如果在 <code>Stopped (0)</code> 或 <code>Error (3)</code> 状态下调用，
-      会返回 <code>CommandInvalidInState (3)</code> 错误。
+      Pause is only valid when the device is in the <code>Running (1)</code> state.
+      Calling it in the <code>Stopped (0)</code> or <code>Error (3)</code> state
+      returns a <code>CommandInvalidInState (3)</code> error.
     </p>
   </div>
   <details class="scenario">
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        洗衣机正在洗涤时，用户需要临时打开门添加衣物。App 发送 Pause 命令，
-        洗衣机暂停洗涤、排水解锁门。添加衣物后发送 Resume 继续。
+        While the washing machine is running, the user needs to open the door to add clothes. The app sends a Pause command;
+        the washer pauses, drains, and unlocks the door. After adding clothes, send Resume to continue.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x01">Stop —— 停止(0x01)</h3>
+  <h3 id="cmd-0x01">Stop (0x01)</h3>
   <p>
-    完全停止设备的当前操作。执行成功后，<code>OperationalState</code> 属性变为
-    <code>Stopped (0)</code>。与 Pause 不同，Stop 会放弃当前进度，
-    需要重新 Start 才能开始新的操作周期。不需要参数。
+    Completely stops the device's current operation. On success，<code>OperationalState</code> attribute changes to
+    <code>Stopped (0)</code>. Unlike Pause, Stop discards current progress;
+    a new Start is required to begin a new operation cycle. No parameters required.
   </p>
   <details class="scenario">
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        烤箱正在烤制食物，用户发现设置有误需要完全取消。发送 Stop 命令终止烤制，
-        之后可以重新配置参数再发送 Start 开始新的烤制周期。
+        An oven is baking and the user realizes the settings are wrong. Sending the Stop command terminates baking;
+        afterwards the user can reconfigure parameters and send Start for a new baking cycle.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x02">Start —— 启动(0x02)</h3>
+  <h3 id="cmd-0x02">Start (0x02)</h3>
   <p>
-    启动设备的操作。执行成功后，<code>OperationalState</code> 属性变为
-    <code>Running (1)</code>。通常在设备处于 <code>Stopped (0)</code> 状态时调用。
-    不需要参数。
+    Starts the device's operation. On success，<code>OperationalState</code> attribute changes to
+    <code>Running (1)</code>. Typically called when the device is in the <code>Stopped (0)</code> state.
+    No parameters required.
   </p>
   <details class="scenario">
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        用户在洗衣机上选好洗涤程序和温度后，点击 App 上的启动按钮，
-        App 发送 Start 命令开始洗涤周期。
+        After the user selects the wash program and temperature, they tap Start in the app;
+        the app sends the Start command to begin the wash cycle.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x03">Resume —— 恢复(0x03)</h3>
+  <h3 id="cmd-0x03">Resume (0x03)</h3>
   <p>
-    恢复之前被 Pause 暂停的操作。执行成功后，<code>OperationalState</code> 属性变为
-    <code>Running (1)</code>，设备从暂停的位置继续执行。不需要参数。
+    Resumes an operation previously paused by Pause. On success，<code>OperationalState</code> attribute changes to
+    <code>Running (1)</code> and the device continues from where it was paused. No parameters required.
   </p>
   <div class="callout callout-warning">
     <div class="callout-title">State Constraints</div>
     <p>
-      只有当设备处于 <code>Paused (2)</code> 状态时才能恢复。
-      如果在 <code>Stopped (0)</code> 状态下调用，会返回
-      <code>CommandInvalidInState (3)</code> 错误 —— 此时应该用 Start 而不是 Resume。
+      Resume is only valid when the device is in the <code>Paused (2)</code> state.
+      Calling it in the <code>Stopped (0)</code> state returns a
+      <code>CommandInvalidInState (3)</code> error — use Start instead of Resume in that case.
     </p>
   </div>
   <details class="scenario">
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        洗衣机在暂停状态下，用户关上门后点击继续按钮。
-        App 发送 Resume 命令，洗衣机从暂停位置继续洗涤。
+        With the washing machine paused, the user closes the door and taps Continue.
+        The app sends the Resume command and the washer continues from where it paused.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 命令响应 ====== -->
-  <h3 id="cmd-response">OperationalCommandResponse —— 命令响应</h3>
+  <!-- ====== Command Response ====== -->
+  <h3 id="cmd-response">OperationalCommandResponse</h3>
   <p>
-    所有四个命令（Pause/Stop/Start/Resume）执行后都会返回此响应。
-    它包含一个 <a href="#struct-errorstate">ErrorStateStruct</a>，用于指示命令是否成功。
+    All four commands (Pause/Stop/Start/Resume) return this response.
+    It contains an <a href="#struct-errorstate">ErrorStateStruct</a> indicating whether the command succeeded.
   </p>
   <div class="table-wrap">
     <table>
@@ -679,18 +679,18 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>CommandResponseState</td>
           <td><a href="#struct-errorstate">ErrorStateStruct</a></td>
-          <td>命令执行结果。<code>ErrorStateID = 0 (NoError)</code> 表示成功</td>
+          <td>Command execution result. <code>ErrorStateID = 0 (NoError)</code> indicates success</td>
         </tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h2 id="attributes">Attributes</h2>
-  <p>OperationalState Cluster 共有 6 个应用属性。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+  <p>OperationalState Cluster has 6 application attributes. Click an attribute ID below to jump to its detailed description.</p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute Summary Table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -703,57 +703,57 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
       </thead>
       <tbody>
-        <!-- 阶段信息 -->
+        <!-- Phase Info -->
         <tr class="clickable-row" data-href="#attr-0x0000">
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>PhaseList</td>
           <td>list&lt;string&gt; / null</td>
-          <td><a href="#group-phase">阶段信息</a></td>
-          <td>操作阶段列表</td>
+          <td><a href="#group-phase">Phase Info</a></td>
+          <td>Operation phase list</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>CurrentPhase</td>
           <td>uint8 / null</td>
-          <td><a href="#group-phase">阶段信息</a></td>
-          <td>当前所处阶段索引</td>
+          <td><a href="#group-phase">Phase Info</a></td>
+          <td>Current phase index</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
           <td>CountdownTime</td>
           <td>elapsed_s / null</td>
-          <td><a href="#group-phase">阶段信息</a></td>
-          <td>剩余时间（秒）</td>
+          <td><a href="#group-phase">Phase Info</a></td>
+          <td>Remaining time (seconds)</td>
         </tr>
-        <!-- 运行状态 -->
+        <!-- Operational State -->
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
           <td>OperationalStateList</td>
           <td>list&lt;OperationalStateStruct&gt;</td>
-          <td><a href="#group-state">运行状态</a></td>
-          <td>设备支持的所有状态</td>
+          <td><a href="#group-state">Operational State</a></td>
+          <td>All states supported by the device</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0004">
           <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
           <td>OperationalState</td>
           <td><a href="#enum-opstate">OperationalStateEnum</a></td>
-          <td><a href="#group-state">运行状态</a></td>
-          <td>当前运行状态</td>
+          <td><a href="#group-state">Operational State</a></td>
+          <td>Current operational state</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0005">
           <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
           <td>OperationalError</td>
           <td><a href="#struct-errorstate">ErrorStateStruct</a></td>
-          <td><a href="#group-state">运行状态</a></td>
-          <td>当前错误信息</td>
+          <td><a href="#group-state">Operational State</a></td>
+          <td>Current error information</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 阶段信息（0x0000, 0x0001, 0x0002）====== -->
-  <h3 id="group-phase">阶段信息(0x0000, 0x0001, 0x0002)</h3>
-  <p>描述设备当前操作的阶段进度和剩余时间。对于支持多阶段流程的设备（如洗衣机、烘干机），这些属性可以让 App 展示精确的进度信息。</p>
+  <!-- ====== Phase Info (0x0000, 0x0001, 0x0002) ====== -->
+  <h3 id="group-phase">Phase Information (0x0000, 0x0001, 0x0002)</h3>
+  <p>Describes the phase progress and remaining time of the current operation. For multi-phase devices (e.g., washing machines, dryers), these attributes let the app display precise progress.</p>
 
   <div class="table-wrap">
     <table>
@@ -768,30 +768,30 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0000">
           <td><code>0x0000</code></td>
-          <td>PhaseList（阶段列表）</td>
+          <td>PhaseList</td>
           <td>list&lt;string&gt; / null</td>
           <td>
-            设备操作的有序阶段名称列表。例如洗衣机可能是 <code>["浸泡", "洗涤", "漂洗", "脱水"]</code>。
-            <strong>Nullable</strong> —— <code>null</code> 表示设备不支持阶段概念（如简单的开关设备）。
-            列表最多 32 项
+            An ordered list of phase names for the device operation. E.g., a washing machine might use <code>["Soak", "Wash", "Rinse", "Spin"]</code>.
+            <strong>Nullable</strong> — <code>null</code> means the device does not support the phase concept (e.g., a simple on/off device).
+            Maximum 32 entries
           </td>
         </tr>
         <tr id="attr-0x0001">
           <td><code>0x0001</code></td>
-          <td>CurrentPhase（当前阶段）</td>
+          <td>CurrentPhase</td>
           <td>uint8 / null</td>
           <td>
-            当前所处阶段在 PhaseList 中的索引（从 0 开始）。
-            <strong>Nullable</strong> —— 当 PhaseList 为 <code>null</code> 时，此值也为 <code>null</code>
+            Index of the current phase in PhaseList (zero-based).
+            <strong>Nullable</strong> — when PhaseList is <code>null</code>, this value is also <code>null</code>
           </td>
         </tr>
         <tr id="attr-0x0002">
           <td><code>0x0002</code></td>
-          <td>CountdownTime（剩余时间）</td>
+          <td>CountdownTime</td>
           <td>elapsed_s / null</td>
           <td>
-            当前操作的预计剩余时间，单位<strong>秒</strong>。设备会定期更新此值。
-            <strong>Nullable</strong> —— <code>null</code> 表示设备无法预估剩余时间
+            Estimated remaining time for the current operation, in <strong>seconds</strong>. The device periodically updates this value.
+            <strong>Nullable</strong> — <code>null</code> means the device cannot estimate remaining time
           </td>
         </tr>
       </tbody>
@@ -799,18 +799,18 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">阶段与倒计时的关系</div>
+    <div class="callout-title">Relationship Between Phase and Countdown</div>
     <p>
-      <code>CountdownTime</code> 是整个操作周期的剩余时间，不是单个阶段的剩余时间。
-      当设备从一个阶段进入下一个阶段时，<code>CurrentPhase</code> 会更新，
-      而 <code>CountdownTime</code> 则持续倒数直到整个操作完成。
+      <code>CountdownTime</code> is the remaining time for the entire operation cycle, not a single phase.
+      When the device transitions between phases, <code>CurrentPhase</code> updates,
+      while <code>CountdownTime</code> continues counting down until the operation completes.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 运行状态（0x0003, 0x0004, 0x0005）====== -->
-  <h3 id="group-state">运行状态(0x0003, 0x0004, 0x0005)</h3>
-  <p>描述设备的运行状态和错误信息。这是 App 上展示设备状态的核心数据源。</p>
+  <!-- ====== Operational State (0x0003, 0x0004, 0x0005) ====== -->
+  <h3 id="group-state">Operational State (0x0003, 0x0004, 0x0005)</h3>
+  <p>Describes the device operational state and error information. This is the primary data source for device status in the app.</p>
 
   <div class="table-wrap">
     <table>
@@ -825,31 +825,31 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0003">
           <td><code>0x0003</code></td>
-          <td>OperationalStateList（状态列表）</td>
+          <td>OperationalStateList</td>
           <td>list&lt;OperationalStateStruct&gt;</td>
           <td>
-            设备支持的所有运行状态。每个条目包含状态 ID 和可选的本地化标签。
-            标准状态（0~3）之外，设备可以定义自己的扩展状态（ID &ge; 0x80）
+            All operational states supported by the device. Each entry has a state ID and optional localized label.
+            Beyond standard states (0-3), devices may define extended states (ID &ge; 0x80)
           </td>
         </tr>
         <tr id="attr-0x0004">
           <td><code>0x0004</code></td>
-          <td>OperationalState（运行状态）</td>
+          <td>OperationalState</td>
           <td><a href="#enum-opstate">OperationalStateEnum</a></td>
           <td>
-            设备当前的运行状态，取值范围见
-            <a href="#enum-opstate">OperationalStateEnum</a>。
-            这是 App 展示设备状态的核心属性
+            The device's current operational state; see
+            <a href="#enum-opstate">OperationalStateEnum</a> for possible values.
+            This is the primary attribute for device status display in the app
           </td>
         </tr>
         <tr id="attr-0x0005">
           <td><code>0x0005</code></td>
-          <td>OperationalError（当前错误）</td>
+          <td>OperationalError</td>
           <td><a href="#struct-errorstate">ErrorStateStruct</a></td>
           <td>
-            设备当前的错误状态。当 <code>OperationalState</code> 为
-            <code>Error (3)</code> 时，此属性包含具体的错误信息。
-            无错误时 <code>ErrorStateID = 0 (NoError)</code>
+            The device's current error state. When <code>OperationalState</code> is
+            <code>Error (3)</code>, this attribute contains the specific error information.
+            When no error, <code>ErrorStateID = 0 (NoError)</code>
           </td>
         </tr>
       </tbody>
@@ -857,145 +857,145 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 枚举定义 ====== -->
+  <!-- ====== Enum Definitions ====== -->
   <h2 id="enums">Enum Definitions</h2>
 
-  <h3 id="enum-opstate">OperationalStateEnum —— 运行状态</h3>
-  <p>设备的运行状态枚举。标准定义了 4 个基础值，设备特定的 Cluster 可以在 0x80~0xBF 范围内扩展。</p>
+  <h3 id="enum-opstate">OperationalStateEnum</h3>
+  <p>Operational state enumeration. The standard defines 4 base values; device-specific Clusters may extend 0x80-0xBF.</p>
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">Stopped</span>
-        <span class="enum-desc">已停止 —— 设备空闲，可以接受 Start 命令</span>
+        <span class="enum-desc">Stopped — device is idle; can accept Start command</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">Running</span>
-        <span class="enum-desc">运行中 —— 正在执行操作，可以 Pause 或 Stop</span>
+        <span class="enum-desc">Running — operation in progress; can be Paused or Stopped</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">Paused</span>
-        <span class="enum-desc">已暂停 —— 操作被暂停，可以 Resume 或 Stop</span>
+        <span class="enum-desc">Paused — operation suspended; can be Resumed or Stopped</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">Error</span>
-        <span class="enum-desc">错误 —— 发生故障，查看 OperationalError 获取详情</span>
+        <span class="enum-desc">Error — fault occurred; check OperationalError for details</span>
       </div>
     </div>
   </div>
 
-  <h3 id="enum-errorstate">ErrorStateEnum —— 错误类型</h3>
-  <p>错误状态枚举。标准定义了 4 个通用错误码，设备特定的 Cluster 可以在 0x40~0x7F 范围内扩展。</p>
+  <h3 id="enum-errorstate">ErrorStateEnum</h3>
+  <p>Error state enumeration. The standard defines 4 generic error codes; device-specific Clusters may extend 0x40-0x7F.</p>
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">NoError</span>
-        <span class="enum-desc">无错误 —— 一切正常</span>
+        <span class="enum-desc">No error — everything is normal</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">UnableToStartOrResume</span>
-        <span class="enum-desc">无法启动或恢复 —— 设备因某种原因无法开始操作</span>
+        <span class="enum-desc">Unable to start or resume — the device cannot begin the operation</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">UnableToCompleteOperation</span>
-        <span class="enum-desc">无法完成操作 —— 操作过程中遇到了不可恢复的问题</span>
+        <span class="enum-desc">Unable to complete operation — an unrecoverable problem occurred</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">CommandInvalidInState</span>
-        <span class="enum-desc">命令在当前状态无效 —— 如在 Stopped 状态下调用 Resume</span>
+        <span class="enum-desc">Command invalid in current state — e.g., calling Resume while Stopped</span>
       </div>
     </div>
   </div>
 
-  <!-- ====== 数据结构 ====== -->
+  <!-- ====== Data Structures ====== -->
   <h2 id="structs">Data Structures</h2>
 
-  <h3 id="struct-errorstate">ErrorStateStruct —— 错误状态结构</h3>
+  <h3 id="struct-errorstate">ErrorStateStruct</h3>
   <p>
-    用于描述设备的错误信息。既用于 <code>OperationalError</code> 属性，也用于命令响应。
-    包含错误码、可选的本地化标签和详细描述。
+    Describes the device's error information. Used for both the <code>OperationalError</code> attribute and command responses.
+    Contains an error code, optional localized label, and detailed description.
   </p>
   <div class="table-wrap">
     <table>
       <thead>
-        <tr><th>Field</th><th>Type</th><th>必选</th><th>Description</th></tr>
+        <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
       </thead>
       <tbody>
         <tr>
           <td>ErrorStateID</td>
           <td><a href="#enum-errorstate">ErrorStateEnum</a></td>
-          <td>是</td>
-          <td>错误类型编码。<code>0</code> 表示无错误</td>
+          <td>Yes</td>
+          <td>Error type code. <code>0</code> indicates no error</td>
         </tr>
         <tr>
           <td>ErrorStateLabel</td>
           <td>string</td>
-          <td>否</td>
-          <td>可选的本地化错误标签，供 App 直接展示。当 ErrorStateID 在标准范围之外时，此字段<strong>必须</strong>提供</td>
+          <td>No</td>
+          <td>Optional localized error label for app display. When ErrorStateID is outside the standard range, this field <strong>must</strong> be provided</td>
         </tr>
         <tr>
           <td>ErrorStateDetails</td>
           <td>string</td>
-          <td>否</td>
-          <td>可选的错误详细描述，提供更多诊断信息</td>
+          <td>No</td>
+          <td>Optional detailed error description for diagnostics</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <h3 id="struct-opstate">OperationalStateStruct —— 操作状态结构</h3>
+  <h3 id="struct-opstate">OperationalStateStruct</h3>
   <p>
-    用于 <code>OperationalStateList</code> 属性中，描述设备支持的每一个运行状态。
+    Used in the <code>OperationalStateList</code> attribute to describe each operational state the device supports.
   </p>
   <div class="table-wrap">
     <table>
       <thead>
-        <tr><th>Field</th><th>Type</th><th>必选</th><th>Description</th></tr>
+        <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
       </thead>
       <tbody>
         <tr>
           <td>OperationalStateID</td>
           <td>uint8</td>
-          <td>是</td>
-          <td>状态编码。0~3 为标准状态，0x80~0xBF 为设备特定扩展状态</td>
+          <td>Yes</td>
+          <td>State code. 0-3 are standard; 0x80-0xBF are device-specific extensions</td>
         </tr>
         <tr>
           <td>OperationalStateLabel</td>
           <td>string</td>
-          <td>否</td>
-          <td>可选的本地化状态标签。对于标准状态（0~3），此字段可以省略；对于扩展状态（&ge;0x80），此字段<strong>必须</strong>提供</td>
+          <td>No</td>
+          <td>Optional localized state label. For standard states (0-3), may be omitted; for extended states (&ge;0x80), <strong>must</strong> be provided</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 事件 ====== -->
+  <!-- ====== Events ====== -->
   <h2 id="events">Events</h2>
-  <p>OperationalState Cluster 定义了 2 个事件，用于通知控制端设备的重要状态变化。</p>
+  <p>OperationalState Cluster defines 2 events for notifying controllers of important state changes.</p>
 
-  <h3 id="event-error">OperationalError 事件</h3>
+  <h3 id="event-error">OperationalError Event</h3>
   <p>
-    当设备进入错误状态时触发此事件。事件优先级为 <strong>CRITICAL</strong>，
-    确保控制端能及时收到错误通知。
+    Triggered when the device enters an error state. Event priority is <strong>CRITICAL</strong>,
+    ensuring controllers receive timely error notifications.
   </p>
   <div class="table-wrap">
     <table>
@@ -1006,73 +1006,73 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>ErrorState</td>
           <td><a href="#struct-errorstate">ErrorStateStruct</a></td>
-          <td>当前的错误信息</td>
+          <td>Current error information</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <h3 id="event-completion">OperationCompletion 事件</h3>
+  <h3 id="event-completion">OperationCompletion Event</h3>
   <p>
-    当设备完成一个完整操作周期时触发此事件。事件优先级为 <strong>INFO</strong>。
-    该事件携带操作的时间统计信息，方便 App 展示操作报告。
+    Triggered when the device completes a full operation cycle. Event priority is <strong>INFO</strong>.
+    This event carries time statistics for the app to display an operation report.
   </p>
   <div class="table-wrap">
     <table>
       <thead>
-        <tr><th>Field</th><th>Type</th><th>必选</th><th>Description</th></tr>
+        <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
       </thead>
       <tbody>
         <tr>
           <td>CompletionErrorCode</td>
           <td><a href="#enum-errorstate">ErrorStateEnum</a></td>
-          <td>是</td>
-          <td>操作完成时的错误码。<code>0 (NoError)</code> 表示正常完成</td>
+          <td>Yes</td>
+          <td>Error code at completion. <code>0 (NoError)</code> indicates normal completion</td>
         </tr>
         <tr>
           <td>TotalOperationalTime</td>
           <td>elapsed_s / null</td>
-          <td>否</td>
-          <td>操作总耗时（秒），包含暂停时间。<code>null</code> 表示设备不支持统计</td>
+          <td>No</td>
+          <td>Total operation time (seconds) including pauses. <code>null</code> means device does not track time</td>
         </tr>
         <tr>
           <td>PausedTime</td>
           <td>elapsed_s / null</td>
-          <td>否</td>
-          <td>暂停累计时长（秒）。<code>null</code> 表示设备不支持统计</td>
+          <td>No</td>
+          <td>Cumulative paused time (seconds). <code>null</code> means device does not track time</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">实际运行时间</div>
+    <div class="callout-title">Actual Running Time</div>
     <p>
-      如果需要计算实际工作时间（不含暂停），可以用
-      <code>TotalOperationalTime - PausedTime</code>。
-      例如洗衣机总耗时 90 分钟，其中暂停了 10 分钟，则实际洗涤时间为 80 分钟。
+      To calculate actual work time (excluding pauses), use
+      <code>TotalOperationalTime - PausedTime</code>.
+      For example, if a washer's total time is 90 minutes with 10 paused, the actual wash time is 80 minutes.
     </p>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一台正在运行中的洗衣机的 OperationalState Cluster 读取结果：</p>
+  <p>Read result from an OperationalState Cluster on a running washing machine:</p>
 
   <pre><code>{
-  // --- 阶段信息 ---
-  "0x0000": ["浸泡", "洗涤", "漂洗", "脱水"],  // PhaseList（操作阶段列表）
-  "0x0001": 1,                                   // CurrentPhase = 1（当前处于「洗涤」阶段）
-  "0x0002": 1620,                                // CountdownTime = 1620 秒（剩余 27 分钟）
+  // --- Phase Information ---
+  "0x0000": ["Soak", "Wash", "Rinse", "Spin"],  // PhaseList (operation phase list)
+  "0x0001": 1,                                   // CurrentPhase = 1（currently in "Wash" phase）
+  "0x0002": 1620,                                // CountdownTime = 1620 seconds (27 min remaining)
 
-  // --- 运行状态 ---
-  "0x0003": [                                    // OperationalStateList（设备支持的状态列表）
-    { "OperationalStateID": 0, "OperationalStateLabel": "已停止" },
-    { "OperationalStateID": 1, "OperationalStateLabel": "运行中" },
-    { "OperationalStateID": 2, "OperationalStateLabel": "已暂停" },
-    { "OperationalStateID": 3, "OperationalStateLabel": "错误" }
+  // --- Operational State ---
+  "0x0003": [                                    // OperationalStateList (supported states)
+    { "OperationalStateID": 0, "OperationalStateLabel": "Stopped" },
+    { "OperationalStateID": 1, "OperationalStateLabel": "Running" },
+    { "OperationalStateID": 2, "OperationalStateLabel": "Paused" },
+    { "OperationalStateID": 3, "OperationalStateLabel": "Error" }
   ],
-  "0x0004": 1,                                   // OperationalState = Running（正在运行）
-  "0x0005": {                                    // OperationalError（当前无错误）
+  "0x0004": 1,                                   // OperationalState = Running
+  "0x0005": {                                    // OperationalError (no current error)
     "ErrorStateID": 0,
     "ErrorStateLabel": "",
     "ErrorStateDetails": ""
@@ -1082,56 +1082,56 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      <code>PhaseList</code>、<code>CurrentPhase</code>、<code>CountdownTime</code>
-      都是 Nullable 类型。简单的设备可能不支持阶段和倒计时，这些值会返回 <code>null</code>。
-      App 在渲染界面时需要处理 <code>null</code> 的情况 —— 当值为 <code>null</code> 时，
-      隐藏对应的 UI 元素即可。
+      <code>PhaseList</code>, <code>CurrentPhase</code>, and <code>CountdownTime</code>
+      are all Nullable. Simple devices may not support phases or countdowns and return <code>null</code>.
+      The app must handle <code>null</code> when rendering the UI — hide
+      the corresponding elements when the value is <code>null</code>.
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
-  <h3 id="scenario-lifecycle">场景 1：洗衣机完整洗涤生命周期</h3>
+  <h3 id="scenario-lifecycle">Scenario 1: Complete Washing Machine Lifecycle</h3>
   <ol>
-    <li>用户选好洗涤程序，App 发送 <code>Start (0x02)</code> 命令</li>
-    <li>洗衣机状态变为 <code>Running (1)</code>，<code>PhaseList</code> 返回
-      <code>["浸泡", "洗涤", "漂洗", "脱水"]</code>，<code>CurrentPhase = 0</code>（浸泡）</li>
-    <li>App 订阅 <code>CurrentPhase</code> 和 <code>CountdownTime</code> 属性变化，实时更新进度条和倒计时</li>
-    <li>洗衣机依次进入各阶段，<code>CurrentPhase</code> 从 0 → 1 → 2 → 3</li>
-    <li>操作完成后，设备状态变为 <code>Stopped (0)</code>，触发 <code>OperationCompletion</code> 事件</li>
-    <li>App 收到事件，展示完成通知：「洗涤完成，总耗时 65 分钟」</li>
+    <li>The user selects a wash program; the app sends <code>Start (0x02)</code> command</li>
+    <li>The washer state becomes <code>Running (1)</code>; <code>PhaseList</code> returns
+      <code>["Soak", "Wash", "Rinse", "Spin"]</code> with <code>CurrentPhase = 0</code> (Soak)</li>
+    <li>The app subscribes to <code>CurrentPhase</code> and <code>CountdownTime</code> changes, updating progress bar and countdown in real time</li>
+    <li>The washer progresses through phases: <code>CurrentPhase</code> goes 0 → 1 → 2 → 3</li>
+    <li>On completion, the device becomes <code>Stopped (0)</code> and fires the <code>OperationCompletion</code> event</li>
+    <li>The app shows a completion notification: "Wash complete, total: 65 minutes"</li>
   </ol>
 
-  <h3 id="scenario-error">场景 2：错误处理与恢复</h3>
+  <h3 id="scenario-error">Scenario 2: Error Handling and Recovery</h3>
   <ol>
-    <li>洗衣机正在运行，突然检测到进水管异常</li>
-    <li>设备状态变为 <code>Error (3)</code>，<code>OperationalError</code> 更新为：
+    <li>The washing machine is running and detects a water inlet anomaly</li>
+    <li>The device state becomes <code>Error (3)</code>; <code>OperationalError</code> updates to:
       <ul>
         <li><code>ErrorStateID = 1 (UnableToStartOrResume)</code></li>
-        <li><code>ErrorStateLabel = "进水异常"</code></li>
-        <li><code>ErrorStateDetails = "进水流量低于阈值，请检查水龙头是否打开"</code></li>
+        <li><code>ErrorStateLabel = "Water Inlet Error"</code></li>
+        <li><code>ErrorStateDetails = "Water flow below threshold; check if the faucet is open"</code></li>
       </ul>
     </li>
-    <li>设备触发 <code>OperationalError</code> 事件（CRITICAL 优先级），App 弹出错误通知</li>
-    <li>用户检查并修复进水管后，发送 <code>Stop (0x01)</code> 清除错误状态</li>
-    <li>设备回到 <code>Stopped (0)</code>，用户重新发送 <code>Start (0x02)</code> 开始新周期</li>
+    <li>The device fires the <code>OperationalError</code> event (CRITICAL); the app shows an error notification</li>
+    <li>After fixing the inlet, send <code>Stop (0x01)</code> to clear the error state</li>
+    <li>The device returns to <code>Stopped (0)</code>; send <code>Start (0x02)</code> to begin a new cycle</li>
   </ol>
 
-  <h3 id="scenario-progress">场景 3：进度追踪与界面展示</h3>
+  <h3 id="scenario-progress">Scenario 3: Progress Tracking and UI Display</h3>
   <ol>
-    <li>App 读取 <code>PhaseList</code>，根据阶段数量渲染进度指示器（如 4 个步骤的进度条）</li>
-    <li>订阅 <code>CurrentPhase</code> 属性，收到变化后高亮对应的阶段步骤</li>
-    <li>订阅 <code>CountdownTime</code> 属性，实时更新倒计时显示</li>
-    <li>订阅 <code>OperationalState</code> 属性，根据不同状态切换界面：
+    <li>The app reads <code>PhaseList</code> and renders a progress indicator (e.g., a 4-step bar)</li>
+    <li>Subscribe to <code>CurrentPhase</code>; highlight the corresponding step on change</li>
+    <li>Subscribe to <code>CountdownTime</code>; update the countdown in real time</li>
+    <li>Subscribe to <code>OperationalState</code>; switch UI based on state:
       <ul>
-        <li><code>Stopped (0)</code> —— 显示「启动」按钮</li>
-        <li><code>Running (1)</code> —— 显示「暂停」和「停止」按钮，展示进度和倒计时</li>
-        <li><code>Paused (2)</code> —— 显示「继续」和「停止」按钮，倒计时暂停</li>
-        <li><code>Error (3)</code> —— 显示错误信息和「停止」按钮</li>
+        <li><code>Stopped (0)</code> —— show the "Start" button</li>
+        <li><code>Running (1)</code> —— show "Pause" and "Stop" buttons with progress and countdown</li>
+        <li><code>Paused (2)</code> —— show "Resume" and "Stop" buttons; countdown is paused</li>
+        <li><code>Error (3)</code> —— show error information and a "Stop" button</li>
       </ul>
     </li>
-    <li>注意处理 <code>PhaseList = null</code> 的情况 —— 不显示阶段进度，仅显示状态和倒计时</li>
+    <li>Handle <code>PhaseList = null</code> — do not show phase progress; display only state and countdown</li>
   </ol>
 
   <script>
@@ -1170,26 +1170,26 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'laundry-washer-mode': {
     title: 'LaundryWasherMode Cluster (0x0051)',
-    description: 'Matter LaundryWasherMode Cluster(0x0051)完整参考 — 基于 ModeBase 派生，支持 Normal/Delicate/Heavy/Whites 模式选择，ChangeToMode 命令、ModeTag 语义标签及启动模式配置。',
+    description: 'Complete reference for the Matter LaundryWasherMode Cluster (0x0051) — derived from ModeBase, supports Normal/Delicate/Heavy/Whites mode selection, ChangeToMode command, ModeTag semantic tags, and startup mode configuration.',
     prev: undefined,
     next: undefined,
     content: `<h1>LaundryWasherMode Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x0051</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 通常在 <code>Endpoint 1</code>（功能端点）
+    <strong>Endpoint</strong>: Typically on <code>Endpoint 1</code> (application endpoint)
   </p>
   <p>
-    LaundryWasherMode 是 Matter 中用于洗衣机模式选择的 Cluster，派生自 ModeBase Cluster。
-    它允许用户在洗衣机支持的多种洗涤模式之间切换，例如标准洗、轻柔洗、强力洗、漂白洗等。
-    每种模式通过语义标签（ModeTag）描述其用途，使不同厂商的洗衣机能以统一方式被控制。
+    LaundryWasherMode is a Cluster in Matter for washing machine mode selection, derived from ModeBase Cluster.
+    It allows users to switch between multiple wash modes supported by the machine, such as Normal, Delicate, Heavy, and Whites.
+    Each mode uses semantic tags (ModeTag) to describe its purpose, enabling standardized control across different manufacturers' washing machines.
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">派生自 ModeBase</div>
+    <div class="callout-title">Derived from ModeBase</div>
     <p>
-      LaundryWasherMode 继承了 ModeBase Cluster 的全部命令和属性结构，
-      并定义了洗衣机专属的 ModeTag 值（0x4000 ~ 0x4003）。
-      如果你已经熟悉 ModeBase 的工作方式，这个 Cluster 的使用方式完全一致，只是模式标签不同。
+      LaundryWasherMode inherits all commands and attribute structures from the ModeBase Cluster,
+      and defines washing machine-specific ModeTag values (0x4000 ~ 0x4003).
+      If you are already familiar with how ModeBase works, this Cluster operates exactly the same way -- only the mode tags differ.
     </p>
   </div>
 
@@ -1199,20 +1199,20 @@ export const clusters: Record<string, ClusterContent> = {
     <span class="nav-sep">|</span>
     <a href="#attributes">Attributes</a>
     <span class="nav-sep">|</span>
-    <a href="#mode-tags">ModeTag 标签</a>
+    <a href="#mode-tags">ModeTag Tags</a>
     <span class="nav-sep">|</span>
-    <a href="#status-codes">状态码</a>
+    <a href="#status-codes">Status Codes</a>
     <span class="nav-sep">|</span>
     <a href="#example-data">Example Data</a>
     <span class="nav-sep">|</span>
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    LaundryWasherMode Cluster 只有一个命令 ChangeToMode，用于切换洗涤模式。
-    命令执行后设备返回 ChangeToModeResponse，告知切换是否成功。
+    LaundryWasherMode Cluster has only one command, ChangeToMode, for switching wash modes.
+    The device returns ChangeToModeResponse to indicate whether the switch succeeded.
   </p>
 
   <div class="table-wrap">
@@ -1230,26 +1230,26 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>ChangeToMode</td>
           <td>Client &rarr; Server</td>
-          <td>切换到指定洗涤模式</td>
+          <td>Switch to a specified wash mode</td>
         </tr>
         <tr>
           <td><code>0x01</code></td>
           <td>ChangeToModeResponse</td>
           <td>Server &rarr; Client</td>
-          <td>切换结果响应（Status + StatusText）</td>
+          <td>Mode switch response (Status + StatusText)</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
-  <h3 id="cmd-0x00">ChangeToMode -- 切换模式(0x00)</h3>
+  <!-- ====== Command Details ====== -->
+  <h3 id="cmd-0x00">ChangeToMode (0x00)</h3>
   <p>
-    请求设备切换到指定的洗涤模式。NewMode 的值必须是 SupportedModes 列表中某个 ModeOptionStruct 的 Mode 字段。
-    设备收到后返回 ChangeToModeResponse。
+    Requests the device to switch to a specified wash mode. The NewMode value must match the Mode field of a ModeOptionStruct in the SupportedModes list.
+    The device returns ChangeToModeResponse upon receipt.
   </p>
 
-  <h4>请求参数</h4>
+  <h4>Request Parameters</h4>
   <div class="table-wrap">
     <table>
       <thead>
@@ -1259,13 +1259,13 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>NewMode</td>
           <td>uint8</td>
-          <td>目标模式编号，必须存在于 SupportedModes 列表中</td>
+          <td>Target mode number; must exist in the SupportedModes list</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <h4>响应字段(ChangeToModeResponse)</h4>
+  <h4>Response Fields (ChangeToModeResponse)</h4>
   <div class="table-wrap">
     <table>
       <thead>
@@ -1275,12 +1275,12 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Status</td>
           <td>enum8</td>
-          <td>操作结果状态码（见<a href="#status-codes">状态码</a>）</td>
+          <td>Operation result status code (see <a href="#status-codes">Status Codes</a>)</td>
         </tr>
         <tr>
           <td>StatusText</td>
-          <td>string（可选）</td>
-          <td>人类可读的状态描述，失败时提供原因</td>
+          <td>string (optional)</td>
+          <td>Human-readable status description; provides the reason on failure</td>
         </tr>
       </tbody>
     </table>
@@ -1290,17 +1290,17 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        用户在 App 上选择「轻柔洗」模式，App 发送 ChangeToMode（NewMode = 1）。
-        洗衣机返回 ChangeToModeResponse（Status = 0x00, Success），CurrentMode 更新为 1。
-        如果洗衣机正在运行中不允许切换，会返回 GenericFailure 并在 StatusText 中说明原因。
+        The user selects "Delicate" mode in the app. The app sends ChangeToMode (NewMode = 1).
+        The washer returns ChangeToModeResponse (Status = 0x00, Success) and CurrentMode updates to 1.
+        If the washer is running and does not allow switching, it returns GenericFailure with the reason in StatusText.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h2 id="attributes">Attributes</h2>
-  <p>LaundryWasherMode Cluster 继承 ModeBase 的 4 个属性。</p>
+  <p>LaundryWasherMode Cluster inherits 4 attributes from ModeBase.</p>
 
   <div class="table-wrap">
     <table>
@@ -1317,34 +1317,34 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>SupportedModes</td>
           <td>list&lt;ModeOptionStruct&gt;</td>
-          <td>设备支持的所有洗涤模式</td>
+          <td>All wash modes supported by the device</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>CurrentMode</td>
           <td>uint8</td>
-          <td>当前选中的模式</td>
+          <td>Currently selected mode</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
           <td>StartUpMode</td>
           <td>uint8 / null</td>
-          <td>设备启动时的默认模式</td>
+          <td>Default mode on device startup</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
           <td>OnMode</td>
           <td>uint8 / null</td>
-          <td>设备开机时自动切换到的模式</td>
+          <td>Mode automatically applied when device turns on</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- 属性逐个说明 -->
-  <h3 id="attr-0x0000">SupportedModes -- 支持的模式列表(0x0000)</h3>
+  <!-- Attribute Details -->
+  <h3 id="attr-0x0000">SupportedModes (0x0000)</h3>
   <p>
-    设备支持的全部洗涤模式，每个元素是一个 ModeOptionStruct：
+    All wash modes supported by the device. Each element is a ModeOptionStruct:
   </p>
   <div class="table-wrap">
     <table>
@@ -1355,66 +1355,66 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Label</td>
           <td>string</td>
-          <td>模式名称，供人类阅读（如 "Normal"、"Delicate"）</td>
+          <td>Mode name for human display (e.g., "Normal", "Delicate")</td>
         </tr>
         <tr>
           <td>Mode</td>
           <td>uint8</td>
-          <td>模式编号，在列表中唯一，用于 ChangeToMode 命令</td>
+          <td>Mode number, unique in the list, used for the ChangeToMode command</td>
         </tr>
         <tr>
           <td>ModeTags</td>
           <td>list&lt;ModeTagStruct&gt;</td>
-          <td>语义标签列表，描述模式的用途（见<a href="#mode-tags">ModeTag 标签</a>）</td>
+          <td>List of semantic tags describing the mode's purpose (see <a href="#mode-tags">ModeTag Tags</a>)</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">Label 与 ModeTag 的区别</div>
+    <div class="callout-title">Difference Between Label and ModeTag</div>
     <p>
-      Label 是厂商自定义的显示文字，不同厂商可能用不同措辞（"Normal"、"Standard"、"Regular"）。
-      ModeTag 是标准化的语义标签，App 应优先根据 ModeTag 值判断模式类型，Label 仅用于界面展示。
+      Label is vendor-defined display text; different manufacturers may use different wording ("Normal", "Standard", "Regular").
+      ModeTag is a standardized semantic tag. Apps should prioritize ModeTag values for determining mode type; Label is only for UI display.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0001">CurrentMode -- 当前模式(0x0001)</h3>
+  <h3 id="attr-0x0001">CurrentMode (0x0001)</h3>
   <p>
-    当前选中的洗涤模式编号。值必须是 SupportedModes 中某个 ModeOptionStruct 的 Mode 字段。
-    通过 ChangeToMode 命令修改。可订阅此属性获取模式变更通知。
+    The currently selected wash mode number. Must be the Mode field of a ModeOptionStruct in SupportedModes.
+    Modified via the ChangeToMode command. Subscribe to this attribute for mode change notifications.
   </p>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0002">StartUpMode -- 启动模式(0x0002)</h3>
+  <h3 id="attr-0x0002">StartUpMode (0x0002)</h3>
   <p>
-    设备上电或重启后的初始模式。Nullable -- 值为 <code>null</code> 时表示保持上次断电前的模式。
-    设置具体值时，该值必须存在于 SupportedModes 列表中。
+    Initial mode after device power-on or restart. Nullable — <code>null</code> means retain the mode from before power loss.
+    When set to a specific value, it must exist in the SupportedModes list.
   </p>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0003">OnMode -- 开机模式(0x0003)</h3>
+  <h3 id="attr-0x0003">OnMode (0x0003)</h3>
   <p>
-    当设备从 Off 切换到 On 时自动应用的模式。Nullable -- 值为 <code>null</code> 时不覆盖，保持 CurrentMode 不变。
-    如果 OnMode 有值，每次开机都会将 CurrentMode 强制设为该值，忽略 StartUpMode 的设置。
+    Mode automatically applied when the device switches from Off to On. Nullable — <code>null</code> means no override; CurrentMode is preserved.
+    If OnMode has a value, CurrentMode is forced to that value on every power-on, overriding StartUpMode.
   </p>
 
   <div class="callout callout-warning">
-    <div class="callout-title">OnMode 与 StartUpMode 的优先级</div>
+    <div class="callout-title">Priority of OnMode vs StartUpMode</div>
     <p>
-      如果 OnMode 不为 null，它的优先级高于 StartUpMode。
-      设备上电流程：先应用 StartUpMode（如果有），再在 Off &rarr; On 时应用 OnMode 覆盖。
-      实际效果是开机后始终使用 OnMode 指定的模式。
+      If OnMode is not null, it takes priority over StartUpMode.
+      Device power-on sequence: StartUpMode is applied first (if set), then OnMode overrides when transitioning from Off &rarr; On.
+      The practical effect is that the device always uses the mode specified by OnMode after powering on.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== ModeTag 语义标签 ====== -->
-  <h2 id="mode-tags">ModeTag 语义标签</h2>
+  <!-- ====== ModeTag Semantic Tags ====== -->
+  <h2 id="mode-tags">ModeTag Semantic Labels</h2>
   <p>
-    LaundryWasherMode 定义了 4 个专属 ModeTag 值，用于标准化描述洗涤模式的类型。
-    App 应根据这些标签识别模式用途，而不是依赖厂商自定义的 Label 文字。
+    LaundryWasherMode defines 4 dedicated ModeTag values for standardized wash mode identification.
+    The app should use these tags to identify mode purposes rather than relying on vendor-defined Label text.
   </p>
 
   <div class="enum-cards enum-cards-row">
@@ -1422,66 +1422,66 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">0x4000</span>
       <div>
         <span class="enum-name">Normal</span>
-        <span class="enum-desc">标准洗 -- 日常衣物的默认洗涤模式</span>
+        <span class="enum-desc">Normal wash — default mode for everyday laundry</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x4001</span>
       <div>
         <span class="enum-name">Delicate</span>
-        <span class="enum-desc">轻柔洗 -- 适用于丝绸、内衣等精细衣物</span>
+        <span class="enum-desc">Delicate wash — for silk, lingerie, and other fine fabrics</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x4002</span>
       <div>
         <span class="enum-name">Heavy</span>
-        <span class="enum-desc">强力洗 -- 适用于重度污渍的工作服、运动服等</span>
+        <span class="enum-desc">Heavy wash — for heavily soiled work clothes, sportswear, etc.</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x4003</span>
       <div>
         <span class="enum-name">Whites</span>
-        <span class="enum-desc">漂白洗 -- 专为白色衣物设计，通常使用更高水温</span>
+        <span class="enum-desc">Whites wash — designed for white garments, typically at higher water temperature</span>
       </div>
     </div>
   </div>
 
-  <!-- ====== 状态码 ====== -->
+  <!-- ====== Status Codes ====== -->
   <h2 id="status-codes">Status Codes</h2>
-  <p>ChangeToModeResponse 中 Status 字段的可能取值：</p>
+  <p>Possible values for the Status field in ChangeToModeResponse:</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0x00</span>
       <div>
         <span class="enum-name">Success</span>
-        <span class="enum-desc">模式切换成功</span>
+        <span class="enum-desc">Mode switch succeeded</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x01</span>
       <div>
         <span class="enum-name">UnsupportedMode</span>
-        <span class="enum-desc">请求的模式编号不存在于 SupportedModes 中</span>
+        <span class="enum-desc">Requested mode number does not exist in SupportedModes</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x02</span>
       <div>
         <span class="enum-name">GenericFailure</span>
-        <span class="enum-desc">通用失败 -- 设备当前状态不允许切换（如正在运行中）</span>
+        <span class="enum-desc">Generic failure — the device's current state does not allow switching (e.g., while running)</span>
       </div>
     </div>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一台支持 4 种洗涤模式、当前处于标准洗的洗衣机的 LaundryWasherMode Cluster 读取结果：</p>
+  <p>Read result from a LaundryWasherMode Cluster on a washer with 4 modes, currently in Normal:</p>
 
   <pre><code>{
-  // --- 支持的模式列表 ---
+  // --- Supported Modes ---
   "0x0000": [                    // SupportedModes
     {
       "Label": "Normal",
@@ -1505,51 +1505,51 @@ export const clusters: Record<string, ClusterContent> = {
     }
   ],
 
-  // --- 当前模式 ---
-  "0x0001": 0,                   // CurrentMode = 0（Normal）
+  // --- Current Mode ---
+  "0x0001": 0,                   // CurrentMode = 0 (Normal)
 
-  // --- 启动与开机模式 ---
-  "0x0002": null,                // StartUpMode = null（保持上次模式）
-  "0x0003": null                 // OnMode = null（不覆盖，保持 CurrentMode）
+  // --- Startup and On Modes ---
+  "0x0002": null,                // StartUpMode = null (retain last mode)
+  "0x0003": null                 // OnMode = null (no override, keep CurrentMode)
 }</code></pre>
 
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      SupportedModes 的内容由设备厂商定义，不同洗衣机支持的模式数量和编号可能不同。
-      App 展示模式列表时应动态读取 SupportedModes，不要硬编码模式选项。
-      使用 ModeTag 值判断模式类型，而不是比较 Label 字符串。
+      SupportedModes content is defined by the device manufacturer; different washers may support different numbers and numbering of modes.
+      The app should dynamically read SupportedModes to display the mode list — do not hard-code mode options.
+      Use ModeTag values to determine mode types rather than comparing Label strings.
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
-  <h3 id="scenario-mode-select">场景 1：选择洗涤模式</h3>
+  <h3 id="scenario-mode-select">Scenario 1: Select Wash Mode</h3>
   <ol>
-    <li>读取 <code>SupportedModes (0x0000)</code> 获取设备支持的所有洗涤模式</li>
-    <li>在 App 界面展示模式列表，根据 ModeTag 值显示对应图标和说明</li>
-    <li>用户选择「轻柔洗」，发送 <code>ChangeToMode (0x00)</code>，NewMode 填入对应的 Mode 编号</li>
-    <li>检查 ChangeToModeResponse 的 Status：
+    <li>Read <code>SupportedModes (0x0000)</code> to get all wash modes supported by the device</li>
+    <li>Display the mode list in the app, showing appropriate icons and descriptions based on ModeTag values</li>
+    <li>The user selects "Delicate"; send <code>ChangeToMode (0x00)</code> with NewMode set to the corresponding Mode number</li>
+    <li>Check ChangeToModeResponse Status:
       <ul>
-        <li><code>0x00</code>（Success）-- 切换成功，订阅 CurrentMode 确认更新</li>
-        <li><code>0x01</code>（UnsupportedMode）-- 模式编号无效，检查是否与 SupportedModes 同步</li>
-        <li><code>0x02</code>（GenericFailure）-- 设备拒绝切换，读取 StatusText 展示原因（如「洗涤中无法切换模式」）</li>
+        <li><code>0x00</code> (Success) — switch succeeded; subscribe to CurrentMode to confirm the update</li>
+        <li><code>0x01</code> (UnsupportedMode) — invalid mode number; check synchronization with SupportedModes</li>
+        <li><code>0x02</code> (GenericFailure) — device refused the switch; read StatusText for the reason (e.g., "Cannot switch mode while washing")</li>
       </ul>
     </li>
   </ol>
 
-  <h3 id="scenario-startup">场景 2：配置启动模式</h3>
+  <h3 id="scenario-startup">Scenario 2: Configure Startup Mode</h3>
   <ol>
-    <li>读取 <code>SupportedModes (0x0000)</code> 获取可选模式列表</li>
-    <li>写入 <code>StartUpMode (0x0002)</code> 设置上电默认模式：
+    <li>Read <code>SupportedModes (0x0000)</code> to get the available modes</li>
+    <li>Write <code>StartUpMode (0x0002)</code> to set the power-on default mode:
       <ul>
-        <li>写入具体 Mode 编号 -- 每次上电自动使用该模式（如始终默认标准洗）</li>
-        <li>写入 <code>null</code> -- 保持断电前的模式（推荐）</li>
+        <li>Write a specific Mode number — automatically use that mode on every power-on (e.g., always default to Normal)</li>
+        <li>Write <code>null</code> — retain the mode from before power loss (recommended)</li>
       </ul>
     </li>
-    <li>如需每次开机强制使用某个模式，可设置 <code>OnMode (0x0003)</code>，其优先级高于 StartUpMode</li>
-    <li>大多数家用场景建议两者都设为 <code>null</code>，让用户每次手动选择模式</li>
+    <li>To force a specific mode on every power-on, set <code>OnMode (0x0003)</code>, which takes priority over StartUpMode</li>
+    <li>For most household use cases, it is recommended to set both to <code>null</code>, letting the user manually select a mode each time</li>
   </ol>
 
   <script>
@@ -1568,33 +1568,33 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'laundry-washer-controls': {
     title: 'LaundryWasherControls Cluster (0x0053)',
-    description: 'Matter LaundryWasherControls Cluster(0x0053)完整参考 — 脱水转速选择、漂洗次数控制、SPIN/RINSE Feature、NumberOfRinsesEnum 枚举值速查及真实设备数据示例。',
+    description: 'Complete reference for the Matter LaundryWasherControls Cluster (0x0053) — spin speed selection, rinse count control, SPIN/RINSE Features, NumberOfRinsesEnum quick reference, and real device data examples.',
     prev: undefined,
     next: undefined,
     content: `<h1>LaundryWasherControls Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x0053</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 通常在 <code>Endpoint 1+</code>（家电功能端点）
+    <strong>Endpoint</strong>: Typically on <code>Endpoint 1+</code> (appliance application endpoint)
   </p>
   <p>
-    LaundryWasherControls 用于管理洗衣机的操作参数 —— 脱水转速和漂洗次数。
-    它是一个<strong>纯属性驱动</strong>的 Cluster（没有命令），所有操作通过直接写属性完成。
-    与 <a href="/clusters/laundry-washer-mode/">LaundryWasherMode（0x0051）</a> 配合使用：
-    Mode 负责选择洗涤模式（标准、轻柔、强力等），Controls 负责调整具体的运行参数。
+    LaundryWasherControls manages the operational parameters of a washing machine -- spin speed and rinse count.
+    It is a purely <strong>attribute-driven</strong> Cluster (no commands); all operations are performed by directly writing attributes.
+    It works in conjunction with <a href="/clusters/laundry-washer-mode/">LaundryWasherMode (0x0051)</a>:
+    Mode handles wash mode selection (Normal, Delicate, Heavy, etc.), while Controls handles fine-tuning of operational parameters.
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">与 LaundryWasherMode 的分工</div>
+    <div class="callout-title">Division of Responsibilities with LaundryWasherMode</div>
     <p>
-      洗衣机通常同时实现两个 Cluster：
+      A washing machine typically implements two Clusters simultaneously:
     </p>
     <ul>
-      <li><strong>LaundryWasherMode（0x0051）</strong> —— 选择洗涤程序（标准、轻柔、强力、漂白等），决定整体洗涤策略</li>
-      <li><strong>LaundryWasherControls（0x0053）</strong> —— 在选定模式的基础上微调参数（脱水转速、漂洗次数）</li>
+      <li><strong>LaundryWasherMode (0x0051)</strong> -- selects the wash program (Normal, Delicate, Heavy, Whites, etc.), determining the overall wash strategy</li>
+      <li><strong>LaundryWasherControls (0x0053)</strong> -- fine-tunes parameters within the selected mode (spin speed, rinse count)</li>
     </ul>
     <p>
-      类比来说：Mode 是「选哪个菜谱」，Controls 是「盐多放一点还是少放一点」。
-      两者通常在同一个 Endpoint 上，App 界面上可以设计为模式选择 + 参数调节的组合面板。
+      By analogy: Mode is "which recipe to use", Controls is "a little more or less salt".
+      Both typically reside on the same Endpoint, and the app UI can be designed as a combined panel for mode selection and parameter adjustment.
     </p>
   </div>
 
@@ -1609,45 +1609,45 @@ export const clusters: Record<string, ClusterContent> = {
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== Feature 位图 ====== -->
+  <!-- ====== Feature Bitmap ====== -->
   <h2 id="features">Feature Bitmap</h2>
-  <p>LaundryWasherControls 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持哪些控制能力。Feature 决定了哪些属性可用：</p>
+  <p>LaundryWasherControls declares supported control capabilities through <code>FeatureMap</code> (0xFFFC). Features determine which attributes are available:</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">Bit 0</span>
       <div>
         <span class="enum-name">SPIN（SpinSpeedControl）</span>
-        <span class="enum-desc">脱水转速控制 —— 启用 SpinSpeeds 和 SpinSpeedCurrent 属性，允许用户选择脱水转速</span>
+        <span class="enum-desc">Spin speed control — enables SpinSpeeds and SpinSpeedCurrent attributes, allowing the user to select spin speed</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 1</span>
       <div>
         <span class="enum-name">RINSE（RinseControl）</span>
-        <span class="enum-desc">漂洗次数控制 —— 启用 NumberOfRinses 和 SupportedRinses 属性，允许用户选择漂洗次数</span>
+        <span class="enum-desc">Rinse count control — enables NumberOfRinses and SupportedRinses attributes, allowing the user to select rinse count</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">Feature 组合示例</div>
+    <div class="callout-title">Feature Combination Examples</div>
     <p>
-      <code>FeatureMap = 0x01</code>（仅 SPIN）—— 只能调转速，漂洗次数由洗涤模式固定。<br/>
-      <code>FeatureMap = 0x02</code>（仅 RINSE）—— 只能调漂洗次数，脱水转速由洗涤模式固定。<br/>
-      <code>FeatureMap = 0x03</code>（SPIN + RINSE）—— 转速和漂洗次数都可以独立调节，这是功能最完整的配置。
+      <code>FeatureMap = 0x01</code> (SPIN only) -- only spin speed can be adjusted; rinse count is fixed by the wash mode.<br/>
+      <code>FeatureMap = 0x02</code> (RINSE only) -- only rinse count can be adjusted; spin speed is fixed by the wash mode.<br/>
+      <code>FeatureMap = 0x03</code> (SPIN + RINSE) -- both spin speed and rinse count can be adjusted independently; this is the most fully-featured configuration.
     </p>
   </div>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h2 id="attributes">Attributes</h2>
   <p>
-    LaundryWasherControls <strong>没有命令</strong>，所有操作通过读写属性完成。
-    共有 4 个属性，分属两组，分别对应 SPIN 和 RINSE 两个 Feature。
-    点击下方汇总表中的属性 ID 可跳转到对应的详细说明。
+    LaundryWasherControls has <strong>no commands</strong>; all operations are performed by reading and writing attributes.
+    There are 4 attributes in two groups, corresponding to the SPIN and RINSE Features.
+    Click an attribute ID below to jump to its detailed description.
   </p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute Summary Table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -1660,45 +1660,45 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
       </thead>
       <tbody>
-        <!-- 脱水转速 -->
+        <!-- Spin Speed -->
         <tr class="clickable-row" data-href="#attr-0x0000">
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>SpinSpeeds</td>
           <td>list&lt;string&gt;</td>
-          <td><a href="#group-spin">脱水转速</a></td>
-          <td>支持的转速列表</td>
+          <td><a href="#group-spin">Spin Speed</a></td>
+          <td>Supported speed list</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>SpinSpeedCurrent</td>
           <td>uint8 / null</td>
-          <td><a href="#group-spin">脱水转速</a></td>
-          <td>当前选择的转速索引</td>
+          <td><a href="#group-spin">Spin Speed</a></td>
+          <td>Currently selected speed index</td>
         </tr>
-        <!-- 漂洗次数 -->
+        <!-- Rinse Count -->
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
           <td>NumberOfRinses</td>
           <td>enum8</td>
-          <td><a href="#group-rinse">漂洗次数</a></td>
-          <td>当前漂洗次数设置</td>
+          <td><a href="#group-rinse">Rinse Count</a></td>
+          <td>Current rinse count setting</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
           <td>SupportedRinses</td>
           <td>list&lt;enum8&gt;</td>
-          <td><a href="#group-rinse">漂洗次数</a></td>
-          <td>支持的漂洗选项列表</td>
+          <td><a href="#group-rinse">Rinse Count</a></td>
+          <td>Supported rinse options list</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 脱水转速（0x0000, 0x0001）====== -->
-  <h3 id="group-spin">脱水转速(0x0000, 0x0001)</h3>
+  <!-- ====== Spin Speed (0x0000, 0x0001) ====== -->
+  <h3 id="group-spin">Spin Speed (0x0000, 0x0001)</h3>
   <p>
-    需要 <strong>SPIN（SpinSpeedControl）</strong> Feature。
-    控制洗衣机脱水阶段的转速 —— 转速越高脱水越彻底，但对衣物的磨损也越大。
+    Requires the <strong>SPIN (SpinSpeedControl)</strong> Feature.
+    Controls the spin speed during the spin-dry phase — higher speeds extract more water but increase fabric wear.
   </p>
 
   <div class="table-wrap">
@@ -1714,45 +1714,45 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0000">
           <td><code>0x0000</code></td>
-          <td>SpinSpeeds<br/><span class="attr-cn">转速列表</span></td>
+          <td>SpinSpeeds<br/><span class="attr-cn">Speed List</span></td>
           <td>list&lt;string&gt;</td>
-          <td>设备支持的所有脱水转速，以字符串列表表示。只读属性。列表中的每个元素是厂商定义的转速名称（如 <code>"400"</code>、<code>"800"</code>、<code>"1200"</code>，或 <code>"Low"</code>、<code>"Medium"</code>、<code>"High"</code>）。列表的索引用于 SpinSpeedCurrent</td>
+          <td>All spin speeds supported by the device, represented as a string list. Read-only. Each element is a vendor-defined speed name (e.g. <code>"400"</code>, <code>"800"</code>, <code>"1200"</code>, or <code>"Low"</code>, <code>"Medium"</code>, <code>"High"</code>). The list index is used with SpinSpeedCurrent</td>
         </tr>
         <tr id="attr-0x0001">
           <td><code>0x0001</code></td>
-          <td>SpinSpeedCurrent<br/><span class="attr-cn">当前转速</span></td>
+          <td>SpinSpeedCurrent<br/><span class="attr-cn">Current Speed</span></td>
           <td>uint8 / null</td>
-          <td>当前选择的脱水转速，值为 SpinSpeeds 列表的索引（从 0 开始）。可读写。Nullable —— <code>null</code> 表示转速由设备根据洗涤模式自动决定。写入时值必须在 <code>0</code> ~ <code>SpinSpeeds.length - 1</code> 范围内</td>
+          <td>The currently selected spin speed, as an index into the SpinSpeeds list (starting from 0). Read-write. Nullable -- <code>null</code> means the speed is automatically determined by the device based on the wash mode. The written value must be in the range <code>0</code> ~ <code>SpinSpeeds.length - 1</code></td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">SpinSpeedCurrent 是索引，不是转速值</div>
+    <div class="callout-title">SpinSpeedCurrent Is an Index, Not a Speed Value</div>
     <p>
-      <code>SpinSpeedCurrent</code> 存储的是 <code>SpinSpeeds</code> 列表的<strong>索引</strong>，不是实际转速数字。
-      例如 <code>SpinSpeeds = ["400", "800", "1200"]</code> 时，写入 <code>SpinSpeedCurrent = 1</code> 表示选择 <code>"800"</code> 转。
-      App 展示时应先读取 SpinSpeeds，再用 SpinSpeedCurrent 的值作为索引去取对应的字符串。
+      <code>SpinSpeedCurrent</code> stores the <strong>index</strong> into the <code>SpinSpeeds</code> list, not the actual speed value.
+      For example, when <code>SpinSpeeds = ["400", "800", "1200"]</code>, writing <code>SpinSpeedCurrent = 1</code> selects <code>"800"</code> RPM.
+      When displaying, the app should first read SpinSpeeds, then use SpinSpeedCurrent as an index to get the corresponding string.
     </p>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">转速名称不一定是数字</div>
+    <div class="callout-title">Speed Names Are Not Necessarily Numbers</div>
     <p>
-      SpinSpeeds 里的字符串由厂商自行定义，不一定是纯数字。
-      有些洗衣机可能用 <code>"Low"</code>、<code>"Medium"</code>、<code>"High"</code> 这样的描述性文字，
-      也有些可能用 <code>"400 RPM"</code>、<code>"No Spin"</code> 等带单位的标记。
-      App 应直接显示这些字符串，而不是尝试解析成数字做计算。
+      The strings in SpinSpeeds are defined by the manufacturer and are not necessarily pure numbers.
+      Some washing machines may use descriptive text like <code>"Low"</code>, <code>"Medium"</code>, <code>"High"</code>,
+      while others may use labels with units like <code>"400 RPM"</code>, <code>"No Spin"</code>.
+      The app should display these strings directly rather than attempting to parse them as numbers.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 漂洗次数（0x0002, 0x0003）====== -->
-  <h3 id="group-rinse">漂洗次数(0x0002, 0x0003)</h3>
+  <!-- ====== Rinse Count (0x0002, 0x0003) ====== -->
+  <h3 id="group-rinse">Rinse Count (0x0002, 0x0003)</h3>
   <p>
-    需要 <strong>RINSE（RinseControl）</strong> Feature。
-    控制洗涤过程中漂洗的次数 —— 漂洗越多，衣物残留的洗涤剂越少，但耗水耗时也更多。
+    Requires the <strong>RINSE (RinseControl)</strong> Feature.
+    Controls the number of rinse cycles — more rinses reduce detergent residue in garments but increase water and time consumption.
   </p>
 
   <div class="table-wrap">
@@ -1768,15 +1768,15 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0002">
           <td><code>0x0002</code></td>
-          <td>NumberOfRinses<br/><span class="attr-cn">漂洗次数</span></td>
+          <td>NumberOfRinses<br/><span class="attr-cn">Rinse Count</span></td>
           <td>enum8</td>
-          <td>当前设置的漂洗次数级别。可读写。写入的值必须在 SupportedRinses 列表中（见下方枚举）</td>
+          <td>The currently set rinse count level. Read-write. The written value must be in the SupportedRinses list (see enum below)</td>
         </tr>
         <tr id="attr-0x0003">
           <td><code>0x0003</code></td>
-          <td>SupportedRinses<br/><span class="attr-cn">支持的漂洗选项</span></td>
+          <td>SupportedRinses<br/><span class="attr-cn">Supported Rinse Options</span></td>
           <td>list&lt;enum8&gt;</td>
-          <td>设备支持的漂洗次数选项列表。只读属性。列表中的每个元素是 NumberOfRinsesEnum 值。App 应只展示此列表中包含的选项</td>
+          <td>The list of supported rinse count options. Read-only. Each element is a NumberOfRinsesEnum value. Apps should only display options included in this list</td>
         </tr>
       </tbody>
     </table>
@@ -1788,105 +1788,105 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">None</span>
-        <span class="enum-desc">不漂洗 —— 跳过漂洗阶段，适合预洗或快洗场景</span>
+        <span class="enum-desc">No rinse — skip the rinse phase; suitable for pre-wash or quick-wash scenarios</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">Normal</span>
-        <span class="enum-desc">标准漂洗 —— 默认的漂洗次数，适合日常衣物</span>
+        <span class="enum-desc">Standard rinse — default rinse count for everyday laundry</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">Extra</span>
-        <span class="enum-desc">额外漂洗 —— 多漂洗一次，适合婴儿衣物或敏感肌肤</span>
+        <span class="enum-desc">Extra rinse — one additional rinse cycle; suitable for baby clothes or sensitive skin</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">Max</span>
-        <span class="enum-desc">最大漂洗 —— 尽可能多次漂洗，最大程度减少洗涤剂残留</span>
+        <span class="enum-desc">Maximum rinse — as many rinses as possible to minimize detergent residue</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">SupportedRinses 决定可选项</div>
+    <div class="callout-title">SupportedRinses Determines Available Options</div>
     <p>
-      并非所有洗衣机都支持全部 4 个漂洗级别。
-      App 在展示漂洗选项前，必须先读取 <code>SupportedRinses</code>，只显示其中包含的值。
-      例如 <code>SupportedRinses = [1, 2]</code> 表示只支持 Normal 和 Extra 两个选项，
-      写入 <code>NumberOfRinses = 0</code>（None）或 <code>3</code>（Max）会被设备拒绝。
+      Not all washing machines support all 4 rinse levels.
+      Before displaying rinse options, the app must first read <code>SupportedRinses</code> and only show the values it contains.
+      For example, <code>SupportedRinses = [1, 2]</code> means only Normal and Extra are supported;
+      writing <code>NumberOfRinses = 0</code> (None) or <code>3</code> (Max) will be rejected by the device.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一台同时支持 SPIN 和 RINSE Feature 的洗衣机在运行中的 LaundryWasherControls Cluster 读取结果：</p>
+  <p>Read result from a LaundryWasherControls Cluster on a running washer with both SPIN and RINSE Features:</p>
 
   <pre><code>{
-  // --- 脱水转速（SPIN Feature）---
-  "0x0000": [                   // SpinSpeeds — 支持的转速列表
+  // --- Spin Speed (SPIN Feature) ---
+  "0x0000": [                   // SpinSpeeds — supported speed list
     "400",
     "600",
     "800",
     "1000",
     "1200"
   ],
-  "0x0001": 2,                  // SpinSpeedCurrent = 2（当前选择 "800" 转）
+  "0x0001": 2,                  // SpinSpeedCurrent = 2 (currently "800" RPM)
 
-  // --- 漂洗次数（RINSE Feature）---
-  "0x0002": 1,                  // NumberOfRinses = Normal（标准漂洗）
+  // --- Rinse Count (RINSE Feature) ---
+  "0x0002": 1,                  // NumberOfRinses = Normal (standard rinse)
   "0x0003": [0, 1, 2, 3]       // SupportedRinses = [None, Normal, Extra, Max]
 }</code></pre>
 
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      如果设备只支持 SPIN Feature（<code>FeatureMap = 0x01</code>），则只有 SpinSpeeds 和 SpinSpeedCurrent 两个属性；
-      如果只支持 RINSE Feature（<code>FeatureMap = 0x02</code>），则只有 NumberOfRinses 和 SupportedRinses。
-      读取前先检查 <code>FeatureMap (0xFFFC)</code>，对不支持的属性发起读取会返回 <code>UNSUPPORTED_ATTRIBUTE</code>。
+      If the device only supports the SPIN Feature (<code>FeatureMap = 0x01</code>), only SpinSpeeds and SpinSpeedCurrent are available;
+      if only the RINSE Feature (<code>FeatureMap = 0x02</code>), only NumberOfRinses and SupportedRinses.
+      Check <code>FeatureMap (0xFFFC)</code> first; reading an unsupported attribute returns <code>UNSUPPORTED_ATTRIBUTE</code>.
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
-    <summary>场景 1：洗衣机控制面板 —— 模式 + 参数联动</summary>
+    <summary>Scenario 1: Washing Machine Control Panel — Mode + Parameter Coordination</summary>
     <div class="scenario-content">
       <p>
-        用户在 App 上操作洗衣机时，通常先选洗涤模式，再调整转速和漂洗次数。
-        App 需要同时读取 LaundryWasherMode 和 LaundryWasherControls 两个 Cluster 的数据来构建完整的控制界面。
+        When operating the washer from the app, users typically select a wash mode first, then adjust spin speed and rinse count.
+        The app needs to read data from both the LaundryWasherMode and LaundryWasherControls Clusters to build a complete control interface.
       </p>
       <ol>
-        <li>读取 <code>LaundryWasherMode</code> 的 <code>SupportedModes (0x0000)</code> 和 <code>CurrentMode (0x0001)</code>，展示模式选择按钮</li>
-        <li>读取 <code>LaundryWasherControls</code> 的 <code>FeatureMap (0xFFFC)</code>，确认支持哪些参数调节</li>
-        <li>如果支持 SPIN：读取 <code>SpinSpeeds (0x0000)</code> 生成转速选择器，用 <code>SpinSpeedCurrent (0x0001)</code> 标记当前选中项</li>
-        <li>如果支持 RINSE：读取 <code>SupportedRinses (0x0003)</code> 生成漂洗选项，用 <code>NumberOfRinses (0x0002)</code> 标记当前值</li>
-        <li>用户切换洗涤模式后，设备可能自动调整 SpinSpeedCurrent 和 NumberOfRinses —— 订阅这两个属性的变化，及时刷新界面</li>
+        <li>Read <code>LaundryWasherMode</code>'s <code>SupportedModes (0x0000)</code> and <code>CurrentMode (0x0001)</code>; display mode selection buttons</li>
+        <li>Read <code>LaundryWasherControls</code>'s <code>FeatureMap (0xFFFC)</code> to confirm which parameters are adjustable</li>
+        <li>If SPIN is supported: read <code>SpinSpeeds (0x0000)</code> to generate a speed picker; mark the current selection with <code>SpinSpeedCurrent (0x0001)</code></li>
+        <li>If RINSE is supported: read <code>SupportedRinses (0x0003)</code> to generate rinse options; mark the current value with <code>NumberOfRinses (0x0002)</code></li>
+        <li>After the user switches wash mode, the device may automatically adjust SpinSpeedCurrent and NumberOfRinses — subscribe to changes on both attributes for timely UI updates</li>
       </ol>
     </div>
   </details>
 
   <details class="scenario">
-    <summary>场景 2：敏感衣物洗涤 —— 低转速 + 额外漂洗</summary>
+    <summary>Scenario 2: Sensitive Fabric Washing — Low Speed + Extra Rinse</summary>
     <div class="scenario-content">
       <p>
-        用户洗婴儿衣物或丝绸等精细织物时，需要降低脱水转速以减少磨损，同时增加漂洗次数以去除洗涤剂残留。
+        When washing baby clothes or delicate fabrics like silk, the user needs to lower the spin speed to reduce wear and increase rinse count to remove detergent residue.
       </p>
       <ol>
-        <li>先通过 <code>LaundryWasherMode</code> 切换到「轻柔 / Delicate」模式</li>
-        <li>读取 <code>SpinSpeeds (0x0000)</code>，找到最低转速的索引（通常是 0）</li>
-        <li>写入 <code>SpinSpeedCurrent (0x0001) = 0</code>，选择最低转速</li>
-        <li>检查 <code>SupportedRinses (0x0003)</code> 是否包含 <code>2</code>（Extra）或 <code>3</code>（Max）</li>
-        <li>写入 <code>NumberOfRinses (0x0002) = 2</code>（Extra），增加漂洗次数</li>
-        <li>App 可以为常见场景（婴儿衣物、过敏体质等）预设这套参数组合，一键应用</li>
+        <li>First switch to "Delicate" mode via <code>LaundryWasherMode</code></li>
+        <li>Read <code>SpinSpeeds (0x0000)</code> and find the lowest speed index (typically 0)</li>
+        <li>Write <code>SpinSpeedCurrent (0x0001) = 0</code> to select the lowest speed</li>
+        <li>Check if <code>SupportedRinses (0x0003)</code> contains <code>2</code> (Extra) or <code>3</code> (Max)</li>
+        <li>Write <code>NumberOfRinses (0x0002) = 2</code> (Extra) to increase the rinse count</li>
+        <li>The app can preset this parameter combination for common scenarios (baby clothes, allergy-prone users, etc.) for one-tap application</li>
       </ol>
     </div>
   </details>
@@ -1931,26 +1931,26 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'dishwasher-mode': {
     title: 'DishwasherMode Cluster (0x0059)',
-    description: 'Matter DishwasherMode Cluster(0x0059)完整参考 — 派生自 ModeBase，支持 Normal/Heavy/Light 三种洗涤模式切换，含 ChangeToMode 命令、模式属性及 ModeTag 定义。',
+    description: 'Complete reference for the Matter DishwasherMode Cluster (0x0059) — derived from ModeBase, supports Normal/Heavy/Light wash mode switching, including ChangeToMode command, mode attributes, and ModeTag definitions.',
     prev: undefined,
     next: undefined,
     content: `<h1>DishwasherMode Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x0059</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 通常在 <code>Endpoint 1</code>（功能端点）
+    <strong>Endpoint</strong>: Typically on <code>Endpoint 1</code> (application endpoint)
   </p>
   <p>
-    DishwasherMode 用于控制洗碗机的洗涤模式选择。
-    它派生自 <strong>ModeBase</strong> Cluster，结构与 LaundryWasherMode 完全一致，
-    区别仅在于 ModeTag 值针对洗碗机场景定义（Normal / Heavy / Light）。
+    DishwasherMode is used to control wash mode selection on a dishwasher.
+    It is derived from the <strong>ModeBase</strong> Cluster, with a structure identical to LaundryWasherMode,
+    differing only in that ModeTag values are defined for dishwasher scenarios (Normal / Heavy / Light).
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">ModeBase 派生 Cluster</div>
+    <div class="callout-title">ModeBase Derived Cluster</div>
     <p>
-      DishwasherMode 是 ModeBase（0x0050）的派生 Cluster，不能独立实现 ——
-      它复用 ModeBase 的全部命令和属性定义，仅扩展了专属的 ModeTag 枚举值。
-      了解 ModeBase 的机制后，所有 Mode 类 Cluster（洗衣机、洗碗机、冰箱等）都是同一套用法。
+      DishwasherMode is a derived Cluster of ModeBase (0x0050) and cannot be implemented independently --
+      it reuses all command and attribute definitions from ModeBase, only extending with its own dedicated ModeTag enum values.
+      Once you understand ModeBase, all Mode-type Clusters (washer, dishwasher, refrigerator, etc.) follow the same usage pattern.
     </p>
   </div>
 
@@ -1960,17 +1960,17 @@ export const clusters: Record<string, ClusterContent> = {
     <span class="nav-sep">|</span>
     <a href="#attributes">Attributes</a>
     <span class="nav-sep">|</span>
-    <a href="#mode-tags">ModeTag 枚举</a>
+    <a href="#mode-tags">ModeTag Enum</a>
     <span class="nav-sep">|</span>
     <a href="#example-data">Example Data</a>
     <span class="nav-sep">|</span>
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    DishwasherMode 继承自 ModeBase，只有一对命令：客户端发送 ChangeToMode，设备返回 ChangeToModeResponse。
+    DishwasherMode inherits from ModeBase with only one command pair: the client sends ChangeToMode, and the device returns ChangeToModeResponse.
   </p>
 
   <div class="table-wrap">
@@ -1986,23 +1986,23 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr class="clickable-row" data-href="#cmd-change">
           <td><a href="#cmd-change"><code>0x00</code></a></td>
-          <td>客户端 → 设备</td>
+          <td>Client &rarr; Server</td>
           <td>ChangeToMode</td>
-          <td>切换到指定模式</td>
+          <td>Switch to a specified mode</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-response">
           <td><a href="#cmd-response"><code>0x01</code></a></td>
-          <td>设备 → 客户端</td>
+          <td>Server &rarr; Client</td>
           <td>ChangeToModeResponse</td>
-          <td>返回切换结果</td>
+          <td>Return switch result</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
-  <h3 id="cmd-change">ChangeToMode —— 切换模式(0x00)</h3>
-  <p>请求设备切换到指定的洗涤模式。目标模式必须是 SupportedModes 中存在的值。</p>
+  <!-- ====== Command Details ====== -->
+  <h3 id="cmd-change">ChangeToMode (0x00)</h3>
+  <p>Requests the device to switch to a specified wash mode. The target mode must exist in SupportedModes.</p>
   <div class="table-wrap">
     <table>
       <thead>
@@ -2012,23 +2012,23 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>NewMode</td>
           <td>uint8</td>
-          <td>目标模式编号，必须在 SupportedModes 列表中存在</td>
+          <td>Target mode number; must exist in the SupportedModes list</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">运行中切换</div>
+    <div class="callout-title">Switching During Operation</div>
     <p>
-      洗碗机正在运行时，设备可能拒绝模式切换并在 ChangeToModeResponse 中返回错误状态码。
-      具体行为取决于厂商实现。
+      When the dishwasher is running, the device may reject mode switching and return an error status code in ChangeToModeResponse.
+      The specific behavior depends on the manufacturer's implementation.
     </p>
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-response">ChangeToModeResponse —— 切换结果(0x01)</h3>
-  <p>设备收到 ChangeToMode 后返回的响应，告知切换是否成功。</p>
+  <h3 id="cmd-response">ChangeToModeResponse (0x01)</h3>
+  <p>Response returned by the device after receiving ChangeToMode, indicating whether the switch succeeded.</p>
   <div class="table-wrap">
     <table>
       <thead>
@@ -2038,21 +2038,21 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Status</td>
           <td>enum8</td>
-          <td><code>0x00</code> = 成功；其他值为厂商自定义错误码</td>
+          <td><code>0x00</code> = success; other values are vendor-defined error codes</td>
         </tr>
         <tr>
           <td>StatusText</td>
-          <td>string（可选）</td>
-          <td>失败时的可读错误描述，最长 64 字节</td>
+          <td>string (optional)</td>
+          <td>Human-readable error description on failure, up to 64 bytes</td>
         </tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h2 id="attributes">Attributes</h2>
-  <p>DishwasherMode 继承 ModeBase 的 4 个属性。点击属性 ID 可跳转到详细说明。</p>
+  <p>DishwasherMode inherits 4 attributes from ModeBase. Click an attribute ID to jump to its description.</p>
 
   <div class="table-wrap">
     <table>
@@ -2069,34 +2069,34 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>SupportedModes</td>
           <td>list&lt;ModeOptionStruct&gt;</td>
-          <td>设备支持的所有模式列表</td>
+          <td>List of all modes supported by the device</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>CurrentMode</td>
           <td>uint8</td>
-          <td>当前激活的模式编号</td>
+          <td>Currently active mode number</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
           <td>StartUpMode</td>
           <td>uint8 / null</td>
-          <td>上电后的初始模式</td>
+          <td>Initial mode after power-on</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
           <td>OnMode</td>
           <td>uint8 / null</td>
-          <td>开机时强制切换到的模式</td>
+          <td>Mode forced on power-on</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- 属性详细说明 -->
-  <h3 id="attr-0x0000">SupportedModes —— 支持的模式列表(0x0000)</h3>
+  <!-- Attribute Details -->
+  <h3 id="attr-0x0000">SupportedModes (0x0000)</h3>
   <p>
-    设备支持的全部洗涤模式，列表中每个元素是一个 <code>ModeOptionStruct</code>：
+    All wash modes supported by the device. Each element in the list is a <code>ModeOptionStruct</code>:
   </p>
   <div class="table-wrap">
     <table>
@@ -2107,65 +2107,65 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Label</td>
           <td>string</td>
-          <td>模式的可读名称（如 <code>"Normal"</code>、<code>"Heavy"</code>）</td>
+          <td>Human-readable mode name (e.g., <code>"Normal"</code>, <code>"Heavy"</code>)</td>
         </tr>
         <tr>
           <td>Mode</td>
           <td>uint8</td>
-          <td>模式编号，在列表中唯一</td>
+          <td>Mode number, unique within the list</td>
         </tr>
         <tr>
           <td>ModeTags</td>
           <td>list&lt;ModeTagStruct&gt;</td>
-          <td>模式标签，用于标识模式的语义（见 <a href="#mode-tags">ModeTag 枚举</a>）</td>
+          <td>Mode tags identifying the semantic meaning (see <a href="#mode-tags">ModeTag Enum</a>)</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">Mode 编号由厂商定义</div>
+    <div class="callout-title">Mode Numbers Are Vendor-Defined</div>
     <p>
-      Mode 编号（0、1、2 …）只是厂商自定义的序号，不同厂商可能不一样。
-      要判断某个模式的语义含义，应查看 ModeTags 中的 ModeTag 值而非 Mode 编号。
+      Mode numbers (0, 1, 2...) are vendor-defined ordinals that may differ between manufacturers.
+      To determine the semantic meaning of a mode, check the ModeTag values in ModeTags rather than the Mode number.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0001">CurrentMode —— 当前模式(0x0001)</h3>
+  <h3 id="attr-0x0001">CurrentMode (0x0001)</h3>
   <p>
-    设备当前激活的模式编号，值必须是 SupportedModes 中某个条目的 Mode 值。
-    订阅此属性可以在模式变化时同步更新 App 界面。
+    The device's currently active mode number, which must be the Mode value of an entry in SupportedModes.
+    Subscribe to this attribute to update the app UI when the mode changes.
   </p>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0002">StartUpMode —— 上电模式(0x0002)</h3>
+  <h3 id="attr-0x0002">StartUpMode (0x0002)</h3>
   <p>
-    设备上电（或重启）后使用的初始模式。Nullable —— <code>null</code> 表示不指定，
-    由设备自行决定（通常恢复断电前的模式）。
+    Initial mode used after device power-on (or restart). Nullable — <code>null</code> means unspecified;
+    the device decides on its own (typically restores the mode from before power loss).
   </p>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0003">OnMode —— 开机模式(0x0003)</h3>
+  <h3 id="attr-0x0003">OnMode (0x0003)</h3>
   <p>
-    设备从 Off 切换到 On 时强制切换到的模式。Nullable ——
-    <code>null</code> 表示开机时不强制切换，保持 CurrentMode 不变。
+    Mode forced when the device switches from Off to On. Nullable —
+    <code>null</code> means no forced switch on power-on; CurrentMode is preserved.
   </p>
   <div class="callout callout-info">
-    <div class="callout-title">StartUpMode 与 OnMode 的区别</div>
+    <div class="callout-title">Difference Between StartUpMode and OnMode</div>
     <p>
-      <strong>StartUpMode</strong> 在设备上电（断电恢复）时生效；
-      <strong>OnMode</strong> 在设备从关闭状态切换到开启状态时生效（如用户按下开始按钮）。
-      两者触发时机不同，可以设置不同的值。
+      <strong>StartUpMode</strong> takes effect when the device powers on (power loss recovery);
+      <strong>OnMode</strong> takes effect when the device transitions from Off to On (e.g. when the user presses the start button).
+      The two are triggered at different times and can be set to different values.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== ModeTag 枚举 ====== -->
-  <h2 id="mode-tags">ModeTag 枚举</h2>
+  <!-- ====== ModeTag Enum ====== -->
+  <h2 id="mode-tags">ModeTag Enum</h2>
   <p>
-    DishwasherMode 定义了 3 个专属 ModeTag 值，用于标识洗碗机洗涤模式的语义。
-    App 应通过 ModeTag 识别模式含义，而非依赖 Label 字符串或 Mode 编号。
+    DishwasherMode defines 3 dedicated ModeTag values for identifying dishwasher wash mode semantics.
+    The app should identify mode meaning through ModeTag rather than relying on Label strings or Mode numbers.
   </p>
 
   <div class="enum-cards enum-cards-row">
@@ -2173,41 +2173,41 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">0x4000</span>
       <div>
         <span class="enum-name">Normal</span>
-        <span class="enum-desc">标准洗涤 —— 日常餐具的默认模式</span>
+        <span class="enum-desc">Normal wash — default mode for everyday dishes</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x4001</span>
       <div>
         <span class="enum-name">Heavy</span>
-        <span class="enum-desc">强力洗涤 —— 重油污、锅具等顽固污渍</span>
+        <span class="enum-desc">Heavy wash — heavy grease, pots, and stubborn stains</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x4002</span>
       <div>
         <span class="enum-name">Light</span>
-        <span class="enum-desc">轻柔洗涤 —— 轻微脏污、精致餐具</span>
+        <span class="enum-desc">Light wash — lightly soiled or delicate dishes</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">通用 ModeTag</div>
+    <div class="callout-title">Common ModeTag</div>
     <p>
-      除了上述专属 Tag，设备也可以使用 ModeBase 定义的通用 Tag，例如
-      <code>0x0000</code>（Auto）、<code>0x0001</code>（Quick）、<code>0x0002</code>（Quiet）等。
-      一个模式可以同时携带多个 Tag。
+      In addition to the above dedicated Tags, devices can also use common Tags defined by ModeBase, such as
+      <code>0x0000</code> (Auto), <code>0x0001</code> (Quick), <code>0x0002</code> (Quiet), etc.
+      A single mode can carry multiple Tags simultaneously.
     </p>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一台支持三种洗涤模式的洗碗机，当前处于 Normal 模式时的 DishwasherMode Cluster 读取结果：</p>
+  <p>Read result from a DishwasherMode Cluster on a dishwasher with three wash modes, currently in Normal:</p>
 
   <pre><code>{
-  // --- 当前模式 ---
-  "0x0000": [                 // SupportedModes — 支持的模式列表
+  // --- Current Mode ---
+  "0x0000": [                 // SupportedModes — supported mode list
     {
       "Label": "Normal",
       "Mode": 0,
@@ -2224,29 +2224,29 @@ export const clusters: Record<string, ClusterContent> = {
       "ModeTags": [{ "Value": 16386 }]
     }
   ],
-  "0x0001": 0,               // CurrentMode = 0（当前为 Normal 模式）
-  "0x0002": 0,               // StartUpMode = 0（上电恢复 Normal）
-  "0x0003": null              // OnMode = null（开机不强制切换模式）
+  "0x0001": 0,               // CurrentMode = 0 (currently Normal mode)
+  "0x0002": 0,               // StartUpMode = 0 (restore Normal on power-up)
+  "0x0003": null              // OnMode = null (no forced mode on power-on)
 }</code></pre>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
-  <h3 id="scenario-switch">场景 1：切换洗涤模式</h3>
+  <h3 id="scenario-switch">Scenario 1: Switch Wash Mode</h3>
   <ol>
-    <li>读取 <code>SupportedModes (0x0000)</code>，获取设备支持的全部模式及其 ModeTag</li>
-    <li>在 App 中根据 ModeTag 展示模式选项（如「标准」「强力」「轻柔」）</li>
-    <li>用户选择后，发送 <code>ChangeToMode</code>，参数 NewMode 设为目标模式的编号</li>
-    <li>检查 <code>ChangeToModeResponse</code> 的 Status —— 如果洗碗机正在运行，可能返回错误</li>
-    <li>订阅 <code>CurrentMode (0x0001)</code> 确认切换成功</li>
+    <li>Read <code>SupportedModes (0x0000)</code> to get all modes and their ModeTag values</li>
+    <li>Display mode options in the app based on ModeTag (e.g., "Normal", "Heavy", "Light")</li>
+    <li>After the user's selection, send <code>ChangeToMode</code> with NewMode set to the target mode number</li>
+    <li>Check <code>ChangeToModeResponse</code> Status — the dishwasher may return an error if currently running</li>
+    <li>Subscribe to <code>CurrentMode (0x0001)</code> to confirm the switch succeeded</li>
   </ol>
 
-  <h3 id="scenario-startup">场景 2：配置默认模式</h3>
+  <h3 id="scenario-startup">Scenario 2: Configure Default Mode</h3>
   <ol>
-    <li>用户在 App 设置页选择「每次开机默认使用强力模式」</li>
-    <li>写入 <code>OnMode (0x0003)</code> 为 Heavy 模式对应的编号（例如 <code>1</code>）</li>
-    <li>之后每次洗碗机从关闭切换到开启，都会自动进入强力模式</li>
-    <li>如需取消强制模式，将 OnMode 写回 <code>null</code></li>
+    <li>The user selects "Default to Heavy mode on every power-on" in app settings</li>
+    <li>Write <code>OnMode (0x0003)</code> to the Heavy mode number (e.g., <code>1</code>)</li>
+    <li>From then on, every time the dishwasher powers on, it automatically enters Heavy mode</li>
+    <li>To cancel the forced mode, write OnMode back to <code>null</code></li>
   </ol>
 
   <script>
@@ -2265,27 +2265,27 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'dishwasher-alarm': {
     title: 'DishwasherAlarm Cluster (0x005D)',
-    description: 'Matter DishwasherAlarm Cluster(0x005D)完整参考 — 告警位图、Mask/Latch/State/Supported 属性、Reset 与 ModifyEnabledAlarms 命令、Notify 事件及典型场景。',
+    description: 'Complete reference for the Matter DishwasherAlarm Cluster (0x005D) — alarm bitmaps, Mask/Latch/State/Supported attributes, Reset and ModifyEnabledAlarms commands, Notify event, and typical scenarios.',
     prev: undefined,
     next: undefined,
     content: `<h1>DishwasherAlarm Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x005D</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 通常在 <code>Endpoint 1</code>（功能端点）
+    <strong>Endpoint</strong>: Typically on <code>Endpoint 1</code> (application endpoint)
   </p>
   <p>
-    DishwasherAlarm 是 Matter 中专门用于洗碗机告警和故障上报的 Cluster。
-    它通过一组位图（bitmap）来描述设备支持哪些告警、当前启用了哪些、哪些正在激活。
-    控制器可以订阅告警状态变化，也可以让用户自行配置关心哪些告警。
+    DishwasherAlarm is a Cluster in Matter specifically for dishwasher alarm and fault reporting.
+    It uses a set of bitmaps to describe which alarms the device supports, which are currently enabled, and which are currently active.
+    Controllers can subscribe to alarm state changes and allow users to configure which alarms they care about.
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">RESET 特性</div>
+    <div class="callout-title">RESET Feature</div>
     <p>
-      DishwasherAlarm Cluster 定义了一个 <strong>RESET</strong> Feature。
-      启用 RESET 后，Cluster 提供 <code>Reset</code> 命令以及 <code>Latch</code> 属性，
-      允许用户手动复位已锁存（latch）的告警。不支持 RESET 特性的设备，
-      告警会在故障解除后自动清除，无法手动复位。
+      The DishwasherAlarm Cluster defines a <strong>RESET</strong> Feature.
+      When RESET is enabled, the Cluster provides the <code>Reset</code> command and the <code>Latch</code> attribute,
+      allowing users to manually reset latched alarms. For devices that do not support the RESET Feature,
+      alarms are automatically cleared when the fault is resolved, with no manual reset available.
     </p>
   </div>
 
@@ -2295,9 +2295,9 @@ export const clusters: Record<string, ClusterContent> = {
     <span class="nav-sep">|</span>
     <a href="#attributes">Attributes</a>
     <span class="nav-sep">|</span>
-    <a href="#alarm-bits">告警位定义</a>
+    <a href="#alarm-bits">Alarm Bit Definitions</a>
     <span class="nav-sep">|</span>
-    <a href="#events">事件</a>
+    <a href="#events">Events</a>
     <span class="nav-sep">|</span>
     <a href="#features">Feature Bitmap</a>
     <span class="nav-sep">|</span>
@@ -2306,12 +2306,12 @@ export const clusters: Record<string, ClusterContent> = {
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    DishwasherAlarm Cluster 有 2 个命令。<code>ModifyEnabledAlarms</code> 允许用户选择关心哪些告警，
-    <code>Reset</code> 用于手动复位锁存的告警（需要 RESET 特性）。
-    点击下方表格中的命令 ID 可跳转到对应的详细说明。
+    The DishwasherAlarm Cluster has 2 commands. <code>ModifyEnabledAlarms</code> allows users to select which alarms they care about,
+    and <code>Reset</code> is used to manually reset latched alarms (requires the RESET Feature).
+    Click a command ID in the table below to jump to its detailed description.
   </p>
 
   <div class="table-wrap">
@@ -2328,24 +2328,24 @@ export const clusters: Record<string, ClusterContent> = {
         <tr class="clickable-row" data-href="#cmd-0x00">
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>Reset</td>
-          <td>复位指定的锁存告警</td>
+          <td>Reset specified latched alarms</td>
           <td class="col-required">RESET</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x01">
           <td><a href="#cmd-0x01"><code>0x01</code></a></td>
           <td>ModifyEnabledAlarms</td>
-          <td>修改启用的告警掩码</td>
-          <td class="col-optional">无</td>
+          <td>Modify the enabled alarm mask</td>
+          <td class="col-optional">None</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
-  <h3 id="cmd-0x00">Reset —— 复位告警(0x00)</h3>
+  <!-- ====== Command Details ====== -->
+  <h3 id="cmd-0x00">Reset (0x00)</h3>
   <p>
-    手动复位一个或多个已锁存（latched）的告警。只有在 <code>Latch</code> 属性中标记为锁存的告警位才需要手动复位，
-    其他告警会在故障解除后自动清除。此命令需要设备支持 RESET 特性。
+    Manually reset one or more latched alarms. Only alarm bits marked as latched in the <code>Latch</code> attribute require manual reset;
+    other alarms are automatically cleared when the fault is resolved. This command requires the device to support the RESET Feature.
   </p>
   <div class="table-wrap">
     <table>
@@ -2356,7 +2356,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Alarms</td>
           <td>bitmap32</td>
-          <td>要复位的告警位图。每一位对应一种告警（见<a href="#alarm-bits">告警位定义</a>），置 1 表示要复位该告警</td>
+          <td>Alarm bitmap to reset. Each bit corresponds to one alarm type (see <a href="#alarm-bits">Alarm Bit Definitions</a>); setting a bit to 1 means resetting that alarm</td>
         </tr>
       </tbody>
     </table>
@@ -2365,18 +2365,18 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        洗碗机排水故障（DrainError）被修复后，由于该告警是锁存类型，State 中仍然保持激活。
-        用户在 App 上点击「清除告警」，App 发送 Reset 命令并将 Alarms 参数的 bit 1 置为 1，
-        设备收到后清除 State 中的 DrainError 位。
+        After a dishwasher drain fault (DrainError) is fixed, the alarm remains active in State because it is latched.
+        The user taps "Clear Alarm" in the app; the app sends the Reset command with bit 1 set in the Alarms parameter,
+        and the device clears the DrainError bit in State.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x01">ModifyEnabledAlarms —— 修改启用告警(0x01)</h3>
+  <h3 id="cmd-0x01">ModifyEnabledAlarms (0x01)</h3>
   <p>
-    修改告警掩码（Mask），控制哪些告警处于启用状态。只有在 Mask 中启用的告警才会被设备上报。
-    用户可以通过这个命令屏蔽不关心的告警类型。
+    Modifies the alarm mask (Mask), controlling which alarms are enabled. Only alarms enabled in the Mask are reported by the device.
+    Users can use this command to suppress alarm types they do not care about.
   </p>
   <div class="table-wrap">
     <table>
@@ -2387,19 +2387,19 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Mask</td>
           <td>bitmap32</td>
-          <td>新的告警掩码。每一位对应一种告警（见<a href="#alarm-bits">告警位定义</a>），置 1 表示启用该告警的上报</td>
+          <td>New alarm mask. Each bit corresponds to one alarm type (see <a href="#alarm-bits">Alarm Bit Definitions</a>); setting a bit to 1 enables reporting for that alarm</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">Mask 限制</div>
+    <div class="callout-title">Mask Constraints</div>
     <p>
-      写入的 Mask 值不能超出 <code>Supported</code> 属性的范围。
-      如果尝试启用设备不支持的告警位，命令会被拒绝。
-      例如设备 Supported = <code>0x07</code>（只支持前 3 种告警），
-      则 Mask 只能在 <code>0x00</code> ~ <code>0x07</code> 范围内设置。
+      The written Mask value must not exceed the range of the <code>Supported</code> attribute.
+      If you attempt to enable an alarm bit the device does not support, the command will be rejected.
+      For example, if the device's Supported = <code>0x07</code> (only the first 3 alarm types are supported),
+      then Mask can only be set in the range <code>0x00</code> ~ <code>0x07</code>.
     </p>
   </div>
 
@@ -2407,19 +2407,19 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        用户在设置页面取消勾选「门未关好」告警（DoorError, bit 2），
-        App 发送 ModifyEnabledAlarms 命令，将 Mask 中的 bit 2 清零。
-        之后即使门未关好，设备也不会上报 DoorError 告警。
+        The user unchecks the "Door not closed" alarm (DoorError, bit 2) in the settings page.
+        The app sends ModifyEnabledAlarms, clearing bit 2 in Mask.
+        Afterwards, even if the door is open, the device will not report a DoorError alarm.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h2 id="attributes">Attributes</h2>
-  <p>DishwasherAlarm Cluster 共有 4 个应用属性，全部为 bitmap32 类型。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+  <p>DishwasherAlarm Cluster has 4 application attributes, all of type bitmap32. Click an attribute ID below to jump to its description.</p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute Summary Table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -2436,40 +2436,40 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>Mask</td>
           <td>bitmap32</td>
-          <td>已启用的告警掩码</td>
-          <td class="col-optional">无</td>
+          <td>Enabled alarm mask</td>
+          <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>Latch</td>
           <td>bitmap32</td>
-          <td>需要手动复位的告警位</td>
+          <td>Alarm bits requiring manual reset</td>
           <td class="col-required">RESET</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
           <td>State</td>
           <td>bitmap32</td>
-          <td>当前激活的告警</td>
-          <td class="col-optional">无</td>
+          <td>Currently active alarms</td>
+          <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
           <td>Supported</td>
           <td>bitmap32</td>
-          <td>设备支持的告警位</td>
-          <td class="col-optional">无</td>
+          <td>Alarm bits supported by the device</td>
+          <td class="col-optional">None</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 属性逐条详解 ====== -->
-  <h3 id="attr-0x0000">Mask —— 告警掩码(0x0000)</h3>
+  <!-- ====== Attribute Details ====== -->
+  <h3 id="attr-0x0000">Mask (0x0000)</h3>
   <p>
-    指示哪些告警当前处于启用状态。只有 Mask 中对应位为 1 的告警，设备才会在 State 中上报。
-    用户可以通过 <code>ModifyEnabledAlarms</code> 命令修改此属性。
-    Mask 的每一位含义见<a href="#alarm-bits">告警位定义</a>。
+    Indicates which alarms are currently enabled. Only alarms whose corresponding bit is 1 in Mask will be reported in State by the device.
+    Users can modify this attribute via the <code>ModifyEnabledAlarms</code> command.
+    See <a href="#alarm-bits">Alarm Bit Definitions</a> for the meaning of each bit in Mask.
   </p>
   <div class="table-wrap">
     <table>
@@ -2479,19 +2479,19 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr>
           <td><code>0x0000</code></td>
-          <td>Mask（告警掩码）</td>
+          <td>Mask (Alarm Mask)</td>
           <td>bitmap32</td>
-          <td>每一位对应一种告警。<code>1</code> = 启用上报，<code>0</code> = 屏蔽。初始值通常等于 Supported（全部启用）</td>
+          <td>Each bit corresponds to one alarm type. <code>1</code> = reporting enabled, <code>0</code> = suppressed. Initial value typically equals Supported (all enabled)</td>
         </tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0001">Latch —— 锁存位图(0x0001)</h3>
+  <h3 id="attr-0x0001">Latch (0x0001)</h3>
   <p>
-    指示哪些告警是「锁存」类型 —— 即故障解除后告警不会自动清除，必须通过 <code>Reset</code> 命令手动复位。
-    此属性仅在设备支持 RESET 特性时存在。
+    Indicates which alarms are of the "latched" type -- meaning the alarm will not automatically clear after the fault is resolved and must be manually reset via the <code>Reset</code> command.
+    This attribute is only present when the device supports the RESET Feature.
   </p>
   <div class="table-wrap">
     <table>
@@ -2501,28 +2501,28 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr>
           <td><code>0x0001</code></td>
-          <td>Latch（锁存位图）</td>
+          <td>Latch (Latch Bitmap)</td>
           <td>bitmap32</td>
-          <td>每一位对应一种告警。<code>1</code> = 锁存（需手动复位），<code>0</code> = 自动清除。<strong>需要 RESET 特性</strong></td>
+          <td>Each bit corresponds to one alarm type. <code>1</code> = latched (requires manual reset), <code>0</code> = auto-clear. <strong>Requires RESET Feature</strong></td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">锁存 vs 自动清除</div>
+    <div class="callout-title">Latched vs Auto-Clear</div>
     <p>
-      锁存告警的典型用途：即使进水故障已经物理排除，设备仍然保持告警状态，
-      直到用户确认已处理。这避免了用户错过重要的故障事件。
-      自动清除的告警则在故障消失后立即恢复正常，适合临时性异常（如瞬时温度波动）。
+      Typical use of latched alarms: even after an inflow fault has been physically resolved, the device maintains the alarm state
+      until the user acknowledges it has been handled. This prevents users from missing important fault events.
+      Auto-clearing alarms return to normal immediately after the fault disappears, suitable for transient anomalies (e.g. momentary temperature fluctuations).
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0002">State —— 当前告警状态(0x0002)</h3>
+  <h3 id="attr-0x0002">State (0x0002)</h3>
   <p>
-    反映设备当前正在激活的告警。每一位对应一种告警类型，置 1 表示该告警当前处于激活状态。
-    这是控制器最常订阅的属性，用于实时监测设备故障。
+    Reflects the currently active alarms on the device. Each bit corresponds to an alarm type; set to 1 means that alarm is currently active.
+    This is the most commonly subscribed attribute for controllers, used for real-time fault monitoring.
   </p>
   <div class="table-wrap">
     <table>
@@ -2532,19 +2532,19 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr>
           <td><code>0x0002</code></td>
-          <td>State（当前告警状态）</td>
+          <td>State (Current Alarm State)</td>
           <td>bitmap32</td>
-          <td>每一位对应一种告警。<code>1</code> = 告警激活，<code>0</code> = 正常。值始终是 Mask 的子集（被屏蔽的告警不会出现在 State 中）</td>
+          <td>Each bit corresponds to one alarm type. <code>1</code> = alarm active, <code>0</code> = normal. Always a subset of Mask (suppressed alarms do not appear in State)</td>
         </tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0003">Supported —— 支持的告警位(0x0003)</h3>
+  <h3 id="attr-0x0003">Supported (0x0003)</h3>
   <p>
-    声明设备硬件层面支持哪些告警类型。这是一个只读属性，由设备固件决定。
-    Mask 和 State 的有效位不能超出 Supported 的范围。
+    Declares which alarm types the device hardware supports. This is a read-only attribute determined by device firmware.
+    Valid bits in Mask and State cannot exceed the range of Supported.
   </p>
   <div class="table-wrap">
     <table>
@@ -2554,63 +2554,63 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr>
           <td><code>0x0003</code></td>
-          <td>Supported（支持的告警位）</td>
+          <td>Supported (Supported Alarm Bits)</td>
           <td>bitmap32</td>
-          <td>每一位对应一种告警。<code>1</code> = 设备支持该告警。只读，不可写入</td>
+          <td>Each bit corresponds to one alarm type. <code>1</code> = device supports this alarm. Read-only</td>
         </tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 告警位定义 ====== -->
-  <h2 id="alarm-bits">告警位定义</h2>
+  <!-- ====== Alarm Bit Definitions ====== -->
+  <h2 id="alarm-bits">Alarm Bit Definitions</h2>
   <p>
-    Mask、Latch、State、Supported 四个属性共享同一套告警位定义。
-    每一位代表一种洗碗机可能出现的故障类型：
+    The Mask, Latch, State, and Supported attributes share the same alarm bit definitions.
+    Each bit represents a possible dishwasher fault type:
   </p>
 
   <div class="enum-cards">
     <div class="enum-card">
       <span class="enum-badge">Bit 0</span>
       <div>
-        <span class="enum-name">InflowError（进水异常）</span>
-        <span class="enum-desc">进水管路故障 —— 水压不足、进水阀卡住或供水中断</span>
+        <span class="enum-name">InflowError</span>
+        <span class="enum-desc">Water inflow fault — insufficient water pressure, stuck inlet valve, or supply interruption</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 1</span>
       <div>
-        <span class="enum-name">DrainError（排水异常）</span>
-        <span class="enum-desc">排水管路故障 —— 排水泵故障、管路堵塞或排水超时</span>
+        <span class="enum-name">DrainError</span>
+        <span class="enum-desc">Water drain fault — drain pump failure, clogged pipes, or drain timeout</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 2</span>
       <div>
-        <span class="enum-name">DoorError（门未关好）</span>
-        <span class="enum-desc">洗碗机门未完全关闭 —— 运行中门被打开或门锁故障</span>
+        <span class="enum-name">DoorError</span>
+        <span class="enum-desc">Door not closed — door opened during operation or door lock failure</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 3</span>
       <div>
-        <span class="enum-name">TempTooLow（温度过低）</span>
-        <span class="enum-desc">水温低于正常工作范围 —— 加热器故障或进水温度异常</span>
+        <span class="enum-name">TempTooLow</span>
+        <span class="enum-desc">Water temperature too low — heater failure or abnormal inlet water temperature</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 4</span>
       <div>
-        <span class="enum-name">TempTooHigh（温度过高）</span>
-        <span class="enum-desc">水温超出安全范围 —— 温控器失灵或加热器持续加热</span>
+        <span class="enum-name">TempTooHigh</span>
+        <span class="enum-desc">Water temperature too high — thermostat failure or continuous heater operation</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 5</span>
       <div>
-        <span class="enum-name">WaterLevelError（水位异常）</span>
-        <span class="enum-desc">水位超出正常范围 —— 可能是溢水风险或水位传感器故障</span>
+        <span class="enum-name">WaterLevelError</span>
+        <span class="enum-desc">Water level abnormal — potential overflow risk or water level sensor failure</span>
       </div>
     </div>
   </div>
@@ -2618,23 +2618,23 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">Bitmap Reading Example</div>
     <p>
-      State = <code>0x00000006</code>（二进制 <code>...000110</code>）
-      表示 bit 1（DrainError）和 bit 2（DoorError）同时处于激活状态。
-      应用层可以通过按位与操作逐一检查每种告警是否激活。
+      State = <code>0x00000006</code> (binary <code>...000110</code>)
+      means bit 1 (DrainError) and bit 2 (DoorError) are both active.
+      The application layer can check each alarm with bitwise AND operations.
     </p>
   </div>
 
-  <!-- ====== 事件（Events）====== -->
+  <!-- ====== Events ====== -->
   <h2 id="events">Events</h2>
   <p>
-    DishwasherAlarm Cluster 定义了一个 <code>Notify</code> 事件，在告警状态发生变化时触发。
-    控制器应当订阅此事件以实时获取告警变更通知。
+    DishwasherAlarm Cluster defines a <code>Notify</code> event, triggered when the alarm state changes.
+    Controllers should subscribe to this event for real-time alarm change notifications.
   </p>
 
-  <h3 id="event-notify">Notify —— 告警通知事件</h3>
+  <h3 id="event-notify">Notify Event</h3>
   <p>
-    当告警状态发生变化（告警激活或解除）时，设备会产生 Notify 事件。
-    事件携带变化时刻的完整快照，方便控制器精确掌握状态变更。
+    Triggered when the alarm state changes (alarm activated or cleared). The event carries a full snapshot
+    at the time of change, enabling controllers to precisely track state transitions.
   </p>
   <div class="table-wrap">
     <table>
@@ -2645,111 +2645,111 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Active</td>
           <td>bitmap32</td>
-          <td>本次变化中新激活的告警位（从 0 变为 1 的位）</td>
+          <td>Alarm bits newly activated in this change (bits changed from 0 to 1)</td>
         </tr>
         <tr>
           <td>Inactive</td>
           <td>bitmap32</td>
-          <td>本次变化中已解除的告警位（从 1 变为 0 的位）</td>
+          <td>Alarm bits cleared in this change (bits changed from 1 to 0)</td>
         </tr>
         <tr>
           <td>State</td>
           <td>bitmap32</td>
-          <td>变化后的完整告警状态（与属性 State 一致）</td>
+          <td>Complete alarm state after change (matches the State attribute)</td>
         </tr>
         <tr>
           <td>Mask</td>
           <td>bitmap32</td>
-          <td>变化时刻的告警掩码（与属性 Mask 一致）</td>
+          <td>Alarm mask at time of change (matches the Mask attribute)</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <details class="scenario">
-    <summary>事件示例</summary>
+    <summary>Event Examples</summary>
     <div class="scenario-content">
       <p>
-        洗碗机排水故障触发：设备产生 Notify 事件，Active = <code>0x02</code>（DrainError 新激活），
-        Inactive = <code>0x00</code>（无告警解除），State = <code>0x02</code>（当前只有排水告警），
-        Mask = <code>0x3F</code>（全部告警已启用）。
+        Dishwasher drain fault triggered: device fires a Notify event with Active = <code>0x02</code> (DrainError newly activated),
+        Inactive = <code>0x00</code> (no alarms cleared), State = <code>0x02</code> (only drain alarm active),
+        Mask = <code>0x3F</code> (all alarms enabled).
       </p>
       <p>
-        故障修复后用户发送 Reset：设备产生另一个 Notify 事件，Active = <code>0x00</code>，
-        Inactive = <code>0x02</code>（DrainError 已解除），State = <code>0x00</code>（无活跃告警），
-        Mask = <code>0x3F</code>。
+        After the fault is repaired and the user sends Reset: the device fires another Notify event with Active = <code>0x00</code>,
+        Inactive = <code>0x02</code> (DrainError cleared), State = <code>0x00</code> (no active alarms),
+        Mask = <code>0x3F</code>.
       </p>
     </div>
   </details>
 
-  <!-- ====== Feature 位图 ====== -->
+  <!-- ====== Feature Bitmap ====== -->
   <h2 id="features">Feature Bitmap</h2>
-  <p>DishwasherAlarm Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持哪些高级能力：</p>
+  <p>DishwasherAlarm Cluster declares advanced capabilities through <code>FeatureMap</code> (0xFFFC):</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">Bit 0</span>
       <div>
         <span class="enum-name">RESET</span>
-        <span class="enum-desc">支持告警复位 —— 启用 Reset 命令和 Latch 属性，允许手动复位锁存的告警</span>
+        <span class="enum-desc">Alarm reset support — enables the Reset command and Latch attribute, allowing manual reset of latched alarms</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">RESET 特性的影响</div>
+    <div class="callout-title">Impact of the RESET Feature</div>
     <p>
-      <strong>启用 RESET</strong>：设备提供 Latch 属性和 Reset 命令。某些关键告警（如进水、排水故障）
-      可以设置为锁存，确保用户不会错过。<br/>
-      <strong>不启用 RESET</strong>：所有告警都是自动清除的，故障消失后 State 自动归零。
-      适合不需要用户确认的简单设备。
+      <strong>With RESET enabled</strong>: The device provides the Latch attribute and Reset command. Certain critical alarms (e.g. inflow, drain faults)
+      can be set as latched, ensuring the user does not miss them.<br/>
+      <strong>Without RESET</strong>: All alarms are auto-clearing; State resets to zero automatically after the fault disappears.
+      Suitable for simple devices that do not require user acknowledgment.
     </p>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一台支持全部 6 种告警、启用了 RESET 特性的洗碗机，当前存在排水告警时的 Cluster 读取结果：</p>
+  <p>Read result of a dishwasher supporting all 6 alarm types with RESET Feature enabled, with a drain alarm currently active:</p>
 
   <pre><code>{
-  // --- 告警位图属性 ---
-  "0x0000": "0x0000003F",    // Mask = 0x3F（全部 6 种告警均已启用）
-  "0x0001": "0x00000003",    // Latch = 0x03（InflowError + DrainError 需手动复位）
-  "0x0002": "0x00000002",    // State = 0x02（当前 DrainError 告警激活）
-  "0x0003": "0x0000003F"     // Supported = 0x3F（设备支持全部 6 种告警位）
+  // --- Alarm Bitmap Attributes ---
+  "0x0000": "0x0000003F",    // Mask = 0x3F (all 6 alarms enabled)
+  "0x0001": "0x00000003",    // Latch = 0x03 (InflowError + DrainError require manual reset)
+  "0x0002": "0x00000002",    // State = 0x02 (DrainError alarm currently active)
+  "0x0003": "0x0000003F"     // Supported = 0x3F (device supports all 6 alarm bits)
 }</code></pre>
 
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      位图属性读取后，应用层需要逐位解析来确定各告警的状态。
-      建议先读 <code>Supported (0x0003)</code> 确认设备支持哪些告警位，
-      再结合 <code>Mask (0x0000)</code> 判断哪些已启用，
-      最后用 <code>State (0x0002)</code> 获取当前激活的告警。
-      三者的关系是：State 是 Mask 的子集，Mask 是 Supported 的子集。
+      After reading bitmap attributes, the application must parse each bit to determine alarm status.
+      It is recommended to first read <code>Supported (0x0003)</code> to confirm supported alarms,
+      then combine with <code>Mask (0x0000)</code> to determine which are enabled,
+      and finally use <code>State (0x0002)</code> to get currently active alarms.
+      The relationship: State is a subset of Mask, which is a subset of Supported.
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
-  <h3 id="scenario-monitoring">场景 1：告警监控与处理</h3>
+  <h3 id="scenario-monitoring">Scenario 1: Alarm Monitoring and Handling</h3>
   <ol>
-    <li>订阅 <code>Notify</code> 事件，实时接收告警状态变化</li>
-    <li>收到事件后，检查 <code>Active</code> 字段确定哪些新告警被触发</li>
-    <li>在 App 上显示对应的告警信息（如「排水异常」、「门未关好」等）</li>
-    <li>读取 <code>Latch (0x0001)</code>，判断该告警是否需要手动复位</li>
-    <li>如果是锁存告警 —— 用户处理故障后，在 App 上点击「清除告警」，发送 <code>Reset (0x00)</code> 命令</li>
-    <li>如果是自动清除告警 —— 等待故障自行消除即可，State 会自动更新</li>
+    <li>Subscribe to the <code>Notify</code> event for real-time alarm state changes</li>
+    <li>On receiving the event, check the <code>Active</code> field to identify newly triggered alarms</li>
+    <li>Display the corresponding alarm information in the app (e.g., "Drain Error", "Door Not Closed")</li>
+    <li>Read <code>Latch (0x0001)</code> to determine whether the alarm requires manual reset</li>
+    <li>If latched — after the user resolves the fault, tap "Clear Alarm" in the app and send the <code>Reset (0x00)</code> command</li>
+    <li>If auto-clear — wait for the fault to resolve on its own; State updates automatically</li>
   </ol>
 
-  <h3 id="scenario-config">场景 2：用户自定义告警配置</h3>
+  <h3 id="scenario-config">Scenario 2: User-Defined Alarm Configuration</h3>
   <ol>
-    <li>读取 <code>Supported (0x0003)</code>，获取设备支持的全部告警类型</li>
-    <li>读取 <code>Mask (0x0000)</code>，获取当前已启用的告警</li>
-    <li>在设置页面展示开关列表，让用户勾选/取消关心的告警类型</li>
-    <li>用户修改后，发送 <code>ModifyEnabledAlarms (0x01)</code> 写入新的 Mask 值</li>
-    <li>例如：用户只关心进水和排水告警，发送 Mask = <code>0x03</code>（bit 0 + bit 1）</li>
-    <li>之后设备只会上报 InflowError 和 DrainError，其他告警不再触发通知</li>
+    <li>Read <code>Supported (0x0003)</code> to get all alarm types supported by the device</li>
+    <li>Read <code>Mask (0x0000)</code> to get the currently enabled alarms</li>
+    <li>Display a toggle list in the settings page for the user to check/uncheck alarm types</li>
+    <li>After the user makes changes, send <code>ModifyEnabledAlarms (0x01)</code> with the new Mask value</li>
+    <li>For example: the user only wants inflow and drain alarms; send Mask = <code>0x03</code> (bit 0 + bit 1)</li>
+    <li>Afterwards, the device only reports InflowError and DrainError; other alarms no longer trigger notifications</li>
   </ol>
 
   <script>
@@ -2788,37 +2788,37 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'refrigerator-mode': {
     title: 'RefrigeratorAndTemperatureControlledCabinetMode Cluster (0x0052)',
-    description: 'Matter RefrigeratorAndTemperatureControlledCabinetMode Cluster(0x0052)完整参考 — 基于 ModeBase 派生，支持 RapidCool/RapidFreeze 模式切换，多 Endpoint 架构下冷藏室与冷冻室独立控制。',
+    description: 'Complete reference for the Matter RefrigeratorAndTemperatureControlledCabinetMode Cluster (0x0052) — derived from ModeBase, supports RapidCool/RapidFreeze mode switching, with independent refrigerator and freezer compartment control in multi-Endpoint architecture.',
     prev: undefined,
     next: undefined,
     content: `<h1>RefrigeratorAndTemperatureControlledCabinetMode Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x0052</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 冷藏室 / 冷冻室功能端点（可能有多个）
+    <strong>Endpoint</strong>: Refrigerator/freezer compartment endpoints (may have multiple)
   </p>
   <p>
-    RefrigeratorAndTemperatureControlledCabinetMode 是 Matter 中用于冰箱模式控制的 Cluster，派生自 ModeBase Cluster。
-    它允许用户切换冰箱各温区的工作模式，例如启用急速制冷（RapidCool）或急速冷冻（RapidFreeze）。
-    每种模式通过语义标签（ModeTag）描述其用途，使不同厂商的冰箱能以统一方式被控制。
+    RefrigeratorAndTemperatureControlledCabinetMode is a Cluster in Matter for refrigerator mode control, derived from ModeBase Cluster.
+    It allows users to switch the operating mode of each temperature zone in the refrigerator, such as enabling RapidCool or RapidFreeze.
+    Each mode uses semantic tags (ModeTag) to describe its purpose, enabling standardized control across different manufacturers' refrigerators.
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">派生自 ModeBase</div>
+    <div class="callout-title">Derived from ModeBase</div>
     <p>
-      RefrigeratorAndTemperatureControlledCabinetMode 继承了 ModeBase Cluster 的全部命令和属性结构，
-      并定义了冰箱专属的 ModeTag 值（0x4000 ~ 0x4001）。
-      如果你已经熟悉 ModeBase 的工作方式，这个 Cluster 的使用方式完全一致，只是模式标签不同。
+      RefrigeratorAndTemperatureControlledCabinetMode inherits all commands and attribute structures from the ModeBase Cluster,
+      and defines refrigerator-specific ModeTag values (0x4000 ~ 0x4001).
+      If you are already familiar with how ModeBase works, this Cluster operates exactly the same way -- only the mode tags differ.
     </p>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">多 Endpoint 架构</div>
+    <div class="callout-title">Multi-Endpoint Architecture</div>
     <p>
-      一台冰箱设备通常包含多个温控区域（冷藏室、冷冻室），每个区域对应一个独立的 Endpoint。
-      每个 Endpoint 上都有自己的 RefrigeratorAndTemperatureControlledCabinetMode Cluster 实例，
-      各自维护独立的 SupportedModes 和 CurrentMode。
-      例如冷藏室 Endpoint 可能支持 RapidCool，冷冻室 Endpoint 则支持 RapidFreeze。
-      操作时需先确认目标 Endpoint，避免对错误的温区发送命令。
+      A refrigerator device typically contains multiple temperature-controlled zones (refrigerator compartment, freezer compartment), each corresponding to an independent Endpoint.
+      Each Endpoint has its own instance of the RefrigeratorAndTemperatureControlledCabinetMode Cluster,
+      each maintaining independent SupportedModes and CurrentMode.
+      For example, the refrigerator compartment Endpoint may support RapidCool, while the freezer compartment Endpoint supports RapidFreeze.
+      When operating, first confirm the target Endpoint to avoid sending commands to the wrong temperature zone.
     </p>
   </div>
 
@@ -2828,9 +2828,9 @@ export const clusters: Record<string, ClusterContent> = {
     <span class="nav-sep">|</span>
     <a href="#attributes">Attributes</a>
     <span class="nav-sep">|</span>
-    <a href="#mode-tags">ModeTag 标签</a>
+    <a href="#mode-tags">ModeTag Tags</a>
     <span class="nav-sep">|</span>
-    <a href="#status-codes">状态码</a>
+    <a href="#status-codes">Status Codes</a>
     <span class="nav-sep">|</span>
     <a href="#features">Feature Bitmap</a>
     <span class="nav-sep">|</span>
@@ -2839,11 +2839,11 @@ export const clusters: Record<string, ClusterContent> = {
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    RefrigeratorAndTemperatureControlledCabinetMode Cluster 只有一个命令 ChangeToMode，用于切换冰箱模式。
-    命令执行后设备返回 ChangeToModeResponse，告知切换是否成功。
+    The RefrigeratorAndTemperatureControlledCabinetMode Cluster has only one command, ChangeToMode, for switching refrigerator modes.
+    After execution, the device returns a ChangeToModeResponse indicating whether the switch was successful.
   </p>
 
   <div class="table-wrap">
@@ -2861,26 +2861,26 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>ChangeToMode</td>
           <td>Client &rarr; Server</td>
-          <td>切换到指定冰箱模式</td>
+          <td>Switch to a specified refrigerator mode</td>
         </tr>
         <tr>
           <td><code>0x01</code></td>
           <td>ChangeToModeResponse</td>
           <td>Server &rarr; Client</td>
-          <td>切换结果响应（Status + StatusText）</td>
+          <td>Mode switch response (Status + StatusText)</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
-  <h3 id="cmd-0x00">ChangeToMode -- 切换模式(0x00)</h3>
+  <!-- ====== Command Details ====== -->
+  <h3 id="cmd-0x00">ChangeToMode -- Switch Mode (0x00)</h3>
   <p>
-    请求设备切换到指定的冰箱模式。NewMode 的值必须是 SupportedModes 列表中某个 ModeOptionStruct 的 Mode 字段。
-    设备收到后返回 ChangeToModeResponse。注意需要向正确的 Endpoint 发送命令 -- 冷藏室和冷冻室是独立的。
+    Request the device to switch to a specified refrigerator mode. The NewMode value must be the Mode field of a ModeOptionStruct in the SupportedModes list.
+    The device returns a ChangeToModeResponse upon receipt. Note that commands must be sent to the correct Endpoint -- the refrigerator and freezer compartments are independent.
   </p>
 
-  <h4>请求参数</h4>
+  <h4>Request Parameters</h4>
   <div class="table-wrap">
     <table>
       <thead>
@@ -2890,13 +2890,13 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>NewMode</td>
           <td>uint8</td>
-          <td>目标模式编号，必须存在于该 Endpoint 的 SupportedModes 列表中</td>
+          <td>Target mode number; must exist in the SupportedModes list of that Endpoint</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <h4>响应字段(ChangeToModeResponse)</h4>
+  <h4>Response Fields (ChangeToModeResponse)</h4>
   <div class="table-wrap">
     <table>
       <thead>
@@ -2906,12 +2906,12 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Status</td>
           <td>enum8</td>
-          <td>操作结果状态码（见<a href="#status-codes">状态码</a>）</td>
+          <td>Operation result status code (see <a href="#status-codes">Status Codes</a>)</td>
         </tr>
         <tr>
           <td>StatusText</td>
-          <td>string（可选）</td>
-          <td>人类可读的状态描述，失败时提供原因</td>
+          <td>string (optional)</td>
+          <td>Human-readable status description; provides the reason on failure</td>
         </tr>
       </tbody>
     </table>
@@ -2921,17 +2921,17 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        用户在 App 上对冷冻室启用「急速冷冻」模式，App 向冷冻室 Endpoint 发送 ChangeToMode（NewMode = 1）。
-        冰箱返回 ChangeToModeResponse（Status = 0x00, Success），该 Endpoint 的 CurrentMode 更新为 1。
-        如果冰箱当前状态不允许切换（例如正在除霜），会返回 GenericFailure 并在 StatusText 中说明原因。
+        The user enables "RapidFreeze" mode for the freezer in the app. The app sends ChangeToMode (NewMode = 1) to the freezer Endpoint.
+        The refrigerator returns ChangeToModeResponse (Status = 0x00, Success), and that Endpoint's CurrentMode updates to 1.
+        If the refrigerator's current state does not allow switching (e.g. currently defrosting), it returns GenericFailure with the reason in StatusText.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h2 id="attributes">Attributes</h2>
-  <p>RefrigeratorAndTemperatureControlledCabinetMode Cluster 继承 ModeBase 的 4 个属性。每个 Endpoint 各自维护一份。</p>
+  <p>The RefrigeratorAndTemperatureControlledCabinetMode Cluster inherits 4 attributes from ModeBase. Each Endpoint maintains its own copy.</p>
 
   <div class="table-wrap">
     <table>
@@ -2948,34 +2948,34 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>SupportedModes</td>
           <td>list&lt;ModeOptionStruct&gt;</td>
-          <td>该温区支持的所有工作模式</td>
+          <td>All operating modes supported by this temperature zone</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>CurrentMode</td>
           <td>uint8</td>
-          <td>当前选中的模式</td>
+          <td>Currently selected mode</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
           <td>StartUpMode</td>
           <td>uint8 / null</td>
-          <td>设备启动时的默认模式</td>
+          <td>Default mode on device startup</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
           <td>OnMode</td>
           <td>uint8 / null</td>
-          <td>设备开机时自动切换到的模式</td>
+          <td>Mode automatically applied when device turns on</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- 属性逐个说明 -->
-  <h3 id="attr-0x0000">SupportedModes -- 支持的模式列表(0x0000)</h3>
+  <!-- Attribute Details -->
+  <h3 id="attr-0x0000">SupportedModes -- Supported Mode List (0x0000)</h3>
   <p>
-    该 Endpoint（温区）支持的全部工作模式，每个元素是一个 ModeOptionStruct：
+    All operating modes supported by this Endpoint (temperature zone). Each element is a ModeOptionStruct:
   </p>
   <div class="table-wrap">
     <table>
@@ -2986,83 +2986,83 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Label</td>
           <td>string</td>
-          <td>模式名称，供人类阅读（如 "Normal"、"Rapid Cool"）</td>
+          <td>Mode name for human reading (e.g. "Normal", "Rapid Cool")</td>
         </tr>
         <tr>
           <td>Mode</td>
           <td>uint8</td>
-          <td>模式编号，在列表中唯一，用于 ChangeToMode 命令</td>
+          <td>Mode number, unique in the list, used for the ChangeToMode command</td>
         </tr>
         <tr>
           <td>ModeTags</td>
           <td>list&lt;ModeTagStruct&gt;</td>
-          <td>语义标签列表，描述模式的用途（见<a href="#mode-tags">ModeTag 标签</a>）</td>
+          <td>List of semantic tags describing the mode's purpose (see <a href="#mode-tags">ModeTag Tags</a>)</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">不同 Endpoint 的 SupportedModes 可能不同</div>
+    <div class="callout-title">SupportedModes May Differ Across Endpoints</div>
     <p>
-      冷藏室 Endpoint 可能支持 RapidCool 模式，而冷冻室 Endpoint 支持 RapidFreeze 模式。
-      App 应分别读取每个 Endpoint 的 SupportedModes，独立展示各温区的可用模式列表。
+      The refrigerator compartment Endpoint may support the RapidCool mode, while the freezer compartment Endpoint supports the RapidFreeze mode.
+      Apps should read each Endpoint's SupportedModes separately and display available mode lists for each temperature zone independently.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0001">CurrentMode -- 当前模式(0x0001)</h3>
+  <h3 id="attr-0x0001">CurrentMode -- Current Mode (0x0001)</h3>
   <p>
-    当前选中的工作模式编号。值必须是 SupportedModes 中某个 ModeOptionStruct 的 Mode 字段。
-    通过 ChangeToMode 命令修改。可订阅此属性获取模式变更通知。
+    The currently selected operating mode number. The value must be the Mode field of a ModeOptionStruct in SupportedModes.
+    Modified via the ChangeToMode command. Subscribe to this attribute to receive mode change notifications.
   </p>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0002">StartUpMode -- 启动模式(0x0002)</h3>
+  <h3 id="attr-0x0002">StartUpMode -- Startup Mode (0x0002)</h3>
   <p>
-    设备上电或重启后的初始模式。Nullable -- 值为 <code>null</code> 时表示保持上次断电前的模式。
-    设置具体值时，该值必须存在于 SupportedModes 列表中。
+    The initial mode after the device powers on or restarts. Nullable -- when <code>null</code>, the device retains the mode from before power loss.
+    When setting a specific value, it must exist in the SupportedModes list.
   </p>
 
   <div class="callout callout-tip">
-    <div class="callout-title">冰箱场景下的建议</div>
+    <div class="callout-title">Recommendations for Refrigerator Use Cases</div>
     <p>
-      冰箱断电恢复后，通常应回到普通模式而非继续急速制冷/冷冻。
-      建议将 StartUpMode 设为普通模式的编号（如 0），避免断电恢复后压缩机长时间高功率运行。
+      After power loss recovery, a refrigerator should typically return to normal mode rather than continuing RapidCool/RapidFreeze.
+      It is recommended to set StartUpMode to the normal mode number (e.g. 0) to avoid the compressor running at high power for extended periods after power recovery.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0003">OnMode -- 开机模式(0x0003)</h3>
+  <h3 id="attr-0x0003">OnMode -- Power-On Mode (0x0003)</h3>
   <p>
-    当设备从 Off 切换到 On 时自动应用的模式。Nullable -- 值为 <code>null</code> 时不覆盖，保持 CurrentMode 不变。
-    如果 OnMode 有值，每次开机都会将 CurrentMode 强制设为该值，忽略 StartUpMode 的设置。
+    The mode automatically applied when the device switches from Off to On. Nullable -- when <code>null</code>, no override occurs and CurrentMode remains unchanged.
+    If OnMode has a value, every power-on will force CurrentMode to that value, ignoring the StartUpMode setting.
   </p>
 
   <div class="callout callout-warning">
-    <div class="callout-title">OnMode 与 StartUpMode 的优先级</div>
+    <div class="callout-title">Priority of OnMode vs StartUpMode</div>
     <p>
-      如果 OnMode 不为 null，它的优先级高于 StartUpMode。
-      设备上电流程：先应用 StartUpMode（如果有），再在 Off &rarr; On 时应用 OnMode 覆盖。
-      实际效果是开机后始终使用 OnMode 指定的模式。
+      If OnMode is not null, it takes priority over StartUpMode.
+      Device power-on sequence: StartUpMode is applied first (if set), then OnMode overrides when transitioning from Off &rarr; On.
+      The practical effect is that the device always uses the mode specified by OnMode after powering on.
     </p>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">DEPONOFF 特性与 OnMode</div>
+    <div class="callout-title">DEPONOFF Feature and OnMode</div>
     <p>
-      OnMode 属性仅在设备支持 DEPONOFF 特性时才存在。
-      该特性表示此 Cluster 依赖同一 Endpoint 上的 OnOff Cluster，
-      当 OnOff 状态从 Off 变为 On 时，会自动将 CurrentMode 设为 OnMode 指定的值。
+      The OnMode attribute is only present when the device supports the DEPONOFF feature.
+      This feature indicates that this Cluster depends on the OnOff Cluster on the same Endpoint,
+      and when the OnOff state transitions from Off to On, CurrentMode is automatically set to the value specified by OnMode.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== ModeTag 语义标签 ====== -->
-  <h2 id="mode-tags">ModeTag 语义标签</h2>
+  <!-- ====== ModeTag Semantic Tags ====== -->
+  <h2 id="mode-tags">ModeTag Semantic Tags</h2>
   <p>
-    RefrigeratorAndTemperatureControlledCabinetMode 定义了 2 个专属 ModeTag 值，用于标准化描述冰箱工作模式。
-    App 应根据这些标签识别模式用途，而不是依赖厂商自定义的 Label 文字。
+    RefrigeratorAndTemperatureControlledCabinetMode defines 2 dedicated ModeTag values for standardized description of refrigerator operating modes.
+    Apps should identify mode purposes based on these tags rather than relying on vendor-defined Label text.
   </p>
 
   <div class="enum-cards enum-cards-row">
@@ -3070,91 +3070,91 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">0x4000</span>
       <div>
         <span class="enum-name">RapidCool</span>
-        <span class="enum-desc">急速制冷 -- 快速降低冷藏室温度，适合大量食材刚放入时使用</span>
+        <span class="enum-desc">Rapid cool -- rapidly lowers the refrigerator compartment temperature, suitable for when a large quantity of food has just been placed inside</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x4001</span>
       <div>
         <span class="enum-name">RapidFreeze</span>
-        <span class="enum-desc">急速冷冻 -- 快速将冷冻室降至极低温度，适合快速冻结新鲜食材</span>
+        <span class="enum-desc">Rapid freeze -- rapidly lowers the freezer compartment to extremely low temperatures, suitable for quickly freezing fresh food</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">ModeTag 与 Endpoint 的对应关系</div>
+    <div class="callout-title">Mapping Between ModeTag and Endpoints</div>
     <p>
-      通常 RapidCool 出现在冷藏室 Endpoint 的 SupportedModes 中，
-      RapidFreeze 出现在冷冻室 Endpoint 的 SupportedModes 中。
-      但规范并不强制这种对应关系 -- 某些高端冰箱可能在同一温区同时支持两种标签。
-      App 应始终以实际读取到的 SupportedModes 为准。
+      Typically RapidCool appears in the SupportedModes of the refrigerator compartment Endpoint,
+      and RapidFreeze appears in the SupportedModes of the freezer compartment Endpoint.
+      However, the specification does not enforce this mapping -- some high-end refrigerators may support both tags in the same temperature zone.
+      Apps should always rely on the actual SupportedModes read from the device.
     </p>
   </div>
 
-  <!-- ====== 状态码 ====== -->
+  <!-- ====== Status Codes ====== -->
   <h2 id="status-codes">Status Codes</h2>
-  <p>ChangeToModeResponse 中 Status 字段的可能取值：</p>
+  <p>Possible values of the Status field in ChangeToModeResponse:</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0x00</span>
       <div>
         <span class="enum-name">Success</span>
-        <span class="enum-desc">模式切换成功</span>
+        <span class="enum-desc">Mode switch successful</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x01</span>
       <div>
         <span class="enum-name">UnsupportedMode</span>
-        <span class="enum-desc">请求的模式编号不存在于 SupportedModes 中</span>
+        <span class="enum-desc">The requested mode number does not exist in SupportedModes</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x02</span>
       <div>
         <span class="enum-name">GenericFailure</span>
-        <span class="enum-desc">通用失败 -- 设备当前状态不允许切换（如正在除霜）</span>
+        <span class="enum-desc">Generic failure -- the device's current state does not allow switching (e.g. currently defrosting)</span>
       </div>
     </div>
   </div>
 
-  <!-- ====== Feature 位图 ====== -->
+  <!-- ====== Feature Bitmap ====== -->
   <h2 id="features">Feature Bitmap</h2>
-  <p>RefrigeratorAndTemperatureControlledCabinetMode Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持的特性：</p>
+  <p>The RefrigeratorAndTemperatureControlledCabinetMode Cluster declares supported features via <code>FeatureMap</code> (0xFFFC):</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">Bit 0</span>
       <div>
-        <span class="enum-name">DEPONOFF（OnOff 依赖）</span>
-        <span class="enum-desc">Cluster 依赖同一 Endpoint 上的 OnOff Cluster，支持通过 OnMode 属性在开机时自动切换模式</span>
+        <span class="enum-name">DEPONOFF (OnOff Dependency)</span>
+        <span class="enum-desc">The Cluster depends on the OnOff Cluster on the same Endpoint, supporting automatic mode switching via the OnMode attribute on power-on</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">DEPONOFF 的实际意义</div>
+    <div class="callout-title">Practical Significance of DEPONOFF</div>
     <p>
-      大多数冰箱不会频繁开关机，因此 DEPONOFF 特性在冰箱场景下使用较少。
-      但如果冰箱的温区可以独立开关（例如变温室可在冷藏/冷冻/关闭之间切换），
-      启用 DEPONOFF 后可通过 OnMode 属性在温区重新开启时自动恢复到指定模式。
+      Most refrigerators are not frequently powered on and off, so the DEPONOFF feature is rarely used in refrigerator scenarios.
+      However, if the refrigerator's temperature zones can be independently toggled (e.g. a convertible compartment can switch between refrigeration/freezing/off),
+      enabling DEPONOFF allows using the OnMode attribute to automatically restore the specified mode when the zone is turned back on.
     </p>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一台双温区冰箱的两个 Endpoint 分别读取到的 Cluster 数据：</p>
+  <p>Cluster data read from two Endpoints of a dual-zone refrigerator:</p>
 
-  <h3>冷藏室 Endpoint</h3>
+  <h3>Refrigerator Compartment Endpoint</h3>
   <pre><code>{
-  // --- 冷藏室 Endpoint 的模式列表 ---
+  // --- Refrigerator Compartment Endpoint Modes ---
   "0x0000": [                    // SupportedModes
     {
       "Label": "Normal",
       "Mode": 0,
-      "ModeTags": []              // 普通模式，无特殊标签
+      "ModeTags": []              // Normal mode, no special tags
     },
     {
       "Label": "Rapid Cool",
@@ -3163,17 +3163,17 @@ export const clusters: Record<string, ClusterContent> = {
     }
   ],
 
-  // --- 当前模式 ---
+  // --- Current mode ---
   "0x0001": 0,                   // CurrentMode = 0（Normal）
 
-  // --- 启动与开机模式 ---
-  "0x0002": null,                // StartUpMode = null（保持上次模式）
-  "0x0003": null                 // OnMode = null（不覆盖，保持 CurrentMode）
+  // --- Startup and power-on modes ---
+  "0x0002": null,                // StartUpMode = null (retain previous mode)
+  "0x0003": null                 // OnMode = null (no override, keep CurrentMode)
 }</code></pre>
 
-  <h3>冷冻室 Endpoint</h3>
+  <h3>Freezer Compartment Endpoint</h3>
   <pre><code>{
-  // --- 冷冻室 Endpoint 的模式列表 ---
+  // --- Freezer Compartment Endpoint Modes ---
   "0x0000": [                    // SupportedModes
     {
       "Label": "Normal",
@@ -3187,67 +3187,67 @@ export const clusters: Record<string, ClusterContent> = {
     }
   ],
 
-  // --- 当前模式 ---
-  "0x0001": 1,                   // CurrentMode = 1（Rapid Freeze 急冻中）
+  // --- Current mode ---
+  "0x0001": 1,                   // CurrentMode = 1 (Rapid Freeze active)
 
-  // --- 启动与开机模式 ---
-  "0x0002": 0,                   // StartUpMode = 0（上电后恢复普通模式）
-  "0x0003": null                 // OnMode = null（不覆盖）
+  // --- Startup and power-on modes ---
+  "0x0002": 0,                   // StartUpMode = 0 (restore Normal on power-up)
+  "0x0003": null                 // OnMode = null (no override)
 }</code></pre>
 
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      同一台冰箱的不同 Endpoint 上，SupportedModes 的内容和编号可以完全不同。
-      App 展示模式列表时应针对每个 Endpoint 独立读取 SupportedModes，不要假设各温区的模式列表相同。
-      使用 ModeTag 值判断模式类型，而不是比较 Label 字符串或 Mode 编号。
+      SupportedModes content and numbering can be completely different across Endpoints on the same refrigerator.
+      The app should read SupportedModes independently for each Endpoint; do not assume zone mode lists are identical.
+      Use ModeTag values to determine mode types rather than comparing Label strings or Mode numbers.
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
-  <h3 id="scenario-rapid-cool">场景 1：大量食材入库后启用急速制冷</h3>
+  <h3 id="scenario-rapid-cool">Scenario 1: Enable Rapid Cool After Loading Groceries</h3>
   <details class="scenario">
-    <summary>操作步骤与说明</summary>
+    <summary>Steps and Details</summary>
     <div class="scenario-content">
-      <p><strong>场景</strong>：用户采购大量食材回家，需要快速降低冷藏室温度以保持食材新鲜。</p>
+      <p><strong>Scenario</strong>: The user has just loaded a large amount of groceries and needs to quickly lower the refrigerator temperature to keep food fresh.</p>
       <ol>
-        <li>通过 Descriptor Cluster 确认冰箱的 Endpoint 结构，找到冷藏室对应的 Endpoint</li>
-        <li>读取冷藏室 Endpoint 的 <code>SupportedModes (0x0000)</code>，找到带有 RapidCool（0x4000）ModeTag 的模式条目</li>
-        <li>发送 <code>ChangeToMode (0x00)</code>，NewMode 填入 RapidCool 模式的 Mode 编号</li>
-        <li>检查 ChangeToModeResponse 的 Status 是否为 Success</li>
-        <li>订阅 <code>CurrentMode (0x0001)</code>，在用户界面显示当前处于急速制冷状态</li>
-        <li>急速制冷结束后（设备自动或用户手动），再次发送 ChangeToMode 切回普通模式</li>
+        <li>Use the Descriptor Cluster to confirm the refrigerator's Endpoint structure and find the refrigerator compartment Endpoint</li>
+        <li>Read the refrigerator Endpoint's <code>SupportedModes (0x0000)</code> and find the mode entry with the RapidCool (0x4000) ModeTag</li>
+        <li>Send <code>ChangeToMode (0x00)</code> with NewMode set to the RapidCool Mode number</li>
+        <li>Check whether the ChangeToModeResponse Status is Success</li>
+        <li>Subscribe to <code>CurrentMode (0x0001)</code> and show Rapid Cool status in the UI</li>
+        <li>After Rapid Cool finishes (automatically or manually), send ChangeToMode again to return to Normal mode</li>
       </ol>
       <p>
-        <strong>注意</strong>：部分冰箱会在急速制冷达到目标温度后自动回退到普通模式，
-        App 应通过订阅 CurrentMode 感知这种自动切换，及时更新界面状态。
+        <strong>Note</strong>: Some refrigerators automatically revert to Normal mode once the target temperature is reached.
+        The app should detect this by subscribing to CurrentMode and updating the UI accordingly.
       </p>
     </div>
   </details>
 
-  <h3 id="scenario-multi-endpoint">场景 2：多温区独立控制</h3>
+  <h3 id="scenario-multi-endpoint">Scenario 2: Independent Multi-Zone Control</h3>
   <details class="scenario">
-    <summary>操作步骤与说明</summary>
+    <summary>Steps and Details</summary>
     <div class="scenario-content">
-      <p><strong>场景</strong>：用户想对冷冻室启用急速冷冻，同时保持冷藏室的普通模式不变。</p>
+      <p><strong>Scenario</strong>: The user wants to enable Rapid Freeze in the freezer while keeping the refrigerator compartment in Normal mode.</p>
       <ol>
-        <li>读取设备的 Descriptor Cluster（Endpoint 0），获取所有 Endpoint 及其 Device Type</li>
-        <li>识别冷藏室 Endpoint（Device Type: Refrigerator，0x0070）和冷冻室 Endpoint（Device Type: Temperature Controlled Cabinet，0x0071）</li>
-        <li>分别读取两个 Endpoint 的 <code>SupportedModes (0x0000)</code>：
+        <li>Read the Descriptor Cluster (Endpoint 0) to get all Endpoints and their Device Types</li>
+        <li>Identify the refrigerator Endpoint (Device Type: Refrigerator, 0x0070) and freezer Endpoint (Device Type: Temperature Controlled Cabinet, 0x0071)</li>
+        <li>Read <code>SupportedModes (0x0000)</code> from both Endpoints:
           <ul>
-            <li>冷藏室：可能包含 Normal 和 RapidCool</li>
-            <li>冷冻室：可能包含 Normal 和 RapidFreeze</li>
+            <li>Refrigerator: may contain Normal and RapidCool</li>
+            <li>Freezer: may contain Normal and RapidFreeze</li>
           </ul>
         </li>
-        <li>向冷冻室 Endpoint 发送 <code>ChangeToMode</code>，切换到 RapidFreeze 模式</li>
-        <li>冷藏室不做操作，保持当前模式</li>
-        <li>App 界面上分区展示两个温区的当前模式，各自独立控制</li>
+        <li>Send <code>ChangeToMode</code> to the freezer Endpoint to switch to RapidFreeze mode</li>
+        <li>Do not change the refrigerator compartment; keep its current mode</li>
+        <li>Display both zones' current modes separately in the app, with independent controls for each</li>
       </ol>
       <p>
-        <strong>关键点</strong>：冷藏室和冷冻室的 Cluster 实例是完全独立的，
-        对一个 Endpoint 的操作不会影响另一个。App 设计时应体现这种分区控制的概念。
+        <strong>Key point</strong>: The refrigerator and freezer Cluster instances are completely independent;
+        operating on one Endpoint does not affect the other. The app design should reflect this zoned control concept.
       </p>
     </div>
   </details>
@@ -3268,36 +3268,36 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'microwave-oven-mode': {
     title: 'MicrowaveOvenMode Cluster (0x005E)',
-    description: 'Matter MicrowaveOvenMode Cluster(0x005E)完整参考 — 基于 ModeBase 派生，支持 Normal/Defrost 模式选择，ChangeToMode 命令、ModeTag 语义标签及与 MicrowaveOvenControl 的协作关系。',
+    description: 'Complete reference for the Matter MicrowaveOvenMode Cluster (0x005E) — derived from ModeBase, supports Normal/Defrost mode selection, ChangeToMode command, ModeTag semantic tags, and coordination with MicrowaveOvenControl.',
     prev: undefined,
     next: undefined,
     content: `<h1>MicrowaveOvenMode Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x005E</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 微波炉功能端点（Microwave Oven Endpoint）
+    <strong>Endpoint</strong>: Microwave Oven Endpoint
   </p>
   <p>
-    MicrowaveOvenMode 是 Matter 中用于微波炉模式选择的 Cluster，派生自 ModeBase Cluster。
-    它允许用户在微波炉支持的多种加热模式之间切换，例如常规加热和解冻。
-    每种模式通过语义标签（ModeTag）描述其用途，使不同厂商的微波炉能以统一方式被控制。
+    MicrowaveOvenMode is a Cluster for microwave oven mode selection in Matter, derived from the ModeBase Cluster.
+    It allows users to switch between multiple heating modes, such as Normal heating and Defrost.
+    Each mode is described by semantic tags (ModeTag), enabling standardized control across manufacturers.
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">派生自 ModeBase</div>
+    <div class="callout-title">Derived from ModeBase</div>
     <p>
-      MicrowaveOvenMode 继承了 ModeBase Cluster 的全部命令和属性结构，
-      并定义了微波炉专属的 ModeTag 值（0x4000 ~ 0x4001）。
-      如果你已经熟悉 ModeBase 的工作方式，这个 Cluster 的使用方式完全一致，只是模式标签不同。
+      MicrowaveOvenMode inherits all command and attribute structures from the ModeBase Cluster,
+      and defines microwave oven-specific ModeTag values (0x4000 ~ 0x4001).
+      If you are already familiar with how ModeBase works, this Cluster operates exactly the same way -- only the mode tags differ.
     </p>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">与 MicrowaveOvenControl 协作</div>
+    <div class="callout-title">Coordination with MicrowaveOvenControl</div>
     <p>
-      MicrowaveOvenMode 只负责「选择加热模式」，不控制具体的烹饪参数。
-      微波炉的完整操作需要配合 <strong>MicrowaveOvenControl（0x005F）</strong> Cluster，
-      后者负责设置烹饪时间、功率等级、启动/停止加热等。
-      典型流程是：先用 MicrowaveOvenMode 选择模式，再用 MicrowaveOvenControl 设置参数并启动。
+      MicrowaveOvenMode only handles "selecting the heating mode" — it does not control cooking parameters.
+      Full microwave operation requires the <strong>MicrowaveOvenControl (0x005F)</strong> Cluster,
+      which handles cooking time, power level settings, and start/stop control.
+      Typical flow: select mode with MicrowaveOvenMode, then set parameters and start with MicrowaveOvenControl.
     </p>
   </div>
 
@@ -3307,20 +3307,20 @@ export const clusters: Record<string, ClusterContent> = {
     <span class="nav-sep">|</span>
     <a href="#attributes">Attributes</a>
     <span class="nav-sep">|</span>
-    <a href="#mode-tags">ModeTag 标签</a>
+    <a href="#mode-tags">ModeTag Tags</a>
     <span class="nav-sep">|</span>
-    <a href="#status-codes">状态码</a>
+    <a href="#status-codes">Status Codes</a>
     <span class="nav-sep">|</span>
     <a href="#example-data">Example Data</a>
     <span class="nav-sep">|</span>
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    MicrowaveOvenMode Cluster 只有一个命令 ChangeToMode，用于切换加热模式。
-    命令执行后设备返回 ChangeToModeResponse，告知切换是否成功。
+    The MicrowaveOvenMode Cluster has only one command, ChangeToMode, for switching heating modes.
+    After execution, the device returns a ChangeToModeResponse indicating whether the switch was successful.
   </p>
 
   <div class="table-wrap">
@@ -3338,26 +3338,26 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>ChangeToMode</td>
           <td>Client &rarr; Server</td>
-          <td>切换到指定加热模式</td>
+          <td>Switch to a specified heating mode</td>
         </tr>
         <tr>
           <td><code>0x01</code></td>
           <td>ChangeToModeResponse</td>
           <td>Server &rarr; Client</td>
-          <td>切换结果响应（Status + StatusText）</td>
+          <td>Mode switch response (Status + StatusText)</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
-  <h3 id="cmd-0x00">ChangeToMode -- 切换模式(0x00)</h3>
+  <!-- ====== Command Details ====== -->
+  <h3 id="cmd-0x00">ChangeToMode -- Switch Mode (0x00)</h3>
   <p>
-    请求微波炉切换到指定的加热模式。NewMode 的值必须是 SupportedModes 列表中某个 ModeOptionStruct 的 Mode 字段。
-    设备收到后返回 ChangeToModeResponse。
+    Request the microwave to switch to a specified heating mode. The NewMode value must be the Mode field of a ModeOptionStruct in the SupportedModes list.
+    The device returns a ChangeToModeResponse upon receipt.
   </p>
 
-  <h4>请求参数</h4>
+  <h4>Request Parameters</h4>
   <div class="table-wrap">
     <table>
       <thead>
@@ -3367,13 +3367,13 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>NewMode</td>
           <td>uint8</td>
-          <td>目标模式编号，必须存在于 SupportedModes 列表中</td>
+          <td>Target mode number; must exist in the SupportedModes list</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <h4>响应字段(ChangeToModeResponse)</h4>
+  <h4>Response Fields (ChangeToModeResponse)</h4>
   <div class="table-wrap">
     <table>
       <thead>
@@ -3383,12 +3383,12 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Status</td>
           <td>enum8</td>
-          <td>操作结果状态码（见<a href="#status-codes">状态码</a>）</td>
+          <td>Operation result status code (see <a href="#status-codes">Status Codes</a>)</td>
         </tr>
         <tr>
           <td>StatusText</td>
-          <td>string（可选）</td>
-          <td>人类可读的状态描述，失败时提供原因</td>
+          <td>string (optional)</td>
+          <td>Human-readable status description; provides the reason on failure</td>
         </tr>
       </tbody>
     </table>
@@ -3398,17 +3398,17 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        用户在 App 上选择「解冻」模式，App 发送 ChangeToMode（NewMode = 1）。
-        微波炉返回 ChangeToModeResponse（Status = 0x00, Success），CurrentMode 更新为 1。
-        如果微波炉正在加热中不允许切换，会返回 GenericFailure 并在 StatusText 中说明原因。
+        The user selects "Defrost" mode in the app. The app sends ChangeToMode (NewMode = 1).
+        The microwave returns ChangeToModeResponse (Status = 0x00, Success) and CurrentMode updates to 1.
+        If the microwave is heating and does not allow switching, it returns GenericFailure with the reason in StatusText.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h2 id="attributes">Attributes</h2>
-  <p>MicrowaveOvenMode Cluster 继承 ModeBase 的 4 个属性。</p>
+  <p>MicrowaveOvenMode Cluster inherits 4 attributes from ModeBase.</p>
 
   <div class="table-wrap">
     <table>
@@ -3425,34 +3425,34 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>SupportedModes</td>
           <td>list&lt;ModeOptionStruct&gt;</td>
-          <td>设备支持的所有加热模式</td>
+          <td>All heating modes supported by the device</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>CurrentMode</td>
           <td>uint8</td>
-          <td>当前选中的模式</td>
+          <td>Currently selected mode</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
           <td>StartUpMode</td>
           <td>uint8 / null</td>
-          <td>设备启动时的默认模式</td>
+          <td>Default mode on device startup</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
           <td>OnMode</td>
           <td>uint8 / null</td>
-          <td>设备开机时自动切换到的模式</td>
+          <td>Mode automatically applied when device turns on</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- 属性逐个说明 -->
-  <h3 id="attr-0x0000">SupportedModes -- 支持的模式列表(0x0000)</h3>
+  <!-- Attribute Details -->
+  <h3 id="attr-0x0000">SupportedModes -- Supported Mode List (0x0000)</h3>
   <p>
-    设备支持的全部加热模式，每个元素是一个 ModeOptionStruct：
+    All heating modes supported by the device. Each element is a ModeOptionStruct:
   </p>
   <div class="table-wrap">
     <table>
@@ -3463,66 +3463,66 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Label</td>
           <td>string</td>
-          <td>模式名称，供人类阅读（如 "Normal"、"Defrost"）</td>
+          <td>Mode name for human display (e.g., "Normal", "Defrost")</td>
         </tr>
         <tr>
           <td>Mode</td>
           <td>uint8</td>
-          <td>模式编号，在列表中唯一，用于 ChangeToMode 命令</td>
+          <td>Mode number, unique in the list, used for the ChangeToMode command</td>
         </tr>
         <tr>
           <td>ModeTags</td>
           <td>list&lt;ModeTagStruct&gt;</td>
-          <td>语义标签列表，描述模式的用途（见<a href="#mode-tags">ModeTag 标签</a>）</td>
+          <td>List of semantic tags describing the mode's purpose (see <a href="#mode-tags">ModeTag Tags</a>)</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">Label 与 ModeTag 的区别</div>
+    <div class="callout-title">Difference Between Label and ModeTag</div>
     <p>
-      Label 是厂商自定义的显示文字，不同厂商可能用不同措辞（"Normal"、"Standard"、"Regular"）。
-      ModeTag 是标准化的语义标签，App 应优先根据 ModeTag 值判断模式类型，Label 仅用于界面展示。
+      Label is vendor-defined display text; different manufacturers may use different wording ("Normal", "Standard", "Regular").
+      ModeTag is a standardized semantic tag. Apps should prioritize ModeTag values for determining mode type; Label is only for UI display.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0001">CurrentMode -- 当前模式(0x0001)</h3>
+  <h3 id="attr-0x0001">CurrentMode -- Current Mode (0x0001)</h3>
   <p>
-    当前选中的加热模式编号。值必须是 SupportedModes 中某个 ModeOptionStruct 的 Mode 字段。
-    通过 ChangeToMode 命令修改。可订阅此属性获取模式变更通知。
+    The currently selected heating mode number. The value must be the Mode field of a ModeOptionStruct in SupportedModes.
+    Modified via the ChangeToMode command. Subscribe to this attribute to receive mode change notifications.
   </p>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0002">StartUpMode -- 启动模式(0x0002)</h3>
+  <h3 id="attr-0x0002">StartUpMode -- Startup Mode (0x0002)</h3>
   <p>
-    设备上电或重启后的初始模式。Nullable -- 值为 <code>null</code> 时表示保持上次断电前的模式。
-    设置具体值时，该值必须存在于 SupportedModes 列表中。
+    The initial mode after the device powers on or restarts. Nullable -- when <code>null</code>, the device retains the mode from before power loss.
+    When setting a specific value, it must exist in the SupportedModes list.
   </p>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0003">OnMode -- 开机模式(0x0003)</h3>
+  <h3 id="attr-0x0003">OnMode -- Power-On Mode (0x0003)</h3>
   <p>
-    当设备从 Off 切换到 On 时自动应用的模式。Nullable -- 值为 <code>null</code> 时不覆盖，保持 CurrentMode 不变。
-    如果 OnMode 有值，每次开机都会将 CurrentMode 强制设为该值，忽略 StartUpMode 的设置。
+    The mode automatically applied when the device switches from Off to On. Nullable -- when <code>null</code>, no override occurs and CurrentMode remains unchanged.
+    If OnMode has a value, every power-on will force CurrentMode to that value, ignoring the StartUpMode setting.
   </p>
 
   <div class="callout callout-warning">
-    <div class="callout-title">OnMode 与 StartUpMode 的优先级</div>
+    <div class="callout-title">Priority of OnMode vs StartUpMode</div>
     <p>
-      如果 OnMode 不为 null，它的优先级高于 StartUpMode。
-      设备上电流程：先应用 StartUpMode（如果有），再在 Off &rarr; On 时应用 OnMode 覆盖。
-      实际效果是开机后始终使用 OnMode 指定的模式。
+      If OnMode is not null, it takes priority over StartUpMode.
+      Device power-on sequence: StartUpMode is applied first (if set), then OnMode overrides when transitioning from Off &rarr; On.
+      The practical effect is that the device always uses the mode specified by OnMode after powering on.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== ModeTag 语义标签 ====== -->
-  <h2 id="mode-tags">ModeTag 语义标签</h2>
+  <!-- ====== ModeTag Semantic Tags ====== -->
+  <h2 id="mode-tags">ModeTag Semantic Tags</h2>
   <p>
-    MicrowaveOvenMode 定义了 2 个专属 ModeTag 值，用于标准化描述微波炉加热模式的类型。
-    App 应根据这些标签识别模式用途，而不是依赖厂商自定义的 Label 文字。
+    MicrowaveOvenMode defines 2 dedicated ModeTag values for standardized description of microwave oven heating mode types.
+    Apps should identify mode purposes based on these tags rather than relying on vendor-defined Label text.
   </p>
 
   <div class="enum-cards enum-cards-row">
@@ -3530,61 +3530,61 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">0x4000</span>
       <div>
         <span class="enum-name">Normal</span>
-        <span class="enum-desc">常规加热 -- 日常食物加热的默认模式，按设定功率持续加热</span>
+        <span class="enum-desc">Normal heating — default mode for everyday food; heats continuously at the set power level</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x4001</span>
       <div>
         <span class="enum-name">Defrost</span>
-        <span class="enum-desc">解冻 -- 以较低功率间歇加热，用于解冻冷冻食品而不过度烹饪</span>
+        <span class="enum-desc">Defrost — heats intermittently at lower power to thaw frozen food without overcooking</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">厂商可扩展自定义模式</div>
+    <div class="callout-title">Vendors Can Add Custom Modes</div>
     <p>
-      除了规范定义的 Normal 和 Defrost，厂商可以在 SupportedModes 中添加额外的自定义模式
-      （如 "Popcorn"、"Beverage"、"Reheat" 等），使用厂商自定义的 ModeTag 值（0x8000 ~ 0xBFFF 范围）。
-      App 遇到不认识的 ModeTag 时，应回退到显示 Label 文字。
+      Beyond the spec-defined Normal and Defrost, vendors can add custom modes to SupportedModes
+      (e.g., "Popcorn", "Beverage", "Reheat") using vendor-defined ModeTag values (0x8000-0xBFFF range).
+      When the app encounters an unrecognized ModeTag, it should fall back to displaying the Label text.
     </p>
   </div>
 
-  <!-- ====== 状态码 ====== -->
+  <!-- ====== Status Codes ====== -->
   <h2 id="status-codes">Status Codes</h2>
-  <p>ChangeToModeResponse 中 Status 字段的可能取值：</p>
+  <p>Possible values of the Status field in ChangeToModeResponse:</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0x00</span>
       <div>
         <span class="enum-name">Success</span>
-        <span class="enum-desc">模式切换成功</span>
+        <span class="enum-desc">Mode switch successful</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x01</span>
       <div>
         <span class="enum-name">UnsupportedMode</span>
-        <span class="enum-desc">请求的模式编号不存在于 SupportedModes 中</span>
+        <span class="enum-desc">The requested mode number does not exist in SupportedModes</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x02</span>
       <div>
         <span class="enum-name">GenericFailure</span>
-        <span class="enum-desc">通用失败 -- 设备当前状态不允许切换（如正在加热中）</span>
+        <span class="enum-desc">Generic failure — device state does not allow switching (e.g., while heating)</span>
       </div>
     </div>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一台支持常规加热和解冻两种模式、当前处于常规加热的微波炉的 MicrowaveOvenMode Cluster 读取结果：</p>
+  <p>Read result from a MicrowaveOvenMode Cluster on a microwave oven with Normal and Defrost modes, currently in Normal:</p>
 
   <pre><code>{
-  // --- 支持的模式列表 ---
+  // --- Supported modes list ---
   "0x0000": [                    // SupportedModes
     {
       "Label": "Normal",
@@ -3598,59 +3598,59 @@ export const clusters: Record<string, ClusterContent> = {
     }
   ],
 
-  // --- 当前模式 ---
+  // --- Current mode ---
   "0x0001": 0,                   // CurrentMode = 0（Normal）
 
-  // --- 启动与开机模式 ---
-  "0x0002": null,                // StartUpMode = null（保持上次模式）
-  "0x0003": null                 // OnMode = null（不覆盖，保持 CurrentMode）
+  // --- Startup and power-on modes ---
+  "0x0002": null,                // StartUpMode = null (retain previous mode)
+  "0x0003": null                 // OnMode = null (no override, keep CurrentMode)
 }</code></pre>
 
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      SupportedModes 的内容由设备厂商定义，不同微波炉支持的模式数量和编号可能不同。
-      App 展示模式列表时应动态读取 SupportedModes，不要硬编码模式选项。
-      使用 ModeTag 值判断模式类型，而不是比较 Label 字符串。
-      完整的微波炉控制还需要读取 MicrowaveOvenControl Cluster（0x005F）的烹饪时间和功率属性。
+      The contents of SupportedModes are defined by the device manufacturer; different microwaves may support different numbers and IDs of modes.
+      When displaying the mode list, apps should dynamically read SupportedModes rather than hardcoding mode options.
+      Use ModeTag values to determine mode type instead of comparing Label strings.
+      Complete microwave control also requires reading the cooking time and power attributes from the MicrowaveOvenControl Cluster (0x005F).
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
-    <summary>场景 1：选择加热模式并启动微波炉</summary>
+    <summary>Scenario 1: Select Heating Mode and Start the Microwave</summary>
     <div class="scenario-content">
       <ol>
-        <li>读取 <code>SupportedModes (0x0000)</code> 获取微波炉支持的所有加热模式</li>
-        <li>在 App 界面展示模式列表，根据 ModeTag 值显示对应图标和说明（如 0x4000 显示「常规加热」图标，0x4001 显示「解冻」图标）</li>
-        <li>用户选择「解冻」，发送 <code>ChangeToMode (0x00)</code>，NewMode 填入对应的 Mode 编号</li>
-        <li>检查 ChangeToModeResponse 的 Status：
+        <li>Read <code>SupportedModes (0x0000)</code> to get all heating modes supported by the microwave</li>
+        <li>Display the mode list in the app UI, showing corresponding icons and descriptions based on ModeTag values (e.g. show a "Normal Heating" icon for 0x4000, a "Defrost" icon for 0x4001)</li>
+        <li>The user selects "Defrost"; send <code>ChangeToMode (0x00)</code> with NewMode set to the corresponding Mode number</li>
+        <li>Check the Status in ChangeToModeResponse:
           <ul>
-            <li><code>0x00</code>（Success）-- 切换成功，订阅 CurrentMode 确认更新</li>
-            <li><code>0x02</code>（GenericFailure）-- 微波炉正在加热中，读取 StatusText 展示原因</li>
+            <li><code>0x00</code> (Success) -- switch successful; subscribe to CurrentMode to confirm the update</li>
+            <li><code>0x02</code> (GenericFailure) — microwave is currently heating; read StatusText for the reason</li>
           </ul>
         </li>
-        <li>模式选定后，通过 MicrowaveOvenControl Cluster（0x005F）设置烹饪时间和功率，然后启动加热</li>
+        <li>After the mode is selected, set cooking time and power via MicrowaveOvenControl Cluster (0x005F), then start heating</li>
       </ol>
     </div>
   </details>
 
   <details class="scenario">
-    <summary>场景 2：解冻冷冻食品的完整流程</summary>
+    <summary>Scenario 2: Complete Flow for Defrosting Frozen Food</summary>
     <div class="scenario-content">
       <ol>
-        <li>读取 <code>SupportedModes (0x0000)</code>，找到带有 ModeTag 0x4001（Defrost）的模式项</li>
-        <li>发送 <code>ChangeToMode</code>，将 NewMode 设为该模式项的 Mode 编号</li>
-        <li>确认 ChangeToModeResponse 返回 Success</li>
-        <li>通过 MicrowaveOvenControl 设置解冻时间（解冻模式通常使用较低功率，设备可能自动调整功率等级）</li>
-        <li>启动加热，订阅 MicrowaveOvenControl 的 OperationalState 跟踪加热进度</li>
-        <li>加热完成后，微波炉自动停止并发出通知，App 提示用户取出食物</li>
+        <li>Read <code>SupportedModes (0x0000)</code> and find the mode entry with ModeTag 0x4001 (Defrost)</li>
+        <li>Send <code>ChangeToMode</code> with NewMode set to that mode entry's Mode number</li>
+        <li>Confirm ChangeToModeResponse returns Success</li>
+        <li>Set the defrost time via MicrowaveOvenControl (defrost mode typically uses lower power; the device may automatically adjust the power level)</li>
+        <li>Start heating and subscribe to MicrowaveOvenControl's OperationalState to track heating progress</li>
+        <li>After heating finishes, the microwave stops automatically and sends a notification; the app prompts the user to remove the food</li>
       </ol>
       <p>
-        <strong>注意</strong>：解冻模式下微波炉通常以间歇方式工作（加热一段时间、暂停一段时间），
-        避免外层过度加热而内层仍是冰冻状态。具体的功率和间歇策略由设备固件控制，App 无需干预。
+        <strong>Note</strong>: In defrost mode, the microwave typically works intermittently (alternating heating and pausing)
+        to avoid overheating the exterior while the interior remains frozen. The specific power and intermittent strategy is controlled by device firmware; no app intervention needed.
       </p>
     </div>
   </details>
@@ -3676,36 +3676,36 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'microwave-oven-control': {
     title: 'MicrowaveOvenControl Cluster (0x005F)',
-    description: 'Matter MicrowaveOvenControl Cluster(0x005F)完整参考 — SetCookingParameters 命令、CookTime/PowerSetting/SupportedWatts 等属性定义、PWRNUM/WATTS/PWRLMTS 特性位与枚举值速查。',
+    description: 'Complete reference for the Matter MicrowaveOvenControl Cluster (0x005F) — SetCookingParameters command, CookTime/PowerSetting/SupportedWatts attribute definitions, PWRNUM/WATTS/PWRLMTS feature bits, and enum value quick reference.',
     prev: { title: 'Cluster Reference', slug: 'clusters' },
     next: undefined,
     content: `<h1>MicrowaveOvenControl Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x005F</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 微波炉功能端点（Microwave Oven Endpoint）
+    <strong>Endpoint</strong>: Microwave Oven Endpoint
   </p>
   <p>
-    MicrowaveOvenControl 是 Matter 厨电设备中微波炉的核心控制 Cluster，负责管理烹饪时间、功率等级和瓦数设定。
-    它不负责启动/停止烹饪（由 OperationalState Cluster 处理），也不负责模式选择（由 MicrowaveOvenMode Cluster 处理），
-    专注于「烹饪参数」这一件事。
+    MicrowaveOvenControl is the core control Cluster for microwave ovens in Matter kitchen appliances, managing cooking time, power level, and wattage settings.
+    It does not handle starting/stopping cooking (handled by the OperationalState Cluster) or mode selection (handled by MicrowaveOvenMode),
+    focusing solely on cooking parameters.
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">三个 Cluster 协同工作</div>
+    <div class="callout-title">Three Clusters Working Together</div>
     <p>
-      微波炉设备通常需要三个 Cluster 配合：<br/>
-      <strong>MicrowaveOvenMode</strong>（0x005E）—— 选择烹饪模式（如普通加热、解冻、预设菜单等）<br/>
-      <strong>MicrowaveOvenControl</strong>（0x005F）—— 设置烹饪参数（时间、功率、瓦数）<br/>
-      <strong>OperationalState</strong>（0x0060）—— 控制烹饪流程（开始、暂停、停止）<br/>
-      典型流程：先选模式 → 再设参数 → 最后启动烹饪。
+      Microwave oven devices typically require three Clusters working together:<br/>
+      <strong>MicrowaveOvenMode</strong> (0x005E) — select cooking mode (Normal, Defrost, preset menus, etc.)<br/>
+      <strong>MicrowaveOvenControl</strong> (0x005F) — set cooking parameters (time, power, wattage)<br/>
+      <strong>OperationalState</strong> (0x0060) — control cooking flow (start, pause, stop)<br/>
+      Typical flow: select mode → set parameters → start cooking.
     </p>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">功率表示方式由 Feature 决定</div>
+    <div class="callout-title">Power Representation Is Determined by Features</div>
     <p>
-      微波炉的功率有两种表示方式：<strong>数值百分比</strong>（PWRNUM 特性，如 80%）和<strong>瓦数等级</strong>（WATTS 特性，如 900W）。
-      设备至少支持其中一种。读写功率属性前，务必先检查 FeatureMap 确定设备使用哪种方式，否则会读到不支持的属性。
+      Microwave power has two representation methods: <strong>numeric percentage</strong> (PWRNUM feature, e.g., 80%) and <strong>wattage level</strong> (WATTS feature, e.g., 900W).
+      The device supports at least one. Always check FeatureMap before reading/writing power attributes to determine which method the device uses.
     </p>
   </div>
 
@@ -3722,12 +3722,12 @@ export const clusters: Record<string, ClusterContent> = {
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    MicrowaveOvenControl Cluster 只有一个命令 —— <code>SetCookingParameters</code>。
-    它是设置烹饪参数的唯一入口，所有参数（时间、功率、瓦数）都通过这一个命令设置。
-    注意：这个命令只设置参数，不会启动烹饪。启动烹饪需要调用 OperationalState Cluster 的 Start 命令。
+    The MicrowaveOvenControl Cluster has only one command -- <code>SetCookingParameters</code>.
+    It is the sole entry point for setting cooking parameters; all parameters (time, power, wattage) are set through this single command.
+    Note: this command only sets parameters and does not start cooking. Starting the cooking requires calling the OperationalState Cluster's Start command.
   </p>
 
   <div class="table-wrap">
@@ -3744,95 +3744,95 @@ export const clusters: Record<string, ClusterContent> = {
         <tr class="clickable-row" data-href="#cmd-0x00">
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>SetCookingParameters</td>
-          <td>设置烹饪参数（时间、功率、瓦数）</td>
-          <td class="col-optional">无</td>
+          <td>Set cooking parameters (time, power, wattage)</td>
+          <td class="col-optional">None</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
-  <h3 id="cmd-0x00">SetCookingParameters —— 设置烹饪参数(0x00)</h3>
+  <!-- ====== Command Details ====== -->
+  <h3 id="cmd-0x00">SetCookingParameters (0x00)</h3>
   <p>
-    设置微波炉的烹饪参数。所有参数都是可选的 —— 只传需要修改的字段即可，未传的参数保持当前值不变。
-    设备处于非运行状态时可以设置参数；某些设备也允许在运行中修改（取决于具体实现）。
+    Sets the microwave cooking parameters. All parameters are optional — only pass the fields that need changing; unspecified parameters retain their current values.
+    Parameters can be set when the device is not running; some devices also allow changes while running (implementation-dependent).
   </p>
   <div class="table-wrap">
     <table>
       <thead>
-        <tr><th>Parameter</th><th>Type</th><th>必填</th><th>Description</th></tr>
+        <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
       </thead>
       <tbody>
         <tr>
           <td>CookMode</td>
           <td>uint8</td>
-          <td>否</td>
-          <td>烹饪模式编号，对应 MicrowaveOvenMode Cluster 中定义的模式值</td>
+          <td>No</td>
+          <td>Cooking mode number, corresponding to the mode value defined in the MicrowaveOvenMode Cluster</td>
         </tr>
         <tr>
           <td>CookTime</td>
           <td>uint32</td>
-          <td>否</td>
-          <td>烹饪时间，单位秒。范围 <code>1</code> ~ <code>MaxCookTime</code></td>
+          <td>No</td>
+          <td>Cooking time in seconds. Range: <code>1</code> to <code>MaxCookTime</code></td>
         </tr>
         <tr>
           <td>PowerSetting</td>
           <td>uint8</td>
-          <td>否</td>
-          <td>功率等级数值。范围 <code>MinPower</code> ~ <code>MaxPower</code>，步长为 <code>PowerStep</code>。<strong>需要 PWRNUM 特性</strong></td>
+          <td>No</td>
+          <td>Power level numeric value. Range: <code>MinPower</code> to <code>MaxPower</code>, step size <code>PowerStep</code>. <strong>Requires PWRNUM feature</strong></td>
         </tr>
         <tr>
           <td>WattSettingIndex</td>
           <td>uint8</td>
-          <td>否</td>
-          <td><code>SupportedWatts</code> 列表的索引（从 0 开始）。<strong>需要 WATTS 特性</strong></td>
+          <td>No</td>
+          <td>Index into the <code>SupportedWatts</code> list (zero-based). <strong>Requires WATTS feature</strong></td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">PowerSetting 与 WattSettingIndex 互斥</div>
+    <div class="callout-title">PowerSetting and WattSettingIndex Are Mutually Exclusive</div>
     <p>
-      一次调用中只能传 <code>PowerSetting</code> 或 <code>WattSettingIndex</code> 之一，不能同时传。
-      传哪个取决于设备支持的 Feature：支持 PWRNUM 用 PowerSetting，支持 WATTS 用 WattSettingIndex。
-      同时传两个会返回 <code>INVALID_COMMAND</code>。
+      Only one of <code>PowerSetting</code> or <code>WattSettingIndex</code> can be passed per call — not both.
+      Which one to use depends on the device's Feature: use PowerSetting for PWRNUM, WattSettingIndex for WATTS.
+      Passing both returns <code>INVALID_COMMAND</code>.
     </p>
   </div>
 
-  <h4>使用示例：按功率百分比设置(PWRNUM)</h4>
+  <h4>Usage Example: Set by Power Percentage (PWRNUM)</h4>
   <pre><code>{
-  "CookTime": 180,          // 烹饪 3 分钟
-  "PowerSetting": 70        // 功率 70%
+  "CookTime": 180,          // Cook for 3 minutes
+  "PowerSetting": 70        // Power 70%
 }</code></pre>
 
-  <h4>使用示例：按瓦数等级设置(WATTS)</h4>
+  <h4>Usage Example: Set by Wattage Level (WATTS)</h4>
   <pre><code>{
-  "CookTime": 300,          // 烹饪 5 分钟
-  "WattSettingIndex": 3     // 选择 SupportedWatts[3] 对应的瓦数
+  "CookTime": 300,          // Cook for 5 minutes
+  "WattSettingIndex": 3     // Select the wattage at SupportedWatts[3]
 }</code></pre>
 
   <details class="scenario">
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        用户在 App 上选择「加热 3 分钟、中高火」时，App 发送 <code>SetCookingParameters(CookTime=180, PowerSetting=70)</code>。
-        参数设好后，再调用 OperationalState 的 <code>Start</code> 命令启动烹饪。
-        如果需要在烹饪中途加时间（如「再加 1 分钟」），可以在运行状态下再次调用此命令更新 CookTime。
+        When the user selects "heat for 3 minutes at medium-high power" in the app, the app sends <code>SetCookingParameters(CookTime=180, PowerSetting=70)</code>.
+        After parameters are set, call the OperationalState <code>Start</code> command to begin cooking.
+        If you need to add time mid-cooking (e.g. "add 1 more minute"), you can call this command again while running to update CookTime.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h2 id="attributes">Attributes</h2>
   <p>
-    MicrowaveOvenControl 的属性按功能分为三组：烹饪时间、功率数值、瓦数等级。
-    后两组分别由 PWRNUM 和 WATTS Feature 门控。
-    点击下方汇总表中的属性 ID 可跳转到对应的详细说明。
+    MicrowaveOvenControl attributes are organized into three groups: cooking time, power level, and wattage level.
+    The latter two are gated by the PWRNUM and WATTS Features respectively.
+    Click an attribute ID below to jump to its detailed description.
   </p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute Summary Table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -3845,79 +3845,79 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
       </thead>
       <tbody>
-        <!-- 烹饪时间 -->
+        <!-- Cook Time -->
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>CookTime</td>
           <td>uint32</td>
-          <td><a href="#group-time">烹饪时间</a></td>
-          <td>当前设定的烹饪时间（秒）</td>
+          <td><a href="#group-time">Cook Time</a></td>
+          <td>Currently set cook time (seconds)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
           <td>MaxCookTime</td>
           <td>uint32</td>
-          <td><a href="#group-time">烹饪时间</a></td>
-          <td>允许的最大烹饪时间（秒）</td>
+          <td><a href="#group-time">Cook Time</a></td>
+          <td>Maximum allowed cook time (seconds)</td>
         </tr>
-        <!-- 功率数值 -->
+        <!-- Power Level -->
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
           <td>PowerSetting</td>
           <td>uint8</td>
-          <td><a href="#group-power">功率数值</a></td>
-          <td>当前功率等级</td>
+          <td><a href="#group-power">Power Level</a></td>
+          <td>Current power level</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0004">
           <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
           <td>MinPower</td>
           <td>uint8</td>
-          <td><a href="#group-power">功率数值</a></td>
-          <td>最低可设功率</td>
+          <td><a href="#group-power">Power Level</a></td>
+          <td>Minimum settable power</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0005">
           <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
           <td>MaxPower</td>
           <td>uint8</td>
-          <td><a href="#group-power">功率数值</a></td>
-          <td>最高可设功率</td>
+          <td><a href="#group-power">Power Level</a></td>
+          <td>Maximum settable power</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0006">
           <td><a href="#attr-0x0006"><code>0x0006</code></a></td>
           <td>PowerStep</td>
           <td>uint8</td>
-          <td><a href="#group-power">功率数值</a></td>
-          <td>功率调节步长</td>
+          <td><a href="#group-power">Power Level</a></td>
+          <td>Power adjustment step size</td>
         </tr>
-        <!-- 瓦数等级 -->
+        <!-- Wattage Level -->
         <tr class="clickable-row" data-href="#attr-0x0007">
           <td><a href="#attr-0x0007"><code>0x0007</code></a></td>
           <td>SupportedWatts</td>
           <td>list[uint16]</td>
-          <td><a href="#group-watts">瓦数等级</a></td>
-          <td>设备支持的瓦数列表</td>
+          <td><a href="#group-watts">Wattage Level</a></td>
+          <td>Supported wattage list</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0008">
           <td><a href="#attr-0x0008"><code>0x0008</code></a></td>
           <td>SelectedWattIndex</td>
           <td>uint8</td>
-          <td><a href="#group-watts">瓦数等级</a></td>
-          <td>当前选中的瓦数索引</td>
+          <td><a href="#group-watts">Wattage Level</a></td>
+          <td>Currently selected wattage index</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0009">
           <td><a href="#attr-0x0009"><code>0x0009</code></a></td>
           <td>WattRating</td>
           <td>uint16</td>
-          <td><a href="#group-watts">瓦数等级</a></td>
-          <td>当前瓦数额定值</td>
+          <td><a href="#group-watts">Wattage Level</a></td>
+          <td>Current wattage rating</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 烹饪时间（0x0001, 0x0002）====== -->
-  <h3 id="group-time">烹饪时间(0x0001, 0x0002)</h3>
-  <p>烹饪时间是所有微波炉都支持的基础属性，不需要特殊 Feature 门控。</p>
+  <!-- ====== Cook Time (0x0001, 0x0002) ====== -->
+  <h3 id="group-time">Cooking Time (0x0001, 0x0002)</h3>
+  <p>Cooking time is a basic attribute supported by all microwave ovens; no special Feature is required.</p>
 
   <div class="table-wrap">
     <table>
@@ -3932,35 +3932,35 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0001">
           <td><code>0x0001</code></td>
-          <td>CookTime<br/><span class="attr-cn">烹饪时间</span></td>
+          <td>CookTime<br/><span class="attr-cn">Cook Time</span></td>
           <td>uint32</td>
-          <td>当前设定的烹饪时间，单位秒。默认值 <code>30</code>（30 秒）。烹饪过程中此值会倒计时递减，实时反映剩余时间。范围 <code>1</code> ~ <code>MaxCookTime</code></td>
+          <td>Currently set cooking time in seconds. Default: <code>30</code> (30 seconds). During cooking, this value counts down to reflect remaining time. Range: <code>1</code> to <code>MaxCookTime</code></td>
         </tr>
         <tr id="attr-0x0002">
           <td><code>0x0002</code></td>
-          <td>MaxCookTime<br/><span class="attr-cn">最大烹饪时间</span></td>
+          <td>MaxCookTime<br/><span class="attr-cn">Max Cook Time</span></td>
           <td>uint32</td>
-          <td>设备允许的最大烹饪时间，单位秒，只读。用于 App 端校验用户输入和限制时间选择器的上限。典型值如 <code>5400</code>（90 分钟）</td>
+          <td>Maximum cooking time allowed by the device, in seconds, read-only. Used by the app for input validation and time picker limits. Typical value: <code>5400</code> (90 minutes)</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">时间单位是秒，不是分钟</div>
+    <div class="callout-title">Time Unit Is Seconds, Not Minutes</div>
     <p>
-      与日常使用习惯不同，<code>CookTime</code> 的单位是<strong>秒</strong>。
-      App 展示时需要转换为分:秒格式（如 <code>120</code> 秒 → <code>2:00</code>）。
-      用户输入「3 分钟」时需要转换为 <code>180</code> 再写入。
+      Unlike everyday usage, <code>CookTime</code> is in <strong>seconds</strong>.
+      The app should convert to min:sec format for display (e.g., <code>120</code> sec → <code>2:00</code>).
+      When the user enters "3 minutes", convert to <code>180</code> before writing.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 功率数值（0x0003 ~ 0x0006）====== -->
-  <h3 id="group-power">功率数值(0x0003 ~ 0x0006)</h3>
+  <!-- ====== Power Level (0x0003 ~ 0x0006) ====== -->
+  <h3 id="group-power">Power Level (0x0003-0x0006)</h3>
   <p>
-    用数值表示功率等级的一组属性。这组属性需要 <strong>PWRNUM</strong> 特性支持。
-    无 PWRNUM 特性时，<code>PowerSetting</code> 仍然存在但默认值固定为 <code>100</code>（满功率），不可修改。
+    A group of attributes representing power level as a numeric value. These require the <strong>PWRNUM</strong> feature.
+    Without PWRNUM, <code>PowerSetting</code> still exists but defaults to <code>100</code> (full power) and cannot be modified.
   </p>
 
   <div class="table-wrap">
@@ -3976,48 +3976,48 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0003">
           <td><code>0x0003</code></td>
-          <td>PowerSetting<br/><span class="attr-cn">功率设置</span></td>
+          <td>PowerSetting<br/><span class="attr-cn">Power Setting</span></td>
           <td>uint8</td>
-          <td>当前功率等级。无 PWRNUM 时固定为 <code>100</code>；有 PWRNUM 时范围为 <code>MinPower</code> ~ <code>MaxPower</code>，步长 <code>PowerStep</code>。默认值 <code>100</code>（满功率）</td>
+          <td>Current power level. Without PWRNUM, fixed at <code>100</code>; with PWRNUM, range is <code>MinPower</code> to <code>MaxPower</code>, step size <code>PowerStep</code>. Default: <code>100</code> (full power)</td>
         </tr>
         <tr id="attr-0x0004">
           <td><code>0x0004</code></td>
-          <td>MinPower<br/><span class="attr-cn">最低功率</span></td>
+          <td>MinPower<br/><span class="attr-cn">Min Power</span></td>
           <td>uint8</td>
-          <td>设备支持的最低功率值。默认 <code>10</code>。<strong>需要 PWRLMTS 特性</strong>（无 PWRLMTS 时固定为 10）</td>
+          <td>Minimum power value supported. Default: <code>10</code>. <strong>Requires PWRLMTS feature</strong> (fixed at 10 without PWRLMTS)</td>
         </tr>
         <tr id="attr-0x0005">
           <td><code>0x0005</code></td>
-          <td>MaxPower<br/><span class="attr-cn">最高功率</span></td>
+          <td>MaxPower<br/><span class="attr-cn">Max Power</span></td>
           <td>uint8</td>
-          <td>设备支持的最高功率值。默认 <code>100</code>。<strong>需要 PWRLMTS 特性</strong>（无 PWRLMTS 时固定为 100）</td>
+          <td>Maximum power value supported. Default: <code>100</code>. <strong>Requires PWRLMTS feature</strong> (fixed at 100 without PWRLMTS)</td>
         </tr>
         <tr id="attr-0x0006">
           <td><code>0x0006</code></td>
-          <td>PowerStep<br/><span class="attr-cn">功率步长</span></td>
+          <td>PowerStep<br/><span class="attr-cn">Power Step</span></td>
           <td>uint8</td>
-          <td>功率调节的步进值。默认 <code>10</code>。例如步长为 10 时，功率只能是 10、20、30...100。<strong>需要 PWRLMTS 特性</strong>（无 PWRLMTS 时固定为 10）</td>
+          <td>Power adjustment step size. Default: <code>10</code>. With step 10, power can only be 10, 20, 30...100. <strong>Requires PWRLMTS feature</strong> (fixed at 10 without PWRLMTS)</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">PWRNUM 与 PWRLMTS 的关系</div>
+    <div class="callout-title">Relationship Between PWRNUM and PWRLMTS</div>
     <p>
-      <strong>PWRNUM</strong> 启用功率数值调节能力 —— 没有它，功率只能是满功率 100。<br/>
-      <strong>PWRLMTS</strong> 是 PWRNUM 的扩展，允许自定义 Min/Max/Step 三个限制参数。
-      PWRLMTS 必须和 PWRNUM 一起启用（不能单独启用 PWRLMTS）。
-      如果只有 PWRNUM 没有 PWRLMTS，则使用默认限制：Min=10, Max=100, Step=10。
+      <strong>PWRNUM</strong> enables numeric power adjustment — without it, power is fixed at 100 (full).<br/>
+      <strong>PWRLMTS</strong> extends PWRNUM, allowing custom Min/Max/Step limit parameters.
+      PWRLMTS must be enabled together with PWRNUM (cannot be enabled alone).
+      With PWRNUM but without PWRLMTS, default limits apply: Min=10, Max=100, Step=10.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 瓦数等级（0x0007 ~ 0x0009）====== -->
-  <h3 id="group-watts">瓦数等级(0x0007 ~ 0x0009)</h3>
+  <!-- ====== Wattage Level (0x0007 ~ 0x0009) ====== -->
+  <h3 id="group-watts">Wattage Level (0x0007-0x0009)</h3>
   <p>
-    用实际瓦数表示功率的一组属性。这组属性需要 <strong>WATTS</strong> 特性支持。
-    与 PWRNUM 的百分比方式不同，WATTS 用离散的瓦数列表让用户选择。
+    A group of attributes representing power as actual wattage. These require the <strong>WATTS</strong> feature.
+    Unlike PWRNUM's percentage approach, WATTS uses a discrete wattage list for user selection.
   </p>
 
   <div class="table-wrap">
@@ -4033,134 +4033,134 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0007">
           <td><code>0x0007</code></td>
-          <td>SupportedWatts<br/><span class="attr-cn">支持的瓦数列表</span></td>
+          <td>SupportedWatts<br/><span class="attr-cn">Supported Watts List</span></td>
           <td>list[uint16]</td>
-          <td>设备支持的所有瓦数等级列表，升序排列。例如 <code>[100, 300, 500, 700, 900, 1100]</code>。只读</td>
+          <td>All wattage levels supported by the device, in ascending order. E.g., <code>[100, 300, 500, 700, 900, 1100]</code>. Read-only</td>
         </tr>
         <tr id="attr-0x0008">
           <td><code>0x0008</code></td>
-          <td>SelectedWattIndex<br/><span class="attr-cn">选中的瓦数索引</span></td>
+          <td>SelectedWattIndex<br/><span class="attr-cn">Selected Watt Index</span></td>
           <td>uint8</td>
-          <td>当前选中的瓦数在 <code>SupportedWatts</code> 列表中的索引（从 0 开始）。通过 <code>SetCookingParameters</code> 的 WattSettingIndex 参数修改</td>
+          <td>Index of the currently selected wattage in the <code>SupportedWatts</code> list (zero-based). Modified via the WattSettingIndex parameter of <code>SetCookingParameters</code></td>
         </tr>
         <tr id="attr-0x0009">
           <td><code>0x0009</code></td>
-          <td>WattRating<br/><span class="attr-cn">瓦数额定值</span></td>
+          <td>WattRating<br/><span class="attr-cn">Watt Rating</span></td>
           <td>uint16</td>
-          <td>微波炉的额定功率（瓦），只读。这是设备的标称最大瓦数，通常等于 <code>SupportedWatts</code> 列表中的最大值</td>
+          <td>The microwave's rated power (watts), read-only. This is the device's nominal maximum wattage, typically equal to the highest value in <code>SupportedWatts</code></td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">用索引而非瓦数值设置功率</div>
+    <div class="callout-title">Set Power by Index, Not Wattage Value</div>
     <p>
-      设置瓦数时使用的是 <code>SupportedWatts</code> 的<strong>索引</strong>（WattSettingIndex），不是瓦数值本身。
-      例如 <code>SupportedWatts = [100, 300, 500, 700, 900, 1100]</code>，要设置 700W 需要传 <code>WattSettingIndex = 3</code>。
-      App 端应先读取 SupportedWatts 列表，展示为可选项（如「低火 100W」「中火 500W」「高火 1100W」），用户选择后传对应索引。
+      When setting wattage, use the <strong>index</strong> into <code>SupportedWatts</code> (WattSettingIndex), not the wattage value itself.
+      E.g., with <code>SupportedWatts = [100, 300, 500, 700, 900, 1100]</code>, setting 700W requires <code>WattSettingIndex = 3</code>.
+      The app should first read the SupportedWatts list, display it as options (e.g., "Low 100W", "Medium 500W", "High 1100W"), then pass the corresponding index after user selection.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== Feature 位图 ====== -->
+  <!-- ====== Feature Bitmap ====== -->
   <h2 id="features">Feature Bitmap</h2>
-  <p>MicrowaveOvenControl Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持哪些功率控制方式：</p>
+  <p>MicrowaveOvenControl Cluster declares supported power control methods through <code>FeatureMap</code> (0xFFFC):</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">Bit 0</span>
       <div>
         <span class="enum-name">PWRNUM（PowerAsNumber）</span>
-        <span class="enum-desc">功率以数值表示 —— 启用 PowerSetting 的读写（10~100 范围）</span>
+        <span class="enum-desc">Power as a numeric value — enables PowerSetting read/write (10-100 range)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 1</span>
       <div>
         <span class="enum-name">WATTS（WattRating）</span>
-        <span class="enum-desc">功率以瓦数表示 —— 启用 SupportedWatts 列表和 WattSettingIndex 选择</span>
+        <span class="enum-desc">Power as wattage — enables SupportedWatts list and WattSettingIndex selection</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 2</span>
       <div>
         <span class="enum-name">PWRLMTS（PowerNumberLimits）</span>
-        <span class="enum-desc">自定义功率限制 —— 启用 MinPower、MaxPower、PowerStep 属性（需同时启用 PWRNUM）</span>
+        <span class="enum-desc">Custom power limits — enables MinPower, MaxPower, PowerStep attributes (requires PWRNUM)</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">Feature 组合约束</div>
+    <div class="callout-title">Feature Combination Constraints</div>
     <p>
-      <strong>PWRNUM 和 WATTS 互斥</strong> —— 设备只能选择一种功率表示方式，不能同时支持两种。<br/>
-      <strong>PWRLMTS 依赖 PWRNUM</strong> —— 启用 PWRLMTS 时必须同时启用 PWRNUM。<br/>
-      常见组合：无 Feature（仅时间控制）、PWRNUM（百分比功率）、PWRNUM + PWRLMTS（自定义范围的百分比功率）、WATTS（瓦数等级选择）。
+      <strong>PWRNUM and WATTS are mutually exclusive</strong> — the device can only support one power representation method.<br/>
+      <strong>PWRLMTS depends on PWRNUM</strong> — PWRLMTS requires PWRNUM to also be enabled.<br/>
+      Common combinations: no Feature (time control only), PWRNUM (percentage power), PWRNUM + PWRLMTS (custom-range percentage), WATTS (wattage level selection).
     </p>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一个同时支持 PWRNUM 和 WATTS 特性的微波炉设备的属性读取结果（实际设备只会支持其中一种功率方式，此处为展示完整属性）：</p>
+  <p>Attribute read result from a microwave oven supporting both PWRNUM and WATTS (in practice, a device only supports one power method; both shown here for completeness):</p>
 
   <pre><code>{
-  // --- 烹饪时间 ---
-  "0x0001": 120,            // CookTime = 120 秒（当前设定烹饪 2 分钟）
-  "0x0002": 5400,           // MaxCookTime = 5400 秒（最大可设 90 分钟）
+  // --- Cooking Time ---
+  "0x0001": 120,            // CookTime = 120 sec (currently set to cook 2 minutes)
+  "0x0002": 5400,           // MaxCookTime = 5400 sec (max 90 minutes)
 
-  // --- 功率设置（PWRNUM 特性）---
-  "0x0003": 80,             // PowerSetting = 80（当前功率 80%）
-  "0x0004": 10,             // MinPower = 10（最低功率 10%）
-  "0x0005": 100,            // MaxPower = 100（最高功率 100%）
-  "0x0006": 10,             // PowerStep = 10（功率调节步长 10%）
+  // --- Power Setting (PWRNUM Feature) ---
+  "0x0003": 80,             // PowerSetting = 80 (current power 80%)
+  "0x0004": 10,             // MinPower = 10 (minimum 10%)
+  "0x0005": 100,            // MaxPower = 100 (maximum 100%)
+  "0x0006": 10,             // PowerStep = 10 (step size 10%)
 
-  // --- 瓦数设置（WATTS 特性）---
-  "0x0007": [100, 300, 500, 700, 900, 1100],  // SupportedWatts（支持的瓦数列表）
-  "0x0008": 4,              // SelectedWattIndex = 4 → 对应 900W
-  "0x0009": 900             // WattRating = 900（当前瓦数额定值）
+  // --- Wattage Setting (WATTS Feature) ---
+  "0x0007": [100, 300, 500, 700, 900, 1100],  // SupportedWatts (supported wattage list)
+  "0x0008": 4,              // SelectedWattIndex = 4 → corresponds to 900W
+  "0x0009": 900             // WattRating = 900 (current rated wattage)
 }</code></pre>
 
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      App 展示功率时，先检查 <code>FeatureMap</code>：<br/>
-      &bull; 有 PWRNUM → 展示为百分比滑块或档位选择器（10% / 20% / ... / 100%）<br/>
-      &bull; 有 WATTS → 读取 <code>SupportedWatts</code> 列表，展示为瓦数选项（100W / 300W / 500W ...）<br/>
-      &bull; 两者都没有 → 设备只支持满功率，不需要展示功率控制 UI
+      When displaying power in the app, first check <code>FeatureMap</code>:<br/>
+      &bull; PWRNUM present → show as a percentage slider or level selector (10% / 20% / ... / 100%)<br/>
+      &bull; WATTS present → read <code>SupportedWatts</code> list; display as wattage options (100W / 300W / 500W ...)<br/>
+      &bull; Neither → device only supports full power; no power control UI needed
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
-    <summary>场景 1：App 设置烹饪参数并启动加热</summary>
+    <summary>Scenario 1: Set Cooking Parameters and Start Heating</summary>
     <div class="scenario-content">
       <ol>
-        <li>读取 <code>MaxCookTime (0x0002)</code> 确定时间上限，用于限制时间选择器范围</li>
-        <li>读取 <code>FeatureMap (0xFFFC)</code> 判断功率控制方式：
+        <li>Read <code>MaxCookTime (0x0002)</code> to determine the time limit for the time picker range</li>
+        <li>Read <code>FeatureMap (0xFFFC)</code> to determine the power control method:
           <ul>
-            <li>PWRNUM → 读取 <code>MinPower (0x0004)</code>、<code>MaxPower (0x0005)</code>、<code>PowerStep (0x0006)</code> 构建功率选择器</li>
-            <li>WATTS → 读取 <code>SupportedWatts (0x0007)</code> 列表，展示可选瓦数</li>
+            <li>PWRNUM → read <code>MinPower (0x0004)</code>, <code>MaxPower (0x0005)</code>, <code>PowerStep (0x0006)</code> to build the power selector</li>
+            <li>WATTS → read <code>SupportedWatts (0x0007)</code> list and display available wattages</li>
           </ul>
         </li>
-        <li>用户选好时间和功率后，发送 <code>SetCookingParameters (0x00)</code> 写入参数</li>
-        <li>调用 OperationalState Cluster 的 <code>Start</code> 命令启动烹饪</li>
-        <li>订阅 <code>CookTime (0x0001)</code> 属性变化，实时更新倒计时显示</li>
+        <li>After the user selects time and power, send <code>SetCookingParameters (0x00)</code> to write parameters</li>
+        <li>Call the OperationalState Cluster's <code>Start</code> command to begin cooking</li>
+        <li>Subscribe to <code>CookTime (0x0001)</code> changes for real-time countdown updates</li>
       </ol>
     </div>
   </details>
 
   <details class="scenario">
-    <summary>场景 2：烹饪中途调整时间或功率</summary>
+    <summary>Scenario 2: Adjust Time or Power Mid-Cooking</summary>
     <div class="scenario-content">
       <ol>
-        <li>通过 OperationalState Cluster 读取当前状态，确认设备正在运行</li>
-        <li>读取 <code>CookTime (0x0001)</code> 获取当前剩余时间</li>
-        <li>用户点击「加 30 秒」→ 发送 <code>SetCookingParameters(CookTime=当前值+30)</code></li>
-        <li>用户调低功率 → 发送 <code>SetCookingParameters(PowerSetting=50)</code> 或 <code>SetCookingParameters(WattSettingIndex=2)</code></li>
-        <li>注意：能否在运行中修改参数取决于设备实现，部分设备可能要求先暂停再修改</li>
+        <li>Read the current state from the OperationalState Cluster to confirm the device is running</li>
+        <li>Read <code>CookTime (0x0001)</code> to get the current remaining time</li>
+        <li>User taps "Add 30 seconds" → send <code>SetCookingParameters(CookTime=currentValue+30)</code></li>
+        <li>User lowers power → send <code>SetCookingParameters(PowerSetting=50)</code> or <code>SetCookingParameters(WattSettingIndex=2)</code></li>
+        <li>Note: whether parameters can be modified while running depends on the device implementation; some devices may require pausing first</li>
       </ol>
     </div>
   </details>
@@ -4220,56 +4220,56 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'rvc-run-mode': {
     title: 'RvcRunMode Cluster (0x0054)',
-    description: 'Matter RvcRunMode Cluster(0x0054)完整参考 — 扫地机器人运行模式管理，ChangeToMode 命令、SupportedModes/CurrentMode/OnMode 属性、ModeTag 枚举、StatusCode 错误码及常见场景。',
+    description: 'Complete reference for the Matter RvcRunMode Cluster (0x0054) — robot vacuum run mode management, ChangeToMode command, SupportedModes/CurrentMode/OnMode attributes, ModeTag enums, StatusCode error codes, and common scenarios.',
     prev: { title: 'OperationalState', slug: 'operational-state' },
     next: undefined,
     content: `<h1>RvcRunMode Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x0054</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 通常在 <code>Endpoint 1</code>（功能端点）&nbsp;|&nbsp;
-    <strong>基类</strong>: ModeBase（0x0050）
+    <strong>Endpoint</strong>: Typically on <code>Endpoint 1</code> (application endpoint) &nbsp;|&nbsp;
+    <strong>Base Class</strong>: ModeBase (0x0050)
   </p>
   <p>
-    RvcRunMode 是 Matter 为<strong>扫地机器人（Robot Vacuum Cleaner）</strong>定义的运行模式 Cluster。
-    它继承自 ModeBase，专门管理扫地机的高级运行状态 —— 空闲、清扫、建图。
-    通过切换运行模式，用户可以控制扫地机是开始打扫、绘制地图还是返回待命。
+    RvcRunMode is a Cluster defined in Matter for <strong>robot vacuum cleaners (RVC)</strong> to manage run modes.
+    It inherits from ModeBase and specifically manages the robot vacuum's high-level operating states -- Idle, Cleaning, and Mapping.
+    By switching run modes, users can control whether the robot starts cleaning, draws a map, or returns to standby.
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">扫地机 Cluster 三件套</div>
+    <div class="callout-title">Robot Vacuum Cluster Trio</div>
     <p>
-      Matter 为扫地机器人定义了三个协作 Cluster，各管一面：
+      Matter defines three cooperating Clusters for robot vacuums, each managing a different aspect:
     </p>
     <ul>
-      <li><strong>RvcRunMode（本页）</strong>—— 高级运行状态：空闲 / 清扫 / 建图</li>
-      <li><strong>RvcCleanMode</strong> —— 清扫强度：静音 / 标准 / 深度清洁</li>
-      <li><strong>RvcOperationalState</strong> —— 实时运行状态：寻找充电座、充电中、卡住等</li>
+      <li><strong>RvcRunMode (this page)</strong> -- high-level operating state: Idle / Cleaning / Mapping</li>
+      <li><strong>RvcCleanMode</strong> -- cleaning intensity: Quiet / Standard / Deep Clean</li>
+      <li><strong>RvcOperationalState</strong> -- real-time operational state: seeking charger, charging, stuck, etc.</li>
     </ul>
     <p>
-      典型流程：先通过 RvcCleanMode 设好清扫强度，再通过 RvcRunMode 切到清扫模式启动工作，
-      运行过程中的实时状态（充电、卡住、回充）由 RvcOperationalState 上报。
+      Typical flow: first set the cleaning intensity via RvcCleanMode, then switch to Cleaning mode via RvcRunMode to start work;
+      real-time status during operation (charging, stuck, returning to dock) is reported by RvcOperationalState.
     </p>
   </div>
 
   <!-- Quick navigation -->
   <nav class="quick-nav">
-    <a href="#commands">命令</a>
+    <a href="#commands">Commands</a>
     <span class="nav-sep">|</span>
-    <a href="#attributes">属性</a>
+    <a href="#attributes">Attributes</a>
     <span class="nav-sep">|</span>
-    <a href="#mode-tags">模式标签</a>
+    <a href="#mode-tags">Mode Tags</a>
     <span class="nav-sep">|</span>
-    <a href="#status-codes">状态码</a>
+    <a href="#status-codes">Status Codes</a>
     <span class="nav-sep">|</span>
     <a href="#example-data">Example Data</a>
     <span class="nav-sep">|</span>
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    RvcRunMode 继承自 ModeBase，只有一对命令：发送模式切换请求，设备返回执行结果。
+    RvcRunMode inherits from ModeBase with only one command pair: send a mode switch request and the device returns the execution result.
   </p>
 
   <div class="table-wrap">
@@ -4286,25 +4286,25 @@ export const clusters: Record<string, ClusterContent> = {
         <tr class="clickable-row" data-href="#cmd-change-to-mode">
           <td><a href="#cmd-change-to-mode"><code>0x00</code></a></td>
           <td>ChangeToMode</td>
-          <td>客户端 → 设备</td>
-          <td>请求切换到指定运行模式</td>
+          <td>Client &rarr; Server</td>
+          <td>Request switch to specified run mode</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-change-to-mode-response">
           <td><a href="#cmd-change-to-mode-response"><code>0x01</code></a></td>
           <td>ChangeToModeResponse</td>
-          <td>设备 → 客户端</td>
-          <td>返回模式切换的执行结果</td>
+          <td>Server &rarr; Client</td>
+          <td>Return mode switch execution result</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
-  <h3 id="cmd-change-to-mode">ChangeToMode —— 切换运行模式(0x00)</h3>
+  <!-- ====== Command Details ====== -->
+  <h3 id="cmd-change-to-mode">ChangeToMode -- Switch Run Mode (0x00)</h3>
   <p>
-    请求设备切换到指定的运行模式。模式编号必须是 <code>SupportedModes</code> 中定义的有效值。
-    设备收到后会校验当前状态是否允许切换（例如正在充电时可能无法直接开始清扫），然后通过
-    <a href="#cmd-change-to-mode-response">ChangeToModeResponse</a> 返回结果。
+    Request the device to switch to a specified run mode. The mode number must be a valid value defined in <code>SupportedModes</code>.
+    Upon receipt, the device validates whether the current state allows the switch (e.g. it may not be possible to start cleaning while charging), then returns the result via
+    <a href="#cmd-change-to-mode-response">ChangeToModeResponse</a>.
   </p>
   <div class="table-wrap">
     <table>
@@ -4315,7 +4315,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>NewMode</td>
           <td>uint8</td>
-          <td>目标模式编号，必须是 SupportedModes 列表中某个模式的 Mode 字段值</td>
+          <td>Target mode number; must be the Mode field value of a mode in the SupportedModes list</td>
         </tr>
       </tbody>
     </table>
@@ -4324,16 +4324,16 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        用户在 App 上点击「开始清扫」，App 发送 ChangeToMode(NewMode=1) 将扫地机从空闲切换到清扫模式。
-        如果扫地机电量过低或尘盒未安装，设备会在响应中返回对应的错误状态码。
+        The user taps "Start Cleaning" in the app. The app sends ChangeToMode(NewMode=1) to switch the robot from Idle to Cleaning mode.
+        If the robot's battery is too low or the dust bin is not installed, the device returns the corresponding error status code in the response.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-change-to-mode-response">ChangeToModeResponse —— 切换结果(0x01)</h3>
+  <h3 id="cmd-change-to-mode-response">ChangeToModeResponse -- Switch Result (0x01)</h3>
   <p>
-    设备对 ChangeToMode 命令的响应。通过 Status 字段告知切换是否成功，失败时附带文字说明。
+    The device's response to the ChangeToMode command. The Status field indicates whether the switch was successful; on failure, a text description is included.
   </p>
   <div class="table-wrap">
     <table>
@@ -4345,33 +4345,33 @@ export const clusters: Record<string, ClusterContent> = {
           <td>Status</td>
           <td>uint8</td>
           <td>
-            <code>0x00</code> = 成功；其他值为错误码（见<a href="#status-codes">状态码</a>章节）
+            <code>0x00</code> = Success; other values are error codes (see <a href="#status-codes">Status Codes</a> section)
           </td>
         </tr>
         <tr>
           <td>StatusText</td>
-          <td>string（可选）</td>
-          <td>人类可读的状态描述，用于调试或展示给用户</td>
+          <td>string (optional)</td>
+          <td>Human-readable status description for debugging or displaying to the user</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">通用错误码 vs 扫地机专属错误码</div>
+    <div class="callout-title">Generic Error Codes vs RVC-Specific Error Codes</div>
     <p>
-      Status 字段的值空间分为两段：<code>0x00–0x3F</code> 是 ModeBase 通用错误码（如 GenericFailure、InvalidInMode），
-      <code>0x40–0x7F</code> 是<strong>扫地机专属</strong>的错误码（如卡住、尘盒缺失等）。
-      App 端处理时需要覆盖两段。
+      The Status field's value space is divided into two ranges: <code>0x00-0x3F</code> for ModeBase generic error codes (e.g. GenericFailure, InvalidInMode),
+      and <code>0x40-0x7F</code> for <strong>robot vacuum-specific</strong> error codes (e.g. stuck, dust bin missing).
+      The app needs to handle both ranges.
     </p>
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h2 id="attributes">Attributes</h2>
   <p>
-    RvcRunMode 继承 ModeBase 的三个属性。注意：ModeBase 定义了 StartUpMode（0x0002），
-    但<strong>扫地机不支持该属性</strong> —— 扫地机每次上电后的行为由 OnMode 决定。
+    RvcRunMode inherits three attributes from ModeBase. Note: ModeBase defines StartUpMode (0x0002),
+    but <strong>robot vacuums do not support this attribute</strong> -- the robot's power-on behavior is determined by OnMode.
   </p>
 
   <div class="table-wrap">
@@ -4389,29 +4389,29 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>SupportedModes</td>
           <td>list&lt;ModeOptionStruct&gt;</td>
-          <td>设备支持的运行模式列表</td>
+          <td>List of run modes supported by the device</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>CurrentMode</td>
           <td>uint8</td>
-          <td>当前运行模式</td>
+          <td>Current run mode</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
           <td>OnMode</td>
           <td>uint8 / null</td>
-          <td>设备唤醒时自动进入的模式</td>
+          <td>Mode automatically entered when device wakes up</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- 属性详细说明 -->
-  <h3 id="attr-0x0000">SupportedModes —— 支持的模式列表(0x0000)</h3>
+  <!-- Attribute Details -->
+  <h3 id="attr-0x0000">SupportedModes -- Supported Mode List (0x0000)</h3>
   <p>
-    设备支持的全部运行模式。每个模式包含标签名称、模式编号和一组模式标签（ModeTag）。
-    列表在设备整个生命周期中固定不变。
+    All run modes supported by the device. Each mode contains a label name, mode number, and a set of mode tags (ModeTag).
+    The list remains fixed throughout the device's lifecycle.
   </p>
   <div class="table-wrap">
     <table>
@@ -4422,265 +4422,265 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Label</td>
           <td>string</td>
-          <td>模式的显示名称，如 "清扫"、"建图"</td>
+          <td>Display name of the mode, e.g. "Cleaning", "Mapping"</td>
         </tr>
         <tr>
           <td>Mode</td>
           <td>uint8</td>
-          <td>模式编号，在列表内唯一，作为 ChangeToMode 的参数</td>
+          <td>Mode number, unique within the list, used as the ChangeToMode parameter</td>
         </tr>
         <tr>
           <td>ModeTags</td>
           <td>list&lt;ModeTagStruct&gt;</td>
-          <td>模式标签列表，标识该模式的语义（见<a href="#mode-tags">模式标签</a>章节）</td>
+          <td>Mode tag list identifying the semantic meaning (see <a href="#mode-tags">Mode Tags</a> section)</td>
         </tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0001">CurrentMode —— 当前模式(0x0001)</h3>
+  <h3 id="attr-0x0001">CurrentMode -- Current Mode (0x0001)</h3>
   <p>
-    设备当前的运行模式编号，值必须是 SupportedModes 中某个模式的 Mode 字段。
-    订阅此属性可以实时跟踪扫地机的运行状态变化。
+    The device's current run mode number. The value must be the Mode field of a mode in SupportedModes.
+    Subscribe to this attribute to track the robot vacuum's operating state changes in real-time.
   </p>
   <div class="callout callout-tip">
-    <div class="callout-title">订阅推荐</div>
+    <div class="callout-title">Subscription Recommendation</div>
     <p>
-      建议 App 通过 Subscribe 订阅 CurrentMode 的变化，而不是轮询。
-      当扫地机完成清扫自动回到空闲模式、或因异常停止时，订阅能实时收到通知。
+      It is recommended that apps subscribe to CurrentMode changes rather than polling.
+      When the robot finishes cleaning and automatically returns to Idle mode, or stops due to an error, subscriptions provide real-time notifications.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0003">OnMode —— 唤醒模式(0x0003)</h3>
+  <h3 id="attr-0x0003">OnMode -- Wake-Up Mode (0x0003)</h3>
   <p>
-    设备从非活跃状态唤醒时自动进入的模式。值为 SupportedModes 中某个模式的 Mode 字段，
-    或 <code>null</code> 表示不自动切换模式。
+    The mode the device automatically enters when waking from an inactive state. The value is the Mode field of a mode in SupportedModes,
+    or <code>null</code> meaning no automatic mode switch.
   </p>
   <div class="callout callout-warning">
-    <div class="callout-title">没有 StartUpMode</div>
+    <div class="callout-title">No StartUpMode</div>
     <p>
-      ModeBase 定义了 <code>StartUpMode（0x0002）</code> 属性，但 RvcRunMode <strong>明确排除了它</strong>。
-      扫地机的上电行为仅由 OnMode 控制。如果你在读取属性时发现 0x0002 不存在，这是正常的。
+      ModeBase defines the <code>StartUpMode (0x0002)</code> attribute, but RvcRunMode <strong>explicitly excludes it</strong>.
+      The robot vacuum's power-on behavior is controlled solely by OnMode. If you find 0x0002 does not exist when reading attributes, this is normal.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 模式标签（ModeTag）====== -->
-  <h2 id="mode-tags">模式标签(ModeTag)</h2>
+  <!-- ====== Mode Tags (ModeTag) ====== -->
+  <h2 id="mode-tags">Mode Tags (ModeTag)</h2>
   <p>
-    每个运行模式通过 ModeTag 标识其语义。ModeTag 让不同厂商的扫地机能用不同的 Label 文字，
-    但 App 仍然能通过标准化的 Tag 值识别出「这是清扫模式」还是「这是建图模式」。
+    Each run mode is identified semantically through ModeTag. ModeTag enables different manufacturers' robots to use different Label text,
+    while apps can still identify whether it's a Cleaning mode or Mapping mode through standardized Tag values.
   </p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0x4000</span>
       <div>
-        <span class="enum-name">Idle（空闲）</span>
-        <span class="enum-desc">扫地机处于待命状态，未执行任何任务</span>
+        <span class="enum-name">Idle</span>
+        <span class="enum-desc">The robot vacuum is in standby, not performing any task</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x4001</span>
       <div>
-        <span class="enum-name">Cleaning（清扫）</span>
-        <span class="enum-desc">扫地机正在执行清扫任务</span>
+        <span class="enum-name">Cleaning</span>
+        <span class="enum-desc">The robot vacuum is performing a cleaning task</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x4002</span>
       <div>
-        <span class="enum-name">Mapping（建图）</span>
-        <span class="enum-desc">扫地机正在扫描环境、构建地图，不进行实际清扫</span>
+        <span class="enum-name">Mapping</span>
+        <span class="enum-desc">The robot vacuum is scanning the environment and building a map without actual cleaning</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">ModeTag 的实际用法</div>
+    <div class="callout-title">Practical Usage of ModeTag</div>
     <p>
-      厂商 A 的清扫模式叫 "Auto Clean"（Mode=1），厂商 B 叫 "智能清扫"（Mode=3），
-      但两者的 ModeTags 都包含 <code>0x4001 (Cleaning)</code>。
-      App 判断模式语义时应看 ModeTag 而非 Label 或 Mode 编号。
+      Manufacturer A's cleaning mode is called "Auto Clean" (Mode=1), Manufacturer B calls it "Smart Clean" (Mode=3),
+      but both have <code>0x4001 (Cleaning)</code> in their ModeTags.
+      Apps should use ModeTag rather than Label or Mode number to determine mode semantics.
     </p>
   </div>
 
-  <!-- ====== 状态码（StatusCode）====== -->
+  <!-- ====== Status Codes (StatusCode) ====== -->
   <h2 id="status-codes">Status Codes</h2>
   <p>
-    ChangeToModeResponse 的 Status 字段使用以下错误码。<code>0x00</code> 表示成功，
-    <code>0x01–0x03</code> 是 ModeBase 通用错误码，<code>0x41–0x48</code> 是扫地机专属错误码。
+    The ChangeToModeResponse Status field uses the following error codes. <code>0x00</code> indicates success;
+    <code>0x01-0x03</code> are ModeBase generic error codes, and <code>0x41-0x48</code> are robot vacuum-specific error codes.
   </p>
 
-  <h3>通用状态码(ModeBase)</h3>
+  <h3>Generic Status Codes (ModeBase)</h3>
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0x00</span>
       <div>
         <span class="enum-name">Success</span>
-        <span class="enum-desc">模式切换成功</span>
+        <span class="enum-desc">Mode switch successful</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x01</span>
       <div>
         <span class="enum-name">UnsupportedMode</span>
-        <span class="enum-desc">请求的模式编号不在 SupportedModes 中</span>
+        <span class="enum-desc">The requested mode number is not in SupportedModes</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x02</span>
       <div>
         <span class="enum-name">GenericFailure</span>
-        <span class="enum-desc">通用失败，无法归类到具体原因</span>
+        <span class="enum-desc">Generic failure; cannot be attributed to a specific cause</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x03</span>
       <div>
         <span class="enum-name">InvalidInMode</span>
-        <span class="enum-desc">当前模式下不允许切换到目标模式</span>
+        <span class="enum-desc">Switching to the target mode is not allowed from the current mode</span>
       </div>
     </div>
   </div>
 
-  <h3>扫地机专属状态码</h3>
+  <h3>Robot Vacuum-Specific Status Codes</h3>
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0x41</span>
       <div>
-        <span class="enum-name">Stuck（卡住）</span>
-        <span class="enum-desc">扫地机被障碍物卡住，无法移动</span>
+        <span class="enum-name">Stuck</span>
+        <span class="enum-desc">The robot is stuck on an obstacle and cannot move</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x42</span>
       <div>
-        <span class="enum-name">DustBinMissing（尘盒缺失）</span>
-        <span class="enum-desc">尘盒未安装到位，拒绝启动清扫</span>
+        <span class="enum-name">DustBinMissing</span>
+        <span class="enum-desc">Dust bin not properly installed; cleaning start refused</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x43</span>
       <div>
-        <span class="enum-name">DustBinFull（尘盒已满）</span>
-        <span class="enum-desc">尘盒已满，需要清理后才能继续</span>
+        <span class="enum-name">DustBinFull</span>
+        <span class="enum-desc">Dust bin is full; must be emptied before continuing</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x44</span>
       <div>
-        <span class="enum-name">WaterTankEmpty（水箱空）</span>
-        <span class="enum-desc">水箱无水，拖地功能无法启动</span>
+        <span class="enum-name">WaterTankEmpty</span>
+        <span class="enum-desc">Water tank is empty; mopping function cannot start</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x45</span>
       <div>
-        <span class="enum-name">WaterTankMissing（水箱缺失）</span>
-        <span class="enum-desc">水箱未安装</span>
+        <span class="enum-name">WaterTankMissing</span>
+        <span class="enum-desc">Water tank not installed</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x46</span>
       <div>
-        <span class="enum-name">WaterTankLidOpen（水箱盖未关）</span>
-        <span class="enum-desc">水箱盖子未正确关闭</span>
+        <span class="enum-name">WaterTankLidOpen</span>
+        <span class="enum-desc">Water tank lid not properly closed</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x47</span>
       <div>
-        <span class="enum-name">MopCleaningPadMissing（拖布缺失）</span>
-        <span class="enum-desc">拖布 / 清洁垫未安装</span>
+        <span class="enum-name">MopCleaningPadMissing</span>
+        <span class="enum-desc">Mop / cleaning pad not installed</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x48</span>
       <div>
-        <span class="enum-name">BatteryLow（电量不足）</span>
-        <span class="enum-desc">电池电量过低，无法启动任务，需要先充电</span>
+        <span class="enum-name">BatteryLow</span>
+        <span class="enum-desc">Battery level too low to start a task; charging required first</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">App 端错误处理建议</div>
+    <div class="callout-title">App-Side Error Handling Recommendations</div>
     <p>
-      这些状态码对应的都是<strong>用户可以自行解决的物理问题</strong>。
-      App 收到错误码后应向用户展示明确的操作指引，例如「请清空尘盒后重试」「请安装水箱」，
-      而不是显示通用的「操作失败」。StatusText 字段也可作为兜底的展示文案。
+      These status codes all correspond to <strong>physical issues that users can resolve themselves</strong>.
+      When the app receives an error code, it should display clear action guidance to the user, such as "Please empty the dust bin and try again" or "Please install the water tank",
+      rather than a generic "Operation failed". The StatusText field can also serve as fallback display text.
     </p>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一台支持三种运行模式的扫地机器人，当前正在清扫中的 RvcRunMode Cluster 读取结果：</p>
+  <p>Read result of the RvcRunMode Cluster from a robot vacuum supporting three run modes, currently cleaning:</p>
 
   <pre><code>{
-  // --- 支持的运行模式 ---
-  "0x0000": [                                    // SupportedModes（设备支持的模式列表）
+  // --- Supported run modes ---
+  "0x0000": [                                    // SupportedModes (device supported modes list)
     {
-      "Label": "空闲",
+      "Label": "Idle",
       "Mode": 0,
       "ModeTags": [{ "Value": 16384 }]           // 0x4000 = Idle
     },
     {
-      "Label": "清扫",
+      "Label": "Cleaning",
       "Mode": 1,
       "ModeTags": [{ "Value": 16385 }]           // 0x4001 = Cleaning
     },
     {
-      "Label": "建图",
+      "Label": "Mapping",
       "Mode": 2,
       "ModeTags": [{ "Value": 16386 }]           // 0x4002 = Mapping
     }
   ],
 
-  // --- 当前状态 ---
-  "0x0001": 1,              // CurrentMode = 1（当前正在清扫）
-  "0x0003": 0               // OnMode = 0（设备唤醒后默认进入空闲模式）
+  // --- Current state ---
+  "0x0001": 1,              // CurrentMode = 1 (currently cleaning)
+  "0x0003": 0               // OnMode = 0 (device defaults to Idle mode after waking up)
 }</code></pre>
 
   <div class="callout callout-tip">
-    <div class="callout-title">关于 ModeTag 的数值</div>
+    <div class="callout-title">About ModeTag Values</div>
     <p>
-      示例中 ModeTags 的 Value 使用十进制：<code>16384</code> = <code>0x4000</code>（Idle），
-      <code>16385</code> = <code>0x4001</code>（Cleaning），<code>16386</code> = <code>0x4002</code>（Mapping）。
-      实际协议传输中使用的是整数值，文档中常写十六进制是为了方便对照规范。
+      The ModeTags Value in the example uses decimal: <code>16384</code> = <code>0x4000</code> (Idle),
+      <code>16385</code> = <code>0x4001</code> (Cleaning), <code>16386</code> = <code>0x4002</code> (Mapping).
+      The actual protocol transmission uses integer values; the documentation commonly uses hexadecimal for easy reference against the specification.
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
-  <h3 id="scenario-start-cleaning">场景 1：启动清扫</h3>
+  <h3 id="scenario-start-cleaning">Scenario 1: Start Cleaning</h3>
   <ol>
-    <li>读取 <code>SupportedModes（0x0000）</code>，找到 ModeTags 包含 <code>0x4001 (Cleaning)</code> 的模式，记下其 Mode 编号</li>
-    <li>发送 <code>ChangeToMode（0x00）</code>，NewMode 设为上一步得到的编号</li>
-    <li>检查 <code>ChangeToModeResponse</code> 的 Status：
+    <li>Read <code>SupportedModes (0x0000)</code>, find the mode with <code>0x4001 (Cleaning)</code> in its ModeTags, and note its Mode number</li>
+    <li>Send <code>ChangeToMode (0x00)</code> with NewMode set to the number obtained above</li>
+    <li>Check the <code>ChangeToModeResponse</code> Status:
       <ul>
-        <li><code>0x00</code> —— 成功，扫地机开始清扫</li>
-        <li><code>0x42</code> —— 尘盒未安装，提示用户装好尘盒</li>
-        <li><code>0x43</code> —— 尘盒已满，提示用户清空</li>
-        <li><code>0x48</code> —— 电量不足，提示用户先充电</li>
+        <li><code>0x00</code> -- Success, the vacuum starts cleaning</li>
+        <li><code>0x42</code> -- Dust bin not installed; prompt the user to install it</li>
+        <li><code>0x43</code> -- Dust bin full; prompt the user to empty it</li>
+        <li><code>0x48</code> -- Battery low; prompt the user to charge first</li>
       </ul>
     </li>
-    <li>订阅 <code>CurrentMode（0x0001）</code>，当值变回 Idle 对应的编号时，说明清扫完成</li>
+    <li>Subscribe to <code>CurrentMode (0x0001)</code>; when the value returns to the Idle mode number, cleaning is complete</li>
   </ol>
 
-  <h3 id="scenario-check-status">场景 2：查询当前状态并展示</h3>
+  <h3 id="scenario-check-status">Scenario 2: Query Current Status and Display</h3>
   <ol>
-    <li>读取 <code>SupportedModes（0x0000）</code> 获取完整模式列表</li>
-    <li>读取 <code>CurrentMode（0x0001）</code> 获取当前模式编号</li>
-    <li>在 SupportedModes 中找到匹配的模式，取其 Label 展示在 App 界面上（如「清扫中」）</li>
-    <li>同时检查 ModeTags 中的 Tag 值，用标准化语义辅助 UI 展示：
+    <li>Read <code>SupportedModes (0x0000)</code> to get the complete mode list</li>
+    <li>Read <code>CurrentMode (0x0001)</code> to get the current mode number</li>
+    <li>Find the matching mode in SupportedModes and display its Label in the app UI (e.g. "Cleaning")</li>
+    <li>Also check the Tag values in ModeTags to assist UI display with standardized semantics:
       <ul>
-        <li><code>0x4000 (Idle)</code> —— 显示待命图标</li>
-        <li><code>0x4001 (Cleaning)</code> —— 显示清扫动画</li>
-        <li><code>0x4002 (Mapping)</code> —— 显示地图扫描进度</li>
+        <li><code>0x4000 (Idle)</code> -- Display standby icon</li>
+        <li><code>0x4001 (Cleaning)</code> -- Display cleaning animation</li>
+        <li><code>0x4002 (Mapping)</code> -- Display map scanning progress</li>
       </ul>
     </li>
   </ol>
@@ -4721,50 +4721,50 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'rvc-clean-mode': {
     title: 'RvcCleanMode Cluster (0x0055)',
-    description: 'Matter RvcCleanMode Cluster(0x0055)完整参考 — 扫地机器人清洁强度模式，ChangeToMode 命令、SupportedModes / CurrentMode / OnMode 属性、DeepClean / VacuumOnly / MopOnly / VacuumAndMop 模式标签定义及枚举值速查。',
+    description: 'Complete reference for the Matter RvcCleanMode Cluster (0x0055) — robot vacuum cleaning intensity modes, ChangeToMode command, SupportedModes/CurrentMode/OnMode attributes, DeepClean/VacuumOnly/MopOnly/VacuumAndMop mode tag definitions and enum value quick reference.',
     prev: undefined,
     next: undefined,
     content: `<h1>RvcCleanMode Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x0055</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 通常在 <code>Endpoint 1</code>（功能端点）
+    <strong>Endpoint</strong>: Typically on <code>Endpoint 1</code> (application endpoint)
   </p>
   <p>
-    RvcCleanMode 是扫地机器人（Robotic Vacuum Cleaner）的<strong>清洁强度模式</strong> Cluster，
-    派生自 ModeBase（0x0049）。它定义了扫地机不同的清洁方式 —— 深度清洁、仅吸尘、仅拖地、吸拖一体等。
-    与 <strong>RvcRunMode</strong>（0x0054，运行模式：清扫/映射/回充）搭配使用：RvcRunMode 决定「做什么任务」，
-    RvcCleanMode 决定「用什么强度做」。
+    RvcCleanMode is the <strong>cleaning intensity mode</strong> Cluster for Robot Vacuum Cleaners (RVC),
+    derived from ModeBase (0x0049). It defines different cleaning methods for the vacuum -- Deep Clean, Vacuum Only, Mop Only, Vacuum and Mop, etc.
+    Used in conjunction with <strong>RvcRunMode</strong> (0x0054, run modes: Cleaning/Mapping/Return to Dock): RvcRunMode determines "what task to do",
+    while RvcCleanMode determines "at what intensity".
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">ModeBase 派生 Cluster</div>
+    <div class="callout-title">ModeBase Derived Cluster</div>
     <p>
-      RvcCleanMode 继承 ModeBase 的全部命令和属性结构，但<strong>不支持</strong> <code>StartUpMode</code> 属性
-      （规范明确禁止）。开机后的默认清洁模式由 <code>OnMode</code> 控制。
-      模式标签（ModeTag）在 0x4000~0x4003 范围内定义了 RVC 专属的清洁类型。
+      RvcCleanMode inherits all commands and attribute structures from ModeBase, but <strong>does not support</strong> the <code>StartUpMode</code> attribute
+      (explicitly prohibited by the specification). The default cleaning mode after power-on is controlled by <code>OnMode</code>.
+      Mode tags (ModeTag) define RVC-specific cleaning types in the 0x4000~0x4003 range.
     </p>
   </div>
 
   <!-- Quick navigation -->
   <nav class="quick-nav">
-    <a href="#commands">命令</a>
+    <a href="#commands">Commands</a>
     <span class="nav-sep">|</span>
-    <a href="#attributes">属性</a>
+    <a href="#attributes">Attributes</a>
     <span class="nav-sep">|</span>
-    <a href="#mode-tags">模式标签</a>
+    <a href="#mode-tags">Mode Tags</a>
     <span class="nav-sep">|</span>
-    <a href="#status-codes">状态码</a>
+    <a href="#status-codes">Status Codes</a>
     <span class="nav-sep">|</span>
     <a href="#example-data">Example Data</a>
     <span class="nav-sep">|</span>
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    RvcCleanMode 只有一个命令 <code>ChangeToMode</code>，继承自 ModeBase。
-    设备收到后切换清洁模式，并通过 <code>ChangeToModeResponse</code> 返回执行结果。
+    RvcCleanMode has only one command, <code>ChangeToMode</code>, inherited from ModeBase.
+    The device switches the cleaning mode upon receipt and returns the execution result via <code>ChangeToModeResponse</code>.
   </p>
 
   <div class="table-wrap">
@@ -4781,24 +4781,24 @@ export const clusters: Record<string, ClusterContent> = {
         <tr class="clickable-row" data-href="#cmd-0x00">
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>ChangeToMode</td>
-          <td>客户端 → 设备</td>
-          <td>切换清洁模式</td>
+          <td>Client &rarr; Server</td>
+          <td>Switch cleaning mode</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x01">
           <td><a href="#cmd-0x01"><code>0x01</code></a></td>
           <td>ChangeToModeResponse</td>
-          <td>设备 → 客户端</td>
-          <td>模式切换结果</td>
+          <td>Server &rarr; Client</td>
+          <td>Mode switch result</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
-  <h3 id="cmd-0x00">ChangeToMode —— 切换模式(0x00)</h3>
+  <!-- ====== Command Details ====== -->
+  <h3 id="cmd-0x00">ChangeToMode -- Switch Mode (0x00)</h3>
   <p>
-    请求设备切换到指定的清洁模式。<code>NewMode</code> 必须是
-    <code>SupportedModes</code> 列表中存在的 Mode 值，否则设备会拒绝。
+    Request the device to switch to the specified cleaning mode. <code>NewMode</code> must be
+    a Mode value that exists in the <code>SupportedModes</code> list; otherwise the device will refuse.
   </p>
   <div class="table-wrap">
     <table>
@@ -4809,25 +4809,25 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>NewMode</td>
           <td>uint8</td>
-          <td>目标模式编号，取自 SupportedModes 中的 Mode 字段</td>
+          <td>Target mode number, taken from the Mode field in SupportedModes</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">切换时机限制</div>
+    <div class="callout-title">Switching Timing Constraints</div>
     <p>
-      扫地机<strong>运行中</strong>时切换清洁模式，设备可能会拒绝并返回
-      <code>InvalidInMode (0x03)</code>。部分设备只允许在空闲或回充状态下切换。
-      建议先检查 RvcRunMode 的 CurrentMode，确认设备处于非活动状态再切换。
+      Switching cleaning modes while the vacuum is <strong>running</strong> may be refused by the device with
+      <code>InvalidInMode (0x03)</code>. Some devices only allow switching in Idle or Docked state.
+      It is recommended to first check RvcRunMode's CurrentMode to confirm the device is in an inactive state before switching.
     </p>
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x01">ChangeToModeResponse —— 响应(0x01)</h3>
+  <h3 id="cmd-0x01">ChangeToModeResponse -- Response (0x01)</h3>
   <p>
-    设备收到 ChangeToMode 后返回此响应，指示切换是否成功。
+    The device returns this response after receiving ChangeToMode, indicating whether the switch was successful.
   </p>
   <div class="table-wrap">
     <table>
@@ -4838,23 +4838,23 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Status</td>
           <td>uint8</td>
-          <td>状态码。<code>0x00 (Success)</code> 表示切换成功，其余见<a href="#status-codes">状态码</a></td>
+          <td>Status code. <code>0x00 (Success)</code> indicates a successful switch; see <a href="#status-codes">Status Codes</a> for others</td>
         </tr>
         <tr>
           <td>StatusText</td>
           <td>string</td>
-          <td>可选的说明文字，失败时提供更多信息</td>
+          <td>Optional description text; provides more information on failure</td>
         </tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h2 id="attributes">Attributes</h2>
   <p>
-    RvcCleanMode 继承 ModeBase 的三个属性。注意：ModeBase 定义的 <code>StartUpMode (0x0002)</code>
-    在 RvcCleanMode 中<strong>被禁止</strong>，不会出现。
+    RvcCleanMode inherits three attributes from ModeBase. Note: ModeBase's <code>StartUpMode (0x0002)</code>
+    is <strong>prohibited</strong> in RvcCleanMode and will not appear.
   </p>
 
   <div class="table-wrap">
@@ -4872,83 +4872,83 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>SupportedModes</td>
           <td>list&lt;ModeOptionStruct&gt;</td>
-          <td>设备支持的所有清洁模式</td>
+          <td>All cleaning modes supported by the device</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>CurrentMode</td>
           <td>uint8</td>
-          <td>当前清洁模式</td>
+          <td>Current cleaning mode</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
           <td>OnMode</td>
           <td>uint8 / null</td>
-          <td>开机后自动切换到的模式</td>
+          <td>Mode automatically applied after power-on</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- 属性详解 -->
-  <h3 id="attr-0x0000">SupportedModes —— 模式列表(0x0000)</h3>
+  <!-- Attribute Details -->
+  <h3 id="attr-0x0000">SupportedModes -- Mode List (0x0000)</h3>
   <p>
-    设备支持的全部清洁模式列表。每个模式包含编号、标签和模式标签（ModeTag），
-    ModeTag 用于标识该模式的清洁类型（如深度清洁、仅吸尘等）。
+    All cleaning modes supported by the device. Each mode contains a number, label, and mode tags (ModeTag);
+    ModeTag identifies the cleaning type of that mode (e.g. Deep Clean, Vacuum Only).
   </p>
   <div class="table-wrap">
     <table>
       <thead>
-        <tr><th>字段（ModeOptionStruct）</th><th>Type</th><th>Description</th></tr>
+        <tr><th>Field (ModeOptionStruct)</th><th>Type</th><th>Description</th></tr>
       </thead>
       <tbody>
         <tr>
           <td>Label</td>
           <td>string</td>
-          <td>模式的可读名称，最长 64 字符，如「深度清洁」「仅吸尘」</td>
+          <td>Human-readable mode name, up to 64 characters, e.g. "Deep Clean", "Vacuum Only"</td>
         </tr>
         <tr>
           <td>Mode</td>
           <td>uint8</td>
-          <td>模式编号，在列表内唯一。ChangeToMode 命令的参数就是这个值</td>
+          <td>Mode number, unique within the list. This is the value used as the ChangeToMode command parameter</td>
         </tr>
         <tr>
           <td>ModeTags</td>
           <td>list&lt;ModeTagStruct&gt;</td>
-          <td>模式标签列表，至少一个。详见<a href="#mode-tags">模式标签</a></td>
+          <td>List of mode tags, at least one. See <a href="#mode-tags">Mode Tags</a> for details</td>
         </tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0001">CurrentMode —— 当前模式(0x0001)</h3>
+  <h3 id="attr-0x0001">CurrentMode -- Current Mode (0x0001)</h3>
   <p>
-    设备当前的清洁模式编号，始终是 SupportedModes 中某个条目的 Mode 值。
-    订阅此属性可以在模式切换时同步更新 App 界面。
+    The device's current cleaning mode number; always the Mode value of an entry in SupportedModes.
+    Subscribing to this attribute keeps the app UI synchronized when the mode switches.
   </p>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0003">OnMode —— 开机模式(0x0003)</h3>
+  <h3 id="attr-0x0003">OnMode -- Power-On Mode (0x0003)</h3>
   <p>
-    设备开机后自动切换到的清洁模式。<strong>Nullable</strong> —— <code>null</code>
-    表示开机后保持上次使用的模式。写入需要操作权限。
+    The cleaning mode the device automatically switches to after power-on. <strong>Nullable</strong> -- <code>null</code>
+    indicates retaining the previously used mode after power-on. Writing requires operational privilege.
   </p>
   <div class="callout callout-tip">
     <div class="callout-title">OnMode vs StartUpMode</div>
     <p>
-      ModeBase 规范中定义了 <code>StartUpMode (0x0002)</code>，但 RvcCleanMode
-      <strong>明确禁止</strong>使用 StartUpMode。开机模式的控制统一通过 OnMode 完成。
-      如果 OnMode 为 <code>null</code>，设备保持断电前的清洁模式。
+      The ModeBase specification defines <code>StartUpMode (0x0002)</code>, but RvcCleanMode
+      <strong>explicitly prohibits</strong> the use of StartUpMode. Power-on mode control is handled exclusively through OnMode.
+      If OnMode is <code>null</code>, the device retains the cleaning mode from before power loss.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 模式标签（ModeTag）====== -->
-  <h2 id="mode-tags">模式标签(ModeTag)</h2>
+  <!-- ====== Mode Tags (ModeTag) ====== -->
+  <h2 id="mode-tags">Mode Tags (ModeTag)</h2>
   <p>
-    RvcCleanMode 在 0x4000~0x4003 范围内定义了 4 个专属标签，用于标识清洁方式的语义。
-    App 可以根据 ModeTag 展示对应的图标或分类，而不依赖 Label 字符串匹配。
+    RvcCleanMode defines 4 dedicated tags in the 0x4000~0x4003 range to identify cleaning method semantics.
+    Apps can display corresponding icons or categories based on ModeTag rather than relying on Label string matching.
   </p>
 
   <div class="enum-cards enum-cards-row">
@@ -4956,46 +4956,46 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">0x4000</span>
       <div>
         <span class="enum-name">DeepClean</span>
-        <span class="enum-desc">深度清洁 —— 最大吸力 + 多次覆盖，适合重度脏污场景</span>
+        <span class="enum-desc">Deep Clean -- maximum suction + multiple passes, suitable for heavily soiled areas</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x4001</span>
       <div>
         <span class="enum-name">VacuumOnly</span>
-        <span class="enum-desc">仅吸尘 —— 只启动吸尘功能，不启用拖地模块</span>
+        <span class="enum-desc">Vacuum Only -- activates only the vacuum function, mopping module disabled</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x4002</span>
       <div>
         <span class="enum-name">MopOnly</span>
-        <span class="enum-desc">仅拖地 —— 只启用拖地模块，不启动吸尘</span>
+        <span class="enum-desc">Mop Only -- activates only the mopping module, vacuum disabled</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x4003</span>
       <div>
         <span class="enum-name">VacuumAndMop</span>
-        <span class="enum-desc">吸拖一体 —— 同时吸尘和拖地（最常用的日常模式）</span>
+        <span class="enum-desc">Vacuum and Mop -- simultaneous vacuuming and mopping (the most common everyday mode)</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">ModeTag 与 ModeBase 通用标签</div>
+    <div class="callout-title">ModeTag and ModeBase Common Tags</div>
     <p>
-      除了上述 RVC 专属标签，每个模式还可以携带 ModeBase 定义的通用标签，
-      如 <code>Auto (0x0000)</code>、<code>Quick (0x0001)</code>、<code>Quiet (0x0002)</code> 等。
-      一个模式可以同时拥有多个标签 —— 例如「安静吸尘」可以标记为
-      <code>VacuumOnly (0x4001)</code> + <code>Quiet (0x0002)</code>。
+      In addition to the RVC-specific tags above, each mode can also carry ModeBase-defined common tags,
+      such as <code>Auto (0x0000)</code>, <code>Quick (0x0001)</code>, <code>Quiet (0x0002)</code>, etc.
+      A mode can have multiple tags simultaneously -- for example, "Quiet Vacuum" can be tagged as
+      <code>VacuumOnly (0x4001)</code> + <code>Quiet (0x0002)</code>.
     </p>
   </div>
 
-  <!-- ====== 状态码 ====== -->
+  <!-- ====== Status Codes ====== -->
   <h2 id="status-codes">Status Codes</h2>
   <p>
-    ChangeToModeResponse 中的 Status 字段使用以下状态码，与 RvcRunMode 共享同一套扩展定义。
+    The Status field in ChangeToModeResponse uses the following status codes, sharing the same extended definitions as RvcRunMode.
   </p>
 
   <div class="enum-cards enum-cards-row">
@@ -5003,103 +5003,103 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">0x00</span>
       <div>
         <span class="enum-name">Success</span>
-        <span class="enum-desc">成功 —— 模式已切换</span>
+        <span class="enum-desc">Success -- mode has been switched</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x01</span>
       <div>
         <span class="enum-name">UnsupportedMode</span>
-        <span class="enum-desc">不支持的模式 —— NewMode 不在 SupportedModes 中</span>
+        <span class="enum-desc">Unsupported mode -- NewMode is not in SupportedModes</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x02</span>
       <div>
         <span class="enum-name">GenericFailure</span>
-        <span class="enum-desc">通用失败 —— 未知原因导致无法切换</span>
+        <span class="enum-desc">Generic failure -- unable to switch due to an unknown reason</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x03</span>
       <div>
         <span class="enum-name">InvalidInMode</span>
-        <span class="enum-desc">当前状态不允许 —— 如扫地机正在运行时切换清洁模式</span>
+        <span class="enum-desc">Not allowed in current state -- e.g. switching cleaning modes while the vacuum is running</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">RVC 专属约束</div>
+    <div class="callout-title">RVC-Specific Constraints</div>
     <p>
-      扫地机在「清扫中」「回充中」等运行状态下，切换清洁模式通常会被拒绝
-      （返回 <code>InvalidInMode</code>）。建议在发送 ChangeToMode 前，
-      先读取 RvcRunMode 的 CurrentMode 确认设备处于空闲或待机状态。
+      Switching cleaning modes while the vacuum is in states such as "Cleaning" or "Returning to Dock" is typically refused
+      (returns <code>InvalidInMode</code>). Before sending ChangeToMode,
+      it is recommended to first read RvcRunMode's CurrentMode to confirm the device is in Idle or standby state.
     </p>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一台支持四种清洁模式的扫地机器人，当前处于「吸拖一体」模式：</p>
+  <p>A robot vacuum supporting four cleaning modes, currently in "Vacuum and Mop" mode:</p>
 
   <pre><code>{
-  // --- 模式列表 ---
+  // --- Mode list ---
   "0x0000": [                              // SupportedModes
     {
-      "Label": "深度清洁",
+      "Label": "Deep Clean",
       "Mode": 0,
       "ModeTags": [{ "Value": 16384 }]    // DeepClean (0x4000)
     },
     {
-      "Label": "仅吸尘",
+      "Label": "Vacuum Only",
       "Mode": 1,
       "ModeTags": [{ "Value": 16385 }]    // VacuumOnly (0x4001)
     },
     {
-      "Label": "仅拖地",
+      "Label": "Mop Only",
       "Mode": 2,
       "ModeTags": [{ "Value": 16386 }]    // MopOnly (0x4002)
     },
     {
-      "Label": "吸拖一体",
+      "Label": "Vacuum and Mop",
       "Mode": 3,
       "ModeTags": [{ "Value": 16387 }]    // VacuumAndMop (0x4003)
     }
   ],
 
-  // --- 当前模式 ---
-  "0x0001": 3,                             // CurrentMode = 3（吸拖一体）
-  "0x0003": 3                              // OnMode = 3（开机默认吸拖一体）
+  // --- Current mode ---
+  "0x0001": 3,                             // CurrentMode = 3 (Vacuum and Mop)
+  "0x0003": 3                              // OnMode = 3 (default to Vacuum and Mop on power-on)
 }</code></pre>
 
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      不同厂商的扫地机支持的模式数量和标签可能不同。有些机型没有拖地模块，
-      就不会出现 <code>MopOnly</code> 和 <code>VacuumAndMop</code> 标签。
-      App 应始终以 <code>SupportedModes</code> 返回的实际列表为准，
-      通过 ModeTag 识别清洁类型，用 Label 作为展示文字。
+      Different manufacturers' vacuums may support different numbers of modes and tags. Some models lack a mopping module
+      and will not have <code>MopOnly</code> or <code>VacuumAndMop</code> tags.
+      Apps should always rely on the actual list returned by <code>SupportedModes</code>,
+      identifying cleaning types through ModeTag and using Label as display text.
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
-  <h3 id="scenario-switch">场景 1：用户切换清洁模式</h3>
+  <h3 id="scenario-switch">Scenario 1: User Switches Cleaning Mode</h3>
   <ol>
-    <li>App 读取 <code>SupportedModes (0x0000)</code>，获取设备支持的所有清洁模式列表</li>
-    <li>根据每个模式的 ModeTag 展示对应图标 —— 如 VacuumOnly 显示吸尘器图标，MopOnly 显示拖布图标</li>
-    <li>用户选择「仅拖地」（Mode = 2），App 发送 <code>ChangeToMode</code>，NewMode = 2</li>
-    <li>设备返回 <code>ChangeToModeResponse</code>，Status = <code>0x00 (Success)</code></li>
-    <li>App 订阅 <code>CurrentMode (0x0001)</code> 变化，确认已切换到目标模式并更新高亮</li>
+    <li>The app reads <code>SupportedModes (0x0000)</code> to get all cleaning modes supported by the device</li>
+    <li>Display corresponding icons based on each mode's ModeTag -- e.g. VacuumOnly shows a vacuum icon, MopOnly shows a mop icon</li>
+    <li>The user selects "Mop Only" (Mode = 2); the app sends <code>ChangeToMode</code> with NewMode = 2</li>
+    <li>The device returns <code>ChangeToModeResponse</code> with Status = <code>0x00 (Success)</code></li>
+    <li>The app subscribes to <code>CurrentMode (0x0001)</code> changes to confirm the switch and update the highlight</li>
   </ol>
 
-  <h3 id="scenario-onmode">场景 2：设置开机默认清洁模式</h3>
+  <h3 id="scenario-onmode">Scenario 2: Set Default Power-On Cleaning Mode</h3>
   <ol>
-    <li>用户在设置页选择「开机默认使用深度清洁」</li>
-    <li>App 写入 <code>OnMode (0x0003)</code> = 0（深度清洁的 Mode 值）</li>
-    <li>下次扫地机开机或从充电桩激活时，自动切换到深度清洁模式</li>
-    <li>如果用户选择「保持上次模式」，App 写入 <code>OnMode = null</code></li>
+    <li>The user selects "Default to Deep Clean on power-on" in the settings page</li>
+    <li>The app writes <code>OnMode (0x0003)</code> = 0 (the Mode value for Deep Clean)</li>
+    <li>Next time the vacuum powers on or activates from the charging dock, it automatically switches to Deep Clean mode</li>
+    <li>If the user selects "Keep previous mode", the app writes <code>OnMode = null</code></li>
   </ol>
 
   <script>
@@ -5138,34 +5138,34 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'rvc-operational-state': {
     title: 'RvcOperationalState Cluster (0x0061)',
-    description: 'Matter RvcOperationalState Cluster(0x0061)完整参考 — 继承自 OperationalState 的扫地机器人专用状态机，Pause/Stop/GoHome 命令、充电/停靠/寻充扩展状态、8 种 RVC 专属错误码、事件通知等全部定义及枚举值速查。',
+    description: 'Complete reference for the Matter RvcOperationalState Cluster (0x0061) — robot vacuum-specific state machine derived from OperationalState, Pause/Stop/GoHome commands, Charging/Docked/SeekingCharger extended states, 8 RVC-specific error codes, event notifications, and all enum value definitions.',
     prev: { title: 'OperationalState', slug: 'operational-state' },
     next: undefined,
     content: `<h1>RvcOperationalState Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x0061</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 通常在 <code>Endpoint 1</code>（功能端点）&nbsp;|&nbsp;
-    <strong>继承自</strong>: <a href="/clusters/operational-state/">OperationalState（0x0060）</a>
+    <strong>Endpoint</strong>: Typically on <code>Endpoint 1</code> (application endpoint) &nbsp;|&nbsp;
+    <strong>Derived from</strong>: <a href="/clusters/operational-state/">OperationalState (0x0060)</a>
   </p>
   <p>
-    RvcOperationalState 是 <a href="/clusters/operational-state/">OperationalState（0x0060）</a>
-    的<strong>扫地机器人专用派生 Cluster</strong>。它继承了基础状态机的所有属性和事件结构，
-    但根据扫地机器人的实际使用场景做了重要调整：
+    RvcOperationalState is a <a href="/clusters/operational-state/">OperationalState (0x0060)</a>
+    <strong>robot vacuum-specific derived Cluster</strong>. It inherits all attributes and event structures from the base state machine,
+    but with important adjustments based on the actual usage scenarios of robot vacuums:
   </p>
   <ul>
-    <li><strong>去掉了 Start 和 Resume 命令</strong> —— 扫地机器人通过 RvcRunMode Cluster 选择清扫模式来启动，不直接用 Start</li>
-    <li><strong>新增了 GoHome 命令（0x80）</strong> —— 让机器人主动回充电座</li>
-    <li><strong>扩展了 3 个 RVC 专属运行状态</strong> —— SeekingCharger（寻找充电座）、Charging（充电中）、Docked（已停靠）</li>
-    <li><strong>扩展了 8 个 RVC 专属错误码</strong> —— 涵盖充电座、卡住、尘盒、水箱、拖布等常见故障</li>
+    <li><strong>Removed Start and Resume commands</strong> -- robot vacuums start by selecting a cleaning mode via the RvcRunMode Cluster, not by using Start directly</li>
+    <li><strong>Added GoHome command (0x80)</strong> -- instructs the robot to return to the charging dock</li>
+    <li><strong>Extended with 3 RVC-specific operational states</strong> -- SeekingCharger, Charging, and Docked</li>
+    <li><strong>Extended with 8 RVC-specific error codes</strong> -- covering common faults involving the charging dock, stuck conditions, dust bin, water tank, mop pad, etc.</li>
   </ul>
 
   <div class="callout callout-info">
-    <div class="callout-title">与基础 OperationalState 的关系</div>
+    <div class="callout-title">Relationship with Base OperationalState</div>
     <p>
-      RvcOperationalState 并非替代 OperationalState，而是在其基础上<strong>定制</strong>了扫地机器人的行为。
-      基础的 4 个状态（Stopped/Running/Paused/Error）仍然保留，RVC 扩展的 3 个状态（0x40~0x42）
-      是在此基础上增加的。同样，基础的 4 个错误码（NoError/UnableToStartOrResume 等）仍然有效，
-      RVC 扩展的 8 个错误码（0x40~0x47）用于描述扫地机器人特有的故障场景。
+      RvcOperationalState does not replace OperationalState; rather, it <strong>customizes</strong> robot vacuum behavior on top of it.
+      The base 4 states (Stopped/Running/Paused/Error) are still retained, and the 3 RVC-extended states (0x40~0x42)
+      are added on top. Similarly, the base 4 error codes (NoError/UnableToStartOrResume, etc.) remain valid,
+      and the 8 RVC-extended error codes (0x40~0x47) describe fault scenarios specific to robot vacuums.
     </p>
   </div>
 
@@ -5179,22 +5179,22 @@ export const clusters: Record<string, ClusterContent> = {
     <span class="nav-sep">|</span>
     <a href="#structs">Data Structures</a>
     <span class="nav-sep">|</span>
-    <a href="#events">事件</a>
+    <a href="#events">Events</a>
     <span class="nav-sep">|</span>
     <a href="#example-data">Example Data</a>
     <span class="nav-sep">|</span>
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    RvcOperationalState Cluster 共有 3 个命令。相比基础 OperationalState 的 4 个命令，
-    <strong>去掉了 Start（0x02）和 Resume（0x03）</strong>，
-    因为扫地机器人的启动和模式切换由 RvcRunMode Cluster 负责。
-    新增了 <strong>GoHome（0x80）</strong> 命令，用于让机器人返回充电座。
-    所有命令执行后都会返回 <code>OperationalCommandResponse</code>，包含一个
-    <a href="#struct-errorstate">ErrorStateStruct</a> 用于指示操作是否成功。
+    The RvcOperationalState Cluster has 3 commands. Compared to the base OperationalState's 4 commands,
+    <strong>Start (0x02) and Resume (0x03) are removed</strong>,
+    because robot vacuum startup and mode switching are handled by the RvcRunMode Cluster.
+    A new <strong>GoHome (0x80)</strong> command is added for instructing the robot to return to the charging dock.
+    All commands return an <code>OperationalCommandResponse</code> after execution, containing an
+    <a href="#struct-errorstate">ErrorStateStruct</a> indicating whether the operation succeeded.
   </p>
 
   <div class="table-wrap">
@@ -5204,26 +5204,26 @@ export const clusters: Record<string, ClusterContent> = {
           <th>ID</th>
           <th>Name</th>
           <th>Description</th>
-          <th>响应</th>
+          <th>Response</th>
         </tr>
       </thead>
       <tbody>
         <tr class="clickable-row" data-href="#cmd-0x00">
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>Pause</td>
-          <td>暂停当前操作</td>
+          <td>Pause current operation</td>
           <td>OperationalCommandResponse</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x01">
           <td><a href="#cmd-0x01"><code>0x01</code></a></td>
           <td>Stop</td>
-          <td>停止操作</td>
+          <td>Stop operation</td>
           <td>OperationalCommandResponse</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x80">
           <td><a href="#cmd-0x80"><code>0x80</code></a></td>
           <td>GoHome</td>
-          <td>返回充电座</td>
+          <td>Return to charging dock</td>
           <td>OperationalCommandResponse</td>
         </tr>
       </tbody>
@@ -5231,90 +5231,90 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">没有 Start 和 Resume 命令</div>
+    <div class="callout-title">No Start or Resume Commands</div>
     <p>
-      扫地机器人的启动不是通过 OperationalState 的 Start 命令，而是通过
-      <strong>RvcRunMode Cluster</strong> 的 ChangeToMode 命令来实现。
-      选择清扫模式（如标准清扫、深度清扫）后，机器人自动开始工作。
-      同理，暂停后的恢复也通过 RvcRunMode 来控制。
-      如果向 RvcOperationalState 发送 Start 或 Resume 命令，会收到
-      <code>CommandInvalidInState (3)</code> 错误。
+      Robot vacuum startup is not through the OperationalState Start command, but through the
+      <strong>RvcRunMode Cluster</strong>'s ChangeToMode command.
+      After selecting a cleaning mode (e.g. standard cleaning, deep cleaning), the robot automatically begins working.
+      Similarly, resuming after a pause is also controlled through RvcRunMode.
+      If Start or Resume commands are sent to RvcOperationalState, the response will be
+      <code>CommandInvalidInState (3)</code> error.
     </p>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
-  <h3 id="cmd-0x00">Pause —— 暂停(0x00)</h3>
+  <!-- ====== Command Details ====== -->
+  <h3 id="cmd-0x00">Pause (0x00)</h3>
   <p>
-    暂停机器人当前正在进行的操作（清扫、回充等）。执行成功后，<code>OperationalState</code>
-    属性变为 <code>Paused (2)</code>。机器人会原地停止并保留当前位置和清扫进度。不需要参数。
+    Pauses the robot's current operation (cleaning, returning to dock, etc.). On success, the <code>OperationalState</code>
+    attribute changes to <code>Paused (2)</code>. The robot stops in place and retains its current position and cleaning progress. No parameters required.
   </p>
   <div class="callout callout-warning">
     <div class="callout-title">State Constraints</div>
     <p>
-      只有当机器人处于 <code>Running (1)</code> 或 <code>SeekingCharger (0x40)</code> 状态时才能暂停。
-      如果在 <code>Stopped (0)</code>、<code>Charging (0x41)</code>、<code>Docked (0x42)</code>
-      或 <code>Error (3)</code> 状态下调用，会返回 <code>CommandInvalidInState (3)</code> 错误。
+      Pausing is only possible when the robot is in <code>Running (1)</code> or <code>SeekingCharger (0x40)</code> state.
+      If called while in <code>Stopped (0)</code>, <code>Charging (0x41)</code>, <code>Docked (0x42)</code>,
+      or <code>Error (3)</code> state, it returns a <code>CommandInvalidInState (3)</code> error.
     </p>
   </div>
   <details class="scenario">
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        机器人正在清扫客厅，用户需要临时搬开地上的杂物。App 发送 Pause 命令，
-        机器人原地停止等待。整理完毕后通过 RvcRunMode 恢复清扫。
+        The robot is cleaning the living room and the user needs to temporarily move items off the floor. The app sends a Pause command,
+        and the robot stops in place and waits. After tidying up, cleaning resumes via RvcRunMode.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x01">Stop —— 停止(0x01)</h3>
+  <h3 id="cmd-0x01">Stop (0x01)</h3>
   <p>
-    完全停止机器人的当前操作。执行成功后，<code>OperationalState</code> 属性变为
-    <code>Stopped (0)</code>。与 Pause 不同，Stop 会结束本次清扫任务，
-    需要通过 RvcRunMode 重新选择模式才能开始新的清扫。不需要参数。
+    Completely stops the robot's current operation. On success, the <code>OperationalState</code> attribute changes to
+    <code>Stopped (0)</code>. Unlike Pause, Stop terminates the current cleaning task,
+    and a new mode must be selected via RvcRunMode to start a new cleaning session. No parameters required.
   </p>
   <details class="scenario">
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        用户要出门，不想让机器人继续清扫。发送 Stop 命令终止清扫任务。
-        回家后可以通过 RvcRunMode 重新启动清扫。
+        The user is leaving home and doesn't want the robot to continue cleaning. Send a Stop command to terminate the cleaning task.
+        After returning home, cleaning can be restarted via RvcRunMode.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x80">GoHome —— 返回充电座(0x80)</h3>
+  <h3 id="cmd-0x80">GoHome -- Return to Charging Dock (0x80)</h3>
   <p>
-    <strong>RVC 专属命令</strong>。指示机器人停止当前操作并返回充电座。
-    执行成功后，<code>OperationalState</code> 属性变为 <code>SeekingCharger (0x40)</code>，
-    机器人开始自动导航回充电座。到达后状态依次变为 <code>Charging (0x41)</code>
-    → <code>Docked (0x42)</code>。不需要参数。
+    <strong>RVC-specific command</strong>. Instructs the robot to stop its current operation and return to the charging dock.
+    On success, the <code>OperationalState</code> attribute changes to <code>SeekingCharger (0x40)</code>,
+    and the robot begins automatically navigating back to the charging dock. Upon arrival, the state sequentially changes to <code>Charging (0x41)</code>
+    → <code>Docked (0x42)</code>. No parameters required.
   </p>
   <div class="callout callout-warning">
     <div class="callout-title">State Constraints</div>
     <p>
-      当机器人已经处于 <code>Charging (0x41)</code> 或 <code>Docked (0x42)</code> 状态时，
-      调用 GoHome 会返回 <code>CommandInvalidInState (3)</code> 错误 —— 机器人已经在充电座上了。
+      When the robot is already in <code>Charging (0x41)</code> or <code>Docked (0x42)</code> state,
+      calling GoHome returns a <code>CommandInvalidInState (3)</code> error -- the robot is already on the charging dock.
     </p>
   </div>
   <details class="scenario">
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        机器人清扫到一半，用户想让它提前回充电座。App 发送 GoHome 命令，
-        机器人放弃剩余清扫区域，自动导航回充电座充电。
-        也常用于清扫完成后未自动回充的情况。
+        The robot is halfway through cleaning and the user wants it to return to the charging dock early. The app sends a GoHome command,
+        and the robot abandons the remaining cleaning area and automatically navigates back to the dock to charge.
+        Also commonly used when the robot does not automatically return to dock after finishing cleaning.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 命令响应 ====== -->
-  <h3 id="cmd-response">OperationalCommandResponse —— 命令响应</h3>
+  <!-- ====== Command Response ====== -->
+  <h3 id="cmd-response">OperationalCommandResponse -- Command Response</h3>
   <p>
-    所有三个命令（Pause/Stop/GoHome）执行后都会返回此响应。
-    它包含一个 <a href="#struct-errorstate">ErrorStateStruct</a>，用于指示命令是否成功。
+    All three commands (Pause/Stop/GoHome) return this response after execution.
+    It contains an <a href="#struct-errorstate">ErrorStateStruct</a> indicating whether the command succeeded.
   </p>
   <div class="table-wrap">
     <table>
@@ -5325,21 +5325,21 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>CommandResponseState</td>
           <td><a href="#struct-errorstate">ErrorStateStruct</a></td>
-          <td>命令执行结果。<code>ErrorStateID = 0 (NoError)</code> 表示成功</td>
+          <td>Command execution result. <code>ErrorStateID = 0 (NoError)</code> indicates success</td>
         </tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h2 id="attributes">Attributes</h2>
   <p>
-    RvcOperationalState Cluster 继承了基础 OperationalState 的全部 6 个属性，定义完全一致。
-    点击下方汇总表中的属性 ID 可跳转到对应的详细说明。
+    The RvcOperationalState Cluster inherits all 6 attributes from the base OperationalState, with identical definitions.
+    Click an attribute ID in the summary table below to jump to its detailed description.
   </p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute Summary Table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -5352,59 +5352,59 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
       </thead>
       <tbody>
-        <!-- 阶段信息 -->
+        <!-- Phase Info -->
         <tr class="clickable-row" data-href="#attr-0x0000">
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>PhaseList</td>
           <td>list&lt;string&gt; / null</td>
-          <td><a href="#group-phase">阶段信息</a></td>
-          <td>操作阶段列表</td>
+          <td><a href="#group-phase">Phase Info</a></td>
+          <td>Operation phase list</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>CurrentPhase</td>
           <td>uint8 / null</td>
-          <td><a href="#group-phase">阶段信息</a></td>
-          <td>当前所处阶段索引</td>
+          <td><a href="#group-phase">Phase Info</a></td>
+          <td>Current phase index</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
           <td>CountdownTime</td>
           <td>elapsed_s / null</td>
-          <td><a href="#group-phase">阶段信息</a></td>
-          <td>剩余时间（秒）</td>
+          <td><a href="#group-phase">Phase Info</a></td>
+          <td>Remaining time (seconds)</td>
         </tr>
-        <!-- 运行状态 -->
+        <!-- Operational State -->
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
           <td>OperationalStateList</td>
           <td>list&lt;OperationalStateStruct&gt;</td>
-          <td><a href="#group-state">运行状态</a></td>
-          <td>设备支持的所有状态（含 RVC 扩展）</td>
+          <td><a href="#group-state">Operational State</a></td>
+          <td>All states supported by the device (including RVC extensions)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0004">
           <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
           <td>OperationalState</td>
           <td><a href="#enum-opstate">OperationalStateEnum</a></td>
-          <td><a href="#group-state">运行状态</a></td>
-          <td>当前运行状态</td>
+          <td><a href="#group-state">Operational State</a></td>
+          <td>Current operational state</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0005">
           <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
           <td>OperationalError</td>
           <td><a href="#struct-errorstate">ErrorStateStruct</a></td>
-          <td><a href="#group-state">运行状态</a></td>
-          <td>当前错误信息</td>
+          <td><a href="#group-state">Operational State</a></td>
+          <td>Current error information</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 阶段信息（0x0000, 0x0001, 0x0002）====== -->
-  <h3 id="group-phase">阶段信息(0x0000, 0x0001, 0x0002)</h3>
+  <!-- ====== Phase Info (0x0000, 0x0001, 0x0002) ====== -->
+  <h3 id="group-phase">Phase Info (0x0000, 0x0001, 0x0002)</h3>
   <p>
-    描述机器人当前清扫任务的阶段进度和剩余时间。
-    扫地机器人的阶段划分可能包括：主区域清扫、沿边清扫、拖地、回充等。
+    Describes the phase progress and remaining time of the robot's current cleaning task.
+    Robot vacuum phases may include: main area sweeping, edge sweeping, mopping, returning to dock, etc.
   </p>
 
   <div class="table-wrap">
@@ -5420,30 +5420,30 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0000">
           <td><code>0x0000</code></td>
-          <td>PhaseList（阶段列表）</td>
+          <td>PhaseList (Phase List)</td>
           <td>list&lt;string&gt; / null</td>
           <td>
-            机器人清扫操作的有序阶段名称列表。例如 <code>["主刷清扫", "沿边清扫", "回充中"]</code>。
-            <strong>Nullable</strong> —— <code>null</code> 表示机器人不支持阶段划分。
-            列表最多 32 项
+            An ordered list of phase names for the robot's cleaning operation. Example: <code>["Main Brush Sweep", "Edge Sweep", "Returning to Dock"]</code>.
+            <strong>Nullable</strong> -- <code>null</code> indicates the robot does not support phase tracking.
+            Maximum 32 entries in the list
           </td>
         </tr>
         <tr id="attr-0x0001">
           <td><code>0x0001</code></td>
-          <td>CurrentPhase（当前阶段）</td>
+          <td>CurrentPhase (Current Phase)</td>
           <td>uint8 / null</td>
           <td>
-            当前所处阶段在 PhaseList 中的索引（从 0 开始）。
-            <strong>Nullable</strong> —— 当 PhaseList 为 <code>null</code> 时，此值也为 <code>null</code>
+            The index of the current phase in PhaseList (starting from 0).
+            <strong>Nullable</strong> -- when PhaseList is <code>null</code>, this value is also <code>null</code>
           </td>
         </tr>
         <tr id="attr-0x0002">
           <td><code>0x0002</code></td>
-          <td>CountdownTime（剩余时间）</td>
+          <td>CountdownTime (Remaining Time)</td>
           <td>elapsed_s / null</td>
           <td>
-            当前清扫任务的预计剩余时间，单位<strong>秒</strong>。机器人会根据剩余面积和电量定期更新此值。
-            <strong>Nullable</strong> —— <code>null</code> 表示机器人无法预估剩余时间
+            The estimated remaining time for the current cleaning task, in <strong>seconds</strong>. The robot periodically updates this value based on remaining area and battery level.
+            <strong>Nullable</strong> -- <code>null</code> indicates the robot cannot estimate remaining time
           </td>
         </tr>
       </tbody>
@@ -5451,21 +5451,21 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">扫地机器人的阶段特殊性</div>
+    <div class="callout-title">Phase Tracking Specifics for Robot Vacuums</div>
     <p>
-      与洗衣机等家电不同，扫地机器人的阶段划分不一定是固定的线性流程。
-      有些机器人可能在清扫过程中动态调整阶段（如发现电量不足时插入回充阶段），
-      因此 <code>PhaseList</code> 的内容可能随任务执行而变化。
-      App 应定期重新读取 PhaseList，而不是只在任务开始时读取一次。
+      Unlike appliances such as washing machines, robot vacuum phase tracking is not necessarily a fixed linear process.
+      Some robots may dynamically adjust phases during cleaning (e.g. inserting a return-to-dock phase when low battery is detected),
+      so the contents of <code>PhaseList</code> may change as the task progresses.
+      Apps should periodically re-read PhaseList rather than reading it only once at task start.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 运行状态（0x0003, 0x0004, 0x0005）====== -->
-  <h3 id="group-state">运行状态(0x0003, 0x0004, 0x0005)</h3>
+  <!-- ====== Operational State (0x0003, 0x0004, 0x0005) ====== -->
+  <h3 id="group-state">Operational State (0x0003, 0x0004, 0x0005)</h3>
   <p>
-    描述机器人的运行状态和错误信息。<code>OperationalStateList</code> 会包含基础的 4 个状态
-    以及 RVC 扩展的 3 个状态（SeekingCharger/Charging/Docked）。
+    Describes the robot's operational state and error information. <code>OperationalStateList</code> contains the base 4 states
+    plus the 3 RVC-extended states (SeekingCharger/Charging/Docked).
   </p>
 
   <div class="table-wrap">
@@ -5481,31 +5481,31 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0003">
           <td><code>0x0003</code></td>
-          <td>OperationalStateList（状态列表）</td>
+          <td>OperationalStateList (State List)</td>
           <td>list&lt;OperationalStateStruct&gt;</td>
           <td>
-            机器人支持的所有运行状态。除了基础的 0~3 四个状态之外，
-            RVC 还会在列表中包含 0x40~0x42 三个扩展状态（寻找充电座/充电中/已停靠）
+            All operational states supported by the robot. In addition to the base 4 states (0~3),
+            RVC devices also include the three extended states 0x40~0x42 in the list (seeking charger/charging/docked)
           </td>
         </tr>
         <tr id="attr-0x0004">
           <td><code>0x0004</code></td>
-          <td>OperationalState（运行状态）</td>
+          <td>OperationalState (Operating State)</td>
           <td><a href="#enum-opstate">OperationalStateEnum</a></td>
           <td>
-            机器人当前的运行状态，取值范围见
-            <a href="#enum-opstate">OperationalStateEnum</a>（含 RVC 扩展值）。
-            这是 App 展示机器人状态的核心属性
+            The robot's current operating state; see
+            <a href="#enum-opstate">OperationalStateEnum</a>(including RVC-extended values).
+            This is the core attribute for displaying the robot's status in the app
           </td>
         </tr>
         <tr id="attr-0x0005">
           <td><code>0x0005</code></td>
-          <td>OperationalError（当前错误）</td>
+          <td>OperationalError (Current Error)</td>
           <td><a href="#struct-errorstate">ErrorStateStruct</a></td>
           <td>
-            机器人当前的错误状态。当 <code>OperationalState</code> 为
-            <code>Error (3)</code> 时，此属性包含具体的错误信息（含 RVC 扩展错误码）。
-            无错误时 <code>ErrorStateID = 0 (NoError)</code>
+            The robot's current error state. When <code>OperationalState</code> is
+            <code>Error (3)</code>, this attribute contains the specific error information (including RVC-extended error codes).
+            When there is no error, <code>ErrorStateID = 0 (NoError)</code>
           </td>
         </tr>
       </tbody>
@@ -5513,262 +5513,262 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 枚举定义 ====== -->
+  <!-- ====== Enum Definitions ====== -->
   <h2 id="enums">Enum Definitions</h2>
 
-  <h3 id="enum-opstate">OperationalStateEnum —— 运行状态</h3>
+  <h3 id="enum-opstate">OperationalStateEnum -- Operational States</h3>
   <p>
-    RVC 的运行状态枚举继承了基础 OperationalState 的 4 个标准值（0~3），
-    并在 0x40~0x42 范围内扩展了 3 个扫地机器人专属状态。
+    The RVC operational state enum inherits the 4 standard values (0~3) from the base OperationalState,
+    and extends with 3 robot vacuum-specific states in the 0x40~0x42 range.
   </p>
 
-  <h4>基础状态(继承自 OperationalState)</h4>
+  <h4>Base States (Inherited from OperationalState)</h4>
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">Stopped</span>
-        <span class="enum-desc">已停止 —— 机器人空闲，可以通过 RvcRunMode 启动清扫</span>
+        <span class="enum-desc">Stopped -- the robot is idle and can be started for cleaning via RvcRunMode</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">Running</span>
-        <span class="enum-desc">运行中 —— 正在执行清扫任务，可以 Pause、Stop 或 GoHome</span>
+        <span class="enum-desc">Running -- performing a cleaning task; can be Paused, Stopped, or sent GoHome</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">Paused</span>
-        <span class="enum-desc">已暂停 —— 清扫被暂停，可以通过 RvcRunMode 恢复或 Stop</span>
+        <span class="enum-desc">Paused -- cleaning is paused; can be resumed via RvcRunMode or Stopped</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">Error</span>
-        <span class="enum-desc">错误 —— 发生故障，查看 OperationalError 获取详情</span>
+        <span class="enum-desc">Error -- a fault has occurred; check OperationalError for details</span>
       </div>
     </div>
   </div>
 
-  <h4>RVC 扩展状态</h4>
+  <h4>RVC Extended States</h4>
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0x40</span>
       <div>
         <span class="enum-name">SeekingCharger</span>
-        <span class="enum-desc">寻找充电座 —— 机器人正在自动导航回充电座的途中</span>
+        <span class="enum-desc">Seeking Charger -- the robot is automatically navigating back to the charging dock</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x41</span>
       <div>
         <span class="enum-name">Charging</span>
-        <span class="enum-desc">充电中 —— 已停靠在充电座上并正在充电</span>
+        <span class="enum-desc">Charging -- docked at the charging station and currently charging</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x42</span>
       <div>
         <span class="enum-name">Docked</span>
-        <span class="enum-desc">已停靠 —— 停靠在充电座上，电量已满或待机中</span>
+        <span class="enum-desc">Docked -- parked at the charging station, fully charged or on standby</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">充电状态的变迁</div>
+    <div class="callout-title">Charging State Transitions</div>
     <p>
-      典型的充电流程是：<code>SeekingCharger (0x40)</code> → <code>Charging (0x41)</code>
-      → <code>Docked (0x42)</code>。机器人回到充电座后先进入 Charging 状态充电，
-      电量充满后转为 Docked 待机状态。从 Docked 或 Charging 状态启动清扫，
-      需要通过 RvcRunMode Cluster 发送 ChangeToMode 命令。
+      The typical charging flow is: <code>SeekingCharger (0x40)</code> → <code>Charging (0x41)</code>
+      → <code>Docked (0x42)</code>. After the robot returns to the charging dock, it first enters the Charging state,
+      and transitions to the Docked standby state once fully charged. To start cleaning from Docked or Charging state,
+      a ChangeToMode command must be sent via the RvcRunMode Cluster.
     </p>
   </div>
 
-  <h3 id="enum-errorstate">ErrorStateEnum —— 错误类型</h3>
+  <h3 id="enum-errorstate">ErrorStateEnum -- Error Types</h3>
   <p>
-    RVC 的错误状态枚举继承了基础的 4 个通用错误码（0~3），
-    并在 0x40~0x47 范围内扩展了 8 个扫地机器人专属错误码，涵盖充电座、机械故障、耗材等常见问题。
+    The RVC error state enum inherits the base 4 generic error codes (0~3),
+    and extends with 8 robot vacuum-specific error codes in the 0x40~0x47 range, covering common issues with the charging dock, mechanical faults, consumables, etc.
   </p>
 
-  <h4>基础错误码(继承自 OperationalState)</h4>
+  <h4>Base Error Codes (Inherited from OperationalState)</h4>
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">NoError</span>
-        <span class="enum-desc">无错误 —— 一切正常</span>
+        <span class="enum-desc">No Error -- everything is normal</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">UnableToStartOrResume</span>
-        <span class="enum-desc">无法启动或恢复 —— 机器人因某种原因无法开始清扫</span>
+        <span class="enum-desc">Unable to Start or Resume -- the robot cannot begin cleaning for some reason</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">UnableToCompleteOperation</span>
-        <span class="enum-desc">无法完成操作 —— 清扫过程中遇到了不可恢复的问题</span>
+        <span class="enum-desc">Unable to Complete Operation -- an unrecoverable issue was encountered during cleaning</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">CommandInvalidInState</span>
-        <span class="enum-desc">命令在当前状态无效 —— 如在 Docked 状态下调用 GoHome</span>
+        <span class="enum-desc">Command invalid in current state -- e.g. calling GoHome while in Docked state</span>
       </div>
     </div>
   </div>
 
-  <h4>RVC 扩展错误码</h4>
+  <h4>RVC Extended Error Codes</h4>
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0x40</span>
       <div>
         <span class="enum-name">FailedToFindChargingDock</span>
-        <span class="enum-desc">找不到充电座 —— 机器人无法定位或导航到充电座</span>
+        <span class="enum-desc">Failed to find charging dock -- the robot cannot locate or navigate to the dock</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x41</span>
       <div>
         <span class="enum-name">Stuck</span>
-        <span class="enum-desc">卡住了 —— 机器人被障碍物或地形困住无法移动</span>
+        <span class="enum-desc">Stuck -- the robot is trapped by an obstacle or terrain and cannot move</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x42</span>
       <div>
         <span class="enum-name">DustBinMissing</span>
-        <span class="enum-desc">尘盒未安装 —— 尘盒被取出后未放回</span>
+        <span class="enum-desc">Dust bin not installed -- the dust bin was removed and not replaced</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x43</span>
       <div>
         <span class="enum-name">DustBinFull</span>
-        <span class="enum-desc">尘盒已满 —— 需要清倒尘盒才能继续清扫</span>
+        <span class="enum-desc">Dust bin full -- the dust bin must be emptied before cleaning can continue</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x44</span>
       <div>
         <span class="enum-name">WaterTankEmpty</span>
-        <span class="enum-desc">水箱无水 —— 拖地模式下水箱已空，需要加水</span>
+        <span class="enum-desc">Water tank empty -- the water tank is empty in mopping mode; water needs to be added</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x45</span>
       <div>
         <span class="enum-name">WaterTankMissing</span>
-        <span class="enum-desc">水箱未安装 —— 水箱被取出后未放回</span>
+        <span class="enum-desc">Water tank not installed -- the water tank was removed and not replaced</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x46</span>
       <div>
         <span class="enum-name">WaterTankLidOpen</span>
-        <span class="enum-desc">水箱盖未关 —— 水箱盖子未正确关闭，有漏水风险</span>
+        <span class="enum-desc">Water tank lid open -- the tank lid is not properly closed, risking water leakage</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x47</span>
       <div>
         <span class="enum-name">MopCleaningPadMissing</span>
-        <span class="enum-desc">拖布未安装 —— 拖地模式需要安装拖布才能工作</span>
+        <span class="enum-desc">Mop cleaning pad not installed -- mopping mode requires a mop pad to operate</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">错误处理建议</div>
+    <div class="callout-title">Error Handling Recommendations</div>
     <p>
-      RVC 的 8 个扩展错误码都是<strong>用户可自行解决的物理问题</strong>。
-      App 在收到这些错误时，应该给出明确的操作指引（如「请清倒尘盒后重启清扫」），
-      而不只是显示错误码。用户处理完问题后，通过 RvcRunMode 重新启动清扫即可。
+      All 8 RVC-extended error codes represent <strong>physical issues that users can resolve on their own</strong>.
+      When the app receives these errors, it should provide clear action guidance (e.g. "Please empty the dust bin and restart cleaning"),
+      rather than just displaying the error code. After the user resolves the issue, cleaning can be restarted via RvcRunMode.
     </p>
   </div>
 
-  <!-- ====== 数据结构 ====== -->
+  <!-- ====== Data Structures ====== -->
   <h2 id="structs">Data Structures</h2>
 
-  <h3 id="struct-errorstate">ErrorStateStruct —— 错误状态结构</h3>
+  <h3 id="struct-errorstate">ErrorStateStruct -- Error State Structure</h3>
   <p>
-    用于描述机器人的错误信息。既用于 <code>OperationalError</code> 属性，也用于命令响应。
-    结构与基础 OperationalState 完全一致。
+    Used to describe the robot's error information. Used for both the <code>OperationalError</code> attribute and command responses.
+    The structure is identical to the base OperationalState.
   </p>
   <div class="table-wrap">
     <table>
       <thead>
-        <tr><th>Field</th><th>Type</th><th>必选</th><th>Description</th></tr>
+        <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
       </thead>
       <tbody>
         <tr>
           <td>ErrorStateID</td>
           <td><a href="#enum-errorstate">ErrorStateEnum</a></td>
-          <td>是</td>
-          <td>错误类型编码。<code>0</code> 表示无错误。RVC 扩展错误码范围 0x40~0x47</td>
+          <td>Yes</td>
+          <td>Error type code. <code>0</code> indicates no error. RVC-extended error code range is 0x40~0x47</td>
         </tr>
         <tr>
           <td>ErrorStateLabel</td>
           <td>string</td>
-          <td>否</td>
-          <td>可选的本地化错误标签，供 App 直接展示。对于 RVC 扩展错误码（0x40~0x47），此字段<strong>必须</strong>提供</td>
+          <td>No</td>
+          <td>Optional localized error label for direct display in apps. For RVC-extended error codes (0x40~0x47), this field <strong>must</strong> be provided</td>
         </tr>
         <tr>
           <td>ErrorStateDetails</td>
           <td>string</td>
-          <td>否</td>
-          <td>可选的错误详细描述，提供更多诊断信息（如「左侧轮子被线缆缠绕」）</td>
+          <td>No</td>
+          <td>Optional detailed error description providing more diagnostic information (e.g. "left wheel entangled by cable")</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <h3 id="struct-opstate">OperationalStateStruct —— 操作状态结构</h3>
+  <h3 id="struct-opstate">OperationalStateStruct -- Operational State Structure</h3>
   <p>
-    用于 <code>OperationalStateList</code> 属性中，描述机器人支持的每一个运行状态。
+    Used in the <code>OperationalStateList</code> attribute to describe each operational state supported by the robot.
   </p>
   <div class="table-wrap">
     <table>
       <thead>
-        <tr><th>Field</th><th>Type</th><th>必选</th><th>Description</th></tr>
+        <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
       </thead>
       <tbody>
         <tr>
           <td>OperationalStateID</td>
           <td>uint8</td>
-          <td>是</td>
-          <td>状态编码。0~3 为标准状态，0x40~0x42 为 RVC 扩展状态</td>
+          <td>Yes</td>
+          <td>Status code. 0~3 are standard states; 0x40~0x42 are RVC extended states</td>
         </tr>
         <tr>
           <td>OperationalStateLabel</td>
           <td>string</td>
-          <td>否</td>
-          <td>可选的本地化状态标签。对于标准状态（0~3）可省略；对于 RVC 扩展状态（0x40~0x42）<strong>必须</strong>提供</td>
+          <td>No</td>
+          <td>Optional localized state label. Can be omitted for standard states (0~3); <strong>must</strong> be provided for RVC-extended states (0x40~0x42)</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 事件 ====== -->
+  <!-- ====== Events ====== -->
   <h2 id="events">Events</h2>
   <p>
-    RvcOperationalState Cluster 继承了基础 OperationalState 的 2 个事件，
-    用于通知控制端机器人的重要状态变化。
+    The RvcOperationalState Cluster inherits 2 events from the base OperationalState,
+    used to notify the controller of important state changes in the robot.
   </p>
 
-  <h3 id="event-error">OperationalError 事件</h3>
+  <h3 id="event-error">OperationalError Event</h3>
   <p>
-    当机器人进入错误状态时触发此事件。事件优先级为 <strong>CRITICAL</strong>，
-    确保 App 能及时收到错误通知（如机器人卡住、尘盒已满等）。
+    This event is triggered when the robot enters an error state. The event priority is <strong>CRITICAL</strong>,
+    ensuring that apps receive timely error notifications (e.g. robot stuck, dust bin full, etc.).
   </p>
   <div class="table-wrap">
     <table>
@@ -5779,77 +5779,77 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>ErrorState</td>
           <td><a href="#struct-errorstate">ErrorStateStruct</a></td>
-          <td>当前的错误信息，ErrorStateID 可能是 RVC 扩展错误码（0x40~0x47）</td>
+          <td>Current error information; ErrorStateID may be an RVC extended error code (0x40~0x47)</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <h3 id="event-completion">OperationCompletion 事件</h3>
+  <h3 id="event-completion">OperationCompletion Event</h3>
   <p>
-    当机器人完成一个完整清扫周期时触发此事件。事件优先级为 <strong>INFO</strong>。
-    该事件携带清扫的时间统计信息，方便 App 展示清扫报告。
+    This event is triggered when the robot completes a full cleaning cycle. The event priority is <strong>INFO</strong>.
+    The event carries time statistics for the cleaning session, enabling apps to display cleaning reports.
   </p>
   <div class="table-wrap">
     <table>
       <thead>
-        <tr><th>Field</th><th>Type</th><th>必选</th><th>Description</th></tr>
+        <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
       </thead>
       <tbody>
         <tr>
           <td>CompletionErrorCode</td>
           <td><a href="#enum-errorstate">ErrorStateEnum</a></td>
-          <td>是</td>
-          <td>清扫完成时的错误码。<code>0 (NoError)</code> 表示正常完成</td>
+          <td>Yes</td>
+          <td>Error code at cleaning completion. <code>0 (NoError)</code> indicates normal completion</td>
         </tr>
         <tr>
           <td>TotalOperationalTime</td>
           <td>elapsed_s / null</td>
-          <td>否</td>
-          <td>清扫总耗时（秒），包含暂停时间。<code>null</code> 表示机器人不支持统计</td>
+          <td>No</td>
+          <td>Total cleaning duration (seconds), including paused time. <code>null</code> indicates the robot does not support statistics</td>
         </tr>
         <tr>
           <td>PausedTime</td>
           <td>elapsed_s / null</td>
-          <td>否</td>
-          <td>暂停累计时长（秒）。<code>null</code> 表示机器人不支持统计</td>
+          <td>No</td>
+          <td>Cumulative pause duration (seconds). <code>null</code> indicates the robot does not support statistics</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">清扫报告</div>
+    <div class="callout-title">Cleaning Report</div>
     <p>
-      App 可以结合 <code>OperationCompletion</code> 事件的时间统计和清扫面积等信息，
-      生成清扫报告。例如：「本次清扫耗时 45 分钟，实际清扫 40 分钟，暂停 5 分钟」。
-      注意 <code>CompletionErrorCode</code> 不一定是 NoError —— 机器人可能因为
-      电量耗尽或故障而提前结束清扫，此时会携带对应的错误码。
+      Apps can combine the time statistics from the <code>OperationCompletion</code> event with cleaning area information
+      to generate a cleaning report. For example: "This session lasted 45 minutes: 40 minutes of cleaning, 5 minutes paused."
+      Note that <code>CompletionErrorCode</code> may not be NoError -- the robot may have
+      ended cleaning early due to battery depletion or a fault, in which case the corresponding error code is included.
     </p>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一台正在清扫中的扫地机器人的 RvcOperationalState Cluster 读取结果：</p>
+  <p>Read result of the RvcOperationalState Cluster from a robot vacuum currently cleaning:</p>
 
   <pre><code>{
-  // --- 阶段信息 ---
-  "0x0000": ["主刷清扫", "沿边清扫", "回充中"],  // PhaseList（操作阶段列表）
-  "0x0001": 0,                                    // CurrentPhase = 0（当前处于「主刷清扫」阶段）
-  "0x0002": 2400,                                  // CountdownTime = 2400 秒（剩余约 40 分钟）
+  // --- Phase info ---
+  "0x0000": ["Main Brush Sweep", "Edge Sweep", "Returning to Dock"],  // PhaseList (operation phase list)
+  "0x0001": 0,                                    // CurrentPhase = 0 (currently in "Main Brush Sweep" phase)
+  "0x0002": 2400,                                  // CountdownTime = 2400 seconds (approximately 40 minutes remaining)
 
-  // --- 运行状态 ---
-  "0x0003": [                                      // OperationalStateList（设备支持的状态列表）
-    { "OperationalStateID": 0, "OperationalStateLabel": "已停止" },
-    { "OperationalStateID": 1, "OperationalStateLabel": "运行中" },
-    { "OperationalStateID": 2, "OperationalStateLabel": "已暂停" },
-    { "OperationalStateID": 3, "OperationalStateLabel": "错误" },
-    { "OperationalStateID": 64, "OperationalStateLabel": "寻找充电座" },
-    { "OperationalStateID": 65, "OperationalStateLabel": "充电中" },
-    { "OperationalStateID": 66, "OperationalStateLabel": "已停靠" }
+  // --- Operational state ---
+  "0x0003": [                                      // OperationalStateList (device-supported state list)
+    { "OperationalStateID": 0, "OperationalStateLabel": "Stopped" },
+    { "OperationalStateID": 1, "OperationalStateLabel": "Running" },
+    { "OperationalStateID": 2, "OperationalStateLabel": "Paused" },
+    { "OperationalStateID": 3, "OperationalStateLabel": "Error" },
+    { "OperationalStateID": 64, "OperationalStateLabel": "Seeking Charger" },
+    { "OperationalStateID": 65, "OperationalStateLabel": "Charging" },
+    { "OperationalStateID": 66, "OperationalStateLabel": "Docked" }
   ],
-  "0x0004": 1,                                     // OperationalState = Running（正在清扫）
-  "0x0005": {                                      // OperationalError（当前无错误）
+  "0x0004": 1,                                     // OperationalState = Running (currently cleaning)
+  "0x0005": {                                      // OperationalError (no current error)
     "ErrorStateID": 0,
     "ErrorStateLabel": "",
     "ErrorStateDetails": ""
@@ -5859,54 +5859,54 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      RVC 设备的 <code>OperationalStateList (0x0003)</code> 会比基础 OperationalState 多出
-      3 个扩展状态条目（ID 64/65/66 即 0x40/0x41/0x42）。App 在渲染状态选择或状态指示时，
-      需要处理这些 RVC 专属状态的 UI 展示（如为「寻找充电座」显示导航动画、为「充电中」显示电量进度）。
-      同样，错误处理逻辑也需要覆盖 0x40~0x47 范围的 RVC 扩展错误码。
+      The <code>OperationalStateList (0x0003)</code> of an RVC device will have
+      3 additional extended state entries (ID 64/65/66, i.e. 0x40/0x41/0x42) compared to the base OperationalState. When rendering state selection or indicators,
+      the app needs to handle UI display for these RVC-specific states (e.g. showing a navigation animation for "Seeking Charger" or a battery progress indicator for "Charging").
+      Likewise, error handling logic needs to cover RVC-extended error codes in the 0x40~0x47 range.
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
-  <h3 id="scenario-cleaning">场景 1：完整清扫生命周期</h3>
+  <h3 id="scenario-cleaning">Scenario 1: Complete Cleaning Lifecycle</h3>
   <ol>
-    <li>机器人处于 <code>Docked (0x42)</code> 状态，停靠在充电座上待机</li>
-    <li>用户通过 <strong>RvcRunMode</strong> Cluster 发送 ChangeToMode 命令，选择「标准清扫」模式</li>
-    <li>机器人离开充电座，状态变为 <code>Running (1)</code>，开始清扫</li>
-    <li>App 订阅 <code>OperationalState</code>、<code>CurrentPhase</code>、<code>CountdownTime</code>，
-      实时更新清扫进度和剩余时间</li>
-    <li>清扫完成后，机器人自动进入 <code>SeekingCharger (0x40)</code> 状态回充</li>
-    <li>到达充电座后变为 <code>Charging (0x41)</code>，充满电后变为 <code>Docked (0x42)</code></li>
-    <li>触发 <code>OperationCompletion</code> 事件，App 展示清扫报告：「清扫完成，总耗时 45 分钟」</li>
+    <li>The robot is in <code>Docked (0x42)</code> state, parked on the charging dock on standby</li>
+    <li>The user sends a ChangeToMode command via the <strong>RvcRunMode</strong> Cluster, selecting the "Standard Cleaning" mode</li>
+    <li>The robot leaves the dock, its state changes to <code>Running (1)</code>, and cleaning begins</li>
+    <li>The app subscribes to <code>OperationalState</code>, <code>CurrentPhase</code>, and <code>CountdownTime</code>
+      to update cleaning progress and remaining time in real time</li>
+    <li>After cleaning is complete, the robot automatically enters <code>SeekingCharger (0x40)</code> state to return to dock</li>
+    <li>After reaching the dock, it changes to <code>Charging (0x41)</code>, and to <code>Docked (0x42)</code> when fully charged</li>
+    <li>The <code>OperationCompletion</code> event is triggered; the app displays a cleaning report: "Cleaning complete, total duration 45 minutes"</li>
   </ol>
 
-  <h3 id="scenario-error">场景 2：清扫中的错误处理</h3>
+  <h3 id="scenario-error">Scenario 2: Error Handling During Cleaning</h3>
   <ol>
-    <li>机器人正在清扫（<code>Running (1)</code>），突然被地毯边缘卡住</li>
-    <li>机器人尝试脱困失败，状态变为 <code>Error (3)</code>，<code>OperationalError</code> 更新为：
+    <li>The robot is cleaning (<code>Running (1)</code>) and suddenly gets stuck on a carpet edge</li>
+    <li>The robot fails to free itself, its state changes to <code>Error (3)</code>, and <code>OperationalError</code> updates to:
       <ul>
         <li><code>ErrorStateID = 0x41 (Stuck)</code></li>
-        <li><code>ErrorStateLabel = "机器人卡住"</code></li>
-        <li><code>ErrorStateDetails = "左侧轮子无法转动，请检查是否有异物缠绕"</code></li>
+        <li><code>ErrorStateLabel = "Robot Stuck"</code></li>
+        <li><code>ErrorStateDetails = "Left wheel cannot rotate; please check for foreign objects"</code></li>
       </ul>
     </li>
-    <li>设备触发 <code>OperationalError</code> 事件（CRITICAL 优先级），App 弹出推送通知</li>
-    <li>App 根据错误码 0x41（Stuck）展示对应的操作指引：「请将机器人搬到开阔位置」</li>
-    <li>用户处理完毕后，发送 <code>Stop (0x01)</code> 清除错误状态</li>
-    <li>通过 RvcRunMode 重新启动清扫任务</li>
+    <li>The device triggers the <code>OperationalError</code> event (CRITICAL priority); the app shows a push notification</li>
+    <li>The app displays corresponding action guidance based on error code 0x41 (Stuck): "Please move the robot to an open area"</li>
+    <li>After the user resolves the issue, send <code>Stop (0x01)</code> to clear the error state</li>
+    <li>Restart the cleaning task via RvcRunMode</li>
   </ol>
 
-  <h3 id="scenario-gohome">场景 3：手动回充(GoHome)</h3>
+  <h3 id="scenario-gohome">Scenario 3: Manual Return to Dock (GoHome)</h3>
   <ol>
-    <li>机器人正在清扫（<code>Running (1)</code>），用户想让它提前回充</li>
-    <li>App 发送 <code>GoHome (0x80)</code> 命令</li>
-    <li>机器人停止清扫，状态变为 <code>SeekingCharger (0x40)</code>，开始自动导航回充电座</li>
-    <li>App 可以展示「正在返回充电座...」的状态提示</li>
-    <li>机器人到达充电座后，状态变为 <code>Charging (0x41)</code></li>
-    <li>如果导航过程中找不到充电座，状态变为 <code>Error (3)</code>，
-      错误码为 <code>FailedToFindChargingDock (0x40)</code></li>
-    <li>App 展示：「找不到充电座，请检查充电座是否通电并且前方无障碍物」</li>
+    <li>The robot is cleaning (<code>Running (1)</code>) and the user wants it to return to dock early</li>
+    <li>The app sends the <code>GoHome (0x80)</code> command</li>
+    <li>The robot stops cleaning, its state changes to <code>SeekingCharger (0x40)</code>, and it begins automatically navigating back to the dock</li>
+    <li>The app can display a "Returning to charging dock..." status message</li>
+    <li>After the robot arrives at the dock, its state changes to <code>Charging (0x41)</code></li>
+    <li>If the dock cannot be found during navigation, the state changes to <code>Error (3)</code>,
+      with error code <code>FailedToFindChargingDock (0x40)</code></li>
+    <li>The app displays: "Cannot find the charging dock. Please check that the dock is powered on and the area in front is clear."</li>
   </ol>
 
   <script>
@@ -5945,32 +5945,32 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'hepa-filter-monitoring': {
     title: 'HepaFilterMonitoring Cluster (0x0071)',
-    description: 'Matter HepaFilterMonitoring Cluster(0x0071)完整参考 — 滤芯寿命百分比、劣化方向、更换指示、替换产品列表、ResetCondition 命令，空气净化器滤芯生命周期管理的核心 Cluster。',
+    description: 'Complete reference for the Matter HepaFilterMonitoring Cluster (0x0071) — filter life percentage, degradation direction, change indication, replacement product list, ResetCondition command — the core Cluster for air purifier filter lifecycle management.',
     prev: undefined,
     next: undefined,
     content: `<h1>HepaFilterMonitoring Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x0071</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 功能端点（通常 <code>Endpoint 1</code>）
+    <strong>Endpoint</strong>: Application endpoint (typically <code>Endpoint 1</code>)
   </p>
   <p>
-    HepaFilterMonitoring 用于监测空气净化器中 HEPA 滤芯的生命周期状态，包括剩余寿命百分比、劣化程度、是否需要更换，
-    以及推荐的替换产品信息。当用户更换滤芯后，可以通过命令重置状态，开始新一轮监测周期。
+    HepaFilterMonitoring monitors the lifecycle status of HEPA filters in air purifiers, including remaining life percentage, degradation level, whether replacement is needed,
+    and recommended replacement product information. After the user replaces the filter, the state can be reset via a command to begin a new monitoring cycle.
   </p>
 
   <div class="callout callout-info">
     <div class="callout-title">When to Use</div>
     <p>
-      空气净化器需要定期更换 HEPA 滤芯。这个 Cluster 让 App 能实时展示滤芯剩余寿命，
-      在滤芯接近耗尽时推送提醒，甚至直接提供替换滤芯的购买链接。
-      用户更换完滤芯后，发一个 ResetCondition 命令就能重新开始计时。
+      Air purifiers require periodic HEPA filter replacement. This Cluster enables apps to display remaining filter life in real time,
+      push reminders when the filter is nearing depletion, and even provide purchase links for replacement filters.
+      After the user replaces the filter, a single ResetCondition command restarts the timer.
     </p>
   </div>
 
   <!-- ====== Feature Map ====== -->
-  <h2 id="features">Feature Map(功能特性)</h2>
+  <h2 id="features">Feature Map</h2>
   <p>
-    HepaFilterMonitoring 通过 Feature Map 控制可选功能的启用。设备可以根据硬件能力声明支持哪些特性。
+    HepaFilterMonitoring uses the Feature Map to control optional feature activation. Devices can declare supported features based on hardware capabilities.
   </p>
 
   <div class="table-wrap">
@@ -5978,7 +5978,7 @@ export const clusters: Record<string, ClusterContent> = {
       <thead>
         <tr>
           <th>Bit</th>
-          <th>代码</th>
+          <th>Code</th>
           <th>Name</th>
           <th>Description</th>
         </tr>
@@ -5988,36 +5988,36 @@ export const clusters: Record<string, ClusterContent> = {
           <td><code>0</code></td>
           <td>CON</td>
           <td>Condition</td>
-          <td>支持滤芯剩余寿命百分比（<code>Condition</code> 属性）</td>
+          <td>Supports filter remaining life percentage (<code>Condition</code> attribute)</td>
         </tr>
         <tr>
           <td><code>1</code></td>
           <td>WAR</td>
           <td>Warning</td>
-          <td>支持劣化程度等级（<code>DegradationDirection</code> 属性）</td>
+          <td>Supports degradation level (<code>DegradationDirection</code> attribute)</td>
         </tr>
         <tr>
           <td><code>2</code></td>
           <td>REP</td>
           <td>ReplacementProductList</td>
-          <td>支持替换产品列表（<code>ReplacementProductList</code> 属性）</td>
+          <td>Supports replacement product list (<code>ReplacementProductList</code> attribute)</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">Feature 组合示例</div>
+    <div class="callout-title">Feature Combination Examples</div>
     <p>
-      Feature Map = <code>0b111</code>（7）：同时支持寿命百分比、劣化方向和替换产品列表 —— 这是功能最完整的配置。<br/>
-      Feature Map = <code>0b001</code>（1）：只支持寿命百分比，适合低成本设备。<br/>
-      Feature Map = <code>0b101</code>（5）：支持寿命百分比 + 替换产品列表，不报告劣化方向。
+      Feature Map = <code>0b111</code> (7): supports life percentage, degradation direction, and replacement product list -- the most complete configuration.<br/>
+      Feature Map = <code>0b001</code> (1): supports only life percentage, suitable for low-cost devices.<br/>
+      Feature Map = <code>0b101</code> (5): supports life percentage + replacement product list, does not report degradation direction.
     </p>
   </div>
 
-  <!-- ====== 属性总览 ====== -->
+  <!-- ====== Attribute Overview ====== -->
   <h2 id="attributes">Attribute Overview</h2>
-  <p>HepaFilterMonitoring 的属性分为必选和可选两部分，可选属性取决于设备声明的 Feature。</p>
+  <p>HepaFilterMonitoring attributes are divided into required and optional parts; optional attributes depend on the features declared by the device.</p>
 
   <div class="table-wrap">
     <table>
@@ -6026,8 +6026,8 @@ export const clusters: Record<string, ClusterContent> = {
           <th>ID</th>
           <th>Name</th>
           <th>Type</th>
-          <th>读写</th>
-          <th>必选</th>
+          <th>Access</th>
+          <th>Required</th>
           <th>Description</th>
         </tr>
       </thead>
@@ -6036,75 +6036,75 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x00"><code>0x00</code></a></td>
           <td>Condition</td>
           <td>uint8</td>
-          <td>只读</td>
+          <td>Read-only</td>
           <td>CON</td>
-          <td>滤芯剩余寿命百分比（0-100%）</td>
+          <td>Filter remaining life percentage (0-100%)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x01">
           <td><a href="#attr-0x01"><code>0x01</code></a></td>
           <td>DegradationDirection</td>
           <td>enum8</td>
-          <td>只读</td>
+          <td>Read-only</td>
           <td>WAR</td>
-          <td>劣化方向：数值升高还是降低表示更差</td>
+          <td>Degradation direction: whether higher or lower values mean worse condition</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x02">
           <td><a href="#attr-0x02"><code>0x02</code></a></td>
           <td>ChangeIndication</td>
           <td>enum8</td>
-          <td>只读</td>
-          <td>是</td>
-          <td>更换指示：正常 / 警告 / 临界</td>
+          <td>Read-only</td>
+          <td>Yes</td>
+          <td>Change indication: OK / Warning / Critical</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x03">
           <td><a href="#attr-0x03"><code>0x03</code></a></td>
           <td>InPlaceIndicator</td>
           <td>bool</td>
-          <td>只读</td>
-          <td>否</td>
-          <td>滤芯是否已物理安装</td>
+          <td>Read-only</td>
+          <td>No</td>
+          <td>Whether the filter is physically installed</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x04">
           <td><a href="#attr-0x04"><code>0x04</code></a></td>
           <td>LastChangedTime</td>
           <td>epoch_s</td>
-          <td>只读</td>
-          <td>否</td>
-          <td>上次更换滤芯的时间（可为 null）</td>
+          <td>Read-only</td>
+          <td>No</td>
+          <td>Time of last filter change (may be null)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x05">
           <td><a href="#attr-0x05"><code>0x05</code></a></td>
           <td>ReplacementProductList</td>
           <td>list</td>
-          <td>只读</td>
+          <td>Read-only</td>
           <td>REP</td>
-          <td>推荐的替换产品列表</td>
+          <td>Recommended replacement product list</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 属性详解 ====== -->
-  <h3 id="attr-0x00">Condition(滤芯剩余寿命)</h3>
+  <!-- ====== Attribute Details ====== -->
+  <h3 id="attr-0x00">Condition (Filter Remaining Life)</h3>
   <p>
-    表示滤芯剩余寿命的百分比，范围 <code>0</code> 到 <code>100</code>。
-    <code>100</code> 表示全新滤芯，<code>0</code> 表示滤芯已完全耗尽。
-    需要设备声明 <strong>CON</strong> Feature 才会出现此属性。
+    Represents the filter's remaining life as a percentage, ranging from <code>0</code> to <code>100</code>.
+    <code>100</code> indicates a brand new filter, <code>0</code> indicates the filter is fully depleted.
+    Requires the device to declare the <strong>CON</strong> Feature for this attribute to appear.
   </p>
   <div class="callout callout-tip">
-    <div class="callout-title">如何理解 Condition 值</div>
+    <div class="callout-title">Understanding the Condition Value</div>
     <p>
-      这个百分比由设备固件根据使用时长、风量、颗粒物浓度等因素综合计算。
-      不同厂商的算法可能不同，但对 App 开发者来说只需关注这个 0-100 的值即可。
-      建议在 App 中用进度条或环形图展示，低于 20% 时高亮提醒。
+      This percentage is calculated by the device firmware based on factors such as usage duration, airflow, and particulate concentration.
+      Different manufacturers may use different algorithms, but app developers only need to focus on this 0-100 value.
+      It is recommended to display this in the app using a progress bar or ring chart, with highlighting when below 20%.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x01">DegradationDirection(劣化方向)</h3>
+  <h3 id="attr-0x01">DegradationDirection (Degradation Direction)</h3>
   <p>
-    指示 Condition 值的劣化方向 —— 即数值变大还是变小代表滤芯状态变差。
-    需要设备声明 <strong>WAR</strong> Feature 才会出现此属性。
+    Indicates the degradation direction of the Condition value -- whether increasing or decreasing values represent worsening filter condition.
+    Requires the device to declare the <strong>WAR</strong> Feature for this attribute to appear.
   </p>
 
   <h4>DegradationDirectionEnum Enum Values</h4>
@@ -6113,30 +6113,30 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">Up</span>
-        <span class="enum-desc">数值越高表示越差（如污染指数从 0 升到 100）</span>
+        <span class="enum-desc">Higher values indicate worse condition (e.g. pollution index from 0 to 100)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">Down</span>
-        <span class="enum-desc">数值越低表示越差（如剩余寿命从 100 降到 0）</span>
+        <span class="enum-desc">Lower values indicate worse condition (e.g. remaining life from 100 to 0)</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">为什么需要劣化方向</div>
+    <div class="callout-title">Why Degradation Direction Is Needed</div>
     <p>
-      不同厂商对 Condition 值的定义可能相反：有的用「剩余百分比」（越低越差），有的用「污染程度」（越高越差）。
-      DegradationDirection 让 App 能正确解读 Condition 值，无论厂商如何定义。
+      Different manufacturers may define the Condition value in opposite ways: some use "remaining percentage" (lower is worse), others use "pollution level" (higher is worse).
+      DegradationDirection enables apps to correctly interpret the Condition value regardless of how the manufacturer defines it.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x02">ChangeIndication(更换指示)</h3>
+  <h3 id="attr-0x02">ChangeIndication (Replacement Indication)</h3>
   <p>
-    滤芯当前的更换状态。这是一个必选属性，即使设备不支持 Condition 百分比，也必须报告更换指示。
+    The filter's current replacement status. This is a required attribute; even if the device does not support the Condition percentage, it must report the replacement indication.
   </p>
 
   <h4>ChangeIndicationEnum Enum Values</h4>
@@ -6145,55 +6145,55 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">OK</span>
-        <span class="enum-desc">滤芯状态正常，无需更换</span>
+        <span class="enum-desc">Filter condition is normal; no replacement needed</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">Warning</span>
-        <span class="enum-desc">滤芯开始老化，建议近期更换</span>
+        <span class="enum-desc">Filter is aging; replacement recommended soon</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">Critical</span>
-        <span class="enum-desc">滤芯已严重老化，必须立即更换</span>
+        <span class="enum-desc">Filter is severely degraded; immediate replacement required</span>
       </div>
     </div>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x03">InPlaceIndicator(滤芯安装状态)</h3>
+  <h3 id="attr-0x03">InPlaceIndicator (Filter Installation Status)</h3>
   <p>
-    布尔值，表示滤芯是否已物理安装到设备中。<code>true</code> 表示滤芯在位，<code>false</code> 表示滤芯未安装或已取出。
-    这是一个可选属性，取决于设备是否有物理检测传感器。
+    A boolean indicating whether the filter is physically installed in the device. <code>true</code> means the filter is in place; <code>false</code> means it is not installed or has been removed.
+    This is an optional attribute, depending on whether the device has a physical detection sensor.
   </p>
   <div class="callout callout-tip">
-    <div class="callout-title">App 端提示</div>
+    <div class="callout-title">App-Side Tip</div>
     <p>
-      当 <code>InPlaceIndicator = false</code> 时，App 应提示用户「滤芯未安装」并禁止开机运行。
-      用户更换滤芯的流程通常是：取出旧滤芯（<code>false</code>）→ 装入新滤芯（<code>true</code>）→ 发送 ResetCondition 命令。
+      When <code>InPlaceIndicator = false</code>, the app should prompt the user that the filter is not installed and prevent operation.
+      The typical filter replacement flow is: remove old filter (<code>false</code>) → install new filter (<code>true</code>) → send ResetCondition command.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x04">LastChangedTime(上次更换时间)</h3>
+  <h3 id="attr-0x04">LastChangedTime (Last Changed Time)</h3>
   <p>
-    上次更换滤芯的 UTC 时间戳（epoch 秒数）。可以为 <code>null</code>，表示设备未记录过更换时间。
-    当用户发送 ResetCondition 命令后，设备会将此属性更新为当前时间。
+    The UTC timestamp (epoch seconds) of the last filter replacement. Can be <code>null</code>, indicating the device has not recorded a replacement time.
+    After the user sends a ResetCondition command, the device updates this attribute to the current time.
   </p>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x05">ReplacementProductList(替换产品列表)</h3>
+  <h3 id="attr-0x05">ReplacementProductList (Replacement Product List)</h3>
   <p>
-    推荐的替换产品列表，每个条目包含产品标识类型和标识值。
-    需要设备声明 <strong>REP</strong> Feature 才会出现此属性。
-    列表可以包含多个条目，用不同的编码体系标识同一款替换滤芯。
+    A list of recommended replacement products; each entry contains a product identification type and value.
+    Requires the device to declare the <strong>REP</strong> Feature for this attribute to appear.
+    The list can contain multiple entries, identifying the same replacement filter using different coding systems.
   </p>
 
-  <h4>ReplacementProductStruct 结构</h4>
+  <h4>ReplacementProductStruct</h4>
   <div class="table-wrap">
     <table>
       <thead>
@@ -6207,12 +6207,12 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>ProductIdentifierType</td>
           <td>enum8</td>
-          <td>产品标识编码体系</td>
+          <td>Product identification coding system</td>
         </tr>
         <tr>
           <td>ProductIdentifierValue</td>
           <td>string</td>
-          <td>产品标识值（条码号、编号等）</td>
+          <td>Product identification value (barcode, serial number, etc.)</td>
         </tr>
       </tbody>
     </table>
@@ -6224,45 +6224,45 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">UPC</span>
-        <span class="enum-desc">通用产品代码（北美 12 位条码）</span>
+        <span class="enum-desc">Universal Product Code (12-digit North American barcode)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">GTIN8</span>
-        <span class="enum-desc">全球贸易项目代码（8 位短条码）</span>
+        <span class="enum-desc">Global Trade Item Number (8-digit short barcode)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">EAN</span>
-        <span class="enum-desc">欧洲商品编码（13 位国际条码）</span>
+        <span class="enum-desc">European Article Number (13-digit international barcode)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">GTIN14</span>
-        <span class="enum-desc">全球贸易项目代码（14 位物流条码）</span>
+        <span class="enum-desc">Global Trade Item Number (14-digit logistics barcode)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">4</span>
       <div>
         <span class="enum-name">OEM</span>
-        <span class="enum-desc">厂商自定义编号（如型号名称）</span>
+        <span class="enum-desc">OEM-defined number (e.g. model name)</span>
       </div>
     </div>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 命令 ====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    HepaFilterMonitoring 只有一个命令，由 Client 发给 Server（即 App 发给设备）。
-    用于在用户更换滤芯后重置监测状态。
+    HepaFilterMonitoring has only one command, sent from Client to Server (i.e. app to device).
+    Used to reset the monitoring state after the user replaces the filter.
   </p>
 
   <div class="table-wrap">
@@ -6278,21 +6278,21 @@ export const clusters: Record<string, ClusterContent> = {
         <tr class="clickable-row" data-href="#cmd-0x00">
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>ResetCondition</td>
-          <td>重置滤芯状态（更换滤芯后调用）</td>
+          <td>Reset filter condition (called after filter replacement)</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
-  <h3 id="cmd-0x00">ResetCondition —— 重置滤芯状态(0x00)</h3>
+  <!-- ====== Command Details ====== -->
+  <h3 id="cmd-0x00">ResetCondition -- Reset Filter Status (0x00)</h3>
   <p>
-    用户更换完 HEPA 滤芯后，发送此命令通知设备重新开始生命周期监测。
-    设备收到后会将 <code>Condition</code> 重置为 <code>100</code>，<code>ChangeIndication</code> 重置为 <code>OK</code>，
-    并更新 <code>LastChangedTime</code> 为当前时间。
+    After the user replaces the HEPA filter, this command is sent to notify the device to restart lifecycle monitoring.
+    Upon receipt, the device resets <code>Condition</code> to <code>100</code>, <code>ChangeIndication</code> to <code>OK</code>,
+    and updates <code>LastChangedTime</code> to the current time.
   </p>
-  <p>此命令没有参数，直接发送即可。</p>
-  <p>请求示例：</p>
+  <p>This command has no parameters; send it directly.</p>
+  <p>Request example:</p>
   <pre><code>{
   "invokeRequests": [{
     "commandPath": {
@@ -6305,24 +6305,24 @@ export const clusters: Record<string, ClusterContent> = {
 }</code></pre>
 
   <div class="callout callout-info">
-    <div class="callout-title">注意事项</div>
+    <div class="callout-title">Important Notes</div>
     <p>
-      ResetCondition 不会检查滤芯是否真的被物理更换。如果设备支持 <code>InPlaceIndicator</code>，
-      App 可以先确认该属性从 <code>false</code> 变为 <code>true</code>（用户取出旧滤芯再装入新滤芯）后再发送此命令，
-      避免误操作。
+      ResetCondition does not verify whether the filter was actually physically replaced. If the device supports <code>InPlaceIndicator</code>,
+      the app can first confirm that the attribute changed from <code>false</code> to <code>true</code> (user removed old filter and installed new one) before sending this command,
+      to avoid accidental resets.
     </p>
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>读取一台空气净化器的 HepaFilterMonitoring Cluster 全部属性：</p>
+  <p>Read all attributes of the HepaFilterMonitoring Cluster from an air purifier:</p>
   <pre><code>{
-  // --- 属性 ---
-  "0x0": 72,          // Condition = 72%（滤芯剩余寿命）
-  "0x1": 1,           // DegradationDirection = Down（数值越低越差）
-  "0x2": 0,           // ChangeIndication = OK（状态正常）
-  "0x3": true,        // InPlaceIndicator = true（滤芯已安装）
+  // --- Attributes ---
+  "0x0": 72,          // Condition = 72% (filter remaining life)
+  "0x1": 1,           // DegradationDirection = Down (lower values indicate worse condition)
+  "0x2": 0,           // ChangeIndication = OK (condition normal)
+  "0x3": true,        // InPlaceIndicator = true (filter installed)
   "0x4": 1695206400,  // LastChangedTime = 2023-09-20T16:00:00Z
   "0x5": [            // ReplacementProductList
     {
@@ -6332,42 +6332,42 @@ export const clusters: Record<string, ClusterContent> = {
   ]
 }</code></pre>
 
-  <!-- ====== 场景一 ====== -->
-  <h2 id="scenario-lifecycle">场景一：滤芯生命周期追踪</h2>
+  <!-- ====== Scenario 1 ====== -->
+  <h2 id="scenario-lifecycle">Scenario 1: Filter Lifecycle Tracking</h2>
   <p>
-    一台空气净化器从安装新滤芯到滤芯耗尽再到更换的完整流程。
-    App 通过订阅属性变化来实时更新 UI，在关键节点推送通知。
+    The complete flow from installing a new filter to filter depletion and replacement in an air purifier.
+    The app updates the UI in real time by subscribing to attribute changes, and pushes notifications at key milestones.
   </p>
   <pre><code>{
-  // 场景：空气净化器运行 6 个月后，滤芯开始老化
-  // 第一次读取 —— 滤芯状态良好
+  // Scenario: After 6 months of operation, the filter begins to age
+  // First read -- filter status good
   "readAttributes": {
     "0x0": 72,         // Condition = 72%
     "0x2": 0           // ChangeIndication = OK
   },
 
-  // 两个月后 —— 滤芯进入警告区间
+  // Two months later -- filter enters warning zone
   "readAttributes_later": {
     "0x0": 18,         // Condition = 18%
     "0x2": 1           // ChangeIndication = Warning
   },
 
-  // 继续使用 —— 滤芯进入临界状态
+  // Continued use -- filter enters critical state
   "readAttributes_critical": {
     "0x0": 3,          // Condition = 3%
     "0x2": 2           // ChangeIndication = Critical
   },
 
-  // 用户更换滤芯后，发送 ResetCondition 命令
+  // After user replaces filter, send ResetCondition command
   "resetCommand": {
     "endpointId": 1,
     "clusterId": "0x0071",
     "commandId": "0x00"
   },
 
-  // 重置后的状态
+  // Status after reset
   "readAttributes_after_reset": {
-    "0x0": 100,        // Condition = 100%（已重置）
+    "0x0": 100,        // Condition = 100% (reset)
     "0x2": 0           // ChangeIndication = OK
   }
 }</code></pre>
@@ -6375,26 +6375,26 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">Developer Advice</div>
     <p>
-      App 中的滤芯管理功能推荐这样实现：
+      Recommended implementation for filter management in the app:
     </p>
     <ol>
-      <li>首页卡片展示 <code>Condition</code> 百分比，用环形进度条直观呈现</li>
-      <li>订阅 <code>ChangeIndication</code> 属性变化，当值变为 <code>Warning</code> 时推送 App 通知</li>
-      <li>当值变为 <code>Critical</code> 时，在设备卡片上显示红色警告标识</li>
-      <li>提供「已更换滤芯」按钮，点击后发送 <code>ResetCondition</code> 命令</li>
-      <li>如果设备支持 <code>InPlaceIndicator</code>，在按钮点击前先检查滤芯是否已装入</li>
+      <li>Display <code>Condition</code> percentage on the home card using a ring progress bar for visual representation</li>
+      <li>Subscribe to <code>ChangeIndication</code> attribute changes; push app notification when the value becomes <code>Warning</code></li>
+      <li>When the value becomes <code>Critical</code>, display a red warning badge on the device card</li>
+      <li>Provide a "Filter Replaced" button that sends the <code>ResetCondition</code> command when clicked</li>
+      <li>If the device supports <code>InPlaceIndicator</code>, check whether the filter is installed before the button tap</li>
     </ol>
   </div>
 
-  <!-- ====== 场景二 ====== -->
-  <h2 id="scenario-replacement">场景二：替换产品购买引导</h2>
+  <!-- ====== Scenario 2 ====== -->
+  <h2 id="scenario-replacement">Scenario 2: Replacement Product Purchase Guide</h2>
   <p>
-    当滤芯需要更换时，App 读取设备中的替换产品列表，帮助用户快速找到正确的替换滤芯并完成购买。
+    When the filter needs replacement, the app reads the replacement product list from the device to help the user quickly find the correct replacement filter and complete the purchase.
   </p>
   <pre><code>{
-  // 场景：App 读取替换产品信息，引导用户购买
+  // Scenario: App reads replacement product info to guide user purchase
   "readAttributes": {
-    "0x2": 2,          // ChangeIndication = Critical（需要更换）
+    "0x2": 2,          // ChangeIndication = Critical (replacement needed)
     "0x5": [           // ReplacementProductList
       {
         "0": 0,        // ProductIdentifierType = UPC
@@ -6406,22 +6406,22 @@ export const clusters: Record<string, ClusterContent> = {
       }
     ]
   }
-  // App 可以用 UPC 码跳转电商搜索，或用 OEM 编号跳转厂商官网
+  // App can use UPC code to redirect to e-commerce search, or OEM number to redirect to manufacturer website
 }</code></pre>
 
   <div class="callout callout-tip">
     <div class="callout-title">Developer Advice</div>
     <p>
-      替换产品信息的使用方式：
+      How to use replacement product information:
     </p>
     <ol>
-      <li>读取 <code>ReplacementProductList</code>，遍历所有条目</li>
-      <li>如果有 <code>UPC</code> / <code>EAN</code> / <code>GTIN</code> 类型的条目，可以直接跳转到电商平台搜索对应条码</li>
-      <li>如果有 <code>OEM</code> 类型的条目，用厂商编号在品牌官网或授权渠道搜索</li>
-      <li>在 App 的「滤芯更换」页面展示所有可用的产品标识，让用户自行选择购买渠道</li>
+      <li>Read <code>ReplacementProductList</code> and iterate through all entries</li>
+      <li>If entries with <code>UPC</code> / <code>EAN</code> / <code>GTIN</code> types exist, redirect to e-commerce platform to search by barcode</li>
+      <li>If entries with <code>OEM</code> type exist, search by manufacturer part number on the brand website or authorized channels</li>
+      <li>Display all available product identifiers on the app's "Filter Replacement" page, letting users choose their preferred purchase channel</li>
     </ol>
     <p>
-      同一款滤芯可能同时有 UPC 和 OEM 两种标识，App 应同时展示，适应不同地区用户的购买习惯。
+      The same filter may have both UPC and OEM identifiers. The app should display both to accommodate purchasing habits in different regions.
     </p>
   </div>
 
@@ -6441,59 +6441,59 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'activated-carbon-filter-monitoring': {
     title: 'ActivatedCarbonFilterMonitoring Cluster (0x0072)',
-    description: 'Matter ActivatedCarbonFilterMonitoring Cluster(0x0072)完整参考 — 滤芯寿命、更换提醒、ResetCondition 命令，用于监测活性炭滤芯状态的 Cluster。',
+    description: 'Complete reference for the Matter ActivatedCarbonFilterMonitoring Cluster (0x0072) — filter life, replacement reminders, ResetCondition command — the Cluster for monitoring activated carbon filter status.',
     prev: undefined,
     next: undefined,
     content: `<h1>ActivatedCarbonFilterMonitoring Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x0072</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 功能端点（通常为 <code>Endpoint 1</code> 或独立滤芯端点）
+    <strong>Endpoint</strong>: Application endpoint (typically <code>Endpoint 1</code> or a dedicated filter endpoint)
   </p>
   <p>
-    ActivatedCarbonFilterMonitoring 用于监测活性炭滤芯的生命周期 —— 剩余寿命、降解方向、更换提醒、替换产品信息。
-    它与 HEPA Filter Monitoring（<code>0x0071</code>）<strong>结构完全相同</strong>（相同的属性、命令、枚举），区别仅在滤芯类型。
+    ActivatedCarbonFilterMonitoring monitors the lifecycle of activated carbon filters -- remaining life, degradation direction, replacement reminders, and replacement product information.
+    Its structure is <strong>identical</strong> to HEPA Filter Monitoring (<code>0x0071</code>) (same attributes, commands, and enums); the only difference is the filter type.
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">活性炭 vs HEPA：过滤对象不同</div>
+    <div class="callout-title">Activated Carbon vs HEPA: Different Filtration Targets</div>
     <p>
-      <strong>HEPA 滤芯</strong>捕捉<strong>颗粒物</strong>（PM2.5、粉尘、花粉、宠物毛发），靠物理拦截。<br/>
-      <strong>活性炭滤芯</strong>吸附<strong>气态污染物</strong>（甲醛、VOC、异味、烟味），靠化学吸附。<br/>
-      空气净化器通常同时搭载两层滤芯，各自有独立的寿命周期 —— 因此需要两个独立的 Cluster 分别监测。
+      <strong>HEPA filters</strong> capture <strong>particulates</strong> (PM2.5, dust, pollen, pet dander) through physical interception.<br/>
+      <strong>Activated carbon filters</strong> adsorb <strong>gaseous pollutants</strong> (formaldehyde, VOCs, odors, smoke) through chemical adsorption.<br/>
+      Air purifiers typically carry both filter layers, each with an independent lifecycle -- hence two separate Clusters are needed for individual monitoring.
     </p>
   </div>
 
   <!-- ====== Feature Map ====== -->
-  <h2 id="features">Feature Map(功能位)</h2>
-  <p>三个可选功能位决定设备支持哪些属性，与 HEPA Filter Monitoring 完全一致。</p>
+  <h2 id="features">Feature Map</h2>
+  <p>Three optional feature bits determine which attributes the device supports, identical to HEPA Filter Monitoring.</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0x01</span>
       <div>
         <span class="enum-name">CON（Condition）</span>
-        <span class="enum-desc">支持 Condition 属性，报告滤芯剩余百分比</span>
+        <span class="enum-desc">Supports the Condition attribute, reporting filter remaining percentage</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x02</span>
       <div>
         <span class="enum-name">WAR（Warning）</span>
-        <span class="enum-desc">支持 ChangeIndication 属性，发出更换提醒</span>
+        <span class="enum-desc">Supports the ChangeIndication attribute, issuing replacement reminders</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x04</span>
       <div>
         <span class="enum-name">REP（ReplacementProductList）</span>
-        <span class="enum-desc">支持 ReplacementProductList 属性，提供替换滤芯产品信息</span>
+        <span class="enum-desc">Supports the ReplacementProductList attribute, providing replacement filter product information</span>
       </div>
     </div>
   </div>
 
-  <!-- ====== 属性总览 ====== -->
+  <!-- ====== Attribute Overview ====== -->
   <h2 id="attributes">Attribute Overview</h2>
-  <p>所有属性均与 HEPA Filter Monitoring 相同，Feature 列标注需要哪个功能位。</p>
+  <p>All attributes are identical to HEPA Filter Monitoring. The Feature column indicates which feature bit is required.</p>
 
   <div class="table-wrap">
     <table>
@@ -6512,119 +6512,119 @@ export const clusters: Record<string, ClusterContent> = {
           <td>Condition</td>
           <td>percent</td>
           <td>CON</td>
-          <td>滤芯剩余寿命百分比（0~100）</td>
+          <td>Filter remaining life percentage (0~100)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x01">
           <td><a href="#attr-0x01"><code>0x01</code></a></td>
           <td>DegradationDirection</td>
           <td>enum8</td>
           <td>CON</td>
-          <td>降解方向（值变小=更旧 or 值变大=更旧）</td>
+          <td>Degradation direction (lower = older OR higher = older)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x02">
           <td><a href="#attr-0x02"><code>0x02</code></a></td>
           <td>ChangeIndication</td>
           <td>enum8</td>
-          <td>必选</td>
-          <td>当前更换状态（OK / Warning / Critical）</td>
+          <td>Required</td>
+          <td>Current replacement status (OK / Warning / Critical)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x03">
           <td><a href="#attr-0x03"><code>0x03</code></a></td>
           <td>InPlaceIndicator</td>
           <td>bool</td>
-          <td>可选</td>
-          <td>滤芯是否已安装到位</td>
+          <td>Optional</td>
+          <td>Whether the filter is properly installed</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x04">
           <td><a href="#attr-0x04"><code>0x04</code></a></td>
           <td>LastChangedTime</td>
           <td>epoch-s</td>
-          <td>可选</td>
-          <td>上次更换滤芯的时间戳</td>
+          <td>Optional</td>
+          <td>Timestamp of last filter replacement</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x05">
           <td><a href="#attr-0x05"><code>0x05</code></a></td>
           <td>ReplacementProductList</td>
           <td>list</td>
           <td>REP</td>
-          <td>推荐替换产品列表</td>
+          <td>Recommended replacement product list</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 属性详解 ====== -->
-  <h3 id="attr-0x00">Condition(滤芯剩余寿命)</h3>
+  <!-- ====== Attribute Details ====== -->
+  <h3 id="attr-0x00">Condition (Filter Remaining Life)</h3>
   <p>
-    0~100 的百分比值，表示活性炭滤芯的剩余吸附能力。<code>100</code> 表示全新，<code>0</code> 表示完全耗尽（当 DegradationDirection = Down 时）。
-    活性炭的衰减速度取决于环境中 VOC/异味的浓度，高污染环境下消耗更快。
+    A percentage value from 0 to 100 representing the remaining adsorption capacity of the activated carbon filter. <code>100</code> means brand new; <code>0</code> means fully depleted (when DegradationDirection = Down).
+    The degradation rate of activated carbon depends on the concentration of VOCs/odors in the environment; it is consumed faster in high-pollution environments.
   </p>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x01">DegradationDirection(降解方向)</h3>
-  <p>告诉 App 端 Condition 值的含义方向。</p>
+  <h3 id="attr-0x01">DegradationDirection (Degradation Direction)</h3>
+  <p>Tells the app the meaning direction of the Condition value.</p>
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">Down</span>
-        <span class="enum-desc">值从 100 降到 0，越小越需更换（最常见）</span>
+        <span class="enum-desc">Value decreases from 100 to 0; the lower the value, the more replacement is needed (most common)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">Up</span>
-        <span class="enum-desc">值从 0 升到 100，越大越需更换</span>
+        <span class="enum-desc">Value increases from 0 to 100; the higher the value, the more replacement is needed</span>
       </div>
     </div>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x02">ChangeIndication(更换状态)</h3>
-  <p>设备对滤芯当前状态的综合判断。<strong>必选属性</strong>，即使不支持 CON Feature 也必须实现。</p>
+  <h3 id="attr-0x02">ChangeIndication (Change Indication)</h3>
+  <p>The device's overall assessment of the filter's current status. <strong>Mandatory attribute</strong> -- must be implemented even without the CON Feature.</p>
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">OK</span>
-        <span class="enum-desc">滤芯状态良好，无需更换</span>
+        <span class="enum-desc">Filter status is good; no replacement needed</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">Warning</span>
-        <span class="enum-desc">建议尽快更换（吸附能力下降）</span>
+        <span class="enum-desc">Replacement recommended soon (adsorption capacity declining)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">Critical</span>
-        <span class="enum-desc">必须立即更换（已丧失吸附能力）</span>
+        <span class="enum-desc">Must be replaced immediately (adsorption capacity lost)</span>
       </div>
     </div>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x03">InPlaceIndicator(滤芯安装状态)</h3>
+  <h3 id="attr-0x03">InPlaceIndicator (Filter Installation Status)</h3>
   <p>
-    <code>true</code> 表示滤芯已正确安装，<code>false</code> 表示滤芯缺失或未装好。
-    带有物理检测开关的设备可以在用户取出滤芯时自动更新此值。
+    <code>true</code> indicates the filter is correctly installed; <code>false</code> indicates the filter is missing or improperly installed.
+    Devices with physical detection switches can automatically update this value when the user removes the filter.
   </p>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x04">LastChangedTime(上次更换时间)</h3>
+  <h3 id="attr-0x04">LastChangedTime (Last Changed Time)</h3>
   <p>
-    Unix 时间戳（秒），记录上一次更换活性炭滤芯的时间。配合 Condition 可以计算滤芯的实际使用天数和平均消耗速度。
-    用户更换滤芯并执行 ResetCondition 命令后，设备应更新此值。
+    Unix timestamp (seconds) recording when the activated carbon filter was last replaced. Combined with Condition, it allows calculation of actual usage days and average consumption rate.
+    After the user replaces the filter and executes the ResetCondition command, the device should update this value.
   </p>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x05">ReplacementProductList(替换产品列表)</h3>
+  <h3 id="attr-0x05">ReplacementProductList (Replacement Product List)</h3>
   <p>
-    设备推荐的替换滤芯产品列表，每条记录包含产品标识类型和标识值。App 可据此直接引导用户购买。
+    List of replacement filter products recommended by the device. Each entry contains a product identifier type and value. The app can use this to directly guide users to purchase.
   </p>
   <div class="table-wrap">
     <table>
@@ -6635,12 +6635,12 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>ProductIdentifierType</td>
           <td>enum8</td>
-          <td>标识类型（见下方枚举）</td>
+          <td>Identification type (see enum below)</td>
         </tr>
         <tr>
           <td>ProductIdentifierValue</td>
           <td>string</td>
-          <td>标识值（如 UPC 码、EAN 码、型号等）</td>
+          <td>Identification value (e.g., UPC, EAN, model number)</td>
         </tr>
       </tbody>
     </table>
@@ -6652,43 +6652,43 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">UPC</span>
-        <span class="enum-desc">通用产品代码</span>
+        <span class="enum-desc">Universal Product Code</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">GTIN-8</span>
-        <span class="enum-desc">8 位全球贸易项目代码</span>
+        <span class="enum-desc">8-digit Global Trade Item Number</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">EAN</span>
-        <span class="enum-desc">欧洲商品编号</span>
+        <span class="enum-desc">European Article Number</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">GTIN-14</span>
-        <span class="enum-desc">14 位全球贸易项目代码</span>
+        <span class="enum-desc">14-digit Global Trade Item Number</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">4</span>
       <div>
         <span class="enum-name">OEM</span>
-        <span class="enum-desc">厂商自定义型号</span>
+        <span class="enum-desc">Vendor-defined part number</span>
       </div>
     </div>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 命令 ====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
-  <p>只有一个命令，用于更换滤芯后重置状态。</p>
+  <p>Only one command, used to reset the state after filter replacement.</p>
 
   <div class="table-wrap">
     <table>
@@ -6703,18 +6703,18 @@ export const clusters: Record<string, ClusterContent> = {
         <tr class="clickable-row" data-href="#cmd-0x00">
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>ResetCondition</td>
-          <td>重置滤芯状态（更换滤芯后调用）</td>
+          <td>Reset filter condition (called after filter replacement)</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <h3 id="cmd-0x00">ResetCondition —— 重置滤芯状态(0x00)</h3>
+  <h3 id="cmd-0x00">ResetCondition -- Reset Filter Status (0x00)</h3>
   <p>
-    用户更换活性炭滤芯后，通过 App 发送此命令。设备收到后应将 Condition 恢复到 100（或 0，取决于 DegradationDirection），
-    将 ChangeIndication 重置为 OK，并更新 LastChangedTime 为当前时间。无参数，直接发送即可。
+    After the user replaces the activated carbon filter, this command is sent via the app. Upon receipt, the device should restore Condition to 100 (or 0, depending on DegradationDirection),
+    reset ChangeIndication to OK, and update LastChangedTime to the current time. No parameters required; send directly.
   </p>
-  <p>请求示例：</p>
+  <p>Request example:</p>
   <pre><code>{
   "invokeRequests": [{
     "commandPath": {
@@ -6727,15 +6727,15 @@ export const clusters: Record<string, ClusterContent> = {
 }</code></pre>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>读取一台空气净化器的活性炭滤芯状态：</p>
+  <p>Read the activated carbon filter status from an air purifier:</p>
   <pre><code>{
-  // --- 属性（ActivatedCarbonFilterMonitoring Cluster） ---
-  "0x0": 72,          // Condition = 72%（滤芯剩余寿命）
-  "0x1": 0,           // DegradationDirection = Down（值越小越需更换）
-  "0x2": 1,           // ChangeIndication = Warning（建议更换）
-  "0x3": true,        // InPlaceIndicator = true（滤芯已安装）
+  // --- Attributes (ActivatedCarbonFilterMonitoring Cluster) ---
+  "0x0": 72,          // Condition = 72% (filter remaining life)
+  "0x1": 0,           // DegradationDirection = Down (lower value means more replacement needed)
+  "0x2": 1,           // ChangeIndication = Warning (replacement recommended)
+  "0x3": true,        // InPlaceIndicator = true (filter installed)
   "0x4": 1718380800,  // LastChangedTime = 2024-06-15T00:00:00Z
   "0x5": [{           // ReplacementProductList
     "productIdentifierType": 3,
@@ -6743,49 +6743,49 @@ export const clusters: Record<string, ClusterContent> = {
   }]
 }</code></pre>
 
-  <!-- ====== 场景 ====== -->
+  <!-- ====== Scenarios ====== -->
   <h2 id="scenarios">Usage Scenarios</h2>
 
   <div class="callout callout-tip">
-    <div class="callout-title">场景一：双滤芯空气净化器</div>
+    <div class="callout-title">Scenario 1: Dual-Filter Air Purifier</div>
     <p>
-      一台空气净化器同时搭载 HEPA 滤芯和活性炭滤芯，分别放在两个 Endpoint 上（或同一 Endpoint 上两个不同的 Cluster）。
-      App 需要分别显示两层滤芯的寿命，因为它们的消耗速度不同 —— PM2.5 高的环境 HEPA 先耗尽，装修房间则活性炭先耗尽。
+      An air purifier carries both a HEPA filter and an activated carbon filter, placed on two separate Endpoints (or two different Clusters on the same Endpoint).
+      The app needs to display the lifespan of both filter layers separately, as their consumption rates differ -- in high PM2.5 environments the HEPA depletes first; in newly renovated rooms the activated carbon depletes first.
     </p>
     <pre><code>{
-  // Endpoint 1 — HEPA 滤芯（HEPAFilterMonitoring 0x0071）
+  // Endpoint 1 -- HEPA Filter (HEPAFilterMonitoring 0x0071)
   "hepa": {
     "0x0": 45,         // Condition = 45%
     "0x2": 1           // ChangeIndication = Warning
   },
-  // Endpoint 2 — 活性炭滤芯（ActivatedCarbonFilterMonitoring 0x0072）
+  // Endpoint 2 -- Activated Carbon Filter (ActivatedCarbonFilterMonitoring 0x0072)
   "carbon": {
     "0x0": 78,         // Condition = 78%
     "0x2": 0           // ChangeIndication = OK
   }
 }</code></pre>
     <p>
-      App 端建议用双进度条或双环形图分别展示，让用户一目了然知道该换哪层滤芯。
+      The app is recommended to use dual progress bars or dual ring charts to display both, so users can see at a glance which filter layer needs replacement.
     </p>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">场景二：VOC 吸附能力追踪</div>
+    <div class="callout-title">Scenario 2: VOC Adsorption Capacity Tracking</div>
     <p>
-      智能新风系统内置 VOC 传感器，结合活性炭滤芯的 Condition 属性，可以分析滤芯的实际吸附效率 ——
-      当 VOC 浓度持续偏高且 Condition 下降到 50% 以下时，说明吸附能力明显衰减，App 可提前推送更换建议，
-      而不是等到 ChangeIndication 变为 Critical 才通知用户。
+      Smart fresh air systems with built-in VOC sensors can analyze the actual adsorption efficiency of the activated carbon filter using its Condition attribute --
+      when VOC concentration remains elevated and Condition drops below 50%, it indicates significant adsorption capacity decline, and the app can proactively push replacement suggestions
+      instead of waiting until ChangeIndication becomes Critical to notify the user.
     </p>
     <p>
-      结合 LastChangedTime 还可以统计滤芯的平均使用寿命，帮助用户规划耗材采购周期。
+      Combined with LastChangedTime, the average filter lifespan can be calculated to help users plan consumable procurement cycles.
     </p>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">与 HEPA Filter Monitoring 的关系</div>
+    <div class="callout-title">Relationship with HEPA Filter Monitoring</div>
     <p>
-      两个 Cluster 的属性、命令、枚举定义<strong>完全一致</strong>，仅 Cluster ID 不同（HEPA = <code>0x0071</code>，活性炭 = <code>0x0072</code>）。
-      App 开发时可以复用同一套 UI 组件和数据解析逻辑，只需根据 Cluster ID 显示不同的滤芯名称和图标即可。
+      The attributes, commands, and enum definitions of both Clusters are <strong>identical</strong>; only the Cluster ID differs (HEPA = <code>0x0071</code>, Activated Carbon = <code>0x0072</code>).
+      During app development, the same set of UI components and data parsing logic can be reused; just display different filter names and icons based on the Cluster ID.
     </p>
   </div>
 

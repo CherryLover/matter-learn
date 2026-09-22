@@ -1615,17 +1615,17 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios & Parameters</summary>
     <div class="scenario-content">
       <p>
-        App 上的滑块控件拖动到 30% 位置时，发送 GoToLiftPercentage（LiftPercent100thsValue = 3000）。
-        「打开到一半」的语音指令可发送 5000。建议在 App 上把滑块显示为「打开程度」（0% = 全关，100% = 全开），
-        发送时做 <code>10000 - 用户值 * 100</code> 的换算。
+        When the slider control in the app is dragged to 30%, send GoToLiftPercentage (LiftPercent100thsValue = 3000).
+        A voice command like "open halfway" can send 5000. It is recommended to display the slider as "openness" in the app (0% = fully closed, 100% = fully open),
+        and convert when sending: <code>10000 - userValue * 100</code>.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x07">GoToTiltValue &mdash; 倾斜到绝对值(0x07)</h3>
+  <h3 id="cmd-0x07">GoToTiltValue &mdash; Tilt to Absolute Value (0x07)</h3>
   <p>
-    将百叶窗叶片倾斜到指定的绝对位置值。仅支持带倾斜功能的百叶窗类设备。
+    Tilts the blind slats to a specified absolute position value. Only supported by blind-type devices with tilt capability.
   </p>
   <div class="table-wrap">
     <table>
@@ -1636,17 +1636,17 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>TiltValue</td>
           <td>uint16</td>
-          <td>目标倾斜位置的绝对值</td>
+          <td>Target tilt position absolute value</td>
         </tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x08">GoToTiltPercentage &mdash; 倾斜到百分比(0x08)</h3>
+  <h3 id="cmd-0x08">GoToTiltPercentage &mdash; Tilt to Percentage (0x08)</h3>
   <p>
-    将百叶窗叶片倾斜到指定的百分比位置。与升降百分比逻辑一致，
-    <code>0</code> = 叶片完全打开（平行于窗面），<code>10000</code> = 叶片完全关闭（垂直于窗面）。
+    Tilts the blind slats to a specified percentage position. The logic is consistent with lift percentage:
+    <code>0</code> = slats fully open (parallel to the window), <code>10000</code> = slats fully closed (perpendicular to the window).
   </p>
   <div class="table-wrap">
     <table>
@@ -1657,7 +1657,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>TiltPercent100thsValue</td>
           <td>percent100ths</td>
-          <td>目标倾斜位置。<code>0</code> = 叶片全开，<code>10000</code> = 叶片全关</td>
+          <td>Target tilt position. <code>0</code> = slats fully open, <code>10000</code> = slats fully closed</td>
         </tr>
       </tbody>
     </table>
@@ -1665,14 +1665,14 @@ export const clusters: Record<string, ClusterContent> = {
   <details class="scenario">
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
-      <p>百叶窗的叶片角度调节。例如下午阳光直射时，把叶片调到 7000（70% 关闭）既能遮阳又能保持通风。</p>
+      <p>Adjusting the slat angle on venetian blinds. For example, during afternoon direct sunlight, tilting slats to 7000 (70% closed) provides shade while maintaining ventilation.</p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
   <!-- ====== 属性详解 ====== -->
   <h2 id="attributes">Attributes</h2>
-  <p>WindowCovering Cluster 的属性按功能分为四组。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+  <p>WindowCovering Cluster attributes are organized into four functional groups. Click an attribute ID in the summary table below to jump to its detailed description.</p>
 
   <!-- 属性汇总表 -->
   <div class="table-wrap">
@@ -1692,152 +1692,152 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>Type</td>
           <td>enum8</td>
-          <td><a href="#group-type">类型与配置</a></td>
-          <td>窗帘类型</td>
+          <td><a href="#group-type">Type & Configuration</a></td>
+          <td>Covering type</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x000D">
           <td><a href="#attr-0x000D"><code>0x000D</code></a></td>
           <td>EndProductType</td>
           <td>enum8</td>
-          <td><a href="#group-type">类型与配置</a></td>
-          <td>终端产品类型</td>
+          <td><a href="#group-type">Type & Configuration</a></td>
+          <td>End product type</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0007">
           <td><a href="#attr-0x0007"><code>0x0007</code></a></td>
           <td>ConfigStatus</td>
           <td>bitmap8</td>
-          <td><a href="#group-type">类型与配置</a></td>
-          <td>配置与运行状态标志</td>
+          <td><a href="#group-type">Type & Configuration</a></td>
+          <td>Configuration and operational status flags</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0017">
           <td><a href="#attr-0x0017"><code>0x0017</code></a></td>
           <td>Mode</td>
           <td>bitmap8</td>
-          <td><a href="#group-type">类型与配置</a></td>
-          <td>运行模式标志</td>
+          <td><a href="#group-type">Type & Configuration</a></td>
+          <td>Operating mode flags</td>
         </tr>
         <!-- 升降位置 -->
         <tr class="clickable-row" data-href="#attr-0x000B">
           <td><a href="#attr-0x000B"><code>0x000B</code></a></td>
           <td>TargetPositionLiftPercent100ths</td>
           <td>percent100ths / null</td>
-          <td><a href="#group-lift">升降位置</a></td>
-          <td>目标升降位置</td>
+          <td><a href="#group-lift">Lift Position</a></td>
+          <td>Target lift position</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x000E">
           <td><a href="#attr-0x000E"><code>0x000E</code></a></td>
           <td>CurrentPositionLiftPercent100ths</td>
           <td>percent100ths / null</td>
-          <td><a href="#group-lift">升降位置</a></td>
-          <td>当前升降位置（高精度）</td>
+          <td><a href="#group-lift">Lift Position</a></td>
+          <td>Current lift position (high precision)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0008">
           <td><a href="#attr-0x0008"><code>0x0008</code></a></td>
           <td>CurrentPositionLiftPercentage</td>
           <td>uint8 / null</td>
-          <td><a href="#group-lift">升降位置</a></td>
-          <td>当前升降位置（百分比）</td>
+          <td><a href="#group-lift">Lift Position</a></td>
+          <td>Current lift position (percentage)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
           <td>CurrentPositionLift</td>
           <td>uint16 / null</td>
-          <td><a href="#group-lift">升降位置</a></td>
-          <td>当前升降绝对值</td>
+          <td><a href="#group-lift">Lift Position</a></td>
+          <td>Current lift absolute value</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>PhysicalClosedLimitLift</td>
           <td>uint16</td>
-          <td><a href="#group-lift">升降位置</a></td>
-          <td>物理关闭极限值</td>
+          <td><a href="#group-lift">Lift Position</a></td>
+          <td>Physical closed limit value</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0010">
           <td><a href="#attr-0x0010"><code>0x0010</code></a></td>
           <td>InstalledOpenLimitLift</td>
           <td>uint16</td>
-          <td><a href="#group-lift">升降位置</a></td>
-          <td>安装后的全开极限</td>
+          <td><a href="#group-lift">Lift Position</a></td>
+          <td>Installed open limit</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0011">
           <td><a href="#attr-0x0011"><code>0x0011</code></a></td>
           <td>InstalledClosedLimitLift</td>
           <td>uint16</td>
-          <td><a href="#group-lift">升降位置</a></td>
-          <td>安装后的全关极限</td>
+          <td><a href="#group-lift">Lift Position</a></td>
+          <td>Installed closed limit</td>
         </tr>
         <!-- 倾斜位置 -->
         <tr class="clickable-row" data-href="#attr-0x000C">
           <td><a href="#attr-0x000C"><code>0x000C</code></a></td>
           <td>TargetPositionTiltPercent100ths</td>
           <td>percent100ths / null</td>
-          <td><a href="#group-tilt">倾斜位置</a></td>
-          <td>目标倾斜位置</td>
+          <td><a href="#group-tilt">Tilt Position</a></td>
+          <td>Target tilt position</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x000F">
           <td><a href="#attr-0x000F"><code>0x000F</code></a></td>
           <td>CurrentPositionTiltPercent100ths</td>
           <td>percent100ths / null</td>
-          <td><a href="#group-tilt">倾斜位置</a></td>
-          <td>当前倾斜位置（高精度）</td>
+          <td><a href="#group-tilt">Tilt Position</a></td>
+          <td>Current tilt position (high precision)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0009">
           <td><a href="#attr-0x0009"><code>0x0009</code></a></td>
           <td>CurrentPositionTiltPercentage</td>
           <td>uint8 / null</td>
-          <td><a href="#group-tilt">倾斜位置</a></td>
-          <td>当前倾斜位置（百分比）</td>
+          <td><a href="#group-tilt">Tilt Position</a></td>
+          <td>Current tilt position (percentage)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0004">
           <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
           <td>CurrentPositionTilt</td>
           <td>uint16 / null</td>
-          <td><a href="#group-tilt">倾斜位置</a></td>
-          <td>当前倾斜绝对值</td>
+          <td><a href="#group-tilt">Tilt Position</a></td>
+          <td>Current tilt absolute value</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
           <td>PhysicalClosedLimitTilt</td>
           <td>uint16</td>
-          <td><a href="#group-tilt">倾斜位置</a></td>
-          <td>物理关闭极限值</td>
+          <td><a href="#group-tilt">Tilt Position</a></td>
+          <td>Physical closed limit value</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0012">
           <td><a href="#attr-0x0012"><code>0x0012</code></a></td>
           <td>InstalledOpenLimitTilt</td>
           <td>uint16</td>
-          <td><a href="#group-tilt">倾斜位置</a></td>
-          <td>安装后的全开极限</td>
+          <td><a href="#group-tilt">Tilt Position</a></td>
+          <td>Installed open limit</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0013">
           <td><a href="#attr-0x0013"><code>0x0013</code></a></td>
           <td>InstalledClosedLimitTilt</td>
           <td>uint16</td>
-          <td><a href="#group-tilt">倾斜位置</a></td>
-          <td>安装后的全关极限</td>
+          <td><a href="#group-tilt">Tilt Position</a></td>
+          <td>Installed closed limit</td>
         </tr>
-        <!-- 运行状态 -->
+        <!-- Operational Status -->
         <tr class="clickable-row" data-href="#attr-0x000A">
           <td><a href="#attr-0x000A"><code>0x000A</code></a></td>
           <td>OperationalStatus</td>
           <td>bitmap8</td>
-          <td><a href="#group-status">运行状态</a></td>
-          <td>各轴运动方向</td>
+          <td><a href="#group-status">Operational Status</a></td>
+          <td>Motion direction per axis</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x001A">
           <td><a href="#attr-0x001A"><code>0x001A</code></a></td>
           <td>SafetyStatus</td>
           <td>bitmap16</td>
-          <td><a href="#group-status">运行状态</a></td>
-          <td>安全异常标志</td>
+          <td><a href="#group-status">Operational Status</a></td>
+          <td>Safety anomaly flags</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <!-- ====== 类型与配置（0x0000, 0x000D, 0x0007, 0x0017）====== -->
-  <h3 id="group-type">类型与配置(0x0000, 0x000D, 0x0007, 0x0017)</h3>
-  <p>描述窗帘设备的物理类型、产品分类以及当前的配置和运行模式。</p>
+  <h3 id="group-type">Type & Configuration (0x0000, 0x000D, 0x0007, 0x0017)</h3>
+  <p>Describes the physical type, product classification, and current configuration and operating mode of the window covering device.</p>
 
   <div class="table-wrap">
     <table>
@@ -1847,27 +1847,27 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0000">
           <td><code>0x0000</code></td>
-          <td>Type<br/><span class="attr-cn">窗帘类型</span></td>
+          <td>Type<br/><span class="attr-cn">Covering Type</span></td>
           <td>enum8</td>
-          <td>窗帘的机械类型（见下方枚举），决定了设备支持升降、倾斜还是两者兼有</td>
+          <td>Mechanical type of the covering (see enum below), determines whether the device supports lift, tilt, or both</td>
         </tr>
         <tr id="attr-0x000D">
           <td><code>0x000D</code></td>
-          <td>EndProductType<br/><span class="attr-cn">终端产品类型</span></td>
+          <td>EndProductType<br/><span class="attr-cn">End Product Type</span></td>
           <td>enum8</td>
-          <td>更细化的产品分类（见下方枚举），用于 App 展示合适的图标和控制界面</td>
+          <td>More granular product classification (see enum below), used by the app to display appropriate icons and controls</td>
         </tr>
         <tr id="attr-0x0007">
           <td><code>0x0007</code></td>
-          <td>ConfigStatus<br/><span class="attr-cn">配置状态</span></td>
+          <td>ConfigStatus<br/><span class="attr-cn">Config Status</span></td>
           <td>bitmap8</td>
-          <td>设备的配置与能力标志位（见下方位图）</td>
+          <td>Device configuration and capability flags (see bitmap below)</td>
         </tr>
         <tr id="attr-0x0017">
           <td><code>0x0017</code></td>
-          <td>Mode<br/><span class="attr-cn">运行模式</span></td>
+          <td>Mode<br/><span class="attr-cn">Operating Mode</span></td>
           <td>bitmap8</td>
-          <td>设备的运行模式标志位（见下方位图）</td>
+          <td>Device operating mode flags (see bitmap below)</td>
         </tr>
       </tbody>
     </table>
@@ -1879,77 +1879,77 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">Rollershade</span>
-        <span class="enum-desc">卷帘</span>
+        <span class="enum-desc">Roller shade</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">Rollershade - 2 Motor</span>
-        <span class="enum-desc">双电机卷帘</span>
+        <span class="enum-desc">Dual-motor roller shade</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">Rollershade - Exterior</span>
-        <span class="enum-desc">室外卷帘</span>
+        <span class="enum-desc">Exterior roller shade</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">Rollershade - Exterior - 2 Motor</span>
-        <span class="enum-desc">室外双电机卷帘</span>
+        <span class="enum-desc">Exterior dual-motor roller shade</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">4</span>
       <div>
         <span class="enum-name">Drapery</span>
-        <span class="enum-desc">窗帘（左右拉开式）</span>
+        <span class="enum-desc">Drapery (side-opening curtain)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">5</span>
       <div>
         <span class="enum-name">Awning</span>
-        <span class="enum-desc">遮阳篷</span>
+        <span class="enum-desc">Awning</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">6</span>
       <div>
         <span class="enum-name">Shutter</span>
-        <span class="enum-desc">百叶窗 / 卷闸</span>
+        <span class="enum-desc">Shutter / roller shutter</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">7</span>
       <div>
         <span class="enum-name">TiltBlindTiltOnly</span>
-        <span class="enum-desc">倾斜百叶窗（仅支持倾斜）</span>
+        <span class="enum-desc">Tilt blind (tilt only)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">8</span>
       <div>
         <span class="enum-name">TiltBlindLiftAndTilt</span>
-        <span class="enum-desc">倾斜百叶窗（支持升降 + 倾斜）</span>
+        <span class="enum-desc">Tilt blind (lift + tilt)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">9</span>
       <div>
         <span class="enum-name">ProjectorScreen</span>
-        <span class="enum-desc">投影幕布</span>
+        <span class="enum-desc">Projector screen</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">255</span>
       <div>
         <span class="enum-name">Unknown</span>
-        <span class="enum-desc">未知类型</span>
+        <span class="enum-desc">Unknown type</span>
       </div>
     </div>
   </div>
@@ -1960,175 +1960,175 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">RollerShade</span>
-        <span class="enum-desc">卷帘</span>
+        <span class="enum-desc">Roller shade</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">RomanShade</span>
-        <span class="enum-desc">罗马帘</span>
+        <span class="enum-desc">Roman shade</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">BalloonShade</span>
-        <span class="enum-desc">气球帘</span>
+        <span class="enum-desc">Balloon shade</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">WovenWood</span>
-        <span class="enum-desc">编织木帘</span>
+        <span class="enum-desc">Woven wood shade</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">4</span>
       <div>
         <span class="enum-name">PleatedShade</span>
-        <span class="enum-desc">风琴帘 / 蜂巢帘</span>
+        <span class="enum-desc">Pleated shade / cellular shade</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">5</span>
       <div>
         <span class="enum-name">RollerShutter</span>
-        <span class="enum-desc">卷闸</span>
+        <span class="enum-desc">Roller shutter</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">6</span>
       <div>
         <span class="enum-name">ExteriorVenetianBlind</span>
-        <span class="enum-desc">室外百叶窗</span>
+        <span class="enum-desc">Exterior venetian blind</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">7</span>
       <div>
         <span class="enum-name">LateralLeftCurtain</span>
-        <span class="enum-desc">左侧拉帘</span>
+        <span class="enum-desc">Lateral left curtain</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">8</span>
       <div>
         <span class="enum-name">LateralRightCurtain</span>
-        <span class="enum-desc">右侧拉帘</span>
+        <span class="enum-desc">Lateral right curtain</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">9</span>
       <div>
         <span class="enum-name">CentralCurtain</span>
-        <span class="enum-desc">对开帘</span>
+        <span class="enum-desc">Central (split-draw) curtain</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">10</span>
       <div>
         <span class="enum-name">RollerCurtain</span>
-        <span class="enum-desc">滚筒帘</span>
+        <span class="enum-desc">Roller curtain</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">11</span>
       <div>
         <span class="enum-name">ExteriorVerticalScreen</span>
-        <span class="enum-desc">室外垂直遮阳屏</span>
+        <span class="enum-desc">Exterior vertical screen</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">12</span>
       <div>
         <span class="enum-name">AwningTerracePatio</span>
-        <span class="enum-desc">露台遮阳篷</span>
+        <span class="enum-desc">Terrace/patio awning</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">13</span>
       <div>
         <span class="enum-name">AwningVerticalScreen</span>
-        <span class="enum-desc">垂直遮阳篷</span>
+        <span class="enum-desc">Vertical awning screen</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">14</span>
       <div>
         <span class="enum-name">TiltOnlyInteriorBlind</span>
-        <span class="enum-desc">室内百叶窗（仅倾斜）</span>
+        <span class="enum-desc">Interior blind (tilt only)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">15</span>
       <div>
         <span class="enum-name">InteriorBlind</span>
-        <span class="enum-desc">室内百叶窗</span>
+        <span class="enum-desc">Interior blind</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">16</span>
       <div>
         <span class="enum-name">VerticalBlindStripCurtain</span>
-        <span class="enum-desc">垂直百叶帘 / 条帘</span>
+        <span class="enum-desc">Vertical blind / strip curtain</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">17</span>
       <div>
         <span class="enum-name">InteriorVenetianBlind</span>
-        <span class="enum-desc">室内威尼斯百叶窗</span>
+        <span class="enum-desc">Interior venetian blind</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">18</span>
       <div>
         <span class="enum-name">ExteriorVenetianBlind</span>
-        <span class="enum-desc">室外威尼斯百叶窗</span>
+        <span class="enum-desc">Exterior venetian blind</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">19</span>
       <div>
         <span class="enum-name">LateralLeftVerticalBlind</span>
-        <span class="enum-desc">左侧垂直百叶</span>
+        <span class="enum-desc">Lateral left vertical blind</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">20</span>
       <div>
         <span class="enum-name">LateralRightVerticalBlind</span>
-        <span class="enum-desc">右侧垂直百叶</span>
+        <span class="enum-desc">Lateral right vertical blind</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">21</span>
       <div>
         <span class="enum-name">CentralVerticalBlind</span>
-        <span class="enum-desc">对开垂直百叶</span>
+        <span class="enum-desc">Central (split-draw) vertical blind</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">22</span>
       <div>
         <span class="enum-name">RollerShutterTerrace</span>
-        <span class="enum-desc">露台卷闸</span>
+        <span class="enum-desc">Terrace roller shutter</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">23</span>
       <div>
         <span class="enum-name">ProjectorScreen</span>
-        <span class="enum-desc">投影幕布</span>
+        <span class="enum-desc">Projector screen</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">255</span>
       <div>
         <span class="enum-name">Unknown</span>
-        <span class="enum-desc">未知产品类型</span>
+        <span class="enum-desc">Unknown product type</span>
       </div>
     </div>
   </div>
@@ -2136,108 +2136,108 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">Type vs EndProductType</div>
     <p>
-      <code>Type</code> 决定设备的机械能力（能升降、能倾斜、还是两者兼有），影响哪些 Feature 和命令可用。
-      <code>EndProductType</code> 是更细致的产品分类，主要用于 App 选择合适的图标和控制界面。
-      两者都是设备出厂固定的，不可修改。
+      <code>Type</code> determines the device's mechanical capabilities (lift, tilt, or both), which affects available features and commands.
+      <code>EndProductType</code> is a more granular product classification, primarily used by the app to select appropriate icons and control interfaces.
+      Both are fixed at factory and cannot be modified.
     </p>
   </div>
 
-  <h4>ConfigStatus 位图</h4>
+  <h4>ConfigStatus Bitmap</h4>
   <div class="enum-cards enum-cards-grid">
     <div class="enum-card">
       <span class="enum-badge">Bit 0</span>
       <div>
         <span class="enum-name">Operational</span>
-        <span class="enum-desc">设备可正常运行（1 = 正常，0 = 未就绪）</span>
+        <span class="enum-desc">Device operational (1 = ready, 0 = not ready)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 1</span>
       <div>
         <span class="enum-name">OnlineReserved</span>
-        <span class="enum-desc">在线（保留位，目前始终为 1）</span>
+        <span class="enum-desc">Online (reserved bit, currently always 1)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 2</span>
       <div>
         <span class="enum-name">LiftMovementReversed</span>
-        <span class="enum-desc">升降方向反转（1 = 电机反向运行）</span>
+        <span class="enum-desc">Lift movement reversed (1 = motor runs in reverse)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 3</span>
       <div>
         <span class="enum-name">LiftPositionAware</span>
-        <span class="enum-desc">升降位置感知（1 = 可报告精确位置）</span>
+        <span class="enum-desc">Lift position aware (1 = can report precise position)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 4</span>
       <div>
         <span class="enum-name">TiltPositionAware</span>
-        <span class="enum-desc">倾斜位置感知（1 = 可报告精确倾斜角度）</span>
+        <span class="enum-desc">Tilt position aware (1 = can report precise tilt angle)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 5</span>
       <div>
         <span class="enum-name">LiftEncoderControlled</span>
-        <span class="enum-desc">升降编码器控制（1 = 使用编码器反馈位置）</span>
+        <span class="enum-desc">Lift encoder controlled (1 = uses encoder for position feedback)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 6</span>
       <div>
         <span class="enum-name">TiltEncoderControlled</span>
-        <span class="enum-desc">倾斜编码器控制（1 = 使用编码器反馈角度）</span>
+        <span class="enum-desc">Tilt encoder controlled (1 = uses encoder for angle feedback)</span>
       </div>
     </div>
   </div>
 
-  <h4>Mode 位图</h4>
+  <h4>Mode Bitmap</h4>
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">Bit 0</span>
       <div>
         <span class="enum-name">MotorDirectionReversed</span>
-        <span class="enum-desc">电机方向反转</span>
+        <span class="enum-desc">Motor direction reversed</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 1</span>
       <div>
         <span class="enum-name">CalibrationMode</span>
-        <span class="enum-desc">校准模式（设备正在校准行程极限）</span>
+        <span class="enum-desc">Calibration mode (device is calibrating travel limits)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 2</span>
       <div>
         <span class="enum-name">MaintenanceMode</span>
-        <span class="enum-desc">维护模式（设备暂停正常操作）</span>
+        <span class="enum-desc">Maintenance mode (device has suspended normal operation)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 3</span>
       <div>
         <span class="enum-name">LEDFeedback</span>
-        <span class="enum-desc">LED 反馈（1 = 运动时 LED 指示）</span>
+        <span class="enum-desc">LED feedback (1 = LED indicates during motion)</span>
       </div>
     </div>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
   <!-- ====== 升降位置 ====== -->
-  <h3 id="group-lift">升降位置(0x0001&ndash;0x0011)</h3>
-  <p>描述窗帘升降轴的当前位置、目标位置和行程极限。所有升降属性需要设备支持 <strong>LF（Lift）</strong> 特性。</p>
+  <h3 id="group-lift">Lift Position (0x0001&ndash;0x0011)</h3>
+  <p>Describes the current position, target position, and travel limits of the covering's lift axis. All lift attributes require the device to support the <strong>LF (Lift)</strong> feature.</p>
 
   <div class="callout callout-warning">
-    <div class="callout-title">percent100ths 与 percentage 的区别</div>
+    <div class="callout-title">Difference Between percent100ths and percentage</div>
     <p>
-      <code>CurrentPositionLiftPercent100ths</code> 的范围是 <strong>0&ndash;10000</strong>（精度为 0.01%），
-      而 <code>CurrentPositionLiftPercentage</code> 的范围是 <strong>0&ndash;100</strong>（精度为 1%）。
-      两者表达同一个位置，percent100ths 精度更高，开发时优先使用它。
+      <code>CurrentPositionLiftPercent100ths</code> ranges from <strong>0&ndash;10000</strong> (0.01% precision),
+      while <code>CurrentPositionLiftPercentage</code> ranges from <strong>0&ndash;100</strong> (1% precision).
+      Both represent the same position; percent100ths has higher precision and should be preferred in development.
     </p>
   </div>
 
@@ -2249,45 +2249,45 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x000B">
           <td><code>0x000B</code></td>
-          <td>TargetPositionLiftPercent100ths<br/><span class="attr-cn">目标升降位置</span></td>
+          <td>TargetPositionLiftPercent100ths<br/><span class="attr-cn">Target Lift Position</span></td>
           <td>percent100ths / null</td>
-          <td>窗帘正在前往的目标升降位置。运动中此值与当前位置不同，停止后两者一致。<code>null</code> 表示未知。<strong>需要 LF + PA</strong></td>
+          <td>The target lift position the covering is moving toward. During motion this differs from the current position; they match once stopped. <code>null</code> means unknown.<strong>Requires LF + PA</strong></td>
         </tr>
         <tr id="attr-0x000E">
           <td><code>0x000E</code></td>
-          <td>CurrentPositionLiftPercent100ths<br/><span class="attr-cn">当前升降位置（高精度）</span></td>
+          <td>CurrentPositionLiftPercent100ths<br/><span class="attr-cn">Current Lift Position (High Precision)</span></td>
           <td>percent100ths / null</td>
-          <td>当前升降位置，0 = 全开，10000 = 全关。运动过程中实时更新。<code>null</code> 表示位置未知（如刚上电尚未校准）。<strong>需要 LF + PA</strong></td>
+          <td>Current lift position, 0 = fully open, 10000 = fully closed. Updates in real time during motion. <code>null</code> means position unknown (e.g., just powered on and not yet calibrated).<strong>Requires LF + PA</strong></td>
         </tr>
         <tr id="attr-0x0008">
           <td><code>0x0008</code></td>
-          <td>CurrentPositionLiftPercentage<br/><span class="attr-cn">当前升降百分比</span></td>
+          <td>CurrentPositionLiftPercentage<br/><span class="attr-cn">Current Lift Percentage</span></td>
           <td>uint8 / null</td>
-          <td>当前升降位置的粗略百分比（0&ndash;100）。是 Percent100ths 的低精度版本。<strong>需要 LF + PA</strong></td>
+          <td>Coarse percentage of the current lift position (0&ndash;100). A lower-precision version of Percent100ths.<strong>Requires LF + PA</strong></td>
         </tr>
         <tr id="attr-0x0003">
           <td><code>0x0003</code></td>
-          <td>CurrentPositionLift<br/><span class="attr-cn">当前升降绝对值</span></td>
+          <td>CurrentPositionLift<br/><span class="attr-cn">Current Lift Absolute Value</span></td>
           <td>uint16 / null</td>
-          <td>当前升降位置的绝对值（设备内部单位）。<strong>需要 LF + AB</strong></td>
+          <td>Absolute value of the current lift position (device-internal units).<strong>Requires LF + AB</strong></td>
         </tr>
         <tr id="attr-0x0001">
           <td><code>0x0001</code></td>
-          <td>PhysicalClosedLimitLift<br/><span class="attr-cn">物理关闭极限</span></td>
+          <td>PhysicalClosedLimitLift<br/><span class="attr-cn">Physical Closed Limit</span></td>
           <td>uint16</td>
-          <td>升降轴物理关闭位置的绝对值上限。<strong>需要 LF + AB</strong></td>
+          <td>Absolute value upper limit of the lift axis physical closed position.<strong>Requires LF + AB</strong></td>
         </tr>
         <tr id="attr-0x0010">
           <td><code>0x0010</code></td>
-          <td>InstalledOpenLimitLift<br/><span class="attr-cn">安装全开极限</span></td>
+          <td>InstalledOpenLimitLift<br/><span class="attr-cn">Installed Open Limit</span></td>
           <td>uint16</td>
-          <td>安装后实际可到达的全开位置绝对值。<strong>需要 LF + PA</strong></td>
+          <td>Absolute value of the actual fully open position reachable after installation. <strong>Requires LF + PA</strong></td>
         </tr>
         <tr id="attr-0x0011">
           <td><code>0x0011</code></td>
-          <td>InstalledClosedLimitLift<br/><span class="attr-cn">安装全关极限</span></td>
+          <td>InstalledClosedLimitLift<br/><span class="attr-cn">Installed Closed Limit</span></td>
           <td>uint16</td>
-          <td>安装后实际可到达的全关位置绝对值。<strong>需要 LF + PA</strong></td>
+          <td>Absolute value of the actual fully closed position reachable after installation. <strong>Requires LF + PA</strong></td>
         </tr>
       </tbody>
     </table>
@@ -2295,8 +2295,8 @@ export const clusters: Record<string, ClusterContent> = {
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
   <!-- ====== 倾斜位置 ====== -->
-  <h3 id="group-tilt">倾斜位置(0x0002&ndash;0x0013)</h3>
-  <p>描述窗帘倾斜轴（百叶窗叶片角度）的当前位置、目标位置和行程极限。所有倾斜属性需要设备支持 <strong>TL（Tilt）</strong> 特性。</p>
+  <h3 id="group-tilt">Tilt Position (0x0002&ndash;0x0013)</h3>
+  <p>Describes the current position, target position, and travel limits of the covering's tilt axis (blind slat angle). All tilt attributes require the device to support the <strong>TL (Tilt)</strong> feature.</p>
 
   <div class="table-wrap">
     <table>
@@ -2306,54 +2306,54 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x000C">
           <td><code>0x000C</code></td>
-          <td>TargetPositionTiltPercent100ths<br/><span class="attr-cn">目标倾斜位置</span></td>
+          <td>TargetPositionTiltPercent100ths<br/><span class="attr-cn">Target Tilt Position</span></td>
           <td>percent100ths / null</td>
-          <td>叶片正在前往的目标倾斜位置。<code>null</code> 表示未知。<strong>需要 TL + PA</strong></td>
+          <td>The target tilt position the slats are moving toward. <code>null</code> means unknown.<strong>Requires TL + PA</strong></td>
         </tr>
         <tr id="attr-0x000F">
           <td><code>0x000F</code></td>
-          <td>CurrentPositionTiltPercent100ths<br/><span class="attr-cn">当前倾斜位置（高精度）</span></td>
+          <td>CurrentPositionTiltPercent100ths<br/><span class="attr-cn">Current Tilt Position (High Precision)</span></td>
           <td>percent100ths / null</td>
-          <td>当前叶片倾斜位置，0 = 叶片全开，10000 = 叶片全关。<strong>需要 TL + PA</strong></td>
+          <td>Current slat tilt position, 0 = slats fully open, 10000 = slats fully closed.<strong>Requires TL + PA</strong></td>
         </tr>
         <tr id="attr-0x0009">
           <td><code>0x0009</code></td>
-          <td>CurrentPositionTiltPercentage<br/><span class="attr-cn">当前倾斜百分比</span></td>
+          <td>CurrentPositionTiltPercentage<br/><span class="attr-cn">Current Tilt Percentage</span></td>
           <td>uint8 / null</td>
-          <td>当前叶片倾斜位置的粗略百分比（0&ndash;100）。<strong>需要 TL + PA</strong></td>
+          <td>Coarse percentage of the current slat tilt position (0&ndash;100).<strong>Requires TL + PA</strong></td>
         </tr>
         <tr id="attr-0x0004">
           <td><code>0x0004</code></td>
-          <td>CurrentPositionTilt<br/><span class="attr-cn">当前倾斜绝对值</span></td>
+          <td>CurrentPositionTilt<br/><span class="attr-cn">Current Tilt Absolute Value</span></td>
           <td>uint16 / null</td>
-          <td>当前叶片倾斜位置的绝对值。<strong>需要 TL + AB</strong></td>
+          <td>Absolute value of the current slat tilt position.<strong>Requires TL + AB</strong></td>
         </tr>
         <tr id="attr-0x0002">
           <td><code>0x0002</code></td>
-          <td>PhysicalClosedLimitTilt<br/><span class="attr-cn">物理关闭极限</span></td>
+          <td>PhysicalClosedLimitTilt<br/><span class="attr-cn">Physical Closed Limit</span></td>
           <td>uint16</td>
-          <td>倾斜轴物理关闭位置的绝对值上限。<strong>需要 TL + AB</strong></td>
+          <td>Absolute value upper limit of the tilt axis physical closed position.<strong>Requires TL + AB</strong></td>
         </tr>
         <tr id="attr-0x0012">
           <td><code>0x0012</code></td>
-          <td>InstalledOpenLimitTilt<br/><span class="attr-cn">安装全开极限</span></td>
+          <td>InstalledOpenLimitTilt<br/><span class="attr-cn">Installed Open Limit</span></td>
           <td>uint16</td>
-          <td>安装后实际可到达的叶片全开位置绝对值。<strong>需要 TL + PA</strong></td>
+          <td>Absolute value of the actual slat fully open position reachable after installation.<strong>Requires TL + PA</strong></td>
         </tr>
         <tr id="attr-0x0013">
           <td><code>0x0013</code></td>
-          <td>InstalledClosedLimitTilt<br/><span class="attr-cn">安装全关极限</span></td>
+          <td>InstalledClosedLimitTilt<br/><span class="attr-cn">Installed Closed Limit</span></td>
           <td>uint16</td>
-          <td>安装后实际可到达的叶片全关位置绝对值。<strong>需要 TL + PA</strong></td>
+          <td>Absolute value of the actual slat fully closed position reachable after installation.<strong>Requires TL + PA</strong></td>
         </tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 运行状态 ====== -->
-  <h3 id="group-status">运行状态(0x000A, 0x001A)</h3>
-  <p>描述窗帘当前的运动方向和安全异常状态。</p>
+  <!-- ====== Operational Status ====== -->
+  <h3 id="group-status">Operational Status(0x000A, 0x001A)</h3>
+  <p>Describes the current motion direction and safety status of the covering.</p>
 
   <div class="table-wrap">
     <table>
@@ -2363,26 +2363,26 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x000A">
           <td><code>0x000A</code></td>
-          <td>OperationalStatus<br/><span class="attr-cn">运行状态</span></td>
+          <td>OperationalStatus<br/><span class="attr-cn">Operational Status</span></td>
           <td>bitmap8</td>
-          <td>各运动轴的当前运动方向（见下方位图）。全部为 0 表示已停止</td>
+          <td>Current motion direction of each axis (see bitmap below). All zeros means stopped</td>
         </tr>
         <tr id="attr-0x001A">
           <td><code>0x001A</code></td>
-          <td>SafetyStatus<br/><span class="attr-cn">安全状态</span></td>
+          <td>SafetyStatus<br/><span class="attr-cn">Safety Status</span></td>
           <td>bitmap16</td>
-          <td>安全异常标志（见下方位图）。任何位为 1 都表示存在异常</td>
+          <td>Safety anomaly flags (see bitmap below). Any bit set to 1 indicates an anomaly</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <h4>OperationalStatus 位图</h4>
+  <h4>OperationalStatus Bitmap</h4>
   <div class="callout callout-info">
-    <div class="callout-title">编码方式</div>
+    <div class="callout-title">Encoding</div>
     <p>
-      OperationalStatus 用 3 组 2-bit 字段表示三个轴的运动方向：
-      <code>00</code> = 已停止，<code>01</code> = 正在打开（向 0 方向），<code>10</code> = 正在关闭（向 10000 方向）。
+      OperationalStatus uses 3 groups of 2-bit fields to indicate the motion direction of three axes:
+      <code>00</code> = stopped, <code>01</code> = opening (toward 0), <code>10</code> = closing (toward 10000).
     </p>
   </div>
   <div class="enum-cards enum-cards-row">
@@ -2390,102 +2390,102 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">Bit 0&ndash;1</span>
       <div>
         <span class="enum-name">Global</span>
-        <span class="enum-desc">全局运动方向（综合升降和倾斜的整体状态）</span>
+        <span class="enum-desc">Global motion direction (combined lift and tilt overall status)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 2&ndash;3</span>
       <div>
         <span class="enum-name">Lift</span>
-        <span class="enum-desc">升降轴运动方向</span>
+        <span class="enum-desc">Lift axis motion direction</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 4&ndash;5</span>
       <div>
         <span class="enum-name">Tilt</span>
-        <span class="enum-desc">倾斜轴运动方向</span>
+        <span class="enum-desc">Tilt axis motion direction</span>
       </div>
     </div>
   </div>
 
-  <h4>SafetyStatus 位图</h4>
+  <h4>SafetyStatus Bitmap</h4>
   <div class="enum-cards enum-cards-grid">
     <div class="enum-card">
       <span class="enum-badge">Bit 0</span>
       <div>
         <span class="enum-name">RemoteLockout</span>
-        <span class="enum-desc">远程锁定（设备拒绝远程操作）</span>
+        <span class="enum-desc">Remote lockout (device rejects remote operations)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 1</span>
       <div>
         <span class="enum-name">TamperDetection</span>
-        <span class="enum-desc">篡改检测（设备检测到异常干预）</span>
+        <span class="enum-desc">Tamper detection (device detected abnormal interference)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 2</span>
       <div>
         <span class="enum-name">FailedCommunication</span>
-        <span class="enum-desc">通信故障（与电机控制器通信失败）</span>
+        <span class="enum-desc">Communication failure (failed to communicate with motor controller)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 3</span>
       <div>
         <span class="enum-name">PositionFailure</span>
-        <span class="enum-desc">定位故障（位置传感器异常）</span>
+        <span class="enum-desc">Position failure (position sensor malfunction)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 4</span>
       <div>
         <span class="enum-name">ThermalProtection</span>
-        <span class="enum-desc">热保护（电机过热，暂停运行）</span>
+        <span class="enum-desc">Thermal protection (motor overheated, operation suspended)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 5</span>
       <div>
         <span class="enum-name">ObstacleDetected</span>
-        <span class="enum-desc">检测到障碍物（运动路径上有阻挡）</span>
+        <span class="enum-desc">Obstacle detected (obstruction in motion path)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 6</span>
       <div>
         <span class="enum-name">Power</span>
-        <span class="enum-desc">电源异常（供电不足或中断）</span>
+        <span class="enum-desc">Power anomaly (insufficient or interrupted power supply)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 7</span>
       <div>
         <span class="enum-name">StopInput</span>
-        <span class="enum-desc">外部停止信号（收到硬件停止输入）</span>
+        <span class="enum-desc">External stop signal (hardware stop input received)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 8</span>
       <div>
         <span class="enum-name">MotorJammed</span>
-        <span class="enum-desc">电机堵转</span>
+        <span class="enum-desc">Motor jammed</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 9</span>
       <div>
         <span class="enum-name">HardwareFailure</span>
-        <span class="enum-desc">硬件故障</span>
+        <span class="enum-desc">Hardware failure</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 10</span>
       <div>
         <span class="enum-name">ManualOperation</span>
-        <span class="enum-desc">手动操作中（用户正在手动拉动窗帘）</span>
+        <span class="enum-desc">Manual operation in progress (user is manually moving the covering)</span>
       </div>
     </div>
   </div>
@@ -2493,78 +2493,78 @@ export const clusters: Record<string, ClusterContent> = {
 
   <!-- ====== Feature 位图 ====== -->
   <h2 id="features">Feature Bitmap</h2>
-  <p>WindowCovering Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持哪些能力。Feature 的组合决定了哪些命令和属性可用：</p>
+  <p>The WindowCovering Cluster declares supported capabilities via <code>FeatureMap</code> (0xFFFC). The combination of features determines which commands and attributes are available:</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">Bit 0</span>
       <div>
         <span class="enum-name">LF（Lift）</span>
-        <span class="enum-desc">支持升降运动 &mdash; 窗帘可以上下移动</span>
+        <span class="enum-desc">Supports lift movement &mdash; the covering can move up and down</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 1</span>
       <div>
         <span class="enum-name">TL（Tilt）</span>
-        <span class="enum-desc">支持倾斜调节 &mdash; 百叶窗叶片可旋转</span>
+        <span class="enum-desc">Supports tilt adjustment &mdash; blind slats can rotate</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 2</span>
       <div>
         <span class="enum-name">PA（Position Aware Lift）</span>
-        <span class="enum-desc">位置感知 &mdash; 可报告和定位到精确百分比位置</span>
+        <span class="enum-desc">Position aware &mdash; can report and move to precise percentage positions</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 3</span>
       <div>
         <span class="enum-name">AB（Absolute Position）</span>
-        <span class="enum-desc">绝对位置 &mdash; 支持以设备内部单位定位</span>
+        <span class="enum-desc">Absolute position &mdash; supports positioning in device-internal units</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">Feature 组合与设备类型</div>
+    <div class="callout-title">Feature Combinations and Device Types</div>
     <p>
-      <strong>电动卷帘</strong>：通常为 LF + PA（支持升降和百分比定位），FeatureMap = <code>0x05</code>。<br/>
-      <strong>百叶窗</strong>：通常为 LF + TL + PA（升降 + 倾斜 + 位置感知），FeatureMap = <code>0x07</code>。<br/>
-      <strong>纯倾斜百叶窗</strong>：通常为 TL + PA（仅倾斜），FeatureMap = <code>0x06</code>。<br/>
-      读取 FeatureMap 后，App 应据此决定显示升降控件、倾斜控件还是两者都显示。
+      <strong>Motorized roller shade</strong>: typically LF + PA (supports lift and percentage positioning), FeatureMap = <code>0x05</code>.<br/>
+      <strong>Venetian blind</strong>: typically LF + TL + PA (lift + tilt + position aware), FeatureMap = <code>0x07</code>.<br/>
+      <strong>Tilt-only blind</strong>: typically TL + PA (tilt only), FeatureMap = <code>0x06</code>.<br/>
+      After reading the FeatureMap, the app should decide whether to display lift controls, tilt controls, or both.
     </p>
   </div>
 
   <!-- ====== 示例数据 ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一个支持升降 + 位置感知的电动卷帘在 30% 位置（接近全开）时的 WindowCovering Cluster 读取结果：</p>
+  <p>Read result from a WindowCovering Cluster of a motorized roller shade with lift + position awareness at the 30% position (near fully open):</p>
 
   <pre><code>{
-  // --- 类型与配置 ---
-  "0x0000": 0,              // Type = Rollershade（卷帘）
+  // --- Type & Configuration ---
+  "0x0000": 0,              // Type = Rollershade (roller shade)
   "0x000D": 0,              // EndProductType = RollerShade
   "0x0007": 0x09,           // ConfigStatus = Operational + LiftPositionAware
-  "0x0017": 0x00,           // Mode = 正常运行（所有位为 0）
+  "0x0017": 0x00,           // Mode = normal operation (all bits 0)
 
-  // --- 升降位置 ---
+  // --- Lift Position ---
   "0x000E": 3000,           // CurrentPositionLiftPercent100ths = 30.00%
   "0x0008": 30,             // CurrentPositionLiftPercentage = 30%
-  "0x000B": 3000,           // TargetPositionLiftPercent100ths = 30.00%（目标与当前一致，已停止）
-  "0x0010": 0,              // InstalledOpenLimitLift = 0（全开位置）
-  "0x0011": 10000,          // InstalledClosedLimitLift = 10000（全关位置）
+  "0x000B": 3000,           // TargetPositionLiftPercent100ths = 30.00% (target matches current, stopped)
+  "0x0010": 0,              // InstalledOpenLimitLift = 0 (fully open position)
+  "0x0011": 10000,          // InstalledClosedLimitLift = 10000 (fully closed position)
 
-  // --- 运行状态 ---
-  "0x000A": 0x00,           // OperationalStatus = 所有轴已停止
-  "0x001A": 0x0000          // SafetyStatus = 无异常
+  // --- Operational Status ---
+  "0x000A": 0x00,           // OperationalStatus = all axes stopped
+  "0x001A": 0x0000          // SafetyStatus = no anomalies
 }</code></pre>
 
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      对于只支持 UpOrOpen / DownOrClose 的简单窗帘（无位置感知），可能没有百分比属性。
-      读取前先检查 <code>FeatureMap (0xFFFC)</code> 判断设备支持哪些能力，再决定读取哪些属性和展示什么控件。
-      不支持倾斜的设备不会上报 Tilt 相关属性。
+      For simple coverings that only support UpOrOpen / DownOrClose (no position awareness), percentage attributes may not exist.
+      Check <code>FeatureMap (0xFFFC)</code> first to determine supported capabilities, then decide which attributes to read and which controls to display.
+      Devices that do not support tilt will not report tilt-related attributes.
     </p>
   </div>
 
@@ -2572,63 +2572,63 @@ export const clusters: Record<string, ClusterContent> = {
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
-    <summary>场景 1：基础开合控制</summary>
+    <summary>Scenario 1: Basic Open/Close Control</summary>
     <div class="scenario-content">
       <ol>
-        <li>发送 <code>UpOrOpen (0x00)</code> 打开窗帘，或 <code>DownOrClose (0x01)</code> 关闭窗帘</li>
-        <li>订阅 <code>OperationalStatus (0x000A)</code> 监控运动状态</li>
-        <li>运动过程中，用户可发送 <code>StopMotion (0x02)</code> 让窗帘停在当前位置</li>
-        <li>订阅 <code>CurrentPositionLiftPercent100ths (0x000E)</code> 实时更新 App 上的位置显示</li>
+        <li>Send <code>UpOrOpen (0x00)</code> to open the covering, or <code>DownOrClose (0x01)</code> to close it</li>
+        <li>Subscribe to <code>OperationalStatus (0x000A)</code> to monitor motion status</li>
+        <li>During motion, the user can send <code>StopMotion (0x02)</code> to stop the covering at the current position</li>
+        <li>Subscribe to <code>CurrentPositionLiftPercent100ths (0x000E)</code> to update the position display in the app in real time</li>
       </ol>
     </div>
   </details>
 
   <details class="scenario">
-    <summary>场景 2：滑块精确控制位置</summary>
+    <summary>Scenario 2: Precise Position Control via Slider</summary>
     <div class="scenario-content">
       <ol>
-        <li>读取 <code>FeatureMap (0xFFFC)</code>，确认设备支持 LF + PA 特性</li>
-        <li>App 上展示一个 0%&ndash;100% 的滑块，0% = 全关，100% = 全开</li>
-        <li>用户拖动滑块到 70%（表示打开 70%），换算后发送 <code>GoToLiftPercentage (0x05)</code>，参数 LiftPercent100thsValue = <code>3000</code>（因为 0 = 全开，所以 100% - 70% = 30% = 3000）</li>
-        <li>订阅 <code>CurrentPositionLiftPercent100ths</code> 和 <code>TargetPositionLiftPercent100ths</code>，前者跟踪实际位置，后者可用于显示目标指示器</li>
+        <li>Read <code>FeatureMap (0xFFFC)</code> to confirm the device supports LF + PA features</li>
+        <li>Display a 0%&ndash;100% slider in the app, where 0% = fully closed and 100% = fully open</li>
+        <li>The user drags the slider to 70% (meaning 70% open), then send <code>GoToLiftPercentage (0x05)</code> with LiftPercent100thsValue = <code>3000</code> (since 0 = fully open, 100% - 70% = 30% = 3000)</li>
+        <li>Subscribe to <code>CurrentPositionLiftPercent100ths</code> and <code>TargetPositionLiftPercent100ths</code>; the former tracks actual position, the latter can be used to display a target indicator</li>
       </ol>
     </div>
   </details>
 
   <details class="scenario">
-    <summary>场景 3：百叶窗升降 + 叶片倾斜</summary>
+    <summary>Scenario 3: Blind Lift + Slat Tilt</summary>
     <div class="scenario-content">
       <ol>
-        <li>读取 <code>FeatureMap</code>，确认设备同时支持 LF + TL（升降和倾斜）</li>
-        <li>App 上展示两个控件：升降滑块 + 倾斜滑块</li>
-        <li>升降用 <code>GoToLiftPercentage (0x05)</code> 控制窗帘高度</li>
-        <li>倾斜用 <code>GoToTiltPercentage (0x08)</code> 调节叶片角度</li>
-        <li>用户场景：「百叶窗放到一半高度，叶片倾斜 45 度让光线进来但挡住视线」 &mdash; 升降发 5000，倾斜发 5000</li>
+        <li>Read <code>FeatureMap</code> to confirm the device supports both LF + TL (lift and tilt)</li>
+        <li>Display two controls in the app: a lift slider and a tilt slider</li>
+        <li>Use <code>GoToLiftPercentage (0x05)</code> to control the covering height</li>
+        <li>Use <code>GoToTiltPercentage (0x08)</code> to adjust the slat angle</li>
+        <li>User scenario: "Lower the blind to half height, tilt slats 45 degrees to let light in while blocking the view" &mdash; send 5000 for lift and 5000 for tilt</li>
       </ol>
     </div>
   </details>
 
   <details class="scenario">
-    <summary>场景 4：自动化 &mdash; 日出日落联动</summary>
+    <summary>Scenario 4: Automation &mdash; Sunrise/Sunset Linkage</summary>
     <div class="scenario-content">
       <ol>
-        <li>早晨日出时，自动化规则触发 <code>UpOrOpen (0x00)</code> 打开所有窗帘</li>
-        <li>下午阳光强烈时，触发 <code>GoToLiftPercentage (0x05)</code> 关到 70%（LiftPercent100thsValue = 7000）</li>
-        <li>晚上日落后，触发 <code>DownOrClose (0x01)</code> 完全关闭</li>
-        <li>配合光照传感器（IlluminanceMeasurement Cluster），可实现更智能的光线自适应</li>
+        <li>At sunrise in the morning, an automation rule triggers <code>UpOrOpen (0x00)</code> to open all coverings</li>
+        <li>When afternoon sun is strong, trigger <code>GoToLiftPercentage (0x05)</code> to close to 70% (LiftPercent100thsValue = 7000)</li>
+        <li>After sunset in the evening, trigger <code>DownOrClose (0x01)</code> to fully close</li>
+        <li>Combined with a light sensor (IlluminanceMeasurement Cluster), smarter adaptive lighting control can be achieved</li>
       </ol>
     </div>
   </details>
 
   <details class="scenario">
-    <summary>场景 5：异常处理</summary>
+    <summary>Scenario 5: Error Handling</summary>
     <div class="scenario-content">
       <ol>
-        <li>订阅 <code>SafetyStatus (0x001A)</code>，监控安全异常</li>
-        <li>如果 <code>ObstacleDetected</code>（Bit 5）为 1，说明窗帘运行路径有障碍物，App 应提示用户检查</li>
-        <li>如果 <code>MotorJammed</code>（Bit 8）为 1，说明电机堵转，可能需要维修</li>
-        <li>如果 <code>ThermalProtection</code>（Bit 4）为 1，电机过热保护中，等待冷却后自动恢复</li>
-        <li>检查 <code>Mode (0x0017)</code> 的 CalibrationMode（Bit 1），如果为 1 说明设备正在校准，暂不接受位置命令</li>
+        <li>Subscribe to <code>SafetyStatus (0x001A)</code> to monitor safety anomalies</li>
+        <li>If <code>ObstacleDetected</code> (Bit 5) is 1, it indicates an obstruction in the covering's path; the app should prompt the user to check</li>
+        <li>If <code>MotorJammed</code> (Bit 8) is 1, the motor is jammed and may need service</li>
+        <li>If <code>ThermalProtection</code> (Bit 4) is 1, the motor is in thermal protection mode and will automatically recover after cooling</li>
+        <li>Check CalibrationMode (Bit 1) in <code>Mode (0x0017)</code>; if it is 1, the device is calibrating and will not accept position commands</li>
       </ol>
     </div>
   </details>
@@ -2678,30 +2678,30 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'valve-configuration-and-control': {
     title: 'ValveConfigurationAndControl Cluster (0x0081)',
-    description: 'Matter ValveConfigurationAndControl Cluster(0x0081)完整参考 — Open/Close 开关命令、开度百分比控制、定时自动关阀、阀门状态枚举、故障位图、事件上报等全部属性与命令定义及枚举值速查。',
+    description: 'Complete reference for Matter ValveConfigurationAndControl Cluster (0x0081) — Open/Close commands, opening percentage control, timed auto-close, valve state enums, fault bitmaps, event reporting, and all attribute and command definitions with enum value quick reference.',
     prev: undefined,
     next: undefined,
     content: `<h1>ValveConfigurationAndControl Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x0081</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 通常在 <code>Valve Endpoint</code>（阀门功能端点）
+    <strong>Endpoint</strong>: Typically on the <code>Valve Endpoint</code> (valve function endpoint)
   </p>
   <p>
-    ValveConfigurationAndControl 是 Matter 中控制阀门设备的核心 Cluster，
-    适用于水阀、燃气阀、灌溉阀等需要「开/关/定时/开度调节」能力的场景。
-    它定义了阀门的开关命令、持续时间控制、当前/目标状态、开度百分比、故障检测和事件上报等全部能力。
-    与简单的 OnOff 开关不同，阀门 Cluster 内置了定时自动关阀和精确开度控制，
-    更适合需要安全保护的流体控制场景。
+    ValveConfigurationAndControl is the core Cluster in Matter for controlling valve devices,
+    applicable to water valves, gas valves, irrigation valves, and other scenarios requiring "open/close/timed/level control" capabilities.
+    It defines valve open/close commands, duration control, current/target state, opening percentage, fault detection, and event reporting.
+    Unlike a simple OnOff switch, the Valve Cluster has built-in timed auto-close and precise level control,
+    making it more suitable for fluid control scenarios that require safety protection.
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">Feature 驱动的能力差异</div>
+    <div class="callout-title">Feature-Driven Capability Differences</div>
     <p>
-      ValveConfigurationAndControl 的能力取决于两个 Feature：
-      <strong>TimeSync（TS）</strong> 启用基于 UTC 时间戳的自动关阀能力，
-      <strong>Level（LVL）</strong> 启用百分比开度控制（0~100%）。
-      一个简单的水阀可能只支持全开/全关，而一个灌溉控制阀可能同时支持定时和开度调节。
-      开发前先读取 <code>FeatureMap (0xFFFC)</code>，确认设备支持哪些能力，再决定 UI 布局。
+      ValveConfigurationAndControl capabilities depend on two Features:
+      <strong>TimeSync (TS)</strong> enables UTC timestamp-based auto-close capability,
+      and <strong>Level (LVL)</strong> enables percentage opening control (0~100%).
+      A simple water valve may only support fully open/fully closed, while an irrigation control valve may support both timed and level adjustment.
+      Before development, read <code>FeatureMap (0xFFFC)</code> to determine what capabilities the device supports, then decide on the UI layout.
     </p>
   </div>
 
@@ -2711,7 +2711,7 @@ export const clusters: Record<string, ClusterContent> = {
     <span class="nav-sep">|</span>
     <a href="#attributes">Attributes</a>
     <span class="nav-sep">|</span>
-    <a href="#enums">枚举与位图</a>
+    <a href="#enums">Enums & Bitmaps</a>
     <span class="nav-sep">|</span>
     <a href="#features">Feature Bitmap</a>
     <span class="nav-sep">|</span>
@@ -2725,9 +2725,9 @@ export const clusters: Record<string, ClusterContent> = {
   <!-- ====== 命令（Commands）====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    ValveConfigurationAndControl Cluster 共有 2 个命令：Open 和 Close。
-    Open 命令支持可选的持续时间和目标开度参数，Close 命令无参数直接关阀。
-    点击下方表格中的命令 ID 可跳转到对应的详细说明。
+    The ValveConfigurationAndControl Cluster has 2 commands: Open and Close.
+    The Open command supports optional duration and target level parameters; the Close command takes no parameters and directly closes the valve.
+    Click on a command ID in the table below to jump to its detailed description.
   </p>
 
   <div class="table-wrap">
@@ -2744,54 +2744,54 @@ export const clusters: Record<string, ClusterContent> = {
         <tr class="clickable-row" data-href="#cmd-0x00">
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>Open</td>
-          <td>打开阀门（可指定持续时间和开度）</td>
-          <td class="col-optional">无</td>
+          <td>Open the valve (optionally specify duration and level)</td>
+          <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x01">
           <td><a href="#cmd-0x01"><code>0x01</code></a></td>
           <td>Close</td>
-          <td>关闭阀门</td>
-          <td class="col-optional">无</td>
+          <td>Close the valve</td>
+          <td class="col-optional">None</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <!-- ====== 命令详解 ====== -->
-  <h3 id="cmd-0x00">Open —— 打开阀门(0x00)</h3>
+  <h3 id="cmd-0x00">Open &mdash; Open Valve (0x00)</h3>
   <p>
-    打开阀门。可以通过可选参数指定开阀持续时间和目标开度。
-    如果不传任何参数，阀门按 <code>DefaultOpenDuration</code> 的时间全开。
-    如果阀门已经打开，再次发送 Open 命令会更新持续时间和目标开度。
+    Opens the valve. Optional parameters can specify the open duration and target level.
+    If no parameters are provided, the valve opens fully for the duration specified by <code>DefaultOpenDuration</code>.
+    If the valve is already open, sending another Open command updates the duration and target level.
   </p>
   <div class="table-wrap">
     <table>
       <thead>
-        <tr><th>Parameter</th><th>Type</th><th>是否必选</th><th>Description</th></tr>
+        <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
       </thead>
       <tbody>
         <tr>
           <td>OpenDuration</td>
           <td>elapsed-s / null</td>
-          <td>可选</td>
-          <td>开阀持续时间，单位秒。<code>null</code> 表示使用 DefaultOpenDuration 的值。省略时也使用默认值</td>
+          <td>Optional</td>
+          <td>Open duration in seconds. <code>null</code> means use the DefaultOpenDuration value. Omitting also uses the default</td>
         </tr>
         <tr>
           <td>TargetLevel</td>
           <td>percent</td>
-          <td>可选（需 LVL）</td>
-          <td>目标开度百分比，1~100。省略时全开（100%）。需要 <strong>LVL</strong> Feature</td>
+          <td>Optional (requires LVL)</td>
+          <td>Target opening percentage, 1~100. Omitting means fully open (100%). Requires <strong>LVL</strong> Feature</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">安全提示：DefaultOpenDuration</div>
+    <div class="callout-title">Safety Note: DefaultOpenDuration</div>
     <p>
-      如果 <code>DefaultOpenDuration</code> 为 <code>null</code> 且 Open 命令也未指定 OpenDuration，
-      阀门将无限期保持打开状态，直到收到 Close 命令。对于水阀和燃气阀，
-      建议始终设置 DefaultOpenDuration 作为安全兜底，防止网络断连后阀门长期开启导致水漫或气泄。
+      If <code>DefaultOpenDuration</code> is <code>null</code> and the Open command also does not specify OpenDuration,
+      the valve will remain open indefinitely until a Close command is received. For water and gas valves,
+      it is recommended to always set a DefaultOpenDuration as a safety fallback to prevent the valve from remaining open long-term after a network disconnection, which could cause flooding or gas leaks.
     </p>
   </div>
 
@@ -2799,25 +2799,25 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        用户在 App 上点击「打开水阀」按钮，发送 Open 命令，阀门打开。
-        花园灌溉系统发送 Open(OpenDuration=1800)，阀门开启 30 分钟后自动关闭。
-        智能暖通系统发送 Open(TargetLevel=50)，阀门打开到 50% 开度，精确控制热水流量。
+        User taps "Open Water Valve" in the app, sending the Open command to open the valve.
+        A garden irrigation system sends Open(OpenDuration=1800), opening the valve for 30 minutes before auto-closing.
+        A smart HVAC system sends Open(TargetLevel=50), opening the valve to 50% to precisely control hot water flow.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x01">Close —— 关闭阀门(0x01)</h3>
+  <h3 id="cmd-0x01">Close &mdash; Close Valve (0x01)</h3>
   <p>
-    关闭阀门。没有任何参数。执行成功后，<code>TargetState</code> 变为 <code>Closed (0)</code>，
-    阀门开始执行关闭动作。如果阀门正在定时开启中，Close 命令会取消定时并立即关阀。
+    Closes the valve. Takes no parameters. On successful execution, <code>TargetState</code> changes to <code>Closed (0)</code>,
+    and the valve begins its closing action. If the valve is currently in a timed open state, the Close command cancels the timer and closes the valve immediately.
   </p>
   <details class="scenario">
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        用户手动关闭水阀、水浸传感器检测到漏水后自动化规则触发紧急关阀、
-        燃气报警器联动关闭燃气阀门时调用。
+        User manually closes the water valve; a water leak sensor detects a leak and an automation rule triggers an emergency valve close;
+        a gas alarm triggers a linked gas valve closure.
       </p>
     </div>
   </details>
@@ -2825,7 +2825,7 @@ export const clusters: Record<string, ClusterContent> = {
 
   <!-- ====== 属性详解 ====== -->
   <h2 id="attributes">Attributes</h2>
-  <p>ValveConfigurationAndControl Cluster 的属性按功能分为四组。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+  <p>ValveConfigurationAndControl Cluster attributes are organized into four functional groups. Click on an attribute ID in the summary table below to jump to its detailed description.</p>
 
   <!-- 属性汇总表 -->
   <div class="table-wrap">
@@ -2845,75 +2845,75 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>OpenDuration</td>
           <td>elapsed-s / null</td>
-          <td><a href="#group-timing">定时参数</a></td>
-          <td>当前开阀持续时间（秒）</td>
+          <td><a href="#group-timing">Timing Parameters</a></td>
+          <td>Current open duration (seconds)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>DefaultOpenDuration</td>
           <td>elapsed-s / null</td>
-          <td><a href="#group-timing">定时参数</a></td>
-          <td>默认开阀持续时间（秒）</td>
+          <td><a href="#group-timing">Timing Parameters</a></td>
+          <td>Default open duration (seconds)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
           <td>AutoCloseTime</td>
           <td>epoch-us / null</td>
-          <td><a href="#group-timing">定时参数</a></td>
-          <td>自动关阀的 UTC 时间戳</td>
+          <td><a href="#group-timing">Timing Parameters</a></td>
+          <td>UTC timestamp for auto-close</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
           <td>RemainingDuration</td>
           <td>elapsed-s / null</td>
-          <td><a href="#group-timing">定时参数</a></td>
-          <td>剩余开阀时间（秒）</td>
+          <td><a href="#group-timing">Timing Parameters</a></td>
+          <td>Remaining open time (seconds)</td>
         </tr>
         <!-- 阀门状态 -->
         <tr class="clickable-row" data-href="#attr-0x0004">
           <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
           <td>CurrentState</td>
           <td>ValveStateEnum / null</td>
-          <td><a href="#group-state">阀门状态</a></td>
-          <td>当前阀门状态</td>
+          <td><a href="#group-state">Valve State</a></td>
+          <td>Current valve state</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0005">
           <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
           <td>TargetState</td>
           <td>ValveStateEnum / null</td>
-          <td><a href="#group-state">阀门状态</a></td>
-          <td>目标阀门状态</td>
+          <td><a href="#group-state">Valve State</a></td>
+          <td>Target valve state</td>
         </tr>
         <!-- 开度控制 -->
         <tr class="clickable-row" data-href="#attr-0x0006">
           <td><a href="#attr-0x0006"><code>0x0006</code></a></td>
           <td>CurrentLevel</td>
           <td>percent / null</td>
-          <td><a href="#group-level">开度控制</a></td>
-          <td>当前开度百分比</td>
+          <td><a href="#group-level">Level Control</a></td>
+          <td>Current opening percentage</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0007">
           <td><a href="#attr-0x0007"><code>0x0007</code></a></td>
           <td>TargetLevel</td>
           <td>percent / null</td>
-          <td><a href="#group-level">开度控制</a></td>
-          <td>目标开度百分比</td>
+          <td><a href="#group-level">Level Control</a></td>
+          <td>Target opening percentage</td>
         </tr>
         <!-- 故障状态 -->
         <tr class="clickable-row" data-href="#attr-0x0008">
           <td><a href="#attr-0x0008"><code>0x0008</code></a></td>
           <td>ValveFault</td>
           <td>ValveFaultBitmap</td>
-          <td><a href="#group-fault">故障状态</a></td>
-          <td>阀门故障位图</td>
+          <td><a href="#group-fault">Fault Status</a></td>
+          <td>Valve fault bitmap</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <!-- ====== 定时参数（0x0000 ~ 0x0003）====== -->
-  <h3 id="group-timing">定时参数(0x0000 ~ 0x0003)</h3>
-  <p>控制阀门的开启持续时间和自动关闭机制。这是阀门 Cluster 区别于简单 OnOff 开关的关键能力 —— 内置定时保护，防止阀门意外长期开启。</p>
+  <h3 id="group-timing">Timing Parameters (0x0000 ~ 0x0003)</h3>
+  <p>Controls the valve's open duration and auto-close mechanism. This is the key capability that distinguishes the Valve Cluster from a simple OnOff switch &mdash; built-in timed protection prevents the valve from accidentally remaining open for extended periods.</p>
 
   <div class="table-wrap">
     <table>
@@ -2928,47 +2928,47 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0000">
           <td><code>0x0000</code></td>
-          <td>OpenDuration<br/><span class="attr-cn">开阀持续时间</span></td>
+          <td>OpenDuration<br/><span class="attr-cn">Open Duration</span></td>
           <td>elapsed-s / null</td>
-          <td>本次开阀的持续时间，单位秒。由 Open 命令设置。<code>null</code> 表示无限期开启（直到收到 Close 命令）。阀门关闭后此值变为 <code>null</code></td>
+          <td>Duration of the current valve open session, in seconds. Set by the Open command. <code>null</code> means the valve remains open indefinitely (until a Close command is received). Becomes <code>null</code> after the valve closes</td>
         </tr>
         <tr id="attr-0x0001">
           <td><code>0x0001</code></td>
-          <td>DefaultOpenDuration<br/><span class="attr-cn">默认开阀时间</span></td>
+          <td>DefaultOpenDuration<br/><span class="attr-cn">Default Open Duration</span></td>
           <td>elapsed-s / null</td>
-          <td>当 Open 命令未指定 OpenDuration 时使用的默认值，单位秒。<strong>可读写</strong>。<code>null</code> 表示无默认时间（Open 不带参数时将无限期开启）。建议设置一个合理的安全值</td>
+          <td>Default value used when the Open command does not specify OpenDuration, in seconds. <strong>Read/Write</strong>. <code>null</code> means no default time (Open without parameters will keep the valve open indefinitely). It is recommended to set a reasonable safety value</td>
         </tr>
         <tr id="attr-0x0002">
           <td><code>0x0002</code></td>
-          <td>AutoCloseTime<br/><span class="attr-cn">自动关阀时间</span></td>
+          <td>AutoCloseTime<br/><span class="attr-cn">Auto Close Time</span></td>
           <td>epoch-us / null</td>
-          <td>阀门将自动关闭的 UTC 时间戳，单位微秒。由设备根据 OpenDuration 和开阀时间自动计算。<code>null</code> 表示无自动关闭计划。<strong>需要 TS Feature</strong></td>
+          <td>UTC timestamp when the valve will auto-close, in microseconds. Automatically calculated by the device based on OpenDuration and the time the valve was opened. <code>null</code> means no auto-close scheduled. <strong>Requires TS Feature</strong></td>
         </tr>
         <tr id="attr-0x0003">
           <td><code>0x0003</code></td>
-          <td>RemainingDuration<br/><span class="attr-cn">剩余开阀时间</span></td>
+          <td>RemainingDuration<br/><span class="attr-cn">Remaining Duration</span></td>
           <td>elapsed-s / null</td>
-          <td>距离自动关阀还剩多少秒。设备自动维护，倒计时归零后阀门关闭。<code>null</code> 表示无定时或阀门已关闭</td>
+          <td>Seconds remaining until auto-close. Automatically maintained by the device; when the countdown reaches zero, the valve closes. <code>null</code> means no timer is set or the valve is already closed</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">定时参数之间的关系</div>
+    <div class="callout-title">Relationship Between Timing Parameters</div>
     <p>
-      <code>DefaultOpenDuration</code> 是预设值，<code>OpenDuration</code> 是本次实际生效值，
-      <code>RemainingDuration</code> 是实时倒计时，<code>AutoCloseTime</code> 是绝对时间点。
-      Open 命令不带参数时，<code>OpenDuration</code> = <code>DefaultOpenDuration</code>；
-      带参数时，<code>OpenDuration</code> = 命令参数值。
-      App 界面通常显示 <code>RemainingDuration</code> 作为倒计时。
+      <code>DefaultOpenDuration</code> is the preset value, <code>OpenDuration</code> is the value in effect for the current session,
+      <code>RemainingDuration</code> is the real-time countdown, and <code>AutoCloseTime</code> is the absolute time point.
+      When the Open command is sent without parameters, <code>OpenDuration</code> = <code>DefaultOpenDuration</code>;
+      when sent with parameters, <code>OpenDuration</code> = the command parameter value.
+      The app UI typically displays <code>RemainingDuration</code> as the countdown.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
   <!-- ====== 阀门状态（0x0004 ~ 0x0005）====== -->
-  <h3 id="group-state">阀门状态(0x0004 ~ 0x0005)</h3>
-  <p>描述阀门当前的开关状态和目标状态。阀门动作需要时间（电机驱动），所以 CurrentState 和 TargetState 可能不一致 —— 阀门正在动作时 CurrentState 为 Transitioning。</p>
+  <h3 id="group-state">Valve State (0x0004 ~ 0x0005)</h3>
+  <p>Describes the valve's current open/close state and target state. Valve actions take time (motor-driven), so CurrentState and TargetState may differ &mdash; while the valve is in motion, CurrentState is Transitioning.</p>
 
   <div class="table-wrap">
     <table>
@@ -2983,36 +2983,36 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0004">
           <td><code>0x0004</code></td>
-          <td>CurrentState<br/><span class="attr-cn">当前状态</span></td>
+          <td>CurrentState<br/><span class="attr-cn">Current State</span></td>
           <td>ValveStateEnum / null</td>
-          <td>阀门当前的实际状态。Nullable —— <code>null</code> 表示设备无法确定当前状态（如刚上电、无位置传感器）</td>
+          <td>Actual current state of the valve. Nullable &mdash; <code>null</code> means the device cannot determine the current state (e.g., just powered up, no position sensor)</td>
         </tr>
         <tr id="attr-0x0005">
           <td><code>0x0005</code></td>
-          <td>TargetState<br/><span class="attr-cn">目标状态</span></td>
+          <td>TargetState<br/><span class="attr-cn">Target State</span></td>
           <td>ValveStateEnum / null</td>
-          <td>阀门的目标状态。发送 Open 命令后变为 <code>Open (1)</code>，发送 Close 后变为 <code>Closed (0)</code>。Nullable —— <code>null</code> 表示无待执行的目标</td>
+          <td>Target state of the valve. Changes to <code>Open (1)</code> after an Open command, and to <code>Closed (0)</code> after a Close command. Nullable &mdash; <code>null</code> means no pending target</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">状态转换流程</div>
+    <div class="callout-title">State Transition Flow</div>
     <p>
-      发送 Open 命令后：<code>TargetState</code> 立即变为 <code>Open</code>，<code>CurrentState</code> 变为 <code>Transitioning</code>，
-      阀门电机开始动作。到位后 <code>CurrentState</code> 变为 <code>Open</code>。
-      Close 命令同理。App 界面应根据 <code>CurrentState</code> 显示实时状态，
-      当值为 <code>Transitioning</code> 时可显示加载动画。
+      After sending an Open command: <code>TargetState</code> immediately changes to <code>Open</code>, <code>CurrentState</code> changes to <code>Transitioning</code>,
+      and the valve motor begins operating. Once the target position is reached, <code>CurrentState</code> changes to <code>Open</code>.
+      The Close command works the same way. The app UI should display real-time status based on <code>CurrentState</code>,
+      and can show a loading animation when the value is <code>Transitioning</code>.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
   <!-- ====== 开度控制（0x0006 ~ 0x0007）====== -->
-  <h3 id="group-level">开度控制(0x0006 ~ 0x0007)</h3>
+  <h3 id="group-level">Level Control (0x0006 ~ 0x0007)</h3>
   <p>
-    控制阀门的精确开度百分比。需要设备支持 <strong>Level（LVL）</strong> Feature。
-    不支持 LVL 的阀门只有全开/全关两种状态。
+    Controls the valve's precise opening percentage. Requires the device to support the <strong>Level (LVL)</strong> Feature.
+    Valves without LVL support only have fully open/fully closed states.
   </p>
 
   <div class="table-wrap">
@@ -3028,34 +3028,34 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0006">
           <td><code>0x0006</code></td>
-          <td>CurrentLevel<br/><span class="attr-cn">当前开度</span></td>
+          <td>CurrentLevel<br/><span class="attr-cn">Current Level</span></td>
           <td>percent / null</td>
-          <td>阀门当前的实际开度百分比，0~100。<code>0</code> = 全关，<code>100</code> = 全开。Nullable —— <code>null</code> 表示无法确定当前开度。<strong>需要 LVL Feature</strong></td>
+          <td>Current actual opening percentage of the valve, 0~100. <code>0</code> = fully closed, <code>100</code> = fully open. Nullable &mdash; <code>null</code> means the current level cannot be determined. <strong>Requires LVL Feature</strong></td>
         </tr>
         <tr id="attr-0x0007">
           <td><code>0x0007</code></td>
-          <td>TargetLevel<br/><span class="attr-cn">目标开度</span></td>
+          <td>TargetLevel<br/><span class="attr-cn">Target Level</span></td>
           <td>percent / null</td>
-          <td>阀门的目标开度百分比，1~100。由 Open 命令的 TargetLevel 参数设置。Nullable —— <code>null</code> 表示无待执行的目标开度。<strong>需要 LVL Feature</strong></td>
+          <td>Target opening percentage of the valve, 1~100. Set by the Open command's TargetLevel parameter. Nullable &mdash; <code>null</code> means no pending target level. <strong>Requires LVL Feature</strong></td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">开度与状态的关系</div>
+    <div class="callout-title">Relationship Between Level and State</div>
     <p>
-      <code>CurrentLevel = 0</code> 等价于 <code>CurrentState = Closed</code>，
-      <code>CurrentLevel > 0</code> 等价于 <code>CurrentState = Open</code>。
-      对于支持 LVL 的设备，App 可以用滑块控件让用户精确设置开度，
-      Open 命令的 TargetLevel 参数值即对应滑块位置。
+      <code>CurrentLevel = 0</code> is equivalent to <code>CurrentState = Closed</code>,
+      and <code>CurrentLevel > 0</code> is equivalent to <code>CurrentState = Open</code>.
+      For devices that support LVL, the app can use a slider control to let users set the precise opening level;
+      the Open command's TargetLevel parameter value corresponds directly to the slider position.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
   <!-- ====== 故障状态（0x0008）====== -->
-  <h3 id="group-fault">故障状态(0x0008)</h3>
-  <p>记录阀门的故障信息。ValveFault 是一个位图属性，多个故障可以同时存在。</p>
+  <h3 id="group-fault">Fault Status (0x0008)</h3>
+  <p>Records valve fault information. ValveFault is a bitmap attribute; multiple faults can exist simultaneously.</p>
 
   <div class="table-wrap">
     <table>
@@ -3070,9 +3070,9 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0008">
           <td><code>0x0008</code></td>
-          <td>ValveFault<br/><span class="attr-cn">阀门故障</span></td>
+          <td>ValveFault<br/><span class="attr-cn">Valve Fault</span></td>
           <td>ValveFaultBitmap</td>
-          <td>阀门故障位图，每个位代表一种故障类型。<code>0</code> = 无故障。详见下方 <a href="#valve-fault-bitmap">ValveFaultBitmap</a> 章节</td>
+          <td>Valve fault bitmap; each bit represents a fault type. <code>0</code> = no fault. See the <a href="#valve-fault-bitmap">ValveFaultBitmap</a> section below</td>
         </tr>
       </tbody>
     </table>
@@ -3083,38 +3083,38 @@ export const clusters: Record<string, ClusterContent> = {
   <h2 id="enums">Enums & Bitmaps</h2>
 
   <!-- ValveStateEnum -->
-  <h3 id="valve-state-enum">ValveStateEnum(阀门状态枚举)</h3>
-  <p>用于 <code>CurrentState</code> 和 <code>TargetState</code> 属性，描述阀门的开关状态。</p>
+  <h3 id="valve-state-enum">ValveStateEnum (Valve State Enum)</h3>
+  <p>Used by the <code>CurrentState</code> and <code>TargetState</code> attributes to describe the valve's open/close state.</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">Closed</span>
-        <span class="enum-desc">关闭 —— 阀门完全关闭，无流体通过</span>
+        <span class="enum-desc">Closed &mdash; valve is fully closed, no fluid passes through</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">Open</span>
-        <span class="enum-desc">打开 —— 阀门已打开（全开或部分开启）</span>
+        <span class="enum-desc">Open &mdash; valve is open (fully or partially)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">Transitioning</span>
-        <span class="enum-desc">过渡中 —— 阀门正在执行开启或关闭动作（电机运转中）</span>
+        <span class="enum-desc">Transitioning &mdash; valve is executing an open or close action (motor running)</span>
       </div>
     </div>
   </div>
 
   <!-- ValveFaultBitmap -->
-  <h3 id="valve-fault-bitmap">ValveFaultBitmap(阀门故障位图)</h3>
+  <h3 id="valve-fault-bitmap">ValveFaultBitmap (Valve Fault Bitmap)</h3>
   <p>
-    <code>ValveFault (0x0008)</code> 属性的位图定义。每个位代表一种故障类型，多个位可以同时置位。
-    当任意位从 0 变为 1 时，设备会上报 <code>ValveFault</code> 事件。
+    Bitmap definition for the <code>ValveFault (0x0008)</code> attribute. Each bit represents a fault type; multiple bits can be set simultaneously.
+    When any bit changes from 0 to 1, the device reports a <code>ValveFault</code> event.
   </p>
 
   <div class="enum-cards enum-cards-grid">
@@ -3122,89 +3122,89 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">Bit 0</span>
       <div>
         <span class="enum-name">GeneralFault</span>
-        <span class="enum-desc">通用故障 —— 未归类的一般性硬件或软件问题</span>
+        <span class="enum-desc">General fault &mdash; uncategorized general hardware or software issue</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 1</span>
       <div>
         <span class="enum-name">Blocked</span>
-        <span class="enum-desc">阻塞 —— 阀门机械卡住，无法正常开启或关闭</span>
+        <span class="enum-desc">Blocked &mdash; valve is mechanically stuck and cannot open or close normally</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 2</span>
       <div>
         <span class="enum-name">Leaking</span>
-        <span class="enum-desc">泄漏 —— 阀门关闭状态下仍检测到流体通过</span>
+        <span class="enum-desc">Leaking &mdash; fluid flow detected while the valve is in the closed state</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 3</span>
       <div>
         <span class="enum-name">NotConnected</span>
-        <span class="enum-desc">未连接 —— 阀门执行器与控制器之间通信断开</span>
+        <span class="enum-desc">Not connected &mdash; communication between the valve actuator and controller is lost</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 4</span>
       <div>
         <span class="enum-name">ShortCircuit</span>
-        <span class="enum-desc">短路 —— 阀门电机或驱动电路发生短路</span>
+        <span class="enum-desc">Short circuit &mdash; short circuit in the valve motor or driver circuit</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 5</span>
       <div>
         <span class="enum-name">CurrentExceeded</span>
-        <span class="enum-desc">过流 —— 阀门电机电流超出安全范围</span>
+        <span class="enum-desc">Current exceeded &mdash; valve motor current exceeds the safe range</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">故障位图读取示例</div>
+    <div class="callout-title">Fault Bitmap Reading Examples</div>
     <p>
-      <code>ValveFault = 0x00</code>（十进制 0）= 无故障，一切正常。<br/>
-      <code>ValveFault = 0x06</code>（十进制 6）= Bit 1 + Bit 2 = 阀门卡住且有泄漏 —— 需要立即检修。<br/>
-      <code>ValveFault = 0x30</code>（十进制 48）= Bit 4 + Bit 5 = 电路短路且过流 —— 可能是电机损坏，需要断电检查。
+      <code>ValveFault = 0x00</code> (decimal 0) = No fault, everything is normal.<br/>
+      <code>ValveFault = 0x06</code> (decimal 6) = Bit 1 + Bit 2 = Valve is stuck and leaking &mdash; immediate repair needed.<br/>
+      <code>ValveFault = 0x30</code> (decimal 48) = Bit 4 + Bit 5 = Short circuit and overcurrent &mdash; possible motor damage, power off and inspect.
     </p>
   </div>
 
   <!-- ====== Feature 位图 ====== -->
   <h2 id="features">Feature Bitmap</h2>
-  <p>ValveConfigurationAndControl Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持哪些高级能力：</p>
+  <p>The ValveConfigurationAndControl Cluster declares supported advanced capabilities through <code>FeatureMap</code> (0xFFFC):</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">Bit 0</span>
       <div>
-        <span class="enum-name">TS（TimeSync）</span>
-        <span class="enum-desc">时间同步 —— 启用 AutoCloseTime 属性，设备可基于 UTC 时间戳精确计算自动关阀时刻。需要设备接入 Time Synchronization Cluster</span>
+        <span class="enum-name">TS (TimeSync)</span>
+        <span class="enum-desc">Time synchronization &mdash; enables the AutoCloseTime attribute, allowing the device to precisely calculate auto-close timing based on UTC timestamps. Requires the device to be connected to the Time Synchronization Cluster</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 1</span>
       <div>
-        <span class="enum-name">LVL（Level）</span>
-        <span class="enum-desc">开度控制 —— 启用 CurrentLevel、TargetLevel 属性和 Open 命令的 TargetLevel 参数，支持 0~100% 精确开度调节</span>
+        <span class="enum-name">LVL (Level)</span>
+        <span class="enum-desc">Level control &mdash; enables CurrentLevel, TargetLevel attributes and the Open command's TargetLevel parameter, supporting 0~100% precise opening adjustment</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">Feature 组合示例</div>
+    <div class="callout-title">Feature Combination Examples</div>
     <p>
-      一个简单的水阀（开/关）：<code>FeatureMap = 0x00</code>，只支持全开全关和基于秒数的定时。<br/>
-      一个灌溉控制阀：<code>FeatureMap = 0x03</code>（TS + LVL），支持精确开度调节和基于 UTC 时间的自动关阀。<br/>
-      一个带时间同步的燃气阀：<code>FeatureMap = 0x01</code>（仅 TS），只能全开全关，但支持 UTC 时间戳的精确定时。
+      A simple water valve (open/close): <code>FeatureMap = 0x00</code>, only supports fully open/fully closed and second-based timing.<br/>
+      An irrigation control valve: <code>FeatureMap = 0x03</code> (TS + LVL), supports precise level adjustment and UTC timestamp-based auto-close.<br/>
+      A gas valve with time sync: <code>FeatureMap = 0x01</code> (TS only), only fully open/fully closed, but supports precise timing via UTC timestamps.
     </p>
   </div>
 
   <!-- ====== 事件（Events）====== -->
   <h2 id="events">Events</h2>
   <p>
-    ValveConfigurationAndControl Cluster 定义了 2 个事件，分别用于阀门状态变化通知和故障上报。
+    The ValveConfigurationAndControl Cluster defines 2 events, used for valve state change notifications and fault reporting.
   </p>
 
   <div class="table-wrap">
@@ -3214,7 +3214,7 @@ export const clusters: Record<string, ClusterContent> = {
           <th>ID</th>
           <th>Name</th>
           <th>Priority</th>
-          <th>数据字段</th>
+          <th>Data Fields</th>
           <th>Description</th>
         </tr>
       </thead>
@@ -3224,14 +3224,14 @@ export const clusters: Record<string, ClusterContent> = {
           <td>ValveStateChanged</td>
           <td class="col-event-info">INFO</td>
           <td>ValveState (ValveStateEnum), ValveLevel (percent)</td>
-          <td>阀门状态或开度发生变化时触发</td>
+          <td>Triggered when valve state or opening level changes</td>
         </tr>
         <tr>
           <td><code>0x01</code></td>
           <td>ValveFault</td>
           <td class="col-event-warning">WARNING</td>
           <td>ValveFault (ValveFaultBitmap)</td>
-          <td>阀门故障位图发生变化时触发（新增或清除故障）</td>
+          <td>Triggered when the valve fault bitmap changes (fault added or cleared)</td>
         </tr>
       </tbody>
     </table>
@@ -3240,76 +3240,76 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-info">
     <div class="callout-title">Event Subscription Advice</div>
     <p>
-      <strong>ValveStateChanged</strong> 事件包含变化后的状态和开度值，App 订阅后可实时更新界面，
-      无需轮询 CurrentState 和 CurrentLevel 属性。
-      <strong>ValveFault</strong> 事件在故障出现或消除时都会触发，携带最新的完整故障位图。
-      对于水阀和燃气阀，建议始终订阅 ValveFault 事件并在收到 Leaking（泄漏）故障时立即告警。
+      The <strong>ValveStateChanged</strong> event includes the post-change state and opening level; subscribing to it allows the app to update the interface in real time
+      without polling CurrentState and CurrentLevel attributes.
+      The <strong>ValveFault</strong> event triggers when faults appear or are cleared, carrying the latest complete fault bitmap.
+      For water and gas valves, it is recommended to always subscribe to ValveFault events and immediately alert when a Leaking fault is received.
     </p>
   </div>
 
   <!-- ====== 示例数据 ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一个支持 Level（LVL）特性的智能水阀在 75% 开度运行中的 ValveConfigurationAndControl Cluster 读取结果：</p>
+  <p>A smart water valve with Level (LVL) feature running at 75% opening, ValveConfigurationAndControl Cluster read result:</p>
 
   <pre><code>{
-  // --- 定时参数 ---
-  "0x0000": 1800,            // OpenDuration = 1800 秒（本次开阀 30 分钟）
-  "0x0001": 3600,            // DefaultOpenDuration = 3600 秒（默认每次开阀 1 小时）
-  "0x0002": null,            // AutoCloseTime = null（未设置自动关阀时间点）
-  "0x0003": 1200,            // RemainingDuration = 1200 秒（还剩 20 分钟关阀）
+  // --- Timing Parameters ---
+  "0x0000": 1800,            // OpenDuration = 1800 seconds (this session open for 30 minutes)
+  "0x0001": 3600,            // DefaultOpenDuration = 3600 seconds (default 1 hour per open)
+  "0x0002": null,            // AutoCloseTime = null (no auto-close time set)
+  "0x0003": 1200,            // RemainingDuration = 1200 seconds (20 minutes until close)
 
-  // --- 阀门状态 ---
-  "0x0004": 1,               // CurrentState = Open（当前已打开）
-  "0x0005": 1,               // TargetState = Open（目标也是打开）
+  // --- Valve State ---
+  "0x0004": 1,               // CurrentState = Open (currently open)
+  "0x0005": 1,               // TargetState = Open (target is also open)
 
-  // --- 开度控制（LVL Feature）---
-  "0x0006": 75,              // CurrentLevel = 75%（当前开度 75%）
-  "0x0007": 75,              // TargetLevel = 75%（目标开度 75%）
+  // --- Level Control (LVL Feature) ---
+  "0x0006": 75,              // CurrentLevel = 75% (current opening 75%)
+  "0x0007": 75,              // TargetLevel = 75% (target opening 75%)
 
-  // --- 故障状态 ---
-  "0x0008": 0                // ValveFault = 0（无故障）
+  // --- Fault Status ---
+  "0x0008": 0                // ValveFault = 0 (no fault)
 }</code></pre>
 
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      最简单的阀门可能只有 OpenDuration、DefaultOpenDuration、RemainingDuration、CurrentState、TargetState 和 ValveFault 这几个核心属性。
-      CurrentLevel / TargetLevel 需要 LVL Feature，AutoCloseTime 需要 TS Feature。
-      读取前先检查 <code>FeatureMap (0xFFFC)</code>，对不支持的属性发起读取会返回 <code>UNSUPPORTED_ATTRIBUTE</code>。
+      The simplest valves may only have the core attributes: OpenDuration, DefaultOpenDuration, RemainingDuration, CurrentState, TargetState, and ValveFault.
+      CurrentLevel / TargetLevel requires the LVL Feature; AutoCloseTime requires the TS Feature.
+      Check <code>FeatureMap (0xFFFC)</code> first; reading unsupported attributes will return <code>UNSUPPORTED_ATTRIBUTE</code>.
     </p>
   </div>
 
   <!-- ====== 常见场景 ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
-  <h3 id="scenario-irrigation">场景 1：花园灌溉定时浇水</h3>
+  <h3 id="scenario-irrigation">Scenario 1: Garden Irrigation Timed Watering</h3>
   <details class="scenario">
-    <summary>查看步骤</summary>
+    <summary>View Steps</summary>
     <div class="scenario-content">
       <ol>
-        <li>写入 <code>DefaultOpenDuration (0x0001) = 1800</code>，预设每次浇水 30 分钟</li>
-        <li>自动化规则在早晨 6 点触发，发送 <code>Open (0x00)</code> 命令（不带参数，使用默认时间）</li>
-        <li>阀门打开，<code>CurrentState</code> 变为 <code>Open (1)</code>，<code>RemainingDuration</code> 开始从 1800 倒计时</li>
-        <li>App 订阅 <code>RemainingDuration (0x0003)</code>，界面显示「还剩 XX 分钟自动关闭」</li>
-        <li>30 分钟后阀门自动关闭，<code>CurrentState</code> 变为 <code>Closed (0)</code></li>
-        <li>如果需要中途取消浇水，发送 <code>Close (0x01)</code> 命令立即关阀</li>
-        <li>订阅 <code>ValveFault</code> 事件，当检测到 <code>Blocked (Bit 1)</code> 时提醒用户清理阀门</li>
+        <li>Write <code>DefaultOpenDuration (0x0001) = 1800</code> to preset 30 minutes of watering per session</li>
+        <li>An automation rule triggers at 6 AM, sending the <code>Open (0x00)</code> command (without parameters, using the default duration)</li>
+        <li>The valve opens, <code>CurrentState</code> changes to <code>Open (1)</code>, and <code>RemainingDuration</code> begins counting down from 1800</li>
+        <li>The app subscribes to <code>RemainingDuration (0x0003)</code> and the interface displays "XX minutes until auto-close"</li>
+        <li>After 30 minutes the valve auto-closes, <code>CurrentState</code> changes to <code>Closed (0)</code></li>
+        <li>If watering needs to be cancelled mid-session, send the <code>Close (0x01)</code> command to immediately close the valve</li>
+        <li>Subscribe to <code>ValveFault</code> events; when <code>Blocked (Bit 1)</code> is detected, remind the user to clean the valve</li>
       </ol>
     </div>
   </details>
 
-  <h3 id="scenario-leak">场景 2：水浸传感器联动紧急关阀</h3>
+  <h3 id="scenario-leak">Scenario 2: Water Leak Sensor Linked Emergency Valve Close</h3>
   <details class="scenario">
-    <summary>查看步骤</summary>
+    <summary>View Steps</summary>
     <div class="scenario-content">
       <ol>
-        <li>水浸传感器（BooleanState Cluster）检测到漏水，<code>StateValue</code> 变为 <code>true</code></li>
-        <li>自动化规则触发，向水阀发送 <code>Close (0x01)</code> 命令紧急关阀</li>
-        <li>读取 <code>CurrentState (0x0004)</code> 确认阀门已关闭（<code>Closed = 0</code>）</li>
-        <li>如果 CurrentState 为 <code>Transitioning (2)</code>，等待几秒后再次确认</li>
-        <li>检查 <code>ValveFault (0x0008)</code> 位图中的 <code>Leaking (Bit 2)</code> 位 —— 如果阀门关闭后仍检测到泄漏，说明阀门密封失效，需要人工干预</li>
-        <li>向用户推送告警通知：「检测到漏水，已自动关闭水阀。请检查现场。」</li>
-        <li>漏水解除后，用户手动发送 <code>Open</code> 命令恢复供水</li>
+        <li>A water leak sensor (BooleanState Cluster) detects a leak, <code>StateValue</code> changes to <code>true</code></li>
+        <li>An automation rule triggers, sending <code>Close (0x01)</code> to the water valve for an emergency close</li>
+        <li>Read <code>CurrentState (0x0004)</code> to confirm the valve is closed (<code>Closed = 0</code>)</li>
+        <li>If CurrentState is <code>Transitioning (2)</code>, wait a few seconds and check again</li>
+        <li>Check the <code>ValveFault (0x0008)</code> bitmap for the <code>Leaking (Bit 2)</code> bit &mdash; if the valve is closed but leaking is still detected, the valve seal has failed and manual intervention is needed</li>
+        <li>Send an alert notification to the user: "Water leak detected. The water valve has been automatically closed. Please check the area."</li>
+        <li>After the leak is resolved, the user manually sends an <code>Open</code> command to restore water supply</li>
       </ol>
     </div>
   </details>

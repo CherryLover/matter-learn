@@ -26,11 +26,11 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 属性总览 ====== -->
+  <!-- ====== Attribute Overview ====== -->
   <h2 id="attributes">Attribute Overview</h2>
   <p>BasicInformation has 23 attributes organized into five groups. Click an attribute ID to jump to its detailed description.</p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute Summary Table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -43,7 +43,7 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
       </thead>
       <tbody>
-        <!-- 厂商信息 -->
+        <!-- Vendor Information -->
         <tr class="clickable-row" data-href="#attr-0x00">
           <td><a href="#attr-0x00"><code>0x00</code></a></td>
           <td>DataModelRevision</td>
@@ -79,7 +79,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#group-vendor">Vendor Information</a></td>
           <td>Product ID (vendor-defined)</td>
         </tr>
-        <!-- 产品信息 -->
+        <!-- Product Information -->
         <tr class="clickable-row" data-href="#attr-0x05">
           <td><a href="#attr-0x05"><code>0x05</code></a></td>
           <td>NodeLabel</td>
@@ -136,7 +136,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#group-product">Product Information</a></td>
           <td>Device unique identifier</td>
         </tr>
-        <!-- 版本信息 -->
+        <!-- Version Information -->
         <tr class="clickable-row" data-href="#attr-0x07">
           <td><a href="#attr-0x07"><code>0x07</code></a></td>
           <td>HardwareVersion</td>
@@ -165,7 +165,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#group-version">Version Information</a></td>
           <td>Software version string (user-facing)</td>
         </tr>
-        <!-- 设备状态 -->
+        <!-- Device Status -->
         <tr class="clickable-row" data-href="#attr-0x10">
           <td><a href="#attr-0x10"><code>0x10</code></a></td>
           <td>LocalConfigDisabled</td>
@@ -180,7 +180,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#group-state">Device Status</a></td>
           <td>Whether the device is reachable</td>
         </tr>
-        <!-- 规格能力 -->
+        <!-- Capabilities -->
         <tr class="clickable-row" data-href="#attr-0x13">
           <td><a href="#attr-0x13"><code>0x13</code></a></td>
           <td>CapabilityMinima</td>
@@ -213,7 +213,7 @@ export const clusters: Record<string, ClusterContent> = {
     </table>
   </div>
 
-  <!-- ====== 厂商信息（0x00-0x04）====== -->
+  <!-- ====== Vendor Information (0x00-0x04) ====== -->
   <h3 id="group-vendor">Vendor Information (0x00 – 0x04)</h3>
   <p>Device vendor and product identifiers, assigned by CSA or set by the vendor. These attributes are fixed at manufacturing time and cannot be changed at runtime.</p>
 
@@ -272,7 +272,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 产品信息（0x05-0x06, 0x0B-0x0F, 0x12）====== -->
+  <!-- ====== Product Information (0x05-0x06, 0x0B-0x0F, 0x12) ====== -->
   <h3 id="group-product">Product Information (0x05 – 0x06, 0x0B – 0x0F, 0x12)</h3>
   <p>
     Detailed product information — user labels, manufacturing date, serial numbers, etc.
@@ -352,7 +352,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 版本信息（0x07-0x0A）====== -->
+  <!-- ====== Version Information (0x07-0x0A) ====== -->
   <h3 id="group-version">Version Information (0x07 – 0x0A)</h3>
   <p>Device hardware and software version information. The OTA upgrade process relies on these version numbers to determine whether an update is needed.</p>
 
@@ -406,7 +406,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 设备状态（0x10-0x11）====== -->
+  <!-- ====== Device Status (0x10-0x11) ====== -->
   <h3 id="group-state">Device Status (0x10 – 0x11)</h3>
   <p>Describes the device's current operating status and configuration mode.</p>
 
@@ -448,7 +448,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 规格能力（0x13-0x16）====== -->
+  <!-- ====== Capabilities (0x13-0x16) ====== -->
   <h3 id="group-capability">Capabilities (0x13 – 0x16)</h3>
   <p>Describes the protocol capabilities and product appearance supported by the device.</p>
 
@@ -491,7 +491,7 @@ export const clusters: Record<string, ClusterContent> = {
     </table>
   </div>
 
-  <!-- CapabilityMinima 结构体 -->
+  <!-- CapabilityMinima Struct -->
   <h4 id="struct-capability-minima">CapabilityMinima Struct</h4>
   <p>Describes the device's minimum protocol processing capabilities. Controllers can adjust their interaction strategy accordingly.</p>
   <div class="table-wrap">
@@ -528,7 +528,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ProductAppearance 结构体 -->
+  <!-- ProductAppearance Struct -->
   <h4 id="struct-product-appearance">ProductAppearance Struct</h4>
   <p>Describes the product's physical appearance characteristics, used for displaying device icons or color schemes in the App.</p>
   <div class="table-wrap">
@@ -789,7 +789,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
   <p>A typical Matter device's BasicInformation Cluster read result:</p>
 
@@ -907,11 +907,11 @@ export const clusters: Record<string, ClusterContent> = {
     </ul>
   </div>
 
-  <!-- ====== 属性总览 ====== -->
+  <!-- ====== Attribute Overview ====== -->
   <h2 id="attributes">Attribute Overview</h2>
   <p>BridgedDeviceBasicInformation has 17 attributes, a subset of BasicInformation. Organized into five groups:</p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute Summary Table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -924,7 +924,7 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
       </thead>
       <tbody>
-        <!-- 厂商信息 -->
+        <!-- Vendor Information -->
         <tr class="clickable-row" data-href="#attr-0x01">
           <td><a href="#attr-0x01"><code>0x01</code></a></td>
           <td>VendorName</td>
@@ -953,7 +953,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#group-vendor">Vendor Information</a></td>
           <td>Sub-device product ID</td>
         </tr>
-        <!-- 产品信息 -->
+        <!-- Product Information -->
         <tr class="clickable-row" data-href="#attr-0x05">
           <td><a href="#attr-0x05"><code>0x05</code></a></td>
           <td>NodeLabel</td>
@@ -1003,7 +1003,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#group-product">Product Information</a></td>
           <td>Device unique identifier</td>
         </tr>
-        <!-- 版本信息 -->
+        <!-- Version Information -->
         <tr class="clickable-row" data-href="#attr-0x07">
           <td><a href="#attr-0x07"><code>0x07</code></a></td>
           <td>HardwareVersion</td>
@@ -1032,7 +1032,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#group-version">Version Information</a></td>
           <td>Software version string</td>
         </tr>
-        <!-- 设备状态 -->
+        <!-- Device Status -->
         <tr class="clickable-row" data-href="#attr-0x11">
           <td><a href="#attr-0x11"><code>0x11</code></a></td>
           <td>Reachable</td>
@@ -1040,7 +1040,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#group-state">Device Status</a></td>
           <td>Whether the sub-device is currently reachable (core attribute)</td>
         </tr>
-        <!-- 产品外观 -->
+        <!-- Product Appearance -->
         <tr class="clickable-row" data-href="#attr-0x14">
           <td><a href="#attr-0x14"><code>0x14</code></a></td>
           <td>ProductAppearance</td>
@@ -1070,7 +1070,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 厂商信息（0x01-0x04）====== -->
+  <!-- ====== Vendor Information (0x01-0x04) ====== -->
   <h3 id="group-vendor">Vendor Information (0x01 – 0x04)</h3>
   <p>
     Original vendor and product identification of the sub-device. Note that vendor information here describes <strong>the bridged sub-device itself</strong>,
@@ -1128,7 +1128,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 产品信息（0x05, 0x0B-0x0F, 0x12）====== -->
+  <!-- ====== Product Information (0x05, 0x0B-0x0F, 0x12) ====== -->
   <h3 id="group-product">Product Information (0x05, 0x0B – 0x0F, 0x12)</h3>
   <p>
     Detailed product information for the sub-device. Most of these attributes are optional; the Bridge will do its best to extract and populate them from the original protocol.
@@ -1202,7 +1202,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 版本信息（0x07-0x0A）====== -->
+  <!-- ====== Version Information (0x07-0x0A) ====== -->
   <h3 id="group-version">Version Information (0x07 – 0x0A)</h3>
   <p>Sub-device hardware and software version information. If the sub-device supports OTA (upgrade via original protocol), these version numbers reflect its current state.</p>
 
@@ -1246,7 +1246,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 设备状态（0x11）====== -->
+  <!-- ====== Device Status (0x11) ====== -->
   <h3 id="group-state">Device Status (0x11)</h3>
   <p>The most critical attribute in bridging scenarios — the sub-device's online status.</p>
 
@@ -1298,7 +1298,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 产品外观（0x14）====== -->
+  <!-- ====== Product Appearance (0x14) ====== -->
   <h3 id="group-appearance">Product Appearance (0x14)</h3>
   <p>Physical appearance of the sub-device.</p>
 
@@ -1323,7 +1323,7 @@ export const clusters: Record<string, ClusterContent> = {
     </table>
   </div>
 
-  <!-- ProductAppearance 结构体 -->
+  <!-- ProductAppearance Struct -->
   <h4 id="struct-product-appearance">ProductAppearance Struct</h4>
   <p>Describes the sub-device's physical appearance. Apps can use this for device icon color schemes.</p>
   <div class="table-wrap">
@@ -1550,21 +1550,21 @@ export const clusters: Record<string, ClusterContent> = {
 
   <!-- ====== Command ====== -->
   <h2 id="commands">Command</h2>
-  <p>BridgedDeviceBasicInformation <strong>没有定义任何 Command</strong>。</p>
+  <p>BridgedDeviceBasicInformation <strong>does not define any Commands</strong>.</p>
 
   <div class="callout callout-info">
-    <div class="callout-title">为什么没有 Command？</div>
+    <div class="callout-title">Why No Commands?</div>
     <p>
-      与 BasicInformation 不同（它有一个可选的 <code>MfgSpecificPing</code>），
-      BridgedDeviceBasicInformation 纯粹是一个<strong>信息展示</strong> Cluster。
-      所有对子设备的控制操作（开关、调光、读传感器等）通过各自的功能 Cluster 完成，
-      而不是通过基本信息 Cluster。如果需要检测子设备是否在线，直接读取 <code>Reachable</code> 属性即可。
+      Unlike BasicInformation (which has an optional <code>MfgSpecificPing</code>),
+      BridgedDeviceBasicInformation is purely an <strong>informational</strong> Cluster.
+      All control operations on sub-devices (on/off, dimming, reading sensors, etc.) are done through their respective functional Clusters,
+      not through the basic information Cluster. To check if a sub-device is online, simply read the <code>Reachable</code> attribute.
     </p>
   </div>
 
-  <!-- ====== 事件 ====== -->
+  <!-- ====== Events ====== -->
   <h2 id="events">Events</h2>
-  <p>BridgedDeviceBasicInformation 定义了 4 个事件，用于通知 Controller 子设备的生命周期和可达状态变化。</p>
+  <p>BridgedDeviceBasicInformation defines 4 events to notify Controllers of sub-device lifecycle and reachable status changes.</p>
 
   <div class="table-wrap">
     <table>
@@ -1582,29 +1582,29 @@ export const clusters: Record<string, ClusterContent> = {
           <td>StartUp</td>
           <td>Critical</td>
           <td>
-            子设备启动完成。携带 <code>SoftwareVersion</code> 字段，
-            Controller 可据此检测固件是否在离线期间被升级
+            Sub-device startup complete. Carries the <code>SoftwareVersion</code> field;
+            Controller can use this to detect if firmware was upgraded while offline
           </td>
         </tr>
         <tr id="event-shutdown">
           <td><code>0x01</code></td>
           <td>ShutDown</td>
           <td>Critical</td>
-          <td>子设备正在关闭。无附加字段</td>
+          <td>Sub-device is shutting down. No additional fields</td>
         </tr>
         <tr id="event-leave">
           <td><code>0x02</code></td>
           <td>Leave</td>
           <td>Info</td>
-          <td>子设备从 Bridge 中移除（取消配对 / 解绑）。无附加字段</td>
+          <td>Sub-device removed from Bridge (unpaired / unbound). No additional fields</td>
         </tr>
         <tr id="event-reachable-changed">
           <td><code>0x03</code></td>
           <td>ReachableChanged</td>
           <td>Info</td>
           <td>
-            子设备可达状态发生变化。携带 <code>ReachableNewValue</code>（bool）字段，
-            表示变化后的新状态
+            Sub-device reachable status has changed. Carries the <code>ReachableNewValue</code> (bool) field,
+            indicating the new status after the change
           </td>
         </tr>
       </tbody>
@@ -1612,27 +1612,27 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">ReachableChanged —— 桥接设备必须关注的事件</div>
+    <div class="callout-title">ReachableChanged — A Must-Watch Event for Bridged Devices</div>
     <p>
-      <code>ReachableChanged</code> 是 BridgedDeviceBasicInformation 中<strong>最关键的事件</strong>，
-      也是该 Cluster 独有的（BasicInformation 没有这个事件）。
+      <code>ReachableChanged</code> is the <strong>most critical event</strong> in BridgedDeviceBasicInformation,
+      and is unique to this Cluster (BasicInformation does not have this event).
     </p>
-    <p>典型触发场景：</p>
+    <p>Typical trigger scenarios:</p>
     <ul>
-      <li>Zigbee 子设备电池耗尽 &rarr; Bridge 检测到通信超时 &rarr; 触发 <code>ReachableChanged(false)</code></li>
-      <li>Z-Wave 门锁信号恢复 &rarr; Bridge 重新收到响应 &rarr; 触发 <code>ReachableChanged(true)</code></li>
-      <li>蓝牙灯泡被移出 Bridge 蓝牙范围 &rarr; 触发 <code>ReachableChanged(false)</code></li>
+      <li>Zigbee sub-device battery depleted &rarr; Bridge detects communication timeout &rarr; triggers <code>ReachableChanged(false)</code></li>
+      <li>Z-Wave door lock signal recovered &rarr; Bridge receives response again &rarr; triggers <code>ReachableChanged(true)</code></li>
+      <li>Bluetooth light bulb moved out of Bridge's Bluetooth range &rarr; triggers <code>ReachableChanged(false)</code></li>
     </ul>
     <p>
-      <strong>App 开发建议</strong>：订阅所有桥接子设备 Endpoint 上的 <code>ReachableChanged</code> 事件，
-      在收到事件时立即更新设备列表的在线状态图标。不要依赖轮询 <code>Reachable</code> 属性 ——
-      事件驱动更及时、更省资源。
+      <strong>App development tip</strong>: Subscribe to <code>ReachableChanged</code> events on all bridged sub-device Endpoints.
+      Update device list online status icons immediately upon receiving events. Do not rely on polling the <code>Reachable</code> attribute —
+      event-driven is more timely and resource-efficient.
     </p>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一个通过 Zigbee Bridge 接入的温度传感器的 BridgedDeviceBasicInformation Cluster 读取结果：</p>
+  <p>Read result of a BridgedDeviceBasicInformation Cluster from a temperature sensor connected via Zigbee Bridge:</p>
 
   <pre><code>{
   // --- Vendor Information ---
@@ -1642,7 +1642,7 @@ export const clusters: Record<string, ClusterContent> = {
   "0x4": 514,                    // ProductID = 0x0202
 
   // --- Product Information ---
-  "0x5": "客厅温度计",          // NodeLabel (user-defined name)
+  "0x5": "Living Room Thermometer",          // NodeLabel (user-defined name)
   "0xB": "2024-08-20",           // ManufacturingDate
   "0xC": "WSDCGQ11LM",          // PartNumber
   "0xD": "https://www.aqara.com/sensor",  // ProductURL
@@ -1657,41 +1657,41 @@ export const clusters: Record<string, ClusterContent> = {
   "0xA": "v1.2.1",               // SoftwareVersionString
 
   // --- Device Status ---
-  "0x11": true,                  // Reachable = true（当前可达）
+  "0x11": true,                  // Reachable = true (currently reachable)
 
-  // --- 产品外观 ---
+  // --- Product Appearance ---
   "0x14": {                      // ProductAppearance
     "Finish": 1,                 // Matte
-    "PrimaryColor": 14           // White（白色）
+    "PrimaryColor": 14           // White
   }
 }</code></pre>
 
   <div class="callout callout-tip">
-    <div class="callout-title">读取桥接设备信息的典型流程</div>
+    <div class="callout-title">Typical Flow for Reading Bridged Device Information</div>
     <p>
-      当发现一个 Bridge 设备后，App 需要枚举所有桥接子设备并获取其信息：
+      After discovering a Bridge device, the App needs to enumerate all bridged sub-devices and retrieve their information:
     </p>
     <ol>
-      <li>读取 Bridge 的 Endpoint 0 上的 <a href="/clusters/descriptor/"><code>Descriptor</code> Cluster</a> 的 <code>PartsList</code>，获取所有子设备 Endpoint 列表</li>
-      <li>对每个子设备 Endpoint，读取 <code>BridgedDeviceBasicInformation</code>：
+      <li>Read the <code>PartsList</code> from the <a href="/clusters/descriptor/"><code>Descriptor</code> Cluster</a> on Bridge's Endpoint 0 to get the list of all sub-device Endpoints</li>
+      <li>For each sub-device Endpoint, read <code>BridgedDeviceBasicInformation</code>:
         <ul>
-          <li><code>ProductName (0x03)</code> + <code>NodeLabel (0x05)</code> 作为设备显示名</li>
-          <li><code>Reachable (0x11)</code> 判断在线状态</li>
-          <li><code>SoftwareVersionString (0x0A)</code> 展示固件版本</li>
+          <li><code>ProductName (0x03)</code> + <code>NodeLabel (0x05)</code> as the device display name</li>
+          <li><code>Reachable (0x11)</code> to determine online status</li>
+          <li><code>SoftwareVersionString (0x0A)</code> to display firmware version</li>
         </ul>
       </li>
-      <li>订阅每个子设备 Endpoint 上的 <code>ReachableChanged</code> 事件</li>
-      <li>注意：读取时指定的是<strong>子设备的 Endpoint</strong>（如 1、2、3），不是 Endpoint 0</li>
+      <li>Subscribe to <code>ReachableChanged</code> events on each sub-device Endpoint</li>
+      <li>Note: reads target the <strong>sub-device's Endpoint</strong> (e.g. 1, 2, 3), not Endpoint 0</li>
     </ol>
   </div>
 
-  <!-- ====== 使用场景 ====== -->
+  <!-- ====== Usage Scenarios ====== -->
   <h2 id="scenarios">Usage Scenarios</h2>
 
   <h3>Scenario 1: Zigbee Gateway Bridging Multiple Sub-devices</h3>
   <p>
-    一个常见的 Matter Bridge 场景：Zigbee 网关（如 Aqara Hub M2）同时管理多个 Zigbee 子设备，
-    通过 Matter 协议将它们暴露给 Apple Home / Google Home / Amazon Alexa。
+    A common Matter Bridge scenario: a Zigbee gateway (e.g. Aqara Hub M2) managing multiple Zigbee sub-devices simultaneously,
+    exposing them to Apple Home / Google Home / Amazon Alexa via the Matter protocol.
   </p>
   <div class="table-wrap">
     <table>
@@ -1708,7 +1708,7 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr>
           <td>0</td>
-          <td>Bridge（网关自身）</td>
+          <td>Bridge (gateway itself)</td>
           <td>BasicInformation</td>
           <td>Aqara</td>
           <td>Hub M2</td>
@@ -1742,65 +1742,65 @@ export const clusters: Record<string, ClusterContent> = {
     </table>
   </div>
   <p>
-    注意 Endpoint 3 的 <code>Reachable</code> 为 <code>false</code> ——
-    这意味着该 IKEA 智能插座当前不可达（可能是信号问题或已断电）。
-    App 应在设备列表中将其标记为离线状态。
+    Note that Endpoint 3's <code>Reachable</code> is <code>false</code> —
+    this means the IKEA smart plug is currently unreachable (possibly due to signal issues or power loss).
+    The App should mark it as offline in the device list.
   </p>
 
   <h3>Scenario 2: Reachable Status Monitoring</h3>
   <p>
-    App 需要实时追踪桥接子设备的在线状态，以提供准确的 UI 反馈和可靠的自动化执行。
+    The App needs to track bridged sub-device online status in real-time for accurate UI feedback and reliable automation execution.
   </p>
   <div class="callout callout-info">
-    <div class="callout-title">监控流程</div>
+    <div class="callout-title">Monitoring Flow</div>
     <ol>
       <li>
-        <strong>初始化</strong>：App 连接 Bridge 后，读取所有子设备 Endpoint 的 <code>Reachable</code> 属性，
-        建立初始在线状态表
+        <strong>Initialization</strong>: After connecting to the Bridge, read <code>Reachable</code> attributes on all sub-device Endpoints
+        to establish the initial online status table
       </li>
       <li>
-        <strong>订阅</strong>：对每个子设备 Endpoint 订阅 <code>ReachableChanged</code> 事件
+        <strong>Subscribe</strong>: Subscribe to <code>ReachableChanged</code> events on each sub-device Endpoint
       </li>
       <li>
-        <strong>响应</strong>：收到 <code>ReachableChanged</code> 事件后：
+        <strong>Respond</strong>: Upon receiving a <code>ReachableChanged</code> event:
         <ul>
-          <li>如果 <code>ReachableNewValue = false</code>：设备列表标灰、禁用控制按钮、通知用户</li>
-          <li>如果 <code>ReachableNewValue = true</code>：恢复设备图标、启用控制按钮</li>
+          <li>If <code>ReachableNewValue = false</code>: grey out device list, disable control buttons, notify user</li>
+          <li>If <code>ReachableNewValue = true</code>: restore device icon, enable control buttons</li>
         </ul>
       </li>
       <li>
-        <strong>自动化</strong>：在执行包含桥接设备的自动化之前，先检查 <code>Reachable</code>，
-        避免向不可达设备发送命令导致超时
+        <strong>Automation</strong>: Before executing automations involving bridged devices, first check <code>Reachable</code>,
+        to avoid timeouts from sending commands to unreachable devices
       </li>
     </ol>
   </div>
 
   <h3>Scenario 3: Device Identification and Deduplication</h3>
   <p>
-    当 Bridge 重启或固件升级后，子设备的 Endpoint 编号可能发生变化。
-    App 需要正确识别"这还是之前那台设备"，避免出现重复设备或丢失用户配置。
+    After a Bridge restart or firmware upgrade, sub-device Endpoint numbers may change.
+    The App needs to correctly identify "this is still the same device" to avoid duplicates or lost user configurations.
   </p>
   <div class="callout callout-tip">
-    <div class="callout-title">识别策略</div>
-    <p>推荐的设备识别优先级：</p>
+    <div class="callout-title">Identification Strategy</div>
+    <p>Recommended device identification priority:</p>
     <ol>
       <li>
-        <strong><code>UniqueID (0x12)</code></strong>（最优先）：全局唯一且在 Bridge 重启后不变。
-        Bridge 通常使用子设备的 Zigbee IEEE 地址（如 <code>00:15:8d:00:02:3a:4b:5c</code>）
-        或 Z-Wave DSK 生成
+        <strong><code>UniqueID (0x12)</code></strong> (highest priority): Globally unique and unchanged after Bridge restart.
+        Bridge typically uses the sub-device's Zigbee IEEE address (e.g. <code>00:15:8d:00:02:3a:4b:5c</code>)
+        or Z-Wave DSK to generate it
       </li>
       <li>
-        <strong><code>SerialNumber (0x0F)</code></strong>：如果子设备提供序列号，可作为辅助标识
+        <strong><code>SerialNumber (0x0F)</code></strong>: Can serve as a secondary identifier if the sub-device provides a serial number
       </li>
       <li>
-        <strong><code>VendorID + ProductID</code></strong>：仅能识别产品型号，不能区分同型号的不同设备。
-        结合 Endpoint 编号使用时需注意 Endpoint 可能在 Bridge 重启后变化
+        <strong><code>VendorID + ProductID</code></strong>: Can only identify product models, not distinguish between different devices of the same model.
+        When used with Endpoint numbers, note that Endpoints may change after Bridge restart
       </li>
     </ol>
     <p>
-      <strong>最佳实践</strong>：以 <code>UniqueID</code> 作为主键存储设备信息，
-      当 Bridge 重启后重新枚举子设备时，用 <code>UniqueID</code> 匹配已有记录，
-      即使 Endpoint 编号变了也能正确恢复房间归属、设备名称和自动化规则。
+      <strong>Best practice</strong>: Use <code>UniqueID</code> as the primary key for storing device information.
+      When re-enumerating sub-devices after a Bridge restart, match existing records using <code>UniqueID</code>,
+      correctly restoring room assignments, device names, and automation rules even if Endpoint numbers changed.
     </p>
   </div>
 
@@ -1826,27 +1826,27 @@ export const clusters: Record<string, ClusterContent> = {
     content: `<h1>PowerSource Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x002F</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 通常在 <code>Endpoint 1</code>（功能端点）
+    <strong>Endpoint</strong>: Typically on <code>Endpoint 1</code> (functional endpoint)
   </p>
   <p>
-    PowerSource 描述设备的电源信息，包括电源状态、有线供电参数、电池电量与充电信息。
-    这个 Cluster 是<strong>只读的</strong> —— 没有 Command，只有 Attribute。
+    PowerSource describes the device's power information, including power status, wired power parameters, battery level, and charging information.
+    This Cluster is <strong>read-only</strong> — no Commands, only Attributes.
   </p>
 
   <div class="callout callout-warning">
-    <div class="callout-title">电量计算陷阱</div>
+    <div class="callout-title">Battery Level Calculation Pitfall</div>
     <p>
-      <code>BatPercentRemaining</code> 的值需要<strong>除以 2</strong> 才是实际百分比。
-      例如设备返回 <code>200</code>，实际电量是 <code>100%</code>；返回 <code>150</code>，实际电量是 <code>75%</code>。
-      如果直接拿原始值当百分比显示，用户会看到 "200%" 的电量。
+      The <code>BatPercentRemaining</code> value must be <strong>divided by 2</strong> to get the actual percentage.
+      For example, if the device returns <code>200</code>, the actual level is <code>100%</code>; <code>150</code> means <code>75%</code>.
+      If the raw value is displayed directly as a percentage, users will see "200%" battery level.
     </p>
   </div>
 
-  <!-- ====== 属性总览 ====== -->
+  <!-- ====== Attribute Overview ====== -->
   <h2 id="attributes">Attribute Overview</h2>
-  <p>PowerSource 的属性按功能分为五组。点击属性 ID 可跳转到对应的详细说明。</p>
+  <p>PowerSource attributes are organized into five groups. Click an attribute ID to jump to its detailed description.</p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute Summary Table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -1859,242 +1859,242 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
       </thead>
       <tbody>
-        <!-- 状态信息 -->
+        <!-- Status Information -->
         <tr class="clickable-row" data-href="#attr-0x00">
           <td><a href="#attr-0x00"><code>0x00</code></a></td>
           <td>Status</td>
           <td>enum8</td>
           <td><a href="#group-status">Status Information</a></td>
-          <td>电源状态</td>
+          <td>Power status</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x01">
           <td><a href="#attr-0x01"><code>0x01</code></a></td>
           <td>Order</td>
           <td>uint8</td>
           <td><a href="#group-status">Status Information</a></td>
-          <td>电源优先级排序</td>
+          <td>Power priority order</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x02">
           <td><a href="#attr-0x02"><code>0x02</code></a></td>
           <td>Description</td>
           <td>string</td>
           <td><a href="#group-status">Status Information</a></td>
-          <td>电源描述文字</td>
+          <td>Power description text</td>
         </tr>
-        <!-- 有线供电 -->
+        <!-- Wired Power -->
         <tr class="clickable-row" data-href="#attr-0x03">
           <td><a href="#attr-0x03"><code>0x03</code></a></td>
           <td>WiredAssessedInputVoltage</td>
           <td>uint32</td>
           <td><a href="#group-wired">Wired Power</a></td>
-          <td>检测输入电压（mV）</td>
+          <td>Assessed input voltage (mV)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x04">
           <td><a href="#attr-0x04"><code>0x04</code></a></td>
           <td>WiredAssessedInputFrequency</td>
           <td>uint16</td>
           <td><a href="#group-wired">Wired Power</a></td>
-          <td>检测输入频率（Hz）</td>
+          <td>Assessed input frequency (Hz)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x05">
           <td><a href="#attr-0x05"><code>0x05</code></a></td>
           <td>WiredCurrentType</td>
           <td>enum8</td>
           <td><a href="#group-wired">Wired Power</a></td>
-          <td>电流类型（AC/DC）</td>
+          <td>Current type (AC/DC)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x06">
           <td><a href="#attr-0x06"><code>0x06</code></a></td>
           <td>WiredAssessedCurrent</td>
           <td>uint32</td>
           <td><a href="#group-wired">Wired Power</a></td>
-          <td>检测电流（mA）</td>
+          <td>Assessed current (mA)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x07">
           <td><a href="#attr-0x07"><code>0x07</code></a></td>
           <td>WiredNominalVoltage</td>
           <td>uint32</td>
           <td><a href="#group-wired">Wired Power</a></td>
-          <td>额定电压（mV）</td>
+          <td>Nominal voltage (mV)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x08">
           <td><a href="#attr-0x08"><code>0x08</code></a></td>
           <td>WiredMaximumCurrent</td>
           <td>uint32</td>
           <td><a href="#group-wired">Wired Power</a></td>
-          <td>最大电流（mA）</td>
+          <td>Maximum current (mA)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x09">
           <td><a href="#attr-0x09"><code>0x09</code></a></td>
           <td>WiredPresent</td>
           <td>bool</td>
           <td><a href="#group-wired">Wired Power</a></td>
-          <td>有线电源是否连接</td>
+          <td>Whether wired power is connected</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0A">
           <td><a href="#attr-0x0A"><code>0x0A</code></a></td>
           <td>ActiveWiredFaults</td>
           <td>list</td>
           <td><a href="#group-wired">Wired Power</a></td>
-          <td>当前有线电源故障列表</td>
+          <td>Current wired power fault list</td>
         </tr>
-        <!-- 电池基础 -->
+        <!-- Battery Basics -->
         <tr class="clickable-row" data-href="#attr-0x0B">
           <td><a href="#attr-0x0B"><code>0x0B</code></a></td>
           <td>BatVoltage</td>
           <td>uint32</td>
           <td><a href="#group-battery-basic">Battery Basics</a></td>
-          <td>电池电压（mV）</td>
+          <td>Battery voltage (mV)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0C">
           <td><a href="#attr-0x0C"><code>0x0C</code></a></td>
           <td>BatPercentRemaining</td>
           <td>uint8</td>
           <td><a href="#group-battery-basic">Battery Basics</a></td>
-          <td>电池剩余百分比（需除以 2）</td>
+          <td>Battery remaining percentage (divide by 2)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0D">
           <td><a href="#attr-0x0D"><code>0x0D</code></a></td>
           <td>BatTimeRemaining</td>
           <td>uint32</td>
           <td><a href="#group-battery-basic">Battery Basics</a></td>
-          <td>预估剩余时间（秒）</td>
+          <td>Estimated remaining time (seconds)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0E">
           <td><a href="#attr-0x0E"><code>0x0E</code></a></td>
           <td>BatChargeLevel</td>
           <td>enum8</td>
           <td><a href="#group-battery-basic">Battery Basics</a></td>
-          <td>电池电量等级</td>
+          <td>Battery charge level</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0F">
           <td><a href="#attr-0x0F"><code>0x0F</code></a></td>
           <td>BatReplacementNeeded</td>
           <td>bool</td>
           <td><a href="#group-battery-basic">Battery Basics</a></td>
-          <td>是否需要更换电池</td>
+          <td>Whether battery replacement is needed</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x10">
           <td><a href="#attr-0x10"><code>0x10</code></a></td>
           <td>BatReplaceability</td>
           <td>enum8</td>
           <td><a href="#group-battery-basic">Battery Basics</a></td>
-          <td>电池可更换性</td>
+          <td>Battery replaceability</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x11">
           <td><a href="#attr-0x11"><code>0x11</code></a></td>
           <td>BatPresent</td>
           <td>bool</td>
           <td><a href="#group-battery-basic">Battery Basics</a></td>
-          <td>电池是否安装</td>
+          <td>Whether battery is present</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x12">
           <td><a href="#attr-0x12"><code>0x12</code></a></td>
           <td>ActiveBatFaults</td>
           <td>list</td>
           <td><a href="#group-battery-basic">Battery Basics</a></td>
-          <td>当前电池故障列表</td>
+          <td>Current battery fault list</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x13">
           <td><a href="#attr-0x13"><code>0x13</code></a></td>
           <td>BatReplacementDescription</td>
           <td>string</td>
           <td><a href="#group-battery-basic">Battery Basics</a></td>
-          <td>电池更换说明</td>
+          <td>Battery replacement description</td>
         </tr>
-        <!-- 电池规格 -->
+        <!-- Battery Specifications -->
         <tr class="clickable-row" data-href="#attr-0x14">
           <td><a href="#attr-0x14"><code>0x14</code></a></td>
           <td>BatCommonDesignation</td>
           <td>enum16</td>
           <td><a href="#group-battery-spec">Battery Specifications</a></td>
-          <td>电池通用型号代码</td>
+          <td>Battery common designation code</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x15">
           <td><a href="#attr-0x15"><code>0x15</code></a></td>
           <td>BatANSIDesignation</td>
           <td>string</td>
           <td><a href="#group-battery-spec">Battery Specifications</a></td>
-          <td>ANSI 标准编号</td>
+          <td>ANSI designation</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x16">
           <td><a href="#attr-0x16"><code>0x16</code></a></td>
           <td>BatIECDesignation</td>
           <td>string</td>
           <td><a href="#group-battery-spec">Battery Specifications</a></td>
-          <td>IEC 标准编号</td>
+          <td>IEC designation</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x17">
           <td><a href="#attr-0x17"><code>0x17</code></a></td>
           <td>BatApprovedChemistry</td>
           <td>enum16</td>
           <td><a href="#group-battery-spec">Battery Specifications</a></td>
-          <td>电池化学类型</td>
+          <td>Battery chemistry type</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x18">
           <td><a href="#attr-0x18"><code>0x18</code></a></td>
           <td>BatCapacity</td>
           <td>uint32</td>
           <td><a href="#group-battery-spec">Battery Specifications</a></td>
-          <td>电池容量（mAh）</td>
+          <td>Battery capacity (mAh)</td>
         </tr>
-        <!-- 充电信息 -->
+        <!-- Charging Information -->
         <tr class="clickable-row" data-href="#attr-0x19">
           <td><a href="#attr-0x19"><code>0x19</code></a></td>
           <td>BatQuantity</td>
           <td>uint8</td>
           <td><a href="#group-charging">Charging Information</a></td>
-          <td>电池数量</td>
+          <td>Battery quantity</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x1A">
           <td><a href="#attr-0x1A"><code>0x1A</code></a></td>
           <td>BatChargeState</td>
           <td>enum8</td>
           <td><a href="#group-charging">Charging Information</a></td>
-          <td>充电状态</td>
+          <td>Charge state</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x1B">
           <td><a href="#attr-0x1B"><code>0x1B</code></a></td>
           <td>BatTimeToFullCharge</td>
           <td>uint32</td>
           <td><a href="#group-charging">Charging Information</a></td>
-          <td>充满预估时间（秒）</td>
+          <td>Estimated time to full charge (seconds)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x1C">
           <td><a href="#attr-0x1C"><code>0x1C</code></a></td>
           <td>BatFunctionalWhileCharging</td>
           <td>bool</td>
           <td><a href="#group-charging">Charging Information</a></td>
-          <td>充电时设备是否可用</td>
+          <td>Whether device is functional while charging</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x1D">
           <td><a href="#attr-0x1D"><code>0x1D</code></a></td>
           <td>BatChargingCurrent</td>
           <td>uint32</td>
           <td><a href="#group-charging">Charging Information</a></td>
-          <td>充电电流（mA）</td>
+          <td>Charging current (mA)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x1E">
           <td><a href="#attr-0x1E"><code>0x1E</code></a></td>
           <td>ActiveBatChargeFaults</td>
           <td>list</td>
           <td><a href="#group-charging">Charging Information</a></td>
-          <td>当前充电故障列表</td>
+          <td>Current charging fault list</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x1F">
           <td><a href="#attr-0x1F"><code>0x1F</code></a></td>
           <td>EndpointList</td>
           <td>list</td>
           <td><a href="#group-charging">Charging Information</a></td>
-          <td>该电源供电的 Endpoint 列表</td>
+          <td>List of Endpoints powered by this source</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 状态信息（0x00-0x02）====== -->
+  <!-- ====== Status Information (0x00-0x02) ====== -->
   <h3 id="group-status">Status Information (0x00 – 0x02)</h3>
-  <p>每个 PowerSource 实例必须具备的基础属性，描述电源的当前状态和身份。</p>
+  <p>Required base attributes for every PowerSource instance, describing the power source's current state and identity.</p>
 
   <div class="table-wrap">
     <table>
@@ -2109,21 +2109,21 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x00">
           <td><code>0x00</code></td>
-          <td>Status（电源状态）</td>
+          <td>Status</td>
           <td>enum8</td>
-          <td>当前电源工作状态（见下方枚举）</td>
+          <td>Current power source operating state (see enum below)</td>
         </tr>
         <tr id="attr-0x01">
           <td><code>0x01</code></td>
-          <td>Order（优先级）</td>
+          <td>Order</td>
           <td>uint8</td>
-          <td>电源优先级排序。设备有多个电源时，数值越小优先级越高</td>
+          <td>Power source priority. When a device has multiple sources, lower value = higher priority</td>
         </tr>
         <tr id="attr-0x02">
           <td><code>0x02</code></td>
-          <td>Description（描述）</td>
+          <td>Description</td>
           <td>string</td>
-          <td>电源描述文字，如 <code>"Battery"</code>、<code>"USB-C"</code>、<code>"DC Power"</code></td>
+          <td>Power source description text, e.g. <code>"Battery"</code>, <code>"USB-C"</code>, <code>"DC Power"</code></td>
         </tr>
       </tbody>
     </table>
@@ -2162,14 +2162,14 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 有线供电（0x03-0x0A）====== -->
+  <!-- ====== Wired Power (0x03-0x0A) ====== -->
   <h3 id="group-wired">Wired Power (0x03 – 0x0A)</h3>
-  <p>描述有线电源的电气参数和状态。这组属性仅在电源类型为有线时才有意义。</p>
+  <p>Describes wired power source electrical parameters and status. These attributes are only meaningful when the power source type is wired.</p>
   <div class="callout callout-info">
     <div class="callout-title">Applicable Scope</div>
     <p>
-      大多数电池供电设备（如门锁、传感器）不会上报有线供电属性。
-      这组属性主要出现在使用 AC/DC 适配器、USB 或 PoE 供电的设备上。
+      Most battery-powered devices (e.g. door locks, sensors) do not report wired power attributes.
+      These attributes mainly appear on devices powered by AC/DC adapters, USB, or PoE.
     </p>
   </div>
 
@@ -2186,60 +2186,60 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x03">
           <td><code>0x03</code></td>
-          <td>WiredAssessedInputVoltage（检测输入电压）</td>
+          <td>WiredAssessedInputVoltage</td>
           <td>uint32</td>
-          <td>有线输入的实际检测电压，单位 mV</td>
+          <td>Actual assessed voltage of wired input, in mV</td>
         </tr>
         <tr id="attr-0x04">
           <td><code>0x04</code></td>
-          <td>WiredAssessedInputFrequency（检测输入频率）</td>
+          <td>WiredAssessedInputFrequency</td>
           <td>uint16</td>
-          <td>有线输入的实际检测频率，单位 Hz。仅交流供电时有意义</td>
+          <td>Actual assessed frequency of wired input, in Hz. Only meaningful for AC power</td>
         </tr>
         <tr id="attr-0x05">
           <td><code>0x05</code></td>
-          <td>WiredCurrentType（电流类型）</td>
+          <td>WiredCurrentType</td>
           <td>enum8</td>
-          <td>电流类型：<code>0</code> = AC（交流），<code>1</code> = DC（直流）</td>
+          <td>Current type: <code>0</code> = AC, <code>1</code> = DC</td>
         </tr>
         <tr id="attr-0x06">
           <td><code>0x06</code></td>
-          <td>WiredAssessedCurrent（检测电流）</td>
+          <td>WiredAssessedCurrent</td>
           <td>uint32</td>
-          <td>有线输入的实际检测电流，单位 mA</td>
+          <td>Actual assessed current of wired input, in mA</td>
         </tr>
         <tr id="attr-0x07">
           <td><code>0x07</code></td>
-          <td>WiredNominalVoltage（额定电压）</td>
+          <td>WiredNominalVoltage</td>
           <td>uint32</td>
-          <td>有线电源的额定电压，单位 mV</td>
+          <td>Nominal voltage of wired power source, in mV</td>
         </tr>
         <tr id="attr-0x08">
           <td><code>0x08</code></td>
-          <td>WiredMaximumCurrent（最大电流）</td>
+          <td>WiredMaximumCurrent</td>
           <td>uint32</td>
-          <td>有线电源支持的最大电流，单位 mA</td>
+          <td>Maximum current supported by wired power source, in mA</td>
         </tr>
         <tr id="attr-0x09">
           <td><code>0x09</code></td>
-          <td>WiredPresent（有线电源在位）</td>
+          <td>WiredPresent</td>
           <td>bool</td>
-          <td>有线电源是否已连接。<code>true</code> = 已插入，<code>false</code> = 未连接</td>
+          <td>Whether wired power is connected. <code>true</code> = plugged in, <code>false</code> = not connected</td>
         </tr>
         <tr id="attr-0x0A">
           <td><code>0x0A</code></td>
-          <td>ActiveWiredFaults（有线故障列表）</td>
+          <td>ActiveWiredFaults</td>
           <td>list</td>
-          <td>当前有线电源的活跃故障列表，如过压、过流等</td>
+          <td>Active fault list for the wired power source, such as overvoltage, overcurrent, etc.</td>
         </tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 电池基础（0x0B-0x13）====== -->
+  <!-- ====== Battery Basics (0x0B-0x13) ====== -->
   <h3 id="group-battery-basic">Battery Basics (0x0B – 0x13)</h3>
-  <p>电池供电设备最常用的属性组 —— App 展示电池电量和低电提醒都依赖这些属性。</p>
+  <p>The most commonly used attribute group for battery-powered devices — Apps rely on these for displaying battery level and low-battery alerts.</p>
 
   <div class="table-wrap">
     <table>
@@ -2254,57 +2254,57 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0B">
           <td><code>0x0B</code></td>
-          <td>BatVoltage（电池电压）</td>
+          <td>BatVoltage</td>
           <td>uint32</td>
-          <td>当前电池电压，单位 mV</td>
+          <td>Current battery voltage, in mV</td>
         </tr>
         <tr id="attr-0x0C">
           <td><code>0x0C</code></td>
-          <td>BatPercentRemaining（剩余百分比）</td>
+          <td>BatPercentRemaining</td>
           <td>uint8</td>
-          <td>电池剩余百分比。<strong>实际百分比 = 值 / 2</strong>，范围 0~200 对应 0%~100%。Nullable，设备不支持精确电量时返回 <code>null</code></td>
+          <td>Battery remaining percentage. <strong>Actual percentage = value / 2</strong>, range 0~200 maps to 0%~100%. Nullable; returns <code>null</code> when device doesn't support precise level</td>
         </tr>
         <tr id="attr-0x0D">
           <td><code>0x0D</code></td>
-          <td>BatTimeRemaining（预估剩余时间）</td>
+          <td>BatTimeRemaining</td>
           <td>uint32</td>
-          <td>电池预估可用时间，单位秒。Nullable</td>
+          <td>Estimated battery remaining time, in seconds. Nullable</td>
         </tr>
         <tr id="attr-0x0E">
           <td><code>0x0E</code></td>
-          <td>BatChargeLevel（电量等级）</td>
+          <td>BatChargeLevel</td>
           <td>enum8</td>
-          <td>电池电量等级（见下方枚举）</td>
+          <td>Battery charge level (see enum below)</td>
         </tr>
         <tr id="attr-0x0F">
           <td><code>0x0F</code></td>
-          <td>BatReplacementNeeded（需要更换）</td>
+          <td>BatReplacementNeeded</td>
           <td>bool</td>
-          <td>是否需要更换电池。<code>true</code> = 应尽快更换</td>
+          <td>Whether battery needs replacement. <code>true</code> = should be replaced soon</td>
         </tr>
         <tr id="attr-0x10">
           <td><code>0x10</code></td>
-          <td>BatReplaceability（可更换性）</td>
+          <td>BatReplaceability</td>
           <td>enum8</td>
-          <td>电池的可更换方式（见下方枚举）</td>
+          <td>Battery replaceability method (see enum below)</td>
         </tr>
         <tr id="attr-0x11">
           <td><code>0x11</code></td>
-          <td>BatPresent（电池在位）</td>
+          <td>BatPresent</td>
           <td>bool</td>
-          <td>电池是否已安装。<code>true</code> = 已安装</td>
+          <td>Whether battery is installed. <code>true</code> = installed</td>
         </tr>
         <tr id="attr-0x12">
           <td><code>0x12</code></td>
-          <td>ActiveBatFaults（电池故障列表）</td>
+          <td>ActiveBatFaults</td>
           <td>list</td>
-          <td>当前电池的活跃故障列表，如过热、电压异常等</td>
+          <td>Active fault list for the battery, such as overheating, voltage anomaly, etc.</td>
         </tr>
         <tr id="attr-0x13">
           <td><code>0x13</code></td>
-          <td>BatReplacementDescription（更换说明）</td>
+          <td>BatReplacementDescription</td>
           <td>string</td>
-          <td>电池更换说明，包括型号、规格等，如 <code>"4x AA"</code>、<code>"CR2032"</code></td>
+          <td>Battery replacement instructions, including model and specifications, e.g. <code>"4x AA"</code>, <code>"CR2032"</code></td>
         </tr>
       </tbody>
     </table>
@@ -2368,9 +2368,9 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 电池规格（0x14-0x18）====== -->
+  <!-- ====== Battery Specifications (0x14-0x18) ====== -->
   <h3 id="group-battery-spec">Battery Specifications (0x14 – 0x18)</h3>
-  <p>描述电池的具体型号和技术规格，用于指导用户选择正确的替换电池。</p>
+  <p>Describes specific battery model and technical specifications to guide users in selecting the correct replacement battery.</p>
 
   <div class="table-wrap">
     <table>
@@ -2385,33 +2385,33 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x14">
           <td><code>0x14</code></td>
-          <td>BatCommonDesignation（通用型号代码）</td>
+          <td>BatCommonDesignation</td>
           <td>enum16</td>
-          <td>电池通用型号的数字代码，如 AA=15, AAA=10, CR2032=40 等</td>
+          <td>Battery common designation numeric code, e.g. AA=15, AAA=10, CR2032=40, etc.</td>
         </tr>
         <tr id="attr-0x15">
           <td><code>0x15</code></td>
-          <td>BatANSIDesignation（ANSI 编号）</td>
+          <td>BatANSIDesignation</td>
           <td>string</td>
-          <td>电池的 ANSI 标准编号</td>
+          <td>Battery's ANSI standard designation</td>
         </tr>
         <tr id="attr-0x16">
           <td><code>0x16</code></td>
-          <td>BatIECDesignation（IEC 编号）</td>
+          <td>BatIECDesignation</td>
           <td>string</td>
-          <td>电池的 IEC 标准编号</td>
+          <td>Battery's IEC standard designation</td>
         </tr>
         <tr id="attr-0x17">
           <td><code>0x17</code></td>
-          <td>BatApprovedChemistry（化学类型）</td>
+          <td>BatApprovedChemistry</td>
           <td>enum16</td>
-          <td>电池化学类型，如 Alkaline=1, LithiumIon=6 等</td>
+          <td>Battery chemistry type, e.g. Alkaline=1, LithiumIon=6, etc.</td>
         </tr>
         <tr id="attr-0x18">
           <td><code>0x18</code></td>
-          <td>BatCapacity（电池容量）</td>
+          <td>BatCapacity</td>
           <td>uint32</td>
-          <td>电池容量，单位 mAh</td>
+          <td>Battery capacity, in mAh</td>
         </tr>
       </tbody>
     </table>
@@ -2490,9 +2490,9 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 充电信息（0x19-0x1F）====== -->
+  <!-- ====== Charging Information (0x19-0x1F) ====== -->
   <h3 id="group-charging">Charging Information (0x19 – 0x1F)</h3>
-  <p>描述电池的充电状态和充电参数，以及电源与 Endpoint 的映射关系。</p>
+  <p>Describes battery charging status, charging parameters, and the mapping between power sources and Endpoints.</p>
 
   <div class="table-wrap">
     <table>
@@ -2507,45 +2507,45 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x19">
           <td><code>0x19</code></td>
-          <td>BatQuantity（电池数量）</td>
+          <td>BatQuantity</td>
           <td>uint8</td>
-          <td>设备使用的电池数量</td>
+          <td>Number of batteries used by the device</td>
         </tr>
         <tr id="attr-0x1A">
           <td><code>0x1A</code></td>
-          <td>BatChargeState（充电状态）</td>
+          <td>BatChargeState</td>
           <td>enum8</td>
-          <td>当前充电状态（见下方枚举）</td>
+          <td>Current charge state (see enum below)</td>
         </tr>
         <tr id="attr-0x1B">
           <td><code>0x1B</code></td>
-          <td>BatTimeToFullCharge（充满时间）</td>
+          <td>BatTimeToFullCharge</td>
           <td>uint32</td>
-          <td>预估充满剩余时间，单位秒。Nullable</td>
+          <td>Estimated time to full charge, in seconds. Nullable</td>
         </tr>
         <tr id="attr-0x1C">
           <td><code>0x1C</code></td>
-          <td>BatFunctionalWhileCharging（充电时可用）</td>
+          <td>BatFunctionalWhileCharging</td>
           <td>bool</td>
-          <td>充电期间设备是否仍可正常使用。<code>true</code> = 可用</td>
+          <td>Whether the device remains functional while charging. <code>true</code> = functional</td>
         </tr>
         <tr id="attr-0x1D">
           <td><code>0x1D</code></td>
-          <td>BatChargingCurrent（充电电流）</td>
+          <td>BatChargingCurrent</td>
           <td>uint32</td>
-          <td>当前充电电流，单位 mA</td>
+          <td>Current charging current, in mA</td>
         </tr>
         <tr id="attr-0x1E">
           <td><code>0x1E</code></td>
-          <td>ActiveBatChargeFaults（充电故障列表）</td>
+          <td>ActiveBatChargeFaults</td>
           <td>list</td>
-          <td>当前充电过程中的活跃故障列表</td>
+          <td>Active fault list during charging</td>
         </tr>
         <tr id="attr-0x1F">
           <td><code>0x1F</code></td>
-          <td>EndpointList（供电端点列表）</td>
+          <td>EndpointList</td>
           <td>list</td>
-          <td>该电源所供电的 Endpoint 编号列表。用于标识一个电源为哪些功能端点供电</td>
+          <td>List of Endpoint numbers powered by this source. Used to identify which functional endpoints a power source supplies</td>
         </tr>
       </tbody>
     </table>
@@ -2584,44 +2584,44 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一个典型电池供电设备的 PowerSource Cluster 读取结果：</p>
+  <p>A typical battery-powered device's PowerSource Cluster read result:</p>
 
   <pre><code>{
-  // --- 状态信息 ---
-  "0x0": 1,                  // Status = Active（正在供电）
-  "0x1": 0,                  // Order = 0（最高优先级）
+  // --- Status Information ---
+  "0x0": 1,                  // Status = Active (currently powering)
+  "0x1": 0,                  // Order = 0 (highest priority)
   "0x2": "Battery",          // Description = "Battery"
 
-  // --- 电池基础 ---
+  // --- Battery Basics ---
   "0xB": 3200,               // BatVoltage = 3200 mV
-  "0xC": 180,                // BatPercentRemaining = 180 → 实际 90%
-  "0xD": 7776000,            // BatTimeRemaining = 7776000 秒（约 90 天）
+  "0xC": 180,                // BatPercentRemaining = 180 → actual 90%
+  "0xD": 7776000,            // BatTimeRemaining = 7776000 seconds (approx. 90 days)
   "0xE": 0,                  // BatChargeLevel = OK
   "0xF": false,              // BatReplacementNeeded = false
   "0x10": 2,                 // BatReplaceability = UserReplaceable
-  "0x11": true,              // BatPresent = true（电池已安装）
+  "0x11": true,              // BatPresent = true (battery installed)
   "0x13": "4x AA",           // BatReplacementDescription
 
-  // --- 电池规格 ---
+  // --- Battery Specifications ---
   "0x14": 15,                // BatCommonDesignation = 15（AA）
   "0x18": 2800,              // BatCapacity = 2800 mAh
 
-  // --- 充电信息 ---
-  "0x1A": 3                  // BatChargeState = IsNotCharging（干电池不充电）
+  // --- Charging Information ---
+  "0x1A": 3                  // BatChargeState = IsNotCharging (non-rechargeable battery)
 }</code></pre>
 
   <div class="callout callout-tip">
-    <div class="callout-title">电量展示处理逻辑</div>
+    <div class="callout-title">Battery Level Display Logic</div>
     <p>
-      展示电量信息时，典型的处理流程：
+      Typical processing flow when displaying battery information:
     </p>
     <ol>
-      <li>读取 <code>BatPercentRemaining (0x0C)</code>，<strong>除以 2</strong> 得到百分比</li>
-      <li>根据 <code>BatChargeLevel (0x0E)</code> 决定图标颜色：OK 绿色，Warning 黄色，Critical 红色</li>
-      <li>如果 <code>BatReplacementNeeded (0x0F)</code> 为 <code>true</code>，额外显示更换提示</li>
-      <li>注意 <code>BatPercentRemaining</code> 是 <strong>Nullable</strong>，可能为 <code>null</code>（设备不支持精确电量时），此时用 <code>BatChargeLevel</code> 做粗略展示</li>
+      <li>Read <code>BatPercentRemaining (0x0C)</code>, <strong>divide by 2</strong> to get percentage</li>
+      <li>Determine icon color based on <code>BatChargeLevel (0x0E)</code>: OK = green, Warning = yellow, Critical = red</li>
+      <li>If <code>BatReplacementNeeded (0x0F)</code> is <code>true</code>, show an additional replacement prompt</li>
+      <li>Note that <code>BatPercentRemaining</code> is <strong>Nullable</strong> and may be <code>null</code> (when device doesn't support precise levels); in that case, use <code>BatChargeLevel</code> for a rough display</li>
     </ol>
   </div>
 
@@ -2647,30 +2647,30 @@ export const clusters: Record<string, ClusterContent> = {
     content: `<h1>PowerSourceConfiguration Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x002E</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: <code>Endpoint 0</code>（Root Node）
+    <strong>Endpoint</strong>: <code>Endpoint 0</code> (Root Node)
   </p>
   <p>
-    PowerSourceConfiguration 是一个极其简单的 Cluster —— 只有<strong>一个属性、没有命令</strong>。
-    它的唯一职责是告诉你：这台设备的电源信息分别在哪些 Endpoint 上，以及它们的优先级顺序。
+    PowerSourceConfiguration is an extremely simple Cluster — only <strong>one attribute, no commands</strong>.
+    Its sole purpose is to tell you: which Endpoints hold this device's power information and their priority order.
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">和 PowerSource 的关系</div>
+    <div class="callout-title">Relationship with PowerSource</div>
     <p>
-      这两个 Cluster 是搭档关系，分工明确：
+      These two Clusters work as partners with a clear division of labor:
     </p>
     <ul>
-      <li><strong>PowerSourceConfiguration</strong>（本页）—— 在 Endpoint 0，回答「电源信息在哪」：哪些 Endpoint 承载了 PowerSource Cluster，优先级怎么排</li>
-      <li><strong>PowerSource</strong>（<a href="/clusters/power-source/">0x002F</a>）—— 在各功能 Endpoint 上，回答「电源状态是什么」：电量多少、在不在充电、电压多少</li>
+      <li><strong>PowerSourceConfiguration</strong> (this page) — on Endpoint 0, answers "where is the power information": which Endpoints host a PowerSource Cluster and their priority order</li>
+      <li><strong>PowerSource</strong> (<a href="/clusters/power-source/">0x002F</a>) — on functional Endpoints, answers "what is the power status": battery level, charging state, voltage, etc.</li>
     </ul>
     <p>
-      App 的典型流程：先读 PowerSourceConfiguration 拿到端点列表 → 再逐个去对应 Endpoint 读 PowerSource 拿实际数据。
+      Typical App flow: first read PowerSourceConfiguration to get the endpoint list → then read PowerSource on each corresponding Endpoint for actual data.
     </p>
   </div>
 
-  <!-- ====== 属性总览 ====== -->
+  <!-- ====== Attribute Overview ====== -->
   <h2 id="attributes">Attribute Overview</h2>
-  <p>PowerSourceConfiguration 只有一个属性，是必须支持的。</p>
+  <p>PowerSourceConfiguration has only one attribute, which is mandatory.</p>
 
   <div class="table-wrap">
     <table>
@@ -2689,110 +2689,110 @@ export const clusters: Record<string, ClusterContent> = {
           <td>Sources</td>
           <td>list&lt;endpoint-no&gt;</td>
           <td>Read-only</td>
-          <td>承载 PowerSource Cluster 的端点列表，按优先级排序</td>
+          <td>List of endpoints hosting PowerSource Cluster, sorted by priority</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h3 id="attr-0x00">Sources (Power Endpoint List)</h3>
   <p>
-    一个<strong>有序列表</strong>，每个元素是一个 Endpoint 编号，指向一个承载了 PowerSource Cluster 的端点。
-    列表的顺序即优先级：<strong>第一个元素是主电源</strong>，后续依次为备用电源。
+    An <strong>ordered list</strong> where each element is an Endpoint number pointing to an endpoint hosting a PowerSource Cluster.
+    The list order represents priority: <strong>the first element is the primary power source</strong>, followed by backup sources in order.
   </p>
   <div class="callout callout-tip">
-    <div class="callout-title">为什么需要这个列表</div>
+    <div class="callout-title">Why This List Is Needed</div>
     <p>
-      一台设备可能有多个电源（市电 + 电池、USB + 太阳能），每个电源的详细信息各自在不同的 Endpoint 上。
-      Sources 列表就是这些 Endpoint 的「目录」，App 不需要遍历所有 Endpoint 去猜哪个有电源信息 ——
-      直接读这个列表就知道该去哪些 Endpoint 拿数据。
+      A device may have multiple power sources (mains + battery, USB + solar), with each source's detailed information on a different Endpoint.
+      The Sources list serves as a "directory" of these Endpoints, so the App doesn't need to iterate all Endpoints to guess which has power information —
+      simply read this list to know which Endpoints to query for data.
     </p>
   </div>
   <p>
-    如果列表为空，说明设备没有报告任何电源信息。列表中的 Endpoint 编号与 Descriptor Cluster 中的 PartsList 一致。
+    An empty list means the device hasn't reported any power information. Endpoint numbers in the list align with the Descriptor Cluster's PartsList.
   </p>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 没有命令 ====== -->
+  <!-- ====== No Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    PowerSourceConfiguration <strong>没有任何命令</strong>。它是一个纯只读的配置型 Cluster，所有信息通过读取 Sources 属性获得。
+    PowerSourceConfiguration has <strong>no commands</strong>. It is a purely read-only configuration Cluster; all information is obtained by reading the Sources attribute.
   </p>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>读取 Endpoint 0 上的 PowerSourceConfiguration Cluster：</p>
+  <p>Reading the PowerSourceConfiguration Cluster on Endpoint 0:</p>
   <pre><code>{
-  // --- 属性 ---
+  // --- Attributes ---
   "0x0": [1, 2]    // Sources = [Endpoint 1, Endpoint 2]
-                    // 优先级：Endpoint 1 是主电源，Endpoint 2 是备用电源
+                    // Priority: Endpoint 1 is primary, Endpoint 2 is backup
 }</code></pre>
 
-  <!-- ====== 场景一 ====== -->
+  <!-- ====== Scenario 1 ====== -->
   <h2 id="scenario-single">Scenario 1: Single Power Source Device (Battery Door Lock)</h2>
   <p>
-    一台电池供电的智能门锁，只有一个电源。PowerSourceConfiguration 的 Sources 列表只包含一个 Endpoint，
-    App 直接去那个 Endpoint 读取 PowerSource 就能拿到电池电量。
+    A battery-powered smart door lock with only one power source. PowerSourceConfiguration's Sources list contains only one Endpoint;
+    the App goes directly to that Endpoint to read PowerSource for battery level.
   </p>
-  <pre><code>// 场景一：只有一个电源的简单设备（如电池门锁）
+  <pre><code>// Scenario 1: Simple device with only one power source (e.g. battery door lock)
 // Endpoint 0 — PowerSourceConfiguration
 {
   "0x0": [1]       // Sources = [Endpoint 1]
-                   // 只有一个电源，在 Endpoint 1 的 PowerSource Cluster 里查看详情
+                   // Only one power source; see details in Endpoint 1's PowerSource Cluster
 }
 
-// Endpoint 1 — PowerSource（去这里读电池电量）
+// Endpoint 1 — PowerSource (read battery level here)
 {
   "0x0": 1,        // Status = Active
-  "0x1": 0,        // Order = 0（唯一电源）
+  "0x1": 0,        // Order = 0 (only power source)
   "0x2": "Battery",
-  "0xC": 180       // BatPercentRemaining = 180 → 实际 90%
+  "0xC": 180       // BatPercentRemaining = 180 → actual 90%
 }</code></pre>
   <div class="callout callout-tip">
     <div class="callout-title">Developer Advice</div>
     <p>
-      对于只有一个电源的设备，Sources 列表长度为 1，App 逻辑可以简化 —— 直接读第一个 Endpoint 的 PowerSource 即可，不需要展示优先级或切换逻辑。
+      For devices with only one power source, the Sources list length is 1 and App logic can be simplified — just read the first Endpoint's PowerSource directly, no need for priority display or switching logic.
     </p>
   </div>
 
-  <!-- ====== 场景二 ====== -->
+  <!-- ====== Scenario 2 ====== -->
   <h2 id="scenario-multi">Scenario 2: Dual Power Source Device (UPS Gateway)</h2>
   <p>
-    一台网关设备同时支持市电和内置电池供电。PowerSourceConfiguration 列出两个 Endpoint，
-    第一个是市电（主电源），第二个是电池（备用电源）。停电时设备自动切换到电池，App 可以据此展示当前供电状态。
+    A gateway device supporting both mains and built-in battery power. PowerSourceConfiguration lists two Endpoints;
+    the first is mains (primary), the second is battery (backup). During power outage, the device automatically switches to battery, and the App can display the current power status accordingly.
   </p>
-  <pre><code>// 场景二：双电源设备（如 UPS 供电的网关）
+  <pre><code>// Scenario 2: Dual power source device (e.g. UPS-powered gateway)
 // Endpoint 0 — PowerSourceConfiguration
 {
   "0x0": [1, 2]    // Sources = [Endpoint 1, Endpoint 2]
-                   // Endpoint 1 优先级更高（主电源），Endpoint 2 是备用
+                   // Endpoint 1 has higher priority (primary), Endpoint 2 is backup
 }
 
-// Endpoint 1 — PowerSource（主电源：市电）
+// Endpoint 1 — PowerSource (primary: mains)
 {
-  "0x0": 1,        // Status = Active（正在供电）
-  "0x1": 0,        // Order = 0（最高优先级）
-  "0x2": "Mains"   // Description = "Mains"（市电）
+  "0x0": 1,        // Status = Active (currently powering)
+  "0x1": 0,        // Order = 0 (highest priority)
+  "0x2": "Mains"   // Description = "Mains"
 }
 
-// Endpoint 2 — PowerSource（备用电源：内置电池）
+// Endpoint 2 — PowerSource (backup: built-in battery)
 {
-  "0x0": 0,        // Status = Unspecified（待命中）
-  "0x1": 1,        // Order = 1（次优先级）
+  "0x0": 0,        // Status = Unspecified (on standby)
+  "0x1": 1,        // Order = 1 (secondary priority)
   "0x2": "Battery",
-  "0xC": 200       // BatPercentRemaining = 200 → 实际 100%
+  "0xC": 200       // BatPercentRemaining = 200 → actual 100%
 }</code></pre>
   <div class="callout callout-tip">
     <div class="callout-title">Developer Advice</div>
     <p>
-      双电源场景下，App 可以这样处理：
+      In dual power source scenarios, the App can handle it as follows:
     </p>
     <ol>
-      <li>读取 Sources 列表，遍历每个 Endpoint 的 PowerSource</li>
-      <li>检查每个电源的 <code>Status</code> 属性，找到当前 <code>Active</code> 的那个</li>
-      <li>如果主电源（列表第一个）不是 Active，说明设备在用备用电源，可以提示用户</li>
-      <li>订阅各 PowerSource 的 <code>Status</code> 变化，实时感知电源切换</li>
+      <li>Read the Sources list and iterate each Endpoint's PowerSource</li>
+      <li>Check each source's <code>Status</code> attribute to find the currently <code>Active</code> one</li>
+      <li>If the primary source (first in list) is not Active, the device is using backup power and the user should be notified</li>
+      <li>Subscribe to each PowerSource's <code>Status</code> changes for real-time power switching awareness</li>
     </ol>
   </div>
 
@@ -2818,27 +2818,27 @@ export const clusters: Record<string, ClusterContent> = {
     content: `<h1>Fixed Label Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x0040</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: <code>Endpoint 0</code>（Root）或各功能 Endpoint
+    <strong>Endpoint</strong>: <code>Endpoint 0</code> (Root) or functional Endpoints
   </p>
   <p>
-    Fixed Label 存储设备在出厂时写入的标签（键值对），用于描述设备的物理属性或预设分类。
-    这些标签是<strong>只读的</strong> —— 用户和 App 都无法修改，只能读取。
-    标签内容由制造商在生产阶段确定，比如设备预设的房间、楼层、朝向等信息。
+    Fixed Label stores labels (key-value pairs) written to the device at manufacturing time, describing physical attributes or preset categories.
+    These labels are <strong>read-only</strong> — neither users nor Apps can modify them.
+    Label content is determined by the manufacturer during production, such as preset room, floor, orientation, etc.
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">和 UserLabel 的关系</div>
+    <div class="callout-title">Relationship with UserLabel</div>
     <p>
-      Fixed Label（<code>0x0040</code>）是只读的出厂标签，UserLabel（<code>0x0041</code>）是用户可写的自定义标签。
-      两者结构完全相同（都用 <code>LabelStruct</code>），区别只在于谁能改 ——
-      Fixed Label 由制造商在工厂写入后锁定，UserLabel 由用户随时修改。
-      App 通常会合并读取两者，出厂标签作为默认值，用户标签作为覆盖。
+      Fixed Label (<code>0x0040</code>) contains read-only factory labels; UserLabel (<code>0x0041</code>) contains user-writable custom labels.
+      Both share the exact same structure (using <code>LabelStruct</code>); the only difference is who can modify them —
+      Fixed Label is written and locked by the manufacturer at the factory; UserLabel can be modified by users at any time.
+      Apps typically merge both, using factory labels as defaults and user labels as overrides.
     </p>
   </div>
 
-  <!-- ====== 属性总览 ====== -->
+  <!-- ====== Attribute Overview ====== -->
   <h2 id="attributes">Attribute Overview</h2>
-  <p>Fixed Label 只有一个属性，非常简单。</p>
+  <p>Fixed Label has only one attribute — very simple.</p>
 
   <div class="table-wrap">
     <table>
@@ -2857,35 +2857,35 @@ export const clusters: Record<string, ClusterContent> = {
           <td>LabelList</td>
           <td>list&lt;LabelStruct&gt;</td>
           <td>Read-only</td>
-          <td>出厂标签列表（键值对数组）</td>
+          <td>Factory label list (key-value pair array)</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h3 id="attr-0x00">LabelList (Factory Label List)</h3>
   <p>
-    一个 <code>LabelStruct</code> 数组，每个元素是一个键值对。列表可以为空（设备没有预设标签），
-    也可以包含多个条目。标签的键（Label）在同一个列表中<strong>不应重复</strong>。
+    A <code>LabelStruct</code> array where each element is a key-value pair. The list can be empty (device has no preset labels),
+    or contain multiple entries. Label keys should <strong>not be duplicated</strong> within the same list.
   </p>
   <p>
-    这个属性是只读的，设备启动后内容固定不变。如果需要可写的标签，使用 UserLabel Cluster（<code>0x0041</code>）。
+    This attribute is read-only; content is fixed after device startup. For writable labels, use the UserLabel Cluster (<code>0x0041</code>).
   </p>
 
   <div class="callout callout-tip">
-    <div class="callout-title">空列表也是合法的</div>
+    <div class="callout-title">An Empty List Is Valid</div>
     <p>
-      并非所有设备都有出厂标签。很多设备的 <code>LabelList</code> 返回空数组 <code>[]</code>，
-      这是完全正常的。App 应当处理空列表的情况，不要假设一定有标签数据。
+      Not all devices have factory labels. Many devices return an empty array <code>[]</code> for <code>LabelList</code>;
+      this is perfectly normal. Apps should handle the empty list case and not assume label data is always present.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== LabelStruct 结构体 ====== -->
-  <h2 id="label-struct">LabelStruct 结构体</h2>
+  <!-- ====== LabelStruct Struct ====== -->
+  <h2 id="label-struct">LabelStruct Structure</h2>
   <p>
-    <code>LabelStruct</code> 是 Fixed Label 和 UserLabel 共用的数据结构，定义了一个标签的键和值。
+    <code>LabelStruct</code> is the shared data structure for Fixed Label and UserLabel, defining a label's key and value.
   </p>
 
   <div class="table-wrap">
@@ -2902,14 +2902,14 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td><code>Label</code></td>
           <td>string</td>
-          <td>16 字符</td>
-          <td>标签键，描述标签的含义（如 "room"、"floor"）</td>
+          <td>16 chars</td>
+          <td>Label key, describing what the label means (e.g. "room", "floor")</td>
         </tr>
         <tr>
           <td><code>Value</code></td>
           <td>string</td>
-          <td>16 字符</td>
-          <td>标签值，键对应的具体内容（如 "kitchen"、"2"）</td>
+          <td>16 chars</td>
+          <td>Label value, the specific content for the key (e.g. "kitchen", "2")</td>
         </tr>
       </tbody>
     </table>
@@ -2921,86 +2921,86 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">room</span>
       <div>
         <span class="enum-name">Room</span>
-        <span class="enum-desc">如 "kitchen"、"bedroom"、"living room"</span>
+        <span class="enum-desc">e.g. "kitchen", "bedroom", "living room"</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">floor</span>
       <div>
         <span class="enum-name">Floor</span>
-        <span class="enum-desc">如 "1"、"2"、"B1"</span>
+        <span class="enum-desc">e.g. "1", "2", "B1"</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">orientation</span>
       <div>
         <span class="enum-name">Orientation</span>
-        <span class="enum-desc">如 "N"、"S"、"NE"</span>
+        <span class="enum-desc">e.g. "N", "S", "NE"</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">position</span>
       <div>
         <span class="enum-name">Position</span>
-        <span class="enum-desc">如 "left"、"right"、"top"</span>
+        <span class="enum-desc">e.g. "left", "right", "top"</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">zone</span>
       <div>
         <span class="enum-name">Zone</span>
-        <span class="enum-desc">如 "A"、"B"、"public"</span>
+        <span class="enum-desc">e.g. "A", "B", "public"</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">标签键没有强制规范</div>
+    <div class="callout-title">Label Keys Are Not Strictly Standardized</div>
     <p>
-      Matter 规范没有定义标签键的固定列表，上面只是常见用法。
-      制造商可以使用任意字符串作为键，只要不超过 16 个字符。
-      App 端不应硬编码对特定键的依赖，而应优雅地展示任何键值对。
+      The Matter specification does not define a fixed list of label keys; the above are just common usages.
+      Manufacturers can use any string as a key, as long as it doesn't exceed 16 characters.
+      Apps should not hardcode dependencies on specific keys; instead, they should gracefully display any key-value pair.
     </p>
   </div>
 
-  <!-- ====== 命令 ====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    Fixed Label Cluster <strong>没有任何命令</strong>。这是一个纯数据 Cluster ——
-    只提供只读属性供 App 读取，不接受任何写入或操作指令。
-    如果需要修改标签，请使用 UserLabel Cluster（<code>0x0041</code>）。
+    Fixed Label Cluster has <strong>no commands</strong>. This is a pure data Cluster —
+    it only provides read-only attributes for Apps to read, accepting no write or action commands.
+    To modify labels, use the UserLabel Cluster (<code>0x0041</code>).
   </p>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>读取一个厨房传感器设备的 Fixed Label 属性：</p>
+  <p>Reading Fixed Label attributes of a kitchen sensor device:</p>
   <pre><code>{
-  // --- 属性 ---
-  "0x0": [                    // LabelList — 出厂标签列表
+  // --- Attributes ---
+  "0x0": [                    // LabelList — Factory label list
     {
-      "Label": "room",        // 标签键：房间
-      "Value": "kitchen"      // 标签值：厨房
+      "Label": "room",        // Label key: room
+      "Value": "kitchen"      // Label value: kitchen
     },
     {
-      "Label": "floor",       // 标签键：楼层
-      "Value": "2"            // 标签值：2 楼
+      "Label": "floor",       // Label key: floor
+      "Value": "2"            // Label value: 2nd floor
     },
     {
-      "Label": "orientation", // 标签键：朝向
-      "Value": "N"            // 标签值：北
+      "Label": "orientation", // Label key: orientation
+      "Value": "N"            // Label value: north
     }
   ]
 }</code></pre>
 
-  <!-- ====== 应用场景 ====== -->
+  <!-- ====== Usage Scenarios ====== -->
   <h2 id="scenarios">Usage Scenarios</h2>
 
   <h3 id="scenario-1">Scenario 1: Automatically Assign Device to Room</h3>
   <p>
-    用户配网完成后，App 读取设备的出厂标签。如果标签中包含 <code>room</code> 键，
-    App 可以自动将设备归类到对应房间，省去用户手动选择的步骤。
+    After commissioning, the App reads the device's factory labels. If the labels contain a <code>room</code> key,
+    the App can automatically categorize the device to the corresponding room, saving the user from manual selection.
   </p>
-  <pre><code>// 场景：App 读取设备的出厂标签，自动归类到对应房间
+  <pre><code>// Scenario: App reads factory labels and auto-assigns to room
 {
   "readRequests": [{
     "attributePath": {
@@ -3011,7 +3011,7 @@ export const clusters: Record<string, ClusterContent> = {
   }]
 }
 
-// 返回结果
+// Response
 {
   "attributeReports": [{
     "attributeData": {
@@ -3027,18 +3027,18 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">Developer Advice</div>
     <p>
-      配网完成后自动读取 Fixed Label，用已知的键（room、floor）做初始分组建议，
-      但始终让用户确认或修改。出厂标签只是参考，用户的实际安装位置可能不同。
+      Automatically read Fixed Label after commissioning. Use known keys (room, floor) for initial grouping suggestions,
+      but always let users confirm or modify. Factory labels are just a reference; the actual installation location may differ.
     </p>
   </div>
 
   <h3 id="scenario-2">Scenario 2: Distinguishing Sub-functions in Multi-Endpoint Devices</h3>
   <p>
-    一个双路开关有两个 Endpoint，每个 Endpoint 上的 Fixed Label 标注了物理位置（左/右）。
-    App 读取标签后可以直接在 UI 上标注「左开关」「右开关」，而不是显示无意义的 Endpoint 编号。
+    A dual-switch has two Endpoints, each with Fixed Labels marking the physical position (left/right).
+    After reading labels, the App can directly label them as "Left Switch" and "Right Switch" in the UI, instead of showing meaningless Endpoint numbers.
   </p>
-  <pre><code>// 场景：多 Endpoint 设备，每个 Endpoint 有不同的出厂标签
-// Endpoint 1 — 左侧开关
+  <pre><code>// Scenario: Multi-Endpoint device, each Endpoint with different factory labels
+// Endpoint 1 — Left Switch
 {
   "readRequests": [{
     "attributePath": {
@@ -3048,9 +3048,9 @@ export const clusters: Record<string, ClusterContent> = {
     }
   }]
 }
-// 返回: [{ "Label": "position", "Value": "left" }]
+// Returns: [{ "Label": "position", "Value": "left" }]
 
-// Endpoint 2 — 右侧开关
+// Endpoint 2 — Right Switch
 {
   "readRequests": [{
     "attributePath": {
@@ -3060,14 +3060,14 @@ export const clusters: Record<string, ClusterContent> = {
     }
   }]
 }
-// 返回: [{ "Label": "position", "Value": "right" }]</code></pre>
+// Returns: [{ "Label": "position", "Value": "right" }]</code></pre>
 
   <div class="callout callout-tip">
     <div class="callout-title">Developer Advice</div>
     <p>
-      对于多 Endpoint 设备，逐个读取每个 Endpoint 的 Fixed Label。
-      如果标签中有 <code>position</code> 键，用它来标注 UI 中的子设备名称，
-      给用户更直观的控制界面。
+      For multi-Endpoint devices, read Fixed Labels from each Endpoint individually.
+      If a <code>position</code> key exists in the labels, use it to label the sub-device name in the UI,
+      providing users with a more intuitive control interface.
     </p>
   </div>
 
@@ -3093,42 +3093,42 @@ export const clusters: Record<string, ClusterContent> = {
     content: `<h1>UserLabel Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x0041</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 通常在 <code>Endpoint 0</code>（Root）或功能端点 &nbsp;|&nbsp;
-    <strong>角色</strong>: Server（可读写，无命令）
+    <strong>Endpoint</strong>: Typically on <code>Endpoint 0</code> (Root) or functional endpoints &nbsp;|&nbsp;
+    <strong>Role</strong>: Server (read/write, no commands)
   </p>
   <p>
-    UserLabel 允许用户或 App 为设备打上自定义的键值对标签，用于分类、分组、备注等用途。
-    这是一个极其简单的 Cluster —— <strong>0 个命令</strong>、<strong>0 个事件</strong>，
-    只有 <strong>1 个可写属性</strong> <code>LabelList</code>，通过直接写属性来管理标签。
+    UserLabel allows users or Apps to tag devices with custom key-value pair labels for classification, grouping, notes, etc.
+    This is an extremely simple Cluster — <strong>0 commands</strong>, <strong>0 events</strong>,
+    with only <strong>1 writable attribute</strong> <code>LabelList</code>, managing labels through direct attribute writes.
   </p>
 
   <div class="callout callout-info">
     <div class="callout-title">UserLabel vs FixedLabel</div>
     <p>
-      Matter 有两个标签 Cluster，区别在于谁能改：
+      Matter has two label Clusters, differing in who can modify them:
     </p>
     <ul>
-      <li><strong>FixedLabel（0x0040）</strong> —— 厂商在出厂时写入的标签，<strong>只读</strong>，App 无法修改。例如 <code>"room"/"factory-default"</code>、<code>"model"/"v2"</code></li>
-      <li><strong>UserLabel（0x0041）</strong> —— 用户自定义的标签，<strong>可读写</strong>，App 可以随时增删改。例如 <code>"zone"/"living-room"</code>、<code>"owner"/"alice"</code></li>
+      <li><strong>FixedLabel (0x0040)</strong> — Labels written by the manufacturer at factory, <strong>read-only</strong>, Apps cannot modify. E.g. <code>"room"/"factory-default"</code>, <code>"model"/"v2"</code></li>
+      <li><strong>UserLabel (0x0041)</strong> — User-defined labels, <strong>read/write</strong>, Apps can add/remove/modify at any time. E.g. <code>"zone"/"living-room"</code>, <code>"owner"/"alice"</code></li>
     </ul>
     <p>
-      两者数据结构完全相同（都是 <code>LabelStruct</code> 列表），只是读写权限不同。
-      读取设备标签时，应该合并两个 Cluster 的结果，FixedLabel 提供厂商默认值，UserLabel 提供用户自定义值。
+      Both share the same data structure (<code>LabelStruct</code> list); they differ only in read/write permissions.
+      When reading device labels, merge results from both Clusters: FixedLabel provides vendor defaults, UserLabel provides user customizations.
     </p>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">Per-Fabric 隔离</div>
+    <div class="callout-title">Per-Fabric Isolation</div>
     <p>
-      UserLabel 的标签是 <strong>per-fabric（按 Fabric 隔离）</strong>的。
-      每个 Fabric 只能看到和修改自己写入的标签，无法访问其他 Fabric 的标签。
-      例如，用户通过 Apple Home 写入的 <code>"zone"/"kitchen"</code>，在 Google Home 上是看不到的。
+      UserLabel's labels are <strong>per-fabric (isolated by Fabric)</strong>.
+      Each Fabric can only see and modify its own labels; it cannot access other Fabrics' labels.
+      For example, <code>"zone"/"kitchen"</code> written via Apple Home is not visible on Google Home.
     </p>
   </div>
 
-  <!-- ====== 属性总览 ====== -->
+  <!-- ====== Attribute Overview ====== -->
   <h2 id="attributes">Attributes</h2>
-  <p>UserLabel 只有一个属性，且是必须支持的。</p>
+  <p>UserLabel has only one attribute, which is mandatory.</p>
 
   <div class="table-wrap">
     <table>
@@ -3147,32 +3147,32 @@ export const clusters: Record<string, ClusterContent> = {
           <td>LabelList</td>
           <td>list&lt;LabelStruct&gt;</td>
           <td>Read/Write</td>
-          <td>用户自定义的标签列表</td>
+          <td>User-defined label list</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h3 id="attr-0x00">LabelList (Label List)</h3>
   <p>
-    一个 <code>LabelStruct</code> 的列表，每个元素是一对 Label（键）+ Value（值）字符串。
-    App 通过 <strong>Write Attribute</strong> 操作来增删改标签 —— 每次写入都是<strong>整体替换</strong>，
-    不是追加。如果想新增一个标签，需要先读取现有列表，追加后再整体写回。
+    A list of <code>LabelStruct</code>, where each element is a Label (key) + Value (value) string pair.
+    Apps add/remove/modify labels via <strong>Write Attribute</strong> operations — each write is a <strong>full replacement</strong>,
+    not an append. To add a new label, first read the existing list, append, then write the entire list back.
   </p>
   <div class="callout callout-tip">
-    <div class="callout-title">没有命令，全靠写属性</div>
+    <div class="callout-title">No Commands, All Attribute Writes</div>
     <p>
-      UserLabel 没有定义任何命令。所有操作（新增、修改、删除标签）都通过写 <code>LabelList</code> 属性完成。
-      这是 Matter 中少数「纯属性驱动」的 Cluster 之一。写入时要注意整体替换的语义 —— 漏掉已有标签相当于删除它。
+      UserLabel defines no commands. All operations (add, modify, delete labels) are done by writing the <code>LabelList</code> attribute.
+      This is one of the few "purely attribute-driven" Clusters in Matter. Note the full-replacement semantics — omitting an existing label is equivalent to deleting it.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== LabelStruct 结构体 ====== -->
-  <h2 id="label-struct">LabelStruct 结构体</h2>
+  <!-- ====== LabelStruct Struct ====== -->
+  <h2 id="label-struct">LabelStruct Structure</h2>
   <p>
-    <code>LabelStruct</code> 是 UserLabel 和 FixedLabel 共用的数据结构，表示一个键值对标签。
+    <code>LabelStruct</code> is the shared data structure for UserLabel and FixedLabel, representing a key-value pair label.
   </p>
 
   <div class="table-wrap">
@@ -3191,35 +3191,35 @@ export const clusters: Record<string, ClusterContent> = {
           <td><code>0x00</code></td>
           <td>Label</td>
           <td>string</td>
-          <td>最长 16 字符</td>
-          <td>标签的键名，如 <code>"zone"</code>、<code>"owner"</code></td>
+          <td>Max 16 chars</td>
+          <td>Label key name, e.g. <code>"zone"</code>, <code>"owner"</code></td>
         </tr>
         <tr>
           <td><code>0x01</code></td>
           <td>Value</td>
           <td>string</td>
-          <td>最长 16 字符</td>
-          <td>标签的值，如 <code>"living-room"</code>、<code>"alice"</code></td>
+          <td>Max 16 chars</td>
+          <td>Label value, e.g. <code>"living-room"</code>, <code>"alice"</code></td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">长度限制</div>
+    <div class="callout-title">Length Limit</div>
     <p>
-      Label 和 Value 都有 <strong>最长 16 字符</strong>的硬限制。
-      App 端在写入前应做校验，超出长度的写入会被设备拒绝（返回 <code>CONSTRAINT_ERROR</code>）。
-      建议使用短小精悍的英文缩写作为键名，值可以适当使用中文但要注意字符长度（中文字符按 UTF-8 编码计算可能占 3 字节，但 Matter 按字符数计算，16 个中文字符是允许的）。
+      Both Label and Value have a hard limit of <strong>max 16 characters</strong>.
+      Apps should validate before writing; exceeding the length limit will be rejected by the device (returning <code>CONSTRAINT_ERROR</code>).
+      It is recommended to use short English abbreviations as key names. Values can use characters from any language, but note the character length (Matter counts by characters, not bytes, so 16 characters of any language are allowed).
     </p>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>读取一台智能灯的 UserLabel Cluster 属性：</p>
+  <p>Reading UserLabel Cluster attributes of a smart light:</p>
   <pre><code>{
-  // --- 属性 ---
-  "0x0": [                    // LabelList（标签列表）
+  // --- Attributes ---
+  "0x0": [                    // LabelList (label list)
     {
       "0": "zone",            // Label = "zone"
       "1": "living-room"      // Value = "living-room"
@@ -3235,7 +3235,7 @@ export const clusters: Record<string, ClusterContent> = {
   ]
 }</code></pre>
 
-  <p>写入标签（Write Attribute 请求）：</p>
+  <p>Writing labels (Write Attribute request):</p>
   <pre><code>{
   "writeRequests": [{
     "attributePath": {
@@ -3254,39 +3254,39 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">Developer Advice</div>
     <p>
-      写属性的流程是<strong>读 → 改 → 写</strong>三步：
+      The write attribute flow is a three-step <strong>read → modify → write</strong> process:
     </p>
     <ol>
-      <li>先 Read Attribute 获取当前 <code>LabelList</code></li>
-      <li>在本地修改列表（增 / 删 / 改某个标签）</li>
-      <li>将完整列表通过 Write Attribute 写回设备</li>
+      <li>First Read Attribute to get the current <code>LabelList</code></li>
+      <li>Modify the list locally (add / remove / change a label)</li>
+      <li>Write the complete list back to the device via Write Attribute</li>
     </ol>
     <p>
-      直接写入新列表而不先读取，会丢失其他 App 之前写入的标签。
-      如果多个 App 可能同时操作标签，建议加上乐观锁逻辑（读取时记录版本，写入前再次确认）。
+      Writing a new list without reading first will lose labels previously written by other Apps.
+      If multiple Apps may operate on labels simultaneously, consider adding optimistic locking logic (record version on read, verify before write).
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
     <summary>Scenario 1: Group Devices by Zone</summary>
     <div class="scenario-content">
       <p>
-        用户家中有多台同类设备（例如 5 个智能灯泡），需要按房间、楼层等维度组织管理。
-        通过 UserLabel 为每台设备打上位置标签，App 就可以按标签分组展示。
+        A user has multiple devices of the same type (e.g. 5 smart light bulbs) and needs to organize them by room, floor, etc.
+        By tagging each device with location labels via UserLabel, the App can display them grouped by label.
       </p>
       <ol>
-        <li>配网完成后，引导用户为设备设置区域标签</li>
-        <li>写入标签：<code>{'{"zone": "living-room", "floor": "1F"}'}</code></li>
-        <li>App 首页按 <code>zone</code> 值分组显示设备</li>
-        <li>用户搬动设备后，可在 App 中修改 <code>zone</code> 值</li>
-        <li>支持自定义区域名，不限于预置列表</li>
+        <li>After commissioning, guide users to set zone labels for devices</li>
+        <li>Write labels: <code>{'{"zone": "living-room", "floor": "1F"}'}</code></li>
+        <li>App home page groups devices by <code>zone</code> value</li>
+        <li>After moving a device, users can modify the <code>zone</code> value in the App</li>
+        <li>Supports custom zone names, not limited to preset lists</li>
       </ol>
       <p>
-        与 Matter 的 Groups Cluster 不同，UserLabel 是纯元数据标记，不影响设备的群组控制行为。
-        适合做 App 层面的 UI 分组，而非设备层面的联动控制。
+        Unlike Matter's Groups Cluster, UserLabel is pure metadata tagging and does not affect device group control behavior.
+        Suitable for App-level UI grouping, not device-level coordinated control.
       </p>
     </div>
   </details>
@@ -3295,18 +3295,18 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Scenario 2: Device Ownership Tagging in Multi-user Households</summary>
     <div class="scenario-content">
       <p>
-        一个家庭中有多个成员，某些设备归属于特定成员（如儿童房的灯、书房的台灯）。
-        通过 UserLabel 记录归属信息，App 可以为不同成员展示不同的设备视图。
+        A household has multiple members, with some devices belonging to specific members (e.g. children's room light, study desk lamp).
+        By recording ownership information via UserLabel, the App can show different device views for different members.
       </p>
       <ol>
-        <li>为设备写入归属标签：<code>{'{"owner": "alice", "usage": "reading"}'}</code></li>
-        <li>App 根据当前登录用户的名字过滤 <code>owner</code> 标签</li>
-        <li>「我的设备」页面只展示 owner 匹配的设备</li>
-        <li>管理员视图仍可看到全部设备</li>
+        <li>Write ownership labels for the device: <code>{'{"owner": "alice", "usage": "reading"}'}</code></li>
+        <li>App filters by the <code>owner</code> label based on the currently logged-in user's name</li>
+        <li>The "My Devices" page only shows devices with matching owner</li>
+        <li>Admin view can still see all devices</li>
       </ol>
       <p>
-        注意：UserLabel 是 per-fabric 的，如果家庭成员使用不同的 Fabric（不同品牌的 App），
-        各自的标签互相不可见。同一 Fabric 下的所有 App 共享同一套标签。
+        Note: UserLabel is per-fabric. If family members use different Fabrics (different brand Apps),
+        their labels are invisible to each other. All Apps under the same Fabric share the same set of labels.
       </p>
     </div>
   </details>
@@ -3338,29 +3338,29 @@ export const clusters: Record<string, ClusterContent> = {
     content: `<h1>LocalizationConfiguration Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x002B</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: <code>Endpoint 0</code>（Root / Node 级别）
+    <strong>Endpoint</strong>: <code>Endpoint 0</code> (Root / Node level)
   </p>
   <p>
-    LocalizationConfiguration 用于管理设备的语言和区域设置。它让控制端（App / 语音助手）能够查询设备支持哪些语言，
-    并切换设备当前使用的语言区域。语言标签遵循 <strong>BCP 47</strong> 标准（如 <code>"en-US"</code>、<code>"zh-CN"</code>）。
+    LocalizationConfiguration manages the device's language and regional settings. It enables the controller (App / voice assistant) to query which languages the device supports
+    and switch the device's current language locale. Language tags follow the <strong>BCP 47</strong> standard (e.g. <code>"en-US"</code>, <code>"zh-CN"</code>).
   </p>
   <p>
-    这个 Cluster 非常简单 —— 只有 <strong>2 个属性</strong>，<strong>没有命令</strong>。
-    语言切换通过直接 <strong>Write（写入）</strong> <code>ActiveLocale</code> 属性完成。
+    This Cluster is very simple — only <strong>2 attributes</strong>, <strong>no commands</strong>.
+    Language switching is done by directly <strong>writing</strong> the <code>ActiveLocale</code> attribute.
   </p>
 
   <div class="callout callout-info">
     <div class="callout-title">When to Use</div>
     <p>
-      用户在 App 里切换设备语言（比如把门锁的语音提示从英文改成中文）时，
-      就是向这个 Cluster 写入新的 <code>ActiveLocale</code> 值。
-      也可以在配网完成后自动将设备语言设置为与手机系统语言一致。
+      When users switch device language in the App (e.g. changing a door lock's voice prompts from English to Chinese),
+      they are writing a new <code>ActiveLocale</code> value to this Cluster.
+      It can also be used to automatically set the device language to match the phone's system language after commissioning.
     </p>
   </div>
 
-  <!-- ====== 属性总览 ====== -->
+  <!-- ====== Attribute Overview ====== -->
   <h2 id="attributes">Attribute Overview</h2>
-  <p>LocalizationConfiguration 只有两个属性，都是必须支持的。点击属性 ID 可跳转到详细说明。</p>
+  <p>LocalizationConfiguration has only two attributes, both mandatory. Click an attribute ID to jump to its detailed description.</p>
 
   <div class="table-wrap">
     <table>
@@ -3379,40 +3379,40 @@ export const clusters: Record<string, ClusterContent> = {
           <td>ActiveLocale</td>
           <td>string</td>
           <td>Read/Write</td>
-          <td>当前生效的语言区域（BCP 47 标签）</td>
+          <td>Currently active language locale (BCP 47 tag)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x01">
           <td><a href="#attr-0x01"><code>0x01</code></a></td>
           <td>SupportedLocales</td>
           <td>list&lt;string&gt;</td>
           <td>Read-only</td>
-          <td>设备支持的所有语言区域列表</td>
+          <td>List of all language locales supported by the device</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h3 id="attr-0x00">ActiveLocale (Current Language Region)</h3>
   <p>
-    设备当前生效的语言区域标签，格式为 BCP 47（如 <code>"en-US"</code>、<code>"zh-CN"</code>）。
-    写入一个新值即可切换设备语言，但写入的值<strong>必须</strong>在 <code>SupportedLocales</code> 列表中，
-    否则设备会返回 <code>CONSTRAINT_ERROR</code>。
+    The device's currently active language locale tag, in BCP 47 format (e.g. <code>"en-US"</code>, <code>"zh-CN"</code>).
+    Writing a new value switches the device language, but the written value <strong>must</strong> be in the <code>SupportedLocales</code> list;
+    otherwise the device will return <code>CONSTRAINT_ERROR</code>.
   </p>
   <div class="callout callout-tip">
-    <div class="callout-title">BCP 47 标签格式</div>
+    <div class="callout-title">BCP 47 Tag Format</div>
     <p>
-      BCP 47 语言标签由语言代码和可选的区域代码组成，中间用连字符连接。常见示例：
+      BCP 47 language tags consist of a language code and an optional region code, connected by a hyphen. Common examples:
     </p>
     <ul>
-      <li><code>en-US</code> — 英语（美国）</li>
-      <li><code>zh-CN</code> — 简体中文（中国大陆）</li>
-      <li><code>zh-TW</code> — 繁体中文（台湾）</li>
-      <li><code>ja-JP</code> — 日语（日本）</li>
-      <li><code>de-DE</code> — 德语（德国）</li>
+      <li><code>en-US</code> — English (United States)</li>
+      <li><code>zh-CN</code> — Simplified Chinese (Mainland China)</li>
+      <li><code>zh-TW</code> — Traditional Chinese (Taiwan)</li>
+      <li><code>ja-JP</code> — Japanese (Japan)</li>
+      <li><code>de-DE</code> — German (Germany)</li>
     </ul>
   </div>
-  <p>写入示例（将设备切换为简体中文）：</p>
+  <p>Write example (switching device to Simplified Chinese):</p>
   <pre><code>{
   "writeRequests": [{
     "attributePath": {
@@ -3420,40 +3420,40 @@ export const clusters: Record<string, ClusterContent> = {
       "clusterId": "0x002B",
       "attributeId": "0x00"        // ActiveLocale
     },
-    "attributeValue": "zh-CN"      // 切换为简体中文
+    "attributeValue": "zh-CN"      // Switch to Simplified Chinese
   }]
 }</code></pre>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
   <h3 id="attr-0x01">SupportedLocales (Supported Language List)</h3>
   <p>
-    只读属性，返回设备支持的所有语言区域标签列表。列表内容由设备固件决定，App 端无法修改。
-    在切换语言之前，应先读取这个属性确认设备支持目标语言。
+    Read-only attribute, returning the list of all language locale tags supported by the device. List content is determined by device firmware; Apps cannot modify it.
+    Before switching languages, read this attribute first to confirm the device supports the target language.
   </p>
   <div class="callout callout-warning">
     <div class="callout-title">Note</div>
     <p>
-      不同设备的支持列表差异很大。低成本设备可能只支持 <code>["en-US"]</code> 一种语言，
-      而高端设备可能支持十几种。App 切换语言前务必检查此列表，避免写入不支持的值导致错误。
+      Support lists vary widely across devices. Low-cost devices may only support one language <code>["en-US"]</code>,
+      while high-end devices may support over a dozen. Always check this list before switching languages to avoid errors from writing unsupported values.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 没有命令 ====== -->
+  <!-- ====== No Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    LocalizationConfiguration Cluster <strong>没有定义任何命令</strong>。
-    所有操作都通过直接读写属性完成 —— 读取 <code>SupportedLocales</code> 查看支持的语言，
-    写入 <code>ActiveLocale</code> 切换语言。这是 Matter 中最简单的交互模式之一。
+    LocalizationConfiguration Cluster <strong>does not define any commands</strong>.
+    All operations are done through direct attribute reads/writes — read <code>SupportedLocales</code> to check supported languages,
+    write <code>ActiveLocale</code> to switch language. This is one of the simplest interaction patterns in Matter.
   </p>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>读取一个智能门锁设备的 LocalizationConfiguration Cluster 属性：</p>
+  <p>Reading LocalizationConfiguration Cluster attributes of a smart door lock device:</p>
   <pre><code>{
-  // --- 属性 ---
-  "0x0": "en-US",           // ActiveLocale = 当前语言区域
-  "0x1": [                  // SupportedLocales = 设备支持的语言列表
+  // --- Attributes ---
+  "0x0": "en-US",           // ActiveLocale = current language locale
+  "0x1": [                  // SupportedLocales = device supported language list
     "en-US",
     "zh-CN",
     "zh-TW",
@@ -3464,26 +3464,26 @@ export const clusters: Record<string, ClusterContent> = {
   ]
 }</code></pre>
 
-  <!-- ====== 实际场景 ====== -->
+  <!-- ====== Real-world Scenarios ====== -->
   <h2 id="scenarios">Real-world Scenarios</h2>
 
   <details>
     <summary>Scenario 1: Automatically Set Device Language After Commissioning</summary>
     <div class="scenario-content">
       <p>
-        设备配网完成后，App 自动将设备语言与手机系统语言对齐，避免用户手动设置：
+        After device commissioning, the App automatically aligns the device language with the phone's system language, avoiding manual setup:
       </p>
       <ol>
-        <li>获取手机系统语言（如 <code>"zh-CN"</code>）</li>
-        <li>读取设备的 <code>SupportedLocales</code> 属性，得到支持列表</li>
-        <li>检查系统语言是否在支持列表中：
+        <li>Get the phone's system language (e.g. <code>"zh-CN"</code>)</li>
+        <li>Read the device's <code>SupportedLocales</code> attribute to get the supported list</li>
+        <li>Check if the system language is in the supported list:
           <ul>
-            <li>精确匹配优先（<code>"zh-CN"</code>）</li>
-            <li>无精确匹配则尝试语言前缀匹配（<code>"zh"</code> 开头的任意项）</li>
-            <li>都没有则保持设备默认语言，不做修改</li>
+            <li>Exact match takes priority (<code>"zh-CN"</code>)</li>
+            <li>If no exact match, try language prefix matching (any item starting with <code>"zh"</code>)</li>
+            <li>If neither matches, keep the device's default language without modification</li>
           </ul>
         </li>
-        <li>匹配成功后，Write 写入 <code>ActiveLocale</code> 完成切换</li>
+        <li>After a successful match, Write to <code>ActiveLocale</code> to complete the switch</li>
       </ol>
     </div>
   </details>
@@ -3492,17 +3492,17 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Scenario 2: App Language Settings UI</summary>
     <div class="scenario-content">
       <p>
-        在设备详情页提供「语言设置」选项，让用户手动选择设备语言：
+        Provide a "Language Settings" option on the device details page for manual language selection:
       </p>
       <ol>
-        <li>进入设备语言设置页，读取 <code>SupportedLocales</code> 渲染可选列表</li>
-        <li>读取 <code>ActiveLocale</code> 标记当前选中项</li>
-        <li>用户选择新语言后，Write 写入 <code>ActiveLocale</code></li>
-        <li>写入成功后刷新 UI；若返回 <code>CONSTRAINT_ERROR</code>，提示用户该语言不受支持</li>
+        <li>Enter the device language settings page, read <code>SupportedLocales</code> to render the options list</li>
+        <li>Read <code>ActiveLocale</code> to mark the currently selected item</li>
+        <li>After the user selects a new language, Write to <code>ActiveLocale</code></li>
+        <li>Refresh UI after successful write; if <code>CONSTRAINT_ERROR</code> is returned, notify the user that the language is not supported</li>
       </ol>
       <p>
-        建议将 BCP 47 标签转换为用户可读的语言名称显示（如 <code>"zh-CN"</code> 显示为「简体中文」），
-        避免直接展示原始标签。
+        It is recommended to convert BCP 47 tags to user-readable language names (e.g. display <code>"zh-CN"</code> as "Simplified Chinese"),
+        instead of showing raw tags directly.
       </p>
     </div>
   </details>
@@ -3510,9 +3510,9 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">Developer Advice</div>
     <p>
-      LocalizationConfiguration 影响的是设备本身的语言行为（如语音提示、屏幕显示文字），
-      不影响 App 端的 UI 语言。切换后设备可能需要几秒钟才能完成内部语言资源的加载，
-      期间设备行为可能短暂保持旧语言。
+      LocalizationConfiguration affects the device's own language behavior (e.g. voice prompts, screen display text),
+      not the App's UI language. After switching, the device may need a few seconds to load internal language resources,
+      during which the device behavior may briefly remain in the old language.
     </p>
   </div>
 
@@ -3538,25 +3538,25 @@ export const clusters: Record<string, ClusterContent> = {
     content: `<h1>TimeFormatLocalization Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x002C</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: <code>Endpoint 0</code>（Root）&nbsp;|&nbsp;
-    <strong>角色</strong>: Server（通过 Write 属性配置，无命令）
+    <strong>Endpoint</strong>: <code>Endpoint 0</code> (Root) &nbsp;|&nbsp;
+    <strong>Role</strong>: Server (configured via Write attribute, no commands)
   </p>
   <p>
-    TimeFormatLocalization 控制设备上的时间和日期<strong>显示格式</strong>偏好。
-    它不负责时间本身的获取或同步（那是 TimeSynchronization Cluster 的工作），
-    而是决定设备在屏幕、面板等界面上怎么<strong>展示</strong>时间 —— 用 12 小时制还是 24 小时制，用公历还是其他日历。
+    TimeFormatLocalization controls the time and date <strong>display format</strong> preferences on the device.
+    It is not responsible for obtaining or synchronizing time itself (that is the job of TimeSynchronization Cluster),
+    but rather determines how the device <strong>displays</strong> time on screens, panels, etc. — 12-hour or 24-hour format, Gregorian or other calendars.
   </p>
   <p>
-    这个 Cluster 非常精简 —— 最少只有 <strong>1 个属性</strong>（HourFormat），
-    支持 CALFMT Feature 时再增加 2 个日历相关属性。没有任何命令，所有配置都通过<strong>直接写属性</strong>完成。
+    This Cluster is very compact — at minimum only <strong>1 attribute</strong> (HourFormat),
+    with 2 additional calendar-related attributes when CALFMT Feature is supported. No commands; all configuration is done through <strong>direct attribute writes</strong>.
   </p>
 
   <div class="callout callout-info">
     <div class="callout-title">When to Use</div>
     <p>
-      用户拿到一台带屏幕的智能设备（恒温器、智能面板、带显示的门锁），
-      发现上面的时间显示是 12 小时制，想改成 24 小时制？写一下 <code>HourFormat</code> 就行。
-      需要在设备屏幕上显示农历日期？先确认设备支持 CALFMT Feature，然后写 <code>ActiveCalendarType</code>。
+      A user gets a smart device with a screen (thermostat, smart panel, door lock with display),
+      finds the time displayed in 12-hour format, and wants to change to 24-hour? Just write <code>HourFormat</code>.
+      Need to display a lunar calendar date on the device screen? First confirm the device supports CALFMT Feature, then write <code>ActiveCalendarType</code>.
     </p>
   </div>
 
@@ -3571,9 +3571,9 @@ export const clusters: Record<string, ClusterContent> = {
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== Feature 位图 ====== -->
+  <!-- ====== Feature Bitmap ====== -->
   <h2 id="features">Feature Bitmap</h2>
-  <p>TimeFormatLocalization 通过 <code>FeatureMap</code>（0xFFFC）声明设备是否支持日历格式配置：</p>
+  <p>TimeFormatLocalization declares calendar format support through <code>FeatureMap</code> (0xFFFC):</p>
 
   <div class="enum-cards enum-cards-grid">
     <div class="enum-card">
@@ -3586,18 +3586,18 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">Feature 影响哪些属性</div>
+    <div class="callout-title">Feature Impact on Attributes</div>
     <p>
-      <code>HourFormat</code> 是必须支持的，与 Feature 无关。
-      只有当设备声明了 <strong>CALFMT</strong> Feature 时，<code>ActiveCalendarType</code> 和
-      <code>SupportedCalendarTypes</code> 才可用。
-      简单的设备（如只有时钟显示的插座）通常不支持 CALFMT，只有 HourFormat 一个属性。
+      <code>HourFormat</code> is mandatory, regardless of Features.
+      Only when the device declares the <strong>CALFMT</strong> Feature are <code>ActiveCalendarType</code> and
+      <code>SupportedCalendarTypes</code> available.
+      Simple devices (e.g. outlets with only a clock display) typically don't support CALFMT and have only the HourFormat attribute.
     </p>
   </div>
 
-  <!-- ====== 属性总览 ====== -->
+  <!-- ====== Attribute Overview ====== -->
   <h2 id="attributes">Attribute Overview</h2>
-  <p>TimeFormatLocalization 最多有 3 个属性，其中 2 个依赖 CALFMT Feature。点击属性 ID 可跳转到详细说明。</p>
+  <p>TimeFormatLocalization has up to 3 attributes, 2 of which depend on CALFMT Feature. Click an attribute ID to jump to its detailed description.</p>
 
   <div class="table-wrap">
     <table>
@@ -3618,7 +3618,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td>enum8</td>
           <td>Read/Write</td>
           <td>-</td>
-          <td>时间显示格式（12/24 小时制）</td>
+          <td>Time display format (12/24-hour)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x01">
           <td><a href="#attr-0x01"><code>0x01</code></a></td>
@@ -3626,7 +3626,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td>enum8</td>
           <td>Read/Write</td>
           <td>CALFMT</td>
-          <td>当前使用的日历类型</td>
+          <td>Currently used calendar type</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x02">
           <td><a href="#attr-0x02"><code>0x02</code></a></td>
@@ -3634,17 +3634,17 @@ export const clusters: Record<string, ClusterContent> = {
           <td>list&lt;enum8&gt;</td>
           <td>Read-only</td>
           <td>CALFMT</td>
-          <td>设备支持的所有日历类型列表</td>
+          <td>List of all calendar types supported by the device</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h3 id="attr-0x00">HourFormat (Time Display Format)</h3>
   <p>
-    控制设备以 12 小时制还是 24 小时制显示时间。这是 TimeFormatLocalization 唯一的必须属性，
-    所有支持此 Cluster 的设备都必须实现。可读可写，直接写属性即可切换。
+    Controls whether the device displays time in 12-hour or 24-hour format. This is TimeFormatLocalization's only mandatory attribute;
+    all devices supporting this Cluster must implement it. Read/write; switch by directly writing the attribute.
   </p>
 
   <h4>HourFormatEnum Enum Values</h4>
@@ -3673,16 +3673,16 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">UseActiveLocale 的行为</div>
+    <div class="callout-title">UseActiveLocale Behavior</div>
     <p>
-      当 HourFormat 设为 <code>0xFF</code>（UseActiveLocale）时，设备会根据
-      LocalizationConfiguration Cluster 中的 <code>ActiveLocale</code> 属性自动选择时间格式。
-      例如 <code>en-US</code> 自动使用 12 小时制，<code>zh-CN</code> 自动使用 24 小时制。
-      这是最省心的选择，让设备自己跟随语言设置。
+      When HourFormat is set to <code>0xFF</code> (UseActiveLocale), the device will follow
+      the <code>ActiveLocale</code> attribute in the LocalizationConfiguration Cluster to automatically select the time format.
+      For example, <code>en-US</code> automatically uses 12-hour format, <code>zh-CN</code> automatically uses 24-hour format.
+      This is the most hassle-free choice, letting the device follow language settings automatically.
     </p>
   </div>
-  <p>写属性示例（切换为 12 小时制）：</p>
-  <pre><code>// App → Device：将时间显示切换为 12 小时制
+  <p>Write attribute example (switch to 12-hour format):</p>
+  <pre><code>// App → Device: Switch time display to 12-hour format
 {
   "writeRequests": [{
     "attributePath": {
@@ -3697,8 +3697,8 @@ export const clusters: Record<string, ClusterContent> = {
 
   <h3 id="attr-0x01">ActiveCalendarType (Current Calendar Type)</h3>
   <p>
-    控制设备使用哪种日历系统来显示日期。可读可写，但只能写入 <code>SupportedCalendarTypes</code> 列表中包含的值。
-    需要设备支持 <strong>CALFMT</strong> Feature，否则此属性不存在。
+    Controls which calendar system the device uses to display dates. Read/write, but only values in the <code>SupportedCalendarTypes</code> list can be written.
+    Requires device support for the <strong>CALFMT</strong> Feature; otherwise this attribute does not exist.
   </p>
 
   <h4>CalendarTypeEnum Enum Values</h4>
@@ -3797,15 +3797,15 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">写入前先检查支持列表</div>
+    <div class="callout-title">Check Supported List Before Writing</div>
     <p>
-      不是所有设备都支持全部 12 种日历。写入 <code>ActiveCalendarType</code> 之前，
-      <strong>必须</strong>先读取 <code>SupportedCalendarTypes</code> 确认目标日历在列表中。
-      写入不支持的值会被设备拒绝（返回 CONSTRAINT_ERROR）。
+      Not all devices support all 12 calendar types. Before writing to <code>ActiveCalendarType</code>,
+      you <strong>must</strong> first read <code>SupportedCalendarTypes</code> to confirm the target calendar is in the list.
+      Writing an unsupported value will be rejected by the device (returns CONSTRAINT_ERROR).
     </p>
   </div>
-  <p>写属性示例（切换为中国农历）：</p>
-  <pre><code>// App → Device：将日历切换为中国农历
+  <p>Write attribute example (switch to Chinese lunar calendar):</p>
+  <pre><code>// App → Device: Switch calendar to Chinese Lunar
 {
   "writeRequests": [{
     "attributePath": {
@@ -3813,56 +3813,56 @@ export const clusters: Record<string, ClusterContent> = {
       "clusterId": "0x002C",
       "attributeId": "0x01"        // ActiveCalendarType
     },
-    "data": 1                      // Chinese（中国农历）
+    "data": 1                      // Chinese (Chinese Lunar)
   }]
 }</code></pre>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
   <h3 id="attr-0x02">SupportedCalendarTypes (Supported Calendar List)</h3>
   <p>
-    只读属性，返回设备支持的所有日历类型列表。列表中的每个元素都是 <code>CalendarTypeEnum</code> 的一个值。
-    App 应该用这个列表来构建日历选择的 UI —— 只展示设备实际支持的选项。
-    需要设备支持 <strong>CALFMT</strong> Feature。
+    Read-only attribute returning a list of all calendar types the device supports. Each element in the list is a <code>CalendarTypeEnum</code> value.
+    Apps should use this list to build the calendar selection UI — only showing options the device actually supports.
+    Requires device support for the <strong>CALFMT</strong> Feature.
   </p>
 
   <div class="callout callout-tip">
     <div class="callout-title">Developer Advice</div>
     <p>
-      读取 <code>SupportedCalendarTypes</code> 后，用它动态生成设置页面的日历选项列表。
-      大多数设备只会支持 Gregorian（公历）和当地常用的一两种日历，
-      不要硬编码全部 12 种。如果列表里只有一项，可以考虑隐藏日历切换入口。
+      After reading <code>SupportedCalendarTypes</code>, use it to dynamically generate the calendar options list on the settings page.
+      Most devices will only support Gregorian and one or two locally common calendars;
+      don't hardcode all 12. If the list has only one item, consider hiding the calendar switching entry.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>读取一台支持 CALFMT Feature 的智能恒温器的 TimeFormatLocalization 属性：</p>
+  <p>Reading TimeFormatLocalization attributes from a smart thermostat supporting CALFMT Feature:</p>
   <pre><code>{
-  // --- 时间格式 ---
-  "0x00": 1,              // HourFormat = 24hr（24 小时制）
+  // --- Time Format ---
+  "0x00": 1,              // HourFormat = 24hr (24-hour format)
 
-  // --- 日历格式（需 CALFMT Feature）---
-  "0x01": 4,              // ActiveCalendarType = Gregorian（公历）
+  // --- Calendar Format (requires CALFMT Feature) ---
+  "0x01": 4,              // ActiveCalendarType = Gregorian
   "0x02": [4, 0, 1]       // SupportedCalendarTypes = [Gregorian, Buddhist, Chinese]
 }</code></pre>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
     <summary>Scenario 1: Thermostat Time Format Settings</summary>
     <div class="scenario-content">
       <p>
-        用户新装了一台智能恒温器，屏幕上显示的是 12 小时制（如 2:30 PM），
-        习惯 24 小时制的用户希望通过 App 切换显示格式。
+        A user has installed a new smart thermostat, and the screen shows 12-hour format (e.g. 2:30 PM).
+        The user prefers 24-hour format and wants to switch via the App.
       </p>
       <ol>
-        <li>读取 <code>HourFormat</code> 确认当前值为 <code>0</code>（12hr）</li>
-        <li>App 设置页展示三个选项：12 小时制、24 小时制、跟随系统语言</li>
-        <li>用户选择 24 小时制，App 写入 <code>HourFormat = 1</code>（24hr）</li>
-        <li>设备屏幕立即从「2:30 PM」变为「14:30」</li>
-        <li>如果设备支持 CALFMT，同一设置页还可以展示日历切换选项</li>
+        <li>Read <code>HourFormat</code> to confirm current value is <code>0</code> (12hr)</li>
+        <li>App settings page shows three options: 12-hour, 24-hour, follow system language</li>
+        <li>User selects 24-hour format, App writes <code>HourFormat = 1</code> (24hr)</li>
+        <li>Device screen immediately changes from "2:30 PM" to "14:30"</li>
+        <li>If the device supports CALFMT, the same settings page can also show calendar switching options</li>
       </ol>
     </div>
   </details>
@@ -3871,16 +3871,16 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Scenario 2: Calendar Localization for Multi-region Smart Panels</summary>
     <div class="scenario-content">
       <p>
-        一款面向全球市场的智能家居面板，主屏幕显示日期和时间。
-        不同地区的用户需要看到不同的日历格式 —— 中国用户想看农历，中东用户想看伊斯兰历。
+        A smart home panel for the global market, with the main screen displaying date and time.
+        Users in different regions need different calendar formats — Chinese users want the lunar calendar, Middle Eastern users want the Islamic calendar.
       </p>
       <ol>
-        <li>读取 <code>FeatureMap</code> 确认设备支持 CALFMT（Bit 0 = 1）</li>
-        <li>读取 <code>SupportedCalendarTypes</code>，假设返回 <code>[4, 1, 7]</code>（公历、农历、伊斯兰历）</li>
-        <li>App 设置页根据列表动态生成选项，附上本地化名称：「公历」「农历」「伊斯兰历」</li>
-        <li>中国用户选择农历，App 写入 <code>ActiveCalendarType = 1</code>（Chinese）</li>
-        <li>面板屏幕日期区域从「2024-09-22」变为同时显示「甲辰年八月二十」</li>
-        <li>也可以设为 <code>UseActiveLocale (0xFF)</code>，让面板根据语言设置自动选择合适的日历</li>
+        <li>Read <code>FeatureMap</code> to confirm the device supports CALFMT (Bit 0 = 1)</li>
+        <li>Read <code>SupportedCalendarTypes</code>, assume it returns <code>[4, 1, 7]</code> (Gregorian, Chinese Lunar, Islamic)</li>
+        <li>App settings page dynamically generates options from the list with localized names: "Gregorian", "Chinese Lunar", "Islamic"</li>
+        <li>Chinese user selects lunar calendar, App writes <code>ActiveCalendarType = 1</code> (Chinese)</li>
+        <li>Panel screen date area changes from "2024-09-22" to also display the corresponding lunar date</li>
+        <li>Can also be set to <code>UseActiveLocale (0xFF)</code>, letting the panel automatically choose the appropriate calendar based on language settings</li>
       </ol>
     </div>
   </details>
@@ -3912,25 +3912,25 @@ export const clusters: Record<string, ClusterContent> = {
     content: `<h1>Unit Localization Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x002D</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: <code>Endpoint 0</code>（Root Node）
+    <strong>Endpoint</strong>: <code>Endpoint 0</code> (Root Node)
   </p>
   <p>
-    Unit Localization 用于存储用户的温度单位显示偏好。设备收到这个设置后，在本地屏幕、面板等界面上按用户偏好的单位展示温度。
-    这是 Matter 中最简单的 Cluster 之一 —— <strong>只有 1 个属性</strong>，<strong>没有命令</strong>，通过 Write 操作直接配置。
+    Unit Localization stores the user's temperature unit display preference. After receiving this setting, the device displays temperature in the user's preferred unit on its local screen, panel, etc.
+    This is one of the simplest Clusters in Matter — <strong>only 1 attribute</strong>, <strong>no commands</strong>, configured directly via Write operations.
   </p>
 
   <div class="callout callout-info">
     <div class="callout-title">When to Use</div>
     <p>
-      恒温器面板上显示的是华氏度，但用户习惯看摄氏度？写入 <code>TemperatureUnit = Celsius</code> 即可切换。
-      这个 Cluster 只影响<strong>显示单位</strong>，不会改变设备内部的温度数据（内部始终使用标准单位存储和传输）。
+      The thermostat panel shows Fahrenheit, but the user prefers Celsius? Just write <code>TemperatureUnit = Celsius</code> to switch.
+      This Cluster only affects the <strong>display unit</strong>; it does not change the device's internal temperature data (internal storage and transmission always use standard units).
     </p>
   </div>
 
   <!-- ====== Feature Map ====== -->
   <h2 id="features">Feature Map</h2>
   <p>
-    Unit Localization 定义了一个 Feature —— <code>TEMP</code>。设备声明支持该 Feature 后，才会暴露 <code>TemperatureUnit</code> 属性。
+    Unit Localization defines one Feature — <code>TEMP</code>. Only after the device declares support for this Feature will it expose the <code>TemperatureUnit</code> attribute.
   </p>
 
   <div class="table-wrap">
@@ -3948,23 +3948,23 @@ export const clusters: Record<string, ClusterContent> = {
           <td><code>0</code></td>
           <td>TEMP</td>
           <td>Temperature Unit</td>
-          <td>支持温度单位配置。启用后暴露 <code>TemperatureUnit</code> 属性</td>
+          <td>Supports temperature unit configuration. Exposes <code>TemperatureUnit</code> attribute when enabled</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">Feature 与属性的关系</div>
+    <div class="callout-title">Relationship Between Feature and Attribute</div>
     <p>
-      如果设备的 Feature Map 中 <code>TEMP</code> 位为 0，则不会暴露 TemperatureUnit 属性，读取会返回 <code>UNSUPPORTED_ATTRIBUTE</code>。
-      对于恒温器、温度传感器这类需要显示温度的设备，通常都会启用 TEMP。
+      If the <code>TEMP</code> bit is 0 in the device's Feature Map, the TemperatureUnit attribute will not be exposed, and reading it returns <code>UNSUPPORTED_ATTRIBUTE</code>.
+      For devices that need to display temperature such as thermostats and temperature sensors, TEMP is typically enabled.
     </p>
   </div>
 
-  <!-- ====== 属性总览 ====== -->
+  <!-- ====== Attribute Overview ====== -->
   <h2 id="attributes">Attribute Overview</h2>
-  <p>Unit Localization 只有一个属性，依赖 <code>TEMP</code> Feature。</p>
+  <p>Unit Localization has only one attribute, depending on the <code>TEMP</code> Feature.</p>
 
   <div class="table-wrap">
     <table>
@@ -3985,17 +3985,17 @@ export const clusters: Record<string, ClusterContent> = {
           <td>enum8</td>
           <td>Read/Write</td>
           <td>TEMP</td>
-          <td>温度显示单位偏好</td>
+          <td>Temperature display unit preference</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h3 id="attr-0x00">TemperatureUnit (Temperature Display Unit)</h3>
   <p>
-    用户偏好的温度显示单位。写入该属性后，设备在本地界面（屏幕、面板、LED 等）上按指定单位显示温度值。
-    这个属性<strong>不影响</strong>设备通过 Matter 协议上报的温度数据 —— 协议传输的温度始终以 0.01°C 为单位。
+    The user's preferred temperature display unit. After writing this attribute, the device displays temperature values in the specified unit on its local interface (screen, panel, LED, etc.).
+    This attribute <strong>does not affect</strong> temperature data reported by the device via Matter protocol — protocol-transmitted temperatures are always in units of 0.01°C.
   </p>
 
   <h4>TempUnitEnum Enum Values</h4>
@@ -4024,22 +4024,22 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 没有命令 ====== -->
+  <!-- ====== No Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    Unit Localization <strong>没有定义任何命令</strong>。所有配置通过直接 Write 属性完成。
-    这是 Matter 中常见的模式 —— 对于纯配置类的 Cluster，直接读写属性比定义专用命令更简洁。
+    Unit Localization <strong>does not define any commands</strong>. All configuration is done through direct attribute writes.
+    This is a common pattern in Matter — for purely configurational Clusters, directly reading/writing attributes is simpler than defining dedicated commands.
   </p>
 
   <div class="callout callout-tip">
     <div class="callout-title">How to Configure</div>
     <p>
-      想切换温度单位？直接对 <code>TemperatureUnit</code> 属性发一个 Write 请求就行。
-      不需要 Timed Interaction，也没有安全限制。
+      Want to switch temperature units? Just send a Write request to the <code>TemperatureUnit</code> attribute.
+      No Timed Interaction required, no security restrictions.
     </p>
   </div>
 
-  <p>Write 请求示例（切换到摄氏度）：</p>
+  <p>Write request example (switch to Celsius):</p>
   <pre><code>{
   "writeRequests": [{
     "attributePath": {
@@ -4047,11 +4047,11 @@ export const clusters: Record<string, ClusterContent> = {
       "clusterId": "0x002D",
       "attributeId": "0x00"        // TemperatureUnit
     },
-    "attributeValue": 1            // Celsius（摄氏度）
+    "attributeValue": 1            // Celsius
   }]
 }</code></pre>
 
-  <p>Read 请求示例（查询当前设置）：</p>
+  <p>Read request example (query current settings):</p>
   <pre><code>{
   "attributeRequests": [{
     "endpointId": 0,
@@ -4060,54 +4060,54 @@ export const clusters: Record<string, ClusterContent> = {
   }]
 }</code></pre>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>读取一台恒温器设备 Endpoint 0 上的 Unit Localization Cluster 属性：</p>
+  <p>Reading Unit Localization Cluster attributes on a thermostat device's Endpoint 0:</p>
   <pre><code>{
-  // --- 属性 ---
-  "0x0": 0          // TemperatureUnit = Fahrenheit（华氏度）
+  // --- Attributes ---
+  "0x0": 0          // TemperatureUnit = Fahrenheit
 }</code></pre>
 
-  <!-- ====== 实际场景 ====== -->
+  <!-- ====== Real-world Scenarios ====== -->
   <h2 id="scenarios">Real-world Scenarios</h2>
 
   <h3>Scenario 1: US User — Keep Fahrenheit</h3>
   <div class="callout callout-info">
     <div class="callout-title">Scenario Description</div>
     <p>
-      一位美国用户购买了一台 Matter 恒温器。恒温器出厂默认 <code>TemperatureUnit = Fahrenheit</code>，
-      面板上显示 <strong>72°F</strong>。用户习惯华氏度，无需修改。
+      A US user purchases a Matter thermostat. The thermostat defaults to <code>TemperatureUnit = Fahrenheit</code> out of the box,
+      displaying <strong>72°F</strong> on the panel. The user is accustomed to Fahrenheit, no changes needed.
     </p>
   </div>
   <p>
-    App 配网完成后读取属性，发现 <code>TemperatureUnit = 0</code>（Fahrenheit），App 界面同步以 °F 显示温度。
-    用户在 App 和设备面板上看到的单位一致，不需要额外操作。
+    After commissioning, the App reads the attribute, finds <code>TemperatureUnit = 0</code> (Fahrenheit), and syncs the App interface to display temperature in °F.
+    The user sees consistent units on both the App and device panel, requiring no additional action.
   </p>
 
   <h3>Scenario 2: Metric User — Switch to Celsius</h3>
   <div class="callout callout-info">
     <div class="callout-title">Scenario Description</div>
     <p>
-      一位中国用户购买了同一台恒温器（出厂默认华氏度）。面板上显示 <strong>72°F</strong>，用户看不懂。
-      用户在 App 设置中选择「摄氏度」，App 向设备写入 <code>TemperatureUnit = 1</code>（Celsius）。
+      A Chinese user purchases the same thermostat (factory default Fahrenheit). The panel shows <strong>72°F</strong>, which the user doesn't understand.
+      The user selects "Celsius" in the App settings, and the App writes <code>TemperatureUnit = 1</code> (Celsius) to the device.
     </p>
   </div>
   <p>
-    写入成功后，恒温器面板立即切换显示为 <strong>22°C</strong>。App 界面也同步以 °C 显示。
-    注意：设备通过 Matter 协议上报的原始数据（比如 Thermostat Cluster 的 LocalTemperature）始终是 0.01°C 为单位的整数值，
-    不受 TemperatureUnit 的影响。这个属性只控制设备<strong>本地显示</strong>和 App 的<strong>展示偏好</strong>。
+    After successful write, the thermostat panel immediately switches to display <strong>22°C</strong>. The App interface also syncs to display in °C.
+    Note: Raw data reported by the device via Matter protocol (e.g. Thermostat Cluster's LocalTemperature) is always an integer in units of 0.01°C,
+    unaffected by TemperatureUnit. This attribute only controls the device's <strong>local display</strong> and the App's <strong>display preference</strong>.
   </p>
 
   <div class="callout callout-tip">
     <div class="callout-title">Developer Advice</div>
     <p>
-      App 中的「温度单位设置」功能通常这样实现：
+      The "Temperature Unit Settings" feature in Apps is typically implemented as follows:
     </p>
     <ol>
-      <li>配网完成后，根据用户手机的地区设置自动判断偏好单位（<code>Locale</code> 为 <code>en_US</code> 等用华氏度，其余用摄氏度）</li>
-      <li>向设备 Endpoint 0 写入 <code>TemperatureUnit</code></li>
-      <li>App 端温度显示同步使用相同单位，保持一致</li>
-      <li>在设置页提供手动切换入口，用户随时可以改</li>
+      <li>After commissioning, automatically determine the preferred unit based on the phone's locale settings (<code>Locale</code> such as <code>en_US</code> uses Fahrenheit, others use Celsius)</li>
+      <li>Write <code>TemperatureUnit</code> to device Endpoint 0</li>
+      <li>App-side temperature display uses the same unit for consistency</li>
+      <li>Provide a manual switch entry in settings, allowing users to change at any time</li>
     </ol>
   </div>
 
@@ -4133,22 +4133,22 @@ export const clusters: Record<string, ClusterContent> = {
     content: `<h1>TimeSynchronization Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x0038</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 固定在 <code>Endpoint 0</code>（Root Endpoint）
+    <strong>Endpoint</strong>: Fixed on <code>Endpoint 0</code> (Root Endpoint)
   </p>
   <p>
-    TimeSynchronization 负责 Matter 设备的时间管理 —— 让设备知道「现在几点」「在哪个时区」「有没有夏令时」。
-    很多功能依赖准确的时间：定时自动化、日志时间戳、证书有效期校验、能源统计等。
-    没有时间同步，这些功能要么无法工作，要么会给出错误的结果。
+    TimeSynchronization handles Matter device time management — telling the device "what time is it," "what timezone," and "is there daylight saving time."
+    Many features depend on accurate time: scheduled automations, log timestamps, certificate validity checks, energy statistics, etc.
+    Without time synchronization, these features either won't work or will produce incorrect results.
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">Feature 特性</div>
+    <div class="callout-title">Features</div>
     <p>
-      TimeSynchronization Cluster 定义了三个 Feature，设备根据自身能力选择支持：
-      <strong>TZ</strong>（时区管理）支持时区列表和夏令时配置；
-      <strong>NTPC</strong>（NTP 客户端）可主动从 NTP 服务器获取时间；
-      <strong>NTPS</strong>（NTP 服务器）可作为时间源向其他设备提供时间。
-      未启用任何 Feature 的设备仅支持最基础的 SetUTCTime 手动设置时间。
+      TimeSynchronization Cluster defines three Features; devices choose which to support based on their capabilities:
+      <strong>TZ</strong> (timezone management) supports timezone lists and DST configuration;
+      <strong>NTPC</strong> (NTP client) can actively obtain time from NTP servers;
+      <strong>NTPS</strong> (NTP server) can serve as a time source providing time to other devices.
+      Devices without any Feature enabled only support the most basic SetUTCTime manual time setting.
     </p>
   </div>
 
@@ -4169,12 +4169,12 @@ export const clusters: Record<string, ClusterContent> = {
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    TimeSynchronization Cluster 共有 5 个请求命令，其中 SetTimeZone 有对应的响应命令。
-    最基础的 SetUTCTime 所有设备都支持，其余命令需要设备启用对应的 Feature。
-    点击下方表格中的命令 ID 可跳转到对应的详细说明。
+    TimeSynchronization Cluster has 5 request commands, with SetTimeZone having a corresponding response command.
+    The most basic SetUTCTime is supported by all devices; other commands require the device to enable the corresponding Feature.
+    Click a command ID in the table below to jump to its detailed description.
   </p>
 
   <div class="table-wrap">
@@ -4191,42 +4191,42 @@ export const clusters: Record<string, ClusterContent> = {
         <tr class="clickable-row" data-href="#cmd-0x00">
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>SetUTCTime</td>
-          <td>设置设备的 UTC 时间</td>
-          <td class="col-optional">无</td>
+          <td>Set the device's UTC time</td>
+          <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x01">
           <td><a href="#cmd-0x01"><code>0x01</code></a></td>
           <td>SetTrustedTimeSource</td>
-          <td>指定可信时间源节点</td>
-          <td class="col-optional">无</td>
+          <td>Specify a trusted time source node</td>
+          <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x02">
           <td><a href="#cmd-0x02"><code>0x02</code></a></td>
           <td>SetTimeZone</td>
-          <td>设置时区列表</td>
+          <td>Set timezone list</td>
           <td class="col-required">TZ</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x04">
           <td><a href="#cmd-0x04"><code>0x04</code></a></td>
           <td>SetDSTOffset</td>
-          <td>设置夏令时偏移列表</td>
+          <td>Set DST offset list</td>
           <td class="col-required">TZ</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x07">
           <td><a href="#cmd-0x07"><code>0x07</code></a></td>
           <td>SetDefaultNTP</td>
-          <td>设置默认 NTP 服务器地址</td>
+          <td>Set default NTP server address</td>
           <td class="col-required">NTPC</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
+  <!-- ====== Command Details ====== -->
   <h3 id="cmd-0x00">SetUTCTime — Set UTC Time (0x00)</h3>
   <p>
-    直接设置设备的 UTC 时间。这是最基础的时间设置方式 —— 在配网阶段，Commissioner 通常通过此命令为设备注入当前时间。
-    设备收到后会同时更新 <code>Granularity</code> 和 <code>TimeSource</code> 属性。
+    Directly sets the device's UTC time. This is the most basic time setting method — during commissioning, the Commissioner typically uses this command to inject the current time into the device.
+    Upon receiving it, the device updates both <code>Granularity</code> and <code>TimeSource</code> attributes.
   </p>
   <div class="table-wrap">
     <table>
@@ -4237,28 +4237,28 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>UTCTime</td>
           <td>epoch_us</td>
-          <td>UTC 时间，<strong>微秒级</strong>（自 2000-01-01T00:00:00Z 起的微秒数）</td>
+          <td>UTC time, <strong>microsecond-level</strong> (microseconds since 2000-01-01T00:00:00Z)</td>
         </tr>
         <tr>
           <td>Granularity</td>
           <td><a href="#enum-granularity">GranularityEnum</a></td>
-          <td>时间精度等级 —— 告知设备这个时间有多精确</td>
+          <td>Time granularity level — tells the device how precise this time is</td>
         </tr>
         <tr>
           <td>TimeSource</td>
           <td><a href="#enum-timesource">TimeSourceEnum</a></td>
-          <td>时间来源 —— 告知设备这个时间从哪里获取</td>
+          <td>Time source — tells the device where this time was obtained from</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">时间精度要求</div>
+    <div class="callout-title">Time Precision Requirements</div>
     <p>
-      设备会根据 <code>Granularity</code> 参数判断时间的可靠性。
-      如果设备当前已有更高精度的时间源（例如已从 NTP 同步），它可能会拒绝来自低精度源的 SetUTCTime 请求。
-      配网阶段设备通常没有时间，此时设置一定会成功。
+      The device evaluates time reliability based on the <code>Granularity</code> parameter.
+      If the device already has a higher-precision time source (e.g. already synced from NTP), it may reject SetUTCTime requests from lower-precision sources.
+      During commissioning, the device typically has no time, so the setting will always succeed.
     </p>
   </div>
 
@@ -4266,9 +4266,9 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        最常见的使用场景是配网完成后，Commissioner 立即调用 SetUTCTime 为设备设置初始时间。
-        Granularity 通常传 <code>SecondsGranularity (2)</code> 或 <code>MillisecondsGranularity (3)</code>，
-        TimeSource 传 <code>Admin (2)</code>（表示时间由管理者手动设置）。
+        The most common usage is the Commissioner immediately calling SetUTCTime after commissioning to set the device's initial time.
+        Granularity is typically passed as <code>SecondsGranularity (2)</code> or <code>MillisecondsGranularity (3)</code>,
+        and TimeSource as <code>Admin (2)</code> (indicating time was manually set by an administrator).
       </p>
     </div>
   </details>
@@ -4276,8 +4276,8 @@ export const clusters: Record<string, ClusterContent> = {
 
   <h3 id="cmd-0x01">SetTrustedTimeSource — Set Trusted Time Source (0x01)</h3>
   <p>
-    指定一个 Fabric 内的节点作为可信时间源。设备会周期性地从这个节点同步时间，
-    类似于局域网内部的「时间权威」。设置为 <code>null</code> 可清除可信时间源。
+    Specifies a node within the Fabric as a trusted time source. The device will periodically synchronize time from this node,
+    similar to a local network "time authority." Setting to <code>null</code> clears the trusted time source.
   </p>
   <div class="table-wrap">
     <table>
@@ -4288,7 +4288,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>TrustedTimeSource</td>
           <td>struct / null</td>
-          <td>可信时间源节点信息，包含 NodeID 和 Endpoint。设为 <code>null</code> 清除</td>
+          <td>Trusted time source node info, containing NodeID and Endpoint. Set to <code>null</code> to clear</td>
         </tr>
       </tbody>
     </table>
@@ -4304,12 +4304,12 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>NodeID</td>
           <td>node-id</td>
-          <td>时间源节点的 Node ID</td>
+          <td>Time source node's Node ID</td>
         </tr>
         <tr>
           <td>Endpoint</td>
           <td>endpoint-no</td>
-          <td>该节点上 TimeSynchronization Cluster 所在的 Endpoint（通常是 0）</td>
+          <td>Endpoint where TimeSynchronization Cluster resides on that node (typically 0)</td>
         </tr>
       </tbody>
     </table>
@@ -4319,10 +4319,10 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        在 Fabric 中，通常由 Hub（如 Apple HomePod、Google Nest Hub）充当可信时间源。
-        Commissioner 在配网时设置 TrustedTimeSource 指向 Hub 的 Node ID，
-        之后设备就会自动从 Hub 同步时间，无需外部 NTP 服务器。
-        这对于没有直接互联网访问的 Thread 设备尤其重要。
+        In a Fabric, a Hub (e.g. Apple HomePod, Google Nest Hub) typically serves as the trusted time source.
+        The Commissioner sets TrustedTimeSource to point to the Hub's Node ID during commissioning,
+        after which the device will automatically synchronize time from the Hub without an external NTP server.
+        This is especially important for Thread devices without direct internet access.
       </p>
     </div>
   </details>
@@ -4330,9 +4330,9 @@ export const clusters: Record<string, ClusterContent> = {
 
   <h3 id="cmd-0x02">SetTimeZone — Set Timezone (0x02)</h3>
   <p>
-    设置设备的时区列表。可以包含多个时区条目，每个条目有生效时间（<code>validAt</code>），
-    用于支持历史或未来的时区变更。设备处理成功后返回 <code>SetTimeZoneResponse</code>，
-    告知 Commissioner 是否需要继续设置夏令时偏移。
+    Sets the device's timezone list. Can contain multiple timezone entries, each with an effective time (<code>validAt</code>),
+    to support historical or future timezone changes. After successful processing, the device returns <code>SetTimeZoneResponse</code>,
+    informing the Commissioner whether DST offset setting is needed next.
   </p>
   <div class="table-wrap">
     <table>
@@ -4343,7 +4343,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>TimeZone</td>
           <td>list&lt;TimeZoneStruct&gt;</td>
-          <td>时区列表（最多 <code>TimeZoneListMaxSize</code> 个条目）</td>
+          <td>Timezone list (up to <code>TimeZoneListMaxSize</code> entries)</td>
         </tr>
       </tbody>
     </table>
@@ -4359,17 +4359,17 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Offset</td>
           <td>int32</td>
-          <td>相对 UTC 的偏移量，单位<strong>秒</strong>。例如 UTC+8 = <code>28800</code>，UTC-5 = <code>-18000</code></td>
+          <td>Offset from UTC, in <strong>seconds</strong>. E.g. UTC+8 = <code>28800</code>, UTC-5 = <code>-18000</code></td>
         </tr>
         <tr>
           <td>ValidAt</td>
           <td>epoch_us</td>
-          <td>此条目的生效时间（微秒级 epoch）。第一个条目的 ValidAt 必须为 <code>0</code></td>
+          <td>Effective time for this entry (microsecond-level epoch). First entry's ValidAt must be <code>0</code></td>
         </tr>
         <tr>
           <td>Name</td>
-          <td>string（可选）</td>
-          <td>IANA 时区名称（如 <code>"Asia/Shanghai"</code>），用于显示和夏令时数据库查询</td>
+          <td>string (Optional)</td>
+          <td>IANA timezone name (e.g. <code>"Asia/Shanghai"</code>), used for display and DST database lookup</td>
         </tr>
       </tbody>
     </table>
@@ -4385,19 +4385,19 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>DSTOffsetRequired</td>
           <td>bool</td>
-          <td><code>true</code> 表示设备需要 Commissioner 接着调用 <a href="#cmd-0x04">SetDSTOffset</a></td>
+          <td><code>true</code> means the device needs the Commissioner to follow up with <a href="#cmd-0x04">SetDSTOffset</a></td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">DSTOffsetRequired 的含义</div>
+    <div class="callout-title">Meaning of DSTOffsetRequired</div>
     <p>
-      如果设备内置了 IANA 时区数据库（<code>TimeZoneDatabase = Full</code>），
-      设备可以自己推算夏令时规则，此时响应 <code>DSTOffsetRequired = false</code>。
-      如果设备没有时区数据库（<code>TimeZoneDatabase = None</code>），
-      则返回 <code>true</code>，Commissioner 必须手动下发夏令时偏移。
+      If the device has a built-in IANA timezone database (<code>TimeZoneDatabase = Full</code>),
+      the device can calculate DST rules on its own, responding with <code>DSTOffsetRequired = false</code>.
+      If the device has no timezone database (<code>TimeZoneDatabase = None</code>),
+      it returns <code>true</code>, and the Commissioner must manually provide DST offsets.
     </p>
   </div>
 
@@ -4405,9 +4405,9 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        用户搬家到新时区，或设备首次配网时需要设置时区。
-        对于中国用户，通常只需一条记录：Offset = 28800（UTC+8），ValidAt = 0，Name = "Asia/Shanghai"。
-        中国没有夏令时，所以 DSTOffset 可以设为偏移量 0 的单条记录。
+        The user moves to a new timezone, or the device needs timezone setup during first commissioning.
+        For Chinese users, typically only one record is needed: Offset = 28800 (UTC+8), ValidAt = 0, Name = "Asia/Shanghai".
+        China doesn't observe DST, so DSTOffset can be set to a single record with offset 0.
       </p>
     </div>
   </details>
@@ -4415,8 +4415,8 @@ export const clusters: Record<string, ClusterContent> = {
 
   <h3 id="cmd-0x04">SetDSTOffset — Set DST Offset (0x04)</h3>
   <p>
-    设置夏令时（DST）偏移列表。每个条目定义一段时间范围内的额外偏移量。
-    设备根据当前时间匹配对应的条目，将偏移量叠加到时区偏移上，得出本地时间。
+    Sets the daylight saving time (DST) offset list. Each entry defines an additional offset within a time range.
+    The device matches entries based on current time and adds the offset on top of the timezone offset to calculate local time.
   </p>
   <div class="table-wrap">
     <table>
@@ -4427,7 +4427,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>DSTOffset</td>
           <td>list&lt;DSTOffsetStruct&gt;</td>
-          <td>夏令时偏移列表（最多 <code>DSTOffsetListMaxSize</code> 个条目）</td>
+          <td>DST offset list (up to <code>DSTOffsetListMaxSize</code> entries)</td>
         </tr>
       </tbody>
     </table>
@@ -4443,28 +4443,28 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Offset</td>
           <td>int32</td>
-          <td>夏令时额外偏移量，单位<strong>秒</strong>。例如美国夏令时 = <code>3600</code>（+1 小时），无夏令时 = <code>0</code></td>
+          <td>DST additional offset, in <strong>seconds</strong>. E.g. US DST = <code>3600</code> (+1 hour), no DST = <code>0</code></td>
         </tr>
         <tr>
           <td>ValidStarting</td>
           <td>epoch_us</td>
-          <td>此条目的生效起始时间（微秒级 epoch）</td>
+          <td>Effective start time for this entry (microsecond-level epoch)</td>
         </tr>
         <tr>
           <td>ValidUntil</td>
           <td>epoch_us / null</td>
-          <td>此条目的失效时间。最后一条的 ValidUntil 必须为 <code>null</code>（表示一直有效直到被新列表替换）</td>
+          <td>Expiry time for this entry. The last entry's ValidUntil must be <code>null</code> (meaning it remains valid until replaced by a new list)</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">本地时间计算</div>
+    <div class="callout-title">Local Time Calculation</div>
     <p>
       <code>LocalTime = UTCTime + TimeZone.Offset + DSTOffset.Offset</code><br/>
-      例如：UTC 时间 12:00，时区 UTC+8（28800 秒），夏令时 +1h（3600 秒）→ 本地时间 21:00。
-      对于不使用夏令时的地区（如中国），DSTOffset 列表只需一条 Offset = 0 的记录。
+      Example: UTC time 12:00, timezone UTC+8 (28800 seconds), DST +1h (3600 seconds) → local time 21:00.
+      For regions that don't observe DST (e.g. China), the DSTOffset list only needs one record with Offset = 0.
     </p>
   </div>
 
@@ -4472,10 +4472,10 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        美国东部时区（UTC-5）的设备需要在每年 3 月第二个周日进入夏令时（+1h），
-        11 月第一个周日退出。Commissioner 可以下发两条 DSTOffset 记录来覆盖当前年份的切换。
-        当列表中最后一条的 ValidUntil 到期后，设备会触发 <code>DSTTableEmpty</code> 事件，
-        提醒 Commissioner 需要更新夏令时表。
+        A device in US Eastern Time (UTC-5) needs to enter DST (+1h) on the second Sunday of March each year
+        and exit on the first Sunday of November. The Commissioner can provide two DSTOffset records to cover the current year's transitions.
+        When the last entry's ValidUntil expires, the device triggers a <code>DSTTableEmpty</code> event,
+        reminding the Commissioner to update the DST table.
       </p>
     </div>
   </details>
@@ -4483,8 +4483,8 @@ export const clusters: Record<string, ClusterContent> = {
 
   <h3 id="cmd-0x07">SetDefaultNTP — Set Default NTP Server (0x07)</h3>
   <p>
-    设置设备用于时间同步的默认 NTP 服务器地址。需要设备启用 <strong>NTPC</strong>（NTP 客户端）特性。
-    设为 <code>null</code> 可清除默认 NTP 服务器。
+    Sets the default NTP server address for device time synchronization. Requires the device to have <strong>NTPC</strong> (NTP client) feature enabled.
+    Set to <code>null</code> to clear the default NTP server.
   </p>
   <div class="table-wrap">
     <table>
@@ -4495,18 +4495,18 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>DefaultNTP</td>
           <td>string / null</td>
-          <td>NTP 服务器地址（域名或 IPv6 地址）。设为 <code>null</code> 清除</td>
+          <td>NTP server address (domain name or IPv6 address). Set to <code>null</code> to clear</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">DNS 解析能力</div>
+    <div class="callout-title">DNS Resolution Capability</div>
     <p>
-      如果传入的是域名（如 <code>"pool.ntp.org"</code>），设备需要具备 DNS 解析能力
-      （检查 <code>SupportsDNSResolve</code> 属性）。
-      不支持 DNS 的设备只能接受 IPv6 地址形式的 NTP 服务器。
+      If a domain name is provided (e.g. <code>"pool.ntp.org"</code>), the device needs DNS resolution capability
+      (check the <code>SupportsDNSResolve</code> attribute).
+      Devices that don't support DNS can only accept NTP servers in IPv6 address format.
     </p>
   </div>
 
@@ -4514,19 +4514,19 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        配网完成后，Commissioner 可以为支持 NTPC 的设备配置 NTP 服务器。
-        设备随后会自动通过 NTP 协议同步时间，不再依赖 Commissioner 手动设置。
-        常用的公共 NTP 服务器：<code>pool.ntp.org</code>、<code>time.google.com</code>、<code>ntp.aliyun.com</code>。
+        After commissioning, the Commissioner can configure NTP servers for devices supporting NTPC.
+        The device will then automatically synchronize time via NTP protocol, no longer depending on manual Commissioner setup.
+        Common public NTP servers: <code>pool.ntp.org</code>, <code>time.google.com</code>, <code>ntp.aliyun.com</code>.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h2 id="attributes">Attributes</h2>
-  <p>TimeSynchronization Cluster 共有 13 个应用属性。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+  <p>TimeSynchronization Cluster has 13 application attributes. Click an attribute ID in the summary table below to jump to its detailed description.</p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute Summary Table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -4539,108 +4539,108 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
       </thead>
       <tbody>
-        <!-- 时间状态 -->
+        <!-- Time Status -->
         <tr class="clickable-row" data-href="#attr-0x0000">
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>UTCTime</td>
           <td>epoch_us / null</td>
           <td><a href="#group-time">Time Status</a></td>
-          <td>当前 UTC 时间（微秒级）</td>
+          <td>Current UTC time (microsecond-level)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>Granularity</td>
           <td>GranularityEnum</td>
           <td><a href="#group-time">Time Status</a></td>
-          <td>当前时间的精度等级</td>
+          <td>Current time's granularity level</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
           <td>TimeSource</td>
           <td>TimeSourceEnum</td>
           <td><a href="#group-time">Time Status</a></td>
-          <td>当前时间的来源</td>
+          <td>Current time's source</td>
         </tr>
-        <!-- 时间源配置 -->
+        <!-- Time Source Config -->
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
           <td>TrustedTimeSource</td>
           <td>struct / null</td>
           <td><a href="#group-source">Time Source Config</a></td>
-          <td>Fabric 内可信时间源节点</td>
+          <td>Trusted time source node within Fabric</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0004">
           <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
           <td>DefaultNTP</td>
           <td>string / null</td>
           <td><a href="#group-source">Time Source Config</a></td>
-          <td>默认 NTP 服务器地址</td>
+          <td>Default NTP server address</td>
         </tr>
-        <!-- 时区与夏令时 -->
+        <!-- Timezone & DST -->
         <tr class="clickable-row" data-href="#attr-0x0005">
           <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
           <td>TimeZone</td>
           <td>list&lt;TimeZoneStruct&gt;</td>
           <td><a href="#group-tz">Timezone &amp; DST</a></td>
-          <td>时区配置列表</td>
+          <td>Timezone configuration list</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0006">
           <td><a href="#attr-0x0006"><code>0x0006</code></a></td>
           <td>DSTOffset</td>
           <td>list&lt;DSTOffsetStruct&gt;</td>
           <td><a href="#group-tz">Timezone &amp; DST</a></td>
-          <td>夏令时偏移列表</td>
+          <td>DST offset list</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0007">
           <td><a href="#attr-0x0007"><code>0x0007</code></a></td>
           <td>LocalTime</td>
           <td>epoch_us / null</td>
           <td><a href="#group-tz">Timezone &amp; DST</a></td>
-          <td>当前本地时间（已含时区 + 夏令时偏移）</td>
+          <td>Current local time (includes timezone + DST offset)</td>
         </tr>
-        <!-- 能力与限制 -->
+        <!-- Capabilities & Limits -->
         <tr class="clickable-row" data-href="#attr-0x0008">
           <td><a href="#attr-0x0008"><code>0x0008</code></a></td>
           <td>TimeZoneDatabase</td>
           <td>TimeZoneDatabaseEnum</td>
           <td><a href="#group-cap">Capabilities &amp; Limits</a></td>
-          <td>设备的时区数据库类型</td>
+          <td>Device's timezone database type</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0009">
           <td><a href="#attr-0x0009"><code>0x0009</code></a></td>
           <td>TimeZoneListMaxSize</td>
           <td>uint8</td>
           <td><a href="#group-cap">Capabilities &amp; Limits</a></td>
-          <td>时区列表最大条目数</td>
+          <td>Maximum timezone list entries</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x000A">
           <td><a href="#attr-0x000A"><code>0x000A</code></a></td>
           <td>DSTOffsetListMaxSize</td>
           <td>uint8</td>
           <td><a href="#group-cap">Capabilities &amp; Limits</a></td>
-          <td>夏令时偏移列表最大条目数</td>
+          <td>Maximum DST offset list entries</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x000B">
           <td><a href="#attr-0x000B"><code>0x000B</code></a></td>
           <td>SupportsDNSResolve</td>
           <td>bool</td>
           <td><a href="#group-cap">Capabilities &amp; Limits</a></td>
-          <td>是否支持 DNS 域名解析</td>
+          <td>Whether DNS name resolution is supported</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x000C">
           <td><a href="#attr-0x000C"><code>0x000C</code></a></td>
           <td>NTPServerAvailable</td>
           <td>bool</td>
           <td><a href="#group-cap">Capabilities &amp; Limits</a></td>
-          <td>设备是否可用作 NTP 服务器</td>
+          <td>Whether device can serve as NTP server</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 时间状态（0x0000 ~ 0x0002）====== -->
+  <!-- ====== Time Status (0x0000 ~ 0x0002) ====== -->
   <h3 id="group-time">Time Status (0x0000 ~ 0x0002)</h3>
-  <p>描述设备当前的时间值以及时间的精度和来源。</p>
+  <p>Describes the device's current time value and its precision and source.</p>
 
   <div class="table-wrap">
     <table>
@@ -4653,8 +4653,8 @@ export const clusters: Record<string, ClusterContent> = {
           <td>UTCTime<br/><span class="attr-cn">UTC Time</span></td>
           <td>epoch_us / null</td>
           <td>
-            设备当前的 UTC 时间，微秒级精度（自 2000-01-01T00:00:00Z 起）。
-            <code>null</code> 表示设备尚未获得有效时间 —— 这是刚上电、未经时间同步的设备的默认状态
+            The device's current UTC time, microsecond-level precision (since 2000-01-01T00:00:00Z).
+            <code>null</code> means the device has not yet obtained valid time — this is the default state for a freshly powered-on, unsynchronized device
           </td>
         </tr>
         <tr id="attr-0x0001">
@@ -4662,8 +4662,8 @@ export const clusters: Record<string, ClusterContent> = {
           <td>Granularity<br/><span class="attr-cn">Time Granularity</span></td>
           <td><a href="#enum-granularity">GranularityEnum</a></td>
           <td>
-            当前时间的精度等级。<code>NoTimeGranularity (0)</code> 表示设备没有可信时间。
-            精度越高，说明时间来源越可靠（见下方枚举定义）
+            Current time's granularity level. <code>NoTimeGranularity (0)</code> means the device has no trusted time.
+            Higher precision indicates a more reliable time source (see enum definitions below)
           </td>
         </tr>
         <tr id="attr-0x0002">
@@ -4671,8 +4671,8 @@ export const clusters: Record<string, ClusterContent> = {
           <td>TimeSource<br/><span class="attr-cn">Time Source</span></td>
           <td><a href="#enum-timesource">TimeSourceEnum</a></td>
           <td>
-            当前时间是从哪里获取的 —— NTP、管理员手动设置、GNSS、还是其他 Matter 节点等。
-            用于判断时间的可信程度（见下方枚举定义）
+            Where the current time was obtained from — NTP, manually set by administrator, GNSS, or other Matter nodes, etc.
+            Used to assess time reliability (see enum definitions below)
           </td>
         </tr>
       </tbody>
@@ -4680,18 +4680,18 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">Epoch 基准</div>
+    <div class="callout-title">Epoch Reference</div>
     <p>
-      Matter 的时间 epoch 基准是 <strong>2000-01-01T00:00:00Z</strong>，不是 Unix 的 1970 年。
-      转换公式：<code>Matter epoch_us = (Unix timestamp - 946684800) * 1000000</code>。
-      读取 UTCTime 后需要注意转换。
+      Matter's time epoch reference is <strong>2000-01-01T00:00:00Z</strong>, not Unix's 1970.
+      Conversion formula: <code>Matter epoch_us = (Unix timestamp - 946684800) * 1000000</code>.
+      Be aware of conversion when reading UTCTime.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 时间源配置（0x0003, 0x0004）====== -->
+  <!-- ====== Time Source Config (0x0003, 0x0004) ====== -->
   <h3 id="group-source">Time Source Configuration (0x0003, 0x0004)</h3>
-  <p>描述设备的时间同步源 —— 从哪里获取精确时间。</p>
+  <p>Describes the device's time synchronization source — where precise time is obtained from.</p>
 
   <div class="table-wrap">
     <table>
@@ -4704,8 +4704,8 @@ export const clusters: Record<string, ClusterContent> = {
           <td>TrustedTimeSource<br/><span class="attr-cn">Trusted Time Source</span></td>
           <td>struct / null</td>
           <td>
-            Fabric 内指定的可信时间源节点。包含 FabricIndex、NodeID 和 Endpoint 三个字段。
-            <code>null</code> 表示未配置。通过 <a href="#cmd-0x01">SetTrustedTimeSource</a> 命令设置
+            The designated trusted time source node within the Fabric. Contains three fields: FabricIndex, NodeID, and Endpoint.
+            <code>null</code> means not configured. Set via the <a href="#cmd-0x01">SetTrustedTimeSource</a> command
           </td>
         </tr>
         <tr id="attr-0x0004">
@@ -4713,9 +4713,9 @@ export const clusters: Record<string, ClusterContent> = {
           <td>DefaultNTP<br/><span class="attr-cn">Default NTP Server</span></td>
           <td>string / null</td>
           <td>
-            设备使用的默认 NTP 服务器地址（域名或 IPv6 地址）。
-            <code>null</code> 表示未配置。通过 <a href="#cmd-0x07">SetDefaultNTP</a> 命令设置。
-            <strong>需要 NTPC 特性</strong>
+            The default NTP server address used by the device (domain name or IPv6 address).
+            <code>null</code> means not configured. Set via the <a href="#cmd-0x07">SetDefaultNTP</a> command.
+            <strong>Requires NTPC feature</strong>
           </td>
         </tr>
       </tbody>
@@ -4723,18 +4723,18 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">时间源优先级</div>
+    <div class="callout-title">Time Source Priority</div>
     <p>
-      设备获取时间的优先级通常是：<strong>NTP 服务器</strong> &gt; <strong>可信时间源节点</strong> &gt; <strong>管理员手动设置</strong>。
-      如果设备支持 NTPC 且配置了 DefaultNTP，它会自动通过 NTP 同步，精度最高。
-      对于不能直接访问互联网的 Thread 设备，TrustedTimeSource 是唯一的自动同步途径。
+      Device time acquisition priority is typically: <strong>NTP server</strong> &gt; <strong>trusted time source node</strong> &gt; <strong>manual admin setting</strong>.
+      If the device supports NTPC and DefaultNTP is configured, it will automatically sync via NTP with the highest precision.
+      For Thread devices that cannot directly access the internet, TrustedTimeSource is the only automatic synchronization path.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 时区与夏令时（0x0005 ~ 0x0007）====== -->
+  <!-- ====== Timezone & DST (0x0005 ~ 0x0007) ====== -->
   <h3 id="group-tz">Timezone and DST (0x0005 ~ 0x0007)</h3>
-  <p>管理时区配置、夏令时偏移和本地时间计算。需要设备启用 <strong>TZ</strong> 特性。</p>
+  <p>Manages timezone configuration, DST offsets, and local time calculation. Requires the device to have <strong>TZ</strong> feature enabled.</p>
 
   <div class="table-wrap">
     <table>
@@ -4747,8 +4747,8 @@ export const clusters: Record<string, ClusterContent> = {
           <td>TimeZone<br/><span class="attr-cn">Timezone List</span></td>
           <td>list&lt;TimeZoneStruct&gt;</td>
           <td>
-            当前生效的时区配置列表。每条包含 Offset（秒）、ValidAt（生效时间）、Name（IANA 时区名）。
-            通过 <a href="#cmd-0x02">SetTimeZone</a> 命令设置。<strong>需要 TZ 特性</strong>
+            Currently effective timezone configuration list. Each entry contains Offset (seconds), ValidAt (effective time), Name (IANA timezone name).
+            Set via the <a href="#cmd-0x02">SetTimeZone</a> command. <strong>Requires TZ feature</strong>
           </td>
         </tr>
         <tr id="attr-0x0006">
@@ -4756,8 +4756,8 @@ export const clusters: Record<string, ClusterContent> = {
           <td>DSTOffset<br/><span class="attr-cn">DST Offset List</span></td>
           <td>list&lt;DSTOffsetStruct&gt;</td>
           <td>
-            当前生效的夏令时偏移列表。每条包含 Offset（秒）、ValidStarting、ValidUntil。
-            通过 <a href="#cmd-0x04">SetDSTOffset</a> 命令设置。<strong>需要 TZ 特性</strong>
+            Currently effective DST offset list. Each entry contains Offset (seconds), ValidStarting, ValidUntil.
+            Set via the <a href="#cmd-0x04">SetDSTOffset</a> command. <strong>Requires TZ feature</strong>
           </td>
         </tr>
         <tr id="attr-0x0007">
@@ -4765,8 +4765,8 @@ export const clusters: Record<string, ClusterContent> = {
           <td>LocalTime<br/><span class="attr-cn">Local Time</span></td>
           <td>epoch_us / null</td>
           <td>
-            设备计算得出的本地时间 = UTCTime + TimeZone.Offset + DSTOffset.Offset。
-            <code>null</code> 表示缺少 UTC 时间或时区配置，无法计算。只读属性。<strong>需要 TZ 特性</strong>
+            Local time calculated by the device = UTCTime + TimeZone.Offset + DSTOffset.Offset.
+            <code>null</code> means UTC time or timezone configuration is missing, unable to calculate. Read-only attribute. <strong>Requires TZ feature</strong>
           </td>
         </tr>
       </tbody>
@@ -4774,9 +4774,9 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 能力与限制（0x0008 ~ 0x000C）====== -->
+  <!-- ====== Capabilities & Limits (0x0008 ~ 0x000C) ====== -->
   <h3 id="group-cap">Capabilities and Limits (0x0008 ~ 0x000C)</h3>
-  <p>描述设备在时间同步方面的能力上限和硬件特性。这些属性大部分是只读的，由设备固件决定。</p>
+  <p>Describes the device's capability limits and hardware characteristics for time synchronization. Most of these attributes are read-only, determined by device firmware.</p>
 
   <div class="table-wrap">
     <table>
@@ -4789,10 +4789,10 @@ export const clusters: Record<string, ClusterContent> = {
           <td>TimeZoneDatabase<br/><span class="attr-cn">Timezone Database</span></td>
           <td>TimeZoneDatabaseEnum</td>
           <td>
-            设备内置的时区数据库类型。
-            <code>Full (0)</code> = 完整 IANA 数据库，可自动推算夏令时；
-            <code>Partial (1)</code> = 部分数据库；
-            <code>None (2)</code> = 无数据库，完全依赖 Commissioner 手动设置。<strong>需要 TZ 特性</strong>
+            Device's built-in timezone database type.
+            <code>Full (0)</code> = full IANA database, can automatically calculate DST;
+            <code>Partial (1)</code> = partial database;
+            <code>None (2)</code> = no database, fully depends on Commissioner for manual setup. <strong>Requires TZ feature</strong>
           </td>
         </tr>
         <tr id="attr-0x0009">
@@ -4800,8 +4800,8 @@ export const clusters: Record<string, ClusterContent> = {
           <td>TimeZoneListMaxSize<br/><span class="attr-cn">Timezone List Max Size</span></td>
           <td>uint8</td>
           <td>
-            TimeZone 列表允许的最大条目数。最小为 1，最大为 2。
-            <a href="#cmd-0x02">SetTimeZone</a> 的列表长度不能超过此值。<strong>需要 TZ 特性</strong>
+            Maximum number of entries allowed in the TimeZone list. Minimum 1, maximum 2.
+            The list length of <a href="#cmd-0x02">SetTimeZone</a> cannot exceed this value. <strong>Requires TZ feature</strong>
           </td>
         </tr>
         <tr id="attr-0x000A">
@@ -4809,8 +4809,8 @@ export const clusters: Record<string, ClusterContent> = {
           <td>DSTOffsetListMaxSize<br/><span class="attr-cn">DST Offset List Max Size</span></td>
           <td>uint8</td>
           <td>
-            DSTOffset 列表允许的最大条目数。
-            <a href="#cmd-0x04">SetDSTOffset</a> 的列表长度不能超过此值。<strong>需要 TZ 特性</strong>
+            Maximum number of entries allowed in the DSTOffset list.
+            The list length of <a href="#cmd-0x04">SetDSTOffset</a> cannot exceed this value. <strong>Requires TZ feature</strong>
           </td>
         </tr>
         <tr id="attr-0x000B">
@@ -4818,9 +4818,9 @@ export const clusters: Record<string, ClusterContent> = {
           <td>SupportsDNSResolve<br/><span class="attr-cn">Supports DNS Resolve</span></td>
           <td>bool</td>
           <td>
-            设备是否支持将域名解析为 IP 地址。
-            如果为 <code>false</code>，<a href="#cmd-0x07">SetDefaultNTP</a> 只能接受 IPv6 地址，不能传域名。
-            <strong>需要 NTPC 特性</strong>
+            Whether the device supports resolving domain names to IP addresses.
+            If <code>false</code>, <a href="#cmd-0x07">SetDefaultNTP</a> can only accept IPv6 addresses, not domain names.
+            <strong>Requires NTPC feature</strong>
           </td>
         </tr>
         <tr id="attr-0x000C">
@@ -4828,9 +4828,9 @@ export const clusters: Record<string, ClusterContent> = {
           <td>NTPServerAvailable<br/><span class="attr-cn">NTP Server Available</span></td>
           <td>bool</td>
           <td>
-            设备自身是否可作为 NTP 服务器向其他节点提供时间。
-            <code>true</code> 表示其他设备可以将此设备设为 TrustedTimeSource。
-            <strong>需要 NTPS 特性</strong>
+            Whether the device itself can serve as an NTP server to provide time to other nodes.
+            <code>true</code> means other devices can set this device as their TrustedTimeSource.
+            <strong>Requires NTPS feature</strong>
           </td>
         </tr>
       </tbody>
@@ -4838,9 +4838,9 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== Feature 位图 ====== -->
+  <!-- ====== Feature Bitmap ====== -->
   <h2 id="features">Feature Bitmap</h2>
-  <p>TimeSynchronization Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持哪些时间同步能力：</p>
+  <p>TimeSynchronization Cluster declares device time synchronization capabilities through <code>FeatureMap</code> (0xFFFC):</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
@@ -4869,18 +4869,18 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-info">
     <div class="callout-title">Common Combinations</div>
     <p>
-      <strong>基础设备</strong>（如低功耗传感器）：无 Feature，仅支持 SetUTCTime 手动设置；<br/>
-      <strong>普通设备</strong>（如灯、插座）：TZ，支持时区和夏令时配置；<br/>
-      <strong>联网设备</strong>（如 Wi-Fi 灯）：TZ + NTPC，可自动从 NTP 同步；<br/>
-      <strong>Hub 设备</strong>（如边界路由器）：TZ + NTPC + NTPS，不仅自己同步，还能为其他设备提供时间。
+      <strong>Basic devices</strong> (e.g. low-power sensors): no Features, only support manual SetUTCTime;<br/>
+      <strong>Standard devices</strong> (e.g. lights, outlets): TZ, supports timezone and DST configuration;<br/>
+      <strong>Connected devices</strong> (e.g. Wi-Fi lights): TZ + NTPC, can auto-sync from NTP;<br/>
+      <strong>Hub devices</strong> (e.g. border routers): TZ + NTPC + NTPS, not only syncing themselves but also providing time to other devices.
     </p>
   </div>
 
-  <!-- ====== 枚举定义 ====== -->
+  <!-- ====== Enum Definitions ====== -->
   <h2 id="enums">Enum Definitions</h2>
 
   <h3 id="enum-granularity">GranularityEnum</h3>
-  <p>描述设备当前时间的精度等级。精度越高，表示设备的时间源越可靠。</p>
+  <p>Describes the device's current time precision level. Higher precision indicates a more reliable time source.</p>
 
   <div class="enum-cards enum-cards-grid">
     <div class="enum-card">
@@ -4921,7 +4921,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <h3 id="enum-timesource">TimeSourceEnum</h3>
-  <p>标识设备当前时间的获取来源。数值越高通常意味着更可靠的时间源。NTS 后缀表示使用了网络时间安全（Network Time Security）认证。</p>
+  <p>Identifies the source of the device's current time. Higher values typically indicate a more reliable time source. The NTS suffix indicates Network Time Security authentication was used.</p>
 
   <div class="enum-cards enum-cards-grid">
     <div class="enum-card">
@@ -5046,7 +5046,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <h3 id="enum-tzdb">TimeZoneDatabaseEnum</h3>
-  <p>描述设备内置的时区数据库能力，决定设备能否自行推算夏令时规则。</p>
+  <p>Describes the device's built-in timezone database capability, determining whether the device can calculate DST rules on its own.</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
@@ -5072,9 +5072,9 @@ export const clusters: Record<string, ClusterContent> = {
     </div>
   </div>
 
-  <!-- ====== 事件 ====== -->
+  <!-- ====== Events ====== -->
   <h2 id="events">Events</h2>
-  <p>TimeSynchronization Cluster 定义了 5 个事件，用于通知 Commissioner 或自动化系统时间状态的变化。</p>
+  <p>TimeSynchronization Cluster defines 5 events to notify the Commissioner or automation systems of time status changes.</p>
 
   <div class="table-wrap">
     <table>
@@ -5091,31 +5091,31 @@ export const clusters: Record<string, ClusterContent> = {
           <td>DSTTableEmpty</td>
           <td>Info</td>
           <td class="col-required">TZ</td>
-          <td>夏令时表已耗尽 —— 所有 DSTOffset 条目都已过期，设备无法继续正确计算本地时间。Commissioner 需要下发新的 DSTOffset 列表</td>
+          <td>DST table exhausted — all DSTOffset entries have expired, device can no longer correctly calculate local time. Commissioner needs to provide a new DSTOffset list</td>
         </tr>
         <tr>
           <td>DSTStatus</td>
           <td>Info</td>
           <td class="col-required">TZ</td>
-          <td>夏令时状态变更 —— 设备进入或退出夏令时。包含一个 <code>DSTOffsetActive</code> 布尔字段，<code>true</code> = 夏令时生效中</td>
+          <td>DST status change — device entering or exiting DST. Contains a <code>DSTOffsetActive</code> boolean field, <code>true</code> = DST is active</td>
         </tr>
         <tr>
           <td>TimeZoneStatus</td>
           <td>Info</td>
           <td class="col-required">TZ</td>
-          <td>时区切换 —— 时区列表中的下一条生效了（ValidAt 到达）。包含新的 Offset 和 Name 字段</td>
+          <td>Timezone switch — the next entry in the timezone list has taken effect (ValidAt reached). Contains new Offset and Name fields</td>
         </tr>
         <tr>
           <td>TimeFailure</td>
           <td>Info</td>
-          <td class="col-optional">无</td>
-          <td>时间同步失败 —— 设备无法从任何时间源获取或验证时间。可能是 NTP 不可达、可信时间源离线等原因</td>
+          <td class="col-optional">None</td>
+          <td>Time sync failure — device cannot obtain or verify time from any source. Possible causes include NTP unreachable, trusted time source offline, etc.</td>
         </tr>
         <tr>
           <td>MissingTrustedTimeSource</td>
           <td>Info</td>
-          <td class="col-optional">无</td>
-          <td>缺少可信时间源 —— 设备需要时间同步但没有配置 TrustedTimeSource，也没有可用的 NTP。提醒 Commissioner 配置时间源</td>
+          <td class="col-optional">None</td>
+          <td>Missing trusted time source — device needs time sync but has no TrustedTimeSource configured and no available NTP. Reminds Commissioner to configure a time source</td>
         </tr>
       </tbody>
     </table>
@@ -5124,24 +5124,24 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">Event Subscription Advice</div>
     <p>
-      建议 Commissioner 订阅 <strong>DSTTableEmpty</strong> 和 <strong>TimeFailure</strong> 事件。
-      前者在夏令时表过期时触发，如果不及时更新，设备的本地时间会出错（影响定时自动化等功能）；
-      后者在时间同步链路断裂时触发，可及时发现并修复问题。
+      It is recommended that the Commissioner subscribe to <strong>DSTTableEmpty</strong> and <strong>TimeFailure</strong> events.
+      The former triggers when the DST table expires; if not updated promptly, the device's local time will be incorrect (affecting scheduled automations, etc.);
+      the latter triggers when the time sync chain breaks, enabling timely discovery and resolution of issues.
     </p>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
 
   <h3>Attribute Data Example</h3>
-  <p>以下是一个支持 TZ + NTPC 的智能灯（中国地区）的 TimeSynchronization Cluster 典型属性数据：</p>
+  <p>Below is typical attribute data from a TimeSynchronization Cluster of a smart light (China region) supporting TZ + NTPC:</p>
   <pre><code>{
-  // --- 时间状态 ---
-  "0x0000": 1695312000000000,    // UTCTime = 2023-09-21T16:00:00Z（微秒级 epoch）
+  // --- Time Status ---
+  "0x0000": 1695312000000000,    // UTCTime = 2023-09-21T16:00:00Z (microsecond-level epoch)
   "0x0001": 3,                   // Granularity = MillisecondsGranularity
   "0x0002": 7,                   // TimeSource = MatterNTP
 
-  // --- 信任时间源 ---
+  // --- Trusted Time Source ---
   "0x0003": {                    // TrustedTimeSource
     "fabricIndex": 1,
     "nodeID": "0x0000000000000001",
@@ -5149,22 +5149,22 @@ export const clusters: Record<string, ClusterContent> = {
   },
   "0x0004": "pool.ntp.org",      // DefaultNTP
 
-  // --- 时区与夏令时 ---
+  // --- Timezone & DST ---
   "0x0005": [{                   // TimeZone
-    "offset": 28800,             //   UTC+8（秒）
+    "offset": 28800,             //   UTC+8 (seconds)
     "validAt": 0,
     "name": "Asia/Shanghai"
   }],
   "0x0006": [{                   // DSTOffset
-    "offset": 0,                 //   无夏令时
+    "offset": 0,                 //   No DST
     "validStarting": 0,
     "validUntil": null
   }],
 
-  // --- 本地时间 ---
-  "0x0007": 1695340800000000,    // LocalTime（已加时区偏移）
+  // --- Local Time ---
+  "0x0007": 1695340800000000,    // LocalTime (timezone offset applied)
 
-  // --- 能力与限制 ---
+  // --- Capabilities & Limits ---
   "0x0008": 1,                   // TimeZoneDatabase = Full
   "0x0009": 2,                   // TimeZoneListMaxSize = 2
   "0x000A": 2,                   // DSTOffsetListMaxSize = 2
@@ -5172,9 +5172,9 @@ export const clusters: Record<string, ClusterContent> = {
   "0x000C": false                // NTPServerAvailable = false
 }</code></pre>
 
-  <h3>SetUTCTime 交互示例</h3>
-  <p>Commissioner 在配网完成后为设备设置初始时间：</p>
-  <pre><code>// Commissioner → Device：设置 UTC 时间
+  <h3>SetUTCTime Interaction Example</h3>
+  <p>Commissioner sets initial time for the device after commissioning:</p>
+  <pre><code>// Commissioner → Device: Set UTC time
 {
   "invokeRequests": [{
     "commandPath": {
@@ -5183,16 +5183,16 @@ export const clusters: Record<string, ClusterContent> = {
       "commandId": "0x00"            // SetUTCTime
     },
     "commandFields": {
-      "UTCTime": 1695312000000000,   // 2023-09-21T16:00:00Z（微秒）
+      "UTCTime": 1695312000000000,   // 2023-09-21T16:00:00Z (microseconds)
       "granularity": 3,              // MillisecondsGranularity
       "timeSource": 2                // Admin
     }
   }]
 }</code></pre>
 
-  <h3>SetTimeZone 交互示例</h3>
-  <p>为设备设置中国时区（UTC+8）：</p>
-  <pre><code>// Commissioner → Device：设置时区
+  <h3>SetTimeZone Interaction Example</h3>
+  <p>Setting the China timezone (UTC+8) for the device:</p>
+  <pre><code>// Commissioner → Device: Set timezone
 {
   "invokeRequests": [{
     "commandPath": {
@@ -5202,42 +5202,42 @@ export const clusters: Record<string, ClusterContent> = {
     },
     "commandFields": {
       "timeZone": [{
-        "offset": 28800,             // UTC+8（秒）
-        "validAt": 0,                // 立即生效
-        "name": "Asia/Shanghai"      // IANA 时区名（可选）
+        "offset": 28800,             // UTC+8 (seconds)
+        "validAt": 0,                // Effective immediately
+        "name": "Asia/Shanghai"      // IANA timezone name (optional)
       }]
     }
   }]
 }
 
-// Device → Commissioner：确认时区设置
+// Device → Commissioner: Confirm timezone setting
 {
-  "DSTOffsetRequired": true          // 需要跟进设置夏令时偏移
+  "DSTOffsetRequired": true          // Need to follow up with DST offset setting
 }</code></pre>
 
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      大多数 Matter SDK（如 connectedhomeip）在配网流程中会自动处理基础的时间设置。
-      App 开发者通常只需要关注时区配置（特别是用户更换地区时），以及夏令时表的定期更新。
-      订阅 <code>DSTTableEmpty</code> 事件可以在需要更新时得到通知。
+      Most Matter SDKs (e.g. connectedhomeip) automatically handle basic time setup during commissioning.
+      App developers typically only need to focus on timezone configuration (especially when users change regions) and periodic DST table updates.
+      Subscribing to the <code>DSTTableEmpty</code> event provides notification when an update is needed.
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
     <summary>Scenario 1: Set Initial Time During Commissioning</summary>
     <div class="scenario-content">
       <ol>
-        <li>配网完成（CommissioningComplete 成功）后，读取设备的 <code>FeatureMap (0xFFFC)</code> 确认时间同步能力</li>
-        <li>发送 <a href="#cmd-0x00"><code>SetUTCTime (0x00)</code></a>，注入当前 UTC 时间，Granularity = <code>SecondsGranularity (2)</code>，TimeSource = <code>Admin (2)</code></li>
-        <li>发送 <a href="#cmd-0x01"><code>SetTrustedTimeSource (0x01)</code></a>，指定 Fabric 中的 Hub 作为可信时间源</li>
-        <li>如果设备支持 NTPC，发送 <a href="#cmd-0x07"><code>SetDefaultNTP (0x07)</code></a> 配置 NTP 服务器</li>
-        <li>验证：读取 <code>UTCTime (0x0000)</code> 确认时间已设置，<code>Granularity (0x0001)</code> 不再是 0</li>
+        <li>After commissioning (CommissioningComplete succeeded), read the device's <code>FeatureMap (0xFFFC)</code> to confirm time sync capabilities</li>
+        <li>Send <a href="#cmd-0x00"><code>SetUTCTime (0x00)</code></a> to inject current UTC time with Granularity = <code>SecondsGranularity (2)</code>, TimeSource = <code>Admin (2)</code></li>
+        <li>Send <a href="#cmd-0x01"><code>SetTrustedTimeSource (0x01)</code></a> to designate a Hub in the Fabric as the trusted time source</li>
+        <li>If the device supports NTPC, send <a href="#cmd-0x07"><code>SetDefaultNTP (0x07)</code></a> to configure the NTP server</li>
+        <li>Verify: read <code>UTCTime (0x0000)</code> to confirm time is set, <code>Granularity (0x0001)</code> is no longer 0</li>
       </ol>
-      <p>设备后续会自动从 NTP 或 TrustedTimeSource 同步时间，精度会逐步提升。</p>
+      <p>The device will subsequently auto-sync time from NTP or TrustedTimeSource, with precision gradually improving.</p>
     </div>
   </details>
 
@@ -5245,20 +5245,20 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Scenario 2: Timezone Configuration (User Moves to a New Timezone)</summary>
     <div class="scenario-content">
       <ol>
-        <li>确认设备支持 TZ 特性（<code>FeatureMap</code> Bit 0 = 1）</li>
-        <li>读取 <code>TimeZoneListMaxSize (0x0009)</code> 确认列表容量</li>
-        <li>发送 <a href="#cmd-0x02"><code>SetTimeZone (0x02)</code></a>，传入新时区信息：
+        <li>Confirm device supports TZ feature (<code>FeatureMap</code> Bit 0 = 1)</li>
+        <li>Read <code>TimeZoneListMaxSize (0x0009)</code> to confirm list capacity</li>
+        <li>Send <a href="#cmd-0x02"><code>SetTimeZone (0x02)</code></a> with new timezone info:
           <ul>
-            <li>从北京搬到纽约：Offset = <code>-18000</code>（UTC-5），Name = <code>"America/New_York"</code></li>
+            <li>Moving from Beijing to New York: Offset = <code>-18000</code> (UTC-5), Name = <code>"America/New_York"</code></li>
           </ul>
         </li>
-        <li>检查响应的 <code>DSTOffsetRequired</code>：
+        <li>Check the response's <code>DSTOffsetRequired</code>:
           <ul>
-            <li>如果 <code>true</code>：设备没有内置时区数据库，需要接着调用 <a href="#cmd-0x04"><code>SetDSTOffset (0x04)</code></a> 手动设置美东夏令时规则</li>
-            <li>如果 <code>false</code>：设备有内置数据库，已自动推算夏令时，无需额外操作</li>
+            <li>If <code>true</code>: device has no built-in timezone database, need to follow up with <a href="#cmd-0x04"><code>SetDSTOffset (0x04)</code></a> to manually set US Eastern DST rules</li>
+            <li>If <code>false</code>: device has a built-in database and has already calculated DST automatically, no additional action needed</li>
           </ul>
         </li>
-        <li>验证：读取 <code>LocalTime (0x0007)</code> 确认本地时间已正确反映新时区</li>
+        <li>Verify: read <code>LocalTime (0x0007)</code> to confirm local time correctly reflects the new timezone</li>
       </ol>
     </div>
   </details>
@@ -5267,20 +5267,20 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Scenario 3: NTP Auto-sync Configuration</summary>
     <div class="scenario-content">
       <ol>
-        <li>确认设备支持 NTPC 特性（<code>FeatureMap</code> Bit 1 = 1）</li>
-        <li>检查 <code>SupportsDNSResolve (0x000B)</code>：
+        <li>Confirm device supports NTPC feature (<code>FeatureMap</code> Bit 1 = 1)</li>
+        <li>Check <code>SupportsDNSResolve (0x000B)</code>:
           <ul>
-            <li><code>true</code>：可以传域名，如 <code>"pool.ntp.org"</code></li>
-            <li><code>false</code>：只能传 IPv6 地址</li>
+            <li><code>true</code>: can pass domain names, e.g. <code>"pool.ntp.org"</code></li>
+            <li><code>false</code>: can only pass IPv6 addresses</li>
           </ul>
         </li>
-        <li>发送 <a href="#cmd-0x07"><code>SetDefaultNTP (0x07)</code></a>，设置 NTP 服务器地址</li>
-        <li>等待一段时间后，读取 <code>Granularity (0x0001)</code> 和 <code>TimeSource (0x0002)</code>，
-            确认已从 NTP 成功同步（Granularity 应提升到 MillisecondsGranularity，TimeSource 变为 NTP 相关值）</li>
+        <li>Send <a href="#cmd-0x07"><code>SetDefaultNTP (0x07)</code></a> to set the NTP server address</li>
+        <li>After waiting some time, read <code>Granularity (0x0001)</code> and <code>TimeSource (0x0002)</code>,
+            to confirm successful NTP sync (Granularity should upgrade to MillisecondsGranularity, TimeSource changes to NTP-related value)</li>
       </ol>
       <p>
-        <strong>推荐的 NTP 服务器</strong>：<code>pool.ntp.org</code>（全球）、<code>ntp.aliyun.com</code>（中国）、<code>time.google.com</code>（全球）。
-        对于企业环境，可以使用内部 NTP 服务器以确保安全性。
+        <strong>Recommended NTP servers</strong>: <code>pool.ntp.org</code> (global), <code>ntp.aliyun.com</code> (China), <code>time.google.com</code> (global).
+        For enterprise environments, internal NTP servers can be used for security.
       </p>
     </div>
   </details>
@@ -5289,15 +5289,15 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Scenario 4: Handling the DSTTableEmpty Event (DST Table Expired)</summary>
     <div class="scenario-content">
       <ol>
-        <li>订阅设备的 <code>DSTTableEmpty</code> 事件</li>
-        <li>收到事件后，说明所有 DSTOffset 条目已过期</li>
-        <li>根据设备所在时区查询未来的夏令时切换时间</li>
-        <li>发送 <a href="#cmd-0x04"><code>SetDSTOffset (0x04)</code></a>，下发新的夏令时偏移列表</li>
-        <li>最后一条的 <code>ValidUntil</code> 设为 <code>null</code>，确保列表覆盖到下次更新</li>
+        <li>Subscribe to the device's <code>DSTTableEmpty</code> event</li>
+        <li>When the event is received, it means all DSTOffset entries have expired</li>
+        <li>Query future DST transition times based on the device's timezone</li>
+        <li>Send <a href="#cmd-0x04"><code>SetDSTOffset (0x04)</code></a> to provide a new DST offset list</li>
+        <li>Set the last entry's <code>ValidUntil</code> to <code>null</code>, ensuring the list covers until the next update</li>
       </ol>
       <p>
-        <strong>注意</strong>：如果不及时处理此事件，设备的 <code>LocalTime</code> 会因为缺少夏令时信息而出错，
-        影响所有依赖本地时间的自动化规则（如「每天早上 7 点开灯」实际上会提前或延后一小时）。
+        <strong>Note</strong>: If this event is not handled promptly, the device's <code>LocalTime</code> will be incorrect due to missing DST information,
+        affecting all automation rules that depend on local time (e.g. "turn on lights at 7 AM" would actually be an hour early or late).
       </p>
     </div>
   </details>
@@ -5306,18 +5306,18 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Scenario 5: Time Synchronization Strategy for Thread Devices</summary>
     <div class="scenario-content">
       <p>
-        Thread 设备通常没有直接的互联网访问能力，无法使用 NTP。它们依赖以下时间同步链路：
+        Thread devices typically lack direct internet access and cannot use NTP. They rely on the following time sync chain:
       </p>
       <ol>
-        <li><strong>配网阶段</strong>：Commissioner 通过 <a href="#cmd-0x00">SetUTCTime</a> 注入初始时间</li>
-        <li><strong>运行阶段</strong>：通过 <a href="#cmd-0x01">SetTrustedTimeSource</a> 指向 Thread 边界路由器（Border Router），
-            边界路由器从互联网获取 NTP 时间后转发给 Thread 设备</li>
-        <li>如果 TrustedTimeSource 离线，设备会触发 <code>MissingTrustedTimeSource</code> 事件</li>
-        <li>时间精度会逐渐降低（Granularity 可能从 Milliseconds 退化到 Seconds 甚至 Minutes）</li>
+        <li><strong>Commissioning phase</strong>: Commissioner injects initial time via <a href="#cmd-0x00">SetUTCTime</a></li>
+        <li><strong>Running phase</strong>: Via <a href="#cmd-0x01">SetTrustedTimeSource</a>, point to the Thread Border Router,
+            which forwards NTP time obtained from the internet to Thread devices</li>
+        <li>If TrustedTimeSource goes offline, the device triggers a <code>MissingTrustedTimeSource</code> event</li>
+        <li>Time precision will gradually degrade (Granularity may deteriorate from Milliseconds to Seconds or even Minutes)</li>
       </ol>
       <p>
-        <strong>最佳实践</strong>：确保 Fabric 中至少有一个可靠的时间源节点（如 Hub 或边界路由器），
-        并在配网时为所有设备配置 TrustedTimeSource 指向它。
+        <strong>Best practice</strong>: Ensure at least one reliable time source node in the Fabric (e.g. Hub or Border Router),
+        and configure TrustedTimeSource pointing to it for all devices during commissioning.
       </p>
     </div>
   </details>
@@ -5373,23 +5373,23 @@ export const clusters: Record<string, ClusterContent> = {
     content: `<h1>IcdManagement Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x0046</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 固定在 <code>Endpoint 0</code>（根端点）
+    <strong>Endpoint</strong>: Fixed on <code>Endpoint 0</code> (Root Endpoint)
   </p>
   <p>
-    ICD Management 管理「间歇连接设备」（Intermittently Connected Device，简称 ICD），
-    也就是俗称的「休眠设备」或「Sleepy Device」—— 门窗传感器、温湿度传感器、电池供电的按钮等。
-    这些设备为了省电，大部分时间处于休眠状态，只在固定周期或特定事件时短暂唤醒通信。
-    ICD Management 负责定义设备的休眠/唤醒周期、管理订阅者注册、以及通过 Check-In 协议保持连接。
+    ICD Management manages Intermittently Connected Devices (ICD),
+    commonly known as "sleepy devices" — door/window sensors, temperature/humidity sensors, battery-powered buttons, etc.
+    These devices spend most of their time in sleep mode to conserve power, only briefly waking for communication at fixed intervals or specific events.
+    ICD Management defines the device's sleep/wake cycles, manages subscriber registrations, and maintains connectivity through the Check-In protocol.
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">SIT 与 LIT —— 两种运行模式</div>
+    <div class="callout-title">SIT and LIT — Two Operating Modes</div>
     <p>
-      ICD 设备有两种运行模式：<strong>SIT（Short Idle Time）</strong>短空闲时间模式和
-      <strong>LIT（Long Idle Time）</strong>长空闲时间模式。
-      SIT 设备的空闲间隔较短（通常不超过 15 秒），Controller 可以在正常 MRP 重试窗口内等到设备醒来；
-      LIT 设备的空闲间隔更长（可达数小时），Controller 必须依赖 Check-In 协议才能与设备建立通信。
-      LIT 模式显著延长电池寿命，但交互响应速度更慢。
+      ICD devices have two operating modes: <strong>SIT (Short Idle Time)</strong> mode and
+      <strong>LIT (Long Idle Time)</strong> mode.
+      SIT devices have short idle intervals (typically no more than 15 seconds), so the Controller can wait for the device to wake within the normal MRP retry window;
+      LIT devices have longer idle intervals (up to several hours), requiring the Controller to rely on the Check-In protocol to establish communication.
+      LIT mode significantly extends battery life, but interaction response is slower.
     </p>
   </div>
 
@@ -5410,12 +5410,12 @@ export const clusters: Record<string, ClusterContent> = {
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    ICD Management 共有 4 个命令。<code>RegisterClient</code> 和 <code>UnregisterClient</code> 用于管理
-    Check-In 消息的订阅者列表；<code>StayActiveRequest</code> 让设备临时保持唤醒。
-    点击下方表格中的命令 ID 可跳转到对应的详细说明。
+    ICD Management has 4 commands. <code>RegisterClient</code> and <code>UnregisterClient</code> manage
+    the Check-In message subscriber list; <code>StayActiveRequest</code> keeps the device temporarily awake.
+    Click a command ID in the table below to jump to its detailed description.
   </p>
 
   <div class="table-wrap">
@@ -5434,46 +5434,46 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>RegisterClient</td>
           <td>Client &rarr; Server</td>
-          <td>注册一个 Check-In 客户端</td>
+          <td>Register a Check-In client</td>
           <td class="col-required">CIP</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x01">
           <td><a href="#cmd-0x01"><code>0x01</code></a></td>
           <td>RegisterClientResponse</td>
           <td>Server &rarr; Client</td>
-          <td>注册结果，返回 ICDCounter</td>
+          <td>Registration result, returns ICDCounter</td>
           <td class="col-required">CIP</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x02">
           <td><a href="#cmd-0x02"><code>0x02</code></a></td>
           <td>UnregisterClient</td>
           <td>Client &rarr; Server</td>
-          <td>取消注册一个 Check-In 客户端</td>
+          <td>Unregister a Check-In client</td>
           <td class="col-required">CIP</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x03">
           <td><a href="#cmd-0x03"><code>0x03</code></a></td>
           <td>StayActiveRequest</td>
           <td>Client &rarr; Server</td>
-          <td>请求设备保持活跃一段时间</td>
+          <td>Request the device to stay active for a period</td>
           <td class="col-required">LITS</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x04">
           <td><a href="#cmd-0x04"><code>0x04</code></a></td>
           <td>StayActiveResponse</td>
           <td>Server &rarr; Client</td>
-          <td>返回设备实际承诺的活跃时长</td>
+          <td>Returns the actual active duration promised by the device</td>
           <td class="col-required">LITS</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
+  <!-- ====== Command Details ====== -->
   <h3 id="cmd-0x00">RegisterClient — Register Client (0x00)</h3>
   <p>
-    向 ICD 设备注册一个 Check-In 客户端。注册成功后，设备每次从休眠中唤醒时都会向该客户端发送
-    Check-In 消息，告知「我醒了，有什么事赶紧说」。这是 LIT 设备与 Controller 保持连接的核心机制。
+    Registers a Check-In client with the ICD device. After successful registration, the device sends
+    a Check-In message to the client each time it wakes from sleep, saying "I'm awake, send any pending requests now." This is the core mechanism for LIT devices to maintain connectivity with Controllers.
   </p>
   <div class="table-wrap">
     <table>
@@ -5484,22 +5484,22 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>CheckInNodeID</td>
           <td>uint64</td>
-          <td>接收 Check-In 消息的目标节点 ID —— 通常是 Controller 或 Hub 的 NodeID</td>
+          <td>Target node ID for receiving Check-In messages — typically the Controller or Hub's NodeID</td>
         </tr>
         <tr>
           <td>MonitoredSubject</td>
           <td>uint64</td>
-          <td>被监控的 Subject（Case-AuthTag 或 NodeID）—— 标识哪个用户/实体在关注此设备</td>
+          <td>Monitored Subject (Case-AuthTag or NodeID) — identifies which user/entity is watching this device</td>
         </tr>
         <tr>
           <td>Key</td>
           <td>octstr (16 bytes)</td>
-          <td>HMAC 验证密钥 —— 用于验证 Check-In 消息的真实性，防止伪造</td>
+          <td>HMAC verification key — used to verify Check-In message authenticity and prevent forgery</td>
         </tr>
         <tr>
           <td>VerificationKey</td>
           <td>octstr (16 bytes)</td>
-          <td>可选。验证密钥 —— 用于在注册时验证发起方的身份。如果设备要求验证，此字段必填</td>
+          <td>Optional. Verification key — used to verify the initiator's identity during registration. Required if the device demands verification</td>
         </tr>
       </tbody>
     </table>
@@ -5508,8 +5508,8 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        配网完成后，Hub/Controller 向电池传感器注册自己为 Check-In 客户端。
-        之后传感器每次醒来时发送 Check-In 消息，Hub 收到后在设备短暂的活跃窗口内发送订阅请求或读取数据。
+        After commissioning, Hub/Controller registers itself as a Check-In client with the battery sensor.
+        Subsequently, the sensor sends a Check-In message each time it wakes; the Hub then sends subscription requests or reads data during the device's brief active window.
       </p>
     </div>
   </details>
@@ -5517,8 +5517,8 @@ export const clusters: Record<string, ClusterContent> = {
 
   <h3 id="cmd-0x01">RegisterClientResponse — Registration Response (0x01)</h3>
   <p>
-    设备对 RegisterClient 的响应。返回当前的 ICDCounter 值，
-    客户端用它来验证后续收到的 Check-In 消息的新鲜度（防重放攻击）。
+    Device response to RegisterClient. Returns the current ICDCounter value,
+    which the client uses to verify the freshness of subsequent Check-In messages (prevents replay attacks).
   </p>
   <div class="table-wrap">
     <table>
@@ -5529,7 +5529,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>ICDCounter</td>
           <td>uint32</td>
-          <td>设备当前的 Check-In 计数器值。客户端应保存此值，后续收到的 Check-In 消息的 Counter 必须大于此值</td>
+          <td>Device's current Check-In counter value. The client should save this value; subsequent Check-In messages must have a Counter greater than this</td>
         </tr>
       </tbody>
     </table>
@@ -5538,8 +5538,8 @@ export const clusters: Record<string, ClusterContent> = {
 
   <h3 id="cmd-0x02">UnregisterClient — Unregister Client (0x02)</h3>
   <p>
-    从 ICD 设备的注册列表中移除一个 Check-In 客户端。
-    移除后，设备不再向该客户端发送 Check-In 消息。
+    Removes a Check-In client from the ICD device's registration list.
+    After removal, the device no longer sends Check-In messages to that client.
   </p>
   <div class="table-wrap">
     <table>
@@ -5550,12 +5550,12 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>CheckInNodeID</td>
           <td>uint64</td>
-          <td>要移除的客户端的节点 ID —— 必须与注册时使用的 CheckInNodeID 一致</td>
+          <td>Node ID of the client to remove — must match the CheckInNodeID used during registration</td>
         </tr>
         <tr>
           <td>VerificationKey</td>
           <td>octstr (16 bytes)</td>
-          <td>可选。验证密钥 —— 同注册时的用途，防止未授权的取消注册</td>
+          <td>Optional. Verification key — same purpose as during registration, prevents unauthorized unregistration</td>
         </tr>
       </tbody>
     </table>
@@ -5564,8 +5564,8 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        用户从家庭中移除一个 Hub，该 Hub 需要先调用 UnregisterClient 将自己从所有已注册的 ICD 设备上注销，
-        避免设备继续向一个不存在的节点发送 Check-In 消息浪费电量。
+        When removing a Hub from the home, the Hub needs to first call UnregisterClient to unregister itself from all registered ICD devices,
+        to prevent devices from wasting battery by continuing to send Check-In messages to a non-existent node.
       </p>
     </div>
   </details>
@@ -5573,8 +5573,8 @@ export const clusters: Record<string, ClusterContent> = {
 
   <h3 id="cmd-0x03">StayActiveRequest — Request Stay Active (0x03)</h3>
   <p>
-    请求 ICD 设备在活跃模式下额外保持一段时间，暂时不要回到休眠状态。
-    适用于需要与设备进行一系列交互（如 OTA 升级、批量配置）但设备默认活跃时间太短的场景。
+    Requests the ICD device to stay in active mode for an additional period, temporarily not returning to sleep.
+    Applicable when needing to perform a series of interactions with the device (e.g. OTA upgrade, batch configuration) but the device's default active time is too short.
   </p>
   <div class="table-wrap">
     <table>
@@ -5585,7 +5585,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>StayActiveDuration</td>
           <td>uint32</td>
-          <td>请求的额外活跃时长，单位<strong>毫秒</strong>。设备会在当前活跃周期结束后继续保持唤醒至少这么久</td>
+          <td>Requested additional active duration, in <strong>milliseconds</strong>. The device will remain awake for at least this long after the current active period ends</td>
         </tr>
       </tbody>
     </table>
@@ -5594,9 +5594,9 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        Controller 需要对门窗传感器进行 OTA 固件升级。传感器的默认活跃窗口只有 10 秒，不够传输固件。
-        Controller 发送 StayActiveRequest（StayActiveDuration = 120000，即 2 分钟），
-        传感器回复 StayActiveResponse 告知实际可以维持多久，Controller 在此窗口内完成升级。
+        The Controller needs to perform an OTA firmware upgrade on a door/window sensor. The sensor's default active window is only 10 seconds, insufficient for firmware transfer.
+        The Controller sends StayActiveRequest (StayActiveDuration = 120000, i.e. 2 minutes),
+        the sensor replies with StayActiveResponse indicating how long it can actually maintain, and the Controller completes the upgrade within this window.
       </p>
     </div>
   </details>
@@ -5604,8 +5604,8 @@ export const clusters: Record<string, ClusterContent> = {
 
   <h3 id="cmd-0x04">StayActiveResponse — Stay Active Response (0x04)</h3>
   <p>
-    设备对 StayActiveRequest 的响应。设备可能无法完全满足请求的时长（例如电池电量不足），
-    响应中包含设备实际承诺的活跃时长。
+    Device response to StayActiveRequest. The device may not fully satisfy the requested duration (e.g. low battery),
+    and the response contains the actual active duration the device promises.
   </p>
   <div class="table-wrap">
     <table>
@@ -5616,18 +5616,18 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>PromisedActiveDuration</td>
           <td>uint32</td>
-          <td>设备实际承诺的活跃时长，单位<strong>毫秒</strong>。可能小于请求值。Controller 应在此时间内完成所有操作</td>
+          <td>Actual active duration promised by the device, in <strong>milliseconds</strong>. May be less than requested. The Controller should complete all operations within this time</td>
         </tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h2 id="attributes">Attributes</h2>
-  <p>ICD Management 的属性按功能分为四组。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+  <p>ICD Management attributes are divided into four functional groups. Click an attribute ID in the summary table below to jump to its detailed description.</p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute Summary Table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -5640,97 +5640,97 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
       </thead>
       <tbody>
-        <!-- 休眠/唤醒参数 -->
+        <!-- Sleep/Wake Parameters -->
         <tr class="clickable-row" data-href="#attr-0x0000">
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>IdleModeDuration</td>
           <td>uint32</td>
           <td><a href="#group-timing">Sleep/Wake Parameters</a></td>
-          <td>空闲模式持续时间（秒）</td>
+          <td>Idle mode duration (seconds)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>ActiveModeDuration</td>
           <td>uint32</td>
           <td><a href="#group-timing">Sleep/Wake Parameters</a></td>
-          <td>活跃模式持续时间（毫秒）</td>
+          <td>Active mode duration (milliseconds)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
           <td>ActiveModeThreshold</td>
           <td>uint16</td>
           <td><a href="#group-timing">Sleep/Wake Parameters</a></td>
-          <td>活跃模式延长阈值（毫秒）</td>
+          <td>Active mode extension threshold (milliseconds)</td>
         </tr>
-        <!-- 注册管理 -->
+        <!-- Registration Management -->
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
           <td>RegisteredClients</td>
           <td>list&lt;MonitoringRegistrationStruct&gt;</td>
           <td><a href="#group-registration">Registration Management</a></td>
-          <td>已注册的监控客户端列表</td>
+          <td>List of registered monitoring clients</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0004">
           <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
           <td>ICDCounter</td>
           <td>uint32</td>
           <td><a href="#group-registration">Registration Management</a></td>
-          <td>Check-In 消息计数器</td>
+          <td>Check-In message counter</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0005">
           <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
           <td>ClientsSupportedPerFabric</td>
           <td>uint16</td>
           <td><a href="#group-registration">Registration Management</a></td>
-          <td>每个 Fabric 支持的最大注册客户端数</td>
+          <td>Maximum registered clients per Fabric</td>
         </tr>
-        <!-- 用户唤醒提示 -->
+        <!-- User Wake-up Hints -->
         <tr class="clickable-row" data-href="#attr-0x0006">
           <td><a href="#attr-0x0006"><code>0x0006</code></a></td>
           <td>UserActiveModeTriggerHint</td>
           <td>UserActiveModeTriggerBitmap</td>
           <td><a href="#group-trigger">User Wake-up Hints</a></td>
-          <td>用户可用的唤醒方式提示位图</td>
+          <td>Bitmap of user-available wake-up methods</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0007">
           <td><a href="#attr-0x0007"><code>0x0007</code></a></td>
           <td>UserActiveModeTriggerInstruction</td>
           <td>string (max 128)</td>
           <td><a href="#group-trigger">User Wake-up Hints</a></td>
-          <td>唤醒操作的文字说明</td>
+          <td>Wake-up operation text instructions</td>
         </tr>
-        <!-- 运行模式 -->
+        <!-- Operating Mode -->
         <tr class="clickable-row" data-href="#attr-0x0008">
           <td><a href="#attr-0x0008"><code>0x0008</code></a></td>
           <td>OperatingMode</td>
           <td>OperatingModeEnum</td>
           <td><a href="#group-mode">Operating Mode</a></td>
-          <td>当前运行模式（SIT / LIT）</td>
+          <td>Current operating mode (SIT / LIT)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0009">
           <td><a href="#attr-0x0009"><code>0x0009</code></a></td>
           <td>MaximumCheckInBackOff</td>
           <td>uint32</td>
           <td><a href="#group-mode">Operating Mode</a></td>
-          <td>Check-In 最大回退间隔（秒）</td>
+          <td>Maximum Check-In back-off interval (seconds)</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 休眠/唤醒参数（0x0000-0x0002）====== -->
+  <!-- ====== Sleep/Wake Parameters (0x0000-0x0002) ====== -->
   <h3 id="group-timing">Sleep/Wake Parameters (0x0000-0x0002)</h3>
   <p>
-    定义设备的休眠与唤醒周期参数。这三个值直接决定了设备的省电程度和通信响应速度 ——
-    空闲时间越长越省电，但响应越慢。
+    Defines the device's sleep and wake cycle parameters. These three values directly determine the device's power saving level and communication responsiveness —
+    the longer the idle time, the more power saved, but the slower the response.
   </p>
 
   <div class="callout callout-warning">
     <div class="callout-title">Time Unit Note</div>
     <p>
-      <code>IdleModeDuration</code> 的单位是<strong>秒</strong>，
-      而 <code>ActiveModeDuration</code> 和 <code>ActiveModeThreshold</code> 的单位是<strong>毫秒</strong>。
-      例如 IdleModeDuration = 300 表示空闲 5 分钟，ActiveModeDuration = 10000 表示活跃 10 秒。
+      <code>IdleModeDuration</code> is in <strong>seconds</strong>,
+      while <code>ActiveModeDuration</code> and <code>ActiveModeThreshold</code> are in <strong>milliseconds</strong>.
+      For example, IdleModeDuration = 300 means 5 minutes idle, ActiveModeDuration = 10000 means 10 seconds active.
     </p>
   </div>
 
@@ -5744,19 +5744,19 @@ export const clusters: Record<string, ClusterContent> = {
           <td><code>0x0000</code></td>
           <td>IdleModeDuration<br/><span class="attr-cn">Idle Mode Duration</span></td>
           <td>uint32</td>
-          <td>设备在空闲（休眠）模式下的持续时间，单位<strong>秒</strong>。这段时间内设备不主动收发消息。SIT 设备通常 &le; 15 秒，LIT 设备可达数小时。最小值 1 秒</td>
+          <td>Duration the device stays in idle (sleep) mode, in <strong>seconds</strong>. The device does not actively send or receive messages during this time. SIT devices typically &le; 15 seconds, LIT devices can reach hours. Minimum 1 second</td>
         </tr>
         <tr id="attr-0x0001">
           <td><code>0x0001</code></td>
           <td>ActiveModeDuration<br/><span class="attr-cn">Active Mode Duration</span></td>
           <td>uint32</td>
-          <td>设备在活跃模式下的持续时间，单位<strong>毫秒</strong>。设备每次醒来后至少保持这么久的通信窗口。最小值 300 毫秒</td>
+          <td>Duration the device stays in active mode, in <strong>milliseconds</strong>. The device maintains a communication window for at least this long each time it wakes. Minimum 300 milliseconds</td>
         </tr>
         <tr id="attr-0x0002">
           <td><code>0x0002</code></td>
           <td>ActiveModeThreshold<br/><span class="attr-cn">Active Mode Threshold</span></td>
           <td>uint16</td>
-          <td>设备在活跃模式下收到通信后，额外延长的活跃时间，单位<strong>毫秒</strong>。每次收到消息都会重新计时，避免正在交互时设备突然休眠。SIT 设备最小值 300ms，LIT 设备最小值 5000ms</td>
+          <td>Additional active time extension after receiving communication in active mode, in <strong>milliseconds</strong>. Timer resets on each received message, preventing the device from suddenly sleeping during interaction. SIT device minimum 300ms, LIT device minimum 5000ms</td>
         </tr>
       </tbody>
     </table>
@@ -5765,17 +5765,17 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      SIT 设备的 <code>IdleModeDuration</code> &le; 15 秒，与 MRP 的 Idle Retransmission Timeout 对齐，
-      Controller 可以在正常重试窗口内等到设备醒来。
-      如果 IdleModeDuration &gt; 15 秒，设备就是 LIT 模式，Controller 必须等 Check-In 消息才能通信。
+      SIT device's <code>IdleModeDuration</code> &le; 15 seconds, aligned with MRP's Idle Retransmission Timeout,
+      allowing the Controller to wait for the device to wake within the normal retry window.
+      If IdleModeDuration &gt; 15 seconds, the device is in LIT mode, and the Controller must wait for Check-In messages to communicate.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 注册管理（0x0003-0x0005）====== -->
+  <!-- ====== Registration Management (0x0003-0x0005) ====== -->
   <h3 id="group-registration">Registration Management (0x0003-0x0005)</h3>
   <p>
-    管理 Check-In 客户端的注册列表。只有注册过的客户端才会收到设备的 Check-In 消息。
+    Manages the Check-In client registration list. Only registered clients will receive Check-In messages from the device.
   </p>
 
   <div class="table-wrap">
@@ -5788,30 +5788,30 @@ export const clusters: Record<string, ClusterContent> = {
           <td><code>0x0003</code></td>
           <td>RegisteredClients<br/><span class="attr-cn">Registered Clients</span></td>
           <td>list&lt;<a href="#struct-monitoring-registration">MonitoringRegistrationStruct</a>&gt;</td>
-          <td>当前已注册的 Check-In 客户端列表。每个 Fabric 的注册数不超过 <code>ClientsSupportedPerFabric</code>。<strong>需要 CIP 特性</strong></td>
+          <td>List of currently registered Check-In clients. Number of registrations per Fabric cannot exceed <code>ClientsSupportedPerFabric</code>. <strong>Requires CIP feature</strong></td>
         </tr>
         <tr id="attr-0x0004">
           <td><code>0x0004</code></td>
           <td>ICDCounter<br/><span class="attr-cn">Check-In Counter</span></td>
           <td>uint32</td>
-          <td>设备发送 Check-In 消息的单调递增计数器。客户端据此检测消息重放 —— 如果收到的 Counter &le; 上次保存的值，说明可能是重放攻击。<strong>需要 CIP 特性</strong></td>
+          <td>Monotonically increasing counter for Check-In messages sent by the device. Clients use this to detect message replay — if the received Counter &le; the last saved value, it may indicate a replay attack. <strong>Requires CIP feature</strong></td>
         </tr>
         <tr id="attr-0x0005">
           <td><code>0x0005</code></td>
           <td>ClientsSupportedPerFabric<br/><span class="attr-cn">Max Clients Per Fabric</span></td>
           <td>uint16</td>
-          <td>每个 Fabric 最多可注册的 Check-In 客户端数量。最小值 1。受限于设备的存储和电量资源 —— 更多客户端意味着每次唤醒时要发更多 Check-In 消息。<strong>需要 CIP 特性</strong></td>
+          <td>Maximum number of Check-In clients that can be registered per Fabric. Minimum 1. Limited by the device's storage and power resources — more clients means more Check-In messages to send each wake-up. <strong>Requires CIP feature</strong></td>
         </tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 用户唤醒提示（0x0006-0x0007）====== -->
+  <!-- ====== User Wake-up Hints (0x0006-0x0007) ====== -->
   <h3 id="group-trigger">User Wake-up Hints (0x0006-0x0007)</h3>
   <p>
-    当 Controller 需要与 LIT 设备通信但不想等 Check-In 时，可以提示用户手动唤醒设备。
-    这两个属性告诉 App 如何指导用户操作 —— 比如「按一下设备上的按钮」或「打开/关闭门窗一次」。
+    When the Controller needs to communicate with a LIT device but doesn't want to wait for Check-In, it can prompt the user to manually wake the device.
+    These two attributes tell the App how to guide user actions — e.g. "press the button on the device" or "open/close the door once."
   </p>
 
   <div class="table-wrap">
@@ -5824,19 +5824,19 @@ export const clusters: Record<string, ClusterContent> = {
           <td><code>0x0006</code></td>
           <td>UserActiveModeTriggerHint<br/><span class="attr-cn">Wake-up Mode Hint</span></td>
           <td>UserActiveModeTriggerBitmap</td>
-          <td>位图，标识用户可以通过哪些方式手动唤醒设备。App 应根据此位图显示对应的引导提示。<strong>需要 UAT 特性</strong></td>
+          <td>Bitmap identifying which methods users can use to manually wake the device. The App should display corresponding guidance based on this bitmap. <strong>Requires UAT feature</strong></td>
         </tr>
         <tr id="attr-0x0007">
           <td><code>0x0007</code></td>
           <td>UserActiveModeTriggerInstruction<br/><span class="attr-cn">Wake-up Instruction</span></td>
           <td>string (max 128)</td>
-          <td>厂商自定义的操作说明文字。当位图中设置了 ActuateSensorLightsBlink 等较特殊的触发方式时，此字段提供具体的操作指引（如「连续按顶部按钮 3 次」）。<strong>需要 UAT 特性</strong></td>
+          <td>Vendor-defined operation instruction text. When special trigger methods like ActuateSensorLightsBlink are set in the bitmap, this field provides specific operational guidance (e.g. "press the top button 3 times consecutively"). <strong>Requires UAT feature</strong></td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <h4>UserActiveModeTriggerBitmap 常见位</h4>
+  <h4>UserActiveModeTriggerBitmap Common Bits</h4>
   <div class="enum-cards enum-cards-grid">
     <div class="enum-card">
       <span class="enum-badge">Bit 0</span>
@@ -5925,9 +5925,9 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 运行模式（0x0008-0x0009）====== -->
+  <!-- ====== Operating Mode (0x0008-0x0009) ====== -->
   <h3 id="group-mode">Operating Mode (0x0008-0x0009)</h3>
-  <p>设备当前的运行模式和 Check-In 回退参数。</p>
+  <p>Device's current operating mode and Check-In back-off parameters.</p>
 
   <div class="table-wrap">
     <table>
@@ -5939,24 +5939,24 @@ export const clusters: Record<string, ClusterContent> = {
           <td><code>0x0008</code></td>
           <td>OperatingMode<br/><span class="attr-cn">Operating Mode</span></td>
           <td><a href="#enum-operating-mode">OperatingModeEnum</a></td>
-          <td>设备当前的 ICD 运行模式：SIT（短空闲）或 LIT（长空闲）。支持 DSLS 特性的设备可以在两种模式间动态切换。<strong>需要 LITS 特性</strong></td>
+          <td>Device's current ICD operating mode: SIT (short idle) or LIT (long idle). Devices supporting DSLS feature can dynamically switch between modes. <strong>Requires LITS feature</strong></td>
         </tr>
         <tr id="attr-0x0009">
           <td><code>0x0009</code></td>
           <td>MaximumCheckInBackOff<br/><span class="attr-cn">Max Check-In Backoff</span></td>
           <td>uint32</td>
-          <td>设备在没有已注册客户端时，Check-In 消息的最大发送间隔，单位<strong>秒</strong>。设备会逐渐拉长间隔直到此上限，用于在无人监听时进一步省电。<strong>需要 LITS 特性</strong></td>
+          <td>Maximum Check-In message sending interval when there are no registered clients, in <strong>seconds</strong>. The device gradually extends the interval up to this limit to further conserve power when no one is listening. <strong>Requires LITS feature</strong></td>
         </tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 枚举速查 ====== -->
+  <!-- ====== Enum Quick Reference ====== -->
   <h2 id="enums">Enum Quick Reference</h2>
 
   <h3 id="enum-operating-mode">OperatingModeEnum — Operating Mode</h3>
-  <p>描述 ICD 设备的当前运行模式，对应 <code>OperatingMode (0x0008)</code> 属性。</p>
+  <p>Describes the ICD device's current operating mode, corresponding to the <code>OperatingMode (0x0008)</code> attribute.</p>
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0</span>
@@ -5974,11 +5974,11 @@ export const clusters: Record<string, ClusterContent> = {
     </div>
   </div>
 
-  <!-- ====== 数据结构 ====== -->
+  <!-- ====== Data Structures ====== -->
   <h2 id="structs">Data Structures</h2>
 
   <h3 id="struct-monitoring-registration">MonitoringRegistrationStruct</h3>
-  <p>描述一个已注册的 Check-In 客户端的信息，是 <code>RegisteredClients (0x0003)</code> 属性中每个列表元素的结构。</p>
+  <p>Describes a registered Check-In client's information, the structure of each list element in the <code>RegisteredClients (0x0003)</code> attribute.</p>
 
   <div class="table-wrap">
     <table>
@@ -5989,33 +5989,33 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>CheckInNodeID</td>
           <td>uint64</td>
-          <td>接收 Check-In 消息的节点 ID —— 通常是注册时的 Controller 或 Hub</td>
+          <td>Node ID for receiving Check-In messages — typically the Controller or Hub from registration</td>
         </tr>
         <tr>
           <td>MonitoredSubject</td>
           <td>uint64</td>
-          <td>被监控的 Subject —— 标识哪个用户或实体关注此设备</td>
+          <td>Monitored Subject — identifies which user or entity is watching this device</td>
         </tr>
         <tr>
           <td>FabricIndex</td>
           <td>uint8</td>
-          <td>该注册所属的 Fabric 索引</td>
+          <td>Fabric index this registration belongs to</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <p>MonitoringRegistrationStruct 数据示例：</p>
+  <p>MonitoringRegistrationStruct data example:</p>
   <pre><code>{
-  "CheckInNodeID": 1,                   // Check-In 消息目标节点 ID
-  "MonitoredSubject": 112233,           // 被监控的 Subject（通常是用户的 NodeID）
-  "FabricIndex": 1                      // 所属 Fabric 索引
+  "CheckInNodeID": 1,                   // Check-In message target node ID
+  "MonitoredSubject": 112233,           // Monitored Subject (typically the user's NodeID)
+  "FabricIndex": 1                      // Fabric index
 }</code></pre>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== Feature 位图 ====== -->
+  <!-- ====== Feature Bitmap ====== -->
   <h2 id="features">Feature Bitmap</h2>
-  <p>ICD Management 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持的 ICD 能力：</p>
+  <p>ICD Management declares device ICD capabilities through <code>FeatureMap</code> (0xFFFC):</p>
 
   <div class="enum-cards enum-cards-grid">
     <div class="enum-card">
@@ -6049,65 +6049,65 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">Feature 依赖关系</div>
+    <div class="callout-title">Feature Dependencies</div>
     <p>
-      LITS 依赖 CIP（长空闲设备必须支持 Check-In 协议才能被找到），DSLS 依赖 LITS（动态切换必须先支持 LIT 模式）。
-      因此，一个支持 DSLS 的设备的 FeatureMap 至少是 <code>0b1111</code>（CIP + UAT + LITS + DSLS）。
+      LITS depends on CIP (long-idle devices must support Check-In protocol to be discoverable), DSLS depends on LITS (dynamic switching requires LIT mode support first).
+      Therefore, a device supporting DSLS must have a FeatureMap of at least <code>0b1111</code> (CIP + UAT + LITS + DSLS).
     </p>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一个运行在 LIT 模式下的电池门窗传感器的 ICD Management Cluster 读取结果：</p>
+  <p>Read results from an ICD Management Cluster of a battery-powered door/window sensor running in LIT mode:</p>
 
   <pre><code>{
-  // --- 休眠/唤醒时间参数 ---
-  "0x0000": 300,              // IdleModeDuration = 300 秒（空闲模式持续 5 分钟）
-  "0x0001": 10,               // ActiveModeDuration = 10000 毫秒（活跃模式持续 10 秒）
-  "0x0002": 5000,             // ActiveModeThreshold = 5000 毫秒（活跃模式延长阈值 5 秒）
+  // --- Sleep/Wake Time Parameters ---
+  "0x0000": 300,              // IdleModeDuration = 300 seconds (idle mode lasts 5 minutes)
+  "0x0001": 10,               // ActiveModeDuration = 10000 milliseconds (active mode lasts 10 seconds)
+  "0x0002": 5000,             // ActiveModeThreshold = 5000 milliseconds (active mode extension threshold 5 seconds)
 
-  // --- 注册管理 ---
-  "0x0003": [                 // RegisteredClients（已注册的监控客户端列表）
+  // --- Registration Management ---
+  "0x0003": [                 // RegisteredClients (list of registered monitoring clients)
     {
       "CheckInNodeID": 1,
       "MonitoredSubject": 1,
       "FabricIndex": 1
     }
   ],
-  "0x0004": 42,               // ICDCounter = 42（Check-In 消息计数器）
-  "0x0005": 2,                // ClientsSupportedPerFabric = 2（每个 Fabric 最多注册 2 个客户端）
+  "0x0004": 42,               // ICDCounter = 42 (Check-In message counter)
+  "0x0005": 2,                // ClientsSupportedPerFabric = 2 (max 2 clients per Fabric)
 
-  // --- 用户唤醒提示 ---
-  "0x0006": 1,                // UserActiveModeTriggerHint = PowerCycle（提示用户通过重新上电唤醒）
-  "0x0007": "",               // UserActiveModeTriggerInstruction = ""（无额外说明）
+  // --- User Wake-up Hints ---
+  "0x0006": 1,                // UserActiveModeTriggerHint = PowerCycle (hint user to wake by power cycling)
+  "0x0007": "",               // UserActiveModeTriggerInstruction = "" (no additional instructions)
 
-  // --- 运行模式 ---
-  "0x0008": 1,                // OperatingMode = LIT（长空闲时间模式）
-  "0x0009": 3600              // MaximumCheckInBackOff = 3600 秒（最大 Check-In 回退间隔 1 小时）
+  // --- Operating Mode ---
+  "0x0008": 1,                // OperatingMode = LIT (Long Idle Time mode)
+  "0x0009": 3600              // MaximumCheckInBackOff = 3600 seconds (max Check-In back-off interval 1 hour)
 }</code></pre>
 
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      读取 ICD Management 属性时需注意设备可能正在休眠。
-      对于 SIT 设备，Controller 可以在 MRP 重试窗口内等到设备醒来并完成读取；
-      对于 LIT 设备，需要先收到 Check-In 消息或用户手动唤醒后才能读取。
-      读取前可先检查 <code>OperatingMode (0x0008)</code> 判断设备的运行模式。
+      When reading ICD Management attributes, note that the device may be sleeping.
+      For SIT devices, the Controller can wait for the device to wake within the MRP retry window and complete the read;
+      for LIT devices, a Check-In message must be received or the user must manually wake the device before reading.
+      Before reading, you can first check <code>OperatingMode (0x0008)</code> to determine the device's operating mode.
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
     <summary>Scenario 1: Register Check-In Monitoring After Commissioning</summary>
     <div class="scenario-content">
       <ol>
-        <li>完成设备配网后，读取 <code>FeatureMap (0xFFFC)</code> 确认设备支持 CIP 特性</li>
-        <li>读取 <code>ClientsSupportedPerFabric (0x0005)</code> 确认还有注册名额</li>
-        <li>发送 <code>RegisterClient (0x00)</code>，传入 Hub 的 NodeID 作为 CheckInNodeID，并生成一个 16 字节的 HMAC Key</li>
-        <li>保存 <code>RegisterClientResponse</code> 中返回的 ICDCounter 值，用于后续 Check-In 消息验证</li>
-        <li>设备每次醒来时，Hub 会收到 Check-In 消息，在活跃窗口内完成数据同步</li>
+        <li>After commissioning the device, read <code>FeatureMap (0xFFFC)</code> to confirm the device supports the CIP feature</li>
+        <li>Read <code>ClientsSupportedPerFabric (0x0005)</code> to confirm registration slots are available</li>
+        <li>Send <code>RegisterClient (0x00)</code> with the Hub's NodeID as CheckInNodeID and generate a 16-byte HMAC Key</li>
+        <li>Save the ICDCounter value returned in <code>RegisterClientResponse</code> for subsequent Check-In message verification</li>
+        <li>Each time the device wakes, the Hub receives a Check-In message and completes data synchronization within the active window</li>
       </ol>
     </div>
   </details>
@@ -6116,11 +6116,11 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Scenario 2: OTA Upgrade — Extend Active Window</summary>
     <div class="scenario-content">
       <ol>
-        <li>等待 LIT 设备发送 Check-In 消息（或提示用户手动唤醒设备）</li>
-        <li>在设备活跃窗口内，发送 <code>StayActiveRequest (0x03)</code>，请求足够长的活跃时间（如 120 秒）</li>
-        <li>检查 <code>StayActiveResponse</code> 中的 <code>PromisedActiveDuration</code>，确认设备实际承诺的时长</li>
-        <li>在承诺的时间窗口内执行 OTA 升级流程</li>
-        <li>如果一次不够，可在窗口结束前再发一次 StayActiveRequest 续时</li>
+        <li>Wait for the LIT device to send a Check-In message (or prompt the user to manually wake the device)</li>
+        <li>Within the device's active window, send <code>StayActiveRequest (0x03)</code> requesting sufficient active time (e.g. 120 seconds)</li>
+        <li>Check <code>PromisedActiveDuration</code> in <code>StayActiveResponse</code> to confirm the actual duration the device promises</li>
+        <li>Execute the OTA upgrade process within the promised time window</li>
+        <li>If not enough, send another StayActiveRequest before the window ends to extend the time</li>
       </ol>
     </div>
   </details>

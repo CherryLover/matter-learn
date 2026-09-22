@@ -1081,26 +1081,26 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'media-input': {
     title: 'MediaInput Cluster (0x0507)',
-    description: 'Matter MediaInput Cluster(0x0507)完整参考 — SelectInput/ShowInputStatus/HideInputStatus/RenameInput 命令、InputList 输入源列表、InputInfoStruct 结构体、InputTypeEnum 枚举值及 NameUpdates 特性说明。',
+    description: 'Complete reference for the Matter MediaInput Cluster (0x0507) — SelectInput/ShowInputStatus/HideInputStatus/RenameInput commands, InputList input source list, InputInfoStruct structure, InputTypeEnum enum values, and NameUpdates feature explanation.',
     prev: { title: 'Cluster Reference', slug: 'clusters' },
     next: undefined,
     content: `<h1>MediaInput Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x0507</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 媒体端点（电视、AV 接收器等）
+    <strong>Endpoint</strong>: Media endpoint (TV, AV receiver, etc.)
   </p>
   <p>
-    MediaInput 负责管理设备的外部输入源 —— HDMI、USB、分量、光纤等各种音视频输入接口。
-    用户可以通过它查询设备有哪些输入源、当前选中哪个、切换到指定输入源，以及为输入源自定义名称。
-    它是智能电视和 AV 接收器等媒体设备的核心 Cluster 之一。
+    MediaInput manages the external input sources of a device — HDMI, USB, component, optical, and other audio/video input interfaces.
+    Users can query available input sources, check which one is selected, switch to a specific source, and customize input source names.
+    It is one of the core Clusters for media devices such as smart TVs and AV receivers.
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">NameUpdates(NU)特性</div>
+    <div class="callout-title">NameUpdates (NU) Feature</div>
     <p>
-      MediaInput Cluster 定义了一个 <strong>NameUpdates（NU）</strong> Feature。
-      启用后，控制端可以通过 <code>RenameInput</code> 命令为输入源自定义名称
-      （例如把"HDMI 2"改成"PS5"）。未启用时，输入源名称由设备固定，不可修改。
+      The MediaInput Cluster defines a <strong>NameUpdates (NU)</strong> Feature.
+      When enabled, the controller can customize input source names via the <code>RenameInput</code> command
+      (e.g., renaming "HDMI 2" to "PS5"). When disabled, input source names are fixed by the device and cannot be modified.
     </p>
   </div>
 
@@ -1122,9 +1122,9 @@ export const clusters: Record<string, ClusterContent> = {
   <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    MediaInput Cluster 共有 4 个命令。SelectInput 用于切换输入源，ShowInputStatus / HideInputStatus 控制输入源信息的 OSD 显示，
-    RenameInput 允许用户为输入源自定义名称（需要 NU 特性）。
-    点击下方表格中的命令 ID 可跳转到对应的详细说明。
+    The MediaInput Cluster has 4 commands. SelectInput switches the input source, ShowInputStatus / HideInputStatus control the OSD display of input source information,
+    and RenameInput allows users to customize input source names (requires the NU feature).
+    Click a command ID in the table below to jump to its detailed description.
   </p>
 
   <div class="table-wrap">
@@ -1141,25 +1141,25 @@ export const clusters: Record<string, ClusterContent> = {
         <tr class="clickable-row" data-href="#cmd-0x00">
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>SelectInput</td>
-          <td>切换到指定输入源</td>
+          <td>Switch to a specified input source</td>
           <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x01">
           <td><a href="#cmd-0x01"><code>0x01</code></a></td>
           <td>ShowInputStatus</td>
-          <td>在屏幕上显示输入源信息</td>
+          <td>Show input source info on screen</td>
           <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x02">
           <td><a href="#cmd-0x02"><code>0x02</code></a></td>
           <td>HideInputStatus</td>
-          <td>隐藏输入源信息的屏幕显示</td>
+          <td>Hide input source info from screen</td>
           <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x03">
           <td><a href="#cmd-0x03"><code>0x03</code></a></td>
           <td>RenameInput</td>
-          <td>重命名指定输入源</td>
+          <td>Rename a specified input source</td>
           <td class="col-required">NU</td>
         </tr>
       </tbody>
@@ -1167,11 +1167,11 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <!-- ====== Command Details ====== -->
-  <h3 id="cmd-0x00">SelectInput —— 切换输入源(0x00)</h3>
+  <h3 id="cmd-0x00">SelectInput — Switch Input Source (0x00)</h3>
   <p>
-    将设备切换到指定的输入源。<code>Index</code> 必须是 <code>InputList</code> 中某个
-    <code>InputInfoStruct</code> 的 <code>Index</code> 值，否则设备会返回错误。
-    执行成功后，<code>CurrentInput</code> 属性会更新为指定的 Index 值。
+    Switches the device to the specified input source. <code>Index</code> must match the <code>Index</code> value
+    of an <code>InputInfoStruct</code> in <code>InputList</code>; otherwise the device returns an error.
+    On success, the <code>CurrentInput</code> attribute updates to the specified Index value.
   </p>
   <div class="table-wrap">
     <table>
@@ -1182,7 +1182,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Index</td>
           <td>uint8</td>
-          <td>目标输入源的索引值，必须存在于 <code>InputList</code> 中</td>
+          <td>Index of the target input source; must exist in <code>InputList</code></td>
         </tr>
       </tbody>
     </table>
@@ -1191,43 +1191,43 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        用户在手机 App 上选择"HDMI 1"，App 读取 <code>InputList</code> 获取该输入源的 Index 值，
-        然后发送 <code>SelectInput</code> 命令。电视切换到对应的 HDMI 输入，<code>CurrentInput</code> 随之更新。
+        The user selects "HDMI 1" on the phone app. The app reads <code>InputList</code> to get the Index value of that input source,
+        then sends the <code>SelectInput</code> command. The TV switches to the corresponding HDMI input, and <code>CurrentInput</code> updates accordingly.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x01">ShowInputStatus —— 显示输入源信息(0x01)</h3>
+  <h3 id="cmd-0x01">ShowInputStatus — Show Input Source Info (0x01)</h3>
   <p>
-    请求设备在屏幕上显示当前输入源的信息（OSD 叠加层），类似按遥控器上的"信息"按钮。
-    不需要参数。显示的内容和持续时间由设备自行决定。
+    Requests the device to display current input source information on screen (OSD overlay), similar to pressing the "Info" button on a remote.
+    No parameters required. The displayed content and duration are determined by the device.
   </p>
   <details class="scenario">
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
-      <p>用户想确认当前电视在哪个输入源上，通过 App 发送此命令，电视屏幕上会弹出输入源信息（如"HDMI 1 - 客厅机顶盒"）。</p>
+      <p>The user wants to verify which input source the TV is on. Sending this command via the app causes the TV to display input source information on screen (e.g., "HDMI 1 - Living Room Set-Top Box").</p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x02">HideInputStatus —— 隐藏输入源信息(0x02)</h3>
+  <h3 id="cmd-0x02">HideInputStatus — Hide Input Source Info (0x02)</h3>
   <p>
-    请求设备隐藏屏幕上的输入源信息显示。不需要参数。
-    如果当前没有显示输入源信息，此命令不产生任何效果。
+    Requests the device to hide the input source information display on screen. No parameters required.
+    If no input source information is currently displayed, this command has no effect.
   </p>
   <details class="scenario">
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
-      <p>在 ShowInputStatus 弹出信息后，用户觉得碍眼，通过 App 发送此命令关闭 OSD 叠加层。</p>
+      <p>After ShowInputStatus pops up the information, the user finds it distracting and sends this command via the app to close the OSD overlay.</p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x03">RenameInput —— 重命名输入源(0x03)</h3>
+  <h3 id="cmd-0x03">RenameInput — Rename Input Source (0x03)</h3>
   <p>
-    为指定的输入源设置一个自定义名称。修改后，<code>InputList</code> 中对应条目的 <code>Name</code> 字段会更新。
-    此命令需要设备启用 <strong>NU（NameUpdates）</strong> 特性。
+    Sets a custom name for the specified input source. After modification, the <code>Name</code> field of the corresponding entry in <code>InputList</code> updates.
+    This command requires the device to have the <strong>NU (NameUpdates)</strong> feature enabled.
   </p>
   <div class="table-wrap">
     <table>
@@ -1238,32 +1238,32 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Index</td>
           <td>uint8</td>
-          <td>要重命名的输入源索引，必须存在于 <code>InputList</code> 中</td>
+          <td>Index of the input source to rename; must exist in <code>InputList</code></td>
         </tr>
         <tr>
           <td>Name</td>
           <td>string</td>
-          <td>新的输入源名称</td>
+          <td>New name for the input source</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <pre><code>// RenameInput 命令示例
-// 将 Index=2 的输入源重命名为 "PS5"
+  <pre><code>// RenameInput command example
+// Rename the input source at Index=2 to "PS5"
 {
   "Index": 2,
   "Name": "PS5"
 }
-// 执行后 InputList 中 Index=2 的 Name 变为 "PS5"</code></pre>
+// After execution, the Name of Index=2 in InputList becomes "PS5"</code></pre>
 
   <details class="scenario">
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        用户把游戏主机接到了 HDMI 2，但设备默认显示"HDMI 2"不够直观。
-        通过 App 发送 <code>RenameInput</code>，将 Index=2 的输入源重命名为"PS5"。
-        之后 InputList 中该条目的 Name 会变为"PS5"，UI 上也会显示新名称。
+        The user connected a game console to HDMI 2, but the default "HDMI 2" label is not intuitive.
+        By sending <code>RenameInput</code> via the app, the input source at Index=2 is renamed to "PS5".
+        Afterwards, the Name of that entry in InputList becomes "PS5", and the UI displays the new name.
       </p>
     </div>
   </details>
@@ -1271,7 +1271,7 @@ export const clusters: Record<string, ClusterContent> = {
 
   <!-- ====== Attributes ====== -->
   <h2 id="attributes">Attributes</h2>
-  <p>MediaInput Cluster 共有 2 个属性。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+  <p>The MediaInput Cluster has 2 attributes. Click an attribute ID in the summary table below to jump to its detailed description.</p>
 
   <!-- Attribute summary table -->
   <div class="table-wrap">
@@ -1289,21 +1289,21 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>InputList</td>
           <td>list&lt;<a href="#struct-input-info">InputInfoStruct</a>&gt;</td>
-          <td>设备所有输入源的列表</td>
+          <td>List of all input sources on the device</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>CurrentInput</td>
           <td>uint8</td>
-          <td>当前选中的输入源索引</td>
+          <td>Index of the currently selected input source</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 属性详细说明 ====== -->
-  <h3 id="group-input">输入源状态(0x0000, 0x0001)</h3>
-  <p>描述设备当前可用的输入源列表和当前选中的输入源。</p>
+  <!-- ====== Attribute Details ====== -->
+  <h3 id="group-input">Input Source State (0x0000, 0x0001)</h3>
+  <p>Describes the device's currently available input source list and the currently selected input source.</p>
 
   <div class="table-wrap">
     <table>
@@ -1318,15 +1318,15 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0000">
           <td><code>0x0000</code></td>
-          <td>InputList（输入源列表）</td>
+          <td>InputList</td>
           <td>list&lt;<a href="#struct-input-info">InputInfoStruct</a>&gt;</td>
-          <td>设备声明的全部可用输入源，每个元素是一个 <a href="#struct-input-info">InputInfoStruct</a>。列表内容反映设备实际的物理和虚拟输入接口，每个 Index 值唯一。当用户通过 <code>RenameInput</code> 修改名称后，对应条目的 Name 会更新</td>
+          <td>All available input sources declared by the device. Each element is an <a href="#struct-input-info">InputInfoStruct</a>. The list reflects the device's actual physical and virtual input interfaces, with each Index value being unique. When a user modifies a name via <code>RenameInput</code>, the corresponding entry's Name updates</td>
         </tr>
         <tr id="attr-0x0001">
           <td><code>0x0001</code></td>
-          <td>CurrentInput（当前输入源）</td>
+          <td>CurrentInput</td>
           <td>uint8</td>
-          <td>当前选中的输入源索引。该值始终指向 <code>InputList</code> 中某个 <code>InputInfoStruct.Index</code>。通过 <code>SelectInput</code> 命令改变，也可能由用户通过遥控器切换</td>
+          <td>The index of the currently selected input source. This value always points to an <code>InputInfoStruct.Index</code> in <code>InputList</code>. Changed via the <code>SelectInput</code> command, or by the user switching via the remote</td>
         </tr>
       </tbody>
     </table>
@@ -1335,19 +1335,19 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">Subscribe to Changes</div>
     <p>
-      控制端应订阅 <code>CurrentInput</code> 属性的变化，以便在用户通过遥控器或设备面板切换输入源时同步 App 界面。
-      同样，如果设备支持 NU 特性，也应订阅 <code>InputList</code> 的变化以获取最新的输入源名称。
+      Controllers should subscribe to changes in the <code>CurrentInput</code> attribute to sync the app UI when the user switches input sources via the remote or device panel.
+      Likewise, if the device supports the NU feature, subscribe to <code>InputList</code> changes to get the latest input source names.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 结构体定义 ====== -->
+  <!-- ====== Struct Definitions ====== -->
   <h2 id="structs">Struct Definitions</h2>
-  <p>MediaInput Cluster 使用一个结构体来描述输入源信息。</p>
+  <p>The MediaInput Cluster uses one structure to describe input source information.</p>
 
   <!-- InputInfoStruct -->
   <h3 id="struct-input-info">InputInfoStruct</h3>
-  <p>描述一个输入源的完整信息，包括索引、类型、名称和描述。</p>
+  <p>Describes the complete information for an input source, including index, type, name, and description.</p>
 
   <div class="table-wrap">
     <table>
@@ -1362,22 +1362,22 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Index</td>
           <td>uint8</td>
-          <td>输入源的唯一索引，用于 <code>SelectInput</code> 和 <code>RenameInput</code> 命令的定位</td>
+          <td>Unique index of the input source, used to identify it in <code>SelectInput</code> and <code>RenameInput</code> commands</td>
         </tr>
         <tr>
           <td>InputType</td>
           <td><a href="#enum-input-type">InputTypeEnum</a></td>
-          <td>输入源的接口类型（见下方枚举）</td>
+          <td>Interface type of the input source (see enum below)</td>
         </tr>
         <tr>
           <td>Name</td>
           <td>string</td>
-          <td>输入源的显示名称，如 <code>"HDMI 1"</code>、<code>"PS5"</code>。启用 NU 特性后可通过 <code>RenameInput</code> 修改</td>
+          <td>Display name of the input source, e.g., <code>"HDMI 1"</code>, <code>"PS5"</code>. Can be modified via <code>RenameInput</code> when the NU feature is enabled</td>
         </tr>
         <tr>
           <td>Description</td>
           <td>string</td>
-          <td>输入源的补充描述，如 <code>"客厅机顶盒"</code>。由设备提供，供 UI 展示</td>
+          <td>Supplementary description of the input source, e.g., <code>"Living Room Set-Top Box"</code>. Provided by the device for UI display</td>
         </tr>
       </tbody>
     </table>
@@ -1386,8 +1386,8 @@ export const clusters: Record<string, ClusterContent> = {
   <!-- InputTypeEnum -->
   <h3 id="enum-input-type">InputTypeEnum</h3>
   <p>
-    定义输入源的物理接口类型。共 12 个枚举值，涵盖常见的音视频输入接口。
-    控制端可据此在 UI 上展示对应的图标或分类。
+    Defines the physical interface type of input sources. Contains 12 enum values covering common audio/video input interfaces.
+    Controllers can use this to display corresponding icons or categories in the UI.
   </p>
 
   <div class="enum-cards enum-cards-grid">
@@ -1395,98 +1395,98 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">Internal</span>
-        <span class="enum-desc">内置源 —— 内置调谐器或流媒体应用</span>
+        <span class="enum-desc">Internal — Built-in tuner or streaming application</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">Aux</span>
-        <span class="enum-desc">辅助输入 —— AUX 接口</span>
+        <span class="enum-desc">Auxiliary — AUX interface</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">Coax</span>
-        <span class="enum-desc">同轴 —— 同轴电缆输入</span>
+        <span class="enum-desc">Coaxial — Coaxial cable input</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">Composite</span>
-        <span class="enum-desc">复合 —— 复合视频（RCA 黄色接口）</span>
+        <span class="enum-desc">Composite — Composite video (RCA yellow connector)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">4</span>
       <div>
         <span class="enum-name">HDMI</span>
-        <span class="enum-desc">HDMI —— 最常用的高清数字接口</span>
+        <span class="enum-desc">HDMI — Most common high-definition digital interface</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">5</span>
       <div>
         <span class="enum-name">Input</span>
-        <span class="enum-desc">通用输入 —— 未分类的通用输入接口</span>
+        <span class="enum-desc">Generic Input — Unclassified generic input interface</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">6</span>
       <div>
         <span class="enum-name">Line</span>
-        <span class="enum-desc">线路输入 —— Line In 音频输入</span>
+        <span class="enum-desc">Line Input — Line In audio input</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">7</span>
       <div>
         <span class="enum-name">Optical</span>
-        <span class="enum-desc">光纤 —— 光纤数字音频（TOSLINK/SPDIF）</span>
+        <span class="enum-desc">Optical — Optical digital audio (TOSLINK/SPDIF)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">8</span>
       <div>
         <span class="enum-name">Video</span>
-        <span class="enum-desc">视频 —— 通用视频输入</span>
+        <span class="enum-desc">Video — Generic video input</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">9</span>
       <div>
         <span class="enum-name">SCART</span>
-        <span class="enum-desc">SCART —— 欧洲标准音视频接口</span>
+        <span class="enum-desc">SCART — European standard AV interface</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">10</span>
       <div>
         <span class="enum-name">USB</span>
-        <span class="enum-desc">USB —— USB 媒体播放接口</span>
+        <span class="enum-desc">USB — USB media playback interface</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">11</span>
       <div>
         <span class="enum-name">Other</span>
-        <span class="enum-desc">其他 —— 以上类型未涵盖的接口</span>
+        <span class="enum-desc">Other — Interface not covered by the types above</span>
       </div>
     </div>
   </div>
 
   <!-- ====== Feature Bitmap ====== -->
   <h2 id="features">Feature Bitmap</h2>
-  <p>MediaInput Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持的可选能力：</p>
+  <p>The MediaInput Cluster declares optional capabilities the device supports via <code>FeatureMap</code> (0xFFFC):</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">Bit 0</span>
       <div>
-        <span class="enum-name">NU（NameUpdates）</span>
-        <span class="enum-desc">名称更新 —— 启用后支持 RenameInput 命令，允许用户为输入源自定义名称</span>
+        <span class="enum-name">NU (NameUpdates)</span>
+        <span class="enum-desc">Name Updates — When enabled, supports the RenameInput command, allowing users to customize input source names</span>
       </div>
     </div>
   </div>
@@ -1494,44 +1494,44 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">When to Enable NU</div>
     <p>
-      大多数智能电视和 AV 接收器都应启用此特性 —— 用户通常希望把"HDMI 1"改成更有意义的名称（如"机顶盒""PS5"）。
-      如果设备的输入源名称是出厂固定的且不支持修改，则不启用 NU。
+      Most smart TVs and AV receivers should enable this feature — users typically want to rename "HDMI 1" to something more meaningful (e.g., "Set-Top Box," "PS5").
+      If the device's input source names are factory-fixed and cannot be modified, do not enable NU.
     </p>
   </div>
 
   <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一台智能电视的 MediaInput Cluster 读取结果 —— 当前选中 HDMI 1，共有 4 个输入源：</p>
+  <p>Read results of the MediaInput Cluster from a smart TV — currently selected HDMI 1, with 4 input sources:</p>
 
   <pre><code>{
-  // --- 当前输入源 ---
-  "0x0001": 1,                   // CurrentInput = 1（当前选中 HDMI 1）
+  // --- Current Input Source ---
+  "0x0001": 1,                   // CurrentInput = 1 (currently selected HDMI 1)
 
-  // --- 输入源列表 ---
+  // --- Input Source List ---
   "0x0000": [                    // InputList
     {
       "Index": 0,
-      "InputType": 0,            // Internal（内置调谐器）
+      "InputType": 0,            // Internal (built-in tuner)
       "Name": "TV Tuner",
-      "Description": "内置数字电视调谐器"
+      "Description": "Built-in digital TV tuner"
     },
     {
       "Index": 1,
       "InputType": 4,            // HDMI
       "Name": "HDMI 1",
-      "Description": "客厅机顶盒"
+      "Description": "Living room set-top box"
     },
     {
       "Index": 2,
       "InputType": 4,            // HDMI
       "Name": "HDMI 2",
-      "Description": "游戏主机"
+      "Description": "Game console"
     },
     {
       "Index": 3,
       "InputType": 10,           // USB
       "Name": "USB",
-      "Description": "USB 媒体播放"
+      "Description": "USB media playback"
     }
   ]
 }</code></pre>
@@ -1539,10 +1539,10 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      控制端显示输入源切换 UI 时，应先读取 <code>InputList (0x0000)</code> 获取完整列表，
-      再读取 <code>CurrentInput (0x0001)</code> 高亮当前选中项。
-      可以根据 <code>InputType</code> 为不同接口类型显示不同图标（如 HDMI 图标、USB 图标等），
-      提升用户识别效率。
+      When displaying the input source switching UI, controllers should first read <code>InputList (0x0000)</code> to get the complete list,
+      then read <code>CurrentInput (0x0001)</code> to highlight the currently selected item.
+      Different icons can be displayed for different interface types based on <code>InputType</code> (e.g., HDMI icon, USB icon, etc.)
+      to improve user recognition.
     </p>
   </div>
 
@@ -1550,31 +1550,31 @@ export const clusters: Record<string, ClusterContent> = {
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
-    <summary>场景 1：App 切换电视输入源</summary>
+    <summary>Scenario 1: App Switches TV Input Source</summary>
     <div class="scenario-content">
       <ol>
-        <li>读取 <code>InputList (0x0000)</code>，获取所有输入源（Index、Name、InputType、Description）</li>
-        <li>读取 <code>CurrentInput (0x0001)</code>，高亮当前选中的输入源</li>
-        <li>在 UI 上展示输入源列表，根据 InputType 显示对应图标</li>
-        <li>用户点击目标输入源，发送 <code>SelectInput (0x00)</code>，Index 设为该输入源的索引值</li>
-        <li>订阅 <code>CurrentInput</code> 属性变化，确认切换成功后更新 UI</li>
+        <li>Read <code>InputList (0x0000)</code> to get all input sources (Index, Name, InputType, Description)</li>
+        <li>Read <code>CurrentInput (0x0001)</code> to highlight the currently selected input source</li>
+        <li>Display the input source list in the UI with icons based on InputType</li>
+        <li>When the user taps the target input source, send <code>SelectInput (0x00)</code> with Index set to that input source's index value</li>
+        <li>Subscribe to <code>CurrentInput</code> attribute changes; update the UI after confirming the switch succeeded</li>
       </ol>
     </div>
   </details>
 
   <details class="scenario">
-    <summary>场景 2：用户自定义输入源名称</summary>
+    <summary>Scenario 2: User Customizes Input Source Name</summary>
     <div class="scenario-content">
       <ol>
-        <li>检查设备的 <code>FeatureMap (0xFFFC)</code>，确认支持 <strong>NU</strong>（Bit 0 = 1）</li>
-        <li>读取 <code>InputList (0x0000)</code>，展示输入源列表</li>
-        <li>用户长按某个输入源（如 Index=2，当前名称"HDMI 2"），弹出重命名输入框</li>
-        <li>用户输入新名称"PS5"，发送 <code>RenameInput (0x03)</code>，Index=2，Name="PS5"</li>
-        <li>订阅 <code>InputList</code> 变化，确认名称更新后刷新 UI</li>
+        <li>Check the device's <code>FeatureMap (0xFFFC)</code> to confirm it supports <strong>NU</strong> (Bit 0 = 1)</li>
+        <li>Read <code>InputList (0x0000)</code> and display the input source list</li>
+        <li>User long-presses an input source (e.g., Index=2, current name "HDMI 2"), triggering a rename input dialog</li>
+        <li>User enters the new name "PS5" and sends <code>RenameInput (0x03)</code> with Index=2, Name="PS5"</li>
+        <li>Subscribe to <code>InputList</code> changes; refresh the UI after confirming the name update</li>
       </ol>
       <p>
-        <strong>注意</strong>：如果 FeatureMap 不包含 NU 特性，UI 上不应显示重命名入口，
-        发送 RenameInput 命令会被设备拒绝。
+        <strong>Note</strong>: If FeatureMap does not include the NU feature, the UI should not show the rename option,
+        and sending the RenameInput command will be rejected by the device.
       </p>
     </div>
   </details>
@@ -1615,26 +1615,26 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'audio-output': {
     title: 'AudioOutput Cluster (0x050B)',
-    description: 'Matter AudioOutput Cluster(0x050B)完整参考 — SelectOutput/RenameOutput 命令、OutputList 输出源列表、OutputInfoStruct 结构体、OutputTypeEnum 枚举值及 NameUpdates 特性说明。',
+    description: 'Complete reference for the Matter AudioOutput Cluster (0x050B) — SelectOutput/RenameOutput commands, OutputList, OutputInfoStruct, OutputTypeEnum, and NameUpdates feature.',
     prev: { title: 'Cluster Reference', slug: 'clusters' },
     next: undefined,
     content: `<h1>AudioOutput Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x050B</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 媒体端点（电视、AV 接收器、Soundbar 等）
+    <strong>Endpoint</strong>: Media endpoint (TV, AV receiver, Soundbar, etc.)
   </p>
   <p>
-    AudioOutput 负责管理设备的音频输出目的地 —— HDMI ARC、蓝牙、光纤、耳机、内置扬声器等。
-    用户可以通过它查询设备有哪些音频输出、当前正在使用哪个、切换到指定输出，以及为输出源自定义名称。
-    它是智能电视、AV 接收器、Soundbar 等媒体设备的常见 Cluster 之一，与 <a href="/clusters/media-input/">MediaInput</a> 互为输入/输出的对应关系。
+    AudioOutput manages the audio output destinations of a device — HDMI ARC, Bluetooth, optical, headphones, built-in speakers, etc.
+    Users can query available audio outputs, check which one is currently in use, switch to a specified output, and customize output source names.
+    It is a common Cluster for media devices such as smart TVs, AV receivers, and Soundbars, serving as the output counterpart to <a href="/clusters/media-input/">MediaInput</a>.
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">NameUpdates(NU)特性</div>
+    <div class="callout-title">NameUpdates (NU) Feature</div>
     <p>
-      AudioOutput Cluster 定义了一个 <strong>NameUpdates（NU）</strong> Feature。
-      启用后，控制端可以通过 <code>RenameOutput</code> 命令为输出源自定义名称
-      （例如把"Bluetooth"改成"HomePod"）。未启用时，输出源名称由设备固定，不可修改。
+      The AudioOutput Cluster defines a <strong>NameUpdates (NU)</strong> Feature.
+      When enabled, the controller can customize output source names via the <code>RenameOutput</code> command
+      (e.g., renaming "Bluetooth" to "HomePod"). When disabled, output source names are fixed by the device and cannot be modified.
     </p>
   </div>
 
@@ -1656,9 +1656,9 @@ export const clusters: Record<string, ClusterContent> = {
   <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    AudioOutput Cluster 共有 2 个命令。SelectOutput 用于切换音频输出目的地，
-    RenameOutput 允许用户为输出源自定义名称（需要 NU 特性）。
-    点击下方表格中的命令 ID 可跳转到对应的详细说明。
+    The AudioOutput Cluster has 2 commands. SelectOutput switches the audio output destination,
+    and RenameOutput allows users to customize output source names (requires the NU feature).
+    Click a command ID in the table below to jump to its detailed description.
   </p>
 
   <div class="table-wrap">
@@ -1675,13 +1675,13 @@ export const clusters: Record<string, ClusterContent> = {
         <tr class="clickable-row" data-href="#cmd-0x00">
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>SelectOutput</td>
-          <td>切换到指定音频输出</td>
+          <td>Switch to a specified audio output</td>
           <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x01">
           <td><a href="#cmd-0x01"><code>0x01</code></a></td>
           <td>RenameOutput</td>
-          <td>重命名指定输出源</td>
+          <td>Rename a specified output source</td>
           <td class="col-required">NU</td>
         </tr>
       </tbody>
@@ -1689,11 +1689,11 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <!-- ====== Command Details ====== -->
-  <h3 id="cmd-0x00">SelectOutput —— 切换音频输出(0x00)</h3>
+  <h3 id="cmd-0x00">SelectOutput — Switch Audio Output (0x00)</h3>
   <p>
-    将设备的音频输出切换到指定目的地。<code>Index</code> 必须是 <code>OutputList</code> 中某个
-    <code>OutputInfoStruct</code> 的 <code>Index</code> 值，否则设备会返回错误。
-    执行成功后，<code>CurrentOutput</code> 属性会更新为指定的 Index 值。
+    Switches the device's audio output to the specified destination. <code>Index</code> must match the <code>Index</code> value
+    of an <code>OutputInfoStruct</code> in <code>OutputList</code>; otherwise the device returns an error.
+    On success, the <code>CurrentOutput</code> attribute updates to the specified Index value.
   </p>
   <div class="table-wrap">
     <table>
@@ -1704,7 +1704,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Index</td>
           <td>uint8</td>
-          <td>目标输出源的索引值，必须存在于 <code>OutputList</code> 中</td>
+          <td>Index of the target output source; must exist in <code>OutputList</code></td>
         </tr>
       </tbody>
     </table>
@@ -1713,17 +1713,17 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        用户在手机 App 上选择"HDMI ARC"，App 读取 <code>OutputList</code> 获取该输出源的 Index 值，
-        然后发送 <code>SelectOutput</code> 命令。电视将音频切换到 HDMI ARC 回传，<code>CurrentOutput</code> 随之更新。
+        The user selects "HDMI ARC" on the phone app. The app reads <code>OutputList</code> to get the Index value of that output source,
+        then sends the <code>SelectOutput</code> command. The TV switches audio to HDMI ARC passthrough, and <code>CurrentOutput</code> updates accordingly.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x01">RenameOutput —— 重命名输出源(0x01)</h3>
+  <h3 id="cmd-0x01">RenameOutput — Rename Output Source (0x01)</h3>
   <p>
-    为指定的输出源设置一个自定义名称。修改后，<code>OutputList</code> 中对应条目的 <code>Name</code> 字段会更新。
-    此命令需要设备启用 <strong>NU（NameUpdates）</strong> 特性。
+    Sets a custom name for the specified output source. After modification, the <code>Name</code> field of the corresponding entry in <code>OutputList</code> updates.
+    This command requires the device to have the <strong>NU (NameUpdates)</strong> feature enabled.
   </p>
   <div class="table-wrap">
     <table>
@@ -1734,32 +1734,32 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Index</td>
           <td>uint8</td>
-          <td>要重命名的输出源索引，必须存在于 <code>OutputList</code> 中</td>
+          <td>Index of the output source to rename; must exist in <code>OutputList</code></td>
         </tr>
         <tr>
           <td>Name</td>
           <td>string</td>
-          <td>新的输出源名称</td>
+          <td>New name for the output source</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <pre><code>// RenameOutput 命令示例
-// 将 Index=2 的输出源重命名为 "HomePod"
+  <pre><code>// RenameOutput command example
+// Rename the output source at Index=2 to "HomePod"
 {
   "Index": 2,
   "Name": "HomePod"
 }
-// 执行后 OutputList 中 Index=2 的 Name 变为 "HomePod"</code></pre>
+// After execution, the Name of Index=2 in OutputList becomes "HomePod"</code></pre>
 
   <details class="scenario">
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        用户连接了蓝牙音箱，但设备默认显示"Bluetooth"不够直观。
-        通过 App 发送 <code>RenameOutput</code>，将 Index=2 的输出源重命名为"HomePod"。
-        之后 OutputList 中该条目的 Name 会变为"HomePod"，UI 上也会显示新名称。
+        The user connected a Bluetooth speaker, but the default "Bluetooth" label is not intuitive.
+        By sending <code>RenameOutput</code> via the app, the output source at Index=2 is renamed to "HomePod".
+        Afterwards, the Name of that entry in OutputList becomes "HomePod", and the UI displays the new name.
       </p>
     </div>
   </details>
@@ -1767,7 +1767,7 @@ export const clusters: Record<string, ClusterContent> = {
 
   <!-- ====== Attributes ====== -->
   <h2 id="attributes">Attributes</h2>
-  <p>AudioOutput Cluster 共有 2 个属性。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+  <p>The AudioOutput Cluster has 2 attributes. Click an attribute ID in the summary table below to jump to its detailed description.</p>
 
   <!-- Attribute summary table -->
   <div class="table-wrap">
@@ -1785,21 +1785,21 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>OutputList</td>
           <td>list&lt;<a href="#struct-output-info">OutputInfoStruct</a>&gt;</td>
-          <td>设备所有音频输出源的列表</td>
+          <td>List of all audio output sources on the device</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>CurrentOutput</td>
           <td>uint8</td>
-          <td>当前选中的音频输出源索引</td>
+          <td>Index of the currently selected audio output source</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 属性详细说明 ====== -->
-  <h3 id="group-output">音频输出状态(0x0000, 0x0001)</h3>
-  <p>描述设备当前可用的音频输出列表和当前选中的输出源。</p>
+  <!-- ====== Attribute Details ====== -->
+  <h3 id="group-output">Audio Output State (0x0000, 0x0001)</h3>
+  <p>Describes the device's currently available audio output list and the currently selected output source.</p>
 
   <div class="table-wrap">
     <table>
@@ -1814,15 +1814,15 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0000">
           <td><code>0x0000</code></td>
-          <td>OutputList（输出源列表）</td>
+          <td>OutputList</td>
           <td>list&lt;<a href="#struct-output-info">OutputInfoStruct</a>&gt;</td>
-          <td>设备声明的全部可用音频输出目的地，每个元素是一个 <a href="#struct-output-info">OutputInfoStruct</a>。列表内容反映设备实际的音频输出接口，每个 Index 值唯一。当用户通过 <code>RenameOutput</code> 修改名称后，对应条目的 Name 会更新</td>
+          <td>All available audio output destinations declared by the device. Each element is an <a href="#struct-output-info">OutputInfoStruct</a>. The list reflects the device's actual audio output interfaces, with each Index value being unique. When a user modifies a name via <code>RenameOutput</code>, the corresponding entry's Name updates</td>
         </tr>
         <tr id="attr-0x0001">
           <td><code>0x0001</code></td>
-          <td>CurrentOutput（当前输出源）</td>
+          <td>CurrentOutput</td>
           <td>uint8</td>
-          <td>当前选中的音频输出索引。该值始终指向 <code>OutputList</code> 中某个 <code>OutputInfoStruct.Index</code>。通过 <code>SelectOutput</code> 命令改变，也可能由用户通过遥控器或设备面板切换</td>
+          <td>The index of the currently selected audio output. This value always points to an <code>OutputInfoStruct.Index</code> in <code>OutputList</code>. Changed via the <code>SelectOutput</code> command, or by the user switching via the remote or device panel</td>
         </tr>
       </tbody>
     </table>
@@ -1831,19 +1831,19 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">Subscribe to Changes</div>
     <p>
-      控制端应订阅 <code>CurrentOutput</code> 属性的变化，以便在用户通过遥控器或设备面板切换音频输出时同步 App 界面。
-      同样，如果设备支持 NU 特性，也应订阅 <code>OutputList</code> 的变化以获取最新的输出源名称。
+      Controllers should subscribe to <code>CurrentOutput</code> attribute changes to sync the app UI when the user switches audio output via remote or device panel.
+      Likewise, if the device supports the NU feature, subscribe to <code>OutputList</code> changes to get the latest name for the output source.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 结构体定义 ====== -->
+  <!-- ====== Struct Definitions ====== -->
   <h2 id="structs">Struct Definitions</h2>
-  <p>AudioOutput Cluster 使用一个结构体来描述输出源信息。</p>
+  <p>The AudioOutput Cluster uses one structure to describe output source information.</p>
 
   <!-- OutputInfoStruct -->
   <h3 id="struct-output-info">OutputInfoStruct</h3>
-  <p>描述一个音频输出源的完整信息，包括索引、类型和名称。</p>
+  <p>Describes the complete information for an audio output source, including index, type, and name.</p>
 
   <div class="table-wrap">
     <table>
@@ -1858,35 +1858,35 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Index</td>
           <td>uint8</td>
-          <td>输出源的唯一索引，用于 <code>SelectOutput</code> 和 <code>RenameOutput</code> 命令的定位</td>
+          <td>Unique index of the output source, used to identify it in <code>SelectOutput</code> and <code>RenameOutput</code> commands</td>
         </tr>
         <tr>
           <td>OutputType</td>
           <td><a href="#enum-output-type">OutputTypeEnum</a></td>
-          <td>输出源的接口类型（见下方枚举）</td>
+          <td>Interface type of the output source (see enum below)</td>
         </tr>
         <tr>
           <td>Name</td>
           <td>string</td>
-          <td>输出源的显示名称，如 <code>"HDMI ARC"</code>、<code>"HomePod"</code>。启用 NU 特性后可通过 <code>RenameOutput</code> 修改</td>
+          <td>Display name of the output source, e.g., <code>"HDMI ARC"</code>, <code>"HomePod"</code>. Can be modified via <code>RenameOutput</code> when the NU feature is enabled</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">与 MediaInput 的 InputInfoStruct 对比</div>
+    <div class="callout-title">Comparison with MediaInput InputInfoStruct</div>
     <p>
-      OutputInfoStruct 只有 3 个字段（Index、OutputType、Name），比 MediaInput 的 InputInfoStruct 少了一个 <code>Description</code> 字段。
-      音频输出源的信息相对简单，通常名称本身就足以区分不同输出。
+      OutputInfoStruct has only 3 fields (Index, OutputType, Name), one less than MediaInput's InputInfoStruct which also has a <code>Description</code> field.
+      Audio output source information is relatively simple — the name alone is usually sufficient to distinguish different outputs.
     </p>
   </div>
 
   <!-- OutputTypeEnum -->
   <h3 id="enum-output-type">OutputTypeEnum</h3>
   <p>
-    定义音频输出源的接口类型。共 6 个枚举值，涵盖常见的音频输出方式。
-    控制端可据此在 UI 上展示对应的图标或分类。
+    Defines the interface type of audio output sources. Contains 6 enum values covering common audio output methods.
+    Controllers can use this to display corresponding icons or categories in the UI.
   </p>
 
   <div class="enum-cards enum-cards-grid">
@@ -1894,56 +1894,56 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">HDMI</span>
-        <span class="enum-desc">HDMI —— 通过 HDMI ARC/eARC 回传音频</span>
+        <span class="enum-desc">HDMI — Audio via HDMI ARC/eARC passthrough</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">BT</span>
-        <span class="enum-desc">蓝牙 —— 蓝牙无线音频输出</span>
+        <span class="enum-desc">Bluetooth — Bluetooth wireless audio output</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">Optical</span>
-        <span class="enum-desc">光纤 —— 光纤数字音频输出（TOSLINK/SPDIF）</span>
+        <span class="enum-desc">Optical — Optical digital audio output (TOSLINK/SPDIF)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">Headphone</span>
-        <span class="enum-desc">耳机 —— 3.5mm 耳机插孔或 USB 耳机</span>
+        <span class="enum-desc">Headphone — 3.5mm headphone jack or USB headphones</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">4</span>
       <div>
         <span class="enum-name">Internal</span>
-        <span class="enum-desc">内置 —— 设备内置扬声器</span>
+        <span class="enum-desc">Internal — Device built-in speakers</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">5</span>
       <div>
         <span class="enum-name">Other</span>
-        <span class="enum-desc">其他 —— 以上类型未涵盖的输出方式</span>
+        <span class="enum-desc">Other — Output method not covered by the types above</span>
       </div>
     </div>
   </div>
 
   <!-- ====== Feature Bitmap ====== -->
   <h2 id="features">Feature Bitmap</h2>
-  <p>AudioOutput Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持的可选能力：</p>
+  <p>The AudioOutput Cluster declares optional capabilities the device supports via <code>FeatureMap</code> (0xFFFC):</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">Bit 0</span>
       <div>
-        <span class="enum-name">NU（NameUpdates）</span>
-        <span class="enum-desc">名称更新 —— 启用后支持 RenameOutput 命令，允许用户为输出源自定义名称</span>
+        <span class="enum-name">NU (NameUpdates)</span>
+        <span class="enum-desc">Name Updates — When enabled, supports the RenameOutput command, allowing users to customize output source names</span>
       </div>
     </div>
   </div>
@@ -1951,39 +1951,39 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">When to Enable NU</div>
     <p>
-      支持用户自定义输出源名称的设备应启用此特性 —— 例如用户希望把"Bluetooth"改成蓝牙音箱的具体名称。
-      如果设备的输出源名称是出厂固定的且不支持修改，则不启用 NU。
+      Devices that support user-customizable output source names should enable this feature — for example, users may want to rename "Bluetooth" to the specific name of their Bluetooth speaker.
+      If the device's output source names are factory-fixed and cannot be modified, do not enable NU.
     </p>
   </div>
 
   <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一台智能电视的 AudioOutput Cluster 读取结果 —— 当前音频输出到 HDMI ARC，共有 4 个输出源：</p>
+  <p>Read results of the AudioOutput Cluster from a smart TV — currently outputting audio to HDMI ARC, with 4 output sources:</p>
 
   <pre><code>{
-  // --- 当前输出源 ---
-  "0x0001": 1,                   // CurrentOutput = 1（当前选中 HDMI ARC）
+  // --- Current Output Source ---
+  "0x0001": 1,                   // CurrentOutput = 1 (currently selected HDMI ARC)
 
-  // --- 输出源列表 ---
+  // --- Output Source List ---
   "0x0000": [                    // OutputList
     {
       "Index": 0,
-      "OutputType": 4,            // Internal（内置扬声器）
+      "OutputType": 4,            // Internal (built-in speakers)
       "Name": "TV Speaker"
     },
     {
       "Index": 1,
-      "OutputType": 0,            // HDMI（HDMI ARC/eARC 回传）
+      "OutputType": 0,            // HDMI (HDMI ARC/eARC passthrough)
       "Name": "HDMI ARC"
     },
     {
       "Index": 2,
-      "OutputType": 1,            // BT（蓝牙音箱）
+      "OutputType": 1,            // BT (Bluetooth speaker)
       "Name": "Bluetooth"
     },
     {
       "Index": 3,
-      "OutputType": 2,            // Optical（光纤输出）
+      "OutputType": 2,            // Optical (optical output)
       "Name": "Optical Out"
     }
   ]
@@ -1992,10 +1992,10 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      控制端显示音频输出切换 UI 时，应先读取 <code>OutputList (0x0000)</code> 获取完整列表，
-      再读取 <code>CurrentOutput (0x0001)</code> 高亮当前选中项。
-      可以根据 <code>OutputType</code> 为不同接口类型显示不同图标（如蓝牙图标、耳机图标等），
-      提升用户识别效率。
+      When displaying the audio output switching UI, controllers should first read <code>OutputList (0x0000)</code> to get the complete list,
+      then read <code>CurrentOutput (0x0001)</code> to highlight the currently selected item.
+      Different icons can be displayed for different interface types based on <code>OutputType</code> (e.g., Bluetooth icon, headphone icon)
+      to improve user recognition.
     </p>
   </div>
 
@@ -2003,31 +2003,31 @@ export const clusters: Record<string, ClusterContent> = {
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
-    <summary>场景 1：App 切换电视音频输出</summary>
+    <summary>Scenario 1: App switches TV audio output</summary>
     <div class="scenario-content">
       <ol>
-        <li>读取 <code>OutputList (0x0000)</code>，获取所有输出源（Index、Name、OutputType）</li>
-        <li>读取 <code>CurrentOutput (0x0001)</code>，高亮当前选中的输出源</li>
-        <li>在 UI 上展示输出源列表，根据 OutputType 显示对应图标（蓝牙、HDMI、耳机等）</li>
-        <li>用户点击目标输出源，发送 <code>SelectOutput (0x00)</code>，Index 设为该输出源的索引值</li>
-        <li>订阅 <code>CurrentOutput</code> 属性变化，确认切换成功后更新 UI</li>
+        <li>Read <code>OutputList (0x0000)</code> to get all output sources (Index, Name, OutputType)</li>
+        <li>Read <code>CurrentOutput (0x0001)</code> to highlight the currently selected output source</li>
+        <li>Display the output source list in the UI with corresponding icons based on OutputType (Bluetooth, HDMI, headphones, etc.)</li>
+        <li>The user clicks the target output source and sends <code>SelectOutput (0x00)</code> with Index set to that output source's index value</li>
+        <li>Subscribe to <code>CurrentOutput</code> attribute changes and update the UI after confirming the switch was successful</li>
       </ol>
     </div>
   </details>
 
   <details class="scenario">
-    <summary>场景 2：用户自定义输出源名称</summary>
+    <summary>Scenario 2: User customizes output source names</summary>
     <div class="scenario-content">
       <ol>
-        <li>检查设备的 <code>FeatureMap (0xFFFC)</code>，确认支持 <strong>NU</strong>（Bit 0 = 1）</li>
-        <li>读取 <code>OutputList (0x0000)</code>，展示输出源列表</li>
-        <li>用户长按某个输出源（如 Index=2，当前名称"Bluetooth"），弹出重命名输入框</li>
-        <li>用户输入新名称"HomePod"，发送 <code>RenameOutput (0x01)</code>，Index=2，Name="HomePod"</li>
-        <li>订阅 <code>OutputList</code> 变化，确认名称更新后刷新 UI</li>
+        <li>Check the device's <code>FeatureMap (0xFFFC)</code> to confirm <strong>NU</strong> support (Bit 0 = 1)</li>
+        <li>Read <code>OutputList (0x0000)</code> and display the output source list</li>
+        <li>The user long-presses an output source (e.g., Index=2, current name "Bluetooth") to open the rename input dialog</li>
+        <li>The user enters the new name "HomePod" and sends <code>RenameOutput (0x01)</code> with Index=2, Name="HomePod"</li>
+        <li>Subscribe to <code>OutputList</code> changes and refresh the UI after confirming the name update</li>
       </ol>
       <p>
-        <strong>注意</strong>：如果 FeatureMap 不包含 NU 特性，UI 上不应显示重命名入口，
-        发送 RenameOutput 命令会被设备拒绝。
+        <strong>Note</strong>: If the FeatureMap does not include the NU feature, the UI should not display a rename option;
+        sending the RenameOutput command will be rejected by the device.
       </p>
     </div>
   </details>
@@ -2068,27 +2068,26 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'channel': {
     title: 'Channel Cluster (0x0504)',
-    description: 'Matter Channel Cluster(0x0504)完整参考 — ChangeChannel 模糊匹配、ChangeChannelByNumber 精确切台、SkipChannel 相对跳转、ChannelList 频道列表、Lineup 线路信息、CurrentChannel 当前频道及 Feature Map 说明。',
+    description: 'Complete reference for the Matter Channel Cluster (0x0504) — ChangeChannel fuzzy matching, ChangeChannelByNumber exact tuning, SkipChannel relative skip, ChannelList, Lineup info, CurrentChannel, and Feature Map.',
     prev: { title: 'Cluster Reference', slug: 'clusters' },
     next: undefined,
     content: `<h1>Channel Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x0504</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 媒体端点（电视、机顶盒等）
+    <strong>Endpoint</strong>: Media endpoint (TV, set-top box, etc.)
   </p>
   <p>
-    Channel 负责频道的导航和频道线路（Lineup）管理 —— 切台、跳台、按名称搜台、查询频道列表和电子节目单（EPG）。
-    它是智能电视和机顶盒等媒体设备的核心 Cluster 之一，与 <a href="/clusters/media-input/">MediaInput</a> 分工不同：
-    MediaInput 管理物理输入源（HDMI、USB），Channel 管理逻辑频道（CCTV-1、HBO）。
+    Channel handles channel navigation and lineup management — channel switching, skipping, name-based search, querying the channel list, and the Electronic Program Guide (EPG).
+    It is one of the core Clusters for media devices such as smart TVs and set-top boxes. Unlike <a href="/clusters/media-input/">MediaInput</a> which manages physical input sources (HDMI, USB), Channel manages logical channels (CCTV-1, HBO).
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">四个可选特性</div>
+    <div class="callout-title">Four Optional Features</div>
     <p>
-      Channel Cluster 定义了四个 Feature：<strong>CL</strong>（频道列表）、<strong>LI</strong>（线路信息）、
-      <strong>EG</strong>（电子节目单）、<strong>RP</strong>（节目录制）。
-      最基础的设备可以一个都不启用 —— 只支持 ChangeChannelByNumber 和 SkipChannel 两个基础切台命令。
-      启用 CL 后提供频道列表供 UI 展示；启用 LI 后暴露运营商和线路信息；启用 EG 后可查询 EPG 节目单；启用 RP 后可预约录制。
+      The Channel Cluster defines four Features: <strong>CL</strong> (Channel List), <strong>LI</strong> (Lineup Info),
+      <strong>EG</strong> (Electronic Guide), and <strong>RP</strong> (Record Program).
+      The most basic devices can have none enabled — supporting only the ChangeChannelByNumber and SkipChannel basic tuning commands.
+      Enabling CL provides a channel list for UI display; LI exposes operator and lineup info; EG enables EPG program guide queries; RP enables scheduled recording.
     </p>
   </div>
 
@@ -2112,10 +2111,10 @@ export const clusters: Record<string, ClusterContent> = {
   <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    Channel Cluster 共有 6 个客户端命令和 2 个响应命令。
-    基础切台（ChangeChannelByNumber / SkipChannel）所有设备都支持，
-    ChangeChannel 需要频道列表或线路信息支撑（CL 或 LI），GetProgramGuide 和录制相关命令需要更高级的特性。
-    点击下方表格中的命令 ID 可跳转到对应的详细说明。
+    The Channel Cluster has 6 client commands and 2 response commands.
+    Basic tuning (ChangeChannelByNumber / SkipChannel) is supported by all devices.
+    ChangeChannel requires channel list or lineup info support (CL or LI), and GetProgramGuide and recording commands require more advanced features.
+    Click a command ID in the table below to jump to its detailed description.
   </p>
 
   <div class="table-wrap">
@@ -2132,51 +2131,51 @@ export const clusters: Record<string, ClusterContent> = {
         <tr class="clickable-row" data-href="#cmd-0x00">
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>ChangeChannel</td>
-          <td>按名称 / 呼号 / 编号模糊匹配切台</td>
-          <td class="col-required">CL 或 LI</td>
+          <td>Fuzzy match channel by name / call sign / number</td>
+          <td class="col-required">CL or LI</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x02">
           <td><a href="#cmd-0x02"><code>0x02</code></a></td>
           <td>ChangeChannelByNumber</td>
-          <td>按主号 + 副号精确切台</td>
+          <td>Exact tune by major + minor number</td>
           <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x03">
           <td><a href="#cmd-0x03"><code>0x03</code></a></td>
           <td>SkipChannel</td>
-          <td>相对当前频道向前 / 向后跳转</td>
+          <td>Skip forward / backward relative to current channel</td>
           <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x04">
           <td><a href="#cmd-0x04"><code>0x04</code></a></td>
           <td>GetProgramGuide</td>
-          <td>查询电子节目单（EPG）</td>
+          <td>Query the Electronic Program Guide (EPG)</td>
           <td class="col-required">EG</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x05">
           <td><a href="#cmd-0x05"><code>0x05</code></a></td>
           <td>RecordProgram</td>
-          <td>预约录制指定节目</td>
+          <td>Schedule recording of a specified program</td>
           <td class="col-required">RP</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x06">
           <td><a href="#cmd-0x06"><code>0x06</code></a></td>
           <td>CancelRecordProgram</td>
-          <td>取消已预约的录制</td>
+          <td>Cancel a scheduled recording</td>
           <td class="col-required">RP</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <h4>响应Commands</h4>
+  <h4>Response Commands</h4>
   <div class="table-wrap">
     <table>
       <thead>
         <tr>
           <th>ID</th>
           <th>Name</th>
-          <th>触发命令</th>
+          <th>Trigger Command</th>
           <th>Description</th>
         </tr>
       </thead>
@@ -2185,24 +2184,24 @@ export const clusters: Record<string, ClusterContent> = {
           <td><code>0x01</code></td>
           <td>ChangeChannelResponse</td>
           <td>ChangeChannel</td>
-          <td>返回匹配结果的状态码和可选附加信息</td>
+          <td>Returns the match result status code and optional additional data</td>
         </tr>
         <tr>
           <td><code>0x02</code></td>
           <td>ProgramGuideResponse</td>
           <td>GetProgramGuide</td>
-          <td>返回节目列表和分页信息</td>
+          <td>Returns the program list and pagination info</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <!-- ====== Command Details ====== -->
-  <h3 id="cmd-0x00">ChangeChannel —— 模糊匹配切台(0x00)</h3>
+  <h3 id="cmd-0x00">ChangeChannel — Fuzzy Match Channel (0x00)</h3>
   <p>
-    通过一个字符串在频道列表中模糊匹配并切换频道。设备会依次匹配频道的 Name、CallSign、AffiliateCallSign、
-    编号（MajorNumber-MinorNumber）等字段。如果唯一匹配到一个频道，自动切换并更新 <code>CurrentChannel</code>；
-    如果匹配到多个或零个，通过 <code>ChangeChannelResponse</code> 告知控制端。
+    Fuzzy matches and switches channels using a string against the channel list. The device sequentially matches channel fields including Name, CallSign, AffiliateCallSign,
+    and number (MajorNumber-MinorNumber). If exactly one channel matches, it automatically switches and updates <code>CurrentChannel</code>;
+    if multiple or zero matches are found, the device notifies the controller via <code>ChangeChannelResponse</code>.
   </p>
   <div class="table-wrap">
     <table>
@@ -2213,14 +2212,14 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Match</td>
           <td>string</td>
-          <td>匹配字符串，可以是频道名称、呼号、编号等。例如 <code>"CCTV-6"</code>、<code>"HBO"</code>、<code>"6-1"</code></td>
+          <td>Match string — can be a channel name, call sign, number, etc. E.g., <code>"CCTV-6"</code>, <code>"HBO"</code>, <code>"6-1"</code></td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <h4>ChangeChannelResponse</h4>
-  <p>ChangeChannel 的响应，告知匹配结果：</p>
+  <p>Response to ChangeChannel, indicating the match result:</p>
   <div class="table-wrap">
     <table>
       <thead>
@@ -2230,31 +2229,31 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Status</td>
           <td><a href="#enum-status">StatusEnum</a></td>
-          <td>匹配结果状态（见下方枚举）</td>
+          <td>Match result status (see enum below)</td>
         </tr>
         <tr>
           <td>Data</td>
-          <td>string（可选）</td>
-          <td>附加信息。MultipleMatches 时可能包含匹配到的频道名称列表</td>
+          <td>string (optional)</td>
+          <td>Additional information. May contain a list of matched channel names when MultipleMatches occurs</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <pre><code>// ChangeChannel 命令响应（ChangeChannelResponse）
-// 匹配成功
+  <pre><code>// ChangeChannel command response (ChangeChannelResponse)
+// Match successful
 {
   "Status": 0,         // Success
   "Data": null
 }
 
-// 匹配到多个结果
+// Multiple matches found
 {
   "Status": 1,         // MultipleMatches
-  "Data": "CCTV-5 体育, CCTV-5+ 赛事"
+  "Data": "CCTV-5 Sports, CCTV-5+ Events"
 }
 
-// 未匹配到任何频道
+// No channels matched
 {
   "Status": 2,         // NoMatches
   "Data": null
@@ -2264,20 +2263,20 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        语音助手场景：用户说「换到 CCTV-6」，语音系统将文本传入 ChangeChannel 的 Match 参数。
-        设备在频道列表中匹配到 "CCTV-6 电影"，唯一命中，自动切台，返回 Status = Success。
-        如果用户说「换到 CCTV-5」但设备同时有"CCTV-5 体育"和"CCTV-5+ 赛事"两个频道，
-        返回 Status = MultipleMatches，App 需要让用户进一步选择。
+        Voice assistant scenario: the user says "Switch to CCTV-6", and the voice system passes the text to ChangeChannel's Match parameter.
+        The device matches "CCTV-6 Movie" in the channel list — a unique hit — automatically switches, and returns Status = Success.
+        If the user says "Switch to CCTV-5" but the device has both "CCTV-5 Sports" and "CCTV-5+ Events",
+        it returns Status = MultipleMatches, and the app needs to let the user choose.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x02">ChangeChannelByNumber —— 精确切台(0x02)</h3>
+  <h3 id="cmd-0x02">ChangeChannelByNumber — Exact Tune (0x02)</h3>
   <p>
-    通过主号（MajorNumber）和副号（MinorNumber）精确切换到指定频道。
-    这是最基础的切台命令，不需要设备提供频道列表，所有实现 Channel Cluster 的设备都必须支持。
-    不返回响应命令 —— 切台成功后 <code>CurrentChannel</code> 属性会更新。
+    Switches to a specific channel using the major number (MajorNumber) and minor number (MinorNumber).
+    This is the most basic tuning command — it does not require the device to provide a channel list, and all devices implementing the Channel Cluster must support it.
+    No response command is returned — on success, the <code>CurrentChannel</code> attribute updates.
   </p>
   <div class="table-wrap">
     <table>
@@ -2288,12 +2287,12 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>MajorNumber</td>
           <td>uint16</td>
-          <td>频道主号。例如 CCTV-6 的主号为 <code>6</code></td>
+          <td>Channel major number. E.g., the major number for CCTV-6 is <code>6</code></td>
         </tr>
         <tr>
           <td>MinorNumber</td>
           <td>uint16</td>
-          <td>频道副号。大多数频道副号为 <code>1</code>；同一主号下有子频道时用副号区分（如 6-1、6-2）</td>
+          <td>Channel minor number. Most channels have a minor number of <code>1</code>; minor numbers distinguish sub-channels under the same major number (e.g., 6-1, 6-2)</td>
         </tr>
       </tbody>
     </table>
@@ -2302,17 +2301,17 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        用户在 App 的频道列表中点击某个频道，App 直接用该频道的 MajorNumber 和 MinorNumber 发送此命令。
-        也适用于遥控器数字键输入场景：用户按下 "6-1"，设备解析后调用 ChangeChannelByNumber(6, 1)。
+        The user clicks a channel in the app's channel list, and the app directly sends this command with the channel's MajorNumber and MinorNumber.
+        Also applies to remote control numeric key input: the user presses "6-1", and the device parses it and calls ChangeChannelByNumber(6, 1).
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x03">SkipChannel —— 相对跳台(0x03)</h3>
+  <h3 id="cmd-0x03">SkipChannel — Relative Skip (0x03)</h3>
   <p>
-    相对当前频道向前或向后跳转指定数量的频道。正数向前（频道号增大方向），负数向后。
-    跳转依据的是设备内部的频道排列顺序，到达列表末尾或开头时会循环（wrap around）。
+    Skips a specified number of channels forward or backward relative to the current channel. Positive numbers skip forward (increasing channel numbers), negative numbers skip backward.
+    The skip follows the device's internal channel ordering and wraps around at the end or beginning of the list.
   </p>
   <div class="table-wrap">
     <table>
@@ -2323,7 +2322,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Count</td>
           <td>int16</td>
-          <td>跳转数量。<code>+1</code> = 下一个频道，<code>-1</code> = 上一个频道，<code>+5</code> = 向前跳 5 个频道</td>
+          <td>Skip count. <code>+1</code> = next channel, <code>-1</code> = previous channel, <code>+5</code> = skip 5 channels forward</td>
         </tr>
       </tbody>
     </table>
@@ -2332,18 +2331,18 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        对应遥控器上的频道 +/- 按钮。用户按一下 CH+，App 发送 SkipChannel(+1)；
-        按一下 CH-，发送 SkipChannel(-1)。不需要知道当前频道的编号或列表中的位置，设备自行处理。
+        Corresponds to the CH+/CH- buttons on the remote. The user presses CH+ and the app sends SkipChannel(+1);
+        presses CH- and sends SkipChannel(-1). No need to know the current channel number or position in the list — the device handles it.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x04">GetProgramGuide —— 查询节目单(0x04)</h3>
+  <h3 id="cmd-0x04">GetProgramGuide — Query Program Guide (0x04)</h3>
   <p>
-    查询电子节目单（EPG）数据，返回指定时间范围和频道范围内的节目列表。
-    此命令需要设备启用 <strong>EG（ElectronicGuide）</strong> 特性。
-    响应通过 <code>ProgramGuideResponse</code> 返回，支持分页。
+    Queries the Electronic Program Guide (EPG) data, returning the program list within the specified time range and channel range.
+    This command requires the device to enable the <strong>EG (ElectronicGuide)</strong> feature.
+    The response is returned via <code>ProgramGuideResponse</code> with pagination support.
   </p>
   <div class="table-wrap">
     <table>
@@ -2353,28 +2352,28 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr>
           <td>StartTime</td>
-          <td>epoch-s（可选）</td>
-          <td>查询的起始时间（UTC 秒级时间戳）。省略表示从当前时间开始</td>
+          <td>epoch-s (optional)</td>
+          <td>Query start time (UTC seconds timestamp). Omit to start from current time</td>
         </tr>
         <tr>
           <td>EndTime</td>
-          <td>epoch-s（可选）</td>
-          <td>查询的结束时间。省略表示不限结束时间</td>
+          <td>epoch-s (optional)</td>
+          <td>Query end time. Omit for no end time limit</td>
         </tr>
         <tr>
           <td>ChannelList</td>
-          <td>list&lt;<a href="#struct-channel-info">ChannelInfoStruct</a>&gt;（可选）</td>
-          <td>限定查询的频道范围。省略表示查询所有频道</td>
+          <td>list&lt;<a href="#struct-channel-info">ChannelInfoStruct</a>&gt; (optional)</td>
+          <td>Limits the query to specific channels. Omit to query all channels</td>
         </tr>
         <tr>
           <td>PageToken</td>
-          <td>PageTokenStruct（可选）</td>
-          <td>分页令牌，用于获取下一页结果</td>
+          <td>PageTokenStruct (optional)</td>
+          <td>Pagination token for fetching the next page of results</td>
         </tr>
         <tr>
           <td>RecordingFlag</td>
-          <td>RecordingFlagBitmap（可选）</td>
-          <td>筛选已预约录制或正在录制的节目</td>
+          <td>RecordingFlagBitmap (optional)</td>
+          <td>Filter for scheduled or currently recording programs</td>
         </tr>
       </tbody>
     </table>
@@ -2383,18 +2382,18 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">ProgramGuideResponse</div>
     <p>
-      响应中包含 <code>ProgramList</code>（节目列表）和可选的 <code>Paging</code>（分页信息）。
-      每个节目条目包含标题、描述、起止时间、所属频道、音频语言、分级等信息。
-      由于 EPG 数据量通常较大，控制端应合理使用分页和时间 / 频道筛选来控制返回量。
+      The response contains <code>ProgramList</code> (program list) and optional <code>Paging</code> (pagination info).
+      Each program entry includes title, description, start/end time, channel, audio language, rating, and more.
+      Since EPG data is typically large, controllers should use pagination and time/channel filters appropriately to control the response size.
     </p>
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x05">RecordProgram —— 预约录制(0x05)</h3>
+  <h3 id="cmd-0x05">RecordProgram — Schedule Recording (0x05)</h3>
   <p>
-    预约录制指定节目。通过节目的唯一标识符（ProgramIdentifier）或外部 ID 定位要录制的节目。
-    此命令需要设备启用 <strong>RP（RecordProgram）</strong> 特性。
-    该命令只支持具备存储能力的设备（如带硬盘的机顶盒、DVR）。
+    Schedules recording of a specified program. Locates the program to record via its unique identifier (ProgramIdentifier) or external ID.
+    This command requires the device to enable the <strong>RP (RecordProgram)</strong> feature.
+    This command is only supported by devices with storage capabilities (e.g., set-top boxes with hard drives, DVRs).
   </p>
   <div class="table-wrap">
     <table>
@@ -2405,32 +2404,32 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>ProgramIdentifier</td>
           <td>string</td>
-          <td>节目的唯一标识符，来自 EPG 数据中的 Identifier 字段</td>
+          <td>Unique identifier of the program, from the Identifier field in EPG data</td>
         </tr>
         <tr>
           <td>ShouldRecordSeries</td>
           <td>bool</td>
-          <td>是否录制整个系列（而非单集）</td>
+          <td>Whether to record the entire series (not just a single episode)</td>
         </tr>
         <tr>
           <td>ExternalIDList</td>
-          <td>list&lt;AdditionalInfoStruct&gt;（可选）</td>
-          <td>外部标识符列表，用于跨平台定位同一节目</td>
+          <td>list&lt;AdditionalInfoStruct&gt; (optional)</td>
+          <td>External identifier list for cross-platform program identification</td>
         </tr>
         <tr>
           <td>Data</td>
-          <td>bytes（可选）</td>
-          <td>厂商自定义数据</td>
+          <td>bytes (optional)</td>
+          <td>Vendor-specific custom data</td>
         </tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x06">CancelRecordProgram —— 取消录制(0x06)</h3>
+  <h3 id="cmd-0x06">CancelRecordProgram — Cancel Recording (0x06)</h3>
   <p>
-    取消之前通过 RecordProgram 预约的录制任务。参数结构与 RecordProgram 相同，
-    通过 ProgramIdentifier 定位要取消的录制。需要 <strong>RP</strong> 特性。
+    Cancels a previously scheduled recording via RecordProgram. The parameter structure is the same as RecordProgram,
+    identifying the recording to cancel via ProgramIdentifier. Requires the <strong>RP</strong> feature.
   </p>
   <div class="table-wrap">
     <table>
@@ -2441,22 +2440,22 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>ProgramIdentifier</td>
           <td>string</td>
-          <td>要取消录制的节目标识符</td>
+          <td>Identifier of the program whose recording to cancel</td>
         </tr>
         <tr>
           <td>ShouldRecordSeries</td>
           <td>bool</td>
-          <td>是否取消整个系列的录制</td>
+          <td>Whether to cancel recording of the entire series</td>
         </tr>
         <tr>
           <td>ExternalIDList</td>
-          <td>list&lt;AdditionalInfoStruct&gt;（可选）</td>
-          <td>外部标识符列表</td>
+          <td>list&lt;AdditionalInfoStruct&gt; (optional)</td>
+          <td>External identifier list</td>
         </tr>
         <tr>
           <td>Data</td>
-          <td>bytes（可选）</td>
-          <td>厂商自定义数据</td>
+          <td>bytes (optional)</td>
+          <td>Vendor-specific custom data</td>
         </tr>
       </tbody>
     </table>
@@ -2465,7 +2464,7 @@ export const clusters: Record<string, ClusterContent> = {
 
   <!-- ====== Attributes ====== -->
   <h2 id="attributes">Attributes</h2>
-  <p>Channel Cluster 共有 3 个属性。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+  <p>The Channel Cluster has 3 attributes. Click an attribute ID in the summary table below to jump to its detailed description.</p>
 
   <!-- Attribute summary table -->
   <div class="table-wrap">
@@ -2484,30 +2483,30 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>ChannelList</td>
           <td>list&lt;<a href="#struct-channel-info">ChannelInfoStruct</a>&gt;</td>
-          <td>设备可收看的全部频道列表</td>
+          <td>List of all channels the device can tune to</td>
           <td class="col-required">CL</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>Lineup</td>
           <td><a href="#struct-lineup-info">LineupInfoStruct</a></td>
-          <td>运营商和线路套餐信息</td>
+          <td>Operator and lineup package information</td>
           <td class="col-required">LI</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
           <td>CurrentChannel</td>
           <td><a href="#struct-channel-info">ChannelInfoStruct</a> / null</td>
-          <td>当前正在收看的频道</td>
+          <td>The channel currently being viewed</td>
           <td class="col-optional">None</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 属性详细说明 ====== -->
-  <h3 id="group-channel">频道信息(0x0000 ~ 0x0002)</h3>
-  <p>描述设备可用的频道列表、运营商线路信息以及当前选中的频道。</p>
+  <!-- ====== Attribute Details ====== -->
+  <h3 id="group-channel">Channel Information (0x0000 ~ 0x0002)</h3>
+  <p>Describes the device's available channel list, operator lineup information, and the currently selected channel.</p>
 
   <div class="table-wrap">
     <table>
@@ -2522,21 +2521,21 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0000">
           <td><code>0x0000</code></td>
-          <td>ChannelList（频道列表）</td>
+          <td>ChannelList</td>
           <td>list&lt;<a href="#struct-channel-info">ChannelInfoStruct</a>&gt;</td>
-          <td>设备声明的全部可收看频道。每个元素是一个 <a href="#struct-channel-info">ChannelInfoStruct</a>，包含频道编号、名称、呼号、类型等信息。列表的排列顺序即为 SkipChannel 的跳转顺序。<strong>需要 CL 特性</strong></td>
+          <td>All viewable channels declared by the device. Each element is a <a href="#struct-channel-info">ChannelInfoStruct</a> containing channel number, name, call sign, type, and more. The list order determines the SkipChannel navigation order. <strong>Requires the CL feature</strong></td>
         </tr>
         <tr id="attr-0x0001">
           <td><code>0x0001</code></td>
-          <td>Lineup（线路信息）</td>
+          <td>Lineup</td>
           <td><a href="#struct-lineup-info">LineupInfoStruct</a></td>
-          <td>当前设备接入的运营商和线路套餐信息。包含运营商名称、套餐名、邮编等。<strong>需要 LI 特性</strong></td>
+          <td>The operator and lineup package information the device is connected to. Includes operator name, package name, postal code, etc. <strong>Requires LI feature</strong></td>
         </tr>
         <tr id="attr-0x0002">
           <td><code>0x0002</code></td>
-          <td>CurrentChannel（当前频道）</td>
+          <td>CurrentChannel</td>
           <td><a href="#struct-channel-info">ChannelInfoStruct</a> / null</td>
-          <td>当前正在收看的频道信息。Nullable —— <code>null</code> 表示设备当前未调谐到任何频道（例如正在播放 HDMI 输入或流媒体 App）。通过 ChangeChannel / ChangeChannelByNumber / SkipChannel 命令改变</td>
+          <td>The channel currently being viewed. Nullable — <code>null</code> indicates the device is not tuned to any channel (e.g., playing an HDMI input or streaming app). Changed via ChangeChannel / ChangeChannelByNumber / SkipChannel commands</td>
         </tr>
       </tbody>
     </table>
@@ -2545,19 +2544,19 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">Subscribe to Changes</div>
     <p>
-      控制端应订阅 <code>CurrentChannel</code> 属性的变化，以便在用户通过遥控器换台时同步 App 界面。
-      如果设备支持 CL 特性，也应在初次连接时读取 <code>ChannelList</code> 构建频道选择 UI。
+      Controllers should subscribe to <code>CurrentChannel</code> attribute changes to sync the app UI when the user changes channels via the remote.
+      If the device supports the CL feature, also read <code>ChannelList</code> on initial connection to build the channel selection UI.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 结构体定义 ====== -->
+  <!-- ====== Struct Definitions ====== -->
   <h2 id="structs">Struct Definitions</h2>
-  <p>Channel Cluster 使用两个核心结构体来描述频道和线路信息。</p>
+  <p>The Channel Cluster uses two core structures to describe channel and lineup information.</p>
 
   <!-- ChannelInfoStruct -->
   <h3 id="struct-channel-info">ChannelInfoStruct</h3>
-  <p>描述一个频道的完整信息。MajorNumber 和 MinorNumber 是必选字段，其余为可选。</p>
+  <p>Describes the complete information for a channel. MajorNumber and MinorNumber are required fields; the rest are optional.</p>
 
   <div class="table-wrap">
     <table>
@@ -2574,43 +2573,43 @@ export const clusters: Record<string, ClusterContent> = {
           <td>MajorNumber</td>
           <td>uint16</td>
           <td>Yes</td>
-          <td>频道主号。例如 CCTV-6 对应 <code>6</code>，HBO 对应 <code>100</code></td>
+          <td>Channel major number. E.g., CCTV-6 corresponds to <code>6</code>, HBO to <code>100</code></td>
         </tr>
         <tr>
           <td>MinorNumber</td>
           <td>uint16</td>
           <td>Yes</td>
-          <td>频道副号。同一主号下的子频道用副号区分，大多数频道副号为 <code>1</code></td>
+          <td>Channel minor number. Sub-channels under the same major number are distinguished by minor number; most channels have minor number <code>1</code></td>
         </tr>
         <tr>
           <td>Name</td>
           <td>string</td>
           <td>No</td>
-          <td>频道名称，供 UI 显示。例如 <code>"CCTV-6 电影"</code></td>
+          <td>Channel name for UI display. E.g., <code>"CCTV-6 Movie"</code></td>
         </tr>
         <tr>
           <td>CallSign</td>
           <td>string</td>
           <td>No</td>
-          <td>频道呼号（广播标识符）。例如 <code>"CCTV6"</code>、<code>"HBO"</code></td>
+          <td>Channel call sign (broadcast identifier). E.g., <code>"CCTV6"</code>, <code>"HBO"</code></td>
         </tr>
         <tr>
           <td>AffiliateCallSign</td>
           <td>string</td>
           <td>No</td>
-          <td>附属呼号。用于同一频道在不同地区的分支版本，例如 <code>"HBO East"</code></td>
+          <td>Affiliate call sign. Used for regional variants of the same channel, e.g., <code>"HBO East"</code></td>
         </tr>
         <tr>
           <td>Identifier</td>
           <td>string</td>
           <td>No</td>
-          <td>频道的唯一标识符，用于在 EPG 等系统中定位频道。例如 <code>"cctv6-hd"</code></td>
+          <td>Unique identifier for the channel, used to locate it in EPG and other systems. E.g., <code>"cctv6-hd"</code></td>
         </tr>
         <tr>
           <td>Type</td>
           <td><a href="#enum-channel-type">ChannelTypeEnum</a></td>
           <td>No</td>
-          <td>频道类型 —— 卫星、有线、地面广播还是 OTT 流媒体（见下方枚举）</td>
+          <td>Channel type — satellite, cable, terrestrial, or OTT streaming (see enum below)</td>
         </tr>
       </tbody>
     </table>
@@ -2618,7 +2617,7 @@ export const clusters: Record<string, ClusterContent> = {
 
   <!-- LineupInfoStruct -->
   <h3 id="struct-lineup-info">LineupInfoStruct</h3>
-  <p>描述设备当前接入的运营商线路信息。OperatorName 和 LineupInfoType 是必选字段。</p>
+  <p>Describes the operator lineup information for the device's current connection. OperatorName and LineupInfoType are required fields.</p>
 
   <div class="table-wrap">
     <table>
@@ -2635,184 +2634,184 @@ export const clusters: Record<string, ClusterContent> = {
           <td>OperatorName</td>
           <td>string</td>
           <td>Yes</td>
-          <td>运营商名称。例如 <code>"中国广电"</code>、<code>"Comcast"</code></td>
+          <td>Operator name. E.g., <code>"China Broadcasting"</code>, <code>"Comcast"</code></td>
         </tr>
         <tr>
           <td>LineupName</td>
           <td>string</td>
           <td>No</td>
-          <td>线路套餐名称。例如 <code>"标清数字套餐"</code>、<code>"Premium HD Bundle"</code></td>
+          <td>Lineup package name. E.g., <code>"Standard Digital Package"</code>, <code>"Premium HD Bundle"</code></td>
         </tr>
         <tr>
           <td>PostalCode</td>
           <td>string</td>
           <td>No</td>
-          <td>设备所在地区的邮政编码，用于区分同一运营商在不同地区的频道编排差异</td>
+          <td>Postal code of the device's location, used to distinguish channel lineup differences for the same operator in different regions</td>
         </tr>
         <tr>
           <td>LineupInfoType</td>
           <td><a href="#enum-lineup-info-type">LineupInfoTypeEnum</a></td>
           <td>Yes</td>
-          <td>线路类型（见下方枚举）</td>
+          <td>Lineup type (see enum below)</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 枚举值 ====== -->
-  <h2 id="enums">枚举值</h2>
+  <!-- ====== Enum Values ====== -->
+  <h2 id="enums">Enum Values</h2>
 
   <!-- StatusEnum -->
   <h3 id="enum-status">StatusEnum</h3>
-  <p>ChangeChannelResponse 中的匹配结果状态：</p>
+  <p>Match result status in ChangeChannelResponse:</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">Success</span>
-        <span class="enum-desc">唯一匹配成功 —— 已切换到目标频道</span>
+        <span class="enum-desc">Unique match successful — switched to the target channel</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">MultipleMatches</span>
-        <span class="enum-desc">匹配到多个频道 —— 需要用户进一步选择</span>
+        <span class="enum-desc">Multiple channels matched — user needs to make a further selection</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">NoMatches</span>
-        <span class="enum-desc">未匹配到任何频道</span>
+        <span class="enum-desc">No channels matched</span>
       </div>
     </div>
   </div>
 
   <!-- ChannelTypeEnum -->
   <h3 id="enum-channel-type">ChannelTypeEnum</h3>
-  <p>描述频道的传输方式 / 来源类型：</p>
+  <p>Describes the channel's transmission method / source type:</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">Satellite</span>
-        <span class="enum-desc">卫星电视 —— 通过卫星信号接收</span>
+        <span class="enum-desc">Satellite TV — received via satellite signal</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">Cable</span>
-        <span class="enum-desc">有线电视 —— 通过同轴电缆或光纤入户</span>
+        <span class="enum-desc">Cable TV — delivered via coaxial cable or fiber-to-the-home</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">Terrestrial</span>
-        <span class="enum-desc">地面广播 —— 通过地面无线信号接收（DVB-T / ATSC）</span>
+        <span class="enum-desc">Terrestrial — received via over-the-air broadcast (DVB-T / ATSC)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">OTT</span>
-        <span class="enum-desc">OTT 流媒体 —— 通过互联网传输（IPTV / 网络直播）</span>
+        <span class="enum-desc">OTT streaming — delivered via the internet (IPTV / online live)</span>
       </div>
     </div>
   </div>
 
   <!-- LineupInfoTypeEnum -->
   <h3 id="enum-lineup-info-type">LineupInfoTypeEnum</h3>
-  <p>描述线路运营商的类型：</p>
+  <p>Describes the lineup operator type:</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">MSO</span>
-        <span class="enum-desc">Multiple System Operator —— 多系统运营商（最常见，如有线电视公司、IPTV 运营商）</span>
+        <span class="enum-desc">Multiple System Operator — the most common type, such as cable TV companies and IPTV operators</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">LineupInfoType 目前只有一个值</div>
+    <div class="callout-title">LineupInfoType Currently Has Only One Value</div>
     <p>
-      Matter 1.4 规范中 LineupInfoTypeEnum 目前只定义了 <code>MSO (0)</code> 一个枚举值。
-      未来版本可能会扩展更多类型。设备实现时应使用 <code>0</code> 作为默认值。
+      The Matter 1.4 specification currently defines only one enum value for LineupInfoTypeEnum: <code>MSO (0)</code>.
+      Future versions may add more types. Device implementations should use <code>0</code> as the default value.
     </p>
   </div>
 
   <!-- ====== Feature Bitmap ====== -->
   <h2 id="features">Feature Bitmap</h2>
-  <p>Channel Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持哪些可选能力：</p>
+  <p>The Channel Cluster declares which optional capabilities the device supports via <code>FeatureMap</code> (0xFFFC):</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">Bit 0</span>
       <div>
-        <span class="enum-name">CL（ChannelList）</span>
-        <span class="enum-desc">频道列表 —— 设备提供可浏览的频道列表（ChannelList 属性），支持 ChangeChannel 模糊匹配</span>
+        <span class="enum-name">CL (ChannelList)</span>
+        <span class="enum-desc">Channel List — the device provides a browsable channel list (ChannelList attribute) and supports ChangeChannel fuzzy matching</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 1</span>
       <div>
-        <span class="enum-name">LI（LineupInfo）</span>
-        <span class="enum-desc">线路信息 —— 设备暴露运营商和线路套餐信息（Lineup 属性），也可支持 ChangeChannel</span>
+        <span class="enum-name">LI (LineupInfo)</span>
+        <span class="enum-desc">Lineup Info — the device exposes operator and lineup package information (Lineup attribute) and may also support ChangeChannel</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 2</span>
       <div>
-        <span class="enum-name">EG（ElectronicGuide）</span>
-        <span class="enum-desc">电子节目单 —— 设备提供 EPG 数据，支持 GetProgramGuide 命令查询节目信息</span>
+        <span class="enum-name">EG (ElectronicGuide)</span>
+        <span class="enum-desc">Electronic Guide — the device provides EPG data and supports the GetProgramGuide command for querying program info</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 3</span>
       <div>
-        <span class="enum-name">RP（RecordProgram）</span>
-        <span class="enum-desc">节目录制 —— 设备支持预约录制，提供 RecordProgram 和 CancelRecordProgram 命令</span>
+        <span class="enum-name">RP (RecordProgram)</span>
+        <span class="enum-desc">Record Program — the device supports scheduled recording via RecordProgram and CancelRecordProgram commands</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">特性依赖关系</div>
+    <div class="callout-title">Feature Dependencies</div>
     <p>
-      <strong>ChangeChannel</strong> 命令要求设备至少启用 CL 或 LI 之一，否则没有数据来源进行名称匹配。<br/>
-      <strong>RP</strong> 特性隐含要求 <strong>EG</strong> —— 要录制节目，必须先能查询到节目信息。<br/>
-      <strong>ChangeChannelByNumber</strong> 和 <strong>SkipChannel</strong> 不依赖任何特性，是基础必选命令。
+      <strong>ChangeChannel</strong> requires at least CL or LI to be enabled; otherwise there is no data source for name matching.<br/>
+      <strong>RP</strong> implicitly requires <strong>EG</strong> — to record programs, the device must first be able to query program information.<br/>
+      <strong>ChangeChannelByNumber</strong> and <strong>SkipChannel</strong> do not depend on any feature; they are basic required commands.
     </p>
   </div>
 
   <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一台启用了 CL + LI 特性的机顶盒，当前正在收看 CCTV-6 的 Channel Cluster 读取结果：</p>
+  <p>Read results of the Channel Cluster from a set-top box with CL + LI features enabled, currently viewing CCTV-6:</p>
 
   <pre><code>{
-  // --- 当前频道 ---
+  // --- Current Channel ---
   "0x0002": {                       // CurrentChannel
     "MajorNumber": 6,
     "MinorNumber": 1,
-    "Name": "CCTV-6 电影",
+    "Name": "CCTV-6 Movies",
     "CallSign": "CCTV6",
     "AffiliateCallSign": null,
     "Identifier": "cctv6-hd",
-    "Type": 2                        // Terrestrial（地面广播）
+    "Type": 2                        // Terrestrial
   },
 
-  // --- 频道列表（需要 CL 特性）---
+  // --- Channel List (requires CL feature) ---
   "0x0000": [                        // ChannelList
     {
       "MajorNumber": 1,
       "MinorNumber": 1,
-      "Name": "CCTV-1 综合",
+      "Name": "CCTV-1 General",
       "CallSign": "CCTV1",
       "AffiliateCallSign": null,
       "Identifier": "cctv1-hd",
@@ -2821,7 +2820,7 @@ export const clusters: Record<string, ClusterContent> = {
     {
       "MajorNumber": 5,
       "MinorNumber": 1,
-      "Name": "CCTV-5 体育",
+      "Name": "CCTV-5 Sports",
       "CallSign": "CCTV5",
       "AffiliateCallSign": null,
       "Identifier": "cctv5-hd",
@@ -2830,7 +2829,7 @@ export const clusters: Record<string, ClusterContent> = {
     {
       "MajorNumber": 6,
       "MinorNumber": 1,
-      "Name": "CCTV-6 电影",
+      "Name": "CCTV-6 Movies",
       "CallSign": "CCTV6",
       "AffiliateCallSign": null,
       "Identifier": "cctv6-hd",
@@ -2843,14 +2842,14 @@ export const clusters: Record<string, ClusterContent> = {
       "CallSign": "HBO",
       "AffiliateCallSign": "HBO East",
       "Identifier": "hbo-east",
-      "Type": 1                      // Cable（有线电视）
+      "Type": 1                      // Cable
     }
   ],
 
-  // --- 线路信息（需要 LI 特性）---
+  // --- Lineup Info (requires LI feature) ---
   "0x0001": {                        // Lineup
-    "OperatorName": "中国广电",
-    "LineupName": "标清数字套餐",
+    "OperatorName": "China Broadcasting",
+    "LineupName": "Standard Digital",
     "PostalCode": "100000",
     "LineupInfoType": 0              // MSO
   }
@@ -2859,9 +2858,9 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      对于最简单的设备，可能只有 <code>CurrentChannel (0x0002)</code> 一个属性。
-      只有支持 CL 特性的设备才会返回 <code>ChannelList (0x0000)</code>，只有支持 LI 的设备才会返回 <code>Lineup (0x0001)</code>。
-      读取前可先检查 <code>FeatureMap (0xFFFC)</code> 判断设备支持哪些特性，避免读取不存在的属性。
+      For the simplest devices, there may only be the <code>CurrentChannel (0x0002)</code> attribute.
+      Only devices supporting the CL feature return <code>ChannelList (0x0000)</code>, and only those supporting LI return <code>Lineup (0x0001)</code>.
+      Check <code>FeatureMap (0xFFFC)</code> before reading to determine which features the device supports and avoid reading non-existent attributes.
     </p>
   </div>
 
@@ -2869,37 +2868,37 @@ export const clusters: Record<string, ClusterContent> = {
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
-    <summary>场景 1：App 频道列表与换台</summary>
+    <summary>Scenario 1: App channel list and tuning</summary>
     <div class="scenario-content">
       <ol>
-        <li>检查 <code>FeatureMap (0xFFFC)</code>，确认设备支持 <strong>CL</strong>（Bit 0 = 1）</li>
-        <li>读取 <code>ChannelList (0x0000)</code>，获取全部频道（MajorNumber、MinorNumber、Name、CallSign、Type）</li>
-        <li>读取 <code>CurrentChannel (0x0002)</code>，高亮当前频道</li>
-        <li>在 UI 上展示频道列表，可根据 <code>Type</code> 分组显示（地面广播、有线、卫星、OTT）</li>
-        <li>用户点击目标频道，发送 <code>ChangeChannelByNumber</code>，传入该频道的 MajorNumber 和 MinorNumber</li>
-        <li>订阅 <code>CurrentChannel</code> 属性变化，确认切台成功后更新 UI 高亮</li>
+        <li>Check <code>FeatureMap (0xFFFC)</code> to confirm <strong>CL</strong> support (Bit 0 = 1)</li>
+        <li>Read <code>ChannelList (0x0000)</code> to get all channels (MajorNumber, MinorNumber, Name, CallSign, Type)</li>
+        <li>Read <code>CurrentChannel (0x0002)</code> to highlight the current channel</li>
+        <li>Display the channel list in the UI, optionally grouped by <code>Type</code> (terrestrial, cable, satellite, OTT)</li>
+        <li>The user clicks a target channel and sends <code>ChangeChannelByNumber</code> with the channel's MajorNumber and MinorNumber</li>
+        <li>Subscribe to <code>CurrentChannel</code> attribute changes and update the UI highlight after confirming the switch</li>
       </ol>
     </div>
   </details>
 
   <details class="scenario">
-    <summary>场景 2：语音助手模糊搜台</summary>
+    <summary>Scenario 2: Voice assistant fuzzy channel search</summary>
     <div class="scenario-content">
       <ol>
-        <li>确认设备支持 <strong>CL</strong> 或 <strong>LI</strong> 特性（ChangeChannel 的前提条件）</li>
-        <li>用户对语音助手说「换到 HBO」，语音系统将文本 <code>"HBO"</code> 作为 Match 参数发送 <code>ChangeChannel</code></li>
-        <li>检查 ChangeChannelResponse 的 Status：
+        <li>Confirm the device supports <strong>CL</strong> or <strong>LI</strong> features (prerequisite for ChangeChannel)</li>
+        <li>The user tells the voice assistant "Switch to HBO", and the voice system sends <code>ChangeChannel</code> with <code>"HBO"</code> as the Match parameter</li>
+        <li>Check the ChangeChannelResponse Status:
           <ul>
-            <li><strong>Success (0)</strong>：已切台，无需额外操作</li>
-            <li><strong>MultipleMatches (1)</strong>：向用户展示 Data 中的候选频道列表，让用户选择后用 ChangeChannelByNumber 精确切台</li>
-            <li><strong>NoMatches (2)</strong>：提示用户未找到匹配频道，建议更换搜索词</li>
+            <li><strong>Success (0)</strong>: Channel switched, no further action needed</li>
+            <li><strong>MultipleMatches (1)</strong>: Show the candidate channel list from Data to the user, then use ChangeChannelByNumber for exact tuning after their selection</li>
+            <li><strong>NoMatches (2)</strong>: Notify the user that no matching channel was found and suggest different search terms</li>
           </ul>
         </li>
-        <li>订阅 <code>CurrentChannel</code> 确认切台结果</li>
+        <li>Subscribe to <code>CurrentChannel</code> to confirm the tuning result</li>
       </ol>
       <p>
-        <strong>注意</strong>：ChangeChannel 的匹配逻辑由设备实现决定。不同设备对同一搜索词的匹配结果可能不同。
-        App 应优雅处理 MultipleMatches 和 NoMatches 两种情况。
+        <strong>Note</strong>: The matching logic of ChangeChannel is determined by the device implementation. Different devices may produce different results for the same search term.
+        Apps should gracefully handle both MultipleMatches and NoMatches cases.
       </p>
     </div>
   </details>
@@ -2940,34 +2939,34 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'keypad-input': {
     title: 'KeypadInput Cluster (0x0509)',
-    description: 'Matter KeypadInput Cluster(0x0509)完整参考 — SendKey 命令、CecKeyCode 按键枚举(导航/数字/媒体控制/颜色/功能键)、StatusEnum 响应状态、NV/LK/NK 特性说明及实际场景示例。',
+    description: 'Complete reference for the Matter KeypadInput Cluster (0x0509) — SendKey command, CecKeyCode key enums (navigation/numeric/media control/color/function keys), StatusEnum response status, NV/LK/NK feature description and usage scenarios.',
     prev: { title: 'Cluster Reference', slug: 'clusters' },
     next: undefined,
     content: `<h1>KeypadInput Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x0509</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 媒体端点（电视、机顶盒等）
+    <strong>Endpoint</strong>: Media endpoint (TV, set-top box, etc.)
   </p>
   <p>
-    KeypadInput 负责接收遥控器和外部控制端的按键输入 —— 方向导航、数字键、媒体控制键、颜色功能键等。
-    它是智能电视、机顶盒等媒体设备的核心交互 Cluster，让手机 App 可以充当遥控器使用。
-    按键编码沿用 HDMI-CEC 标准（CEC Key Code），覆盖了遥控器上常见的所有按键。
+    KeypadInput receives key inputs from remote controls and external controllers — directional navigation, numeric keys, media control keys, color function keys, etc.
+    It is the core interaction Cluster for media devices such as smart TVs and set-top boxes, allowing phone apps to serve as remote controls.
+    Key codes follow the HDMI-CEC standard (CEC Key Code), covering all common remote control buttons.
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">三类按键特性</div>
+    <div class="callout-title">Three Key Categories</div>
     <p>
-      KeypadInput 通过三个 Feature 标记设备支持哪些按键类别：
-      <strong>NV</strong>（导航键：方向、确认、菜单等）、
-      <strong>LK</strong>（位置键：频道号、收藏等）、
-      <strong>NK</strong>（数字键：0~9、Enter 等）。
-      发送按键前应先检查 FeatureMap，避免发送设备不支持的按键类别。
+      KeypadInput uses three Features to indicate which key categories the device supports:
+      <strong>NV</strong> (Navigation keys: directional, select, menu, etc.),
+      <strong>LK</strong> (Location keys: channel numbers, favorites, etc.),
+      <strong>NK</strong> (Number keys: 0~9, Enter, etc.).
+      Check the FeatureMap before sending keys to avoid sending unsupported key categories.
     </p>
   </div>
 
   <!-- Quick navigation -->
   <nav class="quick-nav">
-    <a href="#commands">命令</a>
+    <a href="#commands">Commands</a>
     <span class="nav-sep">|</span>
     <a href="#enums">Enum Definitions</a>
     <span class="nav-sep">|</span>
@@ -2981,7 +2980,7 @@ export const clusters: Record<string, ClusterContent> = {
   <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    KeypadInput Cluster 只有 1 个命令和 1 个响应。控制端发送 <code>SendKey</code>，设备返回 <code>SendKeyResponse</code> 表示处理结果。
+    The KeypadInput Cluster has only 1 command and 1 response. The controller sends <code>SendKey</code>, and the device returns <code>SendKeyResponse</code> with the processing result.
   </p>
 
   <div class="table-wrap">
@@ -2999,23 +2998,23 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>SendKey</td>
           <td>Client &rarr; Server</td>
-          <td>发送一个按键到设备</td>
+          <td>Send a key press to the device</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x01">
           <td><a href="#cmd-0x01"><code>0x01</code></a></td>
           <td>SendKeyResponse</td>
           <td>Server &rarr; Client</td>
-          <td>设备对 SendKey 的处理结果</td>
+          <td>Device processing result for SendKey</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <!-- ====== Command Details ====== -->
-  <h3 id="cmd-0x00">SendKey —— 发送按键(0x00)</h3>
+  <h3 id="cmd-0x00">SendKey — Send Key Press (0x00)</h3>
   <p>
-    向设备发送一个 CEC 按键码，模拟遥控器按键操作。
-    设备收到后根据当前状态处理按键，并返回 <code>SendKeyResponse</code> 告知处理结果。
+    Sends a CEC key code to the device, simulating a remote control key press.
+    The device processes the key based on its current state and returns <code>SendKeyResponse</code> with the result.
   </p>
   <div class="table-wrap">
     <table>
@@ -3026,7 +3025,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>KeyCode</td>
           <td><a href="#enum-cec-key-code">CecKeyCode</a></td>
-          <td>要发送的按键码（见下方枚举）</td>
+          <td>Key code to send (see enum below)</td>
         </tr>
       </tbody>
     </table>
@@ -3035,16 +3034,16 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        手机 App 充当遥控器时，用户点击方向键或确认键，App 将对应的 CecKeyCode 通过 SendKey 发送给电视。
-        例如用户按"确认"，发送 <code>KeyCode = 0x00 (Select)</code>。
+        When the phone app serves as a remote control, the user taps a directional or select key, and the app sends the corresponding CecKeyCode via SendKey to the TV.
+        For example, when the user presses "OK", it sends <code>KeyCode = 0x00 (Select)</code>.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x01">SendKeyResponse —— 按键响应(0x01)</h3>
+  <h3 id="cmd-0x01">SendKeyResponse — Key Response (0x01)</h3>
   <p>
-    设备对 SendKey 命令的响应，告知控制端按键是否被成功处理。
+    The device's response to the SendKey command, indicating whether the key press was successfully processed.
   </p>
   <div class="table-wrap">
     <table>
@@ -3055,29 +3054,29 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Status</td>
           <td><a href="#enum-status">StatusEnum</a></td>
-          <td>按键处理结果（见下方枚举）</td>
+          <td>Key processing result (see enum below)</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <pre><code>// SendKey 命令示例
-// 发送"确认"键（Select = 0x00）
+  <pre><code>// SendKey command example
+// Send "Select" key (Select = 0x00)
 {
   "KeyCode": 0       // CecKeyCode.Select
 }
 
-// 设备返回 SendKeyResponse
+// Device returns SendKeyResponse
 {
   "Status": 0        // StatusEnum.Success
 }</code></pre>
 
   <div class="callout callout-warning">
-    <div class="callout-title">错误处理</div>
+    <div class="callout-title">Error Handling</div>
     <p>
-      控制端应根据 <code>StatusEnum</code> 处理异常情况：
-      收到 <code>UnsupportedKey</code> 时，UI 上对应按键可置灰或隐藏；
-      收到 <code>InvalidKeyInCurrentState</code> 时，可提示用户当前状态下该按键不可用（如非播放状态下按暂停）。
+      Controllers should handle exceptions based on <code>StatusEnum</code>:
+      on <code>UnsupportedKey</code>, grey out or hide the corresponding button in the UI;
+      on <code>InvalidKeyInCurrentState</code>, notify the user that the key is not available in the current state (e.g., pressing pause when not playing).
     </p>
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
@@ -3087,505 +3086,505 @@ export const clusters: Record<string, ClusterContent> = {
 
   <!-- StatusEnum -->
   <h3 id="enum-status">StatusEnum</h3>
-  <p>SendKeyResponse 的处理结果。</p>
+  <p>Processing results for SendKeyResponse.</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">Success</span>
-        <span class="enum-desc">成功 —— 按键已被设备正常处理</span>
+        <span class="enum-desc">Success — key press was processed normally by the device</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">UnsupportedKey</span>
-        <span class="enum-desc">不支持 —— 设备不识别该按键码</span>
+        <span class="enum-desc">Unsupported — device does not recognize this key code</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">InvalidKeyInCurrentState</span>
-        <span class="enum-desc">状态无效 —— 当前状态下不接受该按键（如未播放时按暂停）</span>
+        <span class="enum-desc">Invalid state — key not accepted in the current state (e.g., pressing pause when not playing)</span>
       </div>
     </div>
   </div>
 
   <!-- CecKeyCode -->
-  <h3 id="enum-cec-key-code">CecKeyCode(CEC 按键码)</h3>
+  <h3 id="enum-cec-key-code">CecKeyCode (CEC Key Codes)</h3>
   <p>
-    沿用 HDMI-CEC 标准的按键码定义，覆盖遥控器上常见的所有按键。
-    按功能分为以下几组，方便按需查阅。
+    Key code definitions following the HDMI-CEC standard, covering all common remote control buttons.
+    Grouped by function for easy reference.
   </p>
 
-  <!-- 导航键 -->
-  <h4 id="keys-navigation">导航键(NV 特性)</h4>
-  <p>方向导航、确认、返回、菜单等基础交互按键，是遥控器最核心的操作区域。</p>
+  <!-- Navigation keys -->
+  <h4 id="keys-navigation">Navigation Keys (NV Feature)</h4>
+  <p>Directional navigation, select, back, menu, and other basic interaction keys — the core control area of the remote.</p>
 
   <div class="enum-cards enum-cards-grid">
     <div class="enum-card">
       <span class="enum-badge">0x00</span>
       <div>
         <span class="enum-name">Select</span>
-        <span class="enum-desc">确认 / OK</span>
+        <span class="enum-desc">Select / OK</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x01</span>
       <div>
         <span class="enum-name">Up</span>
-        <span class="enum-desc">上</span>
+        <span class="enum-desc">Up</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x02</span>
       <div>
         <span class="enum-name">Down</span>
-        <span class="enum-desc">下</span>
+        <span class="enum-desc">Down</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x03</span>
       <div>
         <span class="enum-name">Left</span>
-        <span class="enum-desc">左</span>
+        <span class="enum-desc">Left</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x04</span>
       <div>
         <span class="enum-name">Right</span>
-        <span class="enum-desc">右</span>
+        <span class="enum-desc">Right</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x05</span>
       <div>
         <span class="enum-name">RightUp</span>
-        <span class="enum-desc">右上</span>
+        <span class="enum-desc">Right-Up</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x06</span>
       <div>
         <span class="enum-name">RightDown</span>
-        <span class="enum-desc">右下</span>
+        <span class="enum-desc">Right-Down</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x07</span>
       <div>
         <span class="enum-name">LeftUp</span>
-        <span class="enum-desc">左上</span>
+        <span class="enum-desc">Left-Up</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x08</span>
       <div>
         <span class="enum-name">LeftDown</span>
-        <span class="enum-desc">左下</span>
+        <span class="enum-desc">Left-Down</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x09</span>
       <div>
         <span class="enum-name">RootMenu</span>
-        <span class="enum-desc">主菜单</span>
+        <span class="enum-desc">Root Menu</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x0A</span>
       <div>
         <span class="enum-name">SetupMenu</span>
-        <span class="enum-desc">设置菜单</span>
+        <span class="enum-desc">Setup Menu</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x0B</span>
       <div>
         <span class="enum-name">ContentsMenu</span>
-        <span class="enum-desc">内容菜单</span>
+        <span class="enum-desc">Contents Menu</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x0D</span>
       <div>
         <span class="enum-name">Exit</span>
-        <span class="enum-desc">退出</span>
+        <span class="enum-desc">Exit</span>
       </div>
     </div>
   </div>
 
-  <!-- 数字键 -->
-  <h4 id="keys-number">数字键(NK 特性)</h4>
-  <p>0~9 数字输入和 Enter 确认，用于频道号输入、密码输入等场景。</p>
+  <!-- Number keys -->
+  <h4 id="keys-number">Number Keys (NK Feature)</h4>
+  <p>0~9 numeric input and Enter confirmation, used for channel number entry, password input, etc.</p>
 
   <div class="enum-cards enum-cards-grid">
     <div class="enum-card">
       <span class="enum-badge">0x20</span>
       <div>
         <span class="enum-name">Number0OrNumber10</span>
-        <span class="enum-desc">数字 0（或 10）</span>
+        <span class="enum-desc">Number 0 (or 10)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x21</span>
       <div>
         <span class="enum-name">Numbers1</span>
-        <span class="enum-desc">数字 1</span>
+        <span class="enum-desc">Number 1</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x22</span>
       <div>
         <span class="enum-name">Numbers2</span>
-        <span class="enum-desc">数字 2</span>
+        <span class="enum-desc">Number 2</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x23</span>
       <div>
         <span class="enum-name">Numbers3</span>
-        <span class="enum-desc">数字 3</span>
+        <span class="enum-desc">Number 3</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x24</span>
       <div>
         <span class="enum-name">Numbers4</span>
-        <span class="enum-desc">数字 4</span>
+        <span class="enum-desc">Number 4</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x25</span>
       <div>
         <span class="enum-name">Numbers5</span>
-        <span class="enum-desc">数字 5</span>
+        <span class="enum-desc">Number 5</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x26</span>
       <div>
         <span class="enum-name">Numbers6</span>
-        <span class="enum-desc">数字 6</span>
+        <span class="enum-desc">Number 6</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x27</span>
       <div>
         <span class="enum-name">Numbers7</span>
-        <span class="enum-desc">数字 7</span>
+        <span class="enum-desc">Number 7</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x28</span>
       <div>
         <span class="enum-name">Numbers8</span>
-        <span class="enum-desc">数字 8</span>
+        <span class="enum-desc">Number 8</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x29</span>
       <div>
         <span class="enum-name">Numbers9</span>
-        <span class="enum-desc">数字 9</span>
+        <span class="enum-desc">Number 9</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x2B</span>
       <div>
         <span class="enum-name">NumbersEnter</span>
-        <span class="enum-desc">数字输入确认</span>
+        <span class="enum-desc">Number input confirm</span>
       </div>
     </div>
   </div>
 
-  <!-- 媒体控制键 -->
-  <h4 id="keys-media">媒体控制键</h4>
-  <p>播放、暂停、快进、快退、录制等媒体播放控制按键。</p>
+  <!-- Media control keys -->
+  <h4 id="keys-media">Media Control Keys</h4>
+  <p>Play, pause, fast-forward, rewind, record, and other media playback control keys.</p>
 
   <div class="enum-cards enum-cards-grid">
     <div class="enum-card">
       <span class="enum-badge">0x41</span>
       <div>
         <span class="enum-name">Play</span>
-        <span class="enum-desc">播放</span>
+        <span class="enum-desc">Play</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x42</span>
       <div>
         <span class="enum-name">Stop</span>
-        <span class="enum-desc">停止</span>
+        <span class="enum-desc">Stop</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x43</span>
       <div>
         <span class="enum-name">Pause</span>
-        <span class="enum-desc">暂停</span>
+        <span class="enum-desc">Pause</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x44</span>
       <div>
         <span class="enum-name">Record</span>
-        <span class="enum-desc">录制</span>
+        <span class="enum-desc">Record</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x45</span>
       <div>
         <span class="enum-name">Rewind</span>
-        <span class="enum-desc">快退</span>
+        <span class="enum-desc">Rewind</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x46</span>
       <div>
         <span class="enum-name">FastForward</span>
-        <span class="enum-desc">快进</span>
+        <span class="enum-desc">Fast Forward</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x47</span>
       <div>
         <span class="enum-name">Eject</span>
-        <span class="enum-desc">弹出</span>
+        <span class="enum-desc">Eject</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x48</span>
       <div>
         <span class="enum-name">Forward</span>
-        <span class="enum-desc">下一曲 / 下一章</span>
+        <span class="enum-desc">Next Track / Next Chapter</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x49</span>
       <div>
         <span class="enum-name">Backward</span>
-        <span class="enum-desc">上一曲 / 上一章</span>
+        <span class="enum-desc">Previous Track / Previous Chapter</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x4B</span>
       <div>
         <span class="enum-name">PausePlayFunction</span>
-        <span class="enum-desc">播放/暂停切换</span>
+        <span class="enum-desc">Play/Pause Toggle</span>
       </div>
     </div>
   </div>
 
-  <!-- 位置/频道键 -->
-  <h4 id="keys-location">位置 / 频道键(LK 特性)</h4>
-  <p>频道切换、收藏频道、节目指南等与频道定位相关的按键。</p>
+  <!-- Location/channel keys -->
+  <h4 id="keys-location">Location / Channel Keys (LK Feature)</h4>
+  <p>Channel switching, favorite channels, program guide, and other channel-related keys.</p>
 
   <div class="enum-cards enum-cards-grid">
     <div class="enum-card">
       <span class="enum-badge">0x30</span>
       <div>
         <span class="enum-name">ChannelUp</span>
-        <span class="enum-desc">频道 +</span>
+        <span class="enum-desc">Channel +</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x31</span>
       <div>
         <span class="enum-name">ChannelDown</span>
-        <span class="enum-desc">频道 -</span>
+        <span class="enum-desc">Channel -</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x32</span>
       <div>
         <span class="enum-name">PreviousChannel</span>
-        <span class="enum-desc">上一个频道（回看）</span>
+        <span class="enum-desc">Previous Channel (recall)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x60</span>
       <div>
         <span class="enum-name">Data</span>
-        <span class="enum-desc">数据 / 信息</span>
+        <span class="enum-desc">Data / Info</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x53</span>
       <div>
         <span class="enum-name">ElectronicProgramGuide</span>
-        <span class="enum-desc">电子节目指南（EPG）</span>
+        <span class="enum-desc">Electronic Program Guide (EPG)</span>
       </div>
     </div>
   </div>
 
-  <!-- 音量/电源键 -->
-  <h4 id="keys-power-volume">电源 / 音量键</h4>
-  <p>设备电源控制和音量调节。这些按键通常不受 Feature 限制，大多数设备都支持。</p>
+  <!-- Power/volume keys -->
+  <h4 id="keys-power-volume">Power / Volume Keys</h4>
+  <p>Device power control and volume adjustment. These keys are typically not limited by Features and are supported by most devices.</p>
 
   <div class="enum-cards enum-cards-grid">
     <div class="enum-card">
       <span class="enum-badge">0x40</span>
       <div>
         <span class="enum-name">Power</span>
-        <span class="enum-desc">电源开/关</span>
+        <span class="enum-desc">Power On/Off</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x6B</span>
       <div>
         <span class="enum-name">PowerOffFunction</span>
-        <span class="enum-desc">关机</span>
+        <span class="enum-desc">Power Off</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x6C</span>
       <div>
         <span class="enum-name">PowerOnFunction</span>
-        <span class="enum-desc">开机</span>
+        <span class="enum-desc">Power On</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x41</span>
       <div>
         <span class="enum-name">VolumeUp</span>
-        <span class="enum-desc">音量 +</span>
+        <span class="enum-desc">Volume +</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x42</span>
       <div>
         <span class="enum-name">VolumeDown</span>
-        <span class="enum-desc">音量 -</span>
+        <span class="enum-desc">Volume -</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x43</span>
       <div>
         <span class="enum-name">Mute</span>
-        <span class="enum-desc">静音</span>
+        <span class="enum-desc">Mute</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x6D</span>
       <div>
         <span class="enum-name">MuteFunction</span>
-        <span class="enum-desc">静音（仅静音）</span>
+        <span class="enum-desc">Mute (mute only)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x6E</span>
       <div>
         <span class="enum-name">RestoreVolumeFunction</span>
-        <span class="enum-desc">恢复音量（取消静音）</span>
+        <span class="enum-desc">Restore Volume (unmute)</span>
       </div>
     </div>
   </div>
 
-  <!-- 颜色功能键 -->
-  <h4 id="keys-color">颜色功能键</h4>
-  <p>遥控器上的四色快捷键（红、绿、黄、蓝），功能由当前界面上下文决定。</p>
+  <!-- Color function keys -->
+  <h4 id="keys-color">Color Function Keys</h4>
+  <p>The four color shortcut keys on the remote (red, green, yellow, blue), with functions determined by the current UI context.</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0x72</span>
       <div>
         <span class="enum-name">F2Red</span>
-        <span class="enum-desc">红色键</span>
+        <span class="enum-desc">Red Key</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x73</span>
       <div>
         <span class="enum-name">F3Green</span>
-        <span class="enum-desc">绿色键</span>
+        <span class="enum-desc">Green Key</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x74</span>
       <div>
         <span class="enum-name">F4Yellow</span>
-        <span class="enum-desc">黄色键</span>
+        <span class="enum-desc">Yellow Key</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">0x75</span>
       <div>
         <span class="enum-name">F5Blue</span>
-        <span class="enum-desc">蓝色键</span>
+        <span class="enum-desc">Blue Key</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">CEC 按键码完整列表</div>
+    <div class="callout-title">Full CEC Key Code List</div>
     <p>
-      以上仅列出最常用的按键码。完整的 CecKeyCode 枚举定义在 Matter 1.4 规范 Section 9.10.4.1 中，
-      共计 80+ 个值，还包括文字输入键（F1~F5）、音频选择、字幕控制等。
-      实际开发中，只需实现设备和 App UI 用到的按键即可。
+      Only the most commonly used key codes are listed above. The complete CecKeyCode enum is defined in Matter 1.4 spec Section 9.10.4.1,
+      with 80+ values including text input keys (F1~F5), audio selection, subtitle control, etc.
+      In practice, only implement the keys used by the device and App UI.
     </p>
   </div>
 
   <!-- ====== Feature Bitmap ====== -->
   <h2 id="features">Feature Bitmap</h2>
-  <p>KeypadInput Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持的按键类别：</p>
+  <p>The KeypadInput Cluster declares supported key categories via <code>FeatureMap</code> (0xFFFC):</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">Bit 0</span>
       <div>
-        <span class="enum-name">NV（NavigationKeyCodes）</span>
-        <span class="enum-desc">导航键 —— 支持方向键、确认、菜单、返回等导航操作</span>
+        <span class="enum-name">NV (NavigationKeyCodes)</span>
+        <span class="enum-desc">Navigation Keys — supports directional keys, select, menu, back, and other navigation operations</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 1</span>
       <div>
-        <span class="enum-name">LK（LocationKeys）</span>
-        <span class="enum-desc">位置键 —— 支持频道切换、频道号输入、节目指南等频道定位操作</span>
+        <span class="enum-name">LK (LocationKeys)</span>
+        <span class="enum-desc">Location Keys — supports channel switching, channel number input, program guide, and other channel location operations</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 2</span>
       <div>
-        <span class="enum-name">NK（NumberKeys）</span>
-        <span class="enum-desc">数字键 —— 支持 0~9 数字输入和数字确认键</span>
+        <span class="enum-name">NK (NumberKeys)</span>
+        <span class="enum-desc">Number Keys — supports 0~9 numeric input and number confirmation keys</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">Feature 与按键的对应关系</div>
+    <div class="callout-title">Feature to Key Mapping</div>
     <p>
-      设备不一定支持所有按键。发送 SendKey 前应检查 FeatureMap：
-      没有 <strong>NV</strong> 就不要发方向键和菜单键；
-      没有 <strong>NK</strong> 就不要发数字键；
-      没有 <strong>LK</strong> 就不要发频道相关的键。
-      发送不支持的按键，设备会返回 <code>UnsupportedKey</code>。
+      Devices do not necessarily support all keys. Check the FeatureMap before sending SendKey:
+      without <strong>NV</strong>, do not send directional or menu keys;
+      without <strong>NK</strong>, do not send numeric keys;
+      without <strong>LK</strong>, do not send channel-related keys.
+      Sending unsupported keys causes the device to return <code>UnsupportedKey</code>.
     </p>
   </div>
 
   <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>KeypadInput Cluster 没有应用属性，以下是读取 FeatureMap 判断设备能力的示例：</p>
+  <p>The KeypadInput Cluster has no application attributes. Below is an example of reading the FeatureMap to determine device capabilities:</p>
 
   <pre><code>{
   // --- Feature Map ---
-  "0xFFFC": 7          // FeatureMap = 0b111（NV + LK + NK 全部启用）
+  "0xFFFC": 7          // FeatureMap = 0b111 (NV + LK + NK all enabled)
 
-  // KeypadInput 没有应用属性，
-  // 只通过 SendKey 命令接收按键输入。
-  // 读取 FeatureMap 可判断设备支持哪些按键类别。
+  // KeypadInput has no application attributes,
+  // it only receives key input via the SendKey command.
+  // Reading FeatureMap determines which key categories the device supports.
 }</code></pre>
 
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      KeypadInput 是一个「纯命令型」Cluster —— 没有可读取的应用属性，只通过 SendKey 命令进行交互。
-      控制端的遥控器 UI 应根据 <code>FeatureMap</code> 动态显示按键区域：
-      支持 NV 就显示方向键区域，支持 NK 就显示数字键盘，支持 LK 就显示频道切换按钮。
+      KeypadInput is a "command-only" Cluster — it has no readable application attributes and interacts solely through the SendKey command.
+      The controller's remote UI should dynamically display key areas based on <code>FeatureMap</code>:
+      show the directional pad if NV is supported, show the numeric keypad if NK is supported, and show channel switching buttons if LK is supported.
     </p>
   </div>
 
@@ -3593,23 +3592,23 @@ export const clusters: Record<string, ClusterContent> = {
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
-    <summary>场景 1：手机 App 充当遥控器</summary>
+    <summary>Scenario 1: Phone app as remote control</summary>
     <div class="scenario-content">
       <ol>
-        <li>读取设备的 <code>FeatureMap (0xFFFC)</code>，判断支持哪些按键类别</li>
-        <li>根据 Feature 动态渲染遥控器 UI：
+        <li>Read the device's <code>FeatureMap (0xFFFC)</code> to determine supported key categories</li>
+        <li>Dynamically render the remote UI based on Features:
           <ul>
-            <li>NV 启用 &rarr; 显示方向键十字盘 + 确认键 + 菜单/返回</li>
-            <li>NK 启用 &rarr; 显示数字键盘（0~9 + Enter）</li>
-            <li>LK 启用 &rarr; 显示频道 +/- 按钮和 EPG 入口</li>
+            <li>NV enabled &rarr; show directional D-pad + select key + menu/back</li>
+            <li>NK enabled &rarr; show numeric keypad (0~9 + Enter)</li>
+            <li>LK enabled &rarr; show Channel +/- buttons and EPG entry</li>
           </ul>
         </li>
-        <li>用户点击 UI 上的按键，发送 <code>SendKey (0x00)</code>，KeyCode 对应 CecKeyCode 枚举值</li>
-        <li>检查 <code>SendKeyResponse</code> 的 Status：
+        <li>The user clicks a key on the UI and sends <code>SendKey (0x00)</code> with the corresponding CecKeyCode enum value</li>
+        <li>Check the <code>SendKeyResponse</code> Status:
           <ul>
-            <li><code>Success (0)</code> —— 正常，无需额外处理</li>
-            <li><code>UnsupportedKey (1)</code> —— 该按键不受支持，UI 上标记为不可用</li>
-            <li><code>InvalidKeyInCurrentState (2)</code> —— 当前状态下不可用，提示用户</li>
+            <li><code>Success (0)</code> — normal, no further action needed</li>
+            <li><code>UnsupportedKey (1)</code> — key not supported, mark as unavailable in the UI</li>
+            <li><code>InvalidKeyInCurrentState (2)</code> — not available in the current state, notify the user</li>
           </ul>
         </li>
       </ol>
@@ -3617,16 +3616,16 @@ export const clusters: Record<string, ClusterContent> = {
   </details>
 
   <details class="scenario">
-    <summary>场景 2：语音助手控制电视播放</summary>
+    <summary>Scenario 2: Voice assistant controls TV playback</summary>
     <div class="scenario-content">
       <ol>
-        <li>用户说"暂停"，语音助手解析意图为暂停播放</li>
-        <li>发送 <code>SendKey</code>，KeyCode = <code>0x43 (Pause)</code></li>
-        <li>设备返回 <code>Success</code>，播放暂停</li>
-        <li>用户说"继续播放"，发送 <code>SendKey</code>，KeyCode = <code>0x41 (Play)</code></li>
+        <li>The user says "pause", and the voice assistant parses the intent as pause playback</li>
+        <li>Send <code>SendKey</code> with KeyCode = <code>0x43 (Pause)</code></li>
+        <li>The device returns <code>Success</code> and playback pauses</li>
+        <li>The user says "resume playback" and sends <code>SendKey</code> with KeyCode = <code>0x41 (Play)</code></li>
         <li>
-          <strong>注意</strong>：如果设备正在菜单界面而非播放状态，发送 Pause 可能返回
-          <code>InvalidKeyInCurrentState</code>，语音助手应给出相应的语音反馈
+          <strong>Note</strong>: If the device is on a menu screen instead of in playback state, sending Pause may return
+          <code>InvalidKeyInCurrentState</code> — the voice assistant should provide appropriate voice feedback
         </li>
       </ol>
     </div>
@@ -3668,27 +3667,27 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'content-launcher': {
     title: 'ContentLauncher Cluster (0x050A)',
-    description: 'Matter ContentLauncher Cluster(0x050A)完整参考 — LaunchContent 内容搜索启动、LaunchURL 链接播放、AcceptHeader 支持类型、SupportedStreamingProtocols 流协议、StatusEnum 状态码、ContentSearchStruct / ParameterStruct / BrandingInformationStruct 结构体及 Feature 位图说明。',
+    description: 'Complete reference for the Matter ContentLauncher Cluster (0x050A) — LaunchContent search-based launch, LaunchURL link playback, AcceptHeader supported types, SupportedStreamingProtocols, StatusEnum, ContentSearchStruct / ParameterStruct / BrandingInformationStruct and Feature Bitmap.',
     prev: { title: 'Cluster Reference', slug: 'clusters' },
     next: undefined,
     content: `<h1>ContentLauncher Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x050A</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 媒体端点（电视、机顶盒、流媒体设备等）
+    <strong>Endpoint</strong>: Media endpoint (TV, set-top box, streaming device, etc.)
   </p>
   <p>
-    ContentLauncher 负责在媒体设备上启动内容播放 —— 既可以通过搜索条件查找内容，也可以直接通过 URL 启动。
-    它是智能电视、机顶盒、流媒体棒等设备的核心 Cluster 之一，是语音助手「播放 XXX」指令的底层实现。
-    控制端可以指定搜索关键词、播放偏好（字幕语言、起始位置）和品牌展示信息。
+    ContentLauncher handles launching content playback on media devices — either by searching with criteria or by directly launching via URL.
+    It is one of the core Clusters for smart TVs, set-top boxes, and streaming sticks, serving as the underlying implementation for voice assistant "play XXX" commands.
+    Controllers can specify search keywords, playback preferences (subtitle language, start position), and branding information.
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">三个 Feature 决定设备能力</div>
+    <div class="callout-title">Three Features Determine Device Capabilities</div>
     <p>
-      ContentLauncher 定义了三个 Feature：<strong>CS（ContentSearch）</strong>、<strong>UP（URLPlayback）</strong> 和 <strong>AP（AdvancedSeek）</strong>。
-      CS 启用后支持 <code>LaunchContent</code> 命令（按关键词搜索启动），UP 启用后支持 <code>LaunchURL</code> 命令（按 URL 直接启动），
-      AP 启用后 <code>LaunchContent</code> 可携带播放偏好（起始位置、字幕、音轨）。
-      设备至少应启用 CS 或 UP 中的一个，否则这个 Cluster 没有实际意义。
+      ContentLauncher defines three Features: <strong>CS (ContentSearch)</strong>, <strong>UP (URLPlayback)</strong>, and <strong>AP (AdvancedSeek)</strong>.
+      CS enables the <code>LaunchContent</code> command (search-based launch), UP enables the <code>LaunchURL</code> command (direct URL launch),
+      and AP allows <code>LaunchContent</code> to carry playback preferences (start position, subtitles, audio tracks).
+      Devices should enable at least CS or UP; otherwise this Cluster has no practical use.
     </p>
   </div>
 
@@ -3700,7 +3699,7 @@ export const clusters: Record<string, ClusterContent> = {
     <span class="nav-sep">|</span>
     <a href="#structs">Struct Definitions</a>
     <span class="nav-sep">|</span>
-    <a href="#enums">枚举与位图</a>
+    <a href="#enums">Enums & Bitmaps</a>
     <span class="nav-sep">|</span>
     <a href="#features">Feature Bitmap</a>
     <span class="nav-sep">|</span>
@@ -3712,10 +3711,10 @@ export const clusters: Record<string, ClusterContent> = {
   <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    ContentLauncher Cluster 有 2 个请求命令和 1 个响应命令。
-    LaunchContent 通过搜索条件查找并启动内容（需要 CS 特性），LaunchURL 通过 URL 直接启动（需要 UP 特性），
-    两者都返回 LauncherResponse 告知启动结果。
-    点击下方表格中的命令 ID 可跳转到对应的详细说明。
+    The ContentLauncher Cluster has 2 request commands and 1 response command.
+    LaunchContent searches for and launches content via criteria (requires CS feature), LaunchURL launches directly via URL (requires UP feature),
+    and both return LauncherResponse with the launch result.
+    Click a command ID in the table below to jump to its detailed description.
   </p>
 
   <div class="table-wrap">
@@ -3733,22 +3732,22 @@ export const clusters: Record<string, ClusterContent> = {
         <tr class="clickable-row" data-href="#cmd-0x00">
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>LaunchContent</td>
-          <td>请求</td>
-          <td>按搜索条件查找并启动内容</td>
+          <td>Request</td>
+          <td>Search for and launch content by criteria</td>
           <td class="col-required">CS</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x01">
           <td><a href="#cmd-0x01"><code>0x01</code></a></td>
           <td>LaunchURL</td>
-          <td>请求</td>
-          <td>按 URL 直接启动内容</td>
+          <td>Request</td>
+          <td>Launch content directly by URL</td>
           <td class="col-required">UP</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x02">
           <td><a href="#cmd-0x02"><code>0x02</code></a></td>
           <td>LauncherResponse</td>
-          <td>响应</td>
-          <td>启动结果（两个命令共用）</td>
+          <td>Response</td>
+          <td>Launch result (shared by both commands)</td>
           <td class="col-optional">None</td>
         </tr>
       </tbody>
@@ -3756,11 +3755,11 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <!-- ====== Command Details ====== -->
-  <h3 id="cmd-0x00">LaunchContent —— 搜索启动内容(0x00)</h3>
+  <h3 id="cmd-0x00">LaunchContent — Search and Launch Content (0x00)</h3>
   <p>
-    通过搜索条件在设备上查找并启动内容。搜索条件由 <a href="#struct-content-search">ContentSearchStruct</a> 描述，
-    可以组合多个参数（如类型 + 演员 + 流派）来精确定位内容。设备收到命令后，
-    根据搜索结果自动播放（AutoPlay = true）或展示搜索结果列表让用户选择。
+    Searches for and launches content on the device using search criteria. The criteria are described by <a href="#struct-content-search">ContentSearchStruct</a>,
+    which can combine multiple parameters (e.g., type + actor + genre) to precisely locate content. After receiving the command,
+    the device either auto-plays (AutoPlay = true) or displays a search results list for the user to choose from.
   </p>
   <div class="table-wrap">
     <table>
@@ -3772,38 +3771,38 @@ export const clusters: Record<string, ClusterContent> = {
           <td>Search</td>
           <td><a href="#struct-content-search">ContentSearchStruct</a></td>
           <td>Yes</td>
-          <td>搜索条件，包含一组搜索参数</td>
+          <td>Search criteria containing a set of search parameters</td>
         </tr>
         <tr>
           <td>AutoPlay</td>
           <td>bool</td>
           <td>Yes</td>
-          <td><code>true</code> = 找到后自动播放；<code>false</code> = 只展示搜索结果</td>
+          <td><code>true</code> = auto-play when found; <code>false</code> = only display search results</td>
         </tr>
         <tr>
           <td>Data</td>
           <td>string</td>
           <td>No</td>
-          <td>应用特定的附加数据（如季/集信息、播放参数），由设备自行解析</td>
+          <td>Application-specific additional data (e.g., season/episode info, playback parameters), parsed by the device</td>
         </tr>
         <tr>
           <td>PlaybackPreferences</td>
           <td><a href="#struct-playback-prefs">PlaybackPreferencesStruct</a></td>
           <td>No</td>
-          <td>播放偏好：起始位置、字幕语言、音轨选择。<strong>需要 AP 特性</strong></td>
+          <td>Playback preferences: start position, subtitle language, audio track selection. <strong>Requires AP feature</strong></td>
         </tr>
         <tr>
           <td>UseCurrentContext</td>
           <td>bool</td>
           <td>No</td>
-          <td><code>true</code> = 在当前播放上下文中启动（如当前 App 内搜索）</td>
+          <td><code>true</code> = launch within the current playback context (e.g., search within the current app)</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <pre><code>// LaunchContent 命令示例
-// 搜索"三体"并自动播放，偏好中文字幕
+  <pre><code>// LaunchContent command example
+// Search for "Three-Body Problem" and auto-play, prefer Chinese subtitles
 {
   "Search": {
     "ParameterList": [
@@ -3813,7 +3812,7 @@ export const clusters: Record<string, ClusterContent> = {
       },
       {
         "Type": 0,
-        "Value": "三体"
+        "Value": "Three-Body"
       }
     ]
   },
@@ -3833,18 +3832,18 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        用户对语音助手说「播放三体第一季」，助手解析出搜索参数（Type=Movie，Value="三体"），
-        构造 ContentSearchStruct，设置 AutoPlay=true，发送 LaunchContent 命令。
-        电视在已安装的流媒体应用中搜索匹配内容并自动开始播放。
+        The user tells the voice assistant "Play Three-Body Problem Season 1". The assistant parses the search parameters (Type=Movie, Value="Three-Body"),
+        constructs the ContentSearchStruct, sets AutoPlay=true, and sends the LaunchContent command.
+        The TV searches for matching content in installed streaming apps and starts playback automatically.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x01">LaunchURL —— URL 直接启动(0x01)</h3>
+  <h3 id="cmd-0x01">LaunchURL — Direct URL Launch (0x01)</h3>
   <p>
-    通过 URL 直接在设备上启动内容播放。适用于已知内容地址的场景，
-    比如从手机 App 分享一个视频链接到电视播放。可以附带显示文本和品牌信息。
+    Directly launches content playback on the device via URL. Suitable for scenarios where the content address is known,
+    such as casting a video link from a phone app to the TV. Can include display text and branding information.
   </p>
   <div class="table-wrap">
     <table>
@@ -3856,29 +3855,29 @@ export const clusters: Record<string, ClusterContent> = {
           <td>ContentURL</td>
           <td>string</td>
           <td>Yes</td>
-          <td>要播放的内容 URL，设备需要支持该 URL 指向的内容格式</td>
+          <td>Content URL to play; the device must support the content format at this URL</td>
         </tr>
         <tr>
           <td>DisplayString</td>
           <td>string</td>
           <td>No</td>
-          <td>在设备屏幕上展示的描述文本（如视频标题）</td>
+          <td>Description text displayed on the device screen (e.g., video title)</td>
         </tr>
         <tr>
           <td>BrandingInformation</td>
           <td><a href="#struct-branding">BrandingInformationStruct</a></td>
           <td>No</td>
-          <td>内容提供商的品牌展示信息（名称、Logo、背景等）</td>
+          <td>Content provider's branding display information (name, logo, background, etc.)</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <pre><code>// LaunchURL 命令示例
-// 直接通过 URL 启动视频，附带品牌信息
+  <pre><code>// LaunchURL command example
+// Directly launch video via URL with branding info
 {
   "ContentURL": "https://example.com/stream/movie-12345.m3u8",
-  "DisplayString": "三体 第一季 第1集",
+  "DisplayString": "Three-Body Problem Season 1 Episode 1",
   "BrandingInformation": {
     "ProviderName": "ExampleTV"
   }
@@ -3888,18 +3887,18 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        用户在手机上看到一个视频，点击「投屏到电视」，App 获取视频的流媒体 URL，
-        发送 LaunchURL 命令到电视。电视收到后直接打开该 URL 播放，
-        屏幕上显示 DisplayString 作为视频标题，加载画面展示品牌 Logo。
+        The user sees a video on their phone and taps "Cast to TV". The app obtains the video's streaming URL
+        and sends the LaunchURL command to the TV. The TV directly opens the URL for playback,
+        displays the DisplayString as the video title, and shows the brand logo on the loading screen.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x02">LauncherResponse —— 启动结果(0x02)</h3>
+  <h3 id="cmd-0x02">LauncherResponse — Launch Result (0x02)</h3>
   <p>
-    LaunchContent 和 LaunchURL 的统一响应。包含一个状态码和可选的附加数据。
-    控制端根据 Status 判断启动是否成功，失败时 Data 中可能包含错误详情。
+    Unified response for LaunchContent and LaunchURL. Contains a status code and optional additional data.
+    Controllers determine success based on Status; on failure, Data may contain error details.
   </p>
   <div class="table-wrap">
     <table>
@@ -3910,25 +3909,25 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Status</td>
           <td><a href="#enum-status">StatusEnum</a></td>
-          <td>启动结果状态码（见下方枚举）</td>
+          <td>Launch result status code (see enum below)</td>
         </tr>
         <tr>
           <td>Data</td>
           <td>string</td>
-          <td>可选的附加数据，成功时可能返回会话 ID，失败时返回错误信息</td>
+          <td>Optional additional data; may return a session ID on success or error info on failure</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <pre><code>// LauncherResponse 响应示例
-// 启动成功
+  <pre><code>// LauncherResponse example
+// Launch successful
 {
   "Status": 0,
   "Data": "playback-session-id=abc123"
 }
 
-// 启动失败 —— URL 不可用
+// Launch failed — URL not available
 {
   "Status": 1,
   "Data": "URL expired or geo-restricted"
@@ -3937,7 +3936,7 @@ export const clusters: Record<string, ClusterContent> = {
 
   <!-- ====== Attributes ====== -->
   <h2 id="attributes">Attributes</h2>
-  <p>ContentLauncher Cluster 共有 2 个属性。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+  <p>The ContentLauncher Cluster has 2 attributes. Click an attribute ID in the summary table below to jump to its detailed description.</p>
 
   <!-- Attribute summary table -->
   <div class="table-wrap">
@@ -3955,21 +3954,21 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>AcceptHeader</td>
           <td>list&lt;string&gt;</td>
-          <td>设备支持的内容 MIME 类型列表</td>
+          <td>List of content MIME types supported by the device</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>SupportedStreamingProtocols</td>
           <td><a href="#bitmap-protocols">SupportedProtocolsBitmap</a></td>
-          <td>设备支持的流媒体协议位图</td>
+          <td>Bitmap of streaming protocols supported by the device</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 属性详细说明 ====== -->
-  <h3 id="group-content-caps">内容能力(0x0000, 0x0001)</h3>
-  <p>描述设备能够接受和播放的内容类型与流媒体协议。控制端在发送 LaunchURL 前应检查这些属性，确保设备支持目标内容格式。</p>
+  <!-- ====== Attribute Details ====== -->
+  <h3 id="group-content-caps">Content Capabilities (0x0000, 0x0001)</h3>
+  <p>Describes the content types and streaming protocols the device can accept and play. Controllers should check these attributes before sending LaunchURL to ensure the device supports the target content format.</p>
 
   <div class="table-wrap">
     <table>
@@ -3984,37 +3983,37 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0000">
           <td><code>0x0000</code></td>
-          <td>AcceptHeader（支持的内容类型）</td>
+          <td>AcceptHeader (Supported Content Types)</td>
           <td>list&lt;string&gt;</td>
-          <td>设备能处理的 MIME 类型列表，格式遵循 HTTP Accept Header 规范（如 <code>"video/mp4"</code>、<code>"application/dash+xml"</code>）。控制端发送 LaunchURL 前应检查目标内容的 MIME 类型是否在此列表中。<strong>需要 UP 特性</strong></td>
+          <td>List of MIME types the device can handle, following the HTTP Accept Header specification (e.g., <code>"video/mp4"</code>, <code>"application/dash+xml"</code>). Controllers should check if the target content's MIME type is in this list before sending LaunchURL. <strong>Requires UP feature</strong></td>
         </tr>
         <tr id="attr-0x0001">
           <td><code>0x0001</code></td>
-          <td>SupportedStreamingProtocols（支持的流协议）</td>
+          <td>SupportedStreamingProtocols (Supported Protocols)</td>
           <td><a href="#bitmap-protocols">SupportedProtocolsBitmap</a></td>
-          <td>设备支持的流媒体协议位图。控制端据此选择合适的流地址格式（如 DASH 的 .mpd 或 HLS 的 .m3u8）。<strong>需要 UP 特性</strong></td>
+          <td>Bitmap of streaming protocols supported by the device. Controllers use this to select the appropriate stream address format (e.g., DASH .mpd or HLS .m3u8). <strong>Requires UP feature</strong></td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">属性与 Feature 的关系</div>
+    <div class="callout-title">Relationship Between Attributes and Features</div>
     <p>
-      AcceptHeader 和 SupportedStreamingProtocols 只在启用 <strong>UP（URLPlayback）</strong> 特性时才有意义。
-      如果设备只支持 CS（内容搜索），这两个属性可能不存在 —— 因为搜索启动不涉及 URL 格式判断，
-      内容格式由设备内部的应用自行处理。
+      AcceptHeader and SupportedStreamingProtocols are only meaningful when the <strong>UP (URLPlayback)</strong> feature is enabled.
+      If the device only supports CS (content search), these two attributes may not exist — because search-based launching does not involve URL format decisions;
+      content format is handled internally by the device's apps.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 结构体定义 ====== -->
+  <!-- ====== Struct Definitions ====== -->
   <h2 id="structs">Struct Definitions</h2>
-  <p>ContentLauncher Cluster 使用多个结构体来描述搜索条件、播放偏好和品牌信息。</p>
+  <p>The ContentLauncher Cluster uses multiple structures to describe search criteria, playback preferences, and branding information.</p>
 
   <!-- ContentSearchStruct -->
   <h3 id="struct-content-search">ContentSearchStruct</h3>
-  <p>描述一次内容搜索的完整条件，包含一组搜索参数。多个参数之间是 AND 关系 —— 设备需要同时满足所有条件。</p>
+  <p>Describes the complete criteria for a content search, containing a set of search parameters. Multiple parameters have an AND relationship — the device must satisfy all conditions simultaneously.</p>
 
   <div class="table-wrap">
     <table>
@@ -4029,7 +4028,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>ParameterList</td>
           <td>list&lt;<a href="#struct-parameter">ParameterStruct</a>&gt;</td>
-          <td>搜索参数列表，每个元素指定一个搜索维度（如类型、演员、流派）</td>
+          <td>Search parameter list; each element specifies a search dimension (e.g., type, actor, genre)</td>
         </tr>
       </tbody>
     </table>
@@ -4037,7 +4036,7 @@ export const clusters: Record<string, ClusterContent> = {
 
   <!-- ParameterStruct -->
   <h3 id="struct-parameter">ParameterStruct</h3>
-  <p>描述单个搜索参数 —— 由参数类型、搜索值和可选的外部 ID 组成。</p>
+  <p>Describes a single search parameter — consisting of parameter type, search value, and optional external IDs.</p>
 
   <div class="table-wrap">
     <table>
@@ -4052,17 +4051,17 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Type</td>
           <td><a href="#enum-parameter">ParameterEnum</a></td>
-          <td>参数类型（见下方枚举），决定 Value 的含义</td>
+          <td>Parameter type (see enum below), determining the meaning of Value</td>
         </tr>
         <tr>
           <td>Value</td>
           <td>string</td>
-          <td>搜索值，如演员名 <code>"刘慈欣"</code>、流派 <code>"Sci-Fi"</code></td>
+          <td>Search value, e.g., actor name <code>"Liu Cixin"</code>, genre <code>"Sci-Fi"</code></td>
         </tr>
         <tr>
           <td>ExternalIDList</td>
           <td>list&lt;<a href="#struct-additional-info">AdditionalInfoStruct</a>&gt;</td>
-          <td>可选。外部平台的 ID 列表（如 IMDB ID、豆瓣 ID），帮助设备精确匹配内容</td>
+          <td>Optional. External platform ID list (e.g., IMDB ID, Douban ID) to help the device precisely match content</td>
         </tr>
       </tbody>
     </table>
@@ -4070,7 +4069,7 @@ export const clusters: Record<string, ClusterContent> = {
 
   <!-- AdditionalInfoStruct -->
   <h3 id="struct-additional-info">AdditionalInfoStruct</h3>
-  <p>描述一个外部标识符的键值对，用于跨平台内容匹配。</p>
+  <p>Describes an external identifier key-value pair for cross-platform content matching.</p>
 
   <div class="table-wrap">
     <table>
@@ -4085,12 +4084,12 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Name</td>
           <td>string</td>
-          <td>标识符名称，如 <code>"IMDB"</code>、<code>"Douban"</code>、<code>"TMDB"</code></td>
+          <td>Identifier name, e.g., <code>"IMDB"</code>, <code>"Douban"</code>, <code>"TMDB"</code></td>
         </tr>
         <tr>
           <td>Value</td>
           <td>string</td>
-          <td>标识符的值，如 <code>"tt1234567"</code>（IMDB 编号）</td>
+          <td>Identifier value, e.g., <code>"tt1234567"</code> (IMDB number)</td>
         </tr>
       </tbody>
     </table>
@@ -4099,8 +4098,8 @@ export const clusters: Record<string, ClusterContent> = {
   <!-- BrandingInformationStruct -->
   <h3 id="struct-branding">BrandingInformationStruct</h3>
   <p>
-    描述内容提供商的品牌展示信息，用于 LaunchURL 命令。设备在加载内容时可以显示提供商的品牌元素。
-    除 ProviderName 外，其他字段都是可选的 StyleInformationStruct（包含图片 URL、颜色、尺寸等样式信息）。
+    Describes content provider branding information for the LaunchURL command. The device can display the provider's brand elements while loading content.
+    Except for ProviderName, all other fields are optional StyleInformationStruct (containing image URL, color, size, and other style information).
   </p>
 
   <div class="table-wrap">
@@ -4116,32 +4115,32 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>ProviderName</td>
           <td>string</td>
-          <td>内容提供商名称，如 <code>"Netflix"</code>、<code>"YouTube"</code></td>
+          <td>Content provider name, e.g., <code>"Netflix"</code>, <code>"YouTube"</code></td>
         </tr>
         <tr>
           <td>Background</td>
           <td>StyleInformationStruct</td>
-          <td>可选。背景样式信息（图片 URL、颜色）</td>
+          <td>Optional. Background style information (image URL, color)</td>
         </tr>
         <tr>
           <td>Logo</td>
           <td>StyleInformationStruct</td>
-          <td>可选。Logo 样式信息</td>
+          <td>Optional. Logo style information</td>
         </tr>
         <tr>
           <td>ProgressBar</td>
           <td>StyleInformationStruct</td>
-          <td>可选。进度条样式信息</td>
+          <td>Optional. Progress bar style information</td>
         </tr>
         <tr>
           <td>Splash</td>
           <td>StyleInformationStruct</td>
-          <td>可选。启动画面样式信息</td>
+          <td>Optional. Splash screen style information</td>
         </tr>
         <tr>
           <td>WaterMark</td>
           <td>StyleInformationStruct</td>
-          <td>可选。水印样式信息</td>
+          <td>Optional. Watermark style information</td>
         </tr>
       </tbody>
     </table>
@@ -4150,7 +4149,7 @@ export const clusters: Record<string, ClusterContent> = {
   <!-- PlaybackPreferencesStruct -->
   <h3 id="struct-playback-prefs">PlaybackPreferencesStruct</h3>
   <p>
-    描述播放偏好设置，包括起始播放位置、字幕和音轨选择。此结构体仅在启用 <strong>AP（AdvancedSeek）</strong> 特性时可用。
+    Describes playback preference settings, including start position, subtitle and audio track selection. This struct is only available when the <strong>AP (AdvancedSeek)</strong> feature is enabled.
   </p>
 
   <div class="table-wrap">
@@ -4166,17 +4165,17 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>PlaybackPosition</td>
           <td>uint64</td>
-          <td>起始播放位置，单位毫秒。<code>0</code> 表示从头开始</td>
+          <td>Start playback position in milliseconds. <code>0</code> means from the beginning</td>
         </tr>
         <tr>
           <td>TextTrack</td>
           <td>TrackPreferenceStruct</td>
-          <td>字幕轨道偏好（语言、特征）</td>
+          <td>Subtitle track preference (language, characteristics)</td>
         </tr>
         <tr>
           <td>AudioTracks</td>
           <td>list&lt;TrackPreferenceStruct&gt;</td>
-          <td>可选。音轨偏好列表，按优先级排列</td>
+          <td>Optional. Audio track preference list, ordered by priority</td>
         </tr>
       </tbody>
     </table>
@@ -4185,53 +4184,53 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-info">
     <div class="callout-title">TrackPreferenceStruct</div>
     <p>
-      轨道偏好结构体包含：<code>LanguageCode</code>（BCP-47 语言代码，如 <code>"zh-CN"</code>）、
-      可选的 <code>Characteristics</code>（轨道特征列表，如字幕、解说、配音等）和
-      可选的 <code>AudioOutputIndex</code>（指定音频输出端口索引）。
+      Track preference struct contains: <code>LanguageCode</code> (BCP-47 language code, e.g., <code>"zh-CN"</code>),
+      optional <code>Characteristics</code> (track characteristics list, such as subtitles, commentary, dubbing, etc.), and
+      optional <code>AudioOutputIndex</code> (specifying the audio output port index).
     </p>
   </div>
 
-  <!-- ====== 枚举与位图 ====== -->
+  <!-- ====== Enums & Bitmaps ====== -->
   <h2 id="enums">Enums & Bitmaps</h2>
 
   <!-- StatusEnum -->
   <h3 id="enum-status">StatusEnum</h3>
-  <p>LauncherResponse 中的状态码，表示内容启动的结果。</p>
+  <p>Status codes in LauncherResponse, indicating the content launch result.</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">Success</span>
-        <span class="enum-desc">成功 —— 内容已启动或搜索结果已展示</span>
+        <span class="enum-desc">Success — content has been launched or search results displayed</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">URLNotAvailable</span>
-        <span class="enum-desc">URL 不可用 —— 链接无法访问、格式不支持或已过期</span>
+        <span class="enum-desc">URL not available — link is inaccessible, format not supported, or expired</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">AuthFailed</span>
-        <span class="enum-desc">认证失败 —— 内容需要登录或权限不足</span>
+        <span class="enum-desc">Auth failed — content requires login or insufficient permissions</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">TextTrackNotAvailable</span>
-        <span class="enum-desc">字幕不可用 —— 请求的字幕语言或类型不存在</span>
+        <span class="enum-desc">Text track not available — requested subtitle language or type does not exist</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">4</span>
       <div>
         <span class="enum-name">AudioTrackNotAvailable</span>
-        <span class="enum-desc">音轨不可用 —— 请求的音轨语言或类型不存在</span>
+        <span class="enum-desc">Audio track not available — requested audio track language or type does not exist</span>
       </div>
     </div>
   </div>
@@ -4239,8 +4238,8 @@ export const clusters: Record<string, ClusterContent> = {
   <!-- ParameterEnum -->
   <h3 id="enum-parameter">ParameterEnum</h3>
   <p>
-    定义搜索参数的类型。控制端通过不同的 Type 值指定搜索维度，
-    设备据此在内容库中匹配。共 14 个枚举值。
+    Defines search parameter types. Controllers specify search dimensions via different Type values,
+    and the device matches against its content library accordingly. Contains 14 enum values.
   </p>
 
   <div class="enum-cards enum-cards-grid">
@@ -4248,174 +4247,174 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">Actor</span>
-        <span class="enum-desc">演员 —— 按演员名搜索</span>
+        <span class="enum-desc">Actor — search by actor name</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">Channel</span>
-        <span class="enum-desc">频道 —— 按频道名称或编号</span>
+        <span class="enum-desc">Channel — by channel name or number</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">Character</span>
-        <span class="enum-desc">角色 —— 按角色名搜索</span>
+        <span class="enum-desc">Character — search by character name</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">Director</span>
-        <span class="enum-desc">导演 —— 按导演名搜索</span>
+        <span class="enum-desc">Director — search by director name</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">4</span>
       <div>
         <span class="enum-name">Event</span>
-        <span class="enum-desc">事件 —— 按体育赛事或直播事件</span>
+        <span class="enum-desc">Event — by sporting event or live event</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">5</span>
       <div>
         <span class="enum-name">Franchise</span>
-        <span class="enum-desc">系列 —— 按内容系列或 IP</span>
+        <span class="enum-desc">Franchise — by content series or IP</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">6</span>
       <div>
         <span class="enum-name">Genre</span>
-        <span class="enum-desc">流派 —— 按类型标签（科幻、动作等）</span>
+        <span class="enum-desc">Genre — by genre tag (sci-fi, action, etc.)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">7</span>
       <div>
         <span class="enum-name">League</span>
-        <span class="enum-desc">联赛 —— 按体育联赛</span>
+        <span class="enum-desc">League — by sports league</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">8</span>
       <div>
         <span class="enum-name">Popularity</span>
-        <span class="enum-desc">热度 —— 按流行度排序</span>
+        <span class="enum-desc">Popularity — sort by popularity</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">9</span>
       <div>
         <span class="enum-name">Provider</span>
-        <span class="enum-desc">提供商 —— 按内容提供方</span>
+        <span class="enum-desc">Provider — by content provider</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">10</span>
       <div>
         <span class="enum-name">Sport</span>
-        <span class="enum-desc">运动 —— 按运动类型</span>
+        <span class="enum-desc">Sport — by sport type</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">11</span>
       <div>
         <span class="enum-name">SportsTeam</span>
-        <span class="enum-desc">球队 —— 按运动队名</span>
+        <span class="enum-desc">SportsTeam — by team name</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">12</span>
       <div>
         <span class="enum-name">Type</span>
-        <span class="enum-desc">类型 —— 内容类型（Movie / TV / Music 等）</span>
+        <span class="enum-desc">Type — content type (Movie / TV / Music, etc.)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">13</span>
       <div>
         <span class="enum-name">Video</span>
-        <span class="enum-desc">视频 —— 按视频标题直接搜索</span>
+        <span class="enum-desc">Video — search directly by video title</span>
       </div>
     </div>
   </div>
 
   <!-- SupportedProtocolsBitmap -->
   <h3 id="bitmap-protocols">SupportedProtocolsBitmap</h3>
-  <p>设备支持的流媒体协议位图。控制端据此选择合适的流地址格式。</p>
+  <p>Bitmap of streaming protocols supported by the device. Controllers use this to select the appropriate stream address format.</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">Bit 0</span>
       <div>
         <span class="enum-name">DASH</span>
-        <span class="enum-desc">Dynamic Adaptive Streaming over HTTP —— 对应 <code>.mpd</code> 清单</span>
+        <span class="enum-desc">Dynamic Adaptive Streaming over HTTP — corresponds to <code>.mpd</code> manifests</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 1</span>
       <div>
         <span class="enum-name">HLS</span>
-        <span class="enum-desc">HTTP Live Streaming —— 对应 <code>.m3u8</code> 清单</span>
+        <span class="enum-desc">HTTP Live Streaming — corresponds to <code>.m3u8</code> manifests</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">协议选择</div>
+    <div class="callout-title">Protocol Selection</div>
     <p>
-      如果设备同时支持 DASH 和 HLS（值 = <code>3</code>，即 <code>0b11</code>），
-      控制端可根据内容源的可用格式灵活选择。一般来说，Apple 生态优先用 HLS，跨平台场景优先用 DASH。
+      If the device supports both DASH and HLS (value = <code>3</code>, i.e., <code>0b11</code>),
+      the controller can flexibly choose based on the content source's available formats. Generally, Apple ecosystem prefers HLS, cross-platform scenarios prefer DASH.
     </p>
   </div>
 
   <!-- ====== Feature Bitmap ====== -->
   <h2 id="features">Feature Bitmap</h2>
-  <p>ContentLauncher Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持的能力：</p>
+  <p>The ContentLauncher Cluster declares device capabilities via <code>FeatureMap</code> (0xFFFC):</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">Bit 0</span>
       <div>
-        <span class="enum-name">CS（ContentSearch）</span>
-        <span class="enum-desc">内容搜索 —— 启用后支持 LaunchContent 命令，通过搜索条件查找并启动内容</span>
+        <span class="enum-name">CS (ContentSearch)</span>
+        <span class="enum-desc">Content Search — when enabled, supports the LaunchContent command for searching and launching content by criteria</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 1</span>
       <div>
-        <span class="enum-name">UP（URLPlayback）</span>
-        <span class="enum-desc">URL 播放 —— 启用后支持 LaunchURL 命令和 AcceptHeader / SupportedStreamingProtocols 属性</span>
+        <span class="enum-name">UP (URLPlayback)</span>
+        <span class="enum-desc">URL Playback — when enabled, supports the LaunchURL command and AcceptHeader / SupportedStreamingProtocols attributes</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 2</span>
       <div>
-        <span class="enum-name">AP（AdvancedSeek）</span>
-        <span class="enum-desc">高级定位 —— 启用后 LaunchContent 可携带 PlaybackPreferences（播放位置、字幕、音轨偏好）</span>
+        <span class="enum-name">AP (AdvancedSeek)</span>
+        <span class="enum-desc">Advanced Seek — when enabled, LaunchContent can carry PlaybackPreferences (playback position, subtitle, audio track preferences)</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">至少启用一个</div>
+    <div class="callout-title">Enable At Least One</div>
     <p>
-      设备至少应启用 <strong>CS</strong> 或 <strong>UP</strong> 中的一个。如果两个都不启用，
-      ContentLauncher Cluster 没有可用的命令，声明这个 Cluster 就没有意义。
-      AP 特性是对 CS 的增强，必须在 CS 启用的基础上才有效。
+      Devices should enable at least <strong>CS</strong> or <strong>UP</strong>. If neither is enabled,
+      the ContentLauncher Cluster has no usable commands, making it pointless to declare this Cluster.
+      The AP feature enhances CS and is only effective when CS is enabled.
     </p>
   </div>
 
   <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一台支持 DASH 和 HLS 的智能电视的 ContentLauncher Cluster 属性读取结果：</p>
+  <p>Attribute read results of the ContentLauncher Cluster from a smart TV supporting DASH and HLS:</p>
 
   <pre><code>{
-  // --- 支持的内容类型 ---
+  // --- Supported Content Types ---
   "0x0000": [                        // AcceptHeader
     "video/mp4",
     "video/webm",
@@ -4424,7 +4423,7 @@ export const clusters: Record<string, ClusterContent> = {
     "application/x-mpegURL"
   ],
 
-  // --- 支持的流媒体协议 ---
+  // --- Supported Streaming Protocols ---
   "0x0001": 3                         // SupportedStreamingProtocols
                                       // = 0b11 (DASH + HLS)
 }</code></pre>
@@ -4432,9 +4431,9 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      发送 LaunchURL 前，应先检查 <code>AcceptHeader (0x0000)</code> 确认设备支持目标内容的 MIME 类型，
-      再检查 <code>SupportedStreamingProtocols (0x0001)</code> 确认设备支持的流协议。
-      如果目标格式不在支持范围内，应提前提示用户，避免收到 <code>URLNotAvailable</code> 错误。
+      Before sending LaunchURL, check <code>AcceptHeader (0x0000)</code> to confirm the device supports the target content's MIME type,
+      then check <code>SupportedStreamingProtocols (0x0001)</code> to confirm the device's supported streaming protocols.
+      If the target format is not in the supported range, notify the user in advance to avoid receiving a <code>URLNotAvailable</code> error.
     </p>
   </div>
 
@@ -4442,18 +4441,18 @@ export const clusters: Record<string, ClusterContent> = {
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
-    <summary>场景 1：语音助手「播放 XXX」</summary>
+    <summary>Scenario 1: Voice assistant "Play XXX"</summary>
     <div class="scenario-content">
       <ol>
-        <li>用户对语音助手说「在电视上播放三体」</li>
-        <li>检查设备 <code>FeatureMap (0xFFFC)</code>，确认支持 <strong>CS</strong> 特性</li>
-        <li>构造 <a href="#struct-content-search">ContentSearchStruct</a>：Type=Video(13)，Value="三体"</li>
-        <li>发送 <code>LaunchContent (0x00)</code>，AutoPlay=true</li>
-        <li>设备在已安装的流媒体应用中搜索匹配内容，找到后自动开始播放</li>
-        <li>检查 <a href="#cmd-0x02">LauncherResponse</a> 的 Status：
+        <li>The user tells the voice assistant "Play Three-Body Problem on the TV"</li>
+        <li>Check the device <code>FeatureMap (0xFFFC)</code> to confirm <strong>CS</strong> support</li>
+        <li>Construct <a href="#struct-content-search">ContentSearchStruct</a>: Type=Video(13), Value="Three-Body"</li>
+        <li>Send <code>LaunchContent (0x00)</code> with AutoPlay=true</li>
+        <li>The device searches for matching content in installed streaming apps and starts playback automatically</li>
+        <li>Check the <a href="#cmd-0x02">LauncherResponse</a> Status:
           <ul>
-            <li><code>0</code>（Success）—— 播放已开始</li>
-            <li><code>2</code>（AuthFailed）—— 内容需要付费或登录，提示用户</li>
+            <li><code>0</code> (Success) — playback has started</li>
+            <li><code>2</code> (AuthFailed) — content requires payment or login, notify the user</li>
           </ul>
         </li>
       </ol>
@@ -4461,19 +4460,19 @@ export const clusters: Record<string, ClusterContent> = {
   </details>
 
   <details class="scenario">
-    <summary>场景 2：手机视频投屏到电视</summary>
+    <summary>Scenario 2: Cast phone video to TV</summary>
     <div class="scenario-content">
       <ol>
-        <li>用户在手机 App 中观看视频，点击「投屏」按钮</li>
-        <li>检查设备 <code>FeatureMap (0xFFFC)</code>，确认支持 <strong>UP</strong> 特性</li>
-        <li>读取 <code>AcceptHeader (0x0000)</code>，确认电视支持 <code>video/mp4</code> 或 <code>application/x-mpegURL</code></li>
-        <li>读取 <code>SupportedStreamingProtocols (0x0001)</code>，选择合适的流地址（如 HLS 的 .m3u8）</li>
-        <li>发送 <code>LaunchURL (0x01)</code>，附带视频 URL、标题和品牌信息</li>
-        <li>电视开始播放，屏幕上展示品牌 Logo 和视频标题</li>
-        <li>检查 <a href="#cmd-0x02">LauncherResponse</a>：
+        <li>The user is watching a video in the phone app and taps the "Cast" button</li>
+        <li>Check the device <code>FeatureMap (0xFFFC)</code> to confirm <strong>UP</strong> support</li>
+        <li>Read <code>AcceptHeader (0x0000)</code> to confirm the TV supports <code>video/mp4</code> or <code>application/x-mpegURL</code></li>
+        <li>Read <code>SupportedStreamingProtocols (0x0001)</code> to select the appropriate stream address (e.g., HLS .m3u8)</li>
+        <li>Send <code>LaunchURL (0x01)</code> with the video URL, title, and branding information</li>
+        <li>The TV starts playback, displaying the brand logo and video title on screen</li>
+        <li>Check <a href="#cmd-0x02">LauncherResponse</a>:
           <ul>
-            <li><code>0</code>（Success）—— 投屏成功</li>
-            <li><code>1</code>（URLNotAvailable）—— URL 不可用，可能是地域限制或格式不兼容</li>
+            <li><code>0</code> (Success) — casting successful</li>
+            <li><code>1</code> (URLNotAvailable) — URL not available, possibly due to geo-restrictions or format incompatibility</li>
           </ul>
         </li>
       </ol>
@@ -4516,26 +4515,26 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'target-navigator': {
     title: 'TargetNavigator Cluster (0x0505)',
-    description: 'Matter TargetNavigator Cluster(0x0505)完整参考 — NavigateTarget 导航命令、TargetList 目标列表、CurrentTarget 当前目标、TargetInfoStruct 结构体、StatusEnum 状态枚举及常见场景说明。',
+    description: 'Complete reference for the Matter TargetNavigator Cluster (0x0505) — NavigateTarget command, TargetList, CurrentTarget, TargetInfoStruct, StatusEnum, and common scenarios.',
     prev: { title: 'Cluster Reference', slug: 'clusters' },
     next: undefined,
     content: `<h1>TargetNavigator Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x0505</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 媒体端点（电视、机顶盒等）
+    <strong>Endpoint</strong>: Media endpoint (TV, set-top box, etc.)
   </p>
   <p>
-    TargetNavigator 负责在设备的内容目标之间进行导航 —— 这些目标可以是应用、屏幕页面、菜单项等。
-    用户可以通过它查询设备有哪些可导航的目标、当前处于哪个目标，并跳转到指定目标。
-    它是智能电视和机顶盒等媒体设备中用于应用切换和界面导航的核心 Cluster。
+    TargetNavigator handles navigation between content targets on a device — these targets can be apps, screen pages, menu items, etc.
+    Users can query which targets are available on the device, which one is currently active, and navigate to a specific target.
+    It is the core Cluster for app switching and UI navigation on media devices such as smart TVs and set-top boxes.
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">与 MediaInput 的区别</div>
+    <div class="callout-title">Difference from MediaInput</div>
     <p>
-      <a href="/clusters/media-input/">MediaInput（0x0507）</a>管理的是物理/虚拟输入源（如 HDMI 1、USB），
-      而 TargetNavigator 管理的是软件层面的内容目标（如 Netflix、YouTube、设置页面）。
-      一台智能电视可能同时拥有两个 Cluster：MediaInput 切换输入接口，TargetNavigator 切换应用。
+      <a href="/clusters/media-input/">MediaInput (0x0507)</a> manages physical/virtual input sources (e.g., HDMI 1, USB),
+      while TargetNavigator manages software-level content targets (e.g., Netflix, YouTube, settings page).
+      A smart TV may have both Clusters: MediaInput for switching input interfaces, TargetNavigator for switching apps.
     </p>
   </div>
 
@@ -4557,8 +4556,8 @@ export const clusters: Record<string, ClusterContent> = {
   <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    TargetNavigator Cluster 只有 1 个命令和 1 个响应。
-    NavigateTarget 用于跳转到指定目标，设备返回 NavigateTargetResponse 告知导航结果。
+    The TargetNavigator Cluster has only 1 command and 1 response.
+    NavigateTarget navigates to a specified target, and the device returns NavigateTargetResponse with the navigation result.
   </p>
 
   <div class="table-wrap">
@@ -4576,25 +4575,25 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>NavigateTarget</td>
           <td>Client &rarr; Server</td>
-          <td>导航到指定目标</td>
+          <td>Navigate to a specified target</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x01">
           <td><a href="#cmd-0x01"><code>0x01</code></a></td>
           <td>NavigateTargetResponse</td>
           <td>Server &rarr; Client</td>
-          <td>导航结果响应</td>
+          <td>Navigation result response</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <!-- ====== Command Details ====== -->
-  <h3 id="cmd-0x00">NavigateTarget —— 导航到目标(0x00)</h3>
+  <h3 id="cmd-0x00">NavigateTarget — Navigate to Target (0x00)</h3>
   <p>
-    请求设备跳转到指定的目标。<code>Target</code> 必须是 <code>TargetList</code> 中某个
-    <code>TargetInfoStruct</code> 的 <code>Identifier</code> 值。
-    可选的 <code>Data</code> 字段可以传递额外的导航参数（如深度链接路径）。
-    设备收到命令后会返回 <a href="#cmd-0x01">NavigateTargetResponse</a> 告知结果。
+    Requests the device to navigate to the specified target. <code>Target</code> must be the <code>Identifier</code> value
+    of a <code>TargetInfoStruct</code> in <code>TargetList</code>.
+    The optional <code>Data</code> field can pass additional navigation parameters (e.g., deep link path).
+    The device returns <a href="#cmd-0x01">NavigateTargetResponse</a> with the result.
   </p>
   <div class="table-wrap">
     <table>
@@ -4606,26 +4605,26 @@ export const clusters: Record<string, ClusterContent> = {
           <td>Target</td>
           <td>uint8</td>
           <td>Yes</td>
-          <td>目标的标识符，必须存在于 <code>TargetList</code> 中</td>
+          <td>Target identifier; must exist in <code>TargetList</code></td>
         </tr>
         <tr>
           <td>Data</td>
           <td>string</td>
           <td>No</td>
-          <td>传递给目标的应用自定义数据，如深度链接 URL、启动参数等</td>
+          <td>Application-specific data passed to the target, such as deep link URL, launch parameters, etc.</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <pre><code>// NavigateTarget 命令示例
-// 导航到 Identifier=1 的目标（Netflix），附带启动参数
+  <pre><code>// NavigateTarget command example
+// Navigate to target with Identifier=1 (Netflix) with launch parameters
 {
   "Target": 1,
   "Data": "movie/12345"
 }
 
-// NavigateTargetResponse 响应
+// NavigateTargetResponse response
 {
   "Status": 0,                   // Success
   "Data": "launched"
@@ -4635,18 +4634,18 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        用户在手机 App 上选择打开电视上的 Netflix。App 读取 <code>TargetList</code> 找到 Netflix 对应的 Identifier，
-        发送 <code>NavigateTarget</code> 命令，并在 Data 字段传入要播放的影片 ID。
-        电视启动 Netflix 并直接跳转到对应影片页面。
+        The user selects to open Netflix on the TV from the phone app. The app reads <code>TargetList</code> to find Netflix's Identifier,
+        sends the <code>NavigateTarget</code> command, and passes the movie ID in the Data field.
+        The TV launches Netflix and navigates directly to the corresponding movie page.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x01">NavigateTargetResponse —— 导航结果响应(0x01)</h3>
+  <h3 id="cmd-0x01">NavigateTargetResponse — Navigation Result Response (0x01)</h3>
   <p>
-    设备对 NavigateTarget 命令的响应。通过 <code>Status</code> 字段告知导航是否成功，
-    可选的 <code>Data</code> 字段可以携带设备返回的额外信息。
+    The device's response to the NavigateTarget command. The <code>Status</code> field indicates navigation success,
+    and the optional <code>Data</code> field can carry additional information from the device.
   </p>
   <div class="table-wrap">
     <table>
@@ -4658,13 +4657,13 @@ export const clusters: Record<string, ClusterContent> = {
           <td>Status</td>
           <td><a href="#enum-status">StatusEnum</a></td>
           <td>Yes</td>
-          <td>导航结果状态（见下方枚举）</td>
+          <td>Navigation result status (see enum below)</td>
         </tr>
         <tr>
           <td>Data</td>
           <td>string</td>
           <td>No</td>
-          <td>设备返回的附加信息，内容由应用自定义</td>
+          <td>Additional information returned by the device, content is application-defined</td>
         </tr>
       </tbody>
     </table>
@@ -4673,7 +4672,7 @@ export const clusters: Record<string, ClusterContent> = {
 
   <!-- ====== Attributes ====== -->
   <h2 id="attributes">Attributes</h2>
-  <p>TargetNavigator Cluster 共有 2 个属性。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+  <p>The TargetNavigator Cluster has 2 attributes. Click an attribute ID in the summary table below to jump to its detailed description.</p>
 
   <!-- Attribute summary table -->
   <div class="table-wrap">
@@ -4691,21 +4690,21 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>TargetList</td>
           <td>list&lt;<a href="#struct-target-info">TargetInfoStruct</a>&gt;</td>
-          <td>设备所有可导航目标的列表</td>
+          <td>List of all navigable targets on the device</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>CurrentTarget</td>
           <td>uint8</td>
-          <td>当前所在目标的标识符</td>
+          <td>Identifier of the currently active target</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 属性详细说明 ====== -->
-  <h3 id="group-target">目标状态(0x0000, 0x0001)</h3>
-  <p>描述设备当前可导航的目标列表和当前所在的目标。</p>
+  <!-- ====== Attribute Details ====== -->
+  <h3 id="group-target">Target State (0x0000, 0x0001)</h3>
+  <p>Describes the device's currently navigable target list and the currently active target.</p>
 
   <div class="table-wrap">
     <table>
@@ -4720,15 +4719,15 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0000">
           <td><code>0x0000</code></td>
-          <td>TargetList（目标列表）</td>
+          <td>TargetList</td>
           <td>list&lt;<a href="#struct-target-info">TargetInfoStruct</a>&gt;</td>
-          <td>设备声明的全部可导航目标，每个元素是一个 <a href="#struct-target-info">TargetInfoStruct</a>。列表内容反映设备上已安装的应用、可访问的页面或菜单项。每个 Identifier 值唯一。列表可能随设备安装或卸载应用而变化</td>
+          <td>All navigable targets declared by the device. Each element is a <a href="#struct-target-info">TargetInfoStruct</a>. The list reflects installed apps, accessible pages, or menu items on the device. Each Identifier value is unique. The list may change as apps are installed or uninstalled</td>
         </tr>
         <tr id="attr-0x0001">
           <td><code>0x0001</code></td>
-          <td>CurrentTarget（当前目标）</td>
+          <td>CurrentTarget</td>
           <td>uint8</td>
-          <td>当前所在目标的标识符。该值指向 <code>TargetList</code> 中某个 <code>TargetInfoStruct.Identifier</code>。值为 <code>0xFF</code> 时表示当前没有处于任何已知目标上。通过 <code>NavigateTarget</code> 命令或用户在设备上手动切换时改变</td>
+          <td>Identifier of the currently active target. This value points to a <code>TargetInfoStruct.Identifier</code> in <code>TargetList</code>. A value of <code>0xFF</code> indicates no known target is currently active. Changed via the <code>NavigateTarget</code> command or when the user manually switches on the device</td>
         </tr>
       </tbody>
     </table>
@@ -4737,19 +4736,19 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">Subscribe to Changes</div>
     <p>
-      控制端应订阅 <code>CurrentTarget</code> 属性的变化，以便在用户通过遥控器或设备界面手动切换应用时同步 App 界面上的高亮状态。
-      同时也应订阅 <code>TargetList</code>，以便在设备安装或卸载应用后及时更新可用目标列表。
+      Controllers should subscribe to <code>CurrentTarget</code> attribute changes to sync the highlight state in the app UI when the user manually switches apps via the remote or device UI.
+      Also subscribe to <code>TargetList</code> to promptly update the available target list when apps are installed or uninstalled.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 结构体定义 ====== -->
+  <!-- ====== Struct Definitions ====== -->
   <h2 id="structs">Struct Definitions</h2>
-  <p>TargetNavigator Cluster 使用一个结构体来描述导航目标信息。</p>
+  <p>The TargetNavigator Cluster uses one structure to describe navigation target information.</p>
 
   <!-- TargetInfoStruct -->
   <h3 id="struct-target-info">TargetInfoStruct</h3>
-  <p>描述一个导航目标的基本信息，包括唯一标识和显示名称。</p>
+  <p>Describes the basic information of a navigation target, including unique identifier and display name.</p>
 
   <div class="table-wrap">
     <table>
@@ -4764,23 +4763,23 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Identifier</td>
           <td>uint8</td>
-          <td>目标的唯一标识符，在 <code>TargetList</code> 内唯一。用于 <code>NavigateTarget</code> 命令定位目标</td>
+          <td>Unique identifier for the target, unique within <code>TargetList</code>. Used to locate the target in the <code>NavigateTarget</code> command</td>
         </tr>
         <tr>
           <td>Name</td>
           <td>string</td>
-          <td>目标的显示名称，如 <code>"Netflix"</code>、<code>"Settings"</code>。供 UI 展示给用户</td>
+          <td>Display name of the target, e.g., <code>"Netflix"</code>, <code>"Settings"</code>. Displayed to the user in the UI</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">与 MediaInput.InputInfoStruct 的对比</div>
+    <div class="callout-title">Comparison with MediaInput.InputInfoStruct</div>
     <p>
-      TargetInfoStruct 比 <a href="/clusters/media-input/#struct-input-info">InputInfoStruct</a> 更简洁 ——
-      只有 Identifier 和 Name 两个字段，没有类型枚举和描述字段。
-      这是因为导航目标的性质由应用自身决定，不像物理输入接口那样有固定的分类（HDMI、USB 等）。
+      TargetInfoStruct is more concise than <a href="/clusters/media-input/#struct-input-info">InputInfoStruct</a> —
+      it has only two fields, Identifier and Name, without type enum or description fields.
+      This is because the nature of navigation targets is determined by the applications themselves, unlike physical input interfaces which have fixed categories (HDMI, USB, etc.).
     </p>
   </div>
 
@@ -4788,57 +4787,57 @@ export const clusters: Record<string, ClusterContent> = {
   <h2 id="enums">Enum Definitions</h2>
 
   <h3 id="enum-status">StatusEnum</h3>
-  <p>NavigateTargetResponse 中 Status 字段的枚举值，表示导航操作的结果。</p>
+  <p>Enum values for the Status field in NavigateTargetResponse, indicating the navigation result.</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">Success</span>
-        <span class="enum-desc">导航成功 —— 设备已成功切换到目标</span>
+        <span class="enum-desc">Navigation successful — device has successfully switched to the target</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">TargetNotFound</span>
-        <span class="enum-desc">目标未找到 —— 指定的 Target 标识符不存在于 TargetList 中</span>
+        <span class="enum-desc">Target not found — the specified Target identifier does not exist in TargetList</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">NotAllowed</span>
-        <span class="enum-desc">不允许导航 —— 设备当前状态不允许切换到该目标（如家长控制限制）</span>
+        <span class="enum-desc">Navigation not allowed — the device's current state does not allow switching to this target (e.g., parental control restrictions)</span>
       </div>
     </div>
   </div>
 
   <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一台智能电视的 TargetNavigator Cluster 读取结果 —— 当前在设置页面，共有 4 个可导航目标：</p>
+  <p>Read results of the TargetNavigator Cluster from a smart TV — currently on the settings page, with 4 navigable targets:</p>
 
   <pre><code>{
-  // --- 当前目标 ---
-  "0x0001": 2,                   // CurrentTarget = 2（当前在"设置"页面）
+  // --- Current Target ---
+  "0x0001": 2,                   // CurrentTarget = 2 (currently on "Settings" page)
 
-  // --- 目标列表 ---
+  // --- Target List ---
   "0x0000": [                    // TargetList
     {
       "Identifier": 0,
-      "Name": "Home"              // 主屏幕
+      "Name": "Home"              // Home screen
     },
     {
       "Identifier": 1,
-      "Name": "Netflix"           // Netflix 应用
+      "Name": "Netflix"           // Netflix app
     },
     {
       "Identifier": 2,
-      "Name": "Settings"          // 系统设置
+      "Name": "Settings"          // System settings
     },
     {
       "Identifier": 3,
-      "Name": "YouTube"           // YouTube 应用
+      "Name": "YouTube"           // YouTube app
     }
   ]
 }</code></pre>
@@ -4846,10 +4845,10 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      控制端展示目标列表 UI 时，应先读取 <code>TargetList (0x0000)</code> 获取完整列表，
-      再读取 <code>CurrentTarget (0x0001)</code> 高亮当前所在目标。
-      由于 TargetInfoStruct 没有类型枚举，如果需要为不同目标显示图标，
-      可能需要通过 Name 字段匹配已知的应用名称（如"Netflix""YouTube"）来选择图标。
+      When displaying the target list UI, controllers should first read <code>TargetList (0x0000)</code> to get the complete list,
+      then read <code>CurrentTarget (0x0001)</code> to highlight the currently active target.
+      Since TargetInfoStruct has no type enum, if icons are needed for different targets,
+      you may need to match known app names (e.g., "Netflix", "YouTube") via the Name field to select icons.
     </p>
   </div>
 
@@ -4857,18 +4856,18 @@ export const clusters: Record<string, ClusterContent> = {
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
-    <summary>场景 1：App 远程启动电视上的流媒体应用</summary>
+    <summary>Scenario 1: App remotely launches a streaming app on the TV</summary>
     <div class="scenario-content">
       <ol>
-        <li>读取 <code>TargetList (0x0000)</code>，获取电视上所有可导航目标（Identifier、Name）</li>
-        <li>读取 <code>CurrentTarget (0x0001)</code>，高亮当前所在目标</li>
-        <li>在 App UI 上展示目标列表，用户点击"Netflix"</li>
-        <li>发送 <code>NavigateTarget (0x00)</code>，Target 设为 Netflix 的 Identifier 值，Data 可传入要播放内容的深度链接</li>
-        <li>检查 <code>NavigateTargetResponse</code> 的 Status：
+        <li>Read <code>TargetList (0x0000)</code> to get all navigable targets on the TV (Identifier, Name)</li>
+        <li>Read <code>CurrentTarget (0x0001)</code> to highlight the currently active target</li>
+        <li>Display the target list in the app UI; the user clicks "Netflix"</li>
+        <li>Send <code>NavigateTarget (0x00)</code> with Target set to Netflix's Identifier value; Data can carry a deep link to the content to play</li>
+        <li>Check the <code>NavigateTargetResponse</code> Status:
           <ul>
-            <li><code>Success (0)</code> —— 导航成功，订阅 <code>CurrentTarget</code> 确认更新后刷新 UI</li>
-            <li><code>TargetNotFound (1)</code> —— 目标已不存在（可能应用被卸载），刷新 TargetList</li>
-            <li><code>NotAllowed (2)</code> —— 被限制访问，提示用户可能受家长控制等策略限制</li>
+            <li><code>Success (0)</code> — navigation successful, subscribe to <code>CurrentTarget</code> to confirm the update and refresh the UI</li>
+            <li><code>TargetNotFound (1)</code> — target no longer exists (app may have been uninstalled), refresh TargetList</li>
+            <li><code>NotAllowed (2)</code> — access restricted, notify the user about possible parental control or policy restrictions</li>
           </ul>
         </li>
       </ol>
@@ -4876,19 +4875,19 @@ export const clusters: Record<string, ClusterContent> = {
   </details>
 
   <details class="scenario">
-    <summary>场景 2：自动化场景 —— 语音指令切换应用</summary>
+    <summary>Scenario 2: Automation — voice command to switch apps</summary>
     <div class="scenario-content">
       <ol>
-        <li>用户对语音助手说"打开 YouTube"</li>
-        <li>语音助手读取 <code>TargetList (0x0000)</code>，在列表中按 Name 匹配"YouTube"</li>
-        <li>找到匹配项后，发送 <code>NavigateTarget (0x00)</code>，Target 设为对应 Identifier</li>
-        <li>如果 TargetList 中没有匹配的名称，语音助手回复"该应用不在可用列表中"</li>
-        <li>如果返回 <code>NotAllowed</code>，语音助手提示"当前无法打开该应用，可能受到使用限制"</li>
+        <li>The user tells the voice assistant "Open YouTube"</li>
+        <li>The voice assistant reads <code>TargetList (0x0000)</code> and matches "YouTube" by Name in the list</li>
+        <li>After finding a match, sends <code>NavigateTarget (0x00)</code> with Target set to the corresponding Identifier</li>
+        <li>If no matching name is found in TargetList, the voice assistant replies "That app is not in the available list"</li>
+        <li>If <code>NotAllowed</code> is returned, the voice assistant says "Cannot open that app right now, it may be subject to usage restrictions"</li>
       </ol>
       <p>
-        <strong>注意</strong>：Name 字段的匹配需要考虑大小写和本地化差异。
-        设备厂商可能使用不同的名称格式（如"YouTube"vs"youtube"vs"YouTube TV"），
-        语音助手的匹配逻辑应做模糊匹配或规范化处理。
+        <strong>Note</strong>: Name field matching should account for case sensitivity and localization differences.
+        Device manufacturers may use different name formats (e.g., "YouTube" vs "youtube" vs "YouTube TV"),
+        so the voice assistant's matching logic should use fuzzy matching or normalization.
       </p>
     </div>
   </details>
@@ -4929,25 +4928,25 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'application-basic': {
     title: 'ApplicationBasic Cluster (0x050D)',
-    description: 'Matter ApplicationBasic Cluster(0x050D)完整参考 — 内容应用基本信息、ApplicationStruct 结构体、ApplicationStatusEnum 运行状态枚举、AllowedVendorList 访问控制等全部属性定义及速查。',
+    description: 'Complete reference for the Matter ApplicationBasic Cluster (0x050D) — content app basic info, ApplicationStruct, ApplicationStatusEnum runtime status enum, AllowedVendorList access control, and all attribute definitions.',
     prev: { title: 'MediaPlayback', slug: 'media-playback' },
     next: undefined,
     content: `<h1>ApplicationBasic Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x050D</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 应用端点（每个内容应用占用一个独立的 Endpoint）
+    <strong>Endpoint</strong>: Application endpoint (each content app occupies a separate Endpoint)
   </p>
   <p>
-    ApplicationBasic 提供内容应用（Content App）的基本信息 —— 包括应用名称、开发商、版本号、运行状态和唯一标识。
-    它是 Matter 媒体/电视设备生态中的核心 Cluster，每个安装在电视或机顶盒上的内容应用都通过一个独立的 Endpoint 暴露这个 Cluster。
+    ApplicationBasic provides basic information about content apps (Content Apps) — including app name, vendor, version, runtime status, and unique identifier.
+    It is a core Cluster in the Matter media/TV device ecosystem; each content app installed on a TV or set-top box exposes this Cluster through a separate Endpoint.
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">每个应用 = 一个 Endpoint</div>
+    <div class="callout-title">One App = One Endpoint</div>
     <p>
-      Matter 的媒体架构采用<strong>「每个应用一个 Endpoint」</strong>的模型。
-      例如一台智能电视上装了 3 个流媒体应用（视频、音乐、直播），设备就会在 Endpoint 3、4、5 上分别暴露各自的 ApplicationBasic Cluster。
-      Controller 通过枚举 Endpoint 来发现设备上安装了哪些应用，再读取每个 Endpoint 的 ApplicationBasic 获取应用详情。
+      Matter's media architecture uses an <strong>"one Endpoint per app"</strong> model.
+      For example, if a smart TV has 3 streaming apps installed (video, music, live), the device exposes their respective ApplicationBasic Clusters on Endpoints 3, 4, and 5.
+      Controllers discover installed apps by enumerating Endpoints, then read each Endpoint's ApplicationBasic for app details.
     </p>
   </div>
 
@@ -4955,16 +4954,16 @@ export const clusters: Record<string, ClusterContent> = {
   <nav class="quick-nav">
     <a href="#attributes">Attributes</a>
     <span class="nav-sep">|</span>
-    <a href="#structs-enums">结构体与枚举</a>
+    <a href="#structs-enums">Structs & Enums</a>
     <span class="nav-sep">|</span>
     <a href="#example-data">Example Data</a>
     <span class="nav-sep">|</span>
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 属性总览 ====== -->
+  <!-- ====== Attribute Overview ====== -->
   <h2 id="attributes">Attribute Overview</h2>
-  <p>ApplicationBasic 共有 8 个属性，按功能分为四组。点击属性 ID 可跳转到对应的详细说明。</p>
+  <p>ApplicationBasic has 8 attributes grouped into four categories. Click an attribute ID to jump to its detailed description.</p>
 
   <!-- Attribute summary table -->
   <div class="table-wrap">
@@ -4979,73 +4978,73 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
       </thead>
       <tbody>
-        <!-- 厂商信息 -->
+        <!-- Vendor info -->
         <tr class="clickable-row" data-href="#attr-0x0000">
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>VendorName</td>
           <td>string</td>
-          <td><a href="#group-vendor">厂商信息</a></td>
-          <td>应用开发商名称</td>
+          <td><a href="#group-vendor">Vendor Info</a></td>
+          <td>App vendor name</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>VendorID</td>
           <td>vendor-id</td>
-          <td><a href="#group-vendor">厂商信息</a></td>
-          <td>应用开发商 ID（CSA 分配）</td>
+          <td><a href="#group-vendor">Vendor Info</a></td>
+          <td>App vendor ID (assigned by CSA)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
           <td>ApplicationName</td>
           <td>string</td>
-          <td><a href="#group-vendor">厂商信息</a></td>
-          <td>应用名称</td>
+          <td><a href="#group-vendor">Vendor Info</a></td>
+          <td>App name</td>
         </tr>
-        <!-- 产品标识 -->
+        <!-- Product identity -->
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
           <td>ProductID</td>
           <td>uint16</td>
-          <td><a href="#group-product">产品标识</a></td>
-          <td>应用产品 ID</td>
+          <td><a href="#group-product">Product Identity</a></td>
+          <td>App product ID</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0004">
           <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
           <td>Application</td>
           <td>ApplicationStruct</td>
-          <td><a href="#group-product">产品标识</a></td>
-          <td>应用唯一标识（目录 + ID）</td>
+          <td><a href="#group-product">Product Identity</a></td>
+          <td>App unique identifier (catalog + ID)</td>
         </tr>
-        <!-- 运行状态 -->
+        <!-- Runtime status -->
         <tr class="clickable-row" data-href="#attr-0x0005">
           <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
           <td>Status</td>
           <td>ApplicationStatusEnum</td>
-          <td><a href="#group-status">运行状态</a></td>
-          <td>应用当前运行状态</td>
+          <td><a href="#group-status">Runtime Status</a></td>
+          <td>App current runtime status</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0006">
           <td><a href="#attr-0x0006"><code>0x0006</code></a></td>
           <td>ApplicationVersion</td>
           <td>string</td>
-          <td><a href="#group-status">运行状态</a></td>
-          <td>应用版本号</td>
+          <td><a href="#group-status">Runtime Status</a></td>
+          <td>App version</td>
         </tr>
-        <!-- 访问控制 -->
+        <!-- Access control -->
         <tr class="clickable-row" data-href="#attr-0x0007">
           <td><a href="#attr-0x0007"><code>0x0007</code></a></td>
           <td>AllowedVendorList</td>
           <td>list&lt;vendor-id&gt;</td>
-          <td><a href="#group-acl">访问控制</a></td>
-          <td>允许访问此应用的厂商 ID 列表</td>
+          <td><a href="#group-acl">Access Control</a></td>
+          <td>List of vendor IDs allowed to access this app</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 厂商信息（0x0000-0x0002）====== -->
-  <h3 id="group-vendor">厂商信息(0x0000 – 0x0002)</h3>
-  <p>描述应用的开发商和名称。这些属性在应用安装后就已确定，运行时不可更改。</p>
+  <!-- ====== Vendor Information (0x0000-0x0002) ====== -->
+  <h3 id="group-vendor">Vendor Information (0x0000 – 0x0002)</h3>
+  <p>Describes the app's vendor and name. These attributes are determined after app installation and cannot be changed at runtime.</p>
 
   <div class="table-wrap">
     <table>
@@ -5060,31 +5059,31 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0000">
           <td><code>0x0000</code></td>
-          <td>VendorName（开发商名称）</td>
+          <td>VendorName (Vendor Name)</td>
           <td>string</td>
-          <td>应用开发商的人类可读名称，最长 32 字符。如 <code>"Netflix"</code>、<code>"YouTube"</code>。可选属性</td>
+          <td>Human-readable name of the app vendor, max 32 characters. E.g., <code>"Netflix"</code>, <code>"YouTube"</code>. Optional attribute</td>
         </tr>
         <tr id="attr-0x0001">
           <td><code>0x0001</code></td>
-          <td>VendorID（开发商 ID）</td>
+          <td>VendorID (Vendor ID)</td>
           <td>vendor-id</td>
-          <td>应用开发商的 CSA 厂商编号。如果应用开发商未向 CSA 注册，此值为 <code>0</code>。可选属性</td>
+          <td>CSA vendor number of the app vendor. If the app vendor has not registered with CSA, this value is <code>0</code>. Optional attribute</td>
         </tr>
         <tr id="attr-0x0002">
           <td><code>0x0002</code></td>
-          <td>ApplicationName（应用名称）</td>
+          <td>ApplicationName（App name）</td>
           <td>string</td>
-          <td>应用的人类可读名称，最长 32 字符。如 <code>"Netflix"</code>、<code>"Spotify"</code>。<strong>必选属性</strong>，也是 ApplicationBasic 中唯一的必选属性</td>
+          <td>Human-readable name of the app, max 32 characters. E.g., <code>"Netflix"</code>, <code>"Spotify"</code>. <strong>Required attribute</strong>, and the only required attribute in ApplicationBasic</td>
         </tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 产品标识（0x0003-0x0004）====== -->
-  <h3 id="group-product">产品标识(0x0003 – 0x0004)</h3>
+  <!-- ====== Product Identity (0x0003-0x0004) ====== -->
+  <h3 id="group-product">Product Identity (0x0003 – 0x0004)</h3>
   <p>
-    应用的产品编号和全局唯一标识。<code>Application</code> 属性是最重要的标识 —— 它通过目录体系唯一定位一个应用。
+    The app's product number and globally unique identifier. The <code>Application</code> attribute is the most important identifier — it uniquely locates an app through the catalog system.
   </p>
 
   <div class="table-wrap">
@@ -5100,34 +5099,34 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0003">
           <td><code>0x0003</code></td>
-          <td>ProductID（产品 ID）</td>
+          <td>ProductID (Product ID)</td>
           <td>uint16</td>
-          <td>应用开发商自行分配的产品编号。与 VendorID 组合可标识一款特定应用产品。可选属性</td>
+          <td>Product number assigned by the app vendor. Combined with VendorID, identifies a specific app product. Optional attribute</td>
         </tr>
         <tr id="attr-0x0004">
           <td><code>0x0004</code></td>
-          <td>Application（应用标识）</td>
+          <td>Application (App Identifier)</td>
           <td>ApplicationStruct</td>
-          <td>应用的全局唯一标识，由目录厂商 ID 和应用 ID 两个字段组成（见下方 <a href="#struct-application">ApplicationStruct</a>）。可选属性</td>
+          <td>Globally unique identifier for the app, consisting of catalog vendor ID and application ID (see <a href="#struct-application">ApplicationStruct</a> below). Optional attribute</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">Application 与 VendorID + ProductID 的区别</div>
+    <div class="callout-title">Application vs VendorID + ProductID</div>
     <p>
-      <code>VendorID + ProductID</code> 标识的是「谁开发的哪款产品」，是厂商维度的标识。
-      <code>Application</code>（ApplicationStruct）标识的是「在哪个应用目录中的哪个应用」，是平台维度的标识。
-      例如同一个视频应用，在 CSA 目录中的 ID 是 <code>"com.example.video"</code>，在另一个平台目录中可能有不同的 ID。
-      Controller 通常用 <code>Application</code> 来定位和启动特定的内容应用。
+      <code>VendorID + ProductID</code> identifies "which product by which vendor" — a vendor-dimension identifier.
+      <code>Application</code> (ApplicationStruct) identifies "which app in which catalog" — a platform-dimension identifier.
+      For example, the same video app may have an ID of <code>"com.example.video"</code> in the CSA catalog but a different ID in another platform catalog.
+      Controllers typically use <code>Application</code> to locate and launch specific content apps.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 运行状态（0x0005-0x0006）====== -->
-  <h3 id="group-status">运行状态(0x0005 – 0x0006)</h3>
-  <p>描述应用的当前运行状态和版本信息。</p>
+  <!-- ====== Runtime Status (0x0005-0x0006) ====== -->
+  <h3 id="group-status">Runtime Status (0x0005 – 0x0006)</h3>
+  <p>Describes the app's current runtime status and version information.</p>
 
   <div class="table-wrap">
     <table>
@@ -5142,24 +5141,24 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0005">
           <td><code>0x0005</code></td>
-          <td>Status（运行状态）</td>
+          <td>Status (Runtime Status)</td>
           <td>ApplicationStatusEnum</td>
-          <td>应用当前的运行状态（见下方 <a href="#enum-status">ApplicationStatusEnum</a>）。可选属性</td>
+          <td>Current runtime status of the app (see <a href="#enum-status">ApplicationStatusEnum</a> below). Optional attribute</td>
         </tr>
         <tr id="attr-0x0006">
           <td><code>0x0006</code></td>
-          <td>ApplicationVersion（应用版本）</td>
+          <td>ApplicationVersion (App Version)</td>
           <td>string</td>
-          <td>应用的版本字符串，最长 32 字符。如 <code>"2.1.0"</code>、<code>"3.0.0-beta"</code>。<strong>必选属性</strong></td>
+          <td>App version string, max 32 characters. E.g., <code>"2.1.0"</code>, <code>"3.0.0-beta"</code>. <strong>Required attribute</strong></td>
         </tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 访问控制（0x0007）====== -->
-  <h3 id="group-acl">访问控制(0x0007)</h3>
-  <p>控制哪些厂商的 Controller 可以访问此应用的 Cluster。</p>
+  <!-- ====== Access Control (0x0007) ====== -->
+  <h3 id="group-acl">Access Control (0x0007)</h3>
+  <p>Controls which vendors' Controllers can access this app's Clusters.</p>
 
   <div class="table-wrap">
     <table>
@@ -5174,12 +5173,12 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0007">
           <td><code>0x0007</code></td>
-          <td>AllowedVendorList（允许的厂商列表）</td>
+          <td>AllowedVendorList (Allowed Vendor List)</td>
           <td>list&lt;vendor-id&gt;</td>
           <td>
-            允许访问此内容应用的厂商 ID 列表。
-            只有列表中的厂商所生产的 Controller 才能与此应用的 Cluster 交互。
-            <strong>必选属性</strong>
+            List of vendor IDs allowed to access this content app.
+            Only Controllers produced by vendors in this list can interact with this app's Clusters.
+            <strong>Required attribute</strong>
           </td>
         </tr>
       </tbody>
@@ -5187,24 +5186,23 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">AllowedVendorList 与 ACL 的关系</div>
+    <div class="callout-title">AllowedVendorList and ACL Relationship</div>
     <p>
-      <code>AllowedVendorList</code> 是在标准 ACL（Access Control List）之上的<strong>额外</strong>访问控制层。
-      即使 Controller 通过了 ACL 检查，如果它的 VendorID 不在 AllowedVendorList 中，
-      仍然无法访问这个应用 Endpoint 上的 Cluster（ApplicationBasic 本身除外）。
-      这个机制允许内容提供商限制只有合作方的设备才能控制自己的应用。
+      <code>AllowedVendorList</code> is an <strong>additional</strong> access control layer on top of the standard ACL (Access Control List).
+      Even if a Controller passes ACL checks, it still cannot access Clusters on this app's Endpoint if its VendorID is not in AllowedVendorList (except ApplicationBasic itself).
+      This mechanism allows content providers to restrict app control to only partner devices.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 结构体与枚举 ====== -->
-  <h2 id="structs-enums">结构体与枚举</h2>
+  <!-- ====== Structs & Enums ====== -->
+  <h2 id="structs-enums">Structs & Enums</h2>
 
   <!-- ApplicationStruct -->
-  <h3 id="struct-application">ApplicationStruct(应用标识结构体)</h3>
+  <h3 id="struct-application">ApplicationStruct (App Identifier Struct)</h3>
   <p>
-    通过目录体系唯一标识一个内容应用。不同的应用目录（如 CSA、Google Play、Apple App Store）
-    各自有独立的编号体系，<code>CatalogVendorID</code> 指明使用哪个目录，<code>ApplicationID</code> 是该目录内的应用标识。
+    Uniquely identifies a content app through the catalog system. Different app catalogs (e.g., CSA, Google Play, Apple App Store)
+    each have their own numbering system. <code>CatalogVendorID</code> specifies which catalog, and <code>ApplicationID</code> is the app identifier within that catalog.
   </p>
 
   <div class="table-wrap">
@@ -5220,123 +5218,123 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>CatalogVendorID</td>
           <td>uint16</td>
-          <td>应用目录的厂商 ID。标识应用来源于哪个应用目录/平台。例如 CSA 自己的目录、或某个 OTT 平台的目录</td>
+          <td>Vendor ID of the app catalog. Identifies which app catalog/platform the app comes from. E.g., CSA's own catalog or an OTT platform's catalog</td>
         </tr>
         <tr>
           <td>ApplicationID</td>
           <td>string</td>
-          <td>在目录内唯一标识应用的字符串。格式由目录定义，通常是反向域名风格，如 <code>"com.netflix.app"</code></td>
+          <td>String that uniquely identifies the app within the catalog. Format defined by the catalog, typically reverse domain name style, e.g., <code>"com.netflix.app"</code></td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">CatalogVendorID 的含义</div>
+    <div class="callout-title">Meaning of CatalogVendorID</div>
     <p>
-      <code>CatalogVendorID</code> 不是应用开发商的 VendorID，而是<strong>应用目录提供商</strong>的 VendorID。
-      可以理解为：这个应用是在哪个「应用商店」上架的。
-      如果 CatalogVendorID 对应 CSA 官方目录（值为 <code>0x60AE</code> = 24750），
-      那么 ApplicationID 就是 CSA 目录体系下的应用标识。
+      <code>CatalogVendorID</code> is NOT the app vendor's VendorID, but rather the <strong>app catalog provider's</strong> VendorID.
+      Think of it as: which "app store" the app is listed in.
+      If CatalogVendorID corresponds to the CSA official catalog (value <code>0x60AE</code> = 24750),
+      then ApplicationID is the app identifier in the CSA catalog system.
     </p>
   </div>
 
   <!-- ApplicationStatusEnum -->
-  <h3 id="enum-status">ApplicationStatusEnum(应用运行状态枚举)</h3>
-  <p>描述内容应用当前的运行和可见状态。</p>
+  <h3 id="enum-status">ApplicationStatusEnum (App Runtime Status Enum)</h3>
+  <p>Describes the current runtime and visibility status of a content app.</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">Stopped</span>
-        <span class="enum-desc">已停止 —— 应用未运行，需要先启动才能使用</span>
+        <span class="enum-desc">Stopped — app is not running, needs to be launched before use</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">ActiveVisibleFocus</span>
-        <span class="enum-desc">前台运行 —— 应用正在运行、可见，且拥有用户输入焦点（当前正在使用的应用）</span>
+        <span class="enum-desc">Foreground running — app is running, visible, and has user input focus (the currently active app)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">ActiveHidden</span>
-        <span class="enum-desc">后台运行 —— 应用正在运行但不可见（如后台播放音乐）</span>
+        <span class="enum-desc">Background running — app is running but not visible (e.g., playing music in background)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">ActiveVisibleNotFocus</span>
-        <span class="enum-desc">可见但无焦点 —— 应用正在运行且可见，但用户焦点在其他应用上（如画中画模式）</span>
+        <span class="enum-desc">Visible without focus — app is running and visible, but user focus is on another app (e.g., picture-in-picture mode)</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">状态转换场景</div>
+    <div class="callout-title">State Transition Scenarios</div>
     <p>
-      典型的状态变化路径：用户打开应用时 <code>Stopped &rarr; ActiveVisibleFocus</code>；
-      切换到另一个应用时 <code>ActiveVisibleFocus &rarr; ActiveHidden</code>（完全隐藏）或
-      <code>ActiveVisibleFocus &rarr; ActiveVisibleNotFocus</code>（画中画）；
-      用户关闭应用时回到 <code>Stopped</code>。
-      Controller 可以订阅 Status 属性变化来追踪应用的生命周期。
+      Typical state transition path: when the user opens an app, <code>Stopped &rarr; ActiveVisibleFocus</code>;
+      when switching to another app, <code>ActiveVisibleFocus &rarr; ActiveHidden</code> (fully hidden) or
+      <code>ActiveVisibleFocus &rarr; ActiveVisibleNotFocus</code> (picture-in-picture);
+      when the user closes the app, it returns to <code>Stopped</code>.
+      Controllers can subscribe to Status attribute changes to track the app lifecycle.
     </p>
   </div>
 
   <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    ApplicationBasic 没有定义任何命令。应用的启动和控制由其他 Cluster 负责：
+    ApplicationBasic does not define any commands. App launching and control are handled by other Clusters:
   </p>
   <ul>
-    <li><strong>ApplicationLauncher</strong>（0x050C）—— 负责启动、停止和隐藏应用</li>
-    <li><strong>MediaPlayback</strong>（0x0506）—— 负责播放控制（播放、暂停、快进等）</li>
-    <li><strong>ContentLauncher</strong>（0x050A）—— 负责启动特定内容（如打开某个视频）</li>
+    <li><strong>ApplicationLauncher</strong> (0x050C) — handles launching, stopping, and hiding apps</li>
+    <li><strong>MediaPlayback</strong> (0x0506) — handles playback control (play, pause, fast-forward, etc.)</li>
+    <li><strong>ContentLauncher</strong> (0x050A) — handles launching specific content (e.g., opening a video)</li>
   </ul>
   <p>
-    ApplicationBasic 的定位是<strong>Read-only的信息查询</strong> —— 它告诉 Controller「这个应用是什么」，
-    而不负责「对这个应用做什么」。
+    ApplicationBasic's role is <strong>read-only information query</strong> — it tells the Controller "what this app is",
+    not "what to do with this app".
   </p>
 
   <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一台智能电视上某个流媒体应用（Endpoint 3）的 ApplicationBasic Cluster 读取结果：</p>
+  <p>Read results of the ApplicationBasic Cluster from a streaming app (Endpoint 3) on a smart TV:</p>
 
   <pre><code>{
-  // --- 厂商信息 ---
-  "0x0000": "StreamCo",            // VendorName = 应用开发商名称
-  "0x0001": 4996,                  // VendorID = 0x1384（CSA 分配）
-  "0x0002": "StreamCo Player",     // ApplicationName = 应用名称
+  // --- Vendor Information ---
+  "0x0000": "StreamCo",            // VendorName = App vendor name
+  "0x0001": 4996,                  // VendorID = 0x1384 (assigned by CSA)
+  "0x0002": "StreamCo Player",     // ApplicationName = App name
 
-  // --- 产品标识 ---
-  "0x0003": 101,                   // ProductID = 应用产品 ID
-  "0x0004": {                      // Application（应用标识结构体）
-    "CatalogVendorID": 24742,      //   CatalogVendorID = CSA 目录
-    "ApplicationID": "com.streamco.player"  //   ApplicationID = 应用 ID
+  // --- Product Identity ---
+  "0x0003": 101,                   // ProductID = App product ID
+  "0x0004": {                      // Application (app identifier struct)
+    "CatalogVendorID": 24742,      //   CatalogVendorID = CSA catalog
+    "ApplicationID": "com.streamco.player"  //   ApplicationID = app ID
   },
 
-  // --- 运行状态 ---
-  "0x0005": 1,                     // Status = ActiveVisibleFocus（前台可见且有焦点）
-  "0x0006": "2.1.0",               // ApplicationVersion = 应用版本号
+  // --- Runtime Status ---
+  "0x0005": 1,                     // Status = ActiveVisibleFocus (foreground, visible with focus)
+  "0x0006": "2.1.0",               // ApplicationVersion = App version
 
-  // --- 访问控制 ---
-  "0x0007": [4996, 65521]          // AllowedVendorList = 允许访问此应用的厂商 ID 列表
+  // --- Access Control ---
+  "0x0007": [4996, 65521]          // AllowedVendorList = List of vendor IDs allowed to access this app
 }</code></pre>
 
   <div class="callout callout-tip">
-    <div class="callout-title">读取应用信息的典型流程</div>
+    <div class="callout-title">Typical Flow for Reading App Information</div>
     <p>
-      Controller 发现设备上安装了哪些应用的常规流程：
+      Standard flow for a Controller to discover installed apps on a device:
     </p>
     <ol>
-      <li>读取 Endpoint 0 的 <code>Descriptor Cluster (0x001D)</code> 的 <code>PartsList</code> 获取所有 Endpoint 编号</li>
-      <li>对每个 Endpoint，读取其 Descriptor 的 <code>ServerList</code>，检查是否包含 <code>0x050D</code>（ApplicationBasic）</li>
-      <li>找到后，读取该 Endpoint 的 <code>ApplicationName (0x0002)</code> 和 <code>Application (0x0004)</code> 获取应用名和标识</li>
-      <li>读取 <code>Status (0x0005)</code> 判断应用当前是否在运行</li>
+      <li>Read the <code>PartsList</code> from Endpoint 0's <code>Descriptor Cluster (0x001D)</code> to get all Endpoint numbers</li>
+      <li>For each Endpoint, read its Descriptor's <code>ServerList</code> and check if it contains <code>0x050D</code> (ApplicationBasic)</li>
+      <li>If found, read that Endpoint's <code>ApplicationName (0x0002)</code> and <code>Application (0x0004)</code> for the app name and identifier</li>
+      <li>Read <code>Status (0x0005)</code> to determine if the app is currently running</li>
     </ol>
   </div>
 
@@ -5344,40 +5342,40 @@ export const clusters: Record<string, ClusterContent> = {
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
-    <summary>场景 1：发现并展示电视上的所有内容应用</summary>
+    <summary>Scenario 1: Discover and display all content apps on the TV</summary>
     <div class="scenario-content">
       <p>
-        手机 App 连接到一台智能电视后，需要在界面上列出电视上安装的所有内容应用（类似电视遥控器的应用列表）。
+        After the phone app connects to a smart TV, it needs to list all content apps installed on the TV in the interface (similar to the TV remote's app list).
       </p>
       <ol>
-        <li>读取 Endpoint 0 的 Descriptor Cluster，获取 <code>PartsList</code>（所有子 Endpoint）</li>
-        <li>逐个检查每个 Endpoint 的 <code>ServerList</code>，过滤出包含 <code>0x050D</code> 的 Endpoint</li>
-        <li>对每个应用 Endpoint，批量读取 <code>ApplicationName</code>、<code>VendorName</code>、<code>ApplicationVersion</code>、<code>Status</code></li>
-        <li>在 App 界面上渲染应用列表，显示名称、版本和运行状态（如「运行中」或「已停止」）</li>
+        <li>Read the Descriptor Cluster of Endpoint 0 to get <code>PartsList</code> (all child Endpoints)</li>
+        <li>Check each Endpoint's <code>ServerList</code> one by one, filtering for those containing <code>0x050D</code></li>
+        <li>For each app Endpoint, batch read <code>ApplicationName</code>, <code>VendorName</code>, <code>ApplicationVersion</code>, and <code>Status</code></li>
+        <li>Render the app list in the app interface, showing name, version, and runtime status (e.g., "Running" or "Stopped")</li>
       </ol>
       <p>
-        <strong>注意</strong>：不是所有 Endpoint 都是内容应用，有些可能是灯、传感器等其他设备类型。
-        通过检查 Descriptor 的 <code>DeviceTypeList</code> 是否包含 Content App（0x0024）可以更精确地过滤。
+        <strong>Note</strong>: Not all Endpoints are content apps — some may be other device types such as lights or sensors.
+        More precise filtering can be achieved by checking if the Descriptor's <code>DeviceTypeList</code> contains Content App (0x0024).
       </p>
     </div>
   </details>
 
   <details class="scenario">
-    <summary>场景 2：通过应用标识定位并启动特定应用</summary>
+    <summary>Scenario 2: Locate and launch a specific app via app identifier</summary>
     <div class="scenario-content">
       <p>
-        用户说「打开 Netflix」，Controller 需要找到 Netflix 对应的 Endpoint 并启动它。
+        The user says "Open Netflix", and the Controller needs to find the Endpoint for Netflix and launch it.
       </p>
       <ol>
-        <li>遍历所有应用 Endpoint，读取每个 Endpoint 的 <code>Application (0x0004)</code> 属性</li>
-        <li>比对 <code>ApplicationStruct</code> 中的 <code>CatalogVendorID</code> 和 <code>ApplicationID</code>，找到目标应用</li>
-        <li>检查 <code>Status (0x0005)</code>：如果已经是 <code>ActiveVisibleFocus (1)</code>，无需操作</li>
-        <li>如果是 <code>Stopped (0)</code> 或其他状态，通过 <strong>ApplicationLauncher Cluster (0x050C)</strong> 发送 LaunchApp 命令启动应用</li>
-        <li>订阅 <code>Status</code> 属性变化，确认应用成功进入 <code>ActiveVisibleFocus</code> 状态</li>
+        <li>Iterate through all app Endpoints and read each Endpoint's <code>Application (0x0004)</code> attribute</li>
+        <li>Compare <code>CatalogVendorID</code> and <code>ApplicationID</code> in <code>ApplicationStruct</code> to find the target app</li>
+        <li>Check <code>Status (0x0005)</code>: if already <code>ActiveVisibleFocus (1)</code>, no action needed</li>
+        <li>If <code>Stopped (0)</code> or another status, send the LaunchApp command via <strong>ApplicationLauncher Cluster (0x050C)</strong> to launch the app</li>
+        <li>Subscribe to <code>Status</code> attribute changes to confirm the app successfully entered <code>ActiveVisibleFocus</code> state</li>
       </ol>
       <p>
-        <strong>注意</strong>：启动应用不是 ApplicationBasic 的职责 —— 它只提供信息查询。
-        实际启动操作由同一 Endpoint 上的 ApplicationLauncher Cluster 完成。
+        <strong>Note</strong>: Launching an app is not ApplicationBasic's responsibility — it only provides information queries.
+        The actual launch operation is performed by the ApplicationLauncher Cluster on the same Endpoint.
       </p>
     </div>
   </details>
@@ -5398,28 +5396,28 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'application-launcher': {
     title: 'ApplicationLauncher Cluster (0x050C)',
-    description: 'Matter ApplicationLauncher Cluster(0x050C)完整参考 — LaunchApp 启动应用、StopApp 停止应用、HideApp 隐藏应用、LauncherResponse 响应、CatalogList 目录列表、CurrentApp 当前应用、ApplicationEPStruct / ApplicationStruct 结构体、StatusEnum 状态码及 Feature 位图说明。',
+    description: 'Complete reference for the Matter ApplicationLauncher Cluster (0x050C) — LaunchApp, StopApp, HideApp, LauncherResponse, CatalogList, CurrentApp, ApplicationEPStruct / ApplicationStruct, StatusEnum, and Feature Bitmap.',
     prev: { title: 'Cluster Reference', slug: 'clusters' },
     next: undefined,
     content: `<h1>ApplicationLauncher Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x050C</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 媒体端点（智能电视、机顶盒、流媒体设备等）
+    <strong>Endpoint</strong>: Media endpoint (smart TV, set-top box, streaming device, etc.)
   </p>
   <p>
-    ApplicationLauncher 负责在媒体设备上启动、停止和隐藏内容应用 ——
-    是语音助手「打开 Netflix」「关闭当前应用」等指令的底层实现。
-    它管理的是应用的生命周期（启动/停止/隐藏），而不是应用内的内容播放。
-    通常部署在智能电视或机顶盒的媒体端点上，与
-    <a href="/clusters/application-basic/">ApplicationBasic</a>（应用信息查询）配合使用。
+    ApplicationLauncher handles launching, stopping, and hiding content apps on media devices —
+    it is the underlying implementation for voice assistant commands like "Open Netflix" and "Close the current app".
+    It manages the app lifecycle (launch/stop/hide), not in-app content playback.
+    Typically deployed on the media endpoint of smart TVs or set-top boxes, used in conjunction with
+    <a href="/clusters/application-basic/">ApplicationBasic</a> (app information queries).
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">与 ApplicationBasic 的分工</div>
+    <div class="callout-title">Division of Labor with ApplicationBasic</div>
     <p>
-      <a href="/clusters/application-basic/">ApplicationBasic</a>（0x050D）负责<strong>Read-only的信息查询</strong> —— 告诉 Controller「这个应用是什么、当前什么状态」。
-      ApplicationLauncher（0x050C）负责<strong>操作</strong> —— 启动、停止、隐藏应用。
-      两者通常部署在同一个 Endpoint 上：先通过 ApplicationBasic 获取应用信息，再通过 ApplicationLauncher 控制应用生命周期。
+      <a href="/clusters/application-basic/">ApplicationBasic</a> (0x050D) handles <strong>read-only information queries</strong> — tells the Controller "what this app is and its current status".
+      ApplicationLauncher (0x050C) handles <strong>operations</strong> — launching, stopping, and hiding apps.
+      Both are typically deployed on the same Endpoint: first use ApplicationBasic to get app info, then use ApplicationLauncher to control the app lifecycle.
     </p>
   </div>
 
@@ -5431,7 +5429,7 @@ export const clusters: Record<string, ClusterContent> = {
     <span class="nav-sep">|</span>
     <a href="#structs">Struct Definitions</a>
     <span class="nav-sep">|</span>
-    <a href="#enums">枚举</a>
+    <a href="#enums">Enums</a>
     <span class="nav-sep">|</span>
     <a href="#features">Feature Bitmap</a>
     <span class="nav-sep">|</span>
@@ -5443,9 +5441,9 @@ export const clusters: Record<string, ClusterContent> = {
   <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    ApplicationLauncher Cluster 有 3 个请求命令和 1 个响应命令。
-    LaunchApp 启动应用，StopApp 停止应用，HideApp 隐藏应用（退到后台），三者都返回 LauncherResponse 告知操作结果。
-    点击下方表格中的命令 ID 可跳转到对应的详细说明。
+    The ApplicationLauncher Cluster has 3 request commands and 1 response command.
+    LaunchApp launches an app, StopApp stops it, HideApp hides it (moves to background), and all three return LauncherResponse with the operation result.
+    Click a command ID in the table below to jump to its detailed description.
   </p>
 
   <div class="table-wrap">
@@ -5463,29 +5461,29 @@ export const clusters: Record<string, ClusterContent> = {
         <tr class="clickable-row" data-href="#cmd-0x00">
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>LaunchApp</td>
-          <td>请求</td>
-          <td>启动指定应用</td>
+          <td>Request</td>
+          <td>Launch the specified app</td>
           <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x01">
           <td><a href="#cmd-0x01"><code>0x01</code></a></td>
           <td>StopApp</td>
-          <td>请求</td>
-          <td>停止指定应用</td>
+          <td>Request</td>
+          <td>Stop the specified app</td>
           <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x02">
           <td><a href="#cmd-0x02"><code>0x02</code></a></td>
           <td>HideApp</td>
-          <td>请求</td>
-          <td>隐藏指定应用（退到后台）</td>
+          <td>Request</td>
+          <td>Hide the specified app (move to background)</td>
           <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x03">
           <td><a href="#cmd-0x03"><code>0x03</code></a></td>
           <td>LauncherResponse</td>
-          <td>响应</td>
-          <td>操作结果（三个命令共用）</td>
+          <td>Response</td>
+          <td>Operation result (shared by all three commands)</td>
           <td class="col-optional">None</td>
         </tr>
       </tbody>
@@ -5493,11 +5491,11 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <!-- ====== Command Details ====== -->
-  <h3 id="cmd-0x00">LaunchApp —— 启动应用(0x00)</h3>
+  <h3 id="cmd-0x00">LaunchApp — Launch App (0x00)</h3>
   <p>
-    启动设备上的指定应用。如果应用已在运行，则将其带到前台。
-    通过 <a href="#struct-application">ApplicationStruct</a> 唯一标识目标应用，
-    可附带应用特定数据（如 DeepLink、启动参数）。
+    Launches the specified app on the device. If the app is already running, it is brought to the foreground.
+    The target app is uniquely identified via <a href="#struct-application">ApplicationStruct</a>,
+    and can carry application-specific data (e.g., DeepLink, launch parameters).
   </p>
   <div class="table-wrap">
     <table>
@@ -5509,20 +5507,20 @@ export const clusters: Record<string, ClusterContent> = {
           <td>Application</td>
           <td><a href="#struct-application">ApplicationStruct</a></td>
           <td>No</td>
-          <td>要启动的应用标识。省略时表示启动当前 Endpoint 上的应用</td>
+          <td>App identifier to launch. Omit to launch the app on the current Endpoint</td>
         </tr>
         <tr>
           <td>Data</td>
           <td>octstr</td>
           <td>No</td>
-          <td>应用特定的附加数据（如 DeepLink、启动参数），由应用自行解析</td>
+          <td>Application-specific additional data (e.g., DeepLink, launch parameters), parsed by the app</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <pre><code>// LaunchApp 命令示例
-// 启动 CSA 目录中的 StreamCo Player 应用
+  <pre><code>// LaunchApp command example
+// Launch the StreamCo Player app from the CSA catalog
 {
   "Application": {
     "CatalogVendorID": 24742,
@@ -5535,18 +5533,18 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        用户对语音助手说「打开 Netflix」，助手查找到 Netflix 对应的 ApplicationStruct（CatalogVendorID + ApplicationID），
-        发送 LaunchApp 命令。电视启动 Netflix 并切换到前台显示。
-        如果附带 Data 参数（如 DeepLink），Netflix 可以直接跳转到指定页面。
+        The user tells the voice assistant "Open Netflix". The assistant finds Netflix's ApplicationStruct (CatalogVendorID + ApplicationID)
+        and sends the LaunchApp command. The TV launches Netflix and switches it to the foreground.
+        If Data is included (e.g., DeepLink), Netflix can navigate directly to the specified page.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x01">StopApp —— 停止应用(0x01)</h3>
+  <h3 id="cmd-0x01">StopApp — Stop App (0x01)</h3>
   <p>
-    停止设备上的指定应用。应用的运行状态会变为 Stopped。
-    如果该应用正在播放内容，播放也会一并终止。
+    Stops the specified app on the device. The app's runtime status changes to Stopped.
+    If the app is playing content, playback is also terminated.
   </p>
   <div class="table-wrap">
     <table>
@@ -5558,14 +5556,14 @@ export const clusters: Record<string, ClusterContent> = {
           <td>Application</td>
           <td><a href="#struct-application">ApplicationStruct</a></td>
           <td>No</td>
-          <td>要停止的应用标识。省略时表示停止当前 Endpoint 上的应用</td>
+          <td>App identifier to stop. Omit to stop the app on the current Endpoint</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <pre><code>// StopApp 命令示例
-// 停止当前运行的 StreamCo Player 应用
+  <pre><code>// StopApp command example
+// Stop the currently running StreamCo Player app
 {
   "Application": {
     "CatalogVendorID": 24742,
@@ -5577,17 +5575,17 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        用户说「关闭 Netflix」，或自动化规则在晚上 11 点后自动停止所有正在运行的娱乐应用。
-        StopApp 会彻底终止应用进程，释放系统资源。与 HideApp 不同，被 Stop 的应用需要重新启动才能使用。
+        The user says "Close Netflix", or an automation rule automatically stops all running entertainment apps after 11 PM.
+        StopApp completely terminates the app process and releases system resources. Unlike HideApp, a stopped app needs to be relaunched to use.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x02">HideApp —— 隐藏应用(0x02)</h3>
+  <h3 id="cmd-0x02">HideApp — Hide App (0x02)</h3>
   <p>
-    将应用退到后台，但不终止其进程。应用状态变为 ActiveHidden，
-    仍然可以执行后台任务（如继续播放音乐）。
+    Moves the app to the background without terminating its process. The app status changes to ActiveHidden,
+    and it can still perform background tasks (e.g., continue playing music).
   </p>
   <div class="table-wrap">
     <table>
@@ -5599,14 +5597,14 @@ export const clusters: Record<string, ClusterContent> = {
           <td>Application</td>
           <td><a href="#struct-application">ApplicationStruct</a></td>
           <td>No</td>
-          <td>要隐藏的应用标识。省略时表示隐藏当前 Endpoint 上的应用</td>
+          <td>App identifier to hide. Omit to hide the app on the current Endpoint</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <pre><code>// HideApp 命令示例
-// 隐藏应用（退到后台，不终止进程）
+  <pre><code>// HideApp command example
+// Hide app (move to background, process not terminated)
 {
   "Application": {
     "CatalogVendorID": 24742,
@@ -5618,18 +5616,18 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        用户在看视频时收到来电，系统发送 HideApp 将视频应用退到后台，显示来电界面。
-        通话结束后再通过 LaunchApp 将视频应用切回前台，应用可以从中断处继续播放。
-        与 StopApp 的区别：HideApp 保留应用状态，适合临时切换；StopApp 彻底关闭，适合不再使用时释放资源。
+        When the user receives a call while watching a video, the system sends HideApp to move the video app to the background and display the call screen.
+        After the call ends, LaunchApp brings the video app back to the foreground, and it can resume playback from where it was interrupted.
+        Difference from StopApp: HideApp preserves app state, suitable for temporary switching; StopApp completely closes the app, suitable for releasing resources when no longer in use.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x03">LauncherResponse —— 操作结果(0x03)</h3>
+  <h3 id="cmd-0x03">LauncherResponse — Operation Result (0x03)</h3>
   <p>
-    LaunchApp、StopApp 和 HideApp 的统一响应。包含一个状态码和可选的附加数据。
-    控制端根据 Status 判断操作是否成功，失败时 Data 中可能包含错误详情。
+    Unified response for LaunchApp, StopApp, and HideApp. Contains a status code and optional additional data.
+    Controllers determine success based on Status; on failure, Data may contain error details.
   </p>
   <div class="table-wrap">
     <table>
@@ -5640,31 +5638,31 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Status</td>
           <td><a href="#enum-status">StatusEnum</a></td>
-          <td>操作结果状态码（见下方枚举）</td>
+          <td>Operation result status code (see enum below)</td>
         </tr>
         <tr>
           <td>Data</td>
           <td>octstr</td>
-          <td>可选的附加数据，成功时可能返回会话信息，失败时返回错误描述</td>
+          <td>Optional additional data; may return session info on success or error description on failure</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <pre><code>// LauncherResponse 响应示例
-// 启动成功
+  <pre><code>// LauncherResponse example
+// Launch successful
 {
   "Status": 0,
   "Data": "session-id=xyz789"
 }
 
-// 应用不可用（未安装或不在目录中）
+// App not available (not installed or not in catalog)
 {
   "Status": 1,
   "Data": "Application not found in catalog"
 }
 
-// 等待用户确认（如首次启动需要同意条款）
+// Waiting for user approval (e.g., first launch requires agreeing to terms)
 {
   "Status": 3,
   "Data": "User approval required for first launch"
@@ -5673,7 +5671,7 @@ export const clusters: Record<string, ClusterContent> = {
 
   <!-- ====== Attributes ====== -->
   <h2 id="attributes">Attributes</h2>
-  <p>ApplicationLauncher Cluster 共有 2 个属性。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+  <p>The ApplicationLauncher Cluster has 2 attributes. Click an attribute ID in the summary table below to jump to its detailed description.</p>
 
   <!-- Attribute summary table -->
   <div class="table-wrap">
@@ -5691,21 +5689,21 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>CatalogList</td>
           <td>list&lt;uint16&gt;</td>
-          <td>设备支持的应用目录厂商 ID 列表</td>
+          <td>List of app catalog vendor IDs supported by the device</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>CurrentApp</td>
           <td>nullable <a href="#struct-app-ep">ApplicationEPStruct</a></td>
-          <td>当前前台运行的应用</td>
+          <td>Currently foreground-running app</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 属性详细说明 ====== -->
-  <h3 id="group-attrs">应用管理(0x0000, 0x0001)</h3>
-  <p>描述设备支持的应用目录范围和当前前台应用的状态。</p>
+  <!-- ====== Attribute Details ====== -->
+  <h3 id="group-attrs">App Management (0x0000, 0x0001)</h3>
+  <p>Describes the app catalog scope supported by the device and the current foreground app status.</p>
 
   <div class="table-wrap">
     <table>
@@ -5720,22 +5718,22 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0000">
           <td><code>0x0000</code></td>
-          <td>CatalogList（目录列表）</td>
+          <td>CatalogList (Catalog List)</td>
           <td>list&lt;uint16&gt;</td>
           <td>
-            设备支持的应用目录厂商 ID（CatalogVendorID）列表。
-            Controller 发送 LaunchApp 时，Application 参数中的 CatalogVendorID 必须在此列表中，否则设备无法识别该应用标识。
-            <strong>需要 AP 特性</strong>
+            List of app catalog vendor IDs (CatalogVendorID) supported by the device.
+            When a Controller sends LaunchApp, the CatalogVendorID in the Application parameter must be in this list; otherwise the device cannot recognize the app identifier.
+            <strong>Requires AP feature</strong>
           </td>
         </tr>
         <tr id="attr-0x0001">
           <td><code>0x0001</code></td>
-          <td>CurrentApp（当前应用）</td>
+          <td>CurrentApp (Current App)</td>
           <td>nullable <a href="#struct-app-ep">ApplicationEPStruct</a></td>
           <td>
-            当前处于前台的应用信息，包括应用标识和所在 Endpoint。
-            当没有应用在前台时为 <code>null</code>。
-            <strong>需要 AP 特性</strong>
+            Information about the currently foreground app, including app identifier and its Endpoint.
+            <code>null</code> when no app is in the foreground.
+            <strong>Requires AP feature</strong>
           </td>
         </tr>
       </tbody>
@@ -5743,24 +5741,24 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">CurrentApp 与 ApplicationBasic.Status 的区别</div>
+    <div class="callout-title">Difference Between CurrentApp and ApplicationBasic.Status</div>
     <p>
-      <code>CurrentApp</code> 是从设备全局视角看「谁在前台」，而
-      <a href="/clusters/application-basic/">ApplicationBasic</a> 的 <code>Status</code> 属性是每个应用各自报告自己的运行状态。
-      一台电视上同时有多个应用的 Status 为 ActiveHidden（后台运行），但 CurrentApp 只指向一个前台应用（或 null）。
+      <code>CurrentApp</code> provides a device-global view of "which app is in the foreground", while
+      <a href="/clusters/application-basic/">ApplicationBasic</a>'s <code>Status</code> attribute is each app's own report of its runtime status.
+      A TV may have multiple apps with Status = ActiveHidden (running in background), but CurrentApp points to only one foreground app (or null).
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 结构体定义 ====== -->
+  <!-- ====== Struct Definitions ====== -->
   <h2 id="structs">Struct Definitions</h2>
-  <p>ApplicationLauncher Cluster 使用两个结构体来标识应用。</p>
+  <p>The ApplicationLauncher Cluster uses two structures to identify apps.</p>
 
   <!-- ApplicationEPStruct -->
-  <h3 id="struct-app-ep">ApplicationEPStruct(应用端点结构体)</h3>
+  <h3 id="struct-app-ep">ApplicationEPStruct (App Endpoint Struct)</h3>
   <p>
-    描述一个应用及其在设备上对应的 Endpoint。用于 <code>CurrentApp</code> 属性，
-    让 Controller 既能知道当前前台应用是什么，也能直接定位到它的 Endpoint 进行进一步交互。
+    Describes an app and its corresponding Endpoint on the device. Used in the <code>CurrentApp</code> attribute,
+    allowing Controllers to both know what the current foreground app is and directly locate its Endpoint for further interaction.
   </p>
 
   <div class="table-wrap">
@@ -5778,23 +5776,23 @@ export const clusters: Record<string, ClusterContent> = {
           <td>Application</td>
           <td><a href="#struct-application">ApplicationStruct</a></td>
           <td>Yes</td>
-          <td>应用的唯一标识（目录厂商 ID + 应用 ID）</td>
+          <td>App's unique identifier (catalog vendor ID + app ID)</td>
         </tr>
         <tr>
           <td>Endpoint</td>
           <td>endpoint-no</td>
           <td>No</td>
-          <td>应用所在的 Endpoint 编号。有了这个编号，Controller 可以直接访问该 Endpoint 上的其他 Cluster（如 MediaPlayback、ContentLauncher）</td>
+          <td>Endpoint number where the app resides. With this number, the Controller can directly access other Clusters on that Endpoint (e.g., MediaPlayback, ContentLauncher)</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <!-- ApplicationStruct -->
-  <h3 id="struct-application">ApplicationStruct(应用标识结构体)</h3>
+  <h3 id="struct-application">ApplicationStruct (App Identifier Struct)</h3>
   <p>
-    通过目录体系唯一标识一个内容应用。这个结构体在 LaunchApp / StopApp / HideApp 命令和 CurrentApp 属性中都会用到，
-    也与 <a href="/clusters/application-basic/">ApplicationBasic</a> Cluster 的 Application（0x0004）属性共用同一结构。
+    Uniquely identifies a content app through the catalog system. This struct is used in LaunchApp / StopApp / HideApp commands and the CurrentApp attribute,
+    and shares the same structure as the <a href="/clusters/application-basic/">ApplicationBasic</a> Cluster's Application (0x0004) attribute.
   </p>
 
   <div class="table-wrap">
@@ -5810,137 +5808,137 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>CatalogVendorID</td>
           <td>uint16</td>
-          <td>应用目录的厂商 ID，标识应用来源于哪个目录/平台。例如 CSA 官方目录的 ID 为 <code>0x60AE</code>（24750）</td>
+          <td>Vendor ID of the app catalog, identifying which catalog/platform the app comes from. E.g., the CSA official catalog ID is <code>0x60AE</code> (24750)</td>
         </tr>
         <tr>
           <td>ApplicationID</td>
           <td>string</td>
-          <td>在目录内唯一标识应用的字符串，通常是反向域名风格。如 <code>"com.netflix.app"</code>、<code>"com.youtube.tv"</code></td>
+          <td>String that uniquely identifies the app within the catalog, typically reverse domain name style. E.g., <code>"com.netflix.app"</code>, <code>"com.youtube.tv"</code></td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">CatalogVendorID 不是应用开发商</div>
+    <div class="callout-title">CatalogVendorID Is Not the App Vendor</div>
     <p>
-      <code>CatalogVendorID</code> 是<strong>应用目录提供商</strong>的 VendorID，不是应用开发商的 VendorID。
-      可以理解为「这个应用在哪个应用商店上架的」。
-      同一个应用在不同目录中可能有不同的 ApplicationID，但 CatalogVendorID + ApplicationID 的组合在全局唯一。
+      <code>CatalogVendorID</code> is the VendorID of the <strong>app catalog provider</strong>, not the app vendor.
+      Think of it as "which app store this app is listed in".
+      The same app may have different ApplicationIDs in different catalogs, but the CatalogVendorID + ApplicationID combination is globally unique.
     </p>
   </div>
 
-  <!-- ====== 枚举 ====== -->
-  <h2 id="enums">枚举</h2>
+  <!-- ====== Enums ====== -->
+  <h2 id="enums">Enums</h2>
 
   <!-- StatusEnum -->
   <h3 id="enum-status">StatusEnum</h3>
-  <p>LauncherResponse 中的状态码，表示应用操作的结果。相比 ContentLauncher 的 StatusEnum，ApplicationLauncher 的状态码涵盖了应用安装和权限审批等场景。</p>
+  <p>Status codes in LauncherResponse, indicating the app operation result. Compared to ContentLauncher's StatusEnum, ApplicationLauncher's status codes cover app installation and permission approval scenarios.</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">Success</span>
-        <span class="enum-desc">成功 —— 应用已启动/停止/隐藏</span>
+        <span class="enum-desc">Success — app has been launched/stopped/hidden</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">AppNotAvailable</span>
-        <span class="enum-desc">应用不可用 —— 未安装、不在目录中或已下架</span>
+        <span class="enum-desc">App not available — not installed, not in catalog, or delisted</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">SystemBusy</span>
-        <span class="enum-desc">系统繁忙 —— 设备资源不足，无法启动新应用</span>
+        <span class="enum-desc">System busy — insufficient device resources, cannot launch a new app</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">PendingUserApproval</span>
-        <span class="enum-desc">等待用户确认 —— 首次启动需要用户同意条款或授权</span>
+        <span class="enum-desc">Pending user approval — first launch requires user to agree to terms or authorize</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">4</span>
       <div>
         <span class="enum-name">Downloading</span>
-        <span class="enum-desc">下载中 —— 应用正在下载，尚未安装完成</span>
+        <span class="enum-desc">Downloading — app is downloading, installation not yet complete</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">5</span>
       <div>
         <span class="enum-name">Installing</span>
-        <span class="enum-desc">安装中 —— 应用已下载，正在安装过程中</span>
+        <span class="enum-desc">Installing — app has been downloaded, installation in progress</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">非终态：Downloading 和 Installing</div>
+    <div class="callout-title">Non-Final States: Downloading and Installing</div>
     <p>
-      <code>Downloading (4)</code> 和 <code>Installing (5)</code> 是中间状态 —— 收到后不代表操作失败，
-      而是需要 Controller 等待一段时间后重试 LaunchApp，或订阅相关属性变化来获知安装完成的时机。
-      <code>PendingUserApproval (3)</code> 同理，需要用户在设备端完成确认后才能继续。
+      <code>Downloading (4)</code> and <code>Installing (5)</code> are intermediate states — receiving them does not mean the operation failed.
+      The Controller needs to wait and retry LaunchApp, or subscribe to related attribute changes to learn when installation is complete.
+      <code>PendingUserApproval (3)</code> is similar — the user needs to complete confirmation on the device before proceeding.
     </p>
   </div>
 
   <!-- ====== Feature Bitmap ====== -->
   <h2 id="features">Feature Bitmap</h2>
-  <p>ApplicationLauncher Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持的能力：</p>
+  <p>The ApplicationLauncher Cluster declares device capabilities via <code>FeatureMap</code> (0xFFFC):</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">Bit 0</span>
       <div>
-        <span class="enum-name">AP（ApplicationPlatform）</span>
-        <span class="enum-desc">应用平台 —— 设备是一个应用平台（如智能电视），支持多个可独立管理的内容应用。启用后提供 CatalogList 和 CurrentApp 属性</span>
+        <span class="enum-name">AP (ApplicationPlatform)</span>
+        <span class="enum-desc">Application Platform — the device is an app platform (e.g., smart TV) supporting multiple independently managed content apps. When enabled, provides CatalogList and CurrentApp attributes</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">AP 特性的含义</div>
+    <div class="callout-title">Meaning of AP Feature</div>
     <p>
-      不启用 AP 特性的设备是<strong>单应用设备</strong> —— 设备本身就是一个应用，LaunchApp/StopApp/HideApp 操作的就是这个设备自身。
-      启用 AP 后，设备是一个<strong>应用平台</strong>（如智能电视、机顶盒），上面安装了多个独立应用，
-      每个应用有自己的 Endpoint 和 ApplicationBasic Cluster。
-      AP 特性启用后才有 CatalogList（设备支持哪些应用目录）和 CurrentApp（当前前台是哪个应用）两个属性。
+      A device without the AP feature is a <strong>single-app device</strong> — the device itself is the app, and LaunchApp/StopApp/HideApp operate on the device itself.
+      With AP enabled, the device is an <strong>app platform</strong> (e.g., smart TV, set-top box) with multiple independent apps installed,
+      each with its own Endpoint and ApplicationBasic Cluster.
+      The CatalogList (which app catalogs the device supports) and CurrentApp (which app is currently in the foreground) attributes are only available when AP is enabled.
     </p>
   </div>
 
   <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一台启用了 AP（ApplicationPlatform）特性的智能电视的 ApplicationLauncher Cluster 属性读取结果：</p>
+  <p>Attribute read results of the ApplicationLauncher Cluster from a smart TV with AP (ApplicationPlatform) enabled:</p>
 
   <pre><code>{
-  // --- 支持的应用目录 ---
-  "0x0000": [24742, 4996],           // CatalogList = 支持的目录厂商 ID 列表
-                                      // 24742 = CSA 官方目录
-                                      // 4996 = 某 OTT 平台目录
+  // --- Supported App Catalogs ---
+  "0x0000": [24742, 4996],           // CatalogList = supported catalog vendor ID list
+                                      // 24742 = CSA official catalog
+                                      // 4996 = an OTT platform catalog
 
-  // --- 当前前台应用 ---
-  "0x0001": {                         // CurrentApp（当前应用，nullable）
+  // --- Current Foreground App ---
+  "0x0001": {                         // CurrentApp (current app, nullable)
     "Application": {                  //   ApplicationStruct
-      "CatalogVendorID": 24742,       //     目录厂商 ID（CSA 官方）
-      "ApplicationID": "com.streamco.player"  //  应用 ID
+      "CatalogVendorID": 24742,       //     Catalog vendor ID (CSA official)
+      "ApplicationID": "com.streamco.player"  //  App ID
     },
-    "Endpoint": 3                     //   应用所在 Endpoint 编号
+    "Endpoint": 3                     //   Endpoint number of the app
   }
 }</code></pre>
 
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      发送 LaunchApp 前，应先读取 <code>CatalogList (0x0000)</code> 确认设备支持目标应用所在的目录。
-      如果 CatalogVendorID 不在列表中，LaunchApp 会返回 <code>AppNotAvailable (1)</code>。
-      发送后检查 <code>CurrentApp (0x0001)</code> 的变化来确认应用是否成功切换到前台。
+      Before sending LaunchApp, read <code>CatalogList (0x0000)</code> to confirm the device supports the target app's catalog.
+      If the CatalogVendorID is not in the list, LaunchApp will return <code>AppNotAvailable (1)</code>.
+      After sending, check <code>CurrentApp (0x0001)</code> changes to confirm the app successfully switched to the foreground.
     </p>
   </div>
 
@@ -5948,36 +5946,36 @@ export const clusters: Record<string, ClusterContent> = {
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
-    <summary>场景 1：语音助手「打开 XXX 应用」</summary>
+    <summary>Scenario 1: Voice assistant "Open XXX app"</summary>
     <div class="scenario-content">
       <ol>
-        <li>用户对语音助手说「在电视上打开 Netflix」</li>
-        <li>检查设备 <code>FeatureMap (0xFFFC)</code>，确认支持 <strong>AP</strong> 特性</li>
-        <li>读取 <code>CatalogList (0x0000)</code>，确认设备支持 CSA 官方目录（24742）</li>
-        <li>遍历设备的各个 Endpoint，读取 <a href="/clusters/application-basic/">ApplicationBasic</a> 的 <code>Application (0x0004)</code> 属性，找到 Netflix 对应的 ApplicationStruct</li>
-        <li>发送 <code>LaunchApp (0x00)</code>，传入 Netflix 的 ApplicationStruct</li>
-        <li>检查 <a href="#cmd-0x03">LauncherResponse</a> 的 Status：
+        <li>The user tells the voice assistant "Open Netflix on the TV"</li>
+        <li>Check the device <code>FeatureMap (0xFFFC)</code> to confirm <strong>AP</strong> support</li>
+        <li>Read <code>CatalogList (0x0000)</code> to confirm the device supports the CSA official catalog (24742)</li>
+        <li>Iterate through the device's Endpoints, read <a href="/clusters/application-basic/">ApplicationBasic</a>'s <code>Application (0x0004)</code> attribute, and find Netflix's ApplicationStruct</li>
+        <li>Send <code>LaunchApp (0x00)</code> with Netflix's ApplicationStruct</li>
+        <li>Check <a href="#cmd-0x03">LauncherResponse</a> Status:
           <ul>
-            <li><code>0</code>（Success）—— Netflix 已启动</li>
-            <li><code>1</code>（AppNotAvailable）—— Netflix 未安装，提示用户</li>
-            <li><code>3</code>（PendingUserApproval）—— 首次启动需要在电视上确认</li>
+            <li><code>0</code> (Success) — Netflix has been launched</li>
+            <li><code>1</code> (AppNotAvailable) — Netflix is not installed, notify the user</li>
+            <li><code>3</code> (PendingUserApproval) — first launch requires confirmation on the TV</li>
           </ul>
         </li>
-        <li>确认 <code>CurrentApp (0x0001)</code> 已更新为 Netflix</li>
+        <li>Confirm <code>CurrentApp (0x0001)</code> has been updated to Netflix</li>
       </ol>
     </div>
   </details>
 
   <details class="scenario">
-    <summary>场景 2：自动化场景 —— 睡眠模式关闭所有应用</summary>
+    <summary>Scenario 2: Automation — sleep mode closes all apps</summary>
     <div class="scenario-content">
       <ol>
-        <li>用户设置了「睡眠模式」自动化规则：每晚 11 点自动关闭电视上的所有应用</li>
-        <li>读取 <code>CurrentApp (0x0001)</code> 获取当前前台应用信息</li>
-        <li>如果 CurrentApp 不为 <code>null</code>，发送 <code>StopApp (0x01)</code> 停止该应用</li>
-        <li>遍历设备上所有应用 Endpoint，检查各自的 <a href="/clusters/application-basic/">ApplicationBasic</a> 的 <code>Status</code> 属性</li>
-        <li>对所有 Status 不为 Stopped（0）的应用，逐个发送 <code>StopApp (0x01)</code></li>
-        <li>全部停止后，可配合 <a href="/clusters/on-off/">OnOff Cluster</a> 将电视关闭或进入待机模式</li>
+        <li>The user set up a "Sleep Mode" automation rule: automatically close all apps on the TV every night at 11 PM</li>
+        <li>Read <code>CurrentApp (0x0001)</code> to get the current foreground app info</li>
+        <li>If CurrentApp is not <code>null</code>, send <code>StopApp (0x01)</code> to stop that app</li>
+        <li>Iterate through all app Endpoints on the device and check each <a href="/clusters/application-basic/">ApplicationBasic</a>'s <code>Status</code> attribute</li>
+        <li>For all apps with Status not Stopped (0), send <code>StopApp (0x01)</code> one by one</li>
+        <li>After all apps are stopped, optionally use <a href="/clusters/on-off/">OnOff Cluster</a> to turn off the TV or put it in standby mode</li>
       </ol>
     </div>
   </details>
@@ -6018,84 +6016,84 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'account-login': {
     title: 'AccountLogin Cluster (0x050E)',
-    description: 'Matter AccountLogin Cluster(0x050E)完整参考 — GetSetupPIN / Login / Logout 命令详解、内容提供商认证流程、Timed Invoke 安全要求、临时 PIN 机制及实际场景。',
+    description: 'Complete reference for the Matter AccountLogin Cluster (0x050E) — GetSetupPIN / Login / Logout commands, content provider authentication flow, Timed Invoke security, temporary PIN mechanism, and practical scenarios.',
     prev: undefined,
     next: undefined,
     content: `<h1>AccountLogin Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x050E</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 媒体端点（流媒体设备、智能电视上的内容应用）
+    <strong>Endpoint</strong>: Media endpoint (streaming device, content app on smart TV)
   </p>
   <p>
-    AccountLogin 负责在<strong>智能电视或流媒体设备</strong>上完成内容提供商的账户认证。
-    当用户的手机 App 已登录某个视频服务（如 Netflix、YouTube），
-    想让电视上的对应内容应用也获得该账户的访问权限时，就需要通过这个 Cluster 完成认证。
-    它不负责播放控制（那是 <a href="/clusters/media-playback/">MediaPlayback</a> 的事），
-    而是解决「电视怎么知道你是谁」这个问题。
+    AccountLogin handles content provider account authentication on <strong>smart TVs or streaming devices</strong>.
+    When a user's phone app is already logged into a video service (e.g., Netflix, YouTube)
+    and wants the corresponding content app on the TV to also gain access to that account, this Cluster handles the authentication.
+    It does not handle playback control (that's <a href="/clusters/media-playback/">MediaPlayback</a>'s job),
+    but rather solves the problem of "how does the TV know who you are".
   </p>
 
   <div class="callout callout-info">
     <div class="callout-title">Core Purpose</div>
     <p>
-      如果把电视上的内容应用比作一个需要门禁卡的影院，AccountLogin 就是<strong>发临时门禁卡的柜台</strong>。
-      你的手机（Commissioner）拿着身份证（账户信息）去柜台领一张临时卡（Setup PIN），
-      再用这张卡刷卡进入（Login）。看完电影后，交还临时卡（Logout）。
-      整个过程的关键是：<strong>临时卡是一次性的</strong>，而且领卡和刷卡都必须在限定时间内完成（Timed Invoke）。
+      Think of the content app on a TV as a theater that requires an access card. AccountLogin is the <strong>counter that issues temporary access cards</strong>.
+      Your phone (Commissioner) takes your ID (account info) to the counter to get a temporary card (Setup PIN),
+      then uses that card to enter (Login). After the movie, you return the temporary card (Logout).
+      The key point is: <strong>the temporary card is single-use</strong>, and both getting and using the card must be completed within a time limit (Timed Invoke).
     </p>
   </div>
 
   <!-- Quick navigation -->
   <nav class="quick-nav">
-    <a href="#auth-flow">认证流程</a>
+    <a href="#auth-flow">Authentication Flow</a>
     <span class="nav-sep">|</span>
     <a href="#commands">Commands</a>
     <span class="nav-sep">|</span>
-    <a href="#attributes">属性说明</a>
+    <a href="#attributes">Attributes</a>
     <span class="nav-sep">|</span>
-    <a href="#security">安全机制</a>
+    <a href="#security">Security</a>
     <span class="nav-sep">|</span>
     <a href="#example-data">Example Data</a>
     <span class="nav-sep">|</span>
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 认证流程 ====== -->
-  <h2 id="auth-flow">认证流程</h2>
-  <p>AccountLogin 的认证是一个<strong>三步握手</strong>流程，由手机 App（Commissioner）主导：</p>
+  <!-- ====== Authentication Flow ====== -->
+  <h2 id="auth-flow">Authentication Flow</h2>
+  <p>AccountLogin authentication is a <strong>three-step handshake</strong> process, driven by the phone app (Commissioner):</p>
 
   <ol>
     <li>
-      <strong>请求 PIN</strong>：手机 App 向电视上的内容应用发送 <a href="#cmd-0x00"><code>GetSetupPIN</code></a>，
-      携带一个<strong>临时账户标识</strong>（TempAccountIdentifier）。
-      这个标识由手机端的内容提供商 App 生成，通常是一个关联到用户账户的临时令牌
+      <strong>Request PIN</strong>: The phone app sends <a href="#cmd-0x00"><code>GetSetupPIN</code></a> to the content app on the TV,
+      carrying a <strong>temporary account identifier</strong> (TempAccountIdentifier).
+      This identifier is generated by the content provider app on the phone, typically a temporary token associated with the user's account
     </li>
     <li>
-      <strong>获取 PIN</strong>：电视端的内容应用验证临时标识后，
-      返回一个<strong>临时 Setup PIN</strong>（最长 8 个字符）。
-      这个 PIN 是一次性的，用于下一步的登录
+      <strong>Receive PIN</strong>: After validating the temporary identifier, the TV-side content app
+      returns a <strong>temporary Setup PIN</strong> (max 8 characters).
+      This PIN is single-use, intended for the next login step
     </li>
     <li>
-      <strong>执行登录</strong>：手机 App 将临时标识和 Setup PIN 一起发送 <a href="#cmd-0x02"><code>Login</code></a> 命令，
-      电视端验证通过后，该节点获得内容访问权限
+      <strong>Execute Login</strong>: The phone app sends the <a href="#cmd-0x02"><code>Login</code></a> command with the temporary identifier and Setup PIN together;
+      after the TV-side verification succeeds, the node gains content access privileges
     </li>
   </ol>
 
   <div class="callout callout-warning">
-    <div class="callout-title">所有命令都要求 Timed Invoke</div>
+    <div class="callout-title">All Commands Require Timed Invoke</div>
     <p>
-      AccountLogin 的三个命令（GetSetupPIN、Login、Logout）全部要求使用 <strong>Timed Invoke</strong>。
-      这意味着每个命令在发送前必须先发起一个限时事务（Timed Request），
-      设备只在事务窗口内接受命令。这是防止中间人重放攻击的关键安全措施。
+      All three AccountLogin commands (GetSetupPIN, Login, Logout) require <strong>Timed Invoke</strong>.
+      This means each command must first initiate a timed transaction (Timed Request) before sending,
+      and the device only accepts commands within the transaction window. This is a critical security measure to prevent man-in-the-middle replay attacks.
     </p>
   </div>
 
   <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    AccountLogin Cluster 共有 3 个命令和 1 个响应。
-    其中 GetSetupPIN 有专属的响应结构体 GetSetupPINResponse，
-    Login 和 Logout 通过通用 Status 返回结果。
-    点击下方表格中的命令 ID 可跳转到对应的详细说明。
+    The AccountLogin Cluster has 3 commands and 1 response.
+    GetSetupPIN has a dedicated response structure GetSetupPINResponse,
+    while Login and Logout return results via a generic Status.
+    Click a command ID in the table below to jump to its detailed description.
   </p>
 
   <div class="table-wrap">
@@ -6113,36 +6111,36 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>GetSetupPIN</td>
           <td>Client → Server</td>
-          <td>请求临时 Setup PIN</td>
+          <td>Request temporary Setup PIN</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x01">
           <td><a href="#cmd-0x01"><code>0x01</code></a></td>
           <td>GetSetupPINResponse</td>
           <td>Server → Client</td>
-          <td>返回临时 Setup PIN</td>
+          <td>Return temporary Setup PIN</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x02">
           <td><a href="#cmd-0x02"><code>0x02</code></a></td>
           <td>Login</td>
           <td>Client → Server</td>
-          <td>使用临时标识 + PIN 登录</td>
+          <td>Log in with temporary identifier + PIN</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x03">
           <td><a href="#cmd-0x03"><code>0x03</code></a></td>
           <td>Logout</td>
           <td>Client → Server</td>
-          <td>登出当前账户</td>
+          <td>Log out of current account</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <!-- ====== Command Details ====== -->
-  <h3 id="cmd-0x00">GetSetupPIN —— 请求 Setup PIN(0x00)</h3>
+  <h3 id="cmd-0x00">GetSetupPIN — Request Setup PIN (0x00)</h3>
   <p>
-    由手机 App（Client）发送给电视端的内容应用（Server），请求一个临时的 Setup PIN。
-    内容应用收到后，会根据 <code>TempAccountIdentifier</code> 查询对应的用户账户信息，
-    如果确认有效，则生成并返回一个临时 PIN。
+    Sent by the phone app (Client) to the content app on the TV (Server), requesting a temporary Setup PIN.
+    Upon receiving the request, the content app queries user account information based on <code>TempAccountIdentifier</code>,
+    and if valid, generates and returns a temporary PIN.
   </p>
   <div class="table-wrap">
     <table>
@@ -6153,26 +6151,26 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>TempAccountIdentifier</td>
           <td>string</td>
-          <td>手机端内容提供商 App 生成的临时账户标识。最大长度 <code>100</code> 字符。由内容提供商自行定义格式，通常是与用户账户关联的临时令牌</td>
+          <td>Temporary account identifier generated by the content provider app on the phone. Max length <code>100</code> characters. Format defined by the content provider, typically a temporary token associated with the user account</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">TempAccountIdentifier 是什么</div>
+    <div class="callout-title">What is TempAccountIdentifier</div>
     <p>
-      这个字段<strong>不是</strong>用户的用户名或密码。
-      它是手机端 App 在用户已登录状态下生成的一个临时令牌（token），
-      用于让电视端的内容应用识别「这个请求来自哪个已认证用户」。
-      具体格式和生成方式由内容提供商（如 Netflix、Disney+）自行定义。
+      This field is <strong>NOT</strong> the user's username or password.
+      It is a temporary token generated by the phone app while the user is logged in,
+      used to let the TV-side content app identify "which authenticated user this request comes from".
+      The specific format and generation method are defined by the content provider (e.g., Netflix, Disney+).
     </p>
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x01">GetSetupPINResponse —— 返回 Setup PIN(0x01)</h3>
+  <h3 id="cmd-0x01">GetSetupPINResponse — Return Setup PIN (0x01)</h3>
   <p>
-    电视端内容应用对 GetSetupPIN 的响应。如果临时账户标识有效，返回一个可用于 Login 的临时 PIN。
+    The TV-side content app's response to GetSetupPIN. If the temporary account identifier is valid, returns a temporary PIN usable for Login.
   </p>
   <div class="table-wrap">
     <table>
@@ -6183,26 +6181,26 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>SetupPIN</td>
           <td>string</td>
-          <td>临时 Setup PIN，最大长度 <code>8</code> 字符。用于后续 Login 命令。PIN 是临时的，内容应用可以自行决定有效期</td>
+          <td>Temporary Setup PIN, max length <code>8</code> characters. Used for the subsequent Login command. The PIN is temporary, and the content app can determine its own validity period</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">PIN 是临时的</div>
+    <div class="callout-title">PIN is Temporary</div>
     <p>
-      SetupPIN 应当是<strong>一次性或短时有效</strong>的。内容应用不应该返回固定不变的 PIN，
-      否则存在被重放攻击利用的风险。建议在 Login 成功后立即失效该 PIN，
-      或者设置一个较短的过期时间（如 2 分钟）。
+      The SetupPIN should be <strong>single-use or short-lived</strong>. The content app should not return a fixed, unchanging PIN,
+      as this risks replay attacks. It is recommended to invalidate the PIN immediately after a successful Login,
+      or set a short expiration time (e.g., 2 minutes).
     </p>
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x02">Login —— 登录(0x02)</h3>
+  <h3 id="cmd-0x02">Login — Log In (0x02)</h3>
   <p>
-    使用前面获取的临时账户标识和 Setup PIN 完成登录。
-    登录成功后，发起请求的节点获得该内容应用的访问权限，可以浏览和播放用户订阅的内容。
+    Completes login using the previously obtained temporary account identifier and Setup PIN.
+    After successful login, the requesting node gains access to the content app and can browse and play the user's subscribed content.
   </p>
   <div class="table-wrap">
     <table>
@@ -6213,38 +6211,38 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>TempAccountIdentifier</td>
           <td>string</td>
-          <td>与 GetSetupPIN 相同的临时账户标识</td>
+          <td>Same temporary account identifier as used in GetSetupPIN</td>
         </tr>
         <tr>
           <td>SetupPIN</td>
           <td>string</td>
-          <td>GetSetupPINResponse 返回的临时 PIN</td>
+          <td>Temporary PIN returned by GetSetupPINResponse</td>
         </tr>
         <tr>
           <td>Node</td>
-          <td>node-id（可选）</td>
-          <td>指定要授权的节点 ID。如果省略，则授权发送此命令的节点。当手机代替另一台设备请求登录时使用</td>
+          <td>node-id (optional)</td>
+          <td>Specifies the node ID to authorize. If omitted, authorizes the node sending this command. Used when the phone requests login on behalf of another device</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <details class="scenario">
-    <summary>Login 失败的常见原因</summary>
+    <summary>Common Causes of Login Failure</summary>
     <div class="scenario-content">
       <ul>
-        <li><strong>PIN 已过期</strong> —— 从 GetSetupPIN 到 Login 之间间隔太久，PIN 已失效</li>
-        <li><strong>PIN 不匹配</strong> —— TempAccountIdentifier 与 SetupPIN 不对应</li>
-        <li><strong>未使用 Timed Invoke</strong> —— 命令没有通过限时事务发送，设备直接拒绝</li>
-        <li><strong>账户标识无效</strong> —— TempAccountIdentifier 在内容提供商侧已失效或不存在</li>
+        <li><strong>PIN expired</strong> — too long between GetSetupPIN and Login, PIN has expired</li>
+        <li><strong>PIN mismatch</strong> — TempAccountIdentifier does not correspond to the SetupPIN</li>
+        <li><strong>Timed Invoke not used</strong> — command was not sent via a timed transaction, device rejects directly</li>
+        <li><strong>Account identifier invalid</strong> — TempAccountIdentifier has expired or does not exist on the content provider side</li>
       </ul>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x03">Logout —— 登出(0x03)</h3>
+  <h3 id="cmd-0x03">Logout — Log Out (0x03)</h3>
   <p>
-    撤销之前通过 Login 获得的访问权限。登出后，对应节点将无法再访问该内容应用的用户内容。
+    Revokes access privileges previously obtained through Login. After logout, the corresponding node can no longer access the content app's user content.
   </p>
   <div class="table-wrap">
     <table>
@@ -6254,8 +6252,8 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr>
           <td>Node</td>
-          <td>node-id（可选）</td>
-          <td>指定要登出的节点 ID。如果省略，则登出发送此命令的节点</td>
+          <td>node-id (optional)</td>
+          <td>Specifies the node ID to log out. If omitted, logs out the node sending this command</td>
         </tr>
       </tbody>
     </table>
@@ -6264,18 +6262,18 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        用户在手机上退出内容提供商账户、切换账户、或手动管理设备访问权限时调用。
-        也可以由自动化规则触发 —— 例如当手机离开家庭网络时自动登出电视上的内容应用。
+        Called when the user signs out of the content provider account on the phone, switches accounts, or manually manages device access.
+        Can also be triggered by automation rules — for example, automatically logging out the TV's content app when the phone leaves the home network.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性说明 ====== -->
-  <h2 id="attributes">属性说明</h2>
+  <!-- ====== Attribute Description ====== -->
+  <h2 id="attributes">Attributes</h2>
   <p>
-    AccountLogin Cluster <strong>没有应用层面的自定义属性</strong>。
-    它只包含 Matter 规范要求的全局属性（Global Attributes），这些属性描述 Cluster 本身的元信息。
+    The AccountLogin Cluster has <strong>no application-level custom attributes</strong>.
+    It only contains global attributes required by the Matter specification (Global Attributes), which describe the Cluster's meta-information.
   </p>
 
   <div class="table-wrap">
@@ -6293,114 +6291,114 @@ export const clusters: Record<string, ClusterContent> = {
           <td><code>0xFFF8</code></td>
           <td>GeneratedCommandList</td>
           <td>list&lt;command-id&gt;</td>
-          <td>Server 能生成的响应命令列表。通常为 <code>[0x01]</code>（GetSetupPINResponse）</td>
+          <td>List of response commands the Server can generate. Typically <code>[0x01]</code> (GetSetupPINResponse)</td>
         </tr>
         <tr>
           <td><code>0xFFF9</code></td>
           <td>AcceptedCommandList</td>
           <td>list&lt;command-id&gt;</td>
-          <td>Server 能接受的命令列表。通常为 <code>[0x00, 0x02, 0x03]</code>（GetSetupPIN / Login / Logout）</td>
+          <td>List of commands the Server can accept. Typically <code>[0x00, 0x02, 0x03]</code> (GetSetupPIN / Login / Logout)</td>
         </tr>
         <tr>
           <td><code>0xFFFA</code></td>
           <td>EventList</td>
           <td>list&lt;event-id&gt;</td>
-          <td>此 Cluster 不定义事件，固定为空列表</td>
+          <td>This Cluster defines no events, always an empty list</td>
         </tr>
         <tr>
           <td><code>0xFFFB</code></td>
           <td>AttributeList</td>
           <td>list&lt;attrib-id&gt;</td>
-          <td>本 Cluster 包含的属性 ID 列表</td>
+          <td>List of attribute IDs in this Cluster</td>
         </tr>
         <tr>
           <td><code>0xFFFC</code></td>
           <td>FeatureMap</td>
           <td>map32</td>
-          <td>当前无可选特性，值为 <code>0</code></td>
+          <td>No optional features currently, value is <code>0</code></td>
         </tr>
         <tr>
           <td><code>0xFFFD</code></td>
           <td>ClusterRevision</td>
           <td>uint16</td>
-          <td>Cluster 规范版本</td>
+          <td>Cluster specification revision</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">为什么没有应用属性</div>
+    <div class="callout-title">Why No Application Attributes</div>
     <p>
-      AccountLogin 是一个<strong>纯命令驱动</strong>的 Cluster。
-      它的核心功能（认证）是通过命令交互完成的，不需要持久存储状态到属性中。
-      登录状态由内容应用自身管理，而非通过 Cluster 属性暴露。
-      这与 AdministratorCommissioning 等「有状态」的 Cluster 形成对比。
+      AccountLogin is a purely <strong>command-driven</strong> Cluster.
+      Its core functionality (authentication) is completed through command interactions, with no need for persistent state stored in attributes.
+      Login status is managed by the content app itself, not exposed via Cluster attributes.
+      This contrasts with "stateful" Clusters like AdministratorCommissioning.
     </p>
   </div>
 
-  <!-- ====== 安全机制 ====== -->
-  <h2 id="security">安全机制</h2>
+  <!-- ====== Security Mechanisms ====== -->
+  <h2 id="security">Security Mechanisms</h2>
   <p>
-    AccountLogin 涉及用户账户认证，安全要求高于普通控制类 Cluster。
-    Matter 规范对它施加了以下约束：
+    AccountLogin involves user account authentication, with higher security requirements than ordinary control Clusters.
+    The Matter specification imposes the following constraints:
   </p>
 
-  <h3>Timed Invoke(限时调用)</h3>
+  <h3>Timed Invoke</h3>
   <p>
-    所有三个命令都<strong>必须</strong>使用 Timed Invoke 发送。
-    Timed Invoke 的工作方式：
+    All three commands <strong>must</strong> be sent using Timed Invoke.
+    How Timed Invoke works:
   </p>
   <ol>
-    <li>Client 先发一个 <code>TimedRequest</code>，声明后续命令的超时时间</li>
-    <li>Server 回复确认并开始计时</li>
-    <li>Client 在超时窗口内发送实际命令（如 Login）</li>
-    <li>超时窗口关闭后，Server 不再接受该命令</li>
+    <li>Client first sends a <code>TimedRequest</code>, declaring the timeout for the subsequent command</li>
+    <li>Server replies with acknowledgment and starts the timer</li>
+    <li>Client sends the actual command (e.g., Login) within the timeout window</li>
+    <li>After the timeout window closes, Server no longer accepts the command</li>
   </ol>
   <p>
-    这种机制的核心目的是<strong>防止重放攻击</strong>：即使攻击者截获了 Login 命令的完整数据包，
-    也无法在超时窗口关闭后重新发送。
+    The core purpose of this mechanism is to <strong>prevent replay attacks</strong>: even if an attacker intercepts the complete Login command packet,
+    it cannot be resent after the timeout window closes.
   </p>
 
-  <h3>临时 PIN 机制</h3>
+  <h3>Temporary PIN Mechanism</h3>
   <p>
-    Setup PIN 是认证流程中的第二道防线：
+    Setup PIN is the second line of defense in the authentication flow:
   </p>
   <ul>
-    <li>PIN 由电视端内容应用<strong>动态生成</strong>，不是固定密码</li>
-    <li>PIN 绑定到特定的 TempAccountIdentifier，不能跨账户使用</li>
-    <li>PIN 应设置有效期（规范建议尽可能短），过期后即使知道 PIN 也无法登录</li>
-    <li>PIN 使用后应立即失效，防止被二次使用</li>
+    <li>PIN is <strong>dynamically generated</strong> by the TV-side content app, not a fixed password</li>
+    <li>PIN is bound to a specific TempAccountIdentifier and cannot be used across accounts</li>
+    <li>PIN should have a validity period (spec recommends as short as possible); even knowing the PIN, login fails after expiration</li>
+    <li>PIN should be invalidated immediately after use to prevent reuse</li>
   </ul>
 
-  <h3>访问权限要求</h3>
+  <h3>Access Privilege Requirements</h3>
   <p>
-    AccountLogin 的命令需要 <strong>Administer</strong> 级别的访问权限（Access Privilege）。
-    这意味着只有在设备 ACL 中拥有管理员权限的节点才能调用这些命令，
-    普通的 Operate 级别权限不够。
+    AccountLogin commands require <strong>Administer</strong> level access privilege.
+    This means only nodes with administrator privileges in the device ACL can invoke these commands;
+    normal Operate level privileges are insufficient.
   </p>
 
   <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
 
-  <h3>Cluster 属性读取</h3>
-  <p>读取 AccountLogin Cluster 的全部属性（仅全局属性）：</p>
+  <h3>Cluster Attribute Read</h3>
+  <p>Read all attributes of the AccountLogin Cluster (global attributes only):</p>
   <pre><code>{
-  // --- 全局属性 ---
+  // --- Global Attributes ---
   "0xFFF8": [0, 1],            // GeneratedCommandList = [GetSetupPINResponse]
   "0xFFF9": [0, 2, 3],         // AcceptedCommandList = [GetSetupPIN, Login, Logout]
-  "0xFFFA": [],                 // EventList = []（无事件）
+  "0xFFFA": [],                 // EventList = [] (no events)
   "0xFFFB": [                   // AttributeList
     0xFFF8, 0xFFF9, 0xFFFA,
     0xFFFB, 0xFFFC, 0xFFFD
   ],
-  "0xFFFC": 0,                  // FeatureMap = 0（无可选特性）
+  "0xFFFC": 0,                  // FeatureMap = 0 (no optional features)
   "0xFFFD": 2                   // ClusterRevision = 2
 }</code></pre>
 
-  <h3>GetSetupPIN 交互示例</h3>
-  <p>手机 App 向电视内容应用请求 Setup PIN：</p>
-  <pre><code>// 手机 App → 电视内容应用：请求 Setup PIN
+  <h3>GetSetupPIN Interaction Example</h3>
+  <p>Phone app requests Setup PIN from the TV content app:</p>
+  <pre><code>// Phone App → TV Content App: Request Setup PIN
 {
   "invokeRequests": [{
     "commandPath": {
@@ -6410,14 +6408,14 @@ export const clusters: Record<string, ClusterContent> = {
     },
     "commandFields": {
       "TempAccountIdentifier": "user_abc_token_20260901"
-                                       // 手机端生成的临时账户标识
+                                       // Temporary account identifier generated by the phone
     },
-    "timedRequest": true,              // 必须使用 Timed Invoke
+    "timedRequest": true,              // Must use Timed Invoke
     "interactionTimeoutMs": 10000
   }]
 }
 
-// 电视内容应用 → 手机 App：返回 Setup PIN
+// TV Content App → Phone App: Return Setup PIN
 {
   "invokeResponseMessage": [{
     "commandPath": {
@@ -6426,14 +6424,14 @@ export const clusters: Record<string, ClusterContent> = {
       "commandId": "0x01"              // GetSetupPINResponse
     },
     "commandFields": {
-      "SetupPIN": "34567890"           // 临时 PIN，用于后续 Login
+      "SetupPIN": "34567890"           // Temporary PIN for subsequent Login
     }
   }]
 }</code></pre>
 
-  <h3>Login 交互示例</h3>
-  <p>使用获取到的 PIN 完成登录：</p>
-  <pre><code>// 手机 App → 电视内容应用：使用 PIN 登录
+  <h3>Login Interaction Example</h3>
+  <p>Complete login using the obtained PIN:</p>
+  <pre><code>// Phone App → TV Content App: Login with PIN
 {
   "invokeRequests": [{
     "commandPath": {
@@ -6443,19 +6441,19 @@ export const clusters: Record<string, ClusterContent> = {
     },
     "commandFields": {
       "TempAccountIdentifier": "user_abc_token_20260901",
-      "SetupPIN": "34567890",          // GetSetupPINResponse 返回的 PIN
-      "Node": "0x0000000012345678"     // 可选：指定授权的节点 ID
+      "SetupPIN": "34567890",          // PIN returned by GetSetupPINResponse
+      "Node": "0x0000000012345678"     // Optional: specify the node ID to authorize
     },
     "timedRequest": true,
     "interactionTimeoutMs": 10000
   }]
 }
 
-// 电视内容应用 → 手机 App：Status = SUCCESS</code></pre>
+// TV Content App → Phone App: Status = SUCCESS</code></pre>
 
-  <h3>Logout 交互示例</h3>
-  <p>登出当前账户：</p>
-  <pre><code>// 手机 App → 电视内容应用：登出
+  <h3>Logout Interaction Example</h3>
+  <p>Log out of the current account:</p>
+  <pre><code>// Phone App → TV Content App: Logout
 {
   "invokeRequests": [{
     "commandPath": {
@@ -6464,22 +6462,22 @@ export const clusters: Record<string, ClusterContent> = {
       "commandId": "0x03"              // Logout
     },
     "commandFields": {
-      "Node": "0x0000000012345678"     // 可选：指定要登出的节点 ID
+      "Node": "0x0000000012345678"     // Optional: specify the node ID to log out
     },
     "timedRequest": true,
     "interactionTimeoutMs": 10000
   }]
 }
 
-// 电视内容应用 → 手机 App：Status = SUCCESS</code></pre>
+// TV Content App → Phone App: Status = SUCCESS</code></pre>
 
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      所有命令示例中的 <code>timedRequest: true</code> 和 <code>interactionTimeoutMs</code> 不是可选的。
-      如果 SDK 没有自动处理 Timed Invoke，需要手动构造限时事务。
-      大多数 Matter SDK（如 CHIP Tool、connectedhomeip）在调用标记为 Timed Invoke 的命令时会自动处理，
-      但自定义实现需要注意这一点。
+      The <code>timedRequest: true</code> and <code>interactionTimeoutMs</code> in all command examples are NOT optional.
+      If the SDK does not automatically handle Timed Invoke, the timed transaction must be constructed manually.
+      Most Matter SDKs (such as CHIP Tool, connectedhomeip) handle this automatically when invoking commands marked as Timed Invoke,
+      but custom implementations need to be aware of this.
     </p>
   </div>
 
@@ -6487,51 +6485,51 @@ export const clusters: Record<string, ClusterContent> = {
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
-    <summary>场景 1：手机投屏时自动登录电视内容应用</summary>
+    <summary>Scenario 1: Auto-login to TV content app when casting from phone</summary>
     <div class="scenario-content">
-      <p><strong>背景</strong>：用户在手机上打开 Netflix App 并已登录，现在想在电视上观看。电视上已安装 Netflix 内容应用。</p>
+      <p><strong>Background</strong>: The user has Netflix open and logged in on the phone, and now wants to watch on the TV. The TV already has the Netflix content app installed.</p>
       <ol>
-        <li>用户在手机 Netflix App 中选择「投射到电视」</li>
-        <li>手机发现电视上的 Netflix 内容应用所在的 Endpoint（例如 Endpoint 3）</li>
-        <li>手机 Netflix App 生成一个临时账户标识（关联到用户的 Netflix 账户）</li>
-        <li>手机向电视 Endpoint 3 发送 <a href="#cmd-0x00"><code>GetSetupPIN (0x00)</code></a>，
-            携带临时账户标识</li>
-        <li>电视端 Netflix 应用验证标识，生成临时 PIN 并返回</li>
-        <li>手机自动使用标识和 PIN 发送 <a href="#cmd-0x02"><code>Login (0x02)</code></a></li>
-        <li>登录成功 —— 电视上的 Netflix 现在可以访问用户的观看历史、收藏列表和订阅内容</li>
-        <li>用户在电视上选择内容播放，通过 <a href="/clusters/media-playback/">MediaPlayback</a> 控制播放</li>
+        <li>The user selects "Cast to TV" in the phone's Netflix app</li>
+        <li>The phone discovers the Endpoint of Netflix's content app on the TV (e.g., Endpoint 3)</li>
+        <li>The phone's Netflix app generates a temporary account identifier (linked to the user's Netflix account)</li>
+        <li>The phone sends <a href="#cmd-0x00"><code>GetSetupPIN (0x00)</code></a> to the TV's Endpoint 3,
+            carrying the temporary account identifier</li>
+        <li>The TV-side Netflix app validates the identifier, generates a temporary PIN, and returns it</li>
+        <li>The phone automatically sends <a href="#cmd-0x02"><code>Login (0x02)</code></a> with the identifier and PIN</li>
+        <li>Login successful — Netflix on the TV can now access the user's watch history, favorites, and subscribed content</li>
+        <li>The user selects content on the TV for playback, controlled via <a href="/clusters/media-playback/">MediaPlayback</a></li>
       </ol>
       <p>
-        整个过程对用户来说是无感的：点击「投射」后，电视自动切换到已登录状态。
-        <strong>PIN 交换发生在后台</strong>，用户不需要在电视上手动输入任何信息。
+        The entire process is seamless for the user: after tapping "Cast", the TV automatically switches to a logged-in state.
+        <strong>PIN exchange happens in the background</strong>, and the user does not need to manually enter any information on the TV.
       </p>
     </div>
   </details>
 
   <details class="scenario">
-    <summary>场景 2：多用户切换与登出管理</summary>
+    <summary>Scenario 2: Multi-user switching and logout management</summary>
     <div class="scenario-content">
-      <p><strong>背景</strong>：家庭中多人共用一台电视，每个人有自己的内容订阅账户。</p>
+      <p><strong>Background</strong>: Multiple people in a household share one TV, each with their own content subscription account.</p>
       <ol>
-        <li>用户 A 的手机已通过 Login 让电视登录了 A 的账户</li>
-        <li>用户 B 想切换到自己的账户：
+        <li>User A's phone has logged the TV into A's account via Login</li>
+        <li>User B wants to switch to their own account:
           <ul>
-            <li>B 的手机先发送 <a href="#cmd-0x03"><code>Logout (0x03)</code></a> 登出 A 的会话
-                （如果 B 的节点有权限），或者 A 自己从手机端发送 Logout</li>
-            <li>B 的手机再执行完整的 GetSetupPIN → Login 流程登录 B 的账户</li>
+            <li>B's phone first sends <a href="#cmd-0x03"><code>Logout (0x03)</code></a> to log out A's session
+                (if B's node has permission), or A sends Logout from their own phone</li>
+            <li>B's phone then executes the full GetSetupPIN → Login flow to log in B's account</li>
           </ul>
         </li>
-        <li>登出时机建议：
+        <li>Recommended logout timing:
           <ul>
-            <li>用户主动切换账户时</li>
-            <li>手机 App 退出登录时，同步登出所有已授权的电视</li>
-            <li>设备管理页面中提供「退出所有设备」的选项</li>
+            <li>When the user actively switches accounts</li>
+            <li>When the phone app signs out, simultaneously log out all authorized TVs</li>
+            <li>Provide a "Sign out of all devices" option in the device management page</li>
           </ul>
         </li>
       </ol>
       <p>
-        <strong>注意 Node 参数</strong>：Login 和 Logout 的 <code>Node</code> 参数允许一个节点代替另一个节点操作。
-        例如，家庭管理员可以从自己的手机登出其他家庭成员在电视上的会话。
+        <strong>Note the Node parameter</strong>: The <code>Node</code> parameter in Login and Logout allows one node to operate on behalf of another.
+        For example, a family administrator can log out other family members' sessions on the TV from their own phone.
       </p>
     </div>
   </details>
@@ -6581,32 +6579,32 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'wake-on-lan': {
     title: 'WakeOnLan Cluster (0x0503)',
-    description: 'Matter WakeOnLan Cluster(0x0503)完整参考 — MACAddress / LinkLocalAddress 属性定义，Magic Packet 唤醒机制，与 LowPower Cluster 的配合使用。',
+    description: 'Complete reference for the Matter WakeOnLan Cluster (0x0503) — MACAddress / LinkLocalAddress attribute definitions, Magic Packet wake mechanism, and coordination with LowPower Cluster.',
     prev: undefined,
     next: undefined,
     content: `<h1>WakeOnLan Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x0503</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 媒体端点（电视、机顶盒、游戏主机等）&nbsp;|&nbsp;
-    <strong>角色</strong>: Server（Read-only，无命令）
+    <strong>Endpoint</strong>: Media endpoint (TV, set-top box, game console, etc.)&nbsp;|&nbsp;
+    <strong>Role</strong>: Server (Read-only, no commands)
   </p>
   <p>
-    WakeOnLan 是 Matter 媒体设备中一个非常简单但实用的 Cluster ——
-    它<strong>不包含任何命令</strong>，只暴露设备的 MAC 地址和 IPv6 链路本地地址，
-    让外部系统能够通过发送 WoL Magic Packet（魔术包）将处于待机或休眠状态的设备远程唤醒。
+    WakeOnLan is a very simple yet practical Cluster in Matter media devices —
+    it <strong>contains no commands</strong>, only exposes the device's MAC address and IPv6 link-local address,
+    allowing external systems to remotely wake devices in standby or sleep mode by sending WoL Magic Packets.
   </p>
   <p>
-    这个 Cluster 通常和 <strong>LowPower Cluster（0x0508）</strong>配合使用：
-    LowPower 负责让设备进入低功耗待机状态（Sleep 命令），
-    WakeOnLan 则提供唤醒所需的网络地址信息。两者一个管"睡"，一个管"醒"。
+    This Cluster is typically used in conjunction with <strong>LowPower Cluster (0x0508)</strong>:
+    LowPower handles putting the device into low-power standby (Sleep command),
+    while WakeOnLan provides the network address information needed for waking. One manages "sleep", the other manages "wake".
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">为什么不直接用 Matter 命令唤醒？</div>
+    <div class="callout-title">Why Not Wake Directly with Matter Commands?</div>
     <p>
-      设备进入深度休眠后，Matter 的 IP 通信栈可能已经关闭，无法接收正常的 Matter 消息。
-      但网卡硬件仍然监听特定模式的以太网帧（Magic Packet），收到后触发硬件中断唤醒整个系统。
-      这就是为什么需要一个专门的 Cluster 来暴露 MAC 地址 —— 唤醒操作发生在 Matter 协议层之下。
+      After the device enters deep sleep, Matter's IP communication stack may have shut down and cannot receive normal Matter messages.
+      However, the NIC hardware still listens for Ethernet frames matching a specific pattern (Magic Packet), and upon receipt, triggers a hardware interrupt to wake the entire system.
+      This is why a dedicated Cluster is needed to expose the MAC address — the wake operation occurs below the Matter protocol layer.
     </p>
   </div>
 
@@ -6614,7 +6612,7 @@ export const clusters: Record<string, ClusterContent> = {
   <nav class="quick-nav">
     <a href="#attributes">Attributes</a>
     <span class="nav-sep">|</span>
-    <a href="#wol-mechanism">唤醒机制</a>
+    <a href="#wol-mechanism">Wake Mechanism</a>
     <span class="nav-sep">|</span>
     <a href="#example-data">Example Data</a>
     <span class="nav-sep">|</span>
@@ -6624,8 +6622,8 @@ export const clusters: Record<string, ClusterContent> = {
   <!-- ====== Attributes ====== -->
   <h2 id="attributes">Attributes</h2>
   <p>
-    WakeOnLan Cluster 只有 <strong>2 个属性</strong>，全部Read-only，没有任何命令和事件。
-    两个属性都是可选的，但至少要支持其中一个，否则这个 Cluster 没有实际意义。
+    The WakeOnLan Cluster has only <strong>2 attributes</strong>, all read-only, with no commands or events.
+    Both attributes are optional, but at least one must be supported; otherwise this Cluster serves no practical purpose.
   </p>
 
   <!-- Attribute summary table -->
@@ -6645,79 +6643,79 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>MACAddress</td>
           <td>string</td>
-          <td class="col-optional">可选</td>
-          <td>设备的 48 位 MAC 地址</td>
+          <td class="col-optional">Optional</td>
+          <td>Device's 48-bit MAC address</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>LinkLocalAddress</td>
           <td>octstr (bytes)</td>
-          <td class="col-optional">可选</td>
-          <td>设备的 IPv6 链路本地地址</td>
+          <td class="col-optional">Optional</td>
+          <td>Device's IPv6 link-local address</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <!-- ====== MACAddress ====== -->
-  <h3 id="attr-0x0000">MACAddress —— MAC 地址(0x0000)</h3>
+  <h3 id="attr-0x0000">MACAddress — MAC Address (0x0000)</h3>
   <p>
-    设备用于接收 WoL Magic Packet 的以太网 MAC 地址。
-    格式为标准的 48 位 MAC，以冒号分隔的十六进制字符串表示，例如 <code>AA:BB:CC:DD:EE:FF</code>。
+    The Ethernet MAC address used by the device to receive WoL Magic Packets.
+    Format is a standard 48-bit MAC, represented as a colon-separated hexadecimal string, e.g., <code>AA:BB:CC:DD:EE:FF</code>.
   </p>
   <p>
-    这个地址通常是设备有线网卡的地址。对于只有 WiFi 的设备，也可以是无线网卡的 MAC，
-    但 WoL 在 WiFi 环境下的可靠性远不如有线连接（需要路由器支持 WiFi WoL 转发）。
+    This address is typically the device's wired NIC address. For WiFi-only devices, it can be the wireless NIC's MAC,
+    but WoL reliability over WiFi is much lower than wired connections (requires router support for WiFi WoL forwarding).
   </p>
 
   <div class="callout callout-warning">
-    <div class="callout-title">MAC 地址格式</div>
+    <div class="callout-title">MAC Address Format</div>
     <p>
-      Matter 规范要求 MACAddress 以 <strong>大写十六进制 + 冒号分隔</strong> 的字符串格式存储，
-      例如 <code>"AA:BB:CC:DD:EE:FF"</code>。实际开发中建议做大小写兼容处理。
-      最大长度为 32 字节（含分隔符，可覆盖 48 位和 64 位 EUI 格式）。
+      The Matter specification requires MACAddress to be stored as a <strong>uppercase hex + colon-separated</strong> string format,
+      e.g., <code>"AA:BB:CC:DD:EE:FF"</code>. In practice, case-insensitive handling is recommended.
+      Max length is 32 bytes (including separators, covering both 48-bit and 64-bit EUI formats).
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
   <!-- ====== LinkLocalAddress ====== -->
-  <h3 id="attr-0x0001">LinkLocalAddress —— 链路本地地址(0x0001)</h3>
+  <h3 id="attr-0x0001">LinkLocalAddress — Link-Local Address (0x0001)</h3>
   <p>
-    设备的 IPv6 链路本地地址（Link-Local Address），以字节数组形式存储，固定 16 字节。
-    链路本地地址以 <code>fe80::</code> 开头，仅在同一网络链路（同一子网/VLAN）内有效。
+    The device's IPv6 link-local address, stored as a byte array, fixed at 16 bytes.
+    Link-local addresses start with <code>fe80::</code> and are valid only within the same network link (same subnet/VLAN).
   </p>
   <p>
-    这个地址的用途是让唤醒方知道设备在哪个链路上，以便将 Magic Packet 发送到正确的网段。
-    对于跨子网唤醒场景，还需要配合定向广播或子网转发。
+    The purpose of this address is to let the waking party know which link the device is on, so the Magic Packet can be sent to the correct network segment.
+    For cross-subnet wake scenarios, directed broadcast or subnet forwarding is also needed.
   </p>
 
   <div class="callout callout-tip">
-    <div class="callout-title">什么时候用 LinkLocalAddress？</div>
+    <div class="callout-title">When to Use LinkLocalAddress?</div>
     <p>
-      当网络中存在多个子网或 VLAN 时，仅靠 MAC 地址不够 —— 广播域不同，Magic Packet 到不了目标设备。
-      LinkLocalAddress 可以帮助唤醒方确定目标设备所在的链路，选择正确的网络接口发送唤醒包。
-      如果你的环境是简单的单一子网（家庭网络的常见情况），通常只用 MACAddress 就够了。
+      When the network has multiple subnets or VLANs, MAC address alone is not enough — different broadcast domains mean the Magic Packet cannot reach the target device.
+      LinkLocalAddress helps the waking party determine which link the target device is on, selecting the correct network interface to send the wake packet.
+      In a simple single-subnet environment (common for home networks), MACAddress alone is usually sufficient.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== WoL 唤醒机制 ====== -->
-  <h2 id="wol-mechanism">WoL 唤醒机制</h2>
+  <!-- ====== WoL Wake Mechanism ====== -->
+  <h2 id="wol-mechanism">WoL Wake Mechanism</h2>
   <p>
-    Wake-on-LAN（WoL）是一项已有数十年历史的网络标准，允许通过发送一个特殊的以太网帧（Magic Packet）
-    来远程唤醒处于待机、休眠或关机状态的设备。Matter 的 WakeOnLan Cluster 并不负责发送这个包，
-    它只是告诉你「往哪个地址发」。
+    Wake-on-LAN (WoL) is a decades-old network standard that allows remotely waking devices in standby, sleep, or powered-off states
+    by sending a special Ethernet frame (Magic Packet). Matter's WakeOnLan Cluster does not send this packet;
+    it simply tells you "which address to send to".
   </p>
 
-  <h3>Magic Packet 结构</h3>
+  <h3>Magic Packet Structure</h3>
   <p>
-    Magic Packet 的格式非常简单：<strong>6 字节的 <code>0xFF</code> 同步头</strong>，
-    后面跟着<strong>目标 MAC 地址重复 16 次</strong>，总计 102 字节。
-    可以封装在 UDP 包中（常用端口 7 或 9），也可以直接作为以太网帧发送。
+    The Magic Packet format is very simple: a <strong>6-byte <code>0xFF</code> sync header</strong>,
+    followed by the <strong>target MAC address repeated 16 times</strong>, totaling 102 bytes.
+    It can be encapsulated in a UDP packet (commonly port 7 or 9) or sent directly as an Ethernet frame.
   </p>
-  <pre><code>// WoL Magic Packet 结构（共 102 字节）
-FF FF FF FF FF FF          // 同步头：6 字节全 0xFF
-AA BB CC DD EE FF          // 目标 MAC 地址，重复 16 次
+  <pre><code>// WoL Magic Packet structure (102 bytes total)
+FF FF FF FF FF FF          // Sync header: 6 bytes of 0xFF
+AA BB CC DD EE FF          // Target MAC address, repeated 16 times
 AA BB CC DD EE FF
 AA BB CC DD EE FF
 AA BB CC DD EE FF
@@ -6734,73 +6732,73 @@ AA BB CC DD EE FF
 AA BB CC DD EE FF
 AA BB CC DD EE FF</code></pre>
 
-  <h3>唤醒流程</h3>
+  <h3>Wake-up Process</h3>
   <ol>
-    <li>从设备的 WakeOnLan Cluster 读取 <code>MACAddress</code>（设备在线时提前缓存）</li>
-    <li>设备进入待机/休眠（可能由 LowPower Cluster 的 Sleep 命令触发）</li>
-    <li>需要唤醒时，构造包含目标 MAC 的 Magic Packet</li>
-    <li>通过 UDP 广播（或定向广播）发送到目标网段</li>
-    <li>设备网卡硬件检测到匹配的 Magic Packet，触发中断唤醒系统</li>
-    <li>设备启动后重新加入 Matter Fabric，恢复正常通信</li>
+    <li>Read <code>MACAddress</code> from the device's WakeOnLan Cluster (cache in advance while device is online)</li>
+    <li>Device enters standby/sleep (may be triggered by LowPower Cluster's Sleep command)</li>
+    <li>When wake-up is needed, construct a Magic Packet containing the target MAC</li>
+    <li>Send via UDP broadcast (or directed broadcast) to the target network segment</li>
+    <li>Device NIC hardware detects the matching Magic Packet, triggers interrupt to wake the system</li>
+    <li>After device boots, it rejoins the Matter Fabric and resumes normal communication</li>
   </ol>
 
   <div class="callout callout-warning">
-    <div class="callout-title">前提条件</div>
+    <div class="callout-title">Prerequisites</div>
     <p>
-      WoL 能否工作取决于硬件和固件支持：设备的网卡必须在休眠时仍然通电并监听网络帧，
-      且 BIOS/固件中需要启用 WoL 功能。不是所有设备都支持 —— 尤其是纯 WiFi 设备，
-      WoL 在无线环境下的支持度和可靠性都不如有线以太网。
+      Whether WoL works depends on hardware and firmware support: the device NIC must remain powered and listening for network frames during sleep,
+      and WoL must be enabled in the BIOS/firmware. Not all devices support this — especially WiFi-only devices,
+      where WoL support and reliability over wireless are much lower than wired Ethernet.
     </p>
   </div>
 
-  <!-- ====== 与 LowPower Cluster 的关系 ====== -->
-  <h3 id="lowpower-relation">与 LowPower Cluster 的关系</h3>
+  <!-- ====== Relationship with LowPower Cluster ====== -->
+  <h3 id="lowpower-relation">Relationship with LowPower Cluster</h3>
   <p>
-    在 Matter 媒体设备中，WakeOnLan 和 LowPower（0x0508）是一对互补的 Cluster：
+    In Matter media devices, WakeOnLan and LowPower (0x0508) are a complementary pair of Clusters:
   </p>
   <div class="table-wrap">
     <table>
       <thead>
         <tr>
           <th>Cluster</th>
-          <th>职责</th>
+          <th>Responsibility</th>
           <th>Direction</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><strong>LowPower</strong>（0x0508）</td>
-          <td>让设备进入待机/休眠（Sleep 命令）</td>
-          <td>Controller → Device：「去睡觉」</td>
+          <td>Put the device into standby/sleep (Sleep command)</td>
+          <td>Controller → Device: "Go to sleep"</td>
         </tr>
         <tr>
           <td><strong>WakeOnLan</strong>（0x0503）</td>
-          <td>提供唤醒设备所需的网络地址</td>
-          <td>Controller 读取地址后自行发送 Magic Packet：「起来了」</td>
+          <td>Provide network address needed to wake the device</td>
+          <td>Controller reads address and sends Magic Packet itself: "Wake up"</td>
         </tr>
       </tbody>
     </table>
   </div>
   <p>
-    典型的媒体设备（如电视、机顶盒）会同时实现这两个 Cluster。
-    用户说「关闭电视」时调用 LowPower 的 Sleep，说「打开电视」时用 WakeOnLan 的地址发送 Magic Packet。
+    Typical media devices (such as TVs, set-top boxes) implement both Clusters simultaneously.
+    When the user says "Turn off the TV", LowPower's Sleep is invoked; when they say "Turn on the TV", a Magic Packet is sent using WakeOnLan's address.
   </p>
 
   <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>读取一台智能电视的 WakeOnLan Cluster 属性：</p>
+  <p>Read a smart TV's WakeOnLan Cluster attributes:</p>
   <pre><code>{
-  // --- 网络唤醒地址 ---
-  "0x0000": "AA:BB:CC:DD:EE:FF",   // MACAddress = 设备有线网卡的 MAC 地址
-  "0x0001": "fe80::a8bb:ccff:fedd:eeff"  // LinkLocalAddress = IPv6 链路本地地址
+  // --- Wake-on-LAN Addresses ---
+  "0x0000": "AA:BB:CC:DD:EE:FF",   // MACAddress = device's wired NIC MAC address
+  "0x0001": "fe80::a8bb:ccff:fedd:eeff"  // LinkLocalAddress = IPv6 link-local address
 }</code></pre>
 
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      WakeOnLan 的属性值在设备整个生命周期内通常不变（MAC 地址和 Link-Local 地址都是固定的）。
-      建议在设备首次入网时读取一次并缓存到本地，不需要频繁轮询。
-      这样即使设备已经休眠、无法响应 Matter 请求，你仍然有地址可以发送 Magic Packet。
+      WakeOnLan attribute values typically do not change throughout the device's lifecycle (MAC address and Link-Local address are both fixed).
+      It is recommended to read them once when the device first joins the network and cache locally, with no need for frequent polling.
+      This way, even if the device is already asleep and cannot respond to Matter requests, you still have the address to send a Magic Packet.
     </p>
   </div>
 
@@ -6808,45 +6806,45 @@ AA BB CC DD EE FF</code></pre>
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
-    <summary>场景 1：语音助手唤醒电视</summary>
+    <summary>Scenario 1: Voice assistant wakes the TV</summary>
     <div class="scenario-content">
       <p>
-        用户对着智能音箱说「打开客厅电视」，电视当前处于待机状态，Matter 通信已断开。
+        The user tells the smart speaker "Turn on the living room TV". The TV is currently in standby mode, with Matter communication disconnected.
       </p>
       <ol>
-        <li>智能音箱（Hub）从本地缓存中查找客厅电视的 WakeOnLan 信息（入网时已缓存）</li>
-        <li>取出 <code>MACAddress = "AA:BB:CC:DD:EE:FF"</code></li>
-        <li>构造 Magic Packet（6 字节 0xFF + MAC 重复 16 次 = 102 字节）</li>
-        <li>通过 UDP 端口 9 广播到本地网络</li>
-        <li>电视网卡检测到 Magic Packet，唤醒系统</li>
-        <li>电视启动后重新加入 Matter Fabric，Hub 检测到设备上线</li>
-        <li>Hub 可选择性地发送 OnOff Cluster 的 On 命令确保电视完全开启</li>
+        <li>The smart speaker (Hub) looks up the living room TV's WakeOnLan info from local cache (cached when it joined the network)</li>
+        <li>Retrieve <code>MACAddress = "AA:BB:CC:DD:EE:FF"</code></li>
+        <li>Construct Magic Packet (6 bytes 0xFF + MAC repeated 16 times = 102 bytes)</li>
+        <li>Broadcast to the local network via UDP port 9</li>
+        <li>TV NIC detects the Magic Packet and wakes the system</li>
+        <li>After the TV boots, it rejoins the Matter Fabric, and the Hub detects the device coming online</li>
+        <li>The Hub can optionally send OnOff Cluster's On command to ensure the TV is fully powered on</li>
       </ol>
       <p>
-        <strong>关键点</strong>：唤醒地址必须提前缓存。设备休眠后无法通过 Matter 读取属性，
-        如果没有缓存就只能等用户手动开机。
+        <strong>Key point</strong>: Wake address must be cached in advance. Attributes cannot be read via Matter after the device sleeps;
+        without a cache, you can only wait for the user to manually power on.
       </p>
     </div>
   </details>
 
   <details class="scenario">
-    <summary>场景 2：自动化场景联动(回家模式)</summary>
+    <summary>Scenario 2: Automation integration (Home Mode)</summary>
     <div class="scenario-content">
       <p>
-        用户设置了「回家模式」自动化：手机连上家庭 WiFi 时，自动唤醒电视并切换到常看的输入源。
+        The user has set up a "Home Mode" automation: when the phone connects to the home WiFi, automatically wake the TV and switch to the frequently watched input source.
       </p>
       <ol>
-        <li>Hub 检测到用户手机连入家庭 WiFi（触发条件）</li>
-        <li>自动化引擎启动「回家模式」动作序列</li>
-        <li>第一步：用缓存的 MAC 地址发送 Magic Packet 唤醒电视</li>
-        <li>第二步：等待电视重新上线（轮询设备在线状态或监听 mDNS 广播）</li>
-        <li>第三步：通过 MediaInput Cluster（0x0507）切换到 HDMI 1（机顶盒）</li>
-        <li>同时：通过 LevelControl 调整客厅灯光亮度到 60%</li>
+        <li>Hub detects the user's phone connecting to home WiFi (trigger condition)</li>
+        <li>Automation engine starts the "Home Mode" action sequence</li>
+        <li>Step 1: Send Magic Packet with cached MAC address to wake the TV</li>
+        <li>Step 2: Wait for the TV to come back online (poll device status or listen for mDNS broadcasts)</li>
+        <li>Step 3: Switch to HDMI 1 (set-top box) via MediaInput Cluster (0x0507)</li>
+        <li>Simultaneously: Adjust living room light brightness to 60% via LevelControl</li>
       </ol>
       <p>
-        <strong>注意</strong>：唤醒到设备完全上线需要时间（通常几秒到十几秒），
-        自动化引擎需要在发送 Magic Packet 后等待设备就绪，再执行后续的 Matter 命令。
-        直接连续发送会失败，因为设备的 Matter 栈还没启动。
+        <strong>Note</strong>: It takes time from wake-up to full device online status (typically a few seconds to tens of seconds).
+        The automation engine needs to wait for the device to be ready after sending the Magic Packet before executing subsequent Matter commands.
+        Sending commands immediately in succession will fail because the device's Matter stack has not yet started.
       </p>
     </div>
   </details>
@@ -6877,46 +6875,46 @@ AA BB CC DD EE FF</code></pre>
   },
   'low-power': {
     title: 'LowPower Cluster (0x0508)',
-    description: 'Matter LowPower Cluster(0x0508)完整参考 — Sleep 待机命令、与 WakeOnLan / OnOff 的区别、媒体设备电源管理场景。',
+    description: 'Complete reference for the Matter LowPower Cluster (0x0508) — Sleep standby command, differences from WakeOnLan / OnOff, and media device power management scenarios.',
     prev: undefined,
     next: undefined,
     content: `<h1>LowPower Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x0508</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 媒体端点（电视、机顶盒、流媒体棒等）
+    <strong>Endpoint</strong>: Media endpoint (TV, set-top box, streaming stick, etc.)
   </p>
   <p>
-    LowPower 是 Matter 中<strong>最简单的 Cluster 之一</strong> ——
-    没有任何属性、没有事件、没有 Feature，只有唯一一个命令：<strong>Sleep</strong>。
-    它的职责非常单一：让媒体设备进入低功耗待机（Standby / Sleep）模式。
+    LowPower is <strong>one of the simplest Clusters in Matter</strong> —
+    no attributes, no events, no features, with only a single command: <strong>Sleep</strong>.
+    Its responsibility is singular: put the media device into low-power standby (Standby / Sleep) mode.
   </p>
   <p>
-    这个 Cluster 通常和 <a href="/clusters/wake-on-lan/"><strong>WakeOnLan Cluster（0x0503）</strong></a> 配合使用：
-    LowPower 负责「让设备睡下去」，WakeOnLan 提供「把设备叫醒」所需的网络地址。
-    两者是媒体设备电源管理的一对搭档。
+    This Cluster is typically used in conjunction with <a href="/clusters/wake-on-lan/"><strong>WakeOnLan Cluster (0x0503)</strong></a>:
+    LowPower handles "putting the device to sleep", while WakeOnLan provides the network address needed to "wake it up".
+    Together they form a pair for media device power management.
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">Sleep vs Off —— 为什么不直接用 OnOff？</div>
+    <div class="callout-title">Sleep vs Off — Why Not Just Use OnOff?</div>
     <p>
-      OnOff Cluster 的 <code>Off</code> 命令语义是「关闭功能」，对灯来说是灭灯，对插座是断电。
-      但对电视而言，「关闭」通常不是断电，而是进入<strong>待机模式</strong> ——
-      屏幕和主处理器休眠，但网卡仍然保持监听状态，以便远程唤醒。
+      The OnOff Cluster's <code>Off</code> command semantically means "turn off the function" — for a light it means turn off, for a socket it means cut power.
+      But for a TV, "off" usually doesn't mean power cut, but rather entering <strong>standby mode</strong> —
+      the screen and main processor sleep, but the NIC remains listening for remote wake-up.
     </p>
     <p>
-      LowPower 的 <code>Sleep</code> 命令明确表达了这种「进入低功耗待机」的语义，
-      与 OnOff 的 Off（彻底关闭功能）形成区分。
-      实际上，很多电视同时实现了两个 Cluster：OnOff 用于开/关机状态管理，LowPower 专门用于进入待机。
+      LowPower's <code>Sleep</code> command explicitly expresses this "enter low-power standby" semantic,
+      distinguishing it from OnOff's Off (completely turning off the function).
+      In practice, many TVs implement both Clusters: OnOff for on/power-off state management, LowPower specifically for entering standby.
     </p>
   </div>
 
   <!-- Quick navigation -->
   <nav class="quick-nav">
-    <a href="#commands">命令</a>
+    <a href="#commands">Commands</a>
     <span class="nav-sep">|</span>
-    <a href="#no-attributes">属性说明</a>
+    <a href="#no-attributes">Attributes</a>
     <span class="nav-sep">|</span>
-    <a href="#relationships">关联 Cluster</a>
+    <a href="#relationships">Related Clusters</a>
     <span class="nav-sep">|</span>
     <a href="#example-data">Example Data</a>
     <span class="nav-sep">|</span>
@@ -6926,8 +6924,8 @@ AA BB CC DD EE FF</code></pre>
   <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    LowPower Cluster 只有 <strong>1 个命令</strong>，没有参数，也没有专用的返回数据。
-    这是 Matter 规范中最精简的命令定义之一。
+    The LowPower Cluster has only <strong>1 command</strong>, no parameters, and no dedicated return data.
+    This is one of the most minimal command definitions in the Matter specification.
   </p>
 
   <div class="table-wrap">
@@ -6937,7 +6935,7 @@ AA BB CC DD EE FF</code></pre>
           <th>ID</th>
           <th>Name</th>
           <th>Parameter</th>
-          <th>响应</th>
+          <th>Response</th>
           <th>Description</th>
         </tr>
       </thead>
@@ -6945,32 +6943,32 @@ AA BB CC DD EE FF</code></pre>
         <tr class="clickable-row" data-href="#cmd-0x00">
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>Sleep</td>
-          <td>无</td>
+          <td>None</td>
           <td>Status</td>
-          <td>让设备进入低功耗待机模式</td>
+          <td>Put the device into low-power standby mode</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <!-- ====== Command Details ====== -->
-  <h3 id="cmd-0x00">Sleep —— 进入待机(0x00)</h3>
+  <h3 id="cmd-0x00">Sleep — Enter Standby (0x00)</h3>
   <p>
-    让媒体设备进入低功耗待机（Sleep / Standby）模式。
-    命令没有任何参数，执行成功后设备返回通用的 <code>Status = SUCCESS</code> 响应。
+    Puts the media device into low-power standby (Sleep / Standby) mode.
+    The command has no parameters; upon successful execution, the device returns a generic <code>Status = SUCCESS</code> response.
   </p>
   <p>
-    设备收到 Sleep 命令后的具体行为由厂商实现决定，但通常包括：
+    The specific behavior after receiving the Sleep command is determined by the vendor's implementation, but typically includes:
   </p>
   <ul>
-    <li>关闭屏幕和音频输出</li>
-    <li>暂停或停止正在播放的媒体内容</li>
-    <li>主处理器进入低功耗状态</li>
-    <li>网卡保持活跃，继续监听 WoL Magic Packet（如果支持 WakeOnLan）</li>
+    <li>Turning off screen and audio output</li>
+    <li>Pausing or stopping currently playing media content</li>
+    <li>Main processor entering low-power state</li>
+    <li>NIC remains active, continuing to listen for WoL Magic Packets (if WakeOnLan is supported)</li>
   </ul>
 
-  <p>调用示例：</p>
-  <pre><code>// Sleep 命令请求（Command ID: 0x00）
+  <p>Call example:</p>
+  <pre><code>// Sleep command request (Command ID: 0x00)
 {
   "invokeRequests": [{
     "commandPath": {
@@ -6978,52 +6976,52 @@ AA BB CC DD EE FF</code></pre>
       "clusterId": "0x0508",
       "commandId": "0x00"       // Sleep
     }
-    // 无参数字段 —— Sleep 是零参数命令
+    // No parameter fields — Sleep is a zero-parameter command
   }]
 }
 
-// 响应：Status = SUCCESS（无返回数据）</code></pre>
+// Response: Status = SUCCESS (no return data)</code></pre>
 
   <div class="callout callout-warning">
-    <div class="callout-title">Sleep 之后可能无法通过 Matter 通信</div>
+    <div class="callout-title">Matter Communication May Be Unavailable After Sleep</div>
     <p>
-      设备进入深度待机后，Matter 通信栈可能随之关闭。
-      这意味着 Sleep 之后你<strong>无法再通过 Matter 命令唤醒设备</strong> ——
-      唤醒需要走底层的 WoL 魔术包或用户物理操作（遥控器、机身按钮）。
-      因此，发送 Sleep 之前务必确保已缓存设备的 WakeOnLan 地址信息。
+      After entering deep standby, the Matter communication stack may shut down.
+      This means after Sleep, you <strong>can no longer wake the device via Matter commands</strong> —
+      waking requires low-level WoL Magic Packets or physical user action (remote control, physical button).
+      Therefore, make sure the device's WakeOnLan address information is cached before sending Sleep.
     </p>
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性说明 ====== -->
-  <h2 id="no-attributes">属性说明</h2>
+  <!-- ====== Attribute Description ====== -->
+  <h2 id="no-attributes">Attributes</h2>
   <p>
-    LowPower Cluster <strong>没有定义任何应用层属性</strong>。
-    这意味着你无法通过读取属性来判断设备当前是否处于待机状态 ——
-    设备一旦进入待机，通信都可能断开了，属性也就无从读取。
+    The LowPower Cluster <strong>does not define any application-level attributes</strong>.
+    This means you cannot determine whether the device is currently in standby by reading attributes —
+    once the device enters standby, communication may be disconnected, making attribute reads impossible.
   </p>
   <p>
-    如果需要判断设备的在线/待机状态，通常有以下方式：
+    To determine the device's online/standby status, common approaches include:
   </p>
   <ul>
-    <li>监测设备的 Matter 会话（Session）是否仍然活跃</li>
-    <li>通过 mDNS 广播观察设备是否仍可发现</li>
-    <li>尝试读取其他 Cluster 属性（如 BasicInformation），超时即认为设备已待机</li>
+    <li>Monitor whether the device's Matter session is still active</li>
+    <li>Observe whether the device is still discoverable via mDNS broadcasts</li>
+    <li>Try reading other Cluster attributes (e.g., BasicInformation); a timeout indicates the device is in standby</li>
   </ul>
 
   <div class="callout callout-tip">
-    <div class="callout-title">只有全局属性</div>
+    <div class="callout-title">Only Global Attributes</div>
     <p>
-      虽然没有应用层属性，但 LowPower Cluster 仍然有 Matter 规范要求的全局属性
-      （<code>ClusterRevision</code>、<code>FeatureMap</code>、<code>AttributeList</code> 等）。
-      这些属性用于协议层面的版本协商和能力发现，不涉及业务功能。
+      Although there are no application-level attributes, the LowPower Cluster still has global attributes required by the Matter specification
+      (<code>ClusterRevision</code>, <code>FeatureMap</code>, <code>AttributeList</code>, etc.).
+      These attributes are used for protocol-level version negotiation and capability discovery, not business functionality.
     </p>
   </div>
 
-  <!-- ====== 关联 Cluster ====== -->
-  <h2 id="relationships">关联 Cluster</h2>
+  <!-- ====== Related Clusters ====== -->
+  <h2 id="relationships">Related Clusters</h2>
   <p>
-    LowPower 不是孤立存在的，它在媒体设备的电源管理中与另外两个 Cluster 紧密配合：
+    LowPower does not exist in isolation; it works closely with two other Clusters for media device power management:
   </p>
 
   <div class="table-wrap">
@@ -7032,74 +7030,74 @@ AA BB CC DD EE FF</code></pre>
         <tr>
           <th>Cluster</th>
           <th>ID</th>
-          <th>职责</th>
-          <th>与 LowPower 的关系</th>
+          <th>Responsibility</th>
+          <th>Relationship to LowPower</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><a href="/clusters/wake-on-lan/"><strong>WakeOnLan</strong></a></td>
           <td><code>0x0503</code></td>
-          <td>提供设备 MAC 地址用于 WoL 唤醒</td>
-          <td>互补关系：LowPower 让设备睡下，WakeOnLan 帮你把它叫醒</td>
+          <td>Provides device MAC address for WoL wake-up</td>
+          <td>Complementary: LowPower puts the device to sleep, WakeOnLan helps wake it up</td>
         </tr>
         <tr>
           <td><a href="/clusters/on-off/"><strong>OnOff</strong></a></td>
           <td><code>0x0006</code></td>
-          <td>设备的开/关/切换控制</td>
-          <td>语义区分：Off = 关闭功能，Sleep = 进入待机（设备仍可被远程唤醒）</td>
+          <td>Device's on/off/toggle control</td>
+          <td>Semantic distinction: Off = turn off the function, Sleep = enter standby (device can still be remotely woken)</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <h3>媒体设备的典型电源 Cluster 组合</h3>
+  <h3>Typical Power Cluster Combination for Media Devices</h3>
   <p>
-    一台智能电视通常同时实现以下三个 Cluster，分别覆盖电源管理的不同层面：
+    A smart TV typically implements the following three Clusters simultaneously, each covering a different layer of power management:
   </p>
   <div class="enum-cards">
     <div class="enum-card">
-      <span class="enum-badge">睡</span>
+      <span class="enum-badge">Sleep</span>
       <div>
         <span class="enum-name">LowPower（0x0508）</span>
-        <span class="enum-desc">Controller 发送 Sleep 命令，设备进入待机</span>
+        <span class="enum-desc">Controller sends Sleep command, device enters standby</span>
       </div>
     </div>
     <div class="enum-card">
-      <span class="enum-badge">醒</span>
+      <span class="enum-badge">Wake</span>
       <div>
         <span class="enum-name">WakeOnLan（0x0503）</span>
-        <span class="enum-desc">Controller 读取 MAC 地址，发送 Magic Packet 唤醒设备</span>
+        <span class="enum-desc">Controller reads MAC address, sends Magic Packet to wake device</span>
       </div>
     </div>
     <div class="enum-card">
-      <span class="enum-badge">开关</span>
+      <span class="enum-badge">On/Off</span>
       <div>
         <span class="enum-name">OnOff（0x0006）</span>
-        <span class="enum-desc">管理设备的开机/关机状态（语义不同于待机）</span>
+        <span class="enum-desc">Manages the device's power on/off state (semantically different from standby)</span>
       </div>
     </div>
   </div>
 
   <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>读取一台电视的 LowPower Cluster 属性（几乎没有业务数据）：</p>
+  <p>Read a TV's LowPower Cluster attributes (almost no business data):</p>
   <pre><code>{
-  // LowPower Cluster（0x0508）没有应用层属性
-  // 它是一个纯命令型 Cluster，只提供 Sleep 命令
-  // 读取该 Cluster 只会返回全局属性（ClusterRevision、FeatureMap 等）
+  // LowPower Cluster (0x0508) has no application-level attributes
+  // It is a pure command-type Cluster, providing only the Sleep command
+  // Reading this Cluster only returns global attributes (ClusterRevision, FeatureMap, etc.)
 
   "0xFFFD": 1,              // ClusterRevision = 1
-  "0xFFFC": 0               // FeatureMap = 0（无 Feature）
+  "0xFFFC": 0               // FeatureMap = 0 (no features)
 }</code></pre>
 
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      LowPower Cluster 的存在本身就是一种能力声明 —— 如果设备的某个 Endpoint 上有这个 Cluster，
-      说明该设备支持通过 Matter 进入待机模式。
-      你可以通过 <a href="/clusters/descriptor/">Descriptor Cluster</a> 的 ServerList 属性
-      来检查设备是否实现了 LowPower（<code>0x0508</code>），从而决定是否在 UI 上显示「待机」按钮。
+      The existence of the LowPower Cluster itself is a capability declaration — if a device has this Cluster on an Endpoint,
+      it means the device supports entering standby mode via Matter.
+      You can check whether the device implements LowPower (<code>0x0508</code>) through the <a href="/clusters/descriptor/">Descriptor Cluster</a>'s ServerList attribute,
+      to decide whether to display a "Standby" button in the UI.
     </p>
   </div>
 
@@ -7107,44 +7105,44 @@ AA BB CC DD EE FF</code></pre>
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
-    <summary>场景 1：语音助手关闭电视(Sleep + WoL 缓存)</summary>
+    <summary>Scenario 1: Voice assistant turns off TV (Sleep + WoL cache)</summary>
     <div class="scenario-content">
       <p>
-        用户对着智能音箱说「关闭客厅电视」，要求电视进入待机模式，同时保留远程唤醒能力。
+        The user tells the smart speaker "Turn off the living room TV", requesting the TV to enter standby mode while retaining remote wake-up capability.
       </p>
       <ol>
-        <li>Hub 确认目标设备的 Endpoint 上存在 LowPower Cluster（检查 Descriptor 的 ServerList）</li>
-        <li>Hub 检查本地缓存中是否已有该设备的 WakeOnLan 地址（MAC / Link-Local）</li>
-        <li>如果没有缓存，先读取 WakeOnLan Cluster 的 <code>MACAddress</code> 并存储到本地</li>
-        <li>向设备发送 LowPower 的 <code>Sleep (0x00)</code> 命令</li>
-        <li>设备关闭屏幕和音频，进入低功耗待机模式</li>
-        <li>Matter 通信可能断开 —— Hub 记录设备状态为「待机」</li>
-        <li>后续用户说「打开电视」时，Hub 使用缓存的 MAC 地址发送 WoL Magic Packet 唤醒</li>
+        <li>Hub confirms the target device's Endpoint has the LowPower Cluster (checks Descriptor's ServerList)</li>
+        <li>Hub checks if the device's WakeOnLan address (MAC / Link-Local) is already in local cache</li>
+        <li>If not cached, first read WakeOnLan Cluster's <code>MACAddress</code> and store locally</li>
+        <li>Send LowPower's <code>Sleep (0x00)</code> command to the device</li>
+        <li>Device turns off screen and audio, enters low-power standby mode</li>
+        <li>Matter communication may disconnect — Hub records device status as "standby"</li>
+        <li>When the user later says "Turn on the TV", Hub sends a WoL Magic Packet using the cached MAC address to wake it</li>
       </ol>
       <p>
-        <strong>关键点</strong>：Sleep 命令发送前必须确保 WakeOnLan 地址已缓存。
-        一旦设备进入深度待机，Matter 通信断开，就再也无法通过 Matter 读取 MAC 地址了。
+        <strong>Key point</strong>: WakeOnLan address must be cached before sending the Sleep command.
+        Once the device enters deep standby and Matter communication disconnects, the MAC address can no longer be read via Matter.
       </p>
     </div>
   </details>
 
   <details class="scenario">
-    <summary>场景 2：定时待机(节能自动化)</summary>
+    <summary>Scenario 2: Scheduled standby (energy-saving automation)</summary>
     <div class="scenario-content">
       <p>
-        用户设置了节能自动化规则：每晚 23:00 如果电视仍在运行，自动进入待机以节省电量。
+        The user set up an energy-saving automation rule: every night at 23:00, if the TV is still running, automatically enter standby to save power.
       </p>
       <ol>
-        <li>自动化引擎在 23:00 触发</li>
-        <li>通过 OnOff Cluster 读取电视的 <code>OnOff (0x0000)</code> 属性，确认当前是否开启</li>
-        <li>如果 <code>OnOff = true</code>（电视仍在运行），发送 LowPower 的 <code>Sleep</code> 命令</li>
-        <li>电视进入待机模式，屏幕熄灭，但网卡保持活跃</li>
-        <li>第二天早上，用户可以通过遥控器、语音助手或 WoL 唤醒电视</li>
+        <li>Automation engine triggers at 23:00</li>
+        <li>Read the TV's <code>OnOff (0x0000)</code> attribute via OnOff Cluster to confirm if currently on</li>
+        <li>If <code>OnOff = true</code> (TV is still running), send LowPower's <code>Sleep</code> command</li>
+        <li>TV enters standby mode, screen turns off, but NIC remains active</li>
+        <li>The next morning, the user can wake the TV via remote control, voice assistant, or WoL</li>
       </ol>
       <p>
-        <strong>为什么用 Sleep 而不是 Off？</strong>
-        Sleep 让设备保持可远程唤醒的状态，OnOff 的 Off 可能导致设备完全关机，
-        需要用户物理按下电源按钮才能开启，对智能家居场景不友好。
+        <strong>Why Sleep instead of Off?</strong>
+        Sleep keeps the device in a remotely wakeable state. OnOff's Off may cause the device to completely power off,
+        requiring the user to physically press the power button to turn it on, which is not user-friendly for smart home scenarios.
       </p>
     </div>
   </details>

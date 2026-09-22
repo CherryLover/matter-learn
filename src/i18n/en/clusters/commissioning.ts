@@ -39,7 +39,7 @@ export const clusters: Record<string, ClusterContent> = {
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== Feature 特性 ====== -->
+  <!-- ====== Features ====== -->
   <h2 id="features">Features (Feature Map)</h2>
   <p>
     The NetworkCommissioning Cluster uses the Feature Map to indicate which network interface types the device supports.
@@ -78,7 +78,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
     NetworkCommissioning commands fall into two categories: <strong>Client → Server</strong> (requests from the Commissioner to the device) and
@@ -171,11 +171,11 @@ export const clusters: Record<string, ClusterContent> = {
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
+  <!-- ====== Command Details ====== -->
   <h3 id="cmd-0x00">ScanNetworks — Scan Networks (0x00)</h3>
   <p>
     Instructs the device to scan for available Wi-Fi or Thread networks nearby. This is typically the first step in the commissioning flow — showing users the list of networks they can connect to.
-    The device returns <a href="#cmd-0x01">ScanNetworksResponse</a>。
+    The device returns <a href="#cmd-0x01">ScanNetworksResponse</a>.
   </p>
   <div class="table-wrap">
     <table>
@@ -186,13 +186,13 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>SSID</td>
           <td>OctetString / Nullable</td>
-          <td>否</td>
+          <td>No</td>
           <td><code>null</code> = scan all networks; specified value = scan only matching SSID (Wi-Fi only)</td>
         </tr>
         <tr>
           <td>Breadcrumb</td>
           <td>uint64</td>
-          <td>否</td>
+          <td>No</td>
           <td>Commissioning progress marker, used by the Commissioner to track whether commissioning steps are executed as expected</td>
         </tr>
       </tbody>
@@ -244,7 +244,7 @@ export const clusters: Record<string, ClusterContent> = {
   <h3 id="cmd-0x02">AddOrUpdateWiFiNetwork — Add/Update Wi-Fi Network (0x02)</h3>
   <p>
     Write Wi-Fi network credentials (SSID + password) to the device. If credentials for the same SSID already exist, the password is updated; otherwise a new entry is added.
-    The device returns <a href="#cmd-0x05">NetworkConfigResponse</a>。
+    The device returns <a href="#cmd-0x05">NetworkConfigResponse</a>.
   </p>
   <div class="table-wrap">
     <table>
@@ -255,37 +255,37 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>SSID</td>
           <td>OctetString</td>
-          <td>是</td>
+          <td>Yes</td>
           <td>SSID of the target Wi-Fi network (max 32 bytes)</td>
         </tr>
         <tr>
           <td>Credentials</td>
           <td>OctetString</td>
-          <td>是</td>
+          <td>Yes</td>
           <td>Wi-Fi password (max 64 bytes)</td>
         </tr>
         <tr>
           <td>Breadcrumb</td>
           <td>uint64</td>
-          <td>否</td>
+          <td>No</td>
           <td>Commissioning progress marker</td>
         </tr>
         <tr>
           <td>NetworkIdentity</td>
           <td>OctetString</td>
-          <td>否</td>
+          <td>No</td>
           <td>Network identity (Matter 1.3+, for Per-Device Credentials)</td>
         </tr>
         <tr>
           <td>ClientIdentifier</td>
           <td>OctetString</td>
-          <td>否</td>
+          <td>No</td>
           <td>Client identifier (Matter 1.3+, for Per-Device Credentials)</td>
         </tr>
         <tr>
           <td>PossessionNonce</td>
           <td>OctetString</td>
-          <td>否</td>
+          <td>No</td>
           <td>Possession proof nonce (Matter 1.3+, for Per-Device Credentials)</td>
         </tr>
       </tbody>
@@ -302,7 +302,7 @@ export const clusters: Record<string, ClusterContent> = {
   <h3 id="cmd-0x03">AddOrUpdateThreadNetwork — Add/Update Thread Network (0x03)</h3>
   <p>
     Write Thread network credentials (Operational Dataset) to the device. Thread credentials consist of a complete Operational Dataset
-    containing PAN ID, Channel, Network Key, and other information. The device returns <a href="#cmd-0x05">NetworkConfigResponse</a>。
+    containing PAN ID, Channel, Network Key, and other information. The device returns <a href="#cmd-0x05">NetworkConfigResponse</a>.
   </p>
   <div class="table-wrap">
     <table>
@@ -313,13 +313,13 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>OperationalDataset</td>
           <td>OctetString</td>
-          <td>是</td>
+          <td>Yes</td>
           <td>Thread Operational Dataset (TLV-encoded complete network parameters)</td>
         </tr>
         <tr>
           <td>Breadcrumb</td>
           <td>uint64</td>
-          <td>否</td>
+          <td>No</td>
           <td>Commissioning progress marker</td>
         </tr>
       </tbody>
@@ -335,7 +335,7 @@ export const clusters: Record<string, ClusterContent> = {
 
   <h3 id="cmd-0x04">RemoveNetwork — Remove Network (0x04)</h3>
   <p>
-    Remove stored network credentials from the device. Specify the network to remove via NetworkID. The device returns <a href="#cmd-0x05">NetworkConfigResponse</a>。
+    Remove stored network credentials from the device. Specify the network to remove via NetworkID. The device returns <a href="#cmd-0x05">NetworkConfigResponse</a>.
   </p>
   <div class="table-wrap">
     <table>
@@ -346,13 +346,13 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>NetworkID</td>
           <td>OctetString</td>
-          <td>是</td>
+          <td>Yes</td>
           <td>Network ID to remove (SSID for Wi-Fi, Extended PAN ID for Thread)</td>
         </tr>
         <tr>
           <td>Breadcrumb</td>
           <td>uint64</td>
-          <td>否</td>
+          <td>No</td>
           <td>Commissioning progress marker</td>
         </tr>
       </tbody>
@@ -409,7 +409,7 @@ export const clusters: Record<string, ClusterContent> = {
   <h3 id="cmd-0x06">ConnectNetwork — Connect Network (0x06)</h3>
   <p>
     Instructs the device to connect to a network previously stored via AddOrUpdateWiFiNetwork / AddOrUpdateThreadNetwork.
-    This is the step in the commissioning flow that makes the device "actually go online." The device returns <a href="#cmd-0x07">ConnectNetworkResponse</a>。
+    This is the step in the commissioning flow that makes the device "actually go online." The device returns <a href="#cmd-0x07">ConnectNetworkResponse</a>.
   </p>
   <div class="table-wrap">
     <table>
@@ -420,13 +420,13 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>NetworkID</td>
           <td>OctetString</td>
-          <td>是</td>
+          <td>Yes</td>
           <td>Network ID to connect to (must be a previously stored network)</td>
         </tr>
         <tr>
           <td>Breadcrumb</td>
           <td>uint64</td>
-          <td>否</td>
+          <td>No</td>
           <td>Commissioning progress marker</td>
         </tr>
       </tbody>
@@ -485,7 +485,7 @@ export const clusters: Record<string, ClusterContent> = {
   <h3 id="cmd-0x08">ReorderNetwork — Adjust Network Priority (0x08)</h3>
   <p>
     Adjust the priority order of stored networks. The device attempts connections from highest to lowest priority during restart or network switching.
-    The device returns <a href="#cmd-0x05">NetworkConfigResponse</a>。
+    The device returns <a href="#cmd-0x05">NetworkConfigResponse</a>.
   </p>
   <div class="table-wrap">
     <table>
@@ -496,19 +496,19 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>NetworkID</td>
           <td>OctetString</td>
-          <td>是</td>
+          <td>Yes</td>
           <td>Network ID to reposition</td>
         </tr>
         <tr>
           <td>NetworkIndex</td>
           <td>uint8</td>
-          <td>是</td>
+          <td>Yes</td>
           <td>Target position index (0 = highest priority)</td>
         </tr>
         <tr>
           <td>Breadcrumb</td>
           <td>uint64</td>
-          <td>否</td>
+          <td>No</td>
           <td>Commissioning progress marker</td>
         </tr>
       </tbody>
@@ -522,7 +522,7 @@ export const clusters: Record<string, ClusterContent> = {
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h2 id="attributes">Attributes</h2>
   <p>NetworkCommissioning Cluster attributes describe the capabilities and current state of the network interface. Click an attribute ID in the summary table below to jump to its detailed description.</p>
 
@@ -620,7 +620,7 @@ export const clusters: Record<string, ClusterContent> = {
     </table>
   </div>
 
-  <!-- 属性分组详解 -->
+  <!-- Attribute Group Details -->
 
   <h3 id="attr-capacity">Network Capacity (0x00-0x01)</h3>
   <p>Describes how many network credentials the device can store, and which networks are currently configured.</p>
@@ -735,13 +735,13 @@ export const clusters: Record<string, ClusterContent> = {
           <td><code>0x04</code></td>
           <td>InterfaceEnabled<br/><span class="attr-cn">Interface Enabled</span></td>
           <td>bool</td>
-          <td>Whether the network interface is enabled。<code>false</code> 时设备不会连接任何网络，扫描和连接命令也可能被拒绝</td>
+          <td>Whether the network interface is enabled. When <code>false</code>, the device will not connect to any network, and scan/connect commands may be rejected</td>
         </tr>
         <tr id="attr-0x05">
           <td><code>0x05</code></td>
           <td>LastNetworkingStatus<br/><span class="attr-cn">Last Operation Status</span></td>
           <td><a href="#enum-status">NetworkCommissioningStatusEnum</a> / null</td>
-          <td>Result status of the last network operation码。<code>null</code> 表示尚未执行过任何网络操作</td>
+          <td>Result status of the last network operation. <code>null</code> means no network operation has been performed yet</td>
         </tr>
         <tr id="attr-0x06">
           <td><code>0x06</code></td>
@@ -782,7 +782,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td><code>0x08</code></td>
           <td>SupportedWiFiBands<br/><span class="attr-cn">Supported Wi-Fi Bands</span></td>
           <td>list&lt;<a href="#enum-wifiband">WiFiBandEnum</a>&gt;</td>
-          <td>设备List of supported Wi-Fi bands（如 2.4GHz、5GHz）</td>
+          <td>List of Wi-Fi bands supported by the device (e.g., 2.4GHz, 5GHz)</td>
         </tr>
       </tbody>
     </table>
@@ -808,14 +808,14 @@ export const clusters: Record<string, ClusterContent> = {
           <td><code>0x0A</code></td>
           <td>ThreadVersion<br/><span class="attr-cn">Thread Version</span></td>
           <td>uint16</td>
-          <td>设备支持的 Thread protocol version号</td>
+          <td>Thread protocol version number supported by the device</td>
         </tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 枚举与结构体 ====== -->
+  <!-- ====== Enums & Structs ====== -->
   <h2 id="enums">Enums & Structs</h2>
 
   <h3 id="enum-status">NetworkCommissioningStatusEnum</h3>
@@ -1120,7 +1120,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#enums">&#8593; Back to Enum List</a></p>
 
-  <!-- ====== 标准示例 ====== -->
+  <!-- ====== Standard Examples ====== -->
   <h2 id="standard-example">Standard Example</h2>
 
   <h3>Attribute Data Example</h3>
@@ -1207,7 +1207,7 @@ export const clusters: Record<string, ClusterContent> = {
 // Device replies with NetworkConfigResponse
 {
   "networkingStatus": 0,         // Success
-  "networkIndex": 0              // 存储在索引 0
+  "networkIndex": 0              // Stored at index 0
 }</code></pre>
 
   <div class="callout callout-tip">
@@ -1245,11 +1245,11 @@ export const clusters: Record<string, ClusterContent> = {
     <div class="scenario-content">
       <ol>
         <li>Commissioner establishes a PASE secure channel with the device via BLE</li>
-        <li>读取 <code>FeatureMap</code> 确认是 Thread 设备（Bit 1 = 1）</li>
-        <li>Commissioner 从 Thread Border Router 获取 Operational Dataset</li>
-        <li>发送 <a href="#cmd-0x03"><code>AddOrUpdateThreadNetwork (0x03)</code></a> 写入 Dataset</li>
-        <li>发送 <a href="#cmd-0x06"><code>ConnectNetwork (0x06)</code></a> 指示设备加入 Thread 网络</li>
-        <li>设备加入 Thread 网络后，Commissioner 通过 Thread 网络继续配网</li>
+        <li>Read <code>FeatureMap</code> to confirm it is a Thread device (Bit 1 = 1)</li>
+        <li>Commissioner obtains the Operational Dataset from the Thread Border Router</li>
+        <li>Send <a href="#cmd-0x03"><code>AddOrUpdateThreadNetwork (0x03)</code></a> to write the Dataset</li>
+        <li>Send <a href="#cmd-0x06"><code>ConnectNetwork (0x06)</code></a> to instruct the device to join the Thread network</li>
+        <li>After the device joins the Thread network, the Commissioner continues commissioning through the Thread network</li>
       </ol>
       <p>Note: Thread commissioning typically does not require scanning first, as the Dataset already contains all parameters for the target network.</p>
     </div>
@@ -1367,7 +1367,7 @@ export const clusters: Record<string, ClusterContent> = {
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
     The GeneralCommissioning Cluster has 3 request commands, each with a corresponding response command.
@@ -1443,7 +1443,7 @@ export const clusters: Record<string, ClusterContent> = {
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
+  <!-- ====== Command Details ====== -->
   <h3 id="cmd-0x00">ArmFailSafe — Start Fail-Safe (0x00)</h3>
   <p>
     Starts or renews the Fail-Safe timer. This is the <strong>first step</strong> in the commissioning flow — before any commissioning operation, this must be called to enable safety protection.
@@ -1464,7 +1464,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Breadcrumb</td>
           <td>uint64</td>
-          <td>Commissioning progress marker，写入设备的 Breadcrumb 属性</td>
+          <td>Commissioning progress marker, written to the device's Breadcrumb attribute</td>
         </tr>
       </tbody>
     </table>
@@ -1641,7 +1641,7 @@ export const clusters: Record<string, ClusterContent> = {
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h2 id="attributes">Attributes</h2>
   <p>The GeneralCommissioning Cluster has 5 attributes. Click an attribute ID in the summary table below to jump to its detailed description.</p>
 
@@ -1697,7 +1697,7 @@ export const clusters: Record<string, ClusterContent> = {
     </table>
   </div>
 
-  <!-- ====== 配网追踪（0x0000）====== -->
+  <!-- ====== Commissioning Tracking (0x0000) ====== -->
   <h3 id="group-tracking">Commissioning Tracking (0x0000)</h3>
   <p>Used by the Commissioner to track the progress of the commissioning flow.</p>
 
@@ -1732,7 +1732,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 基础配网信息（0x0001）====== -->
+  <!-- ====== Basic Commissioning Info (0x0001) ====== -->
   <h3 id="group-info">Basic Commissioning Info (0x0001)</h3>
   <p>Describes the device's Fail-Safe time limits, which the Commissioner uses to set reasonable timeout parameters.</p>
 
@@ -1783,7 +1783,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 法规配置（0x0002, 0x0003）====== -->
+  <!-- ====== Regulatory Config (0x0002, 0x0003) ====== -->
   <h3 id="group-regulatory">Regulatory Config (0x0002, 0x0003)</h3>
   <p>Describes the device's regulatory area configuration and its capability constraints.</p>
 
@@ -1819,7 +1819,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 连接能力（0x0004）====== -->
+  <!-- ====== Connection Capability (0x0004) ====== -->
   <h3 id="group-connection">Connection Capability (0x0004)</h3>
   <p>Describes the device's network connection capability during commissioning.</p>
 
@@ -1860,7 +1860,7 @@ export const clusters: Record<string, ClusterContent> = {
   <h2 id="enums">Enum Definitions</h2>
 
   <h3 id="enum-error">CommissioningErrorEnum</h3>
-  <p>所有 GeneralCommissioning 命令的响应都包含此错误码，用于表示Operation result。</p>
+  <p>All GeneralCommissioning command responses include this error code to indicate the operation result.</p>
 
   <div class="enum-cards enum-cards-grid">
     <div class="enum-card">
@@ -2018,14 +2018,14 @@ export const clusters: Record<string, ClusterContent> = {
     <div class="scenario-content">
       <ol>
         <li>Commissioner establishes a PASE secure channel with the device via BLE</li>
-        <li>读取 <code>BasicCommissioningInfo (0x0001)</code> 获取 Fail-Safe timeout parameters</li>
-        <li>发送 <a href="#cmd-0x00"><code>ArmFailSafe (0x00)</code></a>，ExpiryLengthSeconds = 60，Breadcrumb = 1</li>
-        <li>发送 <a href="#cmd-0x02"><code>SetRegulatoryConfig (0x02)</code></a>，设置国家代码和法规区域，Breadcrumb = 2</li>
-        <li>通过 <a href="/clusters/network-commissioning/">NetworkCommissioning (0x0031)</a> 配置网络凭据并连接</li>
-        <li>安装 NOC 证书（OperationalCredentials Cluster）</li>
-        <li>设置 ACL 权限（AccessControl Cluster）</li>
-        <li>发送 <a href="#cmd-0x04"><code>CommissioningComplete (0x04)</code></a> 提交所有变更</li>
-        <li>配网完成，设备正式加入 Fabric</li>
+        <li>Read <code>BasicCommissioningInfo (0x0001)</code> to get Fail-Safe timeout parameters</li>
+        <li>Send <a href="#cmd-0x00"><code>ArmFailSafe (0x00)</code></a> with ExpiryLengthSeconds = 60, Breadcrumb = 1</li>
+        <li>Send <a href="#cmd-0x02"><code>SetRegulatoryConfig (0x02)</code></a> to set country code and regulatory area, Breadcrumb = 2</li>
+        <li>Configure network credentials and connect via <a href="/clusters/network-commissioning/">NetworkCommissioning (0x0031)</a></li>
+        <li>Install NOC certificate (OperationalCredentials Cluster)</li>
+        <li>Set ACL permissions (AccessControl Cluster)</li>
+        <li>Send <a href="#cmd-0x04"><code>CommissioningComplete (0x04)</code></a> to commit all changes</li>
+        <li>Commissioning complete, device officially joins the Fabric</li>
       </ol>
       <p>The entire flow typically completes within 30 seconds (excluding user input time).</p>
     </div>
@@ -2329,11 +2329,11 @@ export const clusters: Record<string, ClusterContent> = {
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x02">RevokeCommissioning —— 关闭配网窗口(0x02)</h3>
+  <h3 id="cmd-0x02">RevokeCommissioning — Close Commissioning Window(0x02)</h3>
   <p>
-    Close the currently open commissioning window。此命令<strong>没有参数</strong>。
-    调用成功后，设备立即停止接受新的配网请求，WindowStatus 恢复为 <code>WindowNotOpen (0)</code>，
-    AdminFabricIndex 和 AdminVendorId 重置为 <code>null</code>。
+    Closes the currently open commissioning window. This command <strong>has no parameters</strong>.
+    After a successful call, the device immediately stops accepting new commissioning requests, WindowStatus returns to <code>WindowNotOpen (0)</code>,
+    and AdminFabricIndex and AdminVendorId reset to <code>null</code>.
   </p>
 
   <div class="callout callout-warning">
@@ -2609,7 +2609,7 @@ export const clusters: Record<string, ClusterContent> = {
 
 // Device → Commissioner: Successfully opened (Status = SUCCESS)</code></pre>
 
-  <h3>RevokeCommissioning 交互示例</h3>
+  <h3>RevokeCommissioning Interaction Example</h3>
   <p>Close the currently open commissioning window：</p>
   <pre><code>// Commissioner → Device: Close commissioning window
 {
@@ -2758,28 +2758,28 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'operational-credentials': {
     title: 'OperationalCredentials Cluster (0x003E)',
-    description: 'Matter OperationalCredentials Cluster(0x003E)完整参考 — NOC 证书管理、Fabric 凭据、CSR 生成、设备认证(DAC)、多管理员、AddNOC/RemoveFabric 命令详解与配网 NOC 流程示例。',
+    description: 'Complete reference for Matter OperationalCredentials Cluster (0x003E) — NOC certificate management, Fabric credentials, CSR generation, device attestation (DAC), multi-admin, AddNOC/RemoveFabric command details and commissioning NOC flow examples.',
     prev: { title: 'Cluster Reference', slug: 'clusters' },
     next: undefined,
     content: `<h1>OperationalCredentials Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x003E</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 固定在 <code>Endpoint 0</code>（Root Endpoint）
+    <strong>Endpoint</strong>: Fixed on <code>Endpoint 0</code> (Root Endpoint)
   </p>
   <p>
-    OperationalCredentials 是 Matter 设备安全通信的基石 —— 负责管理设备的<strong>节点操作证书（NOC）</strong>和 <strong>Fabric 凭据</strong>。
-    每台 Matter 设备要加入一个 Fabric（家庭网络），都需要通过这个 Cluster 完成证书签发和安装。
-    它也是多管理员（Multi-Admin）场景的核心 —— 一台设备可以同时加入多个 Fabric，每个 Fabric 独立管理各自的 NOC。
+    OperationalCredentials is the cornerstone of Matter device secure communication — responsible for managing device <strong>Node Operational Certificates (NOC)</strong> and <strong>Fabric credentials</strong>.
+    Every Matter device that joins a Fabric (home network) needs to complete certificate issuance and installation through this Cluster.
+    It is also the core of multi-admin scenarios — a single device can join multiple Fabrics simultaneously, with each Fabric independently managing its own NOC.
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">核心概念速览</div>
+    <div class="callout-title">Core Concepts Quick Reference</div>
     <p>
-      <strong>Fabric</strong>：一个逻辑上的「家庭网络」，由同一个 Root CA 签发的证书体系定义。同一 Fabric 内的设备可以互相通信。<br/>
-      <strong>NOC（Node Operational Certificate）</strong>：设备在某个 Fabric 中的「身份证」，包含设备的 NodeID 和 FabricID，由 Commissioner（手机 App）的 Root CA 签发。<br/>
-      <strong>ICAC</strong>：中间 CA 证书，可选。在 Root CA 和 NOC 之间增加一层信任链。<br/>
-      <strong>DAC（Device Attestation Certificate）</strong>：设备出厂时预置的证书，证明「这是一个合法的 Matter 设备」。用于配网时的设备认证。<br/>
-      <strong>CSR</strong>：证书签名请求。设备生成密钥对后，将公钥包装为 CSR 发给 Commissioner，Commissioner 用自己的 CA 签发 NOC。
+      <strong>Fabric</strong>: A logical "home network" defined by a certificate system issued by the same Root CA. Devices within the same Fabric can communicate with each other.<br/>
+      <strong>NOC (Node Operational Certificate)</strong>: A device's "identity card" within a Fabric, containing the device's NodeID and FabricID, issued by the Commissioner's (phone App) Root CA.<br/>
+      <strong>ICAC</strong>: Intermediate CA certificate, optional. Adds an extra layer to the trust chain between Root CA and NOC.<br/>
+      <strong>DAC (Device Attestation Certificate)</strong>: A certificate pre-installed at factory, proving "this is a legitimate Matter device." Used for device attestation during commissioning.<br/>
+      <strong>CSR</strong>: Certificate Signing Request. After the device generates a key pair, it packages the public key as a CSR and sends it to the Commissioner, who uses their own CA to issue the NOC.
     </p>
   </div>
 
@@ -2798,13 +2798,13 @@ export const clusters: Record<string, ClusterContent> = {
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    OperationalCredentials Cluster 共有 8 个命令，覆盖了设备认证、CSR 生成、NOC 安装、Fabric 管理的完整流程。
-    大多数命令在配网（Commissioning）过程中由 Commissioner 自动调用，App 开发者通常不需要手动发送。
-    但理解这些命令对调试配网失败和实现多管理员至关重要。
-    点击下方表格中的命令 ID 可跳转到对应的详细说明。
+    The OperationalCredentials Cluster has 8 commands covering the complete flow of device attestation, CSR generation, NOC installation, and Fabric management.
+    Most commands are automatically called by the Commissioner during commissioning; App developers typically do not need to send them manually.
+    However, understanding these commands is crucial for debugging commissioning failures and implementing multi-admin.
+    Click a command ID in the table below to jump to its detailed description.
   </p>
 
   <div class="table-wrap">
@@ -2822,87 +2822,87 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>AttestationRequest</td>
           <td class="col-direction">C &rarr; S</td>
-          <td>请求设备认证（DAC 签名）</td>
+          <td>Request device attestation (DAC signature)</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x01">
           <td><a href="#cmd-0x01"><code>0x01</code></a></td>
           <td>AttestationResponse</td>
           <td class="col-direction">S &rarr; C</td>
-          <td>返回设备认证数据</td>
+          <td>Return device attestation data</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x02">
           <td><a href="#cmd-0x02"><code>0x02</code></a></td>
           <td>CertificateChainRequest</td>
           <td class="col-direction">C &rarr; S</td>
-          <td>请求 DAC 或 PAI 证书</td>
+          <td>Request DAC or PAI certificate</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x03">
           <td><a href="#cmd-0x03"><code>0x03</code></a></td>
           <td>CertificateChainResponse</td>
           <td class="col-direction">S &rarr; C</td>
-          <td>返回请求的证书</td>
+          <td>Return the requested certificate</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x04">
           <td><a href="#cmd-0x04"><code>0x04</code></a></td>
           <td>CSRRequest</td>
           <td class="col-direction">C &rarr; S</td>
-          <td>请求生成 CSR（证书签名请求）</td>
+          <td>Request CSR generation (Certificate Signing Request)</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x05">
           <td><a href="#cmd-0x05"><code>0x05</code></a></td>
           <td>CSRResponse</td>
           <td class="col-direction">S &rarr; C</td>
-          <td>返回 CSR 数据</td>
+          <td>Return CSR data</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x06">
           <td><a href="#cmd-0x06"><code>0x06</code></a></td>
           <td>AddNOC</td>
           <td class="col-direction">C &rarr; S</td>
-          <td>安装 NOC，加入新 Fabric</td>
+          <td>Install NOC, join new Fabric</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x07">
           <td><a href="#cmd-0x07"><code>0x07</code></a></td>
           <td>UpdateNOC</td>
           <td class="col-direction">C &rarr; S</td>
-          <td>更新当前 Fabric 的 NOC</td>
+          <td>Update current Fabric's NOC</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x09">
           <td><a href="#cmd-0x09"><code>0x09</code></a></td>
           <td>UpdateFabricLabel</td>
           <td class="col-direction">C &rarr; S</td>
-          <td>修改 Fabric 标签</td>
+          <td>Modify Fabric label</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x0A">
           <td><a href="#cmd-0x0A"><code>0x0A</code></a></td>
           <td>RemoveFabric</td>
           <td class="col-direction">C &rarr; S</td>
-          <td>移除 Fabric（含 NOC 和信任根）</td>
+          <td>Remove Fabric (including NOC and trust root)</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x0B">
           <td><a href="#cmd-0x0B"><code>0x0B</code></a></td>
           <td>AddTrustedRootCertificate</td>
           <td class="col-direction">C &rarr; S</td>
-          <td>添加受信 Root CA 证书</td>
+          <td>Add trusted Root CA certificate</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">关于命令方向</div>
+    <div class="callout-title">About Command Direction</div>
     <p>
-      <strong>C &rarr; S</strong>：Commissioner（手机 App）发给设备的请求命令。<br/>
-      <strong>S &rarr; C</strong>：设备回复给 Commissioner 的响应命令。<br/>
-      响应命令（AttestationResponse、CertificateChainResponse、CSRResponse）不需要手动发送，它们是设备收到请求后自动回复的。
-      AddNOC / UpdateNOC / UpdateFabricLabel / RemoveFabric 的回复统一是 <strong>NOCResponse</strong>（内含 StatusCode 和 FabricIndex）。
+      <strong>C &rarr; S</strong>: Request commands from Commissioner (phone App) to device.<br/>
+      <strong>S &rarr; C</strong>: Response commands from device to Commissioner.<br/>
+      Response commands (AttestationResponse, CertificateChainResponse, CSRResponse) do not need to be sent manually; they are automatic replies from the device upon receiving a request.
+      Replies to AddNOC / UpdateNOC / UpdateFabricLabel / RemoveFabric are uniformly <strong>NOCResponse</strong> (containing StatusCode and FabricIndex).
     </p>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
-  <h3 id="cmd-0x00">AttestationRequest —— 设备认证请求(0x00)</h3>
+  <!-- ====== Command Details ====== -->
+  <h3 id="cmd-0x00">AttestationRequest — Device Attestation Request(0x00)</h3>
   <p>
-    配网的第一步：验证设备是否为合法的 Matter 设备。Commissioner 发送一个随机数（Nonce），
-    设备用 DAC（设备认证证书）的私钥对该 Nonce 和设备信息进行签名，证明自己持有合法的 DAC。
+    The first step of commissioning: verify whether the device is a legitimate Matter device. The Commissioner sends a random number (Nonce),
+    and the device signs the Nonce and device information with the DAC (Device Attestation Certificate) private key to prove it holds a legitimate DAC.
   </p>
   <div class="table-wrap">
     <table>
@@ -2913,7 +2913,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>AttestationNonce</td>
           <td>octstr (32 bytes)</td>
-          <td>32 字节随机数，防止重放攻击</td>
+          <td>32-byte random number to prevent replay attacks</td>
         </tr>
       </tbody>
     </table>
@@ -2922,17 +2922,17 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        配网过程中自动执行。Commissioner 通过 BLE 或 IP 建立 PASE 连接后，首先发送 AttestationRequest。
-        如果设备的 DAC 签名验证失败，配网流程会立即终止并报告设备认证失败。
+        Automatically executed during commissioning. After the Commissioner establishes a PASE connection via BLE or IP, it first sends AttestationRequest.
+        If the device's DAC signature verification fails, the commissioning flow terminates immediately and reports device attestation failure.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x01">AttestationResponse —— 设备认证响应(0x01)</h3>
+  <h3 id="cmd-0x01">AttestationResponse — Device Attestation Response(0x01)</h3>
   <p>
-    设备收到 AttestationRequest 后的自动回复。包含设备认证信息和 DAC 签名。
-    Commissioner 收到后会验证签名、检查 DAC 证书链（DAC &rarr; PAI &rarr; PAA），确认设备合法性。
+    Automatic reply after the device receives AttestationRequest. Contains device attestation information and DAC signature.
+    The Commissioner verifies the signature upon receipt, checks the DAC certificate chain (DAC &rarr; PAI &rarr; PAA), and confirms device legitimacy.
   </p>
   <div class="table-wrap">
     <table>
@@ -2943,22 +2943,22 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>AttestationElements</td>
           <td>octstr</td>
-          <td>TLV 编码的认证信息（含 Certification Declaration、Nonce、Timestamp 等）</td>
+          <td>TLV-encoded attestation information (including Certification Declaration, Nonce, Timestamp, etc.)</td>
         </tr>
         <tr>
           <td>AttestationSignature</td>
           <td>octstr (64 bytes)</td>
-          <td>DAC 私钥对 AttestationElements 的 ECDSA-P256 签名</td>
+          <td>ECDSA-P256 signature of AttestationElements by the DAC private key</td>
         </tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x02">CertificateChainRequest —— 证书链请求(0x02)</h3>
+  <h3 id="cmd-0x02">CertificateChainRequest — Certificate Chain Request(0x02)</h3>
   <p>
-    请求设备返回 DAC（设备认证证书）或 PAI（产品认证中间证书）。
-    Commissioner 需要完整的证书链来验证设备认证签名 —— DAC 由 PAI 签发，PAI 由 PAA 签发。
+    Request the device to return the DAC (Device Attestation Certificate) or PAI (Product Attestation Intermediate Certificate).
+    The Commissioner needs the complete certificate chain to verify the device attestation signature — DAC is issued by PAI, PAI is issued by PAA.
   </p>
   <div class="table-wrap">
     <table>
@@ -2969,7 +2969,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>CertificateType</td>
           <td>CertificateChainTypeEnum</td>
-          <td>1 = DAC 证书，2 = PAI 证书（见<a href="#enum-cert-chain-type">枚举定义</a>）</td>
+          <td>1 = DAC certificate, 2 = PAI certificate (see <a href="#enum-cert-chain-type">enum definition</a>)</td>
         </tr>
       </tbody>
     </table>
@@ -2978,16 +2978,16 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        配网时 Commissioner 通常会先请求 DAC（type=1），再请求 PAI（type=2），
-        然后结合本地或云端存储的 PAA（Product Attestation Authority）根证书完成整条信任链验证。
+        During commissioning, the Commissioner typically first requests the DAC (type=1), then the PAI (type=2),
+        and then combines them with the locally or cloud-stored PAA (Product Attestation Authority) root certificate to complete the full trust chain verification.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x03">CertificateChainResponse —— 证书链响应(0x03)</h3>
+  <h3 id="cmd-0x03">CertificateChainResponse — Certificate Chain Response(0x03)</h3>
   <p>
-    设备返回请求的证书。证书格式为 DER 编码的 X.509 v3 证书。
+    The device returns the requested certificate. Certificate format is DER-encoded X.509 v3.
   </p>
   <div class="table-wrap">
     <table>
@@ -2998,17 +2998,17 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Certificate</td>
           <td>octstr</td>
-          <td>DER 编码的 X.509 证书（DAC 或 PAI）</td>
+          <td>DER-encoded X.509 certificate (DAC or PAI)</td>
         </tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x04">CSRRequest —— CSR 生成请求(0x04)</h3>
+  <h3 id="cmd-0x04">CSRRequest — CSR Generation Request(0x04)</h3>
   <p>
-    让设备生成一对新的操作密钥（Operational Key Pair），并返回包含公钥的 CSR（Certificate Signing Request）。
-    Commissioner 拿到 CSR 后，用自己的 Root CA 签发 NOC 证书，然后通过 AddNOC 写入设备。
+    Instructs the device to generate a new Operational Key Pair and return a CSR (Certificate Signing Request) containing the public key.
+    After receiving the CSR, the Commissioner uses its own Root CA to issue the NOC certificate, then writes it to the device via AddNOC.
   </p>
   <div class="table-wrap">
     <table>
@@ -3019,12 +3019,12 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>CSRNonce</td>
           <td>octstr (32 bytes)</td>
-          <td>32 字节随机数，绑定到 CSR 中防止重放</td>
+          <td>32-byte random number, bound to the CSR to prevent replay</td>
         </tr>
         <tr>
           <td>IsForUpdateNOC</td>
           <td>bool</td>
-          <td>可选。为 <code>true</code> 时表示此 CSR 用于更新现有 NOC（而非首次安装）</td>
+          <td>Optional. When <code>true</code>, indicates this CSR is for updating an existing NOC (not first-time installation)</td>
         </tr>
       </tbody>
     </table>
@@ -3033,16 +3033,16 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        配网流程中在设备认证通过后执行。CSR 中包含设备新生成的公钥，Commissioner 用自己的 CA 对此公钥签发 NOC。
-        设备保留对应的私钥，后续 CASE 会话建立时用它来证明身份。
+        Executed in the commissioning flow after device attestation passes. The CSR contains the device's newly generated public key; the Commissioner uses its own CA to issue the NOC for this public key.
+        The device retains the corresponding private key, which is used to prove identity when establishing subsequent CASE sessions.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x05">CSRResponse —— CSR 响应(0x05)</h3>
+  <h3 id="cmd-0x05">CSRResponse — CSR Response(0x05)</h3>
   <p>
-    设备返回 CSR 数据和 DAC 签名。Commissioner 验证签名后提取 CSR 用于签发 NOC。
+    The device returns CSR data and DAC signature. The Commissioner verifies the signature and extracts the CSR for issuing the NOC.
   </p>
   <div class="table-wrap">
     <table>
@@ -3053,22 +3053,22 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>NOCSRElements</td>
           <td>octstr</td>
-          <td>TLV 编码的 NOCSR 结构（含 PKCS#10 CSR 和 CSRNonce）</td>
+          <td>TLV-encoded NOCSR structure (containing PKCS#10 CSR and CSRNonce)</td>
         </tr>
         <tr>
           <td>AttestationSignature</td>
           <td>octstr (64 bytes)</td>
-          <td>DAC 私钥对 NOCSRElements 的 ECDSA-P256 签名</td>
+          <td>ECDSA-P256 signature of NOCSRElements by the DAC private key</td>
         </tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x06">AddNOC —— 安装 NOC(0x06)</h3>
+  <h3 id="cmd-0x06">AddNOC — Install NOC(0x06)</h3>
   <p>
-    配网流程的关键一步：将 Commissioner 签发的 NOC 证书写入设备，让设备正式加入一个新的 Fabric。
-    这是整个证书安装流程中参数最多的命令。执行成功后设备会获得一个新的 FabricIndex。
+    A critical step in the commissioning flow: write the Commissioner-issued NOC certificate to the device, officially adding the device to a new Fabric.
+    This is the command with the most parameters in the entire certificate installation flow. Upon successful execution, the device receives a new FabricIndex.
   </p>
   <div class="table-wrap">
     <table>
@@ -3079,59 +3079,59 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>NOCValue</td>
           <td>octstr</td>
-          <td>是</td>
-          <td>签发的 NOC 证书（Matter Operational Certificate，DER 编码）</td>
+          <td>Yes</td>
+          <td>Issued NOC certificate (Matter Operational Certificate, DER-encoded)</td>
         </tr>
         <tr>
           <td>ICACValue</td>
           <td>octstr</td>
-          <td>可选</td>
-          <td>中间 CA 证书。如果 NOC 直接由 Root CA 签发则不需要</td>
+          <td>Optional</td>
+          <td>Intermediate CA certificate. Not required if NOC is directly issued by Root CA</td>
         </tr>
         <tr>
           <td>IPKValue</td>
           <td>octstr (16 bytes)</td>
-          <td>是</td>
-          <td>Identity Protection Key，用于 Fabric 内的群组通信加密</td>
+          <td>Yes</td>
+          <td>Identity Protection Key, used for group communication encryption within the Fabric</td>
         </tr>
         <tr>
           <td>CaseAdminSubject</td>
           <td>uint64</td>
-          <td>是</td>
-          <td>CASE 管理员的 Subject（通常是 Commissioner 的 NodeID）。该节点在此 Fabric 上拥有管理权限</td>
+          <td>Yes</td>
+          <td>CASE administrator's Subject (typically the Commissioner's NodeID). This node has administrative privileges on this Fabric</td>
         </tr>
         <tr>
           <td>AdminVendorId</td>
           <td>uint16</td>
-          <td>是</td>
-          <td>管理员的 Vendor ID（标识是哪个厂商的 App 发起的配网）</td>
+          <td>Yes</td>
+          <td>Administrator's Vendor ID (identifies which manufacturer's App initiated commissioning)</td>
         </tr>
       </tbody>
     </table>
   </div>
   <div class="callout callout-tip">
-    <div class="callout-title">返回值：NOCResponse</div>
+    <div class="callout-title">Return Value: NOCResponse</div>
     <p>
-      AddNOC 执行后设备返回 <strong>NOCResponse</strong>，包含：
-      <code>StatusCode</code>（见 <a href="#enum-noc-status">NodeOperationalCertStatusEnum</a>）和
-      <code>FabricIndex</code>（新分配的索引号，仅在成功时有值）。
+      After AddNOC executes, the device returns <strong>NOCResponse</strong>, containing:
+      <code>StatusCode</code> (see <a href="#enum-noc-status">NodeOperationalCertStatusEnum</a>) and
+      <code>FabricIndex</code> (newly assigned index, only has a value on success).
     </p>
   </div>
   <details class="scenario">
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        这是配网的最后一步。流程为：AddTrustedRootCertificate &rarr; CSRRequest &rarr; 用 CA 签发 NOC &rarr; AddNOC。
-        执行成功后设备会建立一个新的 CASE 会话，后续通信从 PASE 切换到 CASE（基于证书的安全通道）。
+        This is the final step of commissioning. The flow is: AddTrustedRootCertificate &rarr; CSRRequest &rarr; issue NOC with CA &rarr; AddNOC.
+        After successful execution, the device establishes a new CASE session, and subsequent communication switches from PASE to CASE (certificate-based secure channel).
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x07">UpdateNOC —— 更新 NOC(0x07)</h3>
+  <h3 id="cmd-0x07">UpdateNOC — Update NOC(0x07)</h3>
   <p>
-    更新当前 Fabric 的 NOC 证书。通常在证书即将过期或需要轮换密钥时使用。
-    只能更新发起此命令的 Fabric 自身的 NOC，不能跨 Fabric 操作。
+    Updates the current Fabric's NOC certificate. Typically used when the certificate is about to expire or key rotation is needed.
+    Can only update the NOC of the Fabric that issued this command; cross-Fabric operations are not allowed.
   </p>
   <div class="table-wrap">
     <table>
@@ -3142,14 +3142,14 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>NOCValue</td>
           <td>octstr</td>
-          <td>是</td>
-          <td>新的 NOC 证书（DER 编码）</td>
+          <td>Yes</td>
+          <td>New NOC certificate (DER-encoded)</td>
         </tr>
         <tr>
           <td>ICACValue</td>
           <td>octstr</td>
-          <td>可选</td>
-          <td>新的中间 CA 证书</td>
+          <td>Optional</td>
+          <td>New intermediate CA certificate</td>
         </tr>
       </tbody>
     </table>
@@ -3158,17 +3158,17 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        证书轮换场景：Commissioner 先调用 CSRRequest（IsForUpdateNOC=true）获取新 CSR，
-        用 CA 签发新 NOC 后调用 UpdateNOC 写入。旧 NOC 被替换，FabricIndex 不变。
+        Certificate rotation scenario: Commissioner first calls CSRRequest (IsForUpdateNOC=true) to get a new CSR,
+        issues a new NOC with the CA, then calls UpdateNOC to write it. The old NOC is replaced, FabricIndex remains unchanged.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x09">UpdateFabricLabel —— 更新 Fabric 标签(0x09)</h3>
+  <h3 id="cmd-0x09">UpdateFabricLabel — Update Fabric Label(0x09)</h3>
   <p>
-    修改当前 Fabric 的用户自定义标签（如「Home」「Office」）。纯展示用途，不影响安全或通信。
-    只能修改发起命令的 Fabric 自身的标签。
+    Modify the current Fabric's user-defined label (e.g., "Home", "Office"). Purely for display purposes, does not affect security or communication.
+    Can only modify the label of the Fabric that issued the command.
   </p>
   <div class="table-wrap">
     <table>
@@ -3179,7 +3179,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Label</td>
           <td>string (max 32)</td>
-          <td>新标签。空字符串表示清除标签。不允许与同设备上其他 Fabric 重名</td>
+          <td>New label. Empty string clears the label. Must not duplicate labels of other Fabrics on the same device</td>
         </tr>
       </tbody>
     </table>
@@ -3188,17 +3188,17 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        用户在 App 中给某个 Fabric 起名，比如标记为「家里」或「公司」，方便在多管理员场景下区分。
-        如果传入的 Label 与设备上已有的其他 Fabric 标签相同，设备返回 LabelConflict 错误。
+        Users name a Fabric in the App, such as labeling it "Home" or "Office," for easy identification in multi-admin scenarios.
+        If the provided Label matches an existing Fabric label on the device, the device returns a LabelConflict error.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x0A">RemoveFabric —— 移除 Fabric(0x0A)</h3>
+  <h3 id="cmd-0x0A">RemoveFabric — Remove Fabric(0x0A)</h3>
   <p>
-    从设备上移除指定的 Fabric。会删除该 Fabric 对应的 NOC、ICAC、信任根证书、ACL 条目以及所有关联数据。
-    <strong>可以移除任意 Fabric</strong>（包括其他管理员的），这是一个高权限操作。
+    Removes the specified Fabric from the device. Deletes the Fabric's corresponding NOC, ICAC, trusted root certificate, ACL entries, and all associated data.
+    <strong>Can remove any Fabric</strong> (including other administrators'), making this a high-privilege operation.
   </p>
   <div class="table-wrap">
     <table>
@@ -3209,34 +3209,34 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>FabricIndex</td>
           <td>uint8</td>
-          <td>要移除的 Fabric 索引（从 Fabrics 属性列表获取）</td>
+          <td>Fabric index to remove (obtained from the Fabrics attribute list)</td>
         </tr>
       </tbody>
     </table>
   </div>
   <div class="callout callout-warning">
-    <div class="callout-title">危险操作</div>
+    <div class="callout-title">Dangerous Operation</div>
     <p>
-      如果设备只加入了一个 Fabric，执行 RemoveFabric 后设备会回到<strong>未配网状态</strong>（等同恢复出厂设置）。
-      如果移除的是自己所在的 Fabric，当前 CASE 会话会立即断开。
+      If the device has only joined one Fabric, executing RemoveFabric will return the device to an <strong>uncommissioned state</strong> (equivalent to factory reset).
+      If the removed Fabric is the one you are on, the current CASE session will disconnect immediately.
     </p>
   </div>
   <details class="scenario">
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        「取消配对」操作：用户在 App 中删除设备时，App 调用 RemoveFabric 移除自己的 Fabric。
-        如果设备在其他平台（如 Google Home / Apple Home）也配了网，那些 Fabric 不受影响。
-        极端场景：如果 App 失去了与设备的连接，可通过物理按键恢复出厂设置来清除所有 Fabric。
+        "Unpair" operation: When a user removes a device in the App, the App calls RemoveFabric to remove its own Fabric.
+        If the device is also commissioned on other platforms (e.g., Google Home / Apple Home), those Fabrics are not affected.
+        Extreme scenario: If the App loses connection to the device, a physical button factory reset can clear all Fabrics.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x0B">AddTrustedRootCertificate —— 添加信任根证书(0x0B)</h3>
+  <h3 id="cmd-0x0B">AddTrustedRootCertificate — Add Trusted Root Certificate(0x0B)</h3>
   <p>
-    向设备写入一个 Root CA 证书。这是 AddNOC 的前置步骤 —— 设备需要先知道信任哪个 Root CA，
-    才能接受由该 CA 签发的 NOC。每个 Fabric 对应一个信任根。
+    Writes a Root CA certificate to the device. This is a prerequisite step for AddNOC — the device needs to know which Root CA to trust
+    before it can accept NOCs issued by that CA. Each Fabric corresponds to one trust root.
   </p>
   <div class="table-wrap">
     <table>
@@ -3247,24 +3247,24 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>RootCACertificate</td>
           <td>octstr</td>
-          <td>Root CA 证书（Matter Operational Certificate 格式，DER 编码）</td>
+          <td>Root CA certificate (Matter Operational Certificate format, DER-encoded)</td>
         </tr>
       </tbody>
     </table>
   </div>
   <div class="callout callout-info">
-    <div class="callout-title">执行时机</div>
+    <div class="callout-title">Execution Timing</div>
     <p>
-      此命令只能在 PASE 会话中执行（即设备尚未完成配网、使用 Passcode 建立的临时安全通道），
-      或者在已建立 CASE 会话的 Fabric 内执行。不能在没有安全通道的情况下写入信任根。
-      此命令没有响应（成功返回 Status = Success 的通用状态码，不是 NOCResponse）。
+      This command can only be executed in a PASE session (i.e., the device has not completed commissioning, using a temporary secure channel established with a Passcode),
+      or within a Fabric that has an established CASE session. Trust roots cannot be written without a secure channel.
+      This command has no response (returns a standard Status = Success status code on success, not a NOCResponse).
     </p>
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h2 id="attributes">Attributes</h2>
-  <p>OperationalCredentials Cluster 共有 6 个属性，分为 Fabric 信息和容量管理两组。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+  <p>The OperationalCredentials Cluster has 6 attributes, divided into Fabric information and capacity management groups. Click an attribute ID in the summary table below to jump to its detailed description.</p>
 
   <!-- Attribute Summary Table -->
   <div class="table-wrap">
@@ -3283,51 +3283,51 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>NOCs</td>
           <td>list&lt;NOCStruct&gt;</td>
-          <td><a href="#group-fabric">Fabric 信息</a></td>
-          <td>各 Fabric 的 NOC 和 ICAC 证书</td>
+          <td><a href="#group-fabric">Fabric Info</a></td>
+          <td>NOC and ICAC certificates for each Fabric</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>Fabrics</td>
           <td>list&lt;FabricDescriptorStruct&gt;</td>
-          <td><a href="#group-fabric">Fabric 信息</a></td>
-          <td>已加入的 Fabric 描述列表</td>
+          <td><a href="#group-fabric">Fabric Info</a></td>
+          <td>List of joined Fabric descriptions</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
           <td>SupportedFabrics</td>
           <td>uint8</td>
-          <td><a href="#group-capacity">容量管理</a></td>
-          <td>设备最多支持加入的 Fabric 数量</td>
+          <td><a href="#group-capacity">Capacity Management</a></td>
+          <td>Maximum number of Fabrics the device supports</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
           <td>CommissionedFabrics</td>
           <td>uint8</td>
-          <td><a href="#group-capacity">容量管理</a></td>
-          <td>当前已加入的 Fabric 数量</td>
+          <td><a href="#group-capacity">Capacity Management</a></td>
+          <td>Number of Fabrics currently joined</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0004">
           <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
           <td>TrustedRootCertificates</td>
           <td>list&lt;octstr&gt;</td>
-          <td><a href="#group-fabric">Fabric 信息</a></td>
-          <td>已安装的信任根证书列表</td>
+          <td><a href="#group-fabric">Fabric Info</a></td>
+          <td>List of installed trusted root certificates</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0005">
           <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
           <td>CurrentFabricIndex</td>
           <td>uint8</td>
-          <td><a href="#group-capacity">容量管理</a></td>
-          <td>当前操作上下文所属的 Fabric 索引</td>
+          <td><a href="#group-capacity">Capacity Management</a></td>
+          <td>Fabric index of the current operation context</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== Fabric 信息 ====== -->
-  <h3 id="group-fabric">Fabric 信息(0x0000, 0x0001, 0x0004)</h3>
-  <p>描述设备已加入的各个 Fabric 的证书、身份和信任根信息。</p>
+  <!-- ====== Fabric Info ====== -->
+  <h3 id="group-fabric">Fabric Info (0x0000, 0x0001, 0x0004)</h3>
+  <p>Describes the certificates, identities, and trust root information for each Fabric the device has joined.</p>
 
   <div class="table-wrap">
     <table>
@@ -3342,39 +3342,39 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0000">
           <td><code>0x0000</code></td>
-          <td>NOCs<br/><span class="attr-cn">NOC 列表</span></td>
+          <td>NOCs<br/><span class="attr-cn">NOC List</span></td>
           <td>list&lt;NOCStruct&gt;</td>
-          <td>每个 Fabric 对应一个 NOCStruct，包含该 Fabric 的 NOC 和 ICAC 证书。<strong>Fabric-scoped</strong>：每个 Fabric 只能读到自己的条目，读不到其他 Fabric 的 NOC</td>
+          <td>Each Fabric corresponds to one NOCStruct, containing that Fabric's NOC and ICAC certificates. <strong>Fabric-scoped</strong>: Each Fabric can only read its own entry, not other Fabrics' NOCs</td>
         </tr>
         <tr id="attr-0x0001">
           <td><code>0x0001</code></td>
-          <td>Fabrics<br/><span class="attr-cn">Fabric 列表</span></td>
+          <td>Fabrics<br/><span class="attr-cn">Fabric List</span></td>
           <td>list&lt;FabricDescriptorStruct&gt;</td>
-          <td>所有已加入 Fabric 的描述信息。与 NOCs 不同，<strong>所有 Fabric 都能读到完整列表</strong>（但不含证书内容，仅有公钥摘要等公开信息）</td>
+          <td>Description information for all joined Fabrics. Unlike NOCs, <strong>all Fabrics can read the complete list</strong> (but without certificate content, only public information like public key digests)</td>
         </tr>
         <tr id="attr-0x0004">
           <td><code>0x0004</code></td>
-          <td>TrustedRootCertificates<br/><span class="attr-cn">信任根证书列表</span></td>
+          <td>TrustedRootCertificates<br/><span class="attr-cn">Trusted Root Certificate List</span></td>
           <td>list&lt;octstr&gt;</td>
-          <td>已安装的 Root CA 公钥证书列表（DER 编码）。每个 Fabric 对应一个信任根。通过 AddTrustedRootCertificate 添加</td>
+          <td>List of installed Root CA public key certificates (DER-encoded). Each Fabric corresponds to one trust root. Added via AddTrustedRootCertificate</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">Fabric-scoped vs 全局可见</div>
+    <div class="callout-title">Fabric-scoped vs Globally Visible</div>
     <p>
-      <code>NOCs</code> 属性是 <strong>Fabric-scoped</strong> 的 —— Fabric A 读 NOCs 只能看到自己的 NOC，看不到 Fabric B 的。
-      这是安全设计：NOC 中包含了该 Fabric 的操作密钥公钥，不应暴露给其他 Fabric。<br/>
-      <code>Fabrics</code> 属性是全局可见的 —— 任何 Fabric 都能看到设备加入了哪些 Fabric，以及它们的公开信息（Root 公钥、VendorID、FabricID、NodeID、Label）。
+      <code>NOCs</code> attribute is <strong>Fabric-scoped</strong> — Fabric A reading NOCs can only see its own NOC, not Fabric B's.
+      This is a security design: NOC contains that Fabric's operational key public key, which should not be exposed to other Fabrics.<br/>
+      <code>Fabrics</code> attribute is globally visible — any Fabric can see which Fabrics the device has joined and their public information (Root public key, VendorID, FabricID, NodeID, Label).
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 容量管理 ====== -->
-  <h3 id="group-capacity">容量管理(0x0002, 0x0003, 0x0005)</h3>
-  <p>描述设备的 Fabric 容量和当前操作上下文。</p>
+  <!-- ====== Capacity Management ====== -->
+  <h3 id="group-capacity">Capacity Management (0x0002, 0x0003, 0x0005)</h3>
+  <p>Describes the device's Fabric capacity and current operation context.</p>
 
   <div class="table-wrap">
     <table>
@@ -3389,31 +3389,31 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0002">
           <td><code>0x0002</code></td>
-          <td>SupportedFabrics<br/><span class="attr-cn">最大 Fabric 数</span></td>
+          <td>SupportedFabrics<br/><span class="attr-cn">Max Fabrics</span></td>
           <td>uint8</td>
-          <td>设备最多可同时加入的 Fabric 数量。Matter 规范要求至少支持 <strong>5 个</strong>。该值出厂固定，不可修改</td>
+          <td>Maximum number of Fabrics the device can join simultaneously. The Matter specification requires support for at least <strong>5</strong>. This value is fixed at factory and cannot be modified</td>
         </tr>
         <tr id="attr-0x0003">
           <td><code>0x0003</code></td>
-          <td>CommissionedFabrics<br/><span class="attr-cn">已加入 Fabric 数</span></td>
+          <td>CommissionedFabrics<br/><span class="attr-cn">Joined Fabric Count</span></td>
           <td>uint8</td>
-          <td>当前实际已加入的 Fabric 数量。当 <code>CommissionedFabrics &ge; SupportedFabrics</code> 时，设备无法再加入新的 Fabric（AddNOC 会返回 TableFull）</td>
+          <td>Number of Fabrics currently actually joined. When <code>CommissionedFabrics &ge; SupportedFabrics</code>, the device cannot join new Fabrics (AddNOC returns TableFull)</td>
         </tr>
         <tr id="attr-0x0005">
           <td><code>0x0005</code></td>
-          <td>CurrentFabricIndex<br/><span class="attr-cn">当前 Fabric 索引</span></td>
+          <td>CurrentFabricIndex<br/><span class="attr-cn">Current Fabric Index</span></td>
           <td>uint8</td>
-          <td>当前通信会话所属的 Fabric 索引。读取此属性可知道「我是哪个 Fabric」。值为 0 表示当前没有关联的 Fabric（如 PASE 会话中）</td>
+          <td>Fabric index of the current communication session. Reading this attribute tells you "which Fabric am I." A value of 0 means no associated Fabric (e.g., in a PASE session)</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">多管理员容量检查</div>
+    <div class="callout-title">Multi-Admin Capacity Check</div>
     <p>
-      在发起多管理员配网（Multi-Admin）前，应先读取 <code>SupportedFabrics</code> 和 <code>CommissionedFabrics</code>，
-      确认还有剩余槽位。如果已满，需要先通过 RemoveFabric 移除一个不再使用的 Fabric。
+      Before initiating multi-admin commissioning, read <code>SupportedFabrics</code> and <code>CommissionedFabrics</code> first
+      to confirm available slots. If full, use RemoveFabric to remove an unused Fabric first.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
@@ -3422,7 +3422,7 @@ export const clusters: Record<string, ClusterContent> = {
   <h2 id="enums">Enum Definitions</h2>
 
   <h3 id="enum-noc-status">NodeOperationalCertStatusEnum</h3>
-  <p>AddNOC、UpdateNOC、UpdateFabricLabel、RemoveFabric 命令的统一返回状态码（NOCResponse 中的 StatusCode 字段）。</p>
+  <p>Unified return status code for AddNOC, UpdateNOC, UpdateFabricLabel, and RemoveFabric commands (StatusCode field in NOCResponse).</p>
 
   <div class="enum-cards">
     <div class="enum-card">
@@ -3436,92 +3436,92 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">InvalidPublicKey</span>
-        <span class="enum-desc">NOC 中的公钥无效（格式错误或与 CSR 中的不匹配）</span>
+        <span class="enum-desc">Public key in NOC is invalid (format error or mismatch with CSR)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">InvalidNodeOpId</span>
-        <span class="enum-desc">NOC 中的 Node Operational ID（NodeID）无效</span>
+        <span class="enum-desc">Node Operational ID (NodeID) in NOC is invalid</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">InvalidNOC</span>
-        <span class="enum-desc">NOC 证书本身无效（签名验证失败、格式错误、过期等）</span>
+        <span class="enum-desc">NOC certificate itself is invalid (signature verification failed, format error, expired, etc.)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">4</span>
       <div>
         <span class="enum-name">MissingCsr</span>
-        <span class="enum-desc">没有先调用 CSRRequest 就直接 AddNOC/UpdateNOC</span>
+        <span class="enum-desc">Called AddNOC/UpdateNOC without first calling CSRRequest</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">5</span>
       <div>
         <span class="enum-name">TableFull</span>
-        <span class="enum-desc">Fabric 表已满（CommissionedFabrics = SupportedFabrics）</span>
+        <span class="enum-desc">Fabric table is full (CommissionedFabrics = SupportedFabrics)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">6</span>
       <div>
         <span class="enum-name">InvalidAdminSubject</span>
-        <span class="enum-desc">CaseAdminSubject 值无效（不是合法的 NodeID）</span>
+        <span class="enum-desc">CaseAdminSubject value is invalid (not a valid NodeID)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">9</span>
       <div>
         <span class="enum-name">FabricConflict</span>
-        <span class="enum-desc">Fabric 冲突 —— 设备上已存在使用相同 Root CA 的 Fabric</span>
+        <span class="enum-desc">Fabric conflict — a Fabric using the same Root CA already exists on the device</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">10</span>
       <div>
         <span class="enum-name">LabelConflict</span>
-        <span class="enum-desc">标签冲突 —— UpdateFabricLabel 时新标签与已有 Fabric 标签重复</span>
+        <span class="enum-desc">Label conflict — new label in UpdateFabricLabel duplicates an existing Fabric label</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">11</span>
       <div>
         <span class="enum-name">InvalidFabricIndex</span>
-        <span class="enum-desc">指定的 FabricIndex 不存在（RemoveFabric 时传了无效索引）</span>
+        <span class="enum-desc">Specified FabricIndex does not exist (invalid index passed in RemoveFabric)</span>
       </div>
     </div>
   </div>
 
   <h3 id="enum-cert-chain-type">CertificateChainTypeEnum</h3>
-  <p>CertificateChainRequest 命令中指定要获取的证书类型。</p>
+  <p>Specifies the certificate type to retrieve in the CertificateChainRequest command.</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">DACCertificate</span>
-        <span class="enum-desc">设备认证证书（Device Attestation Certificate）—— 出厂预置，证明设备合法性</span>
+        <span class="enum-desc">Device Attestation Certificate — pre-installed at factory, proves device legitimacy</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">PAICertificate</span>
-        <span class="enum-desc">产品认证中间证书（Product Attestation Intermediate Certificate）—— DAC 的签发者</span>
+        <span class="enum-desc">Product Attestation Intermediate Certificate — the issuer of DAC</span>
       </div>
     </div>
   </div>
 
-  <!-- ====== 数据结构 ====== -->
+  <!-- ====== Data Structures ====== -->
   <h2 id="structs">Data Structures</h2>
 
   <h3 id="struct-noc">NOCStruct</h3>
-  <p>NOCs 属性列表中的每个元素，包含一个 Fabric 的 NOC 和可选的 ICAC 证书。</p>
+  <p>Each element in the NOCs attribute list, containing a Fabric's NOC and optional ICAC certificate.</p>
 
   <div class="table-wrap">
     <table>
@@ -3532,24 +3532,24 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>NOC</td>
           <td>octstr</td>
-          <td>节点操作证书（DER 编码）。包含设备在该 Fabric 中的 NodeID、FabricID 和操作公钥</td>
+          <td>Node Operational Certificate (DER-encoded). Contains the device's NodeID, FabricID, and operational public key in this Fabric</td>
         </tr>
         <tr>
           <td>ICAC</td>
           <td>octstr / null</td>
-          <td>中间 CA 证书。如果 NOC 直接由 Root CA 签发，则为 null</td>
+          <td>Intermediate CA certificate. null if NOC is directly issued by Root CA</td>
         </tr>
         <tr>
           <td>FabricIndex</td>
           <td>uint8</td>
-          <td>此条目所属的 Fabric 索引</td>
+          <td>Fabric index this entry belongs to</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <h3 id="struct-fabric-descriptor">FabricDescriptorStruct</h3>
-  <p>Fabrics 属性列表中的每个元素，描述一个 Fabric 的公开信息。</p>
+  <p>Each element in the Fabrics attribute list, describing a Fabric's public information.</p>
 
   <div class="table-wrap">
     <table>
@@ -3560,76 +3560,76 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>RootPublicKey</td>
           <td>octstr (65 bytes)</td>
-          <td>该 Fabric 的 Root CA 公钥（未压缩 EC P-256 点，65 字节）</td>
+          <td>This Fabric's Root CA public key (uncompressed EC P-256 point, 65 bytes)</td>
         </tr>
         <tr>
           <td>VendorID</td>
           <td>uint16</td>
-          <td>签发此 Fabric 凭据的厂商 ID（如 Apple = 0x1349、Google = 0x6006）</td>
+          <td>Vendor ID of the manufacturer that issued this Fabric's credentials (e.g., Apple = 0x1349, Google = 0x6006)</td>
         </tr>
         <tr>
           <td>FabricID</td>
           <td>uint64</td>
-          <td>Fabric 标识符。同一个 Root CA 下不同 Fabric 用此值区分</td>
+          <td>Fabric identifier. Different Fabrics under the same Root CA are distinguished by this value</td>
         </tr>
         <tr>
           <td>NodeID</td>
           <td>uint64</td>
-          <td>设备在该 Fabric 中的节点 ID。同一设备在不同 Fabric 中 NodeID 不同</td>
+          <td>Device's node ID in this Fabric. The same device has different NodeIDs in different Fabrics</td>
         </tr>
         <tr>
           <td>Label</td>
           <td>string (max 32)</td>
-          <td>用户自定义标签（通过 UpdateFabricLabel 修改），如「Home」「Office」</td>
+          <td>User-defined label (modified via UpdateFabricLabel), e.g., "Home", "Office"</td>
         </tr>
         <tr>
           <td>FabricIndex</td>
           <td>uint8</td>
-          <td>此 Fabric 的索引号（设备内唯一，RemoveFabric 时用此值指定）</td>
+          <td>Index number of this Fabric (unique within the device, used to specify in RemoveFabric)</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">VendorID 与 FabricID</div>
+    <div class="callout-title">VendorID and FabricID</div>
     <p>
-      同一台设备被 Apple Home 和 Google Home 同时配网时，会有两条 FabricDescriptor —— VendorID 分别是 Apple 和 Google 的，
-      FabricID 和 NodeID 也各不相同。设备通过 FabricIndex 区分不同 Fabric 的上下文，包括 ACL 权限和订阅。
+      When the same device is commissioned by both Apple Home and Google Home, there will be two FabricDescriptor entries — VendorIDs being Apple's and Google's respectively,
+      with different FabricIDs and NodeIDs. The device uses FabricIndex to distinguish different Fabric contexts, including ACL permissions and subscriptions.
     </p>
   </div>
 
   <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>以下是一台已加入一个 Fabric 的 Matter 设备的 OperationalCredentials 属性读取结果（NOCs 除外，因为 Fabric-scoped 限制只能读自己的）：</p>
+  <p>The following is the OperationalCredentials attribute read result of a Matter device that has joined one Fabric (excluding NOCs, as Fabric-scoped restriction only allows reading your own):</p>
 
   <pre><code>{
-  // --- Fabric 信息 ---
-  "0x0001": [{                    // Fabrics — 已加入的 Fabric 列表
-    "rootPublicKey": "BNkX2...",  // Root CA 公钥（Base64）
-    "vendorID": 65521,            // VendorID = 0xFFF1（测试厂商）
+  // --- Fabric Info ---
+  "0x0001": [{                    // Fabrics — Joined Fabric list
+    "rootPublicKey": "BNkX2...",  // Root CA public key (Base64)
+    "vendorID": 65521,            // VendorID = 0xFFF1 (test vendor)
     "fabricID": 1,                // FabricID = 1
-    "nodeID": 1234,               // 本设备在该 Fabric 中的 NodeID
-    "label": "Home",              // 用户自定义标签
-    "fabricIndex": 1              // Fabric 索引
+    "nodeID": 1234,               // This device's NodeID in this Fabric
+    "label": "Home",              // User-defined label
+    "fabricIndex": 1              // Fabric index
   }],
 
-  // --- 容量与计数 ---
-  "0x0002": 5,                    // SupportedFabrics = 5（最多加入 5 个 Fabric）
-  "0x0003": 1,                    // CommissionedFabrics = 1（当前已加入 1 个）
+  // --- Capacity & Count ---
+  "0x0002": 5,                    // SupportedFabrics = 5 (max 5 Fabrics)
+  "0x0003": 1,                    // CommissionedFabrics = 1 (currently joined 1)
 
-  // --- 信任根证书 ---
-  "0x0004": [                     // TrustedRootCertificates — 受信 Root CA 列表
-    "MIIBnT..."                   // 每个 Fabric 对应一个 Root CA 证书（Base64 DER）
+  // --- Trusted Root Certificates ---
+  "0x0004": [                     // TrustedRootCertificates — Trusted Root CA list
+    "MIIBnT..."                   // One Root CA certificate per Fabric (Base64 DER)
   ],
 
-  // --- 当前上下文 ---
-  "0x0005": 1                     // CurrentFabricIndex = 1（当前操作所属 Fabric）
+  // --- Current Context ---
+  "0x0005": 1                     // CurrentFabricIndex = 1 (current operation's Fabric)
 }</code></pre>
 
-  <h3>CSR 流程交互示例</h3>
-  <p>配网过程中，Commissioner 请求设备生成 CSR 的交互：</p>
-  <pre><code>// 1. Commissioner → Device：请求生成 CSR
+  <h3>CSR Flow Interaction Example</h3>
+  <p>Interaction during commissioning where the Commissioner requests the device to generate a CSR:</p>
+  <pre><code>// 1. Commissioner → Device: Request CSR generation
 {
   "invokeRequests": [{
     "commandPath": {
@@ -3638,20 +3638,20 @@ export const clusters: Record<string, ClusterContent> = {
       "commandId": "0x04"          // CSRRequest
     },
     "commandFields": {
-      "CSRNonce": "dGhpcyBpcyBhIDMyLWJ5dGUgbm9uY2U="  // 32 字节随机数（Base64）
+      "CSRNonce": "dGhpcyBpcyBhIDMyLWJ5dGUgbm9uY2U="  // 32-byte random number (Base64)
     }
   }]
 }
 
-// Device → Commissioner：返回 CSR
+// Device → Commissioner: Return CSR
 {
-  "NOCSRElements": "MIHd...",      // NOCSR 结构（含 CSR + CSRNonce）
-  "attestationSignature": "MEU..." // 设备用 DAC 私钥签名
+  "NOCSRElements": "MIHd...",      // NOCSR structure (containing CSR + CSRNonce)
+  "attestationSignature": "MEU..." // Device signs with DAC private key
 }</code></pre>
 
-  <h3>AddNOC 交互示例</h3>
-  <p>Commissioner 将签发好的 NOC 写入设备：</p>
-  <pre><code>// 2. Commissioner → Device：写入签好的 NOC
+  <h3>AddNOC Interaction Example</h3>
+  <p>Commissioner writes the issued NOC to the device:</p>
+  <pre><code>// 2. Commissioner → Device: Write the signed NOC
 {
   "invokeRequests": [{
     "commandPath": {
@@ -3660,26 +3660,26 @@ export const clusters: Record<string, ClusterContent> = {
       "commandId": "0x06"          // AddNOC
     },
     "commandFields": {
-      "NOCValue": "MIIB...",       // 签发的 NOC 证书（DER Base64）
-      "ICACValue": "MIIB...",      // 可选的中间 CA 证书
-      "IPKValue": "wMs7...",       // 16 字节 Identity Protection Key
-      "caseAdminSubject": 112233,  // CASE 管理员的 Subject（NodeID）
-      "adminVendorId": 65521       // 管理员的 VendorID
+      "NOCValue": "MIIB...",       // Issued NOC certificate (DER Base64)
+      "ICACValue": "MIIB...",      // Optional intermediate CA certificate
+      "IPKValue": "wMs7...",       // 16-byte Identity Protection Key
+      "caseAdminSubject": 112233,  // CASE administrator's Subject (NodeID)
+      "adminVendorId": 65521       // Administrator's VendorID
     }
   }]
 }
 
-// Device → Commissioner：返回结果
+// Device → Commissioner: Return result
 {
   "statusCode": 0,                 // OK
-  "fabricIndex": 1                 // 新分配的 FabricIndex
+  "fabricIndex": 1                 // Newly assigned FabricIndex
 }</code></pre>
 
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      实际开发中，这些命令通常由平台的 Commissioning SDK 自动编排（如 Android CHIPTool、iOS Matter.framework）。
-      但在调试配网失败时，理解每一步的参数含义非常关键 —— 尤其是 CSRNonce 不匹配、NOC 签名验证失败、Fabric 表已满等问题。
+      In practice, these commands are typically orchestrated automatically by the platform's Commissioning SDK (e.g., Android CHIPTool, iOS Matter.framework).
+      However, when debugging commissioning failures, understanding each step's parameter meaning is crucial — especially issues like CSRNonce mismatch, NOC signature verification failure, and Fabric table full.
     </p>
   </div>
 
@@ -3687,69 +3687,69 @@ export const clusters: Record<string, ClusterContent> = {
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
-    <summary>场景 1：首次配网 —— NOC 安装完整流程</summary>
+    <summary>Scenario 1: First Commissioning — Complete NOC Installation Flow</summary>
     <div class="scenario-content">
-      <p>一台新出厂的 Matter 设备首次被手机 App 配网，完整的证书安装流程如下：</p>
+      <p>A newly manufactured Matter device being commissioned by a phone App for the first time, the complete certificate installation flow is:</p>
       <ol>
-        <li>App 通过 BLE 或 SoftAP 与设备建立 <strong>PASE 会话</strong>（使用设备上的 Passcode）</li>
-        <li>App 发送 <code>AttestationRequest (0x00)</code>，收到 <code>AttestationResponse</code> 后验证 DAC 签名</li>
-        <li>App 发送 <code>CertificateChainRequest (0x02, type=1)</code> 获取 DAC 证书</li>
-        <li>App 发送 <code>CertificateChainRequest (0x02, type=2)</code> 获取 PAI 证书</li>
-        <li>App 验证完整信任链：DAC &rarr; PAI &rarr; PAA（PAA 从 DCL 或本地获取）</li>
-        <li>App 发送 <code>AddTrustedRootCertificate (0x0B)</code> 将自己的 Root CA 证书写入设备</li>
-        <li>App 发送 <code>CSRRequest (0x04)</code>，设备生成密钥对并返回 CSR</li>
-        <li>App 的 CA 基于 CSR 签发 NOC 证书</li>
-        <li>App 发送 <code>AddNOC (0x06)</code> 将 NOC、ICAC（可选）、IPK 写入设备</li>
-        <li>设备返回 NOCResponse（StatusCode=OK，FabricIndex=1）</li>
-        <li>PASE 会话结束，App 和设备建立 <strong>CASE 会话</strong>（基于 NOC 证书）</li>
+        <li>App establishes a <strong>PASE session</strong> with the device via BLE or SoftAP (using the device's Passcode)</li>
+        <li>App sends <code>AttestationRequest (0x00)</code>, verifies DAC signature upon receiving <code>AttestationResponse</code></li>
+        <li>App sends <code>CertificateChainRequest (0x02, type=1)</code> to get DAC certificate</li>
+        <li>App sends <code>CertificateChainRequest (0x02, type=2)</code> to get PAI certificate</li>
+        <li>App verifies the complete trust chain: DAC &rarr; PAI &rarr; PAA (PAA obtained from DCL or locally)</li>
+        <li>App sends <code>AddTrustedRootCertificate (0x0B)</code> to write its own Root CA certificate to the device</li>
+        <li>App sends <code>CSRRequest (0x04)</code>, device generates key pair and returns CSR</li>
+        <li>App's CA issues NOC certificate based on the CSR</li>
+        <li>App sends <code>AddNOC (0x06)</code> to write NOC, ICAC (optional), and IPK to the device</li>
+        <li>Device returns NOCResponse (StatusCode=OK, FabricIndex=1)</li>
+        <li>PASE session ends, App and device establish a <strong>CASE session</strong> (based on NOC certificate)</li>
       </ol>
     </div>
   </details>
 
   <details class="scenario">
-    <summary>场景 2：多管理员(Multi-Admin)—— 同一设备加入多个平台</summary>
+    <summary>Scenario 2: Multi-Admin — Same Device Joining Multiple Platforms</summary>
     <div class="scenario-content">
-      <p>用户先用 Apple Home 配网，再用 Google Home 配网同一台设备：</p>
+      <p>User first commissions with Apple Home, then commissions the same device with Google Home:</p>
       <ol>
-        <li>Apple Home 已完成配网，设备有 Fabric 1（Apple 的 Root CA、VendorID、NodeID）</li>
-        <li>用户在 Apple Home 中开启「多管理员配对窗口」（通过 Administrator Commissioning Cluster 的 OpenCommissioningWindow）</li>
-        <li>Google Home 扫描到设备，通过新的 PASE 会话连接</li>
-        <li>Google Home 重复场景 1 的步骤 2-10，使用 Google 自己的 Root CA 签发 NOC</li>
-        <li>设备现在有 Fabric 1（Apple）和 Fabric 2（Google），各自独立运作</li>
-        <li>读取 <code>Fabrics</code> 属性可以看到两条 FabricDescriptorStruct</li>
-        <li>读取 <code>CommissionedFabrics</code> 返回 2，<code>SupportedFabrics</code> 仍然是出厂值（如 5）</li>
+        <li>Apple Home has completed commissioning, device has Fabric 1 (Apple's Root CA, VendorID, NodeID)</li>
+        <li>User opens the "multi-admin pairing window" in Apple Home (via Administrator Commissioning Cluster's OpenCommissioningWindow)</li>
+        <li>Google Home discovers the device and connects via a new PASE session</li>
+        <li>Google Home repeats steps 2-10 of Scenario 1, using Google's own Root CA to issue NOC</li>
+        <li>Device now has Fabric 1 (Apple) and Fabric 2 (Google), operating independently</li>
+        <li>Reading the <code>Fabrics</code> attribute shows two FabricDescriptorStruct entries</li>
+        <li>Reading <code>CommissionedFabrics</code> returns 2, <code>SupportedFabrics</code> remains the factory value (e.g., 5)</li>
       </ol>
     </div>
   </details>
 
   <details class="scenario">
-    <summary>场景 3：移除 Fabric —— 取消配对或恢复出厂</summary>
+    <summary>Scenario 3: Removing a Fabric — Unpairing or Factory Reset</summary>
     <div class="scenario-content">
-      <p>用户要从某个平台上移除设备：</p>
+      <p>User wants to remove a device from a specific platform:</p>
       <ol>
-        <li>App 读取 <code>Fabrics (0x0001)</code> 获取所有 Fabric 列表</li>
-        <li>App 读取 <code>CurrentFabricIndex (0x0005)</code> 确认自己的 FabricIndex</li>
-        <li>App 发送 <code>RemoveFabric (0x0A)</code> 并传入自己的 FabricIndex</li>
-        <li>设备删除该 Fabric 的 NOC、Root 证书、ACL 等所有关联数据</li>
-        <li>如果设备上还有其他 Fabric，设备继续正常运行；如果这是最后一个 Fabric，设备回到未配网状态</li>
+        <li>App reads <code>Fabrics (0x0001)</code> to get all Fabric list</li>
+        <li>App reads <code>CurrentFabricIndex (0x0005)</code> to confirm its own FabricIndex</li>
+        <li>App sends <code>RemoveFabric (0x0A)</code> with its own FabricIndex</li>
+        <li>Device deletes the Fabric's NOC, Root certificate, ACL, and all associated data</li>
+        <li>If other Fabrics remain on the device, it continues operating normally; if this was the last Fabric, the device returns to uncommissioned state</li>
       </ol>
       <p>
-        <strong>注意</strong>：RemoveFabric 可以指定任意 FabricIndex（不限于自己的 Fabric），
-        但通常只有管理员权限（Administrator ACL）才被允许执行。
+        <strong>Note</strong>: RemoveFabric can specify any FabricIndex (not limited to your own Fabric),
+        but typically only administrator privileges (Administrator ACL) allow execution.
       </p>
     </div>
   </details>
 
   <details class="scenario">
-    <summary>场景 4：证书轮换 —— 更新已有的 NOC</summary>
+    <summary>Scenario 4: Certificate Rotation — Updating an Existing NOC</summary>
     <div class="scenario-content">
-      <p>当 NOC 接近过期或因安全策略需要更换密钥时：</p>
+      <p>When the NOC is approaching expiration or key rotation is needed due to security policy:</p>
       <ol>
-        <li>App 发送 <code>CSRRequest (0x04)</code> 并设置 <code>IsForUpdateNOC = true</code></li>
-        <li>设备生成新密钥对，返回新 CSR</li>
-        <li>App 的 CA 基于新 CSR 签发新 NOC（保持相同的 NodeID 和 FabricID）</li>
-        <li>App 发送 <code>UpdateNOC (0x07)</code> 写入新 NOC</li>
-        <li>旧 NOC 被替换，FabricIndex 不变，CASE 会话需要重新建立</li>
+        <li>App sends <code>CSRRequest (0x04)</code> with <code>IsForUpdateNOC = true</code></li>
+        <li>Device generates new key pair and returns new CSR</li>
+        <li>App's CA issues new NOC based on the new CSR (keeping the same NodeID and FabricID)</li>
+        <li>App sends <code>UpdateNOC (0x07)</code> to write the new NOC</li>
+        <li>Old NOC is replaced, FabricIndex remains unchanged, CASE session needs to be re-established</li>
       </ol>
     </div>
   </details>
@@ -3810,26 +3810,26 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'group-key-management': {
     title: 'GroupKeyManagement Cluster (0x003F)',
-    description: 'Matter GroupKeyManagement Cluster(0x003F)完整参考 — 组播通信密钥管理、KeySetWrite/Read/Remove 命令、GroupKeyMap 映射、GroupTable 查询、密钥轮换与 CacheAndSync 特性。',
+    description: 'Complete reference for Matter GroupKeyManagement Cluster (0x003F) — multicast communication key management, KeySetWrite/Read/Remove commands, GroupKeyMap mapping, GroupTable query, key rotation and CacheAndSync feature.',
     prev: undefined,
     next: undefined,
     content: `<h1>GroupKeyManagement Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x003F</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: <code>Endpoint 0</code>（根端点）
+    <strong>Endpoint</strong>: <code>Endpoint 0</code> (Root Endpoint)
   </p>
   <p>
-    GroupKeyManagement 负责管理 Matter 网络中用于组播（multicast）通信的加密密钥。
-    当你需要向一组设备同时发送命令（比如「关闭客厅所有灯」）时，设备之间需要共享一套对称密钥来加密和验证组播消息。
-    这个 Cluster 就是用来写入、读取、删除和维护这些密钥集的。
+    GroupKeyManagement manages the encryption keys used for multicast communication in Matter networks.
+    When you need to send commands to a group of devices simultaneously (e.g., "turn off all living room lights"), devices need to share a set of symmetric keys to encrypt and verify multicast messages.
+    This Cluster is used to write, read, delete, and maintain these key sets.
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">CacheAndSync 特性(CS)</div>
+    <div class="callout-title">CacheAndSync Feature (CS)</div>
     <p>
-      GroupKeyManagement 定义了一个 <strong>CacheAndSync（CS）</strong> Feature。
-      启用 CS 后，设备支持从 Distributed Compliance Ledger（DCL）缓存和同步信任的根证书，
-      并允许使用 <code>CacheAndSync</code> 安全策略。未启用 CS 的设备只能使用 <code>TrustFirst</code> 策略。
+      GroupKeyManagement defines a <strong>CacheAndSync (CS)</strong> Feature.
+      When CS is enabled, the device supports caching and syncing trusted root certificates from the Distributed Compliance Ledger (DCL),
+      and allows the use of the <code>CacheAndSync</code> security policy. Devices without CS can only use the <code>TrustFirst</code> policy.
     </p>
   </div>
 
@@ -3841,7 +3841,7 @@ export const clusters: Record<string, ClusterContent> = {
     <span class="nav-sep">|</span>
     <a href="#structs">Data Structures</a>
     <span class="nav-sep">|</span>
-    <a href="#enums">枚举类型</a>
+    <a href="#enums">Enum Types</a>
     <span class="nav-sep">|</span>
     <a href="#features">Feature Bitmap</a>
     <span class="nav-sep">|</span>
@@ -3850,11 +3850,11 @@ export const clusters: Record<string, ClusterContent> = {
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    GroupKeyManagement Cluster 共有 4 个命令，用于管理密钥集（KeySet）的完整生命周期：
-    写入、读取、删除和列举。点击下方表格中的命令 ID 可跳转到对应的详细说明。
+    The GroupKeyManagement Cluster has 4 commands for managing the complete lifecycle of key sets (KeySets):
+    write, read, delete, and enumerate. Click a command ID in the table below to jump to its detailed description.
   </p>
 
   <div class="table-wrap">
@@ -3872,35 +3872,35 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>KeySetWrite</td>
           <td>Client &rarr; Server</td>
-          <td>写入或更新一个密钥集</td>
+          <td>Write or update a key set</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x01">
           <td><a href="#cmd-0x01"><code>0x01</code></a></td>
           <td>KeySetRead</td>
           <td>Client &rarr; Server</td>
-          <td>读取指定密钥集的信息</td>
+          <td>Read specified key set information</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x03">
           <td><a href="#cmd-0x03"><code>0x03</code></a></td>
           <td>KeySetRemove</td>
           <td>Client &rarr; Server</td>
-          <td>删除一个密钥集</td>
+          <td>Delete a key set</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x04">
           <td><a href="#cmd-0x04"><code>0x04</code></a></td>
           <td>KeySetReadAllIndices</td>
           <td>Client &rarr; Server</td>
-          <td>列出当前 Fabric 的所有密钥集 ID</td>
+          <td>List all key set IDs for the current Fabric</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
-  <h3 id="cmd-0x00">KeySetWrite -- 写入密钥集(0x00)</h3>
+  <!-- ====== Command Details ====== -->
+  <h3 id="cmd-0x00">KeySetWrite — Write Key Set(0x00)</h3>
   <p>
-    写入一个完整的密钥集（GroupKeySet）到设备中。如果指定的 GroupKeySetID 已存在，则更新它。
-    每个密钥集包含最多三个 Epoch 密钥，用于支持密钥轮换时的平滑过渡。
+    Writes a complete key set (GroupKeySet) to the device. If the specified GroupKeySetID already exists, it is updated.
+    Each key set contains up to three Epoch keys to support smooth transitions during key rotation.
   </p>
   <div class="table-wrap">
     <table>
@@ -3911,17 +3911,17 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>GroupKeySet</td>
           <td><a href="#struct-groupkeyset">GroupKeySetStruct</a></td>
-          <td>完整的密钥集结构体，包含 ID、安全策略和最多三组 Epoch 密钥</td>
+          <td>Complete key set structure, containing ID, security policy, and up to three groups of Epoch keys</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">密钥安全</div>
+    <div class="callout-title">Key Security</div>
     <p>
-      写入的 EpochKey 是敏感数据。设备在存储后不会回传明文密钥 ——
-      通过 KeySetRead 读取时，EpochKey 字段会返回 <code>null</code>，只能看到 EpochStartTime。
+      Written EpochKeys are sensitive data. The device will not return plaintext keys after storage —
+      when reading via KeySetRead, EpochKey fields return <code>null</code>, only EpochStartTime is visible.
     </p>
   </div>
 
@@ -3929,17 +3929,17 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        Commissioner（如手机 App）在建立组播通信前，需要先通过 KeySetWrite
-        将共享密钥写入所有参与组播的设备。通常在设备配网成功后、加入组之前调用。
+        The Commissioner (e.g., phone App) needs to write shared keys to all devices participating in multicast
+        via KeySetWrite before establishing multicast communication. Typically called after successful device commissioning and before joining a group.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x01">KeySetRead -- 读取密钥集(0x01)</h3>
+  <h3 id="cmd-0x01">KeySetRead — Read Key Set(0x01)</h3>
   <p>
-    读取指定 ID 的密钥集信息。返回 <strong>KeySetReadResponse</strong>，
-    其中包含密钥集的元数据（ID、安全策略、各 Epoch 起始时间），但不包含密钥明文。
+    Reads key set information for the specified ID. Returns <strong>KeySetReadResponse</strong>,
+    containing the key set's metadata (ID, security policy, Epoch start times) but not the plaintext keys.
   </p>
   <div class="table-wrap">
     <table>
@@ -3950,7 +3950,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>GroupKeySetID</td>
           <td>uint16</td>
-          <td>要读取的密钥集 ID</td>
+          <td>Key set ID to read</td>
         </tr>
       </tbody>
     </table>
@@ -3966,7 +3966,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>GroupKeySet</td>
           <td><a href="#struct-groupkeyset">GroupKeySetStruct</a></td>
-          <td>密钥集信息（EpochKey 字段为 null，不返回明文）</td>
+          <td>Key set information (EpochKey fields are null, plaintext not returned)</td>
         </tr>
       </tbody>
     </table>
@@ -3976,17 +3976,17 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        管理端需要确认某个密钥集是否已成功写入、查看其安全策略和 Epoch 时间窗口时调用。
-        常用于密钥轮换前检查当前密钥集的状态。
+        Called when the management side needs to confirm whether a key set has been successfully written, or to check its security policy and Epoch time windows.
+        Commonly used to check the current key set status before key rotation.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x03">KeySetRemove -- 删除密钥集(0x03)</h3>
+  <h3 id="cmd-0x03">KeySetRemove — Delete Key Set(0x03)</h3>
   <p>
-    删除指定 ID 的密钥集。删除前需要确保没有 GroupKeyMap 条目仍在引用该密钥集，
-    否则相关组将无法正常收发加密组播消息。
+    Deletes the key set with the specified ID. Before deletion, ensure no GroupKeyMap entries still reference this key set,
+    otherwise the associated groups will be unable to send or receive encrypted multicast messages properly.
   </p>
   <div class="table-wrap">
     <table>
@@ -3997,17 +3997,17 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>GroupKeySetID</td>
           <td>uint16</td>
-          <td>要删除的密钥集 ID（不能为 0，ID 0 是 IPK 密钥集，不可删除）</td>
+          <td>Key set ID to delete (cannot be 0; ID 0 is the IPK key set and cannot be deleted)</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">IPK 不可删除</div>
+    <div class="callout-title">IPK Cannot Be Deleted</div>
     <p>
-      GroupKeySetID 为 <code>0</code> 的密钥集是 Identity Protection Key（IPK），
-      由 Fabric 建立时自动创建。尝试删除 ID 0 会返回 <code>INVALID_COMMAND</code> 错误。
+      The key set with GroupKeySetID <code>0</code> is the Identity Protection Key (IPK),
+      automatically created when the Fabric is established. Attempting to delete ID 0 returns an <code>INVALID_COMMAND</code> error.
     </p>
   </div>
 
@@ -4015,16 +4015,16 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        密钥轮换完成后，旧密钥集不再被任何组引用时，可以通过 KeySetRemove 清理掉，释放设备存储空间。
+        After key rotation is complete, when old key sets are no longer referenced by any group, they can be cleaned up via KeySetRemove to free device storage space.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x04">KeySetReadAllIndices -- 列举所有密钥集(0x04)</h3>
+  <h3 id="cmd-0x04">KeySetReadAllIndices — List All Key Sets(0x04)</h3>
   <p>
-    列出当前 Fabric 下所有已存储的密钥集 ID。返回 <strong>KeySetReadAllIndicesResponse</strong>。
-    不需要任何参数。
+    Lists all stored key set IDs under the current Fabric. Returns <strong>KeySetReadAllIndicesResponse</strong>.
+    No parameters required.
   </p>
 
   <h4>KeySetReadAllIndicesResponse</h4>
@@ -4037,7 +4037,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>GroupKeySetIDs</td>
           <td>list&lt;uint16&gt;</td>
-          <td>当前 Fabric 拥有的所有密钥集 ID 列表</td>
+          <td>List of all key set IDs owned by the current Fabric</td>
         </tr>
       </tbody>
     </table>
@@ -4047,16 +4047,16 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        管理端在执行密钥审计或轮换前，先调用此命令获取设备上所有密钥集的 ID，
-        再逐个通过 KeySetRead 查看详情，决定哪些需要更新或删除。
+        Before performing key audit or rotation, the management side calls this command to get all key set IDs on the device,
+        then reviews details one by one via KeySetRead to decide which need updating or deletion.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h2 id="attributes">Attributes</h2>
-  <p>GroupKeyManagement Cluster 共有 4 个应用属性。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+  <p>The GroupKeyManagement Cluster has 4 application attributes. Click an attribute ID in the summary table below to jump to its detailed description.</p>
 
   <div class="table-wrap">
     <table>
@@ -4065,7 +4065,7 @@ export const clusters: Record<string, ClusterContent> = {
           <th>ID</th>
           <th>Name</th>
           <th>Type</th>
-          <th>可写</th>
+          <th>Writable</th>
           <th>Description</th>
         </tr>
       </thead>
@@ -4074,46 +4074,46 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>GroupKeyMap</td>
           <td>list&lt;GroupKeyMapStruct&gt;</td>
-          <td class="col-required">是</td>
-          <td>组 ID 与密钥集的映射关系</td>
+          <td class="col-required">Yes</td>
+          <td>Mapping of group IDs to key sets</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>GroupTable</td>
           <td>list&lt;GroupTableStruct&gt;</td>
-          <td class="col-optional">否</td>
-          <td>设备上所有组的信息表</td>
+          <td class="col-optional">No</td>
+          <td>Information table of all groups on the device</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
           <td>MaxGroupsPerFabric</td>
           <td>uint16</td>
-          <td class="col-optional">否</td>
-          <td>每个 Fabric 最多支持的组数量</td>
+          <td class="col-optional">No</td>
+          <td>Maximum number of groups per Fabric</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
           <td>MaxGroupKeysPerFabric</td>
           <td>uint16</td>
-          <td class="col-optional">否</td>
-          <td>每个 Fabric 最多支持的密钥集数量</td>
+          <td class="col-optional">No</td>
+          <td>Maximum number of key sets per Fabric</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <!-- GroupKeyMap -->
-  <h3 id="attr-0x0000">GroupKeyMap -- 组密钥映射(0x0000)</h3>
+  <h3 id="attr-0x0000">GroupKeyMap — Group Key Mapping(0x0000)</h3>
   <p>
-    这是本 Cluster 最核心的属性。它定义了「哪个组使用哪个密钥集」的映射关系。
-    每个条目将一个 GroupId 关联到一个 GroupKeySetID，设备根据这个映射来选择加解密组播消息所用的密钥。
+    This is the most core attribute of this Cluster. It defines the mapping of "which group uses which key set."
+    Each entry associates a GroupId with a GroupKeySetID, and the device uses this mapping to select the key for encrypting and decrypting multicast messages.
   </p>
   <p>
-    <strong>可写属性</strong> —— 管理端可以直接写入来建立或修改映射。
-    一个密钥集可以被多个组共享，也可以为每个组分配独立的密钥集。
+    <strong>Writable attribute</strong> — the management side can write directly to establish or modify mappings.
+    A key set can be shared by multiple groups, or each group can be assigned an independent key set.
   </p>
 
-  <h4>GroupKeyMapStruct 结构</h4>
+  <h4>GroupKeyMapStruct Structure</h4>
   <div class="table-wrap">
     <table>
       <thead>
@@ -4123,17 +4123,17 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>GroupId</td>
           <td>group-id</td>
-          <td>组 ID（对应 Groups Cluster 中注册的组）</td>
+          <td>Group ID (corresponding to a group registered in the Groups Cluster)</td>
         </tr>
         <tr>
           <td>GroupKeySetID</td>
           <td>uint16</td>
-          <td>关联的密钥集 ID（必须是已通过 KeySetWrite 写入的）</td>
+          <td>Associated key set ID (must be one already written via KeySetWrite)</td>
         </tr>
         <tr>
           <td>FabricIndex</td>
           <td>fabric-idx</td>
-          <td>所属 Fabric 索引（自动填充，Fabric 隔离）</td>
+          <td>Owning Fabric index (auto-filled, Fabric-isolated)</td>
         </tr>
       </tbody>
     </table>
@@ -4141,13 +4141,13 @@ export const clusters: Record<string, ClusterContent> = {
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
   <!-- GroupTable -->
-  <h3 id="attr-0x0001">GroupTable -- 组信息表(0x0001)</h3>
+  <h3 id="attr-0x0001">GroupTable — Group Information Table(0x0001)</h3>
   <p>
-    只读属性，展示设备上所有已注册组的详细信息。
-    这个表由设备根据 Groups Cluster 的操作和 GroupKeyMap 自动维护，不能直接写入。
+    Read-only attribute displaying detailed information for all registered groups on the device.
+    This table is automatically maintained by the device based on Groups Cluster operations and GroupKeyMap; it cannot be written to directly.
   </p>
 
-  <h4>GroupTableStruct 结构</h4>
+  <h4>GroupTableStruct Structure</h4>
   <div class="table-wrap">
     <table>
       <thead>
@@ -4157,22 +4157,22 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>GroupId</td>
           <td>group-id</td>
-          <td>组 ID</td>
+          <td>Group ID</td>
         </tr>
         <tr>
           <td>Endpoints</td>
           <td>list&lt;endpoint-no&gt;</td>
-          <td>该组包含的 Endpoint 列表</td>
+          <td>List of Endpoints included in this group</td>
         </tr>
         <tr>
           <td>GroupName</td>
           <td>string</td>
-          <td>组名称（最长 16 字节，可选）</td>
+          <td>Group name (max 16 bytes, optional)</td>
         </tr>
         <tr>
           <td>FabricIndex</td>
           <td>fabric-idx</td>
-          <td>所属 Fabric 索引</td>
+          <td>Owning Fabric index</td>
         </tr>
       </tbody>
     </table>
@@ -4180,36 +4180,36 @@ export const clusters: Record<string, ClusterContent> = {
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
   <!-- MaxGroupsPerFabric & MaxGroupKeysPerFabric -->
-  <h3 id="attr-0x0002">MaxGroupsPerFabric -- 最大组数(0x0002)</h3>
+  <h3 id="attr-0x0002">MaxGroupsPerFabric — Max Groups(0x0002)</h3>
   <p>
-    只读属性，标识每个 Fabric 最多可以注册多少个组。
-    这是设备的硬件/固件限制，管理端在规划组播拓扑时需要参考这个值。
+    Read-only attribute indicating the maximum number of groups each Fabric can register.
+    This is a hardware/firmware limit of the device; the management side should reference this value when planning multicast topology.
   </p>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0003">MaxGroupKeysPerFabric -- 最大密钥集数(0x0003)</h3>
+  <h3 id="attr-0x0003">MaxGroupKeysPerFabric — Max Key Sets(0x0003)</h3>
   <p>
-    只读属性，标识每个 Fabric 最多可以存储多少个密钥集。
-    包括 IPK（ID = 0）在内。如果值为 3，则除了 IPK 外还能存 2 个自定义密钥集。
+    Read-only attribute indicating the maximum number of key sets each Fabric can store.
+    Including the IPK (ID = 0). If the value is 3, then besides the IPK, 2 custom key sets can be stored.
   </p>
 
   <div class="callout callout-tip">
-    <div class="callout-title">容量规划</div>
+    <div class="callout-title">Capacity Planning</div>
     <p>
-      在写入密钥集或添加组映射前，先读取 <code>MaxGroupsPerFabric</code> 和
-      <code>MaxGroupKeysPerFabric</code> 确认设备还有空间。
-      超出限制的写入操作会返回 <code>RESOURCE_EXHAUSTED</code> 错误。
+      Before writing key sets or adding group mappings, first read <code>MaxGroupsPerFabric</code> and
+      <code>MaxGroupKeysPerFabric</code> to confirm the device has available space.
+      Write operations exceeding the limit return a <code>RESOURCE_EXHAUSTED</code> error.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 数据结构 ====== -->
+  <!-- ====== Data Structures ====== -->
   <h2 id="structs">Data Structures</h2>
 
-  <h3 id="struct-groupkeyset">GroupKeySetStruct(密钥集结构体)</h3>
+  <h3 id="struct-groupkeyset">GroupKeySetStruct (Key Set Structure)</h3>
   <p>
-    描述一个完整的组播密钥集。包含密钥集 ID、安全策略、以及最多三组 Epoch 密钥和对应的起始时间。
-    三个 Epoch 插槽用于支持密钥轮换 —— 设备可以同时持有旧密钥和新密钥，实现无缝切换。
+    Describes a complete multicast key set. Contains the key set ID, security policy, and up to three groups of Epoch keys with their start times.
+    Three Epoch slots support key rotation — the device can hold both old and new keys simultaneously for seamless switching.
   </p>
 
   <div class="table-wrap">
@@ -4221,109 +4221,109 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>GroupKeySetID</td>
           <td>uint16</td>
-          <td>密钥集唯一标识。<code>0</code> 为 IPK（Identity Protection Key），由 Fabric 自动管理</td>
+          <td>Key set unique identifier. <code>0</code> is IPK (Identity Protection Key), automatically managed by the Fabric</td>
         </tr>
         <tr>
           <td>GroupKeySecurityPolicy</td>
           <td><a href="#enum-security-policy">GroupKeySecurityPolicyEnum</a></td>
-          <td>安全策略 —— TrustFirst 或 CacheAndSync</td>
+          <td>Security policy — TrustFirst or CacheAndSync</td>
         </tr>
         <tr>
           <td>EpochKey0</td>
           <td>octstr (16 bytes) / null</td>
-          <td>第一个 Epoch 密钥（128 位 AES 密钥）。读取时返回 null</td>
+          <td>First Epoch key (128-bit AES key). Returns null when read</td>
         </tr>
         <tr>
           <td>EpochStartTime0</td>
           <td>epoch-us / null</td>
-          <td>EpochKey0 的生效时间（微秒级 UTC 时间戳）</td>
+          <td>Effective time of EpochKey0 (microsecond-level UTC timestamp)</td>
         </tr>
         <tr>
           <td>EpochKey1</td>
           <td>octstr (16 bytes) / null</td>
-          <td>第二个 Epoch 密钥。用于密钥轮换过渡期</td>
+          <td>Second Epoch key. Used during key rotation transition period</td>
         </tr>
         <tr>
           <td>EpochStartTime1</td>
           <td>epoch-us / null</td>
-          <td>EpochKey1 的生效时间</td>
+          <td>Effective time of EpochKey1</td>
         </tr>
         <tr>
           <td>EpochKey2</td>
           <td>octstr (16 bytes) / null</td>
-          <td>第三个 Epoch 密钥。完成轮换后的最终密钥</td>
+          <td>Third Epoch key. The final key after rotation is complete</td>
         </tr>
         <tr>
           <td>EpochStartTime2</td>
           <td>epoch-us / null</td>
-          <td>EpochKey2 的生效时间</td>
+          <td>Effective time of EpochKey2</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">Epoch 密钥轮换机制</div>
+    <div class="callout-title">Epoch Key Rotation Mechanism</div>
     <p>
-      三个 Epoch 插槽按时间顺序排列：EpochStartTime0 &lt; EpochStartTime1 &lt; EpochStartTime2。
-      设备在当前时间到达对应的 EpochStartTime 后自动切换到新密钥。
-      在切换窗口期内，设备能同时用旧密钥解密收到的消息、用新密钥加密发出的消息，
-      保证组内设备逐步更新密钥时不会中断通信。
+      Three Epoch slots are arranged in chronological order: EpochStartTime0 &lt; EpochStartTime1 &lt; EpochStartTime2.
+      The device automatically switches to the new key when the current time reaches the corresponding EpochStartTime.
+      During the transition window, the device can simultaneously decrypt received messages with the old key and encrypt sent messages with the new key,
+      ensuring communication is not interrupted as devices in the group gradually update their keys.
     </p>
   </div>
 
-  <!-- ====== 枚举类型 ====== -->
+  <!-- ====== Enum Types ====== -->
   <h2 id="enums">Enum Types</h2>
 
-  <h3 id="enum-security-policy">GroupKeySecurityPolicyEnum(安全策略)</h3>
-  <p>定义密钥集使用的安全验证策略。决定设备如何验证组播消息的来源可信度。</p>
+  <h3 id="enum-security-policy">GroupKeySecurityPolicyEnum (Security Policy)</h3>
+  <p>Defines the security verification policy used by the key set. Determines how the device verifies the trustworthiness of multicast message sources.</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">TrustFirst</span>
-        <span class="enum-desc">信任优先 —— 首次收到的组播密钥即被信任。适用于大多数场景，是默认策略</span>
+        <span class="enum-desc">Trust First — the first received multicast key is trusted. Suitable for most scenarios, the default policy</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">CacheAndSync</span>
-        <span class="enum-desc">缓存与同步 —— 需要从 DCL 验证证书链后才信任。安全性更高，需要设备支持 CS 特性</span>
+        <span class="enum-desc">Cache and Sync — requires verifying the certificate chain from DCL before trusting. Higher security, requires device CS feature support</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">CacheAndSync 前提</div>
+    <div class="callout-title">CacheAndSync Prerequisites</div>
     <p>
-      只有设备的 <code>FeatureMap</code> 中启用了 <strong>CS</strong> 位后，
-      才能在 KeySetWrite 中使用 <code>CacheAndSync</code> 策略。
-      向不支持 CS 的设备写入 CacheAndSync 密钥集会返回 <code>INVALID_COMMAND</code>。
+      Only after the <strong>CS</strong> bit is enabled in the device's <code>FeatureMap</code>
+      can the <code>CacheAndSync</code> policy be used in KeySetWrite.
+      Writing a CacheAndSync key set to a device that does not support CS returns <code>INVALID_COMMAND</code>.
     </p>
   </div>
 
-  <!-- ====== Feature 位图 ====== -->
+  <!-- ====== Feature Bitmap ====== -->
   <h2 id="features">Feature Bitmap</h2>
-  <p>GroupKeyManagement Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持的高级能力：</p>
+  <p>The GroupKeyManagement Cluster declares the device's supported advanced capabilities through <code>FeatureMap</code> (0xFFFC):</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">Bit 0</span>
       <div>
         <span class="enum-name">CS（CacheAndSync）</span>
-        <span class="enum-desc">缓存与同步 —— 支持从 DCL 同步信任根证书，允许使用 CacheAndSync 安全策略</span>
+        <span class="enum-desc">Cache and Sync — supports syncing trusted root certificates from DCL, allows CacheAndSync security policy</span>
       </div>
     </div>
   </div>
 
   <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一个已配置两个组的设备上，GroupKeyManagement Cluster 的属性读取结果：</p>
+  <p>Attribute read results of the GroupKeyManagement Cluster on a device with two configured groups:</p>
 
   <pre><code>{
-  // --- GroupKeyMap（密钥映射表）---
+  // --- GroupKeyMap (Key Mapping Table) ---
   "0x0000": [
     {
       "GroupId": 1,
@@ -4337,23 +4337,23 @@ export const clusters: Record<string, ClusterContent> = {
     }
   ],
 
-  // --- GroupTable（组信息表，只读）---
+  // --- GroupTable (Group Info Table, Read-only) ---
   "0x0001": [
     {
       "GroupId": 1,
       "Endpoints": [1, 2],
-      "GroupName": "客厅灯组",
+      "GroupName": "Living Room Lights",
       "FabricIndex": 1
     },
     {
       "GroupId": 2,
       "Endpoints": [3],
-      "GroupName": "卧室灯组",
+      "GroupName": "Bedroom Lights",
       "FabricIndex": 1
     }
   ],
 
-  // --- 容量限制 ---
+  // --- Capacity Limits ---
   "0x0002": 4,               // MaxGroupsPerFabric = 4
   "0x0003": 3                // MaxGroupKeysPerFabric = 3
 }</code></pre>
@@ -4361,44 +4361,44 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      GroupKeyMap 是唯一可写的属性 —— 通过写入它来绑定组和密钥集。
-      GroupTable 是只读的，由设备自动根据 Groups Cluster 和 GroupKeyMap 计算生成。
-      密钥集本身通过 KeySetWrite / KeySetRead 命令管理，不通过属性读写。
+      GroupKeyMap is the only writable attribute — write to it to bind groups and key sets.
+      GroupTable is read-only, automatically calculated by the device based on Groups Cluster and GroupKeyMap.
+      Key sets themselves are managed through KeySetWrite / KeySetRead commands, not through attribute read/write.
     </p>
   </div>
 
   <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
-  <h3 id="scenario-setup">场景 1：为一组设备建立组播密钥</h3>
-  <p>当你需要让多个设备加入同一个组并支持组播通信时：</p>
+  <h3 id="scenario-setup">Scenario 1: Establishing Multicast Keys for a Group of Devices</h3>
+  <p>When you need multiple devices to join the same group and support multicast communication:</p>
   <ol>
-    <li>先读取目标设备的 <code>MaxGroupKeysPerFabric (0x0003)</code>，确认还有密钥集配额</li>
-    <li>通过 <code>KeySetWrite (0x00)</code> 向每个目标设备写入相同的密钥集（相同的 GroupKeySetID 和 EpochKey）</li>
-    <li>在每个设备上写入 <code>GroupKeyMap (0x0000)</code> 属性，将 GroupId 映射到刚写入的 GroupKeySetID</li>
-    <li>通过 Groups Cluster 的 AddGroup 命令将设备加入对应的组</li>
-    <li>读取 <code>GroupTable (0x0001)</code> 确认组信息和 Endpoint 映射正确</li>
-    <li>现在可以向该组发送组播命令了，所有成员设备都能用共享密钥解密和执行</li>
+    <li>First read the target device's <code>MaxGroupKeysPerFabric (0x0003)</code> to confirm key set quota availability</li>
+    <li>Write the same key set (same GroupKeySetID and EpochKey) to each target device via <code>KeySetWrite (0x00)</code></li>
+    <li>Write the <code>GroupKeyMap (0x0000)</code> attribute on each device, mapping GroupId to the just-written GroupKeySetID</li>
+    <li>Add the device to the corresponding group via the Groups Cluster's AddGroup command</li>
+    <li>Read <code>GroupTable (0x0001)</code> to confirm group information and Endpoint mapping are correct</li>
+    <li>Now you can send multicast commands to the group, and all member devices can decrypt and execute using the shared key</li>
   </ol>
 
-  <h3 id="scenario-rotation">场景 2：密钥轮换(Key Rotation)</h3>
-  <p>定期更换组播密钥是安全最佳实践。Matter 的三 Epoch 机制让轮换可以无缝进行：</p>
+  <h3 id="scenario-rotation">Scenario 2: Key Rotation</h3>
+  <p>Regularly rotating multicast keys is a security best practice. Matter's three-Epoch mechanism allows rotation to proceed seamlessly:</p>
   <ol>
-    <li>通过 <code>KeySetReadAllIndices (0x04)</code> 列出当前所有密钥集 ID</li>
-    <li>通过 <code>KeySetRead (0x01)</code> 读取目标密钥集，检查当前的 Epoch 时间窗口</li>
-    <li>生成新的 128 位 AES 密钥作为下一个 Epoch 密钥</li>
-    <li>通过 <code>KeySetWrite (0x00)</code> 更新密钥集 —— 保留当前活跃的 EpochKey，将新密钥写入下一个 Epoch 插槽，设置未来的 EpochStartTime</li>
-    <li>依次向组内每个设备写入相同的更新后密钥集</li>
-    <li>等待所有设备都更新完毕后，新 EpochStartTime 到达时自动切换到新密钥</li>
-    <li>确认所有设备已切换后，可以移除不再使用的旧 Epoch 密钥（通过下一次 KeySetWrite 覆盖）</li>
+    <li>List all current key set IDs via <code>KeySetReadAllIndices (0x04)</code></li>
+    <li>Read the target key set via <code>KeySetRead (0x01)</code> and check the current Epoch time windows</li>
+    <li>Generate a new 128-bit AES key as the next Epoch key</li>
+    <li>Update the key set via <code>KeySetWrite (0x00)</code> — keep the currently active EpochKey, write the new key into the next Epoch slot, and set a future EpochStartTime</li>
+    <li>Write the same updated key set to each device in the group sequentially</li>
+    <li>After all devices have been updated, when the new EpochStartTime arrives, they automatically switch to the new key</li>
+    <li>After confirming all devices have switched, old Epoch keys no longer in use can be removed (overwritten in the next KeySetWrite)</li>
   </ol>
 
   <div class="callout callout-tip">
-    <div class="callout-title">轮换要点</div>
+    <div class="callout-title">Rotation Key Points</div>
     <p>
-      密钥轮换的关键是 <strong>先写入所有设备，再让新密钥生效</strong>。
-      如果部分设备还持有旧密钥而其他设备已切换到新密钥，这些设备之间的组播通信将中断。
-      因此建议将 EpochStartTime 设置到足够远的未来，确保所有设备都有时间完成更新。
+      The key to key rotation is <strong>write to all devices first, then let the new key take effect</strong>.
+      If some devices still hold the old key while others have switched to the new key, multicast communication between these devices will be interrupted.
+      Therefore, it is recommended to set EpochStartTime far enough in the future to ensure all devices have time to complete the update.
     </p>
   </div>
 
