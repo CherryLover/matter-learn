@@ -1,0 +1,178 @@
+---
+---
+
+<header class="header">
+  <div class="header-inner">
+    <div class="header-left">
+      <button id="menu-toggle" class="menu-btn" aria-label="Toggle menu">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 5h14M3 10h14M3 15h14" />
+        </svg>
+      </button>
+      <a href="/" class="logo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="logo-icon">
+          <path d="M12 2L2 7l10 5 10-5-10-5z" fill="currentColor" opacity="0.8"/>
+          <path d="M2 17l10 5 10-5" stroke="currentColor" stroke-width="2" fill="none"/>
+          <path d="M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" fill="none"/>
+        </svg>
+        <span class="logo-text">Matter Learn</span>
+      </a>
+    </div>
+    <div class="header-right">
+      <button id="theme-toggle" class="theme-btn" aria-label="Toggle theme">
+        <svg id="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"/>
+          <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+        </svg>
+        <svg id="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+(function() {
+  const theme = localStorage.getItem('theme') ||
+    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  if (theme === 'dark') {
+    document.documentElement.classList.add('dark');
+  }
+  updateThemeIcons();
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const toggle = document.getElementById('theme-toggle');
+    if (toggle) {
+      toggle.addEventListener('click', function() {
+        document.documentElement.classList.toggle('dark');
+        const isDark = document.documentElement.classList.contains('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        updateThemeIcons();
+      });
+    }
+
+    const menuBtn = document.getElementById('menu-toggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    if (menuBtn && sidebar) {
+      menuBtn.addEventListener('click', function() {
+        sidebar.classList.toggle('open');
+        if (overlay) overlay.classList.toggle('open');
+      });
+      if (overlay) {
+        overlay.addEventListener('click', function() {
+          sidebar.classList.remove('open');
+          overlay.classList.remove('open');
+        });
+      }
+    }
+  });
+
+  function updateThemeIcons() {
+    const isDark = document.documentElement.classList.contains('dark');
+    const sun = document.getElementById('sun-icon');
+    const moon = document.getElementById('moon-icon');
+    if (sun && moon) {
+      sun.style.display = isDark ? 'none' : 'block';
+      moon.style.display = isDark ? 'block' : 'none';
+    }
+  }
+})();
+</script>
+
+<style>
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 40;
+    height: 56px;
+    background-color: var(--bg-primary);
+    border-bottom: 1px solid var(--border-color);
+    backdrop-filter: blur(8px);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    padding: 0 1rem;
+    max-width: 100%;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .menu-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 0.375rem;
+    border-radius: 0.375rem;
+    border: none;
+    background: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+
+  .menu-btn:hover {
+    background: var(--bg-hover);
+  }
+
+  @media (max-width: 768px) {
+    .menu-btn {
+      display: flex;
+    }
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--text-primary);
+  }
+
+  .logo-icon {
+    color: var(--color-primary-600, #4f46e5);
+  }
+
+  :global(.dark) .logo-icon {
+    color: var(--color-primary-400, #818cf8);
+  }
+
+  .logo-text {
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+
+  .theme-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.375rem;
+    border-radius: 0.375rem;
+    border: none;
+    background: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+
+  .theme-btn:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+  }
+</style>

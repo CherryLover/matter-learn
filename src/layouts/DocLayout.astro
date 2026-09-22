@@ -1,0 +1,104 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  headings?: { depth: number; slug: string; text: string }[];
+  prev?: { title: string; href: string };
+  next?: { title: string; href: string };
+}
+
+const { title, description, headings = [], prev, next } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="doc-layout">
+    <article class="doc-content prose">
+      <slot />
+    </article>
+    <TableOfContents headings={headings} />
+  </div>
+
+  {(prev || next) && (
+    <nav class="prev-next">
+      <div class="prev-next-item">
+        {prev && (
+          <a href={prev.href} class="prev-next-link prev">
+            <span class="prev-next-label">上一篇</span>
+            <span class="prev-next-title">{prev.title}</span>
+          </a>
+        )}
+      </div>
+      <div class="prev-next-item">
+        {next && (
+          <a href={next.href} class="prev-next-link next">
+            <span class="prev-next-label">下一篇</span>
+            <span class="prev-next-title">{next.title}</span>
+          </a>
+        )}
+      </div>
+    </nav>
+  )}
+</BaseLayout>
+
+<style>
+  .doc-layout {
+    max-width: 48rem;
+    position: relative;
+  }
+
+  .doc-content {
+    width: 100%;
+  }
+
+  .prev-next {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    max-width: 48rem;
+  }
+
+  .prev-next-item {
+    flex: 1;
+  }
+
+  .prev-next-link {
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: border-color 0.15s ease;
+  }
+
+  .prev-next-link:hover {
+    border-color: var(--border-active);
+  }
+
+  .prev-next-link.next {
+    text-align: right;
+    margin-left: auto;
+  }
+
+  .prev-next-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+  }
+
+  .prev-next-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-primary-600, #4f46e5);
+  }
+
+  :global(.dark) .prev-next-title {
+    color: var(--color-primary-400, #818cf8);
+  }
+</style>

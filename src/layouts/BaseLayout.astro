@@ -1,0 +1,54 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Sidebar from '../components/Sidebar.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Matter 协议学习站点' } = Astro.props;
+const currentPath = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title} | Matter Learn</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <Header />
+    <Sidebar currentPath={currentPath} />
+    <main class="main-content">
+      <slot />
+    </main>
+  </body>
+</html>
+
+<style>
+  .main-content {
+    margin-top: 56px;
+    margin-left: 260px;
+    min-height: calc(100vh - 56px);
+    padding: 2rem 2.5rem;
+    max-width: 100%;
+  }
+
+  @media (max-width: 1200px) {
+    .main-content {
+      padding-right: 2rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .main-content {
+      margin-left: 0;
+      padding: 1.5rem 1rem;
+    }
+  }
+</style>

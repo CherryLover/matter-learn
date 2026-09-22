@@ -1,0 +1,191 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="首页" description="Matter 协议学习与参考站点">
+  <div class="hero">
+    <div class="hero-badge">Matter Protocol</div>
+    <h1 class="hero-title">Matter 协议学习站</h1>
+    <p class="hero-desc">
+      系统学习 Matter 协议核心概念，速查 Cluster 定义与参数，辅助日常开发调试。
+    </p>
+    <div class="hero-actions">
+      <a href="/concepts/" class="btn btn-primary">开始学习</a>
+      <a href="/clusters/" class="btn btn-secondary">Cluster 手册</a>
+    </div>
+  </div>
+
+  <div class="features">
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+        </svg>
+      </div>
+      <h3 class="feature-title">概念总览</h3>
+      <p class="feature-desc">Matter 协议基础概念，Node、Endpoint、Cluster、Attribute、Command 的层次结构。</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+        </svg>
+      </div>
+      <h3 class="feature-title">Cluster 手册</h3>
+      <p class="feature-desc">DoorLock、PowerSource 等常用 Cluster 的字段定义、枚举值与交互逻辑。</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="16 18 22 12 16 6"/>
+          <polyline points="8 6 2 12 8 18"/>
+        </svg>
+      </div>
+      <h3 class="feature-title">数据工具</h3>
+      <p class="feature-desc">JSON 结构解析器等在线工具，方便调试过程中快速查看设备上报数据。</p>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .hero {
+    text-align: center;
+    padding: 4rem 0 3rem;
+    max-width: 36rem;
+    margin: 0 auto;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: var(--color-primary-50, #eef2ff);
+    color: var(--color-primary-700, #4338ca);
+    border-radius: 9999px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+
+  :global(.dark) .hero-badge {
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--color-primary-300, #a5b4fc);
+  }
+
+  .hero-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .hero-desc {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    line-height: 1.75;
+    margin-bottom: 2rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.625rem 1.5rem;
+    border-radius: 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+
+  .btn-primary {
+    background: var(--color-primary-600, #4f46e5);
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: var(--color-primary-700, #4338ca);
+  }
+
+  .btn-secondary {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+  }
+
+  .btn-secondary:hover {
+    background: var(--bg-hover);
+  }
+
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+    max-width: 56rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .feature-card {
+    padding: 1.5rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    transition: border-color 0.15s ease;
+  }
+
+  .feature-card:hover {
+    border-color: var(--border-active);
+  }
+
+  .feature-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.5rem;
+    background: var(--color-primary-50, #eef2ff);
+    color: var(--color-primary-600, #4f46e5);
+    margin-bottom: 0.75rem;
+  }
+
+  :global(.dark) .feature-icon {
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--color-primary-400, #818cf8);
+  }
+
+  .feature-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .feature-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.625;
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      padding: 2rem 0 1.5rem;
+    }
+
+    .hero-title {
+      font-size: 1.75rem;
+    }
+  }
+</style>
