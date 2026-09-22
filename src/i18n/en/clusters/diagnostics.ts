@@ -1473,25 +1473,25 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'general-diagnostics': {
     title: 'GeneralDiagnostics Cluster (0x0033)',
-    description: 'Matter GeneralDiagnostics Cluster(0x0033)完整参考 — 设备健康状态、网络接口信息、重启统计、故障追踪、TestEventTrigger 测试命令及所有枚举值速查。',
+    description: 'Complete reference for the Matter GeneralDiagnostics Cluster (0x0033) — device health status, network interface information, reboot statistics, fault tracking, TestEventTrigger test command, and all enum quick references.',
     prev: { title: 'Cluster Reference', slug: 'clusters' },
     next: undefined,
     content: `<h1>GeneralDiagnostics Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x0033</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 固定在 <code>Endpoint 0</code>（根端点）
+    <strong>Endpoint</strong>: Fixed on <code>Endpoint 0</code> (Root Endpoint)
   </p>
   <p>
-    GeneralDiagnostics 提供设备的健康状态和运行诊断信息 —— 包括网络接口详情、重启次数、运行时长、启动原因，
-    以及硬件/射频/网络三类故障的实时追踪。所有 Matter 设备都必须实现这个 Cluster，是设备运维和问题排查的第一入口。
+    GeneralDiagnostics provides device health status and operational diagnostics — including network interface details, reboot count, uptime, boot reason,
+    and real-time tracking of hardware, radio, and network faults. All Matter devices must implement this Cluster; it is the primary entry point for device operations and troubleshooting.
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">Endpoint 0 专属</div>
+    <div class="callout-title">Endpoint 0 Exclusive</div>
     <p>
-      GeneralDiagnostics 只出现在 <strong>Endpoint 0</strong>（根端点），不会出现在功能端点上。
-      它反映的是整个设备的健康状态，不是某个功能模块的状态。
-      读取时请确保指定 <code>endpointId = 0</code>。
+      GeneralDiagnostics only appears on <strong>Endpoint 0</strong> (Root Endpoint), never on functional endpoints.
+      It reflects the health status of the entire device, not the status of a specific functional module.
+      When reading, make sure to specify <code>endpointId = 0</code>.
     </p>
   </div>
 
@@ -1512,12 +1512,12 @@ export const clusters: Record<string, ClusterContent> = {
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    GeneralDiagnostics 只有两个命令。<code>TestEventTrigger</code> 用于测试认证，生产环境通常禁用；
-    <code>TimeSnapshot</code> 用于获取设备当前的时间快照。
-    点击下方表格中的命令 ID 可跳转到对应的详细说明。
+    GeneralDiagnostics has only two commands. <code>TestEventTrigger</code> is used for certification testing and is typically disabled in production;
+    <code>TimeSnapshot</code> is used to get the device's current time snapshot.
+    Click on a command ID in the table below to jump to its detailed description.
   </p>
 
   <div class="table-wrap">
@@ -1535,23 +1535,23 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>TestEventTrigger</td>
           <td>Client → Server</td>
-          <td>触发设备内部的测试事件</td>
+          <td>Trigger an internal test event on the device</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x01">
           <td><a href="#cmd-0x01"><code>0x01</code></a></td>
           <td>TimeSnapshot</td>
           <td>Client → Server</td>
-          <td>获取设备当前时间快照</td>
+          <td>Get the device's current time snapshot</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
-  <h3 id="cmd-0x00">TestEventTrigger —— 测试事件触发(0x00)</h3>
+  <!-- ====== Command Details ====== -->
+  <h3 id="cmd-0x00">TestEventTrigger — Test Event Trigger (0x00)</h3>
   <p>
-    触发设备预置的测试事件。这个命令主要用于 Matter 认证测试期间，允许测试工具在不拆机的情况下模拟特定的设备行为
-    （如模拟传感器告警、触发故障状态等）。
+    Triggers a preset test event on the device. This command is primarily used during Matter certification testing, allowing test tools to simulate specific device behaviors
+    without disassembly (e.g., simulating sensor alarms, triggering fault states, etc.).
   </p>
   <div class="table-wrap">
     <table>
@@ -1562,12 +1562,12 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>EnableKey</td>
           <td>octstr (16 bytes)</td>
-          <td>启用密钥 —— 必须与设备预设的密钥匹配，否则命令被拒绝。生产设备应将此密钥设为全零以禁用测试功能</td>
+          <td>Enable key — must match the device's preset key, otherwise the command is rejected. Production devices should set this key to all zeros to disable test functionality</td>
         </tr>
         <tr>
           <td>EventTrigger</td>
           <td>uint64</td>
-          <td>触发器编号 —— 标识要触发的具体测试事件，由厂商或 Matter 测试规范定义</td>
+          <td>Trigger identifier — identifies the specific test event to trigger, defined by the vendor or Matter test specification</td>
         </tr>
       </tbody>
     </table>
@@ -1576,9 +1576,9 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-warning">
     <div class="callout-title">Security Note</div>
     <p>
-      <code>TestEventTriggersEnabled</code> 属性为 <code>true</code> 时此命令才生效。
-      生产环境的设备<strong>必须</strong>禁用测试触发器（将 EnableKey 设为全零），否则存在安全风险 ——
-      攻击者可能利用此命令模拟故障或篡改设备行为。
+      This command only works when the <code>TestEventTriggersEnabled</code> attribute is <code>true</code>.
+      Production devices <strong>must</strong> disable test triggers (set EnableKey to all zeros), otherwise there is a security risk —
+      attackers could use this command to simulate faults or tamper with device behavior.
     </p>
   </div>
 
@@ -1586,20 +1586,20 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        Matter 认证测试时，测试工具通过此命令让设备模拟特定状态（如烟感报警、网络断开等），
-        验证设备的事件上报和故障处理逻辑是否符合规范。App 开发中几乎不会用到此命令。
+        During Matter certification testing, test tools use this command to make the device simulate specific states (e.g., smoke alarm, network disconnection),
+        verifying that the device's event reporting and fault handling logic meets the specification. This command is rarely used in app development.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x01">TimeSnapshot —— 时间快照(0x01)</h3>
+  <h3 id="cmd-0x01">TimeSnapshot — Time Snapshot (0x01)</h3>
   <p>
-    请求设备返回当前的系统时间。不需要参数。
-    设备会返回一个 <code>TimeSnapshotResponse</code>，包含系统启动后的毫秒计时和 POSIX 时间戳（如果设备有可靠时钟）。
+    Requests the device to return its current system time. No parameters required.
+    The device returns a <code>TimeSnapshotResponse</code> containing the milliseconds since boot and a POSIX timestamp (if the device has a reliable clock).
   </p>
 
-  <h4>TimeSnapshotResponse 响应字段</h4>
+  <h4>TimeSnapshotResponse Response Fields</h4>
   <div class="table-wrap">
     <table>
       <thead>
@@ -1609,12 +1609,12 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>SystemTimeMs</td>
           <td>uint64</td>
-          <td>设备启动后经过的毫秒数（单调递增，不受时钟校准影响）</td>
+          <td>Milliseconds elapsed since device boot (monotonically increasing, unaffected by clock calibration)</td>
         </tr>
         <tr>
           <td>PosixTimeMs</td>
           <td>uint64 / null</td>
-          <td>POSIX 时间戳（毫秒精度）。如果设备没有可靠的 UTC 时钟，此字段为 <code>null</code></td>
+          <td>POSIX timestamp (millisecond precision). If the device has no reliable UTC clock, this field is <code>null</code></td>
         </tr>
       </tbody>
     </table>
@@ -1624,18 +1624,18 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        排查设备时间同步问题时使用。例如设备的日志时间戳明显偏差，可以通过 TimeSnapshot 确认设备当前的内部时钟是否准确。
-        <code>SystemTimeMs</code> 是从启动开始的单调时钟，配合 <code>UpTime</code> 属性可以交叉验证。
+        Used when troubleshooting device time synchronization issues. For example, if device log timestamps are noticeably off, you can use TimeSnapshot to confirm whether the device's internal clock is accurate.
+        <code>SystemTimeMs</code> is a monotonic clock from boot, and can be cross-validated with the <code>UpTime</code> attribute.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h2 id="attributes">Attributes</h2>
-  <p>GeneralDiagnostics 的属性按功能分为四组。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+  <p>GeneralDiagnostics attributes are divided into four groups by function. Click on an attribute ID in the summary table below to jump to its detailed description.</p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute summary table -->
   <div class="table-wrap">
     <table>
       <thead>

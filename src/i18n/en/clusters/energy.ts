@@ -457,192 +457,192 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">AC</span>
-        <span class="enum-desc">交流电（家用电器、工业设备、电网供电）</span>
+        <span class="enum-desc">Alternating Current (household appliances, industrial equipment, grid-powered)</span>
       </div>
     </div>
   </div>
 
-  <h3 id="enum-measurement-type">MeasurementTypeEnum(测量类型)</h3>
-  <p>用于 <code>Accuracy</code> 和 <code>Ranges</code> 中标识具体的测量种类：</p>
+  <h3 id="enum-measurement-type">MeasurementTypeEnum (Measurement Type)</h3>
+  <p>Used in <code>Accuracy</code> and <code>Ranges</code> to identify the specific measurement type:</p>
   <div class="enum-cards">
     <div class="enum-card">
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">Unspecified</span>
-        <span class="enum-desc">未指定</span>
+        <span class="enum-desc">Unspecified</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">Voltage</span>
-        <span class="enum-desc">电压（mV）</span>
+        <span class="enum-desc">Voltage (mV)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">ActiveCurrent</span>
-        <span class="enum-desc">有功电流（mA）</span>
+        <span class="enum-desc">Active Current (mA)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">ReactiveCurrent</span>
-        <span class="enum-desc">无功电流（mA）</span>
+        <span class="enum-desc">Reactive Current (mA)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">4</span>
       <div>
         <span class="enum-name">ApparentCurrent</span>
-        <span class="enum-desc">视在电流（mA）</span>
+        <span class="enum-desc">Apparent Current (mA)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">5</span>
       <div>
         <span class="enum-name">ActivePower</span>
-        <span class="enum-desc">有功功率（mW）</span>
+        <span class="enum-desc">Active Power (mW)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">6</span>
       <div>
         <span class="enum-name">ReactivePower</span>
-        <span class="enum-desc">无功功率（mVAR）</span>
+        <span class="enum-desc">Reactive Power (mVAR)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">7</span>
       <div>
         <span class="enum-name">ApparentPower</span>
-        <span class="enum-desc">视在功率（mVA）</span>
+        <span class="enum-desc">Apparent Power (mVA)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">8</span>
       <div>
         <span class="enum-name">RMSVoltage</span>
-        <span class="enum-desc">RMS 电压（mV）</span>
+        <span class="enum-desc">RMS Voltage (mV)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">9</span>
       <div>
         <span class="enum-name">RMSCurrent</span>
-        <span class="enum-desc">RMS 电流（mA）</span>
+        <span class="enum-desc">RMS Current (mA)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">10</span>
       <div>
         <span class="enum-name">RMSPower</span>
-        <span class="enum-desc">RMS 功率（mW）</span>
+        <span class="enum-desc">RMS Power (mW)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">11</span>
       <div>
         <span class="enum-name">Frequency</span>
-        <span class="enum-desc">频率（mHz）</span>
+        <span class="enum-desc">Frequency (mHz)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">12</span>
       <div>
         <span class="enum-name">PowerFactor</span>
-        <span class="enum-desc">功率因数（1/100）</span>
+        <span class="enum-desc">Power Factor (1/100)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">13</span>
       <div>
         <span class="enum-name">NeutralCurrent</span>
-        <span class="enum-desc">中性线电流（mA）</span>
+        <span class="enum-desc">Neutral Current (mA)</span>
       </div>
     </div>
   </div>
 
-  <!-- ====== 事件 ====== -->
+  <!-- ====== Events ====== -->
   <h2 id="events">Events</h2>
   <p>
-    ElectricalPowerMeasurement 定义了一个事件，用于周期性上报各测量类型在一段时间内的统计范围。
-    这是获取历史峰值、谷值数据的主要方式。
+    ElectricalPowerMeasurement defines one event, used for periodically reporting the statistical range of each measurement type over a time period.
+    This is the primary way to obtain historical peak and valley data.
   </p>
 
   <h3 id="event-ranges">MeasurementPeriodRanges</h3>
   <p>
-    <strong>优先级</strong>: INFO &nbsp;|&nbsp;
-    <strong>触发时机</strong>: 设备完成一个测量周期后自动上报
+    <strong>Priority</strong>: INFO &nbsp;|&nbsp;
+    <strong>Trigger</strong>: Automatically reported when the device completes a measurement period
   </p>
   <p>
-    事件包含一个 <code>Ranges</code> 字段，类型为 <code>list&lt;MeasurementRangeStruct&gt;</code>，
-    每个元素记录了某种测量类型在该周期内的最小值、最大值、起止时间戳等统计信息。
+    The event contains a <code>Ranges</code> field of type <code>list&lt;MeasurementRangeStruct&gt;</code>,
+    where each element records the minimum value, maximum value, start/end timestamps, and other statistics for a measurement type within that period.
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">事件 vs 属性中的 Ranges</div>
+    <div class="callout-title">Event vs Attribute Ranges</div>
     <p>
-      属性 <code>Ranges (0x0003)</code> 和事件 <code>MeasurementPeriodRanges</code> 都包含 MeasurementRangeStruct 列表，
-      但用途不同：属性记录的是<strong>累积范围</strong>（设备运行以来的总极值），
-      事件上报的是<strong>单个周期的范围</strong>（最近一段时间内的极值）。App 端应订阅事件来构建历史趋势图。
+      Both the attribute <code>Ranges (0x0003)</code> and the event <code>MeasurementPeriodRanges</code> contain MeasurementRangeStruct lists,
+      but they serve different purposes: the attribute records <strong>cumulative ranges</strong> (overall extremes since the device started running),
+      while the event reports <strong>per-period ranges</strong> (extremes within the most recent time window). Apps should subscribe to the event to build historical trend charts.
     </p>
   </div>
 
-  <!-- ====== Feature 位图 ====== -->
+  <!-- ====== Feature Bitmap ====== -->
   <h2 id="features">Feature Bitmap</h2>
   <p>
-    ElectricalPowerMeasurement 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持的电气测量能力。
-    不同 Feature 组合决定了哪些属性可用：
+    ElectricalPowerMeasurement declares the device's electrical measurement capabilities through <code>FeatureMap</code> (0xFFFC).
+    Different Feature combinations determine which attributes are available:
   </p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">Bit 0</span>
       <div>
-        <span class="enum-name">DIRC（DirectCurrent）</span>
-        <span class="enum-desc">直流测量 —— 支持 DC 电压、电流、功率测量</span>
+        <span class="enum-name">DIRC (DirectCurrent)</span>
+        <span class="enum-desc">DC measurement — supports DC voltage, current, and power measurement</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 1</span>
       <div>
-        <span class="enum-name">ALTC（AlternatingCurrent）</span>
-        <span class="enum-desc">交流测量 —— 解锁无功/视在功率、RMS 系列、频率、功率因数</span>
+        <span class="enum-name">ALTC (AlternatingCurrent)</span>
+        <span class="enum-desc">AC measurement — unlocks reactive/apparent power, RMS series, frequency, and power factor</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 2</span>
       <div>
-        <span class="enum-name">POLY（PolyphasePower）</span>
-        <span class="enum-desc">多相电力 —— 支持三相电系统，解锁 NeutralCurrent 属性</span>
+        <span class="enum-name">POLY (PolyphasePower)</span>
+        <span class="enum-desc">Polyphase power — supports three-phase systems, unlocks NeutralCurrent attribute</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">Bit 3</span>
       <div>
-        <span class="enum-name">HARM（Harmonics）</span>
-        <span class="enum-desc">谐波分析 —— 解锁 HarmonicCurrents 和 HarmonicPhases 属性</span>
+        <span class="enum-name">HARM (Harmonics)</span>
+        <span class="enum-desc">Harmonic analysis — unlocks HarmonicCurrents and HarmonicPhases attributes</span>
       </div>
     </div>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">DIRC 和 ALTC 互斥</div>
+    <div class="callout-title">DIRC and ALTC Are Mutually Exclusive</div>
     <p>
-      一个设备要么是直流（DIRC），要么是交流（ALTC），不能同时声明两者。
-      POLY 和 HARM 只在 ALTC 基础上生效。
-      App 端读取 FeatureMap 后，应据此决定展示哪些属性 —— 不要向 DC 设备请求 RMS 数据。
+      A device is either DC (DIRC) or AC (ALTC) — it cannot declare both.
+      POLY and HARM only take effect on top of ALTC.
+      After reading the FeatureMap, apps should decide which attributes to display accordingly — do not request RMS data from DC devices.
     </p>
   </div>
 
-  <!-- ====== 命令说明 ====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    ElectricalPowerMeasurement 是一个<strong>纯只读的 Server Cluster</strong>，没有任何命令。
-    设备负责采集电力数据并更新属性，App 端只需读取（Read）或订阅（Subscribe）即可获取数据。
+    ElectricalPowerMeasurement is a <strong>read-only Server Cluster</strong> with no commands.
+    The device is responsible for collecting electrical data and updating attributes; the app only needs to Read or Subscribe to obtain data.
   </p>
 
   <!-- ====== 示例数据 ====== -->

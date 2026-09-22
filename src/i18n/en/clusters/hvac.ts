@@ -119,7 +119,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>Amount</td>
           <td>int8</td>
-          <td>是</td>
+          <td>Yes</td>
           <td>Adjustment amount, in 0.1°C units. Positive values raise, negative values lower. For example, <code>10</code> means raise by 1.0°C</td>
         </tr>
       </tbody>
@@ -239,63 +239,63 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x01"><code>0x01</code></a></td>
           <td>OutdoorTemperature</td>
           <td>int16s / null</td>
-          <td><a href="#attr-temp">温度信息</a></td>
+          <td><a href="#attr-temp">Temperature Info</a></td>
           <td>Outdoor temperature</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x02">
           <td><a href="#attr-0x02"><code>0x02</code></a></td>
           <td>Occupancy</td>
           <td>bitmap8</td>
-          <td><a href="#attr-temp">温度信息</a></td>
+          <td><a href="#attr-temp">Temperature Info</a></td>
           <td>Occupancy status</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x03">
           <td><a href="#attr-0x03"><code>0x03</code></a></td>
           <td>AbsMinHeatSetpointLimit</td>
           <td>int16s</td>
-          <td><a href="#attr-temp">温度信息</a></td>
+          <td><a href="#attr-temp">Temperature Info</a></td>
           <td>Absolute minimum heating setpoint</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x04">
           <td><a href="#attr-0x04"><code>0x04</code></a></td>
           <td>AbsMaxHeatSetpointLimit</td>
           <td>int16s</td>
-          <td><a href="#attr-temp">温度信息</a></td>
+          <td><a href="#attr-temp">Temperature Info</a></td>
           <td>Absolute maximum heating setpoint</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x05">
           <td><a href="#attr-0x05"><code>0x05</code></a></td>
           <td>AbsMinCoolSetpointLimit</td>
           <td>int16s</td>
-          <td><a href="#attr-temp">温度信息</a></td>
+          <td><a href="#attr-temp">Temperature Info</a></td>
           <td>Absolute minimum cooling setpoint</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x06">
           <td><a href="#attr-0x06"><code>0x06</code></a></td>
           <td>AbsMaxCoolSetpointLimit</td>
           <td>int16s</td>
-          <td><a href="#attr-temp">温度信息</a></td>
+          <td><a href="#attr-temp">Temperature Info</a></td>
           <td>Absolute maximum cooling setpoint</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x07">
           <td><a href="#attr-0x07"><code>0x07</code></a></td>
           <td>PICoolingDemand</td>
           <td>uint8</td>
-          <td><a href="#attr-temp">温度信息</a></td>
+          <td><a href="#attr-temp">Temperature Info</a></td>
           <td>Cooling demand percentage (0-100)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x08">
           <td><a href="#attr-0x08"><code>0x08</code></a></td>
           <td>PIHeatingDemand</td>
           <td>uint8</td>
-          <td><a href="#attr-temp">温度信息</a></td>
+          <td><a href="#attr-temp">Temperature Info</a></td>
           <td>Heating demand percentage (0-100)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x09">
           <td><a href="#attr-0x09"><code>0x09</code></a></td>
           <td>HVACSystemTypeConfiguration</td>
           <td>bitmap8</td>
-          <td><a href="#attr-temp">温度信息</a></td>
+          <td><a href="#attr-temp">Temperature Info</a></td>
           <td>HVAC system type configuration</td>
         </tr>
         <!-- Setpoints 0x10-0x19 -->
@@ -310,63 +310,63 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x11"><code>0x11</code></a></td>
           <td>OccupiedCoolingSetpoint</td>
           <td>int16s</td>
-          <td><a href="#attr-setpoint">设定点</a></td>
+          <td><a href="#attr-setpoint">Setpoint</a></td>
           <td>Occupied cooling setpoint temperature</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x12">
           <td><a href="#attr-0x12"><code>0x12</code></a></td>
           <td>OccupiedHeatingSetpoint</td>
           <td>int16s</td>
-          <td><a href="#attr-setpoint">设定点</a></td>
+          <td><a href="#attr-setpoint">Setpoint</a></td>
           <td>Occupied heating setpoint temperature</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x13">
           <td><a href="#attr-0x13"><code>0x13</code></a></td>
           <td>UnoccupiedCoolingSetpoint</td>
           <td>int16s</td>
-          <td><a href="#attr-setpoint">设定点</a></td>
+          <td><a href="#attr-setpoint">Setpoint</a></td>
           <td>Unoccupied cooling setpoint temperature</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x14">
           <td><a href="#attr-0x14"><code>0x14</code></a></td>
           <td>UnoccupiedHeatingSetpoint</td>
           <td>int16s</td>
-          <td><a href="#attr-setpoint">设定点</a></td>
+          <td><a href="#attr-setpoint">Setpoint</a></td>
           <td>Unoccupied heating setpoint temperature</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x15">
           <td><a href="#attr-0x15"><code>0x15</code></a></td>
           <td>MinHeatSetpointLimit</td>
           <td>int16s</td>
-          <td><a href="#attr-setpoint">设定点</a></td>
+          <td><a href="#attr-setpoint">Setpoint</a></td>
           <td>User-adjustable minimum heating setpoint</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x16">
           <td><a href="#attr-0x16"><code>0x16</code></a></td>
           <td>MaxHeatSetpointLimit</td>
           <td>int16s</td>
-          <td><a href="#attr-setpoint">设定点</a></td>
+          <td><a href="#attr-setpoint">Setpoint</a></td>
           <td>User-adjustable maximum heating setpoint</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x17">
           <td><a href="#attr-0x17"><code>0x17</code></a></td>
           <td>MinCoolSetpointLimit</td>
           <td>int16s</td>
-          <td><a href="#attr-setpoint">设定点</a></td>
+          <td><a href="#attr-setpoint">Setpoint</a></td>
           <td>User-adjustable minimum cooling setpoint</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x18">
           <td><a href="#attr-0x18"><code>0x18</code></a></td>
           <td>MaxCoolSetpointLimit</td>
           <td>int16s</td>
-          <td><a href="#attr-setpoint">设定点</a></td>
+          <td><a href="#attr-setpoint">Setpoint</a></td>
           <td>User-adjustable maximum cooling setpoint</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x19">
           <td><a href="#attr-0x19"><code>0x19</code></a></td>
           <td>MinSetpointDeadBand</td>
           <td>int8</td>
-          <td><a href="#attr-setpoint">设定点</a></td>
+          <td><a href="#attr-setpoint">Setpoint</a></td>
           <td>Minimum gap between heating and cooling setpoints</td>
         </tr>
         <!-- Mode & Status 0x1A-0x29 -->
@@ -381,70 +381,70 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x1B"><code>0x1B</code></a></td>
           <td>ControlSequenceOfOperation</td>
           <td>enum8</td>
-          <td><a href="#attr-mode">模式与状态</a></td>
+          <td><a href="#attr-mode">Mode & Status</a></td>
           <td>Control sequence of operation</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x1C">
           <td><a href="#attr-0x1C"><code>0x1C</code></a></td>
           <td>SystemMode</td>
           <td>enum8</td>
-          <td><a href="#attr-mode">模式与状态</a></td>
+          <td><a href="#attr-mode">Mode & Status</a></td>
           <td>System operating mode</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x1E">
           <td><a href="#attr-0x1E"><code>0x1E</code></a></td>
           <td>ThermostatRunningMode</td>
           <td>enum8</td>
-          <td><a href="#attr-mode">模式与状态</a></td>
+          <td><a href="#attr-mode">Mode & Status</a></td>
           <td>Actual running mode</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x20">
           <td><a href="#attr-0x20"><code>0x20</code></a></td>
           <td>StartOfWeek</td>
           <td>enum8</td>
-          <td><a href="#attr-mode">模式与状态</a></td>
+          <td><a href="#attr-mode">Mode & Status</a></td>
           <td>Start of week</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x21">
           <td><a href="#attr-0x21"><code>0x21</code></a></td>
           <td>NumberOfWeeklyTransitions</td>
           <td>uint8</td>
-          <td><a href="#attr-mode">模式与状态</a></td>
+          <td><a href="#attr-mode">Mode & Status</a></td>
           <td>Maximum weekly transition points</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x22">
           <td><a href="#attr-0x22"><code>0x22</code></a></td>
           <td>NumberOfDailyTransitions</td>
           <td>uint8</td>
-          <td><a href="#attr-mode">模式与状态</a></td>
+          <td><a href="#attr-mode">Mode & Status</a></td>
           <td>Maximum daily transition points</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x23">
           <td><a href="#attr-0x23"><code>0x23</code></a></td>
           <td>TemperatureSetpointHold</td>
           <td>enum8</td>
-          <td><a href="#attr-mode">模式与状态</a></td>
+          <td><a href="#attr-mode">Mode & Status</a></td>
           <td>Setpoint hold toggle</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x24">
           <td><a href="#attr-0x24"><code>0x24</code></a></td>
           <td>TemperatureSetpointHoldDuration</td>
           <td>uint16 / null</td>
-          <td><a href="#attr-mode">模式与状态</a></td>
+          <td><a href="#attr-mode">Mode & Status</a></td>
           <td>Setpoint hold duration (minutes)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x25">
           <td><a href="#attr-0x25"><code>0x25</code></a></td>
           <td>ThermostatProgrammingOperationMode</td>
           <td>bitmap8</td>
-          <td><a href="#attr-mode">模式与状态</a></td>
+          <td><a href="#attr-mode">Mode & Status</a></td>
           <td>Programming operation mode</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x29">
           <td><a href="#attr-0x29"><code>0x29</code></a></td>
           <td>ThermostatRunningState</td>
           <td>bitmap16</td>
-          <td><a href="#attr-mode">模式与状态</a></td>
+          <td><a href="#attr-mode">Mode & Status</a></td>
           <td>Current running state bitmap</td>
         </tr>
         <!-- Setpoint Change Tracking 0x30-0x3A -->
@@ -459,63 +459,63 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x31"><code>0x31</code></a></td>
           <td>SetpointChangeAmount</td>
           <td>int16s / null</td>
-          <td><a href="#attr-change">变更追踪</a></td>
+          <td><a href="#attr-change">Change Tracking</a></td>
           <td>Amount of the last setpoint change</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x32">
           <td><a href="#attr-0x32"><code>0x32</code></a></td>
           <td>SetpointChangeSourceTimestamp</td>
           <td>epoch-s</td>
-          <td><a href="#attr-change">变更追踪</a></td>
+          <td><a href="#attr-change">Change Tracking</a></td>
           <td>Timestamp of the last setpoint change</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x34">
           <td><a href="#attr-0x34"><code>0x34</code></a></td>
           <td>OccupiedSetback</td>
           <td>uint8 / null</td>
-          <td><a href="#attr-change">变更追踪</a></td>
+          <td><a href="#attr-change">Change Tracking</a></td>
           <td>Occupied energy-saving setback temperature</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x35">
           <td><a href="#attr-0x35"><code>0x35</code></a></td>
           <td>OccupiedSetbackMin</td>
           <td>uint8 / null</td>
-          <td><a href="#attr-change">变更追踪</a></td>
+          <td><a href="#attr-change">Change Tracking</a></td>
           <td>Occupied setback minimum</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x36">
           <td><a href="#attr-0x36"><code>0x36</code></a></td>
           <td>OccupiedSetbackMax</td>
           <td>uint8 / null</td>
-          <td><a href="#attr-change">变更追踪</a></td>
+          <td><a href="#attr-change">Change Tracking</a></td>
           <td>Occupied setback maximum</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x37">
           <td><a href="#attr-0x37"><code>0x37</code></a></td>
           <td>UnoccupiedSetback</td>
           <td>uint8 / null</td>
-          <td><a href="#attr-change">变更追踪</a></td>
+          <td><a href="#attr-change">Change Tracking</a></td>
           <td>Unoccupied energy-saving setback temperature</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x38">
           <td><a href="#attr-0x38"><code>0x38</code></a></td>
           <td>UnoccupiedSetbackMin</td>
           <td>uint8 / null</td>
-          <td><a href="#attr-change">变更追踪</a></td>
+          <td><a href="#attr-change">Change Tracking</a></td>
           <td>Unoccupied setback minimum</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x39">
           <td><a href="#attr-0x39"><code>0x39</code></a></td>
           <td>UnoccupiedSetbackMax</td>
           <td>uint8 / null</td>
-          <td><a href="#attr-change">变更追踪</a></td>
+          <td><a href="#attr-change">Change Tracking</a></td>
           <td>Unoccupied setback maximum</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x3A">
           <td><a href="#attr-0x3A"><code>0x3A</code></a></td>
           <td>EmergencyHeatDelta</td>
           <td>uint8</td>
-          <td><a href="#attr-change">变更追踪</a></td>
+          <td><a href="#attr-change">Change Tracking</a></td>
           <td>Emergency heat activation delta</td>
         </tr>
         <!-- AC Capabilities 0x40-0x47 -->
@@ -530,49 +530,49 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x41"><code>0x41</code></a></td>
           <td>ACCapacity</td>
           <td>uint16</td>
-          <td><a href="#attr-ac">AC 能力</a></td>
+          <td><a href="#attr-ac">AC Capabilities</a></td>
           <td>AC cooling/heating capacity</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x42">
           <td><a href="#attr-0x42"><code>0x42</code></a></td>
           <td>ACRefrigerantType</td>
           <td>enum8</td>
-          <td><a href="#attr-ac">AC 能力</a></td>
+          <td><a href="#attr-ac">AC Capabilities</a></td>
           <td>Refrigerant type</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x43">
           <td><a href="#attr-0x43"><code>0x43</code></a></td>
           <td>ACCompressorType</td>
           <td>enum8</td>
-          <td><a href="#attr-ac">AC 能力</a></td>
+          <td><a href="#attr-ac">AC Capabilities</a></td>
           <td>Compressor type</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x44">
           <td><a href="#attr-0x44"><code>0x44</code></a></td>
           <td>ACErrorCode</td>
           <td>bitmap32</td>
-          <td><a href="#attr-ac">AC 能力</a></td>
+          <td><a href="#attr-ac">AC Capabilities</a></td>
           <td>AC error code bitmap</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x45">
           <td><a href="#attr-0x45"><code>0x45</code></a></td>
           <td>ACLouverPosition</td>
           <td>enum8</td>
-          <td><a href="#attr-ac">AC 能力</a></td>
+          <td><a href="#attr-ac">AC Capabilities</a></td>
           <td>Louver/air deflector position</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x46">
           <td><a href="#attr-0x46"><code>0x46</code></a></td>
           <td>ACCoilTemperature</td>
           <td>int16s / null</td>
-          <td><a href="#attr-ac">AC 能力</a></td>
+          <td><a href="#attr-ac">AC Capabilities</a></td>
           <td>Coil temperature</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x47">
           <td><a href="#attr-0x47"><code>0x47</code></a></td>
           <td>ACCapacityFormat</td>
           <td>enum8</td>
-          <td><a href="#attr-ac">AC 能力</a></td>
+          <td><a href="#attr-ac">AC Capabilities</a></td>
           <td>Capacity unit format</td>
         </tr>
       </tbody>
@@ -1382,7 +1382,7 @@ export const clusters: Record<string, ClusterContent> = {
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">Unknown</span>
-        <span class="enum-desc">未知</span>
+        <span class="enum-desc">Unknown</span>
       </div>
     </div>
     <div class="enum-card">
@@ -1681,14 +1681,14 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x01"><code>0x01</code></a></td>
           <td>KeypadLockout</td>
           <td>enum8</td>
-          <td>读写</td>
+          <td>Read/Write</td>
           <td>Panel keypad lock level (No lock / Level 1-5)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x02">
           <td><a href="#attr-0x02"><code>0x02</code></a></td>
           <td>ScheduleProgrammingVisibility</td>
           <td>enum8</td>
-          <td>读写</td>
+          <td>Read/Write</td>
           <td>Whether schedule programming is visible on the panel</td>
         </tr>
       </tbody>
@@ -1905,7 +1905,7 @@ export const clusters: Record<string, ClusterContent> = {
 
   <h3 id="scenario-region">Scenario 2: Export to Different Regions — Auto-configure Display Units During Commissioning</h3>
   <details class="scenario">
-    <summary>展开场景</summary>
+    <summary>Expand scenario</summary>
     <div class="scenario-content">
       <p>
         A Matter thermostat for the global market, factory-default displaying Celsius.
@@ -2039,7 +2039,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
     FanControl Cluster has only one command — <code>Step</code>, for incremental speed adjustment.
@@ -2055,7 +2055,7 @@ export const clusters: Record<string, ClusterContent> = {
           <th>ID</th>
           <th>Name</th>
           <th>Description</th>
-          <th>Feature 要求</th>
+          <th>Feature Required</th>
         </tr>
       </thead>
       <tbody>
@@ -2079,13 +2079,13 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="table-wrap">
     <table>
       <thead>
-        <tr><th>Parameter</th><th>Type</th><th>必填</th><th>Description</th></tr>
+        <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
       </thead>
       <tbody>
         <tr>
           <td>Direction</td>
           <td>StepDirectionEnum</td>
-          <td>是</td>
+          <td>Yes</td>
           <td>Step direction (see enum values below)</td>
         </tr>
         <tr>
@@ -2097,7 +2097,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>LowestOff</td>
           <td>bool</td>
-          <td>否</td>
+          <td>No</td>
           <td>Whether the lowest level in wrap mode is Off. <code>true</code> means decreasing below minimum turns off the fan</td>
         </tr>
       </tbody>
@@ -2133,11 +2133,11 @@ export const clusters: Record<string, ClusterContent> = {
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h2 id="attributes">Attributes</h2>
   <p>FanControl Cluster attributes are organized into five functional groups. Click an attribute ID in the summary table below to jump to its detailed description.</p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute summary table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -2162,7 +2162,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x01"><code>0x01</code></a></td>
           <td>FanModeSequence</td>
           <td>enum8</td>
-          <td><a href="#group-mode">风扇模式</a></td>
+          <td><a href="#group-mode">Fan Mode</a></td>
           <td>Supported mode sequence</td>
         </tr>
         <!-- Percentage Control -->
@@ -2177,7 +2177,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x03"><code>0x03</code></a></td>
           <td>PercentCurrent</td>
           <td>uint8</td>
-          <td><a href="#group-percent">百分比控制</a></td>
+          <td><a href="#group-percent">Percentage Control</a></td>
           <td>Actual speed percentage</td>
         </tr>
         <!-- Multi-Speed Control -->
@@ -2192,14 +2192,14 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x05"><code>0x05</code></a></td>
           <td>SpeedSetting</td>
           <td>uint8 / null</td>
-          <td><a href="#group-speed">多档位控制</a></td>
+          <td><a href="#group-speed">Multi-Speed Control</a></td>
           <td>Target speed level</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x06">
           <td><a href="#attr-0x06"><code>0x06</code></a></td>
           <td>SpeedCurrent</td>
           <td>uint8</td>
-          <td><a href="#group-speed">多档位控制</a></td>
+          <td><a href="#group-speed">Multi-Speed Control</a></td>
           <td>Actual speed level</td>
         </tr>
         <!-- Oscillation -->
@@ -2214,7 +2214,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x08"><code>0x08</code></a></td>
           <td>RockSetting</td>
           <td>bitmap8</td>
-          <td><a href="#group-rock">摇头功能</a></td>
+          <td><a href="#group-rock">Oscillation</a></td>
           <td>Current oscillation setting</td>
         </tr>
         <!-- Wind Mode -->
@@ -2229,7 +2229,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x0A"><code>0x0A</code></a></td>
           <td>WindSetting</td>
           <td>bitmap8</td>
-          <td><a href="#group-wind">风感模式</a></td>
+          <td><a href="#group-wind">Wind Mode</a></td>
           <td>Current wind setting</td>
         </tr>
         <!-- Airflow Direction -->
@@ -2662,7 +2662,7 @@ export const clusters: Record<string, ClusterContent> = {
   </details>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
   <p>FanControl Cluster read results from a smart ceiling fan supporting all Features while running:</p>
 
@@ -2701,7 +2701,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <h3 id="scenario-basic">Scenario 1: Basic Fan Control</h3>
@@ -2719,7 +2719,7 @@ export const clusters: Record<string, ClusterContent> = {
 
   <h3 id="scenario-speed">Scenario 2: Multi-Speed Fan Interface</h3>
   <details class="scenario">
-    <summary>查看步骤</summary>
+    <summary>View Steps</summary>
     <div class="scenario-content">
       <ol>
         <li>Confirm <code>FeatureMap</code> includes SPD (Bit 0), read <code>SpeedMax (0x04)</code> to get maximum speed levels</li>
@@ -2733,7 +2733,7 @@ export const clusters: Record<string, ClusterContent> = {
 
   <h3 id="scenario-ceiling">Scenario 3: Complete Ceiling Fan Control Panel</h3>
   <details class="scenario">
-    <summary>查看步骤</summary>
+    <summary>View Steps</summary>
     <div class="scenario-content">
       <ol>
         <li>Read <code>FeatureMap</code> to show/hide corresponding UI modules based on supported Features</li>
@@ -2748,7 +2748,7 @@ export const clusters: Record<string, ClusterContent> = {
 
   <h3 id="scenario-hvac">Scenario 4: HVAC System Integration</h3>
   <details class="scenario">
-    <summary>查看步骤</summary>
+    <summary>View Steps</summary>
     <div class="scenario-content">
       <ol>
         <li>FanControl is typically used alongside Thermostat Cluster (0x0201) on the same Endpoint</li>
@@ -2845,7 +2845,7 @@ export const clusters: Record<string, ClusterContent> = {
     <span class="nav-sep">|</span>
     <a href="#attributes">Attributes</a>
     <span class="nav-sep">|</span>
-    <a href="#pump-status">PumpStatus 位图</a>
+    <a href="#pump-status">PumpStatus Bitmap</a>
     <span class="nav-sep">|</span>
     <a href="#events">Events</a>
     <span class="nav-sep">|</span>
@@ -2854,9 +2854,9 @@ export const clusters: Record<string, ClusterContent> = {
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== Feature 位图 ====== -->
+  <!-- ====== Feature Bitmap ====== -->
   <h2 id="features">Feature Bitmap</h2>
-  <p>PumpConfigurationAndControl Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持哪些控制模式。Feature 直接决定了可用的属性范围和 ControlMode 选项：</p>
+  <p>PumpConfigurationAndControl Cluster declares device control capabilities through <code>FeatureMap</code> (0xFFFC). Features directly determine available attribute ranges and ControlMode options:</p>
 
   <div class="enum-cards enum-cards-grid">
     <div class="enum-card">
@@ -2911,7 +2911,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">Feature 组合示例</div>
+    <div class="callout-title">Feature Combination Examples</div>
     <p>
       A simple fixed-speed circulation pump: <code>FeatureMap = 0x04</code> (SPD only), can only run at constant speed.<br/>
       A variable-frequency water supply pump: <code>FeatureMap = 0x23</code> (PRSCONST + PRSCOMP + AUTO), supports constant pressure, compensated pressure, and automatic mode.<br/>
@@ -2919,11 +2919,11 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h2 id="attributes">Attributes</h2>
   <p>PumpConfigurationAndControl Cluster attributes are organized into five functional groups. Click an attribute ID in the summary table below to jump to its detailed description.</p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute summary table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -2948,14 +2948,14 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>MaxSpeed</td>
           <td>uint16 / null</td>
-          <td><a href="#group-capacity">设备能力上限</a></td>
+          <td><a href="#group-capacity">Capacity Limits</a></td>
           <td>Maximum speed (RPM)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
           <td>MaxFlow</td>
           <td>uint16 / null</td>
-          <td><a href="#group-capacity">设备能力上限</a></td>
+          <td><a href="#group-capacity">Capacity Limits</a></td>
           <td>Maximum flow (1/10 m&sup3;/h)</td>
         </tr>
         <!-- Control Range Parameters -->
@@ -2970,63 +2970,63 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
           <td>MaxConstPressure</td>
           <td>int16 / null</td>
-          <td><a href="#group-range">控制范围</a></td>
+          <td><a href="#group-range">Control Range</a></td>
           <td>Constant pressure mode maximum</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0005">
           <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
           <td>MinCompPressure</td>
           <td>int16 / null</td>
-          <td><a href="#group-range">控制范围</a></td>
+          <td><a href="#group-range">Control Range</a></td>
           <td>Compensated pressure mode minimum</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0006">
           <td><a href="#attr-0x0006"><code>0x0006</code></a></td>
           <td>MaxCompPressure</td>
           <td>int16 / null</td>
-          <td><a href="#group-range">控制范围</a></td>
+          <td><a href="#group-range">Control Range</a></td>
           <td>Compensated pressure mode maximum</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0007">
           <td><a href="#attr-0x0007"><code>0x0007</code></a></td>
           <td>MinConstSpeed</td>
           <td>uint16 / null</td>
-          <td><a href="#group-range">控制范围</a></td>
+          <td><a href="#group-range">Control Range</a></td>
           <td>Constant speed mode minimum</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0008">
           <td><a href="#attr-0x0008"><code>0x0008</code></a></td>
           <td>MaxConstSpeed</td>
           <td>uint16 / null</td>
-          <td><a href="#group-range">控制范围</a></td>
+          <td><a href="#group-range">Control Range</a></td>
           <td>Constant speed mode maximum</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0009">
           <td><a href="#attr-0x0009"><code>0x0009</code></a></td>
           <td>MinConstFlow</td>
           <td>uint16 / null</td>
-          <td><a href="#group-range">控制范围</a></td>
+          <td><a href="#group-range">Control Range</a></td>
           <td>Constant flow mode minimum</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x000A">
           <td><a href="#attr-0x000A"><code>0x000A</code></a></td>
           <td>MaxConstFlow</td>
           <td>uint16 / null</td>
-          <td><a href="#group-range">控制范围</a></td>
+          <td><a href="#group-range">Control Range</a></td>
           <td>Constant flow mode maximum</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x000B">
           <td><a href="#attr-0x000B"><code>0x000B</code></a></td>
           <td>MinConstTemp</td>
           <td>int16 / null</td>
-          <td><a href="#group-range">控制范围</a></td>
+          <td><a href="#group-range">Control Range</a></td>
           <td>Constant temperature mode minimum</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x000C">
           <td><a href="#attr-0x000C"><code>0x000C</code></a></td>
           <td>MaxConstTemp</td>
           <td>int16 / null</td>
-          <td><a href="#group-range">控制范围</a></td>
+          <td><a href="#group-range">Control Range</a></td>
           <td>Constant temperature mode maximum</td>
         </tr>
         <!-- Operating Status -->
@@ -3041,28 +3041,28 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x0011"><code>0x0011</code></a></td>
           <td>EffectiveOperationMode</td>
           <td>OperationModeEnum</td>
-          <td><a href="#group-status">运行状态</a></td>
+          <td><a href="#group-status">Operating Status</a></td>
           <td>Effective operation mode</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0012">
           <td><a href="#attr-0x0012"><code>0x0012</code></a></td>
           <td>EffectiveControlMode</td>
           <td>ControlModeEnum</td>
-          <td><a href="#group-status">运行状态</a></td>
+          <td><a href="#group-status">Operating Status</a></td>
           <td>Effective control mode</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0013">
           <td><a href="#attr-0x0013"><code>0x0013</code></a></td>
           <td>Capacity</td>
           <td>int16 / null</td>
-          <td><a href="#group-status">运行状态</a></td>
+          <td><a href="#group-status">Operating Status</a></td>
           <td>Current operating point capacity</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0014">
           <td><a href="#attr-0x0014"><code>0x0014</code></a></td>
           <td>Speed</td>
           <td>uint16 / null</td>
-          <td><a href="#group-status">运行状态</a></td>
+          <td><a href="#group-status">Operating Status</a></td>
           <td>Current speed (RPM)</td>
         </tr>
         <!-- Cumulative Statistics -->
@@ -3077,14 +3077,14 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x0016"><code>0x0016</code></a></td>
           <td>Power</td>
           <td>uint24 / null</td>
-          <td><a href="#group-stats">累计统计</a></td>
+          <td><a href="#group-stats">Cumulative Stats</a></td>
           <td>Current power (W)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0017">
           <td><a href="#attr-0x0017"><code>0x0017</code></a></td>
           <td>LifetimeEnergyConsumed</td>
           <td>uint32 / null</td>
-          <td><a href="#group-stats">累计统计</a></td>
+          <td><a href="#group-stats">Cumulative Stats</a></td>
           <td>Lifetime energy consumed (Wh)</td>
         </tr>
         <!-- Control Parameters -->
@@ -3099,7 +3099,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x0021"><code>0x0021</code></a></td>
           <td>ControlMode</td>
           <td>ControlModeEnum</td>
-          <td><a href="#group-control">控制参数</a></td>
+          <td><a href="#group-control">Control Parameters</a></td>
           <td>Control mode (writable)</td>
         </tr>
       </tbody>
@@ -3496,8 +3496,8 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== PumpStatus 位图 ====== -->
-  <h2 id="pump-status">PumpStatus 位图</h2>
+  <!-- ====== PumpStatus Bitmap ====== -->
+  <h2 id="pump-status">PumpStatus Bitmap</h2>
   <p>
     <code>PumpStatus (0x0010)</code> is a 16-bit bitmap where each bit represents a pump status flag.
     Multiple bits can be set simultaneously — for example, when the pump is running and under local control, both Running and LocalOverride are set.
@@ -3711,7 +3711,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
   <p>PumpConfigurationAndControl Cluster read results from a variable-frequency pump with constant pressure control during normal operation:</p>
 
@@ -3751,12 +3751,12 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <h3 id="scenario-pressure">Scenario 1: HVAC Constant Pressure Water Supply</h3>
   <details class="scenario">
-    <summary>查看步骤</summary>
+    <summary>View Steps</summary>
     <div class="scenario-content">
       <ol>
         <li>Read <code>FeatureMap (0xFFFC)</code> to confirm the device supports PRSCONST (Bit 0)</li>
@@ -3772,7 +3772,7 @@ export const clusters: Record<string, ClusterContent> = {
 
   <h3 id="scenario-monitor">Scenario 2: Pump Fault Monitoring and Alerting</h3>
   <details class="scenario">
-    <summary>查看步骤</summary>
+    <summary>View Steps</summary>
     <div class="scenario-content">
       <ol>
         <li>Subscribe to all events — events are the primary channel for pump fault reporting, more timely than polling PumpStatus</li>

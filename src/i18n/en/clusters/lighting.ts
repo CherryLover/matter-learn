@@ -2232,8 +2232,8 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-colorpoint"><code>0x0030~0x003C</code></a></td>
           <td>WhitePoint / ColorPoint R/G/B</td>
           <td>uint16 / uint8</td>
-          <td><a href="#attr-colorpoint">白点与色点</a></td>
-          <td>白点坐标、RGB 色点坐标与强度</td>
+          <td><a href="#attr-colorpoint">White Point &amp; Color Points</a></td>
+          <td>White point coordinates, RGB color point coordinates and intensity</td>
         </tr>
       </tbody>
     </table>

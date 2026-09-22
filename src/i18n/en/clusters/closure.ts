@@ -1256,57 +1256,57 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x80">
           <td><code>0x80</code></td>
-          <td>AliroReaderVerificationKey<br/><span class="attr-cn">读卡器验证密钥</span></td>
+          <td>AliroReaderVerificationKey<br/><span class="attr-cn">Reader Verification Key</span></td>
           <td>octstr</td>
-          <td>用于验证读卡器身份的公钥</td>
+          <td>Public key used to verify the reader's identity</td>
         </tr>
         <tr id="attr-0x81">
           <td><code>0x81</code></td>
-          <td>AliroReaderGroupIdentifier<br/><span class="attr-cn">读卡器组标识</span></td>
+          <td>AliroReaderGroupIdentifier<br/><span class="attr-cn">Reader Group ID</span></td>
           <td>octstr</td>
-          <td>读卡器所属组的标识符，同组读卡器共享访问权限</td>
+          <td>Identifier for the group the reader belongs to; readers in the same group share access permissions</td>
         </tr>
         <tr id="attr-0x82">
           <td><code>0x82</code></td>
-          <td>AliroReaderGroupSubIdentifier<br/><span class="attr-cn">读卡器子标识</span></td>
+          <td>AliroReaderGroupSubIdentifier<br/><span class="attr-cn">Reader Sub-ID</span></td>
           <td>octstr</td>
-          <td>读卡器在组内的唯一子标识</td>
+          <td>Unique sub-identifier for the reader within its group</td>
         </tr>
         <tr id="attr-0x83">
           <td><code>0x83</code></td>
-          <td>AliroExpeditedTransactionSupportedProtocolVersions<br/><span class="attr-cn">快速交易协议版本</span></td>
+          <td>AliroExpeditedTransactionSupportedProtocolVersions<br/><span class="attr-cn">Expedited Protocol Versions</span></td>
           <td>list</td>
-          <td>支持的快速（无需完整握手）交易协议版本列表</td>
+          <td>List of supported expedited (no full handshake required) transaction protocol versions</td>
         </tr>
         <tr id="attr-0x84">
           <td><code>0x84</code></td>
-          <td>AliroGroupResolvingKey<br/><span class="attr-cn">组解析密钥</span></td>
+          <td>AliroGroupResolvingKey<br/><span class="attr-cn">Group Resolving Key</span></td>
           <td>octstr</td>
-          <td>用于解析和识别 Aliro 组成员身份的密钥</td>
+          <td>Key used to resolve and identify Aliro group membership</td>
         </tr>
         <tr id="attr-0x85">
           <td><code>0x85</code></td>
-          <td>AliroSupportedBLEUWBProtocolVersions<br/><span class="attr-cn">BLE UWB 协议版本</span></td>
+          <td>AliroSupportedBLEUWBProtocolVersions<br/><span class="attr-cn">BLE UWB Protocol Versions</span></td>
           <td>list</td>
-          <td>支持的 BLE 和 UWB 协议版本列表（用于测距定位）</td>
+          <td>List of supported BLE and UWB protocol versions (used for ranging and positioning)</td>
         </tr>
         <tr id="attr-0x86">
           <td><code>0x86</code></td>
-          <td>AliroBLEAdvertisingVersion<br/><span class="attr-cn">BLE 广播版本</span></td>
+          <td>AliroBLEAdvertisingVersion<br/><span class="attr-cn">BLE Advertising Version</span></td>
           <td>uint8</td>
-          <td>Aliro 读卡器的 BLE 广播协议版本号</td>
+          <td>BLE advertising protocol version of the Aliro reader</td>
         </tr>
         <tr id="attr-0x87">
           <td><code>0x87</code></td>
-          <td>NumberOfAliroCredentialIssuerKeysSupported<br/><span class="attr-cn">凭据发行密钥数</span></td>
+          <td>NumberOfAliroCredentialIssuerKeysSupported<br/><span class="attr-cn">Issuer Keys Count</span></td>
           <td>uint16</td>
-          <td>设备支持的 Aliro 凭据发行者密钥数量</td>
+          <td>Number of Aliro credential issuer keys supported by the device</td>
         </tr>
         <tr id="attr-0x88">
           <td><code>0x88</code></td>
-          <td>NumberOfAliroEndpointKeysSupported<br/><span class="attr-cn">端点密钥数</span></td>
+          <td>NumberOfAliroEndpointKeysSupported<br/><span class="attr-cn">Endpoint Keys Count</span></td>
           <td>uint16</td>
-          <td>设备支持的 Aliro 端点密钥数量</td>
+          <td>Number of Aliro endpoint keys supported by the device</td>
         </tr>
       </tbody>
     </table>
@@ -1315,66 +1315,66 @@ export const clusters: Record<string, ClusterContent> = {
 
   <!-- ====== 标准示例 ====== -->
   <h2 id="standard-example">Standard Example</h2>
-  <p>以下是 Matter 门锁的典型属性数据示例（JSON 格式），逐字段标注含义：</p>
+  <p>Below is a typical attribute data example for a Matter door lock (JSON format), with field-by-field annotations:</p>
 
   <pre><code>{
-  // --- 锁核心状态 ---
-  "0x00": 1,           // LockState = Locked（已锁定）
-  "0x01": 0,           // LockType = DeadBolt（锁舌锁）
-  "0x02": true,        // ActuatorEnabled = true（执行器启用）
-  "0x03": 1,           // DoorState = Closed（门已关闭）
+  // --- Lock Core State ---
+  "0x00": 1,           // LockState = Locked
+  "0x01": 0,           // LockType = DeadBolt
+  "0x02": true,        // ActuatorEnabled = true (actuator enabled)
+  "0x03": 1,           // DoorState = Closed
 
-  // --- 用户与凭据 ---
+  // --- Users & Credentials ---
   "0x10": 10,          // NumberOfTotalUsersSupported = 10
   "0x11": 10,          // NumberOfPINUsersSupported = 10
-  "0x16": 8,           // MaxPINCodeLength = 8 位
-  "0x17": 4,           // MinPINCodeLength = 4 位
+  "0x16": 8,           // MaxPINCodeLength = 8 digits
+  "0x17": 4,           // MinPINCodeLength = 4 digits
   "0x1B": 5,           // NumberOfCredentialsSupportedPerUser = 5
 
-  // --- 操作与显示 ---
-  "0x1E": 30,          // AutoRelockTime = 30 秒
+  // --- Operation & Display ---
+  "0x1E": 30,          // AutoRelockTime = 30 seconds
   "0x1F": 2,           // SoundVolume = High
   "0x20": 0,           // OperatingMode = Normal
-  "0x21": 65535,       // SupportedOperatingModes（支持所有模式）
+  "0x21": 65535,       // SupportedOperatingModes (all modes supported)
 
-  // --- 远程操作 ---
-  "0x30": 5,           // WrongCodeEntryLimit = 5 次
+  // --- Remote Operation ---
+  "0x30": 5,           // WrongCodeEntryLimit = 5 attempts
   "0x33": false        // RequirePINforRemoteOperation = false
 }</code></pre>
 
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      实际从设备读取数据时，Attribute ID 会是十六进制字符串作为 key。上面的 JSON 中 <code>"0x00"</code> 对应 LockState，
-      <code>"0x20"</code> 对应 OperatingMode。对照本页的属性表就能逐个翻译。
+      When reading data from a device, attribute IDs are hexadecimal strings used as keys. In the JSON above, <code>"0x00"</code> corresponds to LockState,
+      and <code>"0x20"</code> corresponds to OperatingMode. Cross-reference with the attribute table on this page for each field.
     </p>
   </div>
 
   <!-- ====== 常见场景 ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
-  <h3 id="scenario-lock-unlock">场景 1：远程开锁 / 关锁</h3>
+  <h3 id="scenario-lock-unlock">Scenario 1: Remote Lock / Unlock</h3>
   <ol>
-    <li>读取 <code>ActuatorEnabled (0x02)</code>，确认执行器是否启用</li>
-    <li>读取 <code>RequirePINforRemoteOperation (0x33)</code>，判断是否需要用户输入 PIN</li>
-    <li>发送 <code>LockDoor (0x00)</code> 或 <code>UnlockDoor (0x01)</code> 命令（必须带 Timed Interaction）</li>
-    <li>订阅 <code>LockState (0x00)</code> 的变化，确认操作结果</li>
+    <li>Read <code>ActuatorEnabled (0x02)</code> to confirm the actuator is enabled</li>
+    <li>Read <code>RequirePINforRemoteOperation (0x33)</code> to determine if user PIN input is required</li>
+    <li>Send <code>LockDoor (0x00)</code> or <code>UnlockDoor (0x01)</code> command (must use Timed Interaction)</li>
+    <li>Subscribe to <code>LockState (0x00)</code> changes to confirm the operation result</li>
   </ol>
 
-  <h3 id="scenario-add-user">场景 2：添加新用户和 PIN 码</h3>
+  <h3 id="scenario-add-user">Scenario 2: Add New User and PIN Code</h3>
   <ol>
-    <li>读取 <code>NumberOfTotalUsersSupported (0x10)</code> 确认用户容量</li>
-    <li>发送 <code>SetUser (0x26)</code> 创建用户</li>
-    <li>读取 <code>MinPINCodeLength (0x17)</code> 和 <code>MaxPINCodeLength (0x16)</code> 确认 PIN 长度要求</li>
-    <li>发送 <code>SetCredential (0x1A)</code> 为该用户绑定 PIN 码</li>
-    <li>可通过 <code>GetCredentialStatus (0x1B)</code> 验证凭据是否设置成功</li>
+    <li>Read <code>NumberOfTotalUsersSupported (0x10)</code> to check user capacity</li>
+    <li>Send <code>SetUser (0x26)</code> to create the user</li>
+    <li>Read <code>MinPINCodeLength (0x17)</code> and <code>MaxPINCodeLength (0x16)</code> to verify PIN length requirements</li>
+    <li>Send <code>SetCredential (0x1A)</code> to bind a PIN code to that user</li>
+    <li>Optionally use <code>GetCredentialStatus (0x1B)</code> to verify the credential was set successfully</li>
   </ol>
 
-  <h3 id="scenario-check-state">场景 3：首页展示锁状态</h3>
+  <h3 id="scenario-check-state">Scenario 3: Display Lock Status on Home Screen</h3>
   <ol>
-    <li>读取 <code>LockState (0x00)</code> —— 注意处理 <code>null</code> 值</li>
-    <li>读取 <code>OperatingMode (0x20)</code> —— 如果不是 Normal，界面上可能需要提示</li>
-    <li>配合 PowerSource Cluster 读取电池电量</li>
+    <li>Read <code>LockState (0x00)</code> &mdash; handle the <code>null</code> value properly</li>
+    <li>Read <code>OperatingMode (0x20)</code> &mdash; if not Normal, the UI may need to show a notice</li>
+    <li>Read battery level from the PowerSource Cluster alongside lock status</li>
   </ol>
 
   <script>
@@ -1422,25 +1422,25 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'window-covering': {
     title: 'WindowCovering Cluster (0x0102)',
-    description: 'Matter WindowCovering Cluster(0x0102)完整参考 — UpOrOpen/DownOrClose/GoToLiftPercentage 等命令、升降与倾斜位置属性、Feature Map(LF/TL/PA/AB)、Type/EndProductType 枚举、OperationalStatus/SafetyStatus 位图及常见场景。',
+    description: 'Complete reference for Matter WindowCovering Cluster (0x0102) — UpOrOpen/DownOrClose/GoToLiftPercentage commands, lift and tilt position attributes, Feature Map (LF/TL/PA/AB), Type/EndProductType enums, OperationalStatus/SafetyStatus bitmaps, and common scenarios.',
     prev: { title: 'Cluster Reference', slug: 'clusters' },
     next: undefined,
     content: `<h1>WindowCovering Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x0102</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 通常在 <code>Endpoint 1</code>（功能端点）
+    <strong>Endpoint</strong>: Typically on <code>Endpoint 1</code> (application endpoint)
   </p>
   <p>
-    WindowCovering 是 Matter 中控制窗帘类设备的核心 Cluster，适用于电动卷帘、百叶窗、窗帘轨道、遮阳篷、投影幕布等所有需要「升降」或「倾斜」控制的设备。
-    它定义了窗帘的运动控制命令、位置反馈属性，以及设备类型与安全状态的完整描述。
+    WindowCovering is the core Cluster in Matter for controlling window covering devices. It applies to motorized roller shades, venetian blinds, curtain tracks, awnings, projector screens, and all devices requiring lift or tilt control.
+    It defines motion control commands, position feedback attributes, and a complete description of device types and safety states.
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">位置值约定：0 = 全开，10000 = 全关</div>
+    <div class="callout-title">Position Value Convention: 0 = Fully Open, 10000 = Fully Closed</div>
     <p>
-      WindowCovering 使用 <strong>percent100ths</strong>（百分之一的百分比）表示位置，范围 0&ndash;10000。
-      <code>0</code> 代表完全打开（窗帘收起），<code>10000</code> 代表完全关闭（窗帘放下）。
-      这与直觉可能相反 &mdash; 数值越大，遮挡越多。百分比属性（如 CurrentPositionLiftPercentage）的范围是 0&ndash;100，含义一致。
+      WindowCovering uses <strong>percent100ths</strong> (hundredths of a percent) to represent positions, ranging from 0&ndash;10000.
+      <code>0</code> represents fully open (covering retracted), <code>10000</code> represents fully closed (covering extended).
+      This may be counterintuitive &mdash; the larger the value, the more coverage. Percentage attributes (such as CurrentPositionLiftPercentage) range from 0&ndash;100 with the same meaning.
     </p>
   </div>
 
@@ -1460,9 +1460,9 @@ export const clusters: Record<string, ClusterContent> = {
   <!-- ====== 命令（Commands）====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    WindowCovering Cluster 共有 7 个命令。基础三件套（UpOrOpen / DownOrClose / StopMotion）是所有窗帘设备都支持的，
-    后四个精确定位命令需要设备启用对应的 Feature 组合。
-    点击下方表格中的命令 ID 可跳转到对应的详细说明。
+    The WindowCovering Cluster has 7 commands. The basic trio (UpOrOpen / DownOrClose / StopMotion) is supported by all window covering devices.
+    The four precise positioning commands require the device to have the corresponding Feature combinations enabled.
+    Click a command ID in the table below to jump to its detailed description.
   </p>
 
   <div class="table-wrap">
@@ -1479,43 +1479,43 @@ export const clusters: Record<string, ClusterContent> = {
         <tr class="clickable-row" data-href="#cmd-0x00">
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>UpOrOpen</td>
-          <td>升起 / 打开窗帘</td>
-          <td class="col-optional">无</td>
+          <td>Raise / open the covering</td>
+          <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x01">
           <td><a href="#cmd-0x01"><code>0x01</code></a></td>
           <td>DownOrClose</td>
-          <td>降下 / 关闭窗帘</td>
-          <td class="col-optional">无</td>
+          <td>Lower / close the covering</td>
+          <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x02">
           <td><a href="#cmd-0x02"><code>0x02</code></a></td>
           <td>StopMotion</td>
-          <td>立即停止运动</td>
-          <td class="col-optional">无</td>
+          <td>Stop all motion immediately</td>
+          <td class="col-optional">None</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x04">
           <td><a href="#cmd-0x04"><code>0x04</code></a></td>
           <td>GoToLiftValue</td>
-          <td>升降到指定绝对值</td>
+          <td>Move lift to a specified absolute value</td>
           <td class="col-required">LF + AB</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x05">
           <td><a href="#cmd-0x05"><code>0x05</code></a></td>
           <td>GoToLiftPercentage</td>
-          <td>升降到指定百分比</td>
+          <td>Move lift to a specified percentage</td>
           <td class="col-required">LF + PA</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x07">
           <td><a href="#cmd-0x07"><code>0x07</code></a></td>
           <td>GoToTiltValue</td>
-          <td>倾斜到指定绝对值</td>
+          <td>Move tilt to a specified absolute value</td>
           <td class="col-required">TL + AB</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x08">
           <td><a href="#cmd-0x08"><code>0x08</code></a></td>
           <td>GoToTiltPercentage</td>
-          <td>倾斜到指定百分比</td>
+          <td>Move tilt to a specified percentage</td>
           <td class="col-required">TL + PA</td>
         </tr>
       </tbody>

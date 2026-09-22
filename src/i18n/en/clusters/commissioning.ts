@@ -526,7 +526,7 @@ export const clusters: Record<string, ClusterContent> = {
   <h2 id="attributes">Attributes</h2>
   <p>NetworkCommissioning Cluster attributes describe the capabilities and current state of the network interface. Click an attribute ID in the summary table below to jump to its detailed description.</p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute Summary Table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -1218,7 +1218,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
@@ -1645,7 +1645,7 @@ export const clusters: Record<string, ClusterContent> = {
   <h2 id="attributes">Attributes</h2>
   <p>The GeneralCommissioning Cluster has 5 attributes. Click an attribute ID in the summary table below to jump to its detailed description.</p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute Summary Table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -1856,7 +1856,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 枚举定义 ====== -->
+  <!-- ====== Enum Definitions ====== -->
   <h2 id="enums">Enum Definitions</h2>
 
   <h3 id="enum-error">CommissioningErrorEnum</h3>
@@ -1936,7 +1936,7 @@ export const clusters: Record<string, ClusterContent> = {
     </div>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
 
   <h3>Attribute Data Example</h3>
@@ -2010,7 +2010,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
@@ -2114,30 +2114,30 @@ export const clusters: Record<string, ClusterContent> = {
   },
   'administrator-commissioning': {
     title: 'AdministratorCommissioning Cluster (0x003C)',
-    description: 'Matter AdministratorCommissioning Cluster(0x003C)完整参考 — OpenCommissioningWindow / OpenBasicCommissioningWindow / RevokeCommissioning 命令详解、配网窗口控制、Feature Map、状态码与安全审计场景。',
+    description: 'Complete reference for Matter AdministratorCommissioning Cluster (0x003C) — OpenCommissioningWindow / OpenBasicCommissioningWindow / RevokeCommissioning command details, commissioning window control, Feature Map, status codes and security audit scenarios.',
     prev: { title: 'Cluster Reference', slug: 'clusters' },
     next: undefined,
     content: `<h1>AdministratorCommissioning Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x003C</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 固定在 <code>Endpoint 0</code>（Root Endpoint）
+    <strong>Endpoint</strong>: Fixed on <code>Endpoint 0</code> (Root Endpoint)
   </p>
   <p>
-    AdministratorCommissioning 负责控制设备的<strong>配网窗口</strong>（Commissioning Window）的开启与关闭。
-    当一个设备已经加入了某个 Fabric（已被配网），想要让<em>新的</em>管理员也能配网这台设备时，
-    就需要通过这个 Cluster 打开配网窗口。它不负责配网流程本身（那是
-    <a href="/clusters/general-commissioning/">GeneralCommissioning</a> 的事），
-    而是控制「设备是否接受新的配网请求」这个开关。
+    AdministratorCommissioning controls the opening and closing of the device's <strong>Commissioning Window</strong>.
+    When a device has already joined a Fabric (been commissioned), and you want <em>new</em> administrators to also commission this device,
+    you need to open a commissioning window through this Cluster. It does not handle the commissioning flow itself (that is
+    <a href="/clusters/general-commissioning/">GeneralCommissioning</a>'s job),
+    but rather controls the "whether the device accepts new commissioning requests" switch.
   </p>
 
   <div class="callout callout-info">
     <div class="callout-title">Core Purpose</div>
     <p>
-      如果把设备比作一栋房子，AdministratorCommissioning 就是门口的<strong>门禁系统</strong>。
-      房子的主人（已有管理员）可以选择暂时打开门禁，让新的住户（新管理员）进来完成入住手续（配网）。
-      <strong>OpenCommissioningWindow</strong> 是换了一把新门锁密码再开门（更安全），
-      <strong>OpenBasicCommissioningWindow</strong> 是直接用现有密码开门（更方便），
-      <strong>RevokeCommissioning</strong> 则是随时把门关上。
+      If the device is like a building, AdministratorCommissioning is the <strong>access control system</strong> at the entrance.
+      The building owner (existing administrator) can choose to temporarily open access, allowing new residents (new administrators) to complete move-in procedures (commissioning).
+      <strong>OpenCommissioningWindow</strong> is changing to a new lock code before opening the door (more secure),
+      <strong>OpenBasicCommissioningWindow</strong> is opening the door with the existing code (more convenient),
+      <strong>RevokeCommissioning</strong> is closing the door at any time.
     </p>
   </div>
 
@@ -2146,14 +2146,14 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="table-wrap">
     <table>
       <thead>
-        <tr><th>Bit</th><th>代码</th><th>Name</th><th>Description</th></tr>
+        <tr><th>Bit</th><th>Code</th><th>Name</th><th>Description</th></tr>
       </thead>
       <tbody>
         <tr>
           <td><code>0</code></td>
           <td>BC</td>
           <td>Basic Commissioning</td>
-          <td>支持基础配网方法 —— 即 <a href="#cmd-0x01">OpenBasicCommissioningWindow</a> 命令。如果设备不支持此 Feature，则只能通过增强配网方式开窗</td>
+          <td>Supports basic commissioning method — the <a href="#cmd-0x01">OpenBasicCommissioningWindow</a> command. If the device does not support this Feature, only the enhanced commissioning method can open a window</td>
         </tr>
       </tbody>
     </table>
@@ -2167,19 +2167,19 @@ export const clusters: Record<string, ClusterContent> = {
     <span class="nav-sep">|</span>
     <a href="#enums">Enum Definitions</a>
     <span class="nav-sep">|</span>
-    <a href="#status-codes">状态码</a>
+    <a href="#status-codes">Status Codes</a>
     <span class="nav-sep">|</span>
     <a href="#example-data">Example Data</a>
     <span class="nav-sep">|</span>
     <a href="#scenarios">Common Scenarios</a>
   </nav>
 
-  <!-- ====== 命令（Commands）====== -->
+  <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    AdministratorCommissioning Cluster 共有 3 个命令，分别用于开启增强配网窗口、开启基础配网窗口和关闭配网窗口。
-    这三个命令都没有专属的响应结构体，通过通用的 Status 响应返回结果。
-    点击下方表格中的命令 ID 可跳转到对应的详细说明。
+    The AdministratorCommissioning Cluster has 3 commands for opening an enhanced commissioning window, opening a basic commissioning window, and closing a commissioning window.
+    None of these commands have dedicated response structures; they return results through the standard Status response.
+    Click a command ID in the table below to jump to its detailed description.
   </p>
 
   <div class="table-wrap">
@@ -2197,30 +2197,30 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
           <td>OpenCommissioningWindow</td>
           <td>--</td>
-          <td>使用新的 PAKE 验证器开启增强配网窗口</td>
+          <td>Open enhanced commissioning window with a new PAKE verifier</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x01">
           <td><a href="#cmd-0x01"><code>0x01</code></a></td>
           <td>OpenBasicCommissioningWindow</td>
           <td>BC</td>
-          <td>使用现有密码开启基础配网窗口</td>
+          <td>Open basic commissioning window using existing passcode</td>
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x02">
           <td><a href="#cmd-0x02"><code>0x02</code></a></td>
           <td>RevokeCommissioning</td>
           <td>--</td>
-          <td>关闭当前已开启的配网窗口</td>
+          <td>Close the currently open commissioning window</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 命令详解 ====== -->
-  <h3 id="cmd-0x00">OpenCommissioningWindow —— 增强配网开窗(0x00)</h3>
+  <!-- ====== Command Details ====== -->
+  <h3 id="cmd-0x00">OpenCommissioningWindow — Enhanced Commissioning Window (0x00)</h3>
   <p>
-    开启增强配网窗口（Enhanced Commissioning Window）。调用者需要提供一个<strong>全新的 PAKE 验证器</strong>，
-    新的 Commissioner 将使用这个验证器而非设备出厂密码来建立 PASE 安全通道。
-    这是最安全的开窗方式 —— 每次开窗都使用一次性的密码，即使密码被截获也无法用于下一次配网。
+    Opens an Enhanced Commissioning Window. The caller must provide a <strong>brand-new PAKE verifier</strong>,
+    and the new Commissioner will use this verifier instead of the device's factory passcode to establish a PASE secure channel.
+    This is the most secure window-opening method — each window uses a one-time password, so even if intercepted, it cannot be used for the next commissioning.
   </p>
   <div class="table-wrap">
     <table>
@@ -2231,39 +2231,39 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>CommissioningTimeout</td>
           <td>uint16</td>
-          <td>窗口保持打开的秒数。超时后窗口自动关闭。范围通常为 <code>60 ~ 900</code> 秒</td>
+          <td>Number of seconds the window stays open. Automatically closes after timeout. Range is typically <code>60 ~ 900</code> seconds</td>
         </tr>
         <tr>
           <td>PAKEPasscodeVerifier</td>
           <td>octstr</td>
-          <td>新的 PAKE 密码验证器（Verifier）。由 Commissioner 根据新的 passcode 计算生成</td>
+          <td>New PAKE password verifier. Generated by the Commissioner based on a new passcode</td>
         </tr>
         <tr>
           <td>Discriminator</td>
           <td>uint16</td>
-          <td>12-bit 设备识别码，用于新 Commissioner 在发现阶段识别目标设备</td>
+          <td>12-bit device discriminator, used by the new Commissioner to identify the target device during discovery</td>
         </tr>
         <tr>
           <td>Iterations</td>
           <td>uint32</td>
-          <td>PBKDF2 迭代次数，范围 <code>1000 ~ 100000</code></td>
+          <td>PBKDF2 iteration count, range <code>1000 ~ 100000</code></td>
         </tr>
         <tr>
           <td>Salt</td>
           <td>octstr</td>
-          <td>PBKDF2 盐值，长度 <code>16 ~ 32</code> 字节</td>
+          <td>PBKDF2 salt, length <code>16 ~ 32</code> bytes</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout callout-warning">
-    <div class="callout-title">增强配网 vs 基础配网</div>
+    <div class="callout-title">Enhanced vs Basic Commissioning</div>
     <p>
-      增强配网每次开窗都会生成新的 PAKE 验证器，旧密码完全失效。
-      这意味着即便有人嗅探到了本次配网过程中的 PASE 握手数据，也无法用于破解下一次配网。
-      相比之下，<a href="#cmd-0x01">OpenBasicCommissioningWindow</a> 使用设备出厂密码（通常印在设备标签上），
-      安全性较低但操作更方便。<strong>生产环境建议优先使用增强配网</strong>。
+      Enhanced commissioning generates a new PAKE verifier each time a window is opened, completely invalidating the old password.
+      This means even if someone sniffs the PASE handshake data during this commissioning session, it cannot be used to crack the next one.
+      In contrast, <a href="#cmd-0x01">OpenBasicCommissioningWindow</a> uses the device's factory passcode (usually printed on the device label),
+      which is less secure but more convenient. <strong>Enhanced commissioning is recommended for production environments</strong>.
     </p>
   </div>
 
@@ -2271,30 +2271,30 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios & Notes</summary>
     <div class="scenario-content">
       <p>
-        典型场景：用户在 App A 上已经配网了设备，现在希望 App B 也能控制这台设备。
-        App A 调用 OpenCommissioningWindow 开窗，提供一个临时的配网密码（以 QR Code 或数字代码的形式展示给用户）。
-        用户在 App B 中扫描该 QR Code 或输入数字代码即可完成二次配网。窗口会在超时后自动关闭。
+        Typical scenario: A user has commissioned a device on App A and now wants App B to also control this device.
+        App A calls OpenCommissioningWindow to open a window, providing a temporary commissioning password (displayed to the user as a QR Code or numeric code).
+        The user scans the QR Code or enters the numeric code in App B to complete secondary commissioning. The window closes automatically after timeout.
       </p>
       <p>
-        注意：如果设备已经有一个活跃的配网窗口（WindowStatus 不为 0），再次调用会返回 <a href="#status-busy">Busy (2)</a> 错误。
-        需要先调用 <a href="#cmd-0x02">RevokeCommissioning</a> 关闭现有窗口，或等待其超时。
+        Note: If the device already has an active commissioning window (WindowStatus is not 0), calling again returns a <a href="#status-busy">Busy (2)</a> error.
+        You need to first call <a href="#cmd-0x02">RevokeCommissioning</a> to close the existing window, or wait for it to timeout.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x01">OpenBasicCommissioningWindow —— 基础配网开窗(0x01)</h3>
+  <h3 id="cmd-0x01">OpenBasicCommissioningWindow — Basic Commissioning Window (0x01)</h3>
   <p>
-    开启基础配网窗口（Basic Commissioning Window）。与增强方式不同，基础配网使用设备的<strong>出厂 passcode</strong>
-    （印在设备标签上的那个配对码）来建立 PASE 安全通道。操作简单，但安全性较低。
+    Opens a Basic Commissioning Window. Unlike the enhanced method, basic commissioning uses the device's <strong>factory passcode</strong>
+    (the pairing code printed on the device label) to establish a PASE secure channel. Simpler to operate, but less secure.
   </p>
 
   <div class="callout callout-info">
-    <div class="callout-title">需要 BC Feature</div>
+    <div class="callout-title">Requires BC Feature</div>
     <p>
-      此命令需要设备支持 <strong>BC（Basic Commissioning）</strong> Feature。
-      可以通过读取 Feature Map 确认设备是否支持。不支持此 Feature 的设备只能通过
-      <a href="#cmd-0x00">OpenCommissioningWindow</a>（增强方式）开窗。
+      This command requires the device to support the <strong>BC (Basic Commissioning)</strong> Feature.
+      You can confirm device support by reading the Feature Map. Devices that do not support this Feature can only open windows through
+      <a href="#cmd-0x00">OpenCommissioningWindow</a> (enhanced method).
     </p>
   </div>
 
@@ -2307,7 +2307,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>CommissioningTimeout</td>
           <td>uint16</td>
-          <td>窗口保持打开的秒数。超时后窗口自动关闭</td>
+          <td>Number of seconds the window stays open. Automatically closes after timeout</td>
         </tr>
       </tbody>
     </table>
@@ -2317,13 +2317,13 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios & Notes</summary>
     <div class="scenario-content">
       <p>
-        适用于家庭环境中快速添加第二个控制器的场景。比如用户已经用 Google Home 配网了灯泡，
-        现在想让 Apple Home 也能控制它。在 Google Home App 中打开基础配网窗口后，
-        直接用灯泡背面的配对码在 Apple Home 中配网即可。
+        Suitable for quickly adding a second controller in a home environment. For example, a user has commissioned a light bulb with Google Home
+        and now wants Apple Home to also control it. After opening a basic commissioning window in the Google Home App,
+        simply use the pairing code on the back of the bulb to commission in Apple Home.
       </p>
       <p>
-        由于使用固定的出厂 passcode，<strong>不推荐在安全要求较高的场景使用</strong>。
-        出厂密码可能被多次使用，如果曾被第三方获取，存在被恶意配网的风险。
+        Since it uses a fixed factory passcode, <strong>it is not recommended for high-security scenarios</strong>.
+        The factory password may be used multiple times, and if obtained by a third party, there is a risk of unauthorized commissioning.
       </p>
     </div>
   </details>
@@ -2331,7 +2331,7 @@ export const clusters: Record<string, ClusterContent> = {
 
   <h3 id="cmd-0x02">RevokeCommissioning —— 关闭配网窗口(0x02)</h3>
   <p>
-    关闭当前已开启的配网窗口。此命令<strong>没有参数</strong>。
+    Close the currently open commissioning window。此命令<strong>没有参数</strong>。
     调用成功后，设备立即停止接受新的配网请求，WindowStatus 恢复为 <code>WindowNotOpen (0)</code>，
     AdminFabricIndex 和 AdminVendorId 重置为 <code>null</code>。
   </p>
@@ -2339,8 +2339,8 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-warning">
     <div class="callout-title">Prerequisites</div>
     <p>
-      只有在配网窗口已经打开的情况下才能调用。如果当前没有活跃的配网窗口（WindowStatus = 0），
-      会返回 <a href="#status-windownotopen">WindowNotOpen (4)</a> 错误。
+      Can only be called when a commissioning window is already open. If there is no active commissioning window (WindowStatus = 0),
+      a <a href="#status-windownotopen">WindowNotOpen (4)</a> error is returned.
     </p>
   </div>
 
@@ -2348,22 +2348,22 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Usage Scenarios & Notes</summary>
     <div class="scenario-content">
       <p>
-        主要用途：管理员开启了配网窗口后改变了主意，或者发现安全隐患需要立即关闭窗口。
-        比如在商业环境中，IT 管理员开窗给新同事配网，但新同事临时有事未到场，
-        管理员可以主动关闭窗口避免未授权访问。
+        Main use: An administrator opened a commissioning window but changed their mind, or discovered a security concern requiring immediate window closure.
+        For example, in a commercial environment, an IT admin opens a window for a new colleague to commission, but the colleague is temporarily unavailable;
+        the admin can proactively close the window to prevent unauthorized access.
       </p>
       <p>
-        自动化系统在检测到异常配网尝试时，也可以调用此命令作为安全响应措施。
+        Automated systems can also call this command as a security response when detecting abnormal commissioning attempts.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <!-- ====== 属性详解 ====== -->
+  <!-- ====== Attribute Details ====== -->
   <h2 id="attributes">Attributes</h2>
-  <p>AdministratorCommissioning Cluster 共有 3 个属性，描述配网窗口的当前状态和操作者信息。</p>
+  <p>The AdministratorCommissioning Cluster has 3 attributes describing the current commissioning window state and operator information.</p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute Summary Table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -2379,26 +2379,26 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>WindowStatus</td>
           <td>CommissioningWindowStatusEnum</td>
-          <td>当前配网窗口的状态</td>
+          <td>Current commissioning window status</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>AdminFabricIndex</td>
           <td>fabric-idx (nullable)</td>
-          <td>开启窗口的管理员所在 Fabric 索引</td>
+          <td>Fabric index of the administrator who opened the window</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
           <td>AdminVendorId</td>
           <td>vendor-id (nullable)</td>
-          <td>开启窗口的管理员供应商 ID</td>
+          <td>Vendor ID of the administrator who opened the window</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 窗口状态（0x0000）====== -->
-  <h3 id="attr-detail-window">窗口状态(0x0000)</h3>
+  <!-- ====== Window Status (0x0000) ====== -->
+  <h3 id="attr-detail-window">Window Status (0x0000)</h3>
 
   <div class="table-wrap">
     <table>
@@ -2408,14 +2408,14 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0000">
           <td><code>0x0000</code></td>
-          <td>WindowStatus<br/><span class="attr-cn">窗口状态</span></td>
+          <td>WindowStatus<br/><span class="attr-cn">Window Status</span></td>
           <td><a href="#enum-window-status">CommissioningWindowStatusEnum</a></td>
           <td>
-            表示设备当前的配网窗口状态。
-            <code>WindowNotOpen (0)</code> 表示未开窗，设备不接受新的配网请求；
-            <code>EnhancedWindowOpen (1)</code> 表示增强配网窗口已打开；
-            <code>BasicWindowOpen (2)</code> 表示基础配网窗口已打开。
-            同一时间只能有一个窗口处于打开状态
+            Indicates the device's current commissioning window status.
+            <code>WindowNotOpen (0)</code> means no window is open, the device does not accept new commissioning requests;
+            <code>EnhancedWindowOpen (1)</code> means the enhanced commissioning window is open;
+            <code>BasicWindowOpen (2)</code> means the basic commissioning window is open.
+            Only one window can be open at a time
           </td>
         </tr>
       </tbody>
@@ -2423,18 +2423,18 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <div class="callout callout-tip">
-    <div class="callout-title">监控窗口状态</div>
+    <div class="callout-title">Monitoring Window Status</div>
     <p>
-      在安全敏感的部署环境中，可以通过订阅 WindowStatus 属性变化来实时监控设备的配网窗口状态。
-      一旦检测到非预期的窗口开启（比如 <code>BasicWindowOpen</code>），
-      可以立即调用 <a href="#cmd-0x02">RevokeCommissioning</a> 关闭窗口并发送告警。
+      In security-sensitive deployment environments, you can subscribe to WindowStatus attribute changes to monitor the device's commissioning window state in real time.
+      Once an unexpected window opening is detected (e.g., <code>BasicWindowOpen</code>),
+      you can immediately call <a href="#cmd-0x02">RevokeCommissioning</a> to close the window and send an alert.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 管理员信息（0x0001, 0x0002）====== -->
-  <h3 id="attr-detail-admin">管理员信息(0x0001, 0x0002)</h3>
-  <p>记录是谁开启了当前的配网窗口。窗口关闭或未开启时，这两个属性均为 <code>null</code>。</p>
+  <!-- ====== Administrator Info (0x0001, 0x0002) ====== -->
+  <h3 id="attr-detail-admin">Administrator Info (0x0001, 0x0002)</h3>
+  <p>Records who opened the current commissioning window. Both attributes are <code>null</code> when the window is closed or not opened.</p>
 
   <div class="table-wrap">
     <table>
@@ -2444,22 +2444,22 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0001">
           <td><code>0x0001</code></td>
-          <td>AdminFabricIndex<br/><span class="attr-cn">管理员 Fabric 索引</span></td>
+          <td>AdminFabricIndex<br/><span class="attr-cn">Admin Fabric Index</span></td>
           <td>fabric-idx (nullable)</td>
           <td>
-            开启配网窗口的管理员所在的 Fabric 索引。
-            可用于追溯哪个 Fabric 的管理员执行了开窗操作。
-            窗口未开启时为 <code>null</code>
+            Fabric index of the administrator who opened the commissioning window.
+            Can be used to trace which Fabric's administrator performed the window-opening operation.
+            <code>null</code> when no window is open
           </td>
         </tr>
         <tr id="attr-0x0002">
           <td><code>0x0002</code></td>
-          <td>AdminVendorId<br/><span class="attr-cn">管理员供应商 ID</span></td>
+          <td>AdminVendorId<br/><span class="attr-cn">Admin Vendor ID</span></td>
           <td>vendor-id (nullable)</td>
           <td>
-            开启配网窗口的管理员的供应商 ID（Vendor ID）。
-            标识是哪个厂商的 App 或控制器执行了开窗操作。
-            窗口未开启时为 <code>null</code>
+            Vendor ID of the administrator who opened the commissioning window.
+            Identifies which manufacturer's App or controller performed the window-opening operation.
+            <code>null</code> when no window is open
           </td>
         </tr>
       </tbody>
@@ -2467,69 +2467,69 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">审计用途</div>
+    <div class="callout-title">Audit Purpose</div>
     <p>
-      AdminFabricIndex 和 AdminVendorId 配合使用，可以完整追溯「谁」在「什么身份」下开启了配网窗口。
-      这对安全审计非常有价值 —— 比如在企业环境中，发现设备被意外配网时，
-      可以通过这两个属性确认是哪个管理员、使用哪个平台执行了开窗操作。
+      AdminFabricIndex and AdminVendorId used together provide a complete audit trail of "who" under "what identity" opened the commissioning window.
+      This is highly valuable for security audits — for example, in an enterprise environment, when a device is unexpectedly commissioned,
+      these two attributes can confirm which administrator and which platform performed the window-opening operation.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 枚举定义 ====== -->
+  <!-- ====== Enum Definitions ====== -->
   <h2 id="enums">Enum Definitions</h2>
 
   <h3 id="enum-window-status">CommissioningWindowStatusEnum</h3>
-  <p>表示设备当前的配网窗口状态，用于 <code>WindowStatus</code> 属性。</p>
+  <p>Indicates the device's current commissioning window status, used for the <code>WindowStatus</code> attribute.</p>
 
   <div class="enum-cards enum-cards-row">
     <div class="enum-card">
       <span class="enum-badge">0</span>
       <div>
         <span class="enum-name">WindowNotOpen</span>
-        <span class="enum-desc">配网窗口未开启 —— 设备不接受新的配网请求（默认状态）</span>
+        <span class="enum-desc">Commissioning window not open — device does not accept new commissioning requests (default state)</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">1</span>
       <div>
         <span class="enum-name">EnhancedWindowOpen</span>
-        <span class="enum-desc">增强配网窗口已开启 —— 使用新的 PAKE 验证器，安全性更高</span>
+        <span class="enum-desc">Enhanced commissioning window open — uses a new PAKE verifier, higher security</span>
       </div>
     </div>
     <div class="enum-card">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">BasicWindowOpen</span>
-        <span class="enum-desc">基础配网窗口已开启 —— 使用设备出厂密码，需要 BC Feature 支持</span>
+        <span class="enum-desc">Basic commissioning window open — uses device factory passcode, requires BC Feature support</span>
       </div>
     </div>
   </div>
 
-  <!-- ====== 状态码 ====== -->
-  <h2 id="status-codes">Cluster 状态码(StatusCode)</h2>
-  <p>AdministratorCommissioning 命令通过通用 Status 响应返回结果，除标准状态码外还定义了以下 Cluster 专属状态码：</p>
+  <!-- ====== Status Codes ====== -->
+  <h2 id="status-codes">Cluster Status Codes (StatusCode)</h2>
+  <p>AdministratorCommissioning commands return results through the standard Status response. In addition to standard status codes, the following Cluster-specific status codes are defined:</p>
 
   <div class="enum-cards enum-cards-grid">
     <div class="enum-card" id="status-busy">
       <span class="enum-badge">2</span>
       <div>
         <span class="enum-name">Busy</span>
-        <span class="enum-desc">设备已有一个活跃的配网窗口。同一时间只能开启一个配网窗口，需先关闭现有窗口或等待其超时</span>
+        <span class="enum-desc">Device already has an active commissioning window. Only one commissioning window can be open at a time; close the existing window first or wait for it to timeout</span>
       </div>
     </div>
     <div class="enum-card" id="status-pake-error">
       <span class="enum-badge">3</span>
       <div>
         <span class="enum-name">PAKEParameterError</span>
-        <span class="enum-desc">PAKE 参数无效 —— PAKEPasscodeVerifier、Iterations 或 Salt 参数不合法（仅 OpenCommissioningWindow）</span>
+        <span class="enum-desc">Invalid PAKE parameters — PAKEPasscodeVerifier, Iterations, or Salt parameters are invalid (OpenCommissioningWindow only)</span>
       </div>
     </div>
     <div class="enum-card" id="status-windownotopen">
       <span class="enum-badge">4</span>
       <div>
         <span class="enum-name">WindowNotOpen</span>
-        <span class="enum-desc">当前没有活跃的配网窗口 —— 试图在无活跃窗口时调用 RevokeCommissioning</span>
+        <span class="enum-desc">No active commissioning window — attempted to call RevokeCommissioning with no active window</span>
       </div>
     </div>
   </div>
@@ -2537,40 +2537,40 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">Common Errors Quick Reference</div>
     <p>
-      <strong>OpenCommissioningWindow 返回 Busy</strong> → 已有配网窗口在开启状态，先调用 RevokeCommissioning 关闭再重试；
-      <strong>OpenCommissioningWindow 返回 PAKEParameterError</strong> → 检查 PAKE 验证器的生成参数，确认 Iterations 和 Salt 在有效范围内；
-      <strong>RevokeCommissioning 返回 WindowNotOpen</strong> → 窗口已超时自动关闭或从未开启，无需处理。
+      <strong>OpenCommissioningWindow returns Busy</strong> → A commissioning window is already open, call RevokeCommissioning to close it first then retry;
+      <strong>OpenCommissioningWindow returns PAKEParameterError</strong> → Check the PAKE verifier generation parameters, confirm Iterations and Salt are within valid ranges;
+      <strong>RevokeCommissioning returns WindowNotOpen</strong> → Window has already timed out and auto-closed, or was never opened; no action needed.
     </p>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
 
-  <h3>属性数据示例(窗口未开启)</h3>
-  <p>设备处于正常状态，没有活跃的配网窗口：</p>
+  <h3>Attribute Data Example (Window Not Open)</h3>
+  <p>Device in normal state with no active commissioning window:</p>
   <pre><code>{
-  // --- 配网窗口状态 ---
-  "0x0000": 0,                // WindowStatus = WindowNotOpen（当前未开启配网窗口）
+  // --- Commissioning Window Status ---
+  "0x0000": 0,                // WindowStatus = WindowNotOpen (no commissioning window open)
 
-  // --- 管理员信息 ---
-  "0x0001": null,             // AdminFabricIndex = null（无管理员开启窗口）
-  "0x0002": null              // AdminVendorId = null（无管理员开启窗口）
+  // --- Administrator Info ---
+  "0x0001": null,             // AdminFabricIndex = null (no administrator opened window)
+  "0x0002": null              // AdminVendorId = null (no administrator opened window)
 }</code></pre>
 
-  <h3>属性数据示例(窗口已开启)</h3>
-  <p>某管理员已通过增强方式开启了配网窗口：</p>
+  <h3>Attribute Data Example (Window Open)</h3>
+  <p>An administrator has opened a commissioning window using the enhanced method:</p>
   <pre><code>{
-  // --- 配网窗口状态 ---
-  "0x0000": 1,                // WindowStatus = EnhancedWindowOpen（增强配网窗口已开启）
+  // --- Commissioning Window Status ---
+  "0x0000": 1,                // WindowStatus = EnhancedWindowOpen (enhanced commissioning window open)
 
-  // --- 管理员信息 ---
-  "0x0001": 1,                // AdminFabricIndex = 1（Fabric 索引为 1 的管理员开启了窗口）
-  "0x0002": 4996              // AdminVendorId = 0x1384（开启窗口的管理员供应商 ID）
+  // --- Administrator Info ---
+  "0x0001": 1,                // AdminFabricIndex = 1 (administrator from Fabric index 1 opened the window)
+  "0x0002": 4996              // AdminVendorId = 0x1384（Vendor ID of the administrator who opened the window）
 }</code></pre>
 
-  <h3>OpenCommissioningWindow 交互示例</h3>
-  <p>使用增强配网方式开启配网窗口：</p>
-  <pre><code>// Commissioner → Device：开启增强配网窗口
+  <h3>OpenCommissioningWindow Interaction Example</h3>
+  <p>Opening a commissioning window using the enhanced method:</p>
+  <pre><code>// Commissioner → Device: Open enhanced commissioning window
 {
   "invokeRequests": [{
     "commandPath": {
@@ -2579,21 +2579,21 @@ export const clusters: Record<string, ClusterContent> = {
       "commandId": "0x00"              // OpenCommissioningWindow
     },
     "commandFields": {
-      "commissioningTimeout": 180,     // 180 秒后自动关闭
-      "PAKEPasscodeVerifier": "base64...",  // 新的 PAKE 验证器
-      "discriminator": 3840,           // 12-bit 设备识别码
-      "iterations": 1000,             // PBKDF2 迭代次数
-      "salt": "base64..."             // PBKDF2 盐值
+      "commissioningTimeout": 180,     // Auto-close after 180 seconds
+      "PAKEPasscodeVerifier": "base64...",  // New PAKE verifier
+      "discriminator": 3840,           // 12-bit device discriminator
+      "iterations": 1000,             // PBKDF2 iteration count
+      "salt": "base64..."             // PBKDF2 salt
     }
   }]
 }
 
-// Device → Commissioner：成功开启（Status = SUCCESS）
-// 此命令无专属响应结构体，通过通用 Status 返回结果</code></pre>
+// Device → Commissioner: Successfully opened (Status = SUCCESS)
+// This command has no dedicated response structure; results are returned via standard Status</code></pre>
 
-  <h3>OpenBasicCommissioningWindow 交互示例</h3>
-  <p>使用基础配网方式开启配网窗口（需要 BC Feature）：</p>
-  <pre><code>// Commissioner → Device：开启基础配网窗口
+  <h3>OpenBasicCommissioningWindow Interaction Example</h3>
+  <p>Opening a commissioning window using the basic method (requires BC Feature):</p>
+  <pre><code>// Commissioner → Device: Open basic commissioning window
 {
   "invokeRequests": [{
     "commandPath": {
@@ -2602,16 +2602,16 @@ export const clusters: Record<string, ClusterContent> = {
       "commandId": "0x01"              // OpenBasicCommissioningWindow
     },
     "commandFields": {
-      "commissioningTimeout": 180      // 180 秒后自动关闭
+      "commissioningTimeout": 180      // Auto-close after 180 seconds
     }
   }]
 }
 
-// Device → Commissioner：成功开启（Status = SUCCESS）</code></pre>
+// Device → Commissioner: Successfully opened (Status = SUCCESS)</code></pre>
 
   <h3>RevokeCommissioning 交互示例</h3>
-  <p>关闭当前已开启的配网窗口：</p>
-  <pre><code>// Commissioner → Device：关闭配网窗口
+  <p>Close the currently open commissioning window：</p>
+  <pre><code>// Commissioner → Device: Close commissioning window
 {
   "invokeRequests": [{
     "commandPath": {
@@ -2619,96 +2619,96 @@ export const clusters: Record<string, ClusterContent> = {
       "clusterId": "0x003C",
       "commandId": "0x02"              // RevokeCommissioning
     },
-    "commandFields": {}                // 无参数
+    "commandFields": {}                // No parameters
   }]
 }
 
-// Device → Commissioner：成功关闭（Status = SUCCESS）</code></pre>
+// Device → Commissioner: Successfully closed (Status = SUCCESS)</code></pre>
 
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      在实际开发中，Commissioner SDK 通常会封装 OpenCommissioningWindow 的调用，自动处理 PAKE 验证器的生成。
-      App 开发者通常只需要调用 SDK 提供的「多管理员配网」接口，SDK 会在底层完成 PAKE 参数计算和命令发送。
-      但理解底层原理有助于排查多管理员配网失败的问题。
+      In practice, Commissioner SDKs typically wrap the OpenCommissioningWindow call and automatically handle PAKE verifier generation.
+      App developers usually only need to call the SDK's "multi-admin commissioning" interface, and the SDK handles PAKE parameter calculation and command sending at a lower level.
+      However, understanding the underlying principles helps troubleshoot multi-admin commissioning failures.
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
-    <summary>场景 1：添加第二个管理员(多平台共管)</summary>
+    <summary>Scenario 1: Adding a Second Administrator (Multi-Platform Co-Management)</summary>
     <div class="scenario-content">
-      <p><strong>背景</strong>：用户已经用 Google Home 配网了一盏智能灯，现在希望 Apple Home 也能控制它。</p>
+      <p><strong>Background</strong>: A user has commissioned a smart light with Google Home and now wants Apple Home to also control it.</p>
       <ol>
-        <li>用户在 Google Home App 中找到这盏灯的设备详情页</li>
-        <li>点击「分享设备」或「添加到其他平台」</li>
-        <li>Google Home 在底层调用 <a href="#cmd-0x00"><code>OpenCommissioningWindow (0x00)</code></a>，
-            生成新的 PAKE 验证器和临时 Discriminator</li>
-        <li>App 界面展示一个配网 QR Code（包含临时密码和 Discriminator）</li>
-        <li>用户打开 Apple Home，扫描该 QR Code</li>
-        <li>Apple Home 使用临时密码建立 PASE 通道，完成配网</li>
-        <li>配网完成后窗口自动关闭，WindowStatus 恢复为 <code>WindowNotOpen (0)</code></li>
+        <li>User finds the light's device detail page in the Google Home App</li>
+        <li>Click "Share Device" or "Add to Other Platform"</li>
+        <li>Google Home calls <a href="#cmd-0x00"><code>OpenCommissioningWindow (0x00)</code></a> under the hood,
+            generating a new PAKE verifier and temporary Discriminator</li>
+        <li>The App displays a commissioning QR Code (containing the temporary password and Discriminator)</li>
+        <li>User opens Apple Home and scans the QR Code</li>
+        <li>Apple Home uses the temporary password to establish a PASE channel and complete commissioning</li>
+        <li>After commissioning completes, the window automatically closes, WindowStatus returns to <code>WindowNotOpen (0)</code></li>
       </ol>
       <p>
-        此时设备同时属于两个 Fabric（Google 和 Apple），可以被两个平台独立控制。
-        设备的 AdminFabricIndex 和 AdminVendorId 在窗口关闭后恢复为 <code>null</code>。
+        At this point, the device belongs to two Fabrics (Google and Apple) simultaneously and can be independently controlled by both platforms.
+        The device's AdminFabricIndex and AdminVendorId return to <code>null</code> after the window closes.
       </p>
     </div>
   </details>
 
   <details class="scenario">
-    <summary>场景 2：恢复出厂设置的替代方案</summary>
+    <summary>Scenario 2: Alternative to Factory Reset</summary>
     <div class="scenario-content">
-      <p><strong>背景</strong>：设备所属的 App 已卸载或 Fabric 信息丢失，但不想恢复出厂设置（会丢失所有配置）。</p>
+      <p><strong>Background</strong>: The device's App has been uninstalled or Fabric info is lost, but you don't want to factory reset (which would lose all configuration).</p>
       <ol>
-        <li>如果设备支持 BC Feature 且有物理按钮或其他本地触发方式：
+        <li>If the device supports BC Feature and has a physical button or other local trigger:
           <ul>
-            <li>通过长按设备按钮等方式触发本地开窗（某些设备支持）</li>
-            <li>设备进入基础配网窗口状态（BasicWindowOpen）</li>
+            <li>Trigger local window opening by long-pressing the device button (some devices support this)</li>
+            <li>Device enters basic commissioning window state (BasicWindowOpen)</li>
           </ul>
         </li>
-        <li>如果设备仍属于某个有效的 Fabric 且有另一个管理员：
+        <li>If the device still belongs to a valid Fabric and has another administrator:
           <ul>
-            <li>用该管理员调用 <a href="#cmd-0x01"><code>OpenBasicCommissioningWindow (0x01)</code></a></li>
-            <li>使用设备背面的出厂 passcode 重新配网</li>
+            <li>Use that administrator to call <a href="#cmd-0x01"><code>OpenBasicCommissioningWindow (0x01)</code></a></li>
+            <li>Use the factory passcode on the back of the device to re-commission</li>
           </ul>
         </li>
-        <li>新的 Commissioner 完成配网后，设备加入新的 Fabric</li>
-        <li>可以通过 OperationalCredentials Cluster 移除旧的、不再需要的 Fabric</li>
+        <li>After the new Commissioner completes commissioning, the device joins the new Fabric</li>
+        <li>Old, no-longer-needed Fabrics can be removed via the OperationalCredentials Cluster</li>
       </ol>
       <p>
-        <strong>注意</strong>：如果设备所有 Fabric 的管理员都无法访问，且设备不支持本地开窗方式，
-        那么恢复出厂设置可能是唯一选择。这也是为什么建议至少配置两个管理员（Fabric）作为备份的原因。
+        <strong>Note</strong>: If administrators of all the device's Fabrics are inaccessible and the device does not support local window opening,
+        then factory reset may be the only option. This is why configuring at least two administrators (Fabrics) as backup is recommended.
       </p>
     </div>
   </details>
 
   <details class="scenario">
-    <summary>场景 3：安全审计(检测异常配网窗口)</summary>
+    <summary>Scenario 3: Security Audit (Detecting Abnormal Commissioning Windows)</summary>
     <div class="scenario-content">
-      <p><strong>背景</strong>：企业 IoT 管理员需要确保办公室内的 Matter 设备没有被意外开窗。</p>
+      <p><strong>Background</strong>: An enterprise IoT administrator needs to ensure that Matter devices in the office have not been unexpectedly opened for commissioning.</p>
       <ol>
-        <li>定期轮询所有设备的 <code>WindowStatus (0x0000)</code> 属性</li>
-        <li>如果发现某设备的 WindowStatus 不为 <code>WindowNotOpen (0)</code>：
+        <li>Periodically poll all devices' <code>WindowStatus (0x0000)</code> attribute</li>
+        <li>If a device's WindowStatus is not <code>WindowNotOpen (0)</code>:
           <ul>
-            <li>读取 <code>AdminFabricIndex (0x0001)</code> 确认是哪个 Fabric 的管理员开的窗</li>
-            <li>读取 <code>AdminVendorId (0x0002)</code> 确认使用的是哪个平台</li>
+            <li>Read <code>AdminFabricIndex (0x0001)</code> to confirm which Fabric's administrator opened the window</li>
+            <li>Read <code>AdminVendorId (0x0002)</code> to confirm which platform was used</li>
           </ul>
         </li>
-        <li>如果这次开窗不在预期操作记录中：
+        <li>If this window opening is not in the expected operation log:
           <ul>
-            <li>立即调用 <a href="#cmd-0x02"><code>RevokeCommissioning (0x02)</code></a> 关闭窗口</li>
-            <li>记录审计日志：设备 ID、开窗时间、AdminFabricIndex、AdminVendorId</li>
-            <li>向安全团队发送告警</li>
+            <li>Immediately call <a href="#cmd-0x02"><code>RevokeCommissioning (0x02)</code></a> to close the window</li>
+            <li>Record audit log: device ID, window opening time, AdminFabricIndex, AdminVendorId</li>
+            <li>Send an alert to the security team</li>
           </ul>
         </li>
-        <li>更好的方案：订阅 WindowStatus 属性变化，实现实时检测而非轮询</li>
+        <li>Better approach: Subscribe to WindowStatus attribute changes for real-time detection instead of polling</li>
       </ol>
       <p>
-        在安全要求较高的环境中，建议完全禁用 BC Feature（不支持基础配网），
-        只允许增强配网方式开窗 —— 这样每次开窗都需要新的 PAKE 验证器，被恶意利用的风险更低。
+        In high-security environments, it is recommended to completely disable the BC Feature (no basic commissioning support),
+        allowing only the enhanced commissioning method to open windows — this way each window opening requires a new PAKE verifier, reducing the risk of malicious exploitation.
       </p>
     </div>
   </details>
@@ -3266,7 +3266,7 @@ export const clusters: Record<string, ClusterContent> = {
   <h2 id="attributes">Attributes</h2>
   <p>OperationalCredentials Cluster 共有 6 个属性，分为 Fabric 信息和容量管理两组。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
 
-  <!-- 属性汇总表 -->
+  <!-- Attribute Summary Table -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -3418,7 +3418,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 枚举定义 ====== -->
+  <!-- ====== Enum Definitions ====== -->
   <h2 id="enums">Enum Definitions</h2>
 
   <h3 id="enum-noc-status">NodeOperationalCertStatusEnum</h3>
@@ -3599,7 +3599,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
   <p>以下是一台已加入一个 Fabric 的 Matter 设备的 OperationalCredentials 属性读取结果（NOCs 除外，因为 Fabric-scoped 限制只能读自己的）：</p>
 
@@ -3683,7 +3683,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <details class="scenario">
@@ -4318,7 +4318,7 @@ export const clusters: Record<string, ClusterContent> = {
     </div>
   </div>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
   <p>一个已配置两个组的设备上，GroupKeyManagement Cluster 的属性读取结果：</p>
 
@@ -4367,7 +4367,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
-  <!-- ====== 常见场景 ====== -->
+  <!-- ====== Common Scenarios ====== -->
   <h2 id="scenarios">Common Scenarios</h2>
 
   <h3 id="scenario-setup">场景 1：为一组设备建立组播密钥</h3>
