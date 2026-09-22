@@ -2,18 +2,30 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { getLangFromPath, localePath, getAlternateLang, type Lang } from '../i18n/config';
+import { t } from '../i18n/ui';
 
 interface Props {
   title: string;
   description?: string;
   fullWidth?: boolean;
   type?: 'website' | 'article';
+  lang?: Lang;
 }
 
-const { title, description = 'Matter 协议学习站点 — 从零理解智能家居统一标准协议的核心概念，快速查阅 Cluster 定义，在线解析设备数据。', fullWidth = false, type = 'website' } = Astro.props;
 const currentPath = Astro.url.pathname;
+const lang = Astro.props.lang ?? getLangFromPath(currentPath);
+const altLang = getAlternateLang(lang);
+const defaultDescription = t(lang, 'meta.defaultDescription');
+
+const { title, description = defaultDescription, fullWidth = false, type = 'website' } = Astro.props;
 const canonicalURL = new URL(currentPath, Astro.site);
+const altURL = new URL(localePath(altLang, currentPath), Astro.site);
 const fullTitle = `${title} | Matter Learn`;
+
+const htmlLang = lang === 'zh' ? 'zh-CN' : 'en';
+const ogLocale = lang === 'zh' ? 'zh_CN' : 'en_US';
+const ogLocaleAlt = lang === 'zh' ? 'en_US' : 'zh_CN';
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -21,8 +33,8 @@ const jsonLd = {
   name: fullTitle,
   description,
   url: canonicalURL.href,
-  ...(type === 'website' && { potentialAction: { '@type': 'SearchAction', target: `${Astro.site}clusters/`, 'query-input': 'required name=search_term_string' } }),
-  inLanguage: 'zh-CN',
+  ...(type === 'website' && { potentialAction: { '@type': 'SearchAction', target: `${Astro.site}${lang}/clusters/`, 'query-input': 'required name=search_term_string' } }),
+  inLanguage: htmlLang,
   publisher: {
     '@type': 'Organization',
     name: 'Matter Learn',
@@ -32,12 +44,17 @@ const jsonLd = {
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang={htmlLang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL.href} />
+
+    <!-- hreflang alternates -->
+    <link rel="alternate" hreflang="zh" href={new URL(localePath('zh', currentPath), Astro.site).href} />
+    <link rel="alternate" hreflang="en" href={new URL(localePath('en', currentPath), Astro.site).href} />
+    <link rel="alternate" hreflang="x-default" href={new URL(localePath('zh', currentPath), Astro.site).href} />
 
     <!-- Open Graph -->
     <meta property="og:type" content={type} />
@@ -45,7 +62,8 @@ const jsonLd = {
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL.href} />
     <meta property="og:site_name" content="Matter Learn" />
-    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:locale:alternate" content={ogLocaleAlt} />
     <meta property="og:image" content={`${Astro.site}og-image.png`} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -63,13 +81,13 @@ const jsonLd = {
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>
-    <Header currentPath={currentPath} />
+    <Header currentPath={currentPath} lang={lang} />
     <main class:list={['main-content', { 'main-full': fullWidth }]}>
       <slot />
     </main>
-    <Footer />
+    <Footer lang={lang} />
 
-    <button id="back-to-top" class="back-to-top" aria-label="回到顶部">
+    <button id="back-to-top" class="back-to-top" aria-label={t(lang, 'backToTop')}>
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="18 15 12 9 6 15"></polyline>
       </svg>

@@ -1,11 +1,16 @@
 ---
-import { Layers, ChevronDown, ArrowUpRight, Sun, Moon, Menu, X } from 'lucide-astro';
+import { Layers, ChevronDown, ArrowUpRight, Sun, Moon, Menu, X, Globe } from 'lucide-astro';
+import { type Lang, localePath, getAlternateLang, stripLangPrefix } from '../i18n/config';
+import { t } from '../i18n/ui';
 
 interface Props {
   currentPath?: string;
+  lang?: Lang;
 }
 
-const { currentPath = '' } = Astro.props;
+const { currentPath = '', lang = 'zh' } = Astro.props;
+const altLang = getAlternateLang(lang);
+const altPath = localePath(altLang, currentPath);
 
 interface NavItem {
   title: string;
@@ -17,79 +22,85 @@ interface NavItem {
   group?: boolean;
 }
 
+const lp = (path: string) => localePath(lang, path);
+
 const navigation: NavItem[] = [
-  { title: '首页', href: '/' },
-  { title: '概念总览', href: '/concepts/' },
+  { title: t(lang, 'nav.home'), href: lp('/') },
+  { title: t(lang, 'nav.concepts'), href: lp('/concepts/') },
   {
-    title: 'Cluster 手册',
+    title: t(lang, 'nav.clusterManual'),
     megaMenu: true,
     children: [
-      { title: '照明控制', group: true },
-      { title: '开关 OnOff', href: '/clusters/on-off/' },
-      { title: '亮度 LevelControl', href: '/clusters/level-control/' },
-      { title: '颜色 ColorControl', href: '/clusters/color-control/' },
-      { title: '闭合设备', group: true },
-      { title: '门锁 DoorLock', href: '/clusters/door-lock/' },
-      { title: '窗帘 WindowCovering', href: '/clusters/window-covering/' },
-      { title: '阀门 ValveConfig', href: '/clusters/valve-configuration-and-control/' },
-      { title: '暖通空调', group: true },
-      { title: '温控 Thermostat', href: '/clusters/thermostat/' },
-      { title: '风扇 FanControl', href: '/clusters/fan-control/' },
-      { title: '传感与测量', group: true },
-      { title: '温度 Temperature', href: '/clusters/temperature-measurement/' },
-      { title: '湿度 Humidity', href: '/clusters/relative-humidity-measurement/' },
-      { title: '占位 Occupancy', href: '/clusters/occupancy-sensing/' },
-      { title: '空气 AirQuality', href: '/clusters/air-quality/' },
-      { title: '安防与输入', group: true },
-      { title: '烟感 SmokeCOAlarm', href: '/clusters/smoke-co-alarm/' },
-      { title: '布尔 BooleanState', href: '/clusters/boolean-state/' },
-      { title: '家电', group: true },
-      { title: '运行状态 OperationalState', href: '/clusters/operational-state/' },
-      { title: '洗衣机 LaundryWasher', href: '/clusters/laundry-washer-mode/' },
-      { title: '扫地机 RvcRunMode', href: '/clusters/rvc-run-mode/' },
-      { title: '媒体', group: true },
-      { title: '播放 MediaPlayback', href: '/clusters/media-playback/' },
-      { title: '频道 Channel', href: '/clusters/channel/' },
-      { title: '通用功能', group: true },
-      { title: '标识 Identify', href: '/clusters/identify/' },
-      { title: '描述 Descriptor', href: '/clusters/descriptor/' },
-      { title: '权限 AccessControl', href: '/clusters/access-control/' },
-      { title: '节点与配置', group: true },
-      { title: '基本信息 BasicInfo', href: '/clusters/basic-information/' },
-      { title: '电源 PowerSource', href: '/clusters/power-source/' },
-      { title: '时间 TimeSynchronization', href: '/clusters/time-synchronization/' },
-      { title: '配网与安全', group: true },
-      { title: '网络配置 NetworkComm', href: '/clusters/network-commissioning/' },
-      { title: '凭据 OperationalCred', href: '/clusters/operational-credentials/' },
-      { title: 'OTA 与诊断', group: true },
-      { title: 'OTA Provider', href: '/clusters/ota-software-update-provider/' },
-      { title: '通用诊断 GeneralDiag', href: '/clusters/general-diagnostics/' },
-      { title: '能源管理', group: true },
-      { title: '电功率 ElecPower', href: '/clusters/electrical-power-measurement/' },
-      { title: '查看全部 82 个 Cluster', href: '/clusters/', dividerBefore: true },
+      { title: t(lang, 'nav.group.lighting'), group: true },
+      { title: t(lang, 'nav.cluster.onOff'), href: lp('/clusters/on-off/') },
+      { title: t(lang, 'nav.cluster.levelControl'), href: lp('/clusters/level-control/') },
+      { title: t(lang, 'nav.cluster.colorControl'), href: lp('/clusters/color-control/') },
+      { title: t(lang, 'nav.group.closure'), group: true },
+      { title: t(lang, 'nav.cluster.doorLock'), href: lp('/clusters/door-lock/') },
+      { title: t(lang, 'nav.cluster.windowCovering'), href: lp('/clusters/window-covering/') },
+      { title: t(lang, 'nav.cluster.valveConfig'), href: lp('/clusters/valve-configuration-and-control/') },
+      { title: t(lang, 'nav.group.hvac'), group: true },
+      { title: t(lang, 'nav.cluster.thermostat'), href: lp('/clusters/thermostat/') },
+      { title: t(lang, 'nav.cluster.fanControl'), href: lp('/clusters/fan-control/') },
+      { title: t(lang, 'nav.group.sensing'), group: true },
+      { title: t(lang, 'nav.cluster.temperature'), href: lp('/clusters/temperature-measurement/') },
+      { title: t(lang, 'nav.cluster.humidity'), href: lp('/clusters/relative-humidity-measurement/') },
+      { title: t(lang, 'nav.cluster.occupancy'), href: lp('/clusters/occupancy-sensing/') },
+      { title: t(lang, 'nav.cluster.airQuality'), href: lp('/clusters/air-quality/') },
+      { title: t(lang, 'nav.group.safety'), group: true },
+      { title: t(lang, 'nav.cluster.smokeCOAlarm'), href: lp('/clusters/smoke-co-alarm/') },
+      { title: t(lang, 'nav.cluster.booleanState'), href: lp('/clusters/boolean-state/') },
+      { title: t(lang, 'nav.group.appliance'), group: true },
+      { title: t(lang, 'nav.cluster.operationalState'), href: lp('/clusters/operational-state/') },
+      { title: t(lang, 'nav.cluster.laundryWasher'), href: lp('/clusters/laundry-washer-mode/') },
+      { title: t(lang, 'nav.cluster.rvcRunMode'), href: lp('/clusters/rvc-run-mode/') },
+      { title: t(lang, 'nav.group.media'), group: true },
+      { title: t(lang, 'nav.cluster.mediaPlayback'), href: lp('/clusters/media-playback/') },
+      { title: t(lang, 'nav.cluster.channel'), href: lp('/clusters/channel/') },
+      { title: t(lang, 'nav.group.general'), group: true },
+      { title: t(lang, 'nav.cluster.identify'), href: lp('/clusters/identify/') },
+      { title: t(lang, 'nav.cluster.descriptor'), href: lp('/clusters/descriptor/') },
+      { title: t(lang, 'nav.cluster.accessControl'), href: lp('/clusters/access-control/') },
+      { title: t(lang, 'nav.group.node'), group: true },
+      { title: t(lang, 'nav.cluster.basicInfo'), href: lp('/clusters/basic-information/') },
+      { title: t(lang, 'nav.cluster.powerSource'), href: lp('/clusters/power-source/') },
+      { title: t(lang, 'nav.cluster.timeSync'), href: lp('/clusters/time-synchronization/') },
+      { title: t(lang, 'nav.group.commissioning'), group: true },
+      { title: t(lang, 'nav.cluster.networkComm'), href: lp('/clusters/network-commissioning/') },
+      { title: t(lang, 'nav.cluster.opCred'), href: lp('/clusters/operational-credentials/') },
+      { title: t(lang, 'nav.group.diagnostics'), group: true },
+      { title: t(lang, 'nav.cluster.otaProvider'), href: lp('/clusters/ota-software-update-provider/') },
+      { title: t(lang, 'nav.cluster.generalDiag'), href: lp('/clusters/general-diagnostics/') },
+      { title: t(lang, 'nav.group.energy'), group: true },
+      { title: t(lang, 'nav.cluster.elecPower'), href: lp('/clusters/electrical-power-measurement/') },
+      { title: t(lang, 'nav.viewAll82'), href: lp('/clusters/'), dividerBefore: true },
     ],
   },
   {
-    title: '数据工具',
+    title: t(lang, 'nav.dataTools'),
     children: [
-      { title: 'JSON 解析器', href: '/tools/json-parser/' },
+      { title: t(lang, 'nav.jsonParser'), href: lp('/tools/json-parser/') },
     ],
   },
   {
-    title: '官方标准',
+    title: t(lang, 'nav.officialStandards'),
     children: [
-      { title: 'CSA 官网', href: 'https://csa-iot.org/', external: true },
-      { title: 'Matter 规范', href: 'https://csa-iot.org/all-solutions/matter/', external: true },
-      { title: 'Matter GitHub', href: 'https://github.com/project-chip/connectedhomeip', external: true },
-      { title: 'Device Library', href: 'https://csa-iot.org/csa-iot/csa-device-library/', external: true },
+      { title: t(lang, 'nav.csaWebsite'), href: 'https://csa-iot.org/', external: true },
+      { title: t(lang, 'nav.matterSpec'), href: 'https://csa-iot.org/all-solutions/matter/', external: true },
+      { title: t(lang, 'nav.matterGithub'), href: 'https://github.com/project-chip/connectedhomeip', external: true },
+      { title: t(lang, 'nav.deviceLibrary'), href: 'https://csa-iot.org/csa-iot/csa-device-library/', external: true },
     ],
   },
 ];
 
+// Strip lang prefix for matching active state
+const pathForActive = stripLangPrefix(currentPath);
+
 function isActive(href: string | undefined, current: string): boolean {
   if (!href) return false;
-  if (href === '/') return current === '/';
-  return current.startsWith(href);
+  const clean = stripLangPrefix(href);
+  if (clean === '/') return current === '/';
+  return current.startsWith(clean);
 }
 
 function isDropdownActive(item: NavItem, current: string): boolean {
@@ -103,7 +114,7 @@ function isDropdownActive(item: NavItem, current: string): boolean {
 <header class="header">
   <div class="header-inner">
     <!-- Logo -->
-    <a href="/" class="logo">
+    <a href={lp('/')} class="logo">
       <Layers size={24} class="logo-icon" />
       <span class="logo-text">Matter Learn</span>
     </a>
@@ -114,7 +125,7 @@ function isDropdownActive(item: NavItem, current: string): boolean {
         item.children ? (
           <div class:list={['dropdown', { 'mega': item.megaMenu }]}>
             <button
-              class:list={['nav-item', 'dropdown-trigger', { active: isDropdownActive(item, currentPath) }]}
+              class:list={['nav-item', 'dropdown-trigger', { active: isDropdownActive(item, pathForActive) }]}
               aria-haspopup="true"
               aria-expanded="false"
             >
@@ -130,7 +141,7 @@ function isDropdownActive(item: NavItem, current: string): boolean {
                   ) : (
                     <a
                       href={child.href}
-                      class:list={['dropdown-item', { active: !child.external && isActive(child.href, currentPath) }]}
+                      class:list={['dropdown-item', { active: !child.external && isActive(child.href, pathForActive) }]}
                       {...(child.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                     >
                       <span>{child.title}</span>
@@ -146,7 +157,7 @@ function isDropdownActive(item: NavItem, current: string): boolean {
         ) : (
           <a
             href={item.href}
-            class:list={['nav-item', { active: isActive(item.href, currentPath) }]}
+            class:list={['nav-item', { active: isActive(item.href, pathForActive) }]}
           >
             {item.title}
           </a>
@@ -154,13 +165,17 @@ function isDropdownActive(item: NavItem, current: string): boolean {
       )}
     </nav>
 
-    <!-- Right side: theme toggle + mobile hamburger -->
+    <!-- Right side: language switch + theme toggle + mobile hamburger -->
     <div class="header-right">
-      <button id="theme-toggle" class="icon-btn" aria-label="Toggle theme">
+      <a href={altPath} class="lang-btn" aria-label={t(lang, 'header.switchLangLabel')} data-lang-switch>
+        <Globe size={15} />
+        <span>{t(lang, 'header.switchLang')}</span>
+      </a>
+      <button id="theme-toggle" class="icon-btn" aria-label={t(lang, 'header.toggleTheme')}>
         <Sun id="sun-icon" size={18} />
         <Moon id="moon-icon" size={18} style="display:none;" />
       </button>
-      <button id="mobile-menu-toggle" class="icon-btn mobile-only" aria-label="Toggle menu" aria-expanded="false">
+      <button id="mobile-menu-toggle" class="icon-btn mobile-only" aria-label={t(lang, 'header.toggleMenu')} aria-expanded="false">
         <Menu id="hamburger-icon" size={20} />
         <X id="close-icon" size={20} style="display:none;" />
       </button>
@@ -185,7 +200,7 @@ function isDropdownActive(item: NavItem, current: string): boolean {
                 ) : (
                   <a
                     href={child.href}
-                    class:list={['mobile-link', 'mobile-child', { active: !child.external && isActive(child.href, currentPath) }]}
+                    class:list={['mobile-link', 'mobile-child', { active: !child.external && isActive(child.href, pathForActive) }]}
                     {...(child.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                   >
                     <span>{child.title}</span>
@@ -201,24 +216,41 @@ function isDropdownActive(item: NavItem, current: string): boolean {
       ) : (
         <a
           href={item.href}
-          class:list={['mobile-link', { active: isActive(item.href, currentPath) }]}
+          class:list={['mobile-link', { active: isActive(item.href, pathForActive) }]}
         >
           {item.title}
         </a>
       )
     )}
+    <!-- Mobile language switch -->
+    <div class="mobile-divider" style="margin: 0.5rem 0;"></div>
+    <a href={altPath} class="mobile-link" data-lang-switch>
+      <span>{lang === 'zh' ? 'English' : '中文'}</span>
+      <Globe size={14} />
+    </a>
   </div>
 </header>
 
 <script is:inline>
 (function() {
   // Theme
-  const theme = localStorage.getItem('theme') ||
+  var theme = localStorage.getItem('theme') ||
     (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
   if (theme === 'dark') {
     document.documentElement.classList.add('dark');
   }
   updateThemeIcons();
+
+  // Save language preference when clicking lang switch
+  document.querySelectorAll('[data-lang-switch]').forEach(function(el) {
+    el.addEventListener('click', function() {
+      var href = el.getAttribute('href') || '';
+      var langMatch = href.match(/^\/(zh|en)\//);
+      if (langMatch) {
+        try { localStorage.setItem('preferredLang', langMatch[1]); } catch(e) {}
+      }
+    });
+  });
 
   document.addEventListener('DOMContentLoaded', function() {
     // Theme toggle
@@ -260,7 +292,6 @@ function isDropdownActive(item: NavItem, current: string): boolean {
     // Desktop dropdown: open on hover, close when leaving
     document.querySelectorAll('.dropdown').forEach(function(dropdown) {
       var trigger = dropdown.querySelector('.dropdown-trigger');
-      var menu = dropdown.querySelector('.dropdown-menu');
 
       dropdown.addEventListener('mouseenter', function() {
         if (trigger) trigger.setAttribute('aria-expanded', 'true');
@@ -271,7 +302,6 @@ function isDropdownActive(item: NavItem, current: string): boolean {
         dropdown.classList.remove('open');
       });
 
-      // Also handle click for accessibility
       if (trigger) {
         trigger.addEventListener('click', function(e) {
           e.preventDefault();
@@ -286,8 +316,8 @@ function isDropdownActive(item: NavItem, current: string): boolean {
       document.querySelectorAll('.dropdown.open').forEach(function(d) {
         if (!d.contains(e.target)) {
           d.classList.remove('open');
-          var t = d.querySelector('.dropdown-trigger');
-          if (t) t.setAttribute('aria-expanded', 'false');
+          var tt = d.querySelector('.dropdown-trigger');
+          if (tt) tt.setAttribute('aria-expanded', 'false');
         }
       });
     });
@@ -329,7 +359,6 @@ function isDropdownActive(item: NavItem, current: string): boolean {
     gap: 2rem;
   }
 
-  /* Logo */
   .logo {
     display: flex;
     align-items: center;
@@ -353,7 +382,6 @@ function isDropdownActive(item: NavItem, current: string): boolean {
     letter-spacing: -0.025em;
   }
 
-  /* Desktop nav */
   .desktop-nav {
     display: flex;
     align-items: center;
@@ -397,7 +425,6 @@ function isDropdownActive(item: NavItem, current: string): boolean {
     opacity: 0.6;
   }
 
-  /* Dropdown */
   .dropdown {
     position: relative;
   }
@@ -505,13 +532,35 @@ function isDropdownActive(item: NavItem, current: string): boolean {
     opacity: 0.5;
   }
 
-  /* Header right */
   .header-right {
     display: flex;
     align-items: center;
     gap: 0.25rem;
     margin-left: auto;
     flex-shrink: 0;
+  }
+
+  .lang-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.375rem 0.625rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: 0.375rem;
+    border: 1px solid var(--border-color);
+    background: none;
+    cursor: pointer;
+    transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+    white-space: nowrap;
+  }
+
+  .lang-btn:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+    border-color: var(--border-active);
   }
 
   .icon-btn {
@@ -537,7 +586,6 @@ function isDropdownActive(item: NavItem, current: string): boolean {
     display: none;
   }
 
-  /* Mobile nav panel */
   .mobile-nav {
     display: none;
     position: absolute;
@@ -655,7 +703,6 @@ function isDropdownActive(item: NavItem, current: string): boolean {
     background: var(--border-color);
   }
 
-  /* Responsive */
   @media (max-width: 768px) {
     .header-inner {
       padding: 0 1rem;

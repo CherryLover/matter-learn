@@ -12,6 +12,14 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://matter-learn.flyooo.uk',
   output: 'static',
+  i18n: {
+    defaultLocale: 'zh',
+    locales: ['zh', 'en'],
+    routing: {
+      prefixDefaultLocale: true,
+      redirectToDefaultLocale: false,
+    },
+  },
   integrations: [react(), sitemap()],
   vite: {
     plugins: [tailwindcss()],

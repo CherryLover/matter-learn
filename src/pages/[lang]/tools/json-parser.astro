@@ -1,0 +1,34 @@
+---
+import DocLayout from '../../../layouts/DocLayout.astro';
+import MatterJsonParser from '../../../components/MatterJsonParser';
+import { SUPPORTED_LANGS, localePath, type Lang } from '../../../i18n/config';
+
+export function getStaticPaths() {
+  return SUPPORTED_LANGS.map(lang => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+
+const text = lang === 'en'
+  ? (await import('../../../i18n/en/pages/tools')).default
+  : (await import('../../../i18n/zh/pages/tools')).default;
+---
+
+<DocLayout
+  title={text.title}
+  description={text.description}
+  lang={lang}
+>
+  <h1>{text.heading}</h1>
+  <p>{text.intro}</p>
+
+  <h2 id="parser">{text.parserHeading}</h2>
+  <MatterJsonParser lang={lang} client:load />
+
+  <h2 id="formats">{text.formatsHeading}</h2>
+  <ul>
+    <li><strong>{text.format1}</strong> — <span set:html={text.format1Desc} /></li>
+    <li><strong>{text.format2}</strong> — <span set:html={text.format2Desc} /></li>
+    <li><strong>{text.format3}</strong> — <span set:html={text.format3Desc} /></li>
+  </ul>
+</DocLayout>

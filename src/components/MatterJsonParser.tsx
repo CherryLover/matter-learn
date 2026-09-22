@@ -282,15 +282,53 @@ function ValueDisplay({
   );
 }
 
+// ── i18n ───────────────────────────────────────────────────────────────
+
+type Lang = 'zh' | 'en';
+
+const ui = {
+  capabilityTitle:   { zh: '设备功能声明', en: 'Device Capability' },
+  stateTitle:        { zh: '属性状态', en: 'Attribute State' },
+  readResultTitle:   { zh: '读取结果', en: 'Read Results' },
+  clusters:          { zh: ' 个 Cluster', en: ' Clusters' },
+  supportedCmds:     { zh: '支持命令', en: 'Supported Commands' },
+  noCmds:            { zh: '无自定义命令', en: 'No custom commands' },
+  attributes:        { zh: ' 个属性', en: ' Attributes' },
+  attrId:            { zh: '属性 ID', en: 'Attr ID' },
+  attrName:          { zh: '属性名', en: 'Name' },
+  value:             { zh: '值', en: 'Value' },
+  attribute:         { zh: '属性', en: 'Attribute' },
+  emptyInput:        { zh: '请输入 JSON 数据', en: 'Please enter JSON data' },
+  jsonError:         { zh: 'JSON 格式错误', en: 'JSON syntax error' },
+  parseFail:         { zh: '解析失败', en: 'Parse failed' },
+  unknownType:       {
+    zh: '无法识别 JSON 类型。支持的格式：设备功能声明（含 endpoints.clusters.commands）、属性状态（含 endpoints.clusters.attributes）、ReadAttribute 响应（含 read_results）。',
+    en: 'Unable to identify JSON type. Supported formats: Device Capability (with endpoints.clusters.commands), Attribute State (with endpoints.clusters.attributes), ReadAttribute Response (with read_results).',
+  },
+  sampleLabel:       { zh: '示例数据:', en: 'Sample data:' },
+  sampleCapability:  { zh: '设备功能声明', en: 'Capability' },
+  sampleState:       { zh: '属性状态', en: 'State' },
+  sampleRead:        { zh: '读属性响应', en: 'Read Response' },
+  placeholder:       {
+    zh: '粘贴 Matter 设备 JSON 数据...\n\n支持三种格式：\n  1. 设备功能声明（含 endpoints + clusters + commands）\n  2. 属性状态（含 endpoints + clusters + attributes）\n  3. ReadAttribute 响应（含 read_results）',
+    en: 'Paste Matter device JSON data...\n\nSupported formats:\n  1. Device Capability (endpoints + clusters + commands)\n  2. Attribute State (endpoints + clusters + attributes)\n  3. ReadAttribute Response (read_results)',
+  },
+  parseBtn:          { zh: '解析', en: 'Parse' },
+} as const;
+
+function t(lang: Lang, key: keyof typeof ui): string {
+  return ui[key][lang] ?? ui[key]['zh'];
+}
+
 // ── Result Renderers ────────────────────────────────────────────────────
 
-function CapabilityResult({ data }: { data: ParsedCapability }) {
+function CapabilityResult({ data, lang }: { data: ParsedCapability; lang: Lang }) {
   return (
     <div className="parse-results">
       <div className="result-type-badge capability-badge">Capability</div>
 
       <div className="identity-card">
-        <h3>设备功能声明</h3>
+        <h3>{t(lang, 'capabilityTitle')}</h3>
         <div className="identity-grid">
           {data.matterNodeId && (
             <div className="identity-row">
@@ -319,7 +357,7 @@ function CapabilityResult({ data }: { data: ParsedCapability }) {
               ? `Endpoint ${ep.id} — ${ep.deviceType}`
               : `Endpoint ${ep.id}`
           }
-          badge={`${ep.clusters.length} 个 Cluster`}
+          badge={`${ep.clusters.length}${t(lang, 'clusters')}`}
         >
           {ep.clusters.map((cluster) => (
             <div key={cluster.id} className="cluster-card">
@@ -333,7 +371,7 @@ function CapabilityResult({ data }: { data: ParsedCapability }) {
               {cluster.commands ? (
                 <div className="commands-list">
                   <span className="commands-label">
-                    支持命令 ({cluster.commands.length}):
+                    {t(lang, 'supportedCmds')} ({cluster.commands.length}):
                   </span>
                   <div className="commands-pills">
                     {cluster.commands.map((cmd) => (
@@ -347,7 +385,7 @@ function CapabilityResult({ data }: { data: ParsedCapability }) {
                   </div>
                 </div>
               ) : (
-                <div className="commands-none">无自定义命令</div>
+                <div className="commands-none">{t(lang, 'noCmds')}</div>
               )}
             </div>
           ))}
@@ -357,13 +395,13 @@ function CapabilityResult({ data }: { data: ParsedCapability }) {
   );
 }
 
-function StateResult({ data }: { data: ParsedState }) {
+function StateResult({ data, lang }: { data: ParsedState; lang: Lang }) {
   return (
     <div className="parse-results">
       <div className="result-type-badge state-badge">State</div>
 
       <div className="identity-card">
-        <h3>属性状态</h3>
+        <h3>{t(lang, 'stateTitle')}</h3>
         <div className="identity-grid">
           {data.matterNodeId && (
             <div className="identity-row">
@@ -380,19 +418,19 @@ function StateResult({ data }: { data: ParsedState }) {
         <CollapsibleSection
           key={ep.id}
           title={`Endpoint ${ep.id}`}
-          badge={`${ep.clusters.length} 个 Cluster`}
+          badge={`${ep.clusters.length}${t(lang, 'clusters')}`}
         >
           {ep.clusters.map((cluster) => (
             <CollapsibleSection
               key={cluster.id}
               title={`${cluster.id} ${cluster.name}`}
-              badge={`${cluster.attributes.length} 个属性`}
+              badge={`${cluster.attributes.length}${t(lang, 'attributes')}`}
             >
               <div className="attributes-table">
                 <div className="attr-header">
-                  <span>属性 ID</span>
-                  <span>属性名</span>
-                  <span>值</span>
+                  <span>{t(lang, 'attrId')}</span>
+                  <span>{t(lang, 'attrName')}</span>
+                  <span>{t(lang, 'value')}</span>
                 </div>
                 {cluster.attributes.map((attr) => (
                   <div key={attr.id} className="attr-row">
@@ -414,13 +452,13 @@ function StateResult({ data }: { data: ParsedState }) {
   );
 }
 
-function ReadResponseResult({ data }: { data: ParsedReadResponse }) {
+function ReadResponseResult({ data, lang }: { data: ParsedReadResponse; lang: Lang }) {
   return (
     <div className="parse-results">
       <div className="result-type-badge read-badge">ReadAttribute</div>
 
       <div className="identity-card">
-        <h3>读取结果</h3>
+        <h3>{t(lang, 'readResultTitle')}</h3>
         <div className="identity-grid">
           {data.matterNodeId && (
             <div className="identity-row">
@@ -437,8 +475,8 @@ function ReadResponseResult({ data }: { data: ParsedReadResponse }) {
         <div className="attr-header read-header">
           <span>Endpoint</span>
           <span>Cluster</span>
-          <span>属性</span>
-          <span>值</span>
+          <span>{t(lang, 'attribute')}</span>
+          <span>{t(lang, 'value')}</span>
         </div>
         {data.results.map((r, i) => (
           <div key={i} className="attr-row read-row">
@@ -462,7 +500,7 @@ function ReadResponseResult({ data }: { data: ParsedReadResponse }) {
 
 // ── Main Component ──────────────────────────────────────────────────────
 
-export default function MatterJsonParser() {
+export default function MatterJsonParser({ lang = 'zh' as Lang }: { lang?: Lang }) {
   const [input, setInput] = useState("");
   const [result, setResult] = useState<ParseResult | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -473,7 +511,7 @@ export default function MatterJsonParser() {
 
     const trimmed = input.trim();
     if (!trimmed) {
-      setError("请输入 JSON 数据");
+      setError(t(lang, 'emptyInput'));
       return;
     }
 
@@ -481,7 +519,7 @@ export default function MatterJsonParser() {
     try {
       parsed = JSON.parse(trimmed);
     } catch (e: any) {
-      setError(`JSON 格式错误: ${e.message}`);
+      setError(`${t(lang, 'jsonError')}: ${e.message}`);
       return;
     }
 
@@ -499,12 +537,10 @@ export default function MatterJsonParser() {
           setResult(parseReadResponse(parsed));
           break;
         default:
-          setError(
-            "无法识别 JSON 类型。支持的格式：设备功能声明（含 endpoints.clusters.commands）、属性状态（含 endpoints.clusters.attributes）、ReadAttribute 响应（含 read_results）。"
-          );
+          setError(t(lang, 'unknownType'));
       }
     } catch (e: any) {
-      setError(`解析失败: ${e.message}`);
+      setError(`${t(lang, 'parseFail')}: ${e.message}`);
     }
   }, [input]);
 
@@ -521,27 +557,27 @@ export default function MatterJsonParser() {
     <div className="parser-container">
       {/* Sample buttons */}
       <div className="sample-buttons">
-        <span className="sample-label">示例数据:</span>
+        <span className="sample-label">{t(lang, 'sampleLabel')}</span>
         <button
           className="sample-btn"
           onClick={() => loadSample(SAMPLE_CAPABILITY)}
           type="button"
         >
-          设备功能声明
+          {t(lang, 'sampleCapability')}
         </button>
         <button
           className="sample-btn"
           onClick={() => loadSample(SAMPLE_STATE)}
           type="button"
         >
-          属性状态
+          {t(lang, 'sampleState')}
         </button>
         <button
           className="sample-btn"
           onClick={() => loadSample(SAMPLE_READ_RESPONSE)}
           type="button"
         >
-          读属性响应
+          {t(lang, 'sampleRead')}
         </button>
       </div>
 
@@ -550,22 +586,22 @@ export default function MatterJsonParser() {
         className="json-input"
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        placeholder={'粘贴 Matter 设备 JSON 数据...\n\n支持三种格式：\n  1. 设备功能声明（含 endpoints + clusters + commands）\n  2. 属性状态（含 endpoints + clusters + attributes）\n  3. ReadAttribute 响应（含 read_results）'}
+        placeholder={t(lang, 'placeholder')}
         spellCheck={false}
       />
 
       {/* Parse button */}
       <button className="parse-btn" onClick={handleParse} type="button">
-        解析
+        {t(lang, 'parseBtn')}
       </button>
 
       {/* Error */}
       {error && <div className="parse-error">{error}</div>}
 
       {/* Results */}
-      {result?.type === "capability" && <CapabilityResult data={result} />}
-      {result?.type === "state" && <StateResult data={result} />}
-      {result?.type === "read_response" && <ReadResponseResult data={result} />}
+      {result?.type === "capability" && <CapabilityResult data={result} lang={lang} />}
+      {result?.type === "state" && <StateResult data={result} lang={lang} />}
+      {result?.type === "read_response" && <ReadResponseResult data={result} lang={lang} />}
 
       <style>{componentStyles}</style>
     </div>

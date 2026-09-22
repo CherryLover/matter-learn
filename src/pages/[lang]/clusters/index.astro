@@ -1,0 +1,210 @@
+---
+import DocLayout from '../../../layouts/DocLayout.astro';
+import { SUPPORTED_LANGS, localePath, type Lang } from '../../../i18n/config';
+import { t } from '../../../i18n/ui';
+
+export function getStaticPaths() {
+  return SUPPORTED_LANGS.map(lang => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const lp = (path: string) => localePath(lang, path);
+
+const text = lang === 'en'
+  ? (await import('../../../i18n/en/pages/cluster-index')).default
+  : (await import('../../../i18n/zh/pages/cluster-index')).default;
+
+const totalCount = text.categories.reduce((sum: number, cat: any) => sum + cat.clusters.length, 0);
+const introText = text.intro.replace('{totalCount}', String(totalCount));
+
+const prevText = lang === 'en'
+  ? (await import('../../../i18n/en/pages/concepts')).default
+  : (await import('../../../i18n/zh/pages/concepts')).default;
+---
+
+<DocLayout
+  title={text.title}
+  description={text.description}
+  type="article"
+  prev={{ title: prevText.title, href: lp('/concepts/') }}
+  lang={lang}
+>
+  <h1>{text.title}</h1>
+  <p>
+    <Fragment set:html={introText} />
+  </p>
+
+  <nav class="category-nav">
+    {text.categories.map((cat: any) => (
+      <a href={`#${cat.key}`} class="category-chip">
+        {cat.name}
+        <span class="chip-count">{cat.clusters.length}</span>
+      </a>
+    ))}
+  </nav>
+
+  {text.categories.map((cat: any) => (
+    <section class="category-section" id={cat.key}>
+      <h2 class="category-title">
+        {cat.name}
+        <span class="category-count">{cat.clusters.length}</span>
+      </h2>
+      <p class="category-desc">{cat.desc}</p>
+      <div class="cluster-grid">
+        {cat.clusters.map((c: any) => (
+          <a href={lp(c.href)} class="cluster-card">
+            <div class="cluster-header">
+              <span class="cluster-id">{c.id}</span>
+            </div>
+            <div class="cluster-name">{lang === 'en' ? `${c.enName}` : `${c.cnName}（${c.enName}）`}</div>
+            <div class="cluster-desc">{c.desc}</div>
+          </a>
+        ))}
+      </div>
+    </section>
+  ))}
+
+  <h2 id="how-to-read">{text.howToReadTitle}</h2>
+  <p>{text.howToReadIntro}</p>
+  <ul>
+    {text.howToReadItems.map((item: any) => (
+      <li><strong>{item.label}</strong> — {item.desc}</li>
+    ))}
+  </ul>
+</DocLayout>
+
+<style is:global>
+  .category-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+  }
+
+  .category-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 9999px;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+
+  .category-chip:hover {
+    color: var(--text-primary);
+    border-color: var(--border-active);
+    background: var(--bg-hover);
+  }
+
+  .chip-count {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: var(--bg-hover);
+    padding: 0.0625rem 0.375rem;
+    border-radius: 9999px;
+    min-width: 1.25rem;
+    text-align: center;
+  }
+
+  .category-section {
+    margin-top: 2.5rem;
+  }
+
+  .category-title {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    scroll-margin-top: 5rem;
+  }
+
+  .category-count {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-primary-600, #4f46e5);
+    background: var(--color-primary-50, #eef2ff);
+    padding: 0.125rem 0.625rem;
+    border-radius: 9999px;
+    line-height: 1.5;
+  }
+
+  .dark .category-count {
+    color: var(--color-primary-400, #818cf8);
+    background: rgba(99, 102, 241, 0.15);
+  }
+
+  .category-desc {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin-top: -0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .cluster-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+
+  .cluster-card {
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    overflow: hidden;
+  }
+
+  .cluster-card:hover {
+    border-color: var(--border-active);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .cluster-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.25rem;
+  }
+
+  .cluster-id {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .cluster-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.375rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .cluster-desc {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex: 1;
+  }
+</style>

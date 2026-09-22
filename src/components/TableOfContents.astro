@@ -1,15 +1,19 @@
 ---
+import type { Lang } from '../i18n/config';
+import { t } from '../i18n/ui';
+
 interface Props {
   headings?: { depth: number; slug: string; text: string }[];
+  lang?: Lang;
 }
 
-const { headings = [] } = Astro.props;
+const { headings = [], lang = 'zh' } = Astro.props;
 const filteredHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 3);
 ---
 
 {filteredHeadings.length > 0 && (
   <aside class="toc">
-    <div class="toc-title">目录</div>
+    <div class="toc-title">{t(lang, 'toc.title')}</div>
     <nav class="toc-nav">
       {filteredHeadings.map((heading) => (
         <a

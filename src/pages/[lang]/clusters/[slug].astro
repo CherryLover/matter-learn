@@ -1,0 +1,151 @@
+---
+import DocLayout from '../../../layouts/DocLayout.astro';
+import { SUPPORTED_LANGS, localePath, type Lang } from '../../../i18n/config';
+import { getCluster, getAllClusterSlugs } from '../../../i18n/cluster-loader';
+
+export function getStaticPaths() {
+  const slugs = getAllClusterSlugs();
+  const paths: { params: { lang: string; slug: string } }[] = [];
+  for (const lang of SUPPORTED_LANGS) {
+    for (const slug of slugs) {
+      paths.push({ params: { lang, slug } });
+    }
+  }
+  return paths;
+}
+
+const { lang, slug } = Astro.params as { lang: Lang; slug: string };
+const lp = (path: string) => localePath(lang, path);
+
+const cluster = getCluster(lang, slug);
+if (!cluster) {
+  return Astro.redirect(lp('/clusters/'));
+}
+
+const prevLink = cluster.prev
+  ? { title: cluster.prev.title, href: lp(`/clusters/${cluster.prev.slug}/`) }
+  : undefined;
+const nextLink = cluster.next
+  ? { title: cluster.next.title, href: lp(`/clusters/${cluster.next.slug}/`) }
+  : undefined;
+---
+
+<DocLayout
+  title={cluster.title}
+  description={cluster.description}
+  type="article"
+  prev={prevLink}
+  next={nextLink}
+  lang={lang}
+>
+  <Fragment set:html={cluster.content} />
+</DocLayout>
+
+{cluster.styles && <Fragment set:html={`<style is:global>${cluster.styles}</style>`} />}
+
+<style is:global>
+  /* Shared cluster page styles */
+  .quick-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .quick-nav a {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-primary-600, #4f46e5);
+    text-decoration: none;
+  }
+
+  .quick-nav a:hover {
+    text-decoration: underline;
+  }
+
+  :global(.dark) .quick-nav a {
+    color: var(--color-primary-400, #818cf8);
+  }
+
+  .nav-sep {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+  }
+
+  .clickable-row {
+    cursor: pointer;
+    transition: background 0.1s ease;
+  }
+
+  .clickable-row:hover {
+    background: var(--bg-hover);
+  }
+
+  .col-required {
+    color: #dc2626;
+    font-weight: 600;
+  }
+
+  .col-optional {
+    color: var(--text-muted);
+  }
+
+  .col-rw {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    white-space: nowrap;
+  }
+
+  /* Enum / value tables */
+  .enum-table td:first-child {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+
+  /* Feature bitmap table */
+  .feature-table td:first-child {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    text-align: center;
+  }
+
+  .feature-table td:nth-child(2) {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+
+  /* Scenario cards */
+  .scenario-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+
+  .scenario-card {
+    padding: 1.25rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+  }
+
+  .scenario-card h4 {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .scenario-card p {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+</style>

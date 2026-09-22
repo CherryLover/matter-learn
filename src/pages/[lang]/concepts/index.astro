@@ -1,0 +1,133 @@
+---
+import DocLayout from '../../../layouts/DocLayout.astro';
+import { SUPPORTED_LANGS, localePath, type Lang } from '../../../i18n/config';
+
+export function getStaticPaths() {
+  return SUPPORTED_LANGS.map(lang => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const lp = (path: string) => localePath(lang, path);
+
+const text = lang === 'en'
+  ? (await import('../../../i18n/en/pages/concepts-content')).default
+  : (await import('../../../i18n/zh/pages/concepts-content')).default;
+---
+
+<DocLayout
+  title={text.title}
+  description={text.description}
+  type="article"
+  next={{ title: text.nextTitle, href: lp('/clusters/') }}
+  lang={lang}
+>
+  <Fragment set:html={text.content} />
+</DocLayout>
+
+<style is:global>
+  /* ===== Diagram Color Tokens ===== */
+  /* Node */
+  .d-node-fill   { fill: var(--color-indigo-50, #eef2ff); stroke: var(--color-indigo-300, #a5b4fc); }
+  .d-node-swatch { fill: var(--color-indigo-100, #e0e7ff); stroke: var(--color-indigo-400, #818cf8); }
+
+  /* Endpoint generic */
+  .d-ep-fill   { fill: var(--color-sky-50, #f0f9ff); stroke: var(--color-sky-300, #7dd3fc); }
+  .d-ep-swatch { fill: var(--color-sky-100, #e0f2fe); stroke: var(--color-sky-400, #38bdf8); }
+  .d-ep-line   { stroke: var(--color-sky-300, #7dd3fc); }
+
+  /* Endpoint 1 highlighted */
+  .d-ep1-fill      { fill: var(--color-sky-50, #f0f9ff); stroke: var(--color-sky-500, #0ea5e9); }
+  .d-ep1-highlight { fill: var(--color-sky-50, #f0f9ff); stroke: var(--color-sky-500, #0ea5e9); }
+
+  /* Cluster */
+  .d-cl-fill   { fill: var(--color-emerald-50, #ecfdf5); stroke: var(--color-emerald-300, #6ee7b7); }
+  .d-cl-swatch { fill: var(--color-emerald-100, #d1fae5); stroke: var(--color-emerald-400, #34d399); }
+  .d-cl-line   { stroke: var(--color-emerald-300, #6ee7b7); }
+
+  /* Attribute */
+  .d-at-fill   { fill: var(--color-amber-50, #fffbeb); stroke: var(--color-amber-200, #fde68a); }
+  .d-at-swatch { fill: var(--color-amber-100, #fef3c7); stroke: var(--color-amber-400, #fbbf24); }
+
+  /* Command */
+  .d-cm-fill   { fill: var(--color-rose-50, #fff1f2); stroke: var(--color-rose-200, #fecdd3); }
+  .d-cm-swatch { fill: var(--color-rose-100, #ffe4e6); stroke: var(--color-rose-400, #fb7185); }
+
+  /* Text helpers */
+  .d-text-title  { fill: var(--text-primary); }
+  .d-text-sub    { fill: var(--text-secondary); }
+  .d-text-ep     { fill: var(--color-sky-800, #075985); }
+  .d-text-ep-sub { fill: var(--color-sky-600, #0284c7); }
+  .d-text-cl     { fill: var(--color-emerald-800, #065f46); }
+  .d-text-at     { fill: var(--text-primary); }
+  .d-text-cm     { fill: var(--text-primary); }
+  .d-text-section  { fill: var(--text-muted); }
+  .d-text-muted-italic { fill: var(--text-muted); font-style: italic; }
+  .d-text-legend { fill: var(--text-secondary); }
+
+  .d-legend-bg { fill: var(--bg-secondary); stroke: var(--border-color); }
+
+  /* Endpoint 0 special (muted) */
+  .d-ep0-fill  { fill: var(--bg-secondary); stroke: var(--border-color); }
+  .d-ep0-tag   { fill: var(--bg-hover); }
+  .d-text-ep0  { fill: var(--text-secondary); }
+
+  /* Endpoint 1 tag */
+  .d-ep1-tag { fill: var(--color-sky-100, #e0f2fe); }
+  .d-text-ep1-accent { fill: var(--color-sky-700, #0369a1); }
+
+  /* Device header */
+  .d-device-fill { fill: var(--color-indigo-100, #e0e7ff); stroke: var(--color-indigo-400, #818cf8); }
+  .d-text-device { fill: var(--color-indigo-700, #4338ca); }
+
+  /* Tree / connector lines */
+  .d-tree-line { stroke: var(--text-muted); }
+  .d-hint-text { fill: var(--text-muted); font-style: italic; }
+
+  /* Analogy diagram */
+  .d-analogy-left  { fill: var(--color-indigo-50, #eef2ff); stroke: var(--color-indigo-300, #a5b4fc); }
+  .d-analogy-right { fill: var(--color-amber-50, #fffbeb); stroke: var(--color-amber-300, #fcd34d); }
+  .d-analogy-dash  { stroke: var(--text-muted); }
+  .d-analogy-connector { stroke: var(--text-muted); }
+  .d-text-analogy-header-left  { fill: var(--color-indigo-700, #4338ca); }
+  .d-text-analogy-header-right { fill: var(--color-amber-700, #b45309); }
+  .d-text-analogy-left  { fill: var(--color-indigo-700, #4338ca); }
+  .d-text-analogy-right { fill: var(--color-amber-700, #b45309); }
+  .d-text-analogy-sub   { fill: var(--text-secondary); }
+
+  /* ===== Dark-mode overrides ===== */
+  :global(.dark) .d-node-fill   { fill: rgba(99,102,241,0.08); stroke: var(--color-indigo-500, #6366f1); }
+  :global(.dark) .d-ep-fill     { fill: rgba(14,165,233,0.08); stroke: var(--color-sky-500, #0ea5e9); }
+  :global(.dark) .d-ep1-fill    { fill: rgba(14,165,233,0.10); stroke: var(--color-sky-400, #38bdf8); }
+  :global(.dark) .d-ep1-highlight { fill: rgba(14,165,233,0.10); stroke: var(--color-sky-400, #38bdf8); }
+  :global(.dark) .d-cl-fill     { fill: rgba(52,211,153,0.08); stroke: var(--color-emerald-500, #10b981); }
+  :global(.dark) .d-at-fill     { fill: rgba(251,191,36,0.08); stroke: var(--color-amber-500, #f59e0b); }
+  :global(.dark) .d-cm-fill     { fill: rgba(251,113,133,0.08); stroke: var(--color-rose-500, #f43f5e); }
+
+  :global(.dark) .d-text-ep     { fill: var(--color-sky-300, #7dd3fc); }
+  :global(.dark) .d-text-ep-sub { fill: var(--color-sky-400, #38bdf8); }
+  :global(.dark) .d-text-cl     { fill: var(--color-emerald-300, #6ee7b7); }
+
+  :global(.dark) .d-ep0-fill { fill: rgba(255,255,255,0.04); stroke: var(--border-color); }
+  :global(.dark) .d-ep0-tag  { fill: rgba(255,255,255,0.06); }
+  :global(.dark) .d-text-ep0 { fill: var(--text-muted); }
+
+  :global(.dark) .d-ep1-tag  { fill: rgba(14,165,233,0.15); }
+  :global(.dark) .d-text-ep1-accent { fill: var(--color-sky-300, #7dd3fc); }
+
+  :global(.dark) .d-device-fill { fill: rgba(99,102,241,0.12); stroke: var(--color-indigo-500, #6366f1); }
+  :global(.dark) .d-text-device { fill: var(--color-indigo-300, #a5b4fc); }
+
+  :global(.dark) .d-node-swatch { fill: rgba(99,102,241,0.15); stroke: var(--color-indigo-500, #6366f1); }
+  :global(.dark) .d-ep-swatch   { fill: rgba(14,165,233,0.15); stroke: var(--color-sky-500, #0ea5e9); }
+  :global(.dark) .d-cl-swatch   { fill: rgba(52,211,153,0.15); stroke: var(--color-emerald-500, #10b981); }
+  :global(.dark) .d-at-swatch   { fill: rgba(251,191,36,0.15); stroke: var(--color-amber-500, #f59e0b); }
+  :global(.dark) .d-cm-swatch   { fill: rgba(251,113,133,0.15); stroke: var(--color-rose-500, #f43f5e); }
+
+  :global(.dark) .d-analogy-left  { fill: rgba(99,102,241,0.08); stroke: var(--color-indigo-500, #6366f1); }
+  :global(.dark) .d-analogy-right { fill: rgba(251,191,36,0.08); stroke: var(--color-amber-500, #f59e0b); }
+  :global(.dark) .d-text-analogy-header-left  { fill: var(--color-indigo-300, #a5b4fc); }
+  :global(.dark) .d-text-analogy-header-right { fill: var(--color-amber-300, #fcd34d); }
+  :global(.dark) .d-text-analogy-left  { fill: var(--color-indigo-300, #a5b4fc); }
+  :global(.dark) .d-text-analogy-right { fill: var(--color-amber-300, #fcd34d); }
+  :global(.dark) .d-legend-bg { fill: rgba(255,255,255,0.04); stroke: var(--border-color); }
+</style>

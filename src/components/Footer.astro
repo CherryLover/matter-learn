@@ -1,5 +1,14 @@
 ---
 import { Layers, ArrowUpRight } from 'lucide-astro';
+import { type Lang, localePath } from '../i18n/config';
+import { t } from '../i18n/ui';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'zh' } = Astro.props;
+const lp = (path: string) => localePath(lang, path);
 ---
 
 <footer class="footer">
@@ -12,45 +21,45 @@ import { Layers, ArrowUpRight } from 'lucide-astro';
           <span class="footer-brand-text">Matter Learn</span>
         </div>
         <p class="footer-about">
-          Matter 协议学习与参考平台，帮助开发者理解智能家居统一标准。
+          {t(lang, 'footer.about')}
         </p>
       </div>
 
       <!-- Column 2: Site nav -->
       <div class="footer-col">
-        <h3 class="footer-heading">站内导航</h3>
+        <h3 class="footer-heading">{t(lang, 'footer.siteNav')}</h3>
         <ul class="footer-links">
-          <li><a href="/concepts/">概念总览</a></li>
-          <li><a href="/clusters/">Cluster 手册</a></li>
-          <li><a href="/tools/json-parser/">JSON 解析器</a></li>
+          <li><a href={lp('/concepts/')}>{t(lang, 'footer.concepts')}</a></li>
+          <li><a href={lp('/clusters/')}>{t(lang, 'footer.clusterManual')}</a></li>
+          <li><a href={lp('/tools/json-parser/')}>{t(lang, 'footer.jsonParser')}</a></li>
         </ul>
       </div>
 
       <!-- Column 3: Official resources -->
       <div class="footer-col">
-        <h3 class="footer-heading">官方资源</h3>
+        <h3 class="footer-heading">{t(lang, 'footer.officialResources')}</h3>
         <ul class="footer-links">
           <li>
             <a href="https://csa-iot.org/" target="_blank" rel="noopener noreferrer">
-              CSA 官网
+              {t(lang, 'nav.csaWebsite')}
               <ArrowUpRight class="ext-icon" size={11} strokeWidth={1.5} />
             </a>
           </li>
           <li>
             <a href="https://csa-iot.org/all-solutions/matter/" target="_blank" rel="noopener noreferrer">
-              Matter 规范
+              {t(lang, 'nav.matterSpec')}
               <ArrowUpRight class="ext-icon" size={11} strokeWidth={1.5} />
             </a>
           </li>
           <li>
             <a href="https://github.com/project-chip/connectedhomeip" target="_blank" rel="noopener noreferrer">
-              Matter GitHub
+              {t(lang, 'nav.matterGithub')}
               <ArrowUpRight class="ext-icon" size={11} strokeWidth={1.5} />
             </a>
           </li>
           <li>
             <a href="https://csa-iot.org/csa-iot/csa-device-library/" target="_blank" rel="noopener noreferrer">
-              Matter Device Library
+              Matter {t(lang, 'nav.deviceLibrary')}
               <ArrowUpRight class="ext-icon" size={11} strokeWidth={1.5} />
             </a>
           </li>
@@ -59,17 +68,17 @@ import { Layers, ArrowUpRight } from 'lucide-astro';
 
       <!-- Column 4: More -->
       <div class="footer-col">
-        <h3 class="footer-heading">更多</h3>
+        <h3 class="footer-heading">{t(lang, 'footer.more')}</h3>
         <p class="footer-note">
-          <span class="footer-note-label">数据来源说明</span>
-          本站数据基于 Matter 标准规范整理，部分示例来自真实设备采集。
+          <span class="footer-note-label">{t(lang, 'footer.dataSourceLabel')}</span>
+          {t(lang, 'footer.dataSourceText')}
         </p>
       </div>
     </div>
 
     <!-- Bottom bar -->
     <div class="footer-bottom">
-      <p>&copy; 2026 Matter Learn &middot; 基于 Matter 标准规范整理</p>
+      <p set:html={t(lang, 'footer.copyright')} />
     </div>
   </div>
 </footer>
@@ -99,7 +108,6 @@ import { Layers, ArrowUpRight } from 'lucide-astro';
     padding-bottom: 2.5rem;
   }
 
-  /* Brand */
   .footer-brand {
     display: flex;
     align-items: center;
@@ -124,7 +132,6 @@ import { Layers, ArrowUpRight } from 'lucide-astro';
     color: #94a3b8;
   }
 
-  /* Headings */
   .footer-heading {
     font-size: 0.8125rem;
     font-weight: 600;
@@ -134,7 +141,6 @@ import { Layers, ArrowUpRight } from 'lucide-astro';
     margin-bottom: 0.875rem;
   }
 
-  /* Links */
   .footer-links {
     list-style: none;
     padding: 0;
@@ -169,7 +175,6 @@ import { Layers, ArrowUpRight } from 'lucide-astro';
     opacity: 0.8;
   }
 
-  /* Note */
   .footer-note {
     font-size: 0.8125rem;
     color: #94a3b8;
@@ -184,7 +189,6 @@ import { Layers, ArrowUpRight } from 'lucide-astro';
     margin-bottom: 0.25rem;
   }
 
-  /* Bottom bar */
   .footer-bottom {
     border-top: 1px solid #334155;
     padding: 1.25rem 0;
@@ -201,7 +205,6 @@ import { Layers, ArrowUpRight } from 'lucide-astro';
     margin: 0;
   }
 
-  /* Responsive: tablet (2 columns) */
   @media (max-width: 1024px) {
     .footer-grid {
       grid-template-columns: 1fr 1fr;
@@ -209,7 +212,6 @@ import { Layers, ArrowUpRight } from 'lucide-astro';
     }
   }
 
-  /* Responsive: mobile (1 column) */
   @media (max-width: 640px) {
     .footer-inner {
       padding: 2rem 1rem 0;

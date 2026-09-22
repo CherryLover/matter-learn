@@ -1,6 +1,8 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import TableOfContents from '../components/TableOfContents.astro';
+import { getLangFromPath, type Lang } from '../i18n/config';
+import { t } from '../i18n/ui';
 
 interface Props {
   title: string;
@@ -9,17 +11,20 @@ interface Props {
   headings?: { depth: number; slug: string; text: string }[];
   prev?: { title: string; href: string };
   next?: { title: string; href: string };
+  lang?: Lang;
 }
 
+const currentPath = Astro.url.pathname;
+const lang = Astro.props.lang ?? getLangFromPath(currentPath);
 const { title, description, type, headings = [], prev, next } = Astro.props;
 ---
 
-<BaseLayout title={title} description={description} type={type}>
+<BaseLayout title={title} description={description} type={type} lang={lang}>
   <div class="doc-layout">
     <article class="doc-content prose">
       <slot />
     </article>
-    <TableOfContents headings={headings} />
+    <TableOfContents headings={headings} lang={lang} />
   </div>
 
   {(prev || next) && (
@@ -27,7 +32,7 @@ const { title, description, type, headings = [], prev, next } = Astro.props;
       <div class="prev-next-item">
         {prev && (
           <a href={prev.href} class="prev-next-link prev">
-            <span class="prev-next-label">上一篇</span>
+            <span class="prev-next-label">{t(lang, 'doc.prev')}</span>
             <span class="prev-next-title">{prev.title}</span>
           </a>
         )}
@@ -35,7 +40,7 @@ const { title, description, type, headings = [], prev, next } = Astro.props;
       <div class="prev-next-item">
         {next && (
           <a href={next.href} class="prev-next-link next">
-            <span class="prev-next-label">下一篇</span>
+            <span class="prev-next-label">{t(lang, 'doc.next')}</span>
             <span class="prev-next-title">{next.title}</span>
           </a>
         )}
