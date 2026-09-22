@@ -68,6 +68,32 @@ const jsonLd = {
       <slot />
     </main>
     <Footer />
+
+    <button id="back-to-top" class="back-to-top" aria-label="回到顶部">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="18 15 12 9 6 15"></polyline>
+      </svg>
+    </button>
+
+    <script is:inline>
+    (function() {
+      var btn = document.getElementById('back-to-top');
+      if (!btn) return;
+      var shown = false;
+      function toggle() {
+        var shouldShow = window.scrollY > 400;
+        if (shouldShow !== shown) {
+          shown = shouldShow;
+          btn.classList.toggle('visible', shown);
+        }
+      }
+      window.addEventListener('scroll', toggle, { passive: true });
+      btn.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      toggle();
+    })();
+    </script>
   </body>
 </html>
 
@@ -97,6 +123,53 @@ const jsonLd = {
   @media (max-width: 768px) {
     .main-content {
       padding: 1.5rem 1rem;
+    }
+  }
+</style>
+
+<style is:global>
+  .back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(0.5rem);
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease,
+                background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .back-to-top:hover {
+    color: var(--text-primary);
+    border-color: var(--border-active);
+    background: var(--bg-hover);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  }
+
+  @media (max-width: 768px) {
+    .back-to-top {
+      bottom: 1.25rem;
+      right: 1.25rem;
+      width: 2.5rem;
+      height: 2.5rem;
     }
   }
 </style>
