@@ -5,15 +5,16 @@ import TableOfContents from '../components/TableOfContents.astro';
 interface Props {
   title: string;
   description?: string;
+  type?: 'website' | 'article';
   headings?: { depth: number; slug: string; text: string }[];
   prev?: { title: string; href: string };
   next?: { title: string; href: string };
 }
 
-const { title, description, headings = [], prev, next } = Astro.props;
+const { title, description, type, headings = [], prev, next } = Astro.props;
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} type={type}>
   <div class="doc-layout">
     <article class="doc-content prose">
       <slot />

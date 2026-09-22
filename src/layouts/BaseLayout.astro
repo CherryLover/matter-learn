@@ -7,10 +7,28 @@ interface Props {
   title: string;
   description?: string;
   fullWidth?: boolean;
+  type?: 'website' | 'article';
 }
 
-const { title, description = 'Matter 协议学习站点', fullWidth = false } = Astro.props;
+const { title, description = 'Matter 协议学习站点 — 从零理解智能家居统一标准协议的核心概念，快速查阅 Cluster 定义，在线解析设备数据。', fullWidth = false, type = 'website' } = Astro.props;
 const currentPath = Astro.url.pathname;
+const canonicalURL = new URL(currentPath, Astro.site);
+const fullTitle = `${title} | Matter Learn`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': type === 'article' ? 'Article' : 'WebSite',
+  name: fullTitle,
+  description,
+  url: canonicalURL.href,
+  ...(type === 'website' && { potentialAction: { '@type': 'SearchAction', target: `${Astro.site}clusters/`, 'query-input': 'required name=search_term_string' } }),
+  inLanguage: 'zh-CN',
+  publisher: {
+    '@type': 'Organization',
+    name: 'Matter Learn',
+    url: Astro.site?.href,
+  },
+};
 ---
 
 <!doctype html>
@@ -19,8 +37,26 @@ const currentPath = Astro.url.pathname;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
-    <title>{title} | Matter Learn</title>
+    <link rel="canonical" href={canonicalURL.href} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL.href} />
+    <meta property="og:site_name" content="Matter Learn" />
+    <meta property="og:locale" content="zh_CN" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+
+    <title>{fullTitle}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- JSON-LD -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>
     <Header currentPath={currentPath} />

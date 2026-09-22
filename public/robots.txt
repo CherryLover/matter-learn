@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://matter-learn.flyooo.uk/sitemap-index.xml
