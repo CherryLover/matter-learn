@@ -1523,52 +1523,52 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <!-- ====== 命令详解 ====== -->
-  <h3 id="cmd-0x00">UpOrOpen &mdash; 升起 / 打开(0x00)</h3>
+  <h3 id="cmd-0x00">UpOrOpen &mdash; Raise / Open (0x00)</h3>
   <p>
-    将窗帘向「全开」方向运动。对卷帘来说是向上收起，对窗帘轨道来说是向两侧拉开。
-    不需要任何参数，设备收到后立即开始运动，直到到达全开位置或收到 StopMotion 命令。
+    Moves the covering toward the fully open position. For roller shades this means retracting upward; for curtain tracks, pulling apart to both sides.
+    Requires no parameters. The device begins moving immediately upon receipt, until it reaches the fully open position or a StopMotion command is received.
   </p>
   <details class="scenario">
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
-      <p>用户点击 App 上的「打开窗帘」按钮、语音助手执行「打开窗帘」、早安自动化场景触发时调用。</p>
+      <p>Called when the user taps the "Open covering" button in the app, when a voice assistant executes "open the curtains", or when a good-morning automation scene is triggered.</p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x01">DownOrClose &mdash; 降下 / 关闭(0x01)</h3>
+  <h3 id="cmd-0x01">DownOrClose &mdash; Lower / Close (0x01)</h3>
   <p>
-    将窗帘向「全关」方向运动。对卷帘来说是向下展开，对窗帘轨道来说是向中间合拢。
-    不需要任何参数，设备收到后立即运动到全关位置。
+    Moves the covering toward the fully closed position. For roller shades this means extending downward; for curtain tracks, drawing together to the center.
+    Requires no parameters. The device moves to the fully closed position immediately upon receipt.
   </p>
   <details class="scenario">
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
-      <p>用户点击「关闭窗帘」按钮、晚安场景自动关闭窗帘、光线传感器检测到强光时自动调用。</p>
+      <p>Called when the user taps the "Close covering" button, when a good-night scene automatically closes coverings, or when a light sensor detects bright light.</p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x02">StopMotion &mdash; 停止运动(0x02)</h3>
+  <h3 id="cmd-0x02">StopMotion &mdash; Stop Motion (0x02)</h3>
   <p>
-    立即停止窗帘所有轴的运动（升降和倾斜）。不需要参数。
-    停止后 <code>OperationalStatus</code> 的所有运动位归零。
+    Immediately stops all axis motion (both lift and tilt). Requires no parameters.
+    After stopping, all motion bits in <code>OperationalStatus</code> are cleared to zero.
   </p>
   <details class="scenario">
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
       <p>
-        窗帘运动过程中，用户再次点击控制按钮可发送 StopMotion 让窗帘停在当前位置。
-        也用于安全保护 &mdash; 检测到障碍物或异常时紧急停止。
+        While the covering is in motion, the user can tap the control button again to send StopMotion, stopping the covering at its current position.
+        Also used for safety protection &mdash; emergency stop when an obstacle or anomaly is detected.
       </p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x04">GoToLiftValue &mdash; 升降到绝对值(0x04)</h3>
+  <h3 id="cmd-0x04">GoToLiftValue &mdash; Lift to Absolute Value (0x04)</h3>
   <p>
-    将窗帘升降到指定的绝对位置值。这个值对应设备内部的物理单位（如电机步数），
-    范围由 <code>InstalledOpenLimitLift</code> 和 <code>InstalledClosedLimitLift</code> 决定。
+    Moves the covering lift to a specified absolute position value. This value corresponds to the device's internal physical units (such as motor steps),
+    with the range determined by <code>InstalledOpenLimitLift</code> and <code>InstalledClosedLimitLift</code>.
   </p>
   <div class="table-wrap">
     <table>
@@ -1579,7 +1579,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>LiftValue</td>
           <td>uint16</td>
-          <td>目标升降位置的绝对值</td>
+          <td>Target lift position absolute value</td>
         </tr>
       </tbody>
     </table>
@@ -1587,15 +1587,15 @@ export const clusters: Record<string, ClusterContent> = {
   <details class="scenario">
     <summary>Usage Scenarios</summary>
     <div class="scenario-content">
-      <p>需要精确控制窗帘到物理刻度位置时使用。大多数场景建议用 GoToLiftPercentage（百分比更直观）。</p>
+      <p>Used when precise control to a physical scale position is needed. For most scenarios, GoToLiftPercentage is recommended (percentages are more intuitive).</p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x05">GoToLiftPercentage &mdash; 升降到百分比(0x05)</h3>
+  <h3 id="cmd-0x05">GoToLiftPercentage &mdash; Lift to Percentage (0x05)</h3>
   <p>
-    将窗帘升降到指定的百分比位置。这是最常用的精确控制命令。
-    参数使用 percent100ths（百分之一的百分比，范围 0&ndash;10000），<code>0</code> = 全开，<code>10000</code> = 全关。
+    Moves the covering lift to a specified percentage position. This is the most commonly used precise control command.
+    The parameter uses percent100ths (hundredths of a percent, range 0&ndash;10000): <code>0</code> = fully open, <code>10000</code> = fully closed.
   </p>
   <div class="table-wrap">
     <table>
@@ -1606,7 +1606,7 @@ export const clusters: Record<string, ClusterContent> = {
         <tr>
           <td>LiftPercent100thsValue</td>
           <td>percent100ths</td>
-          <td>目标升降位置。<code>0</code> = 全开，<code>5000</code> = 半开，<code>10000</code> = 全关</td>
+          <td>Target lift position. <code>0</code> = fully open, <code>5000</code> = half open, <code>10000</code> = fully closed</td>
         </tr>
       </tbody>
     </table>

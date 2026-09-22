@@ -1648,80 +1648,80 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
       </thead>
       <tbody>
-        <!-- 网络接口 -->
+        <!-- Network Interface -->
         <tr class="clickable-row" data-href="#attr-0x0000">
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>NetworkInterfaces</td>
           <td>list&lt;NetworkInterface&gt;</td>
-          <td><a href="#group-network">网络接口</a></td>
-          <td>设备所有网络接口信息</td>
+          <td><a href="#group-network">Network Interface</a></td>
+          <td>All network interface information of the device</td>
         </tr>
-        <!-- 运行统计 -->
+        <!-- Runtime Statistics -->
         <tr class="clickable-row" data-href="#attr-0x0001">
           <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>RebootCount</td>
           <td>uint16</td>
-          <td><a href="#group-runtime">运行统计</a></td>
-          <td>累计重启次数</td>
+          <td><a href="#group-runtime">Runtime Statistics</a></td>
+          <td>Total reboot count</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
           <td>UpTime</td>
           <td>uint64</td>
-          <td><a href="#group-runtime">运行统计</a></td>
-          <td>设备已运行时间（秒）</td>
+          <td><a href="#group-runtime">Runtime Statistics</a></td>
+          <td>Device uptime (seconds)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
           <td>TotalOperationalHours</td>
           <td>uint32</td>
-          <td><a href="#group-runtime">运行统计</a></td>
-          <td>累计运行小时数</td>
+          <td><a href="#group-runtime">Runtime Statistics</a></td>
+          <td>Total operational hours</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0004">
           <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
           <td>BootReason</td>
           <td>BootReasonEnum</td>
-          <td><a href="#group-runtime">运行统计</a></td>
-          <td>最近一次启动的原因</td>
+          <td><a href="#group-runtime">Runtime Statistics</a></td>
+          <td>Reason for the most recent boot</td>
         </tr>
-        <!-- 故障追踪 -->
+        <!-- Fault Tracking -->
         <tr class="clickable-row" data-href="#attr-0x0005">
           <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
           <td>ActiveHardwareFaults</td>
           <td>list&lt;HardwareFaultEnum&gt;</td>
-          <td><a href="#group-faults">故障追踪</a></td>
-          <td>当前活跃的硬件故障列表</td>
+          <td><a href="#group-faults">Fault Tracking</a></td>
+          <td>List of currently active hardware faults</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0006">
           <td><a href="#attr-0x0006"><code>0x0006</code></a></td>
           <td>ActiveRadioFaults</td>
           <td>list&lt;RadioFaultEnum&gt;</td>
-          <td><a href="#group-faults">故障追踪</a></td>
-          <td>当前活跃的射频故障列表</td>
+          <td><a href="#group-faults">Fault Tracking</a></td>
+          <td>List of currently active radio faults</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0007">
           <td><a href="#attr-0x0007"><code>0x0007</code></a></td>
           <td>ActiveNetworkFaults</td>
           <td>list&lt;NetworkFaultEnum&gt;</td>
-          <td><a href="#group-faults">故障追踪</a></td>
-          <td>当前活跃的网络故障列表</td>
+          <td><a href="#group-faults">Fault Tracking</a></td>
+          <td>List of currently active network faults</td>
         </tr>
-        <!-- 测试配置 -->
+        <!-- Test Configuration -->
         <tr class="clickable-row" data-href="#attr-0x0008">
           <td><a href="#attr-0x0008"><code>0x0008</code></a></td>
           <td>TestEventTriggersEnabled</td>
           <td>bool</td>
-          <td><a href="#group-test">测试配置</a></td>
-          <td>测试事件触发器是否启用</td>
+          <td><a href="#group-test">Test Configuration</a></td>
+          <td>Whether test event triggers are enabled</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ====== 网络接口（0x0000）====== -->
-  <h3 id="group-network">网络接口(0x0000)</h3>
-  <p>设备当前可用的所有网络接口的详细信息列表。</p>
+  <!-- ====== Network Interface (0x0000) ====== -->
+  <h3 id="group-network">Network Interface (0x0000)</h3>
+  <p>Detailed information list of all currently available network interfaces on the device.</p>
 
   <div class="table-wrap">
     <table>
@@ -1731,9 +1731,9 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0000">
           <td><code>0x0000</code></td>
-          <td>NetworkInterfaces<br/><span class="attr-cn">网络接口列表</span></td>
+          <td>NetworkInterfaces<br/><span class="attr-cn">Network Interface List</span></td>
           <td>list&lt;NetworkInterface&gt;</td>
-          <td>设备当前所有网络接口的信息列表。每个元素是一个 <a href="#struct-network-interface">NetworkInterface</a> 结构体，包含接口名称、状态、IP 地址等详情。最多 8 个接口</td>
+          <td>Information list of all current network interfaces on the device. Each element is a <a href="#struct-network-interface">NetworkInterface</a> struct containing interface name, status, IP address, and other details. Maximum 8 interfaces</td>
         </tr>
       </tbody>
     </table>
@@ -1742,16 +1742,16 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
-      NetworkInterfaces 是了解设备网络连接状况的最直接途径。
-      如果设备同时有 WiFi 和 Thread 接口，列表中会包含多个条目。
-      通过检查 <code>IsOperational</code> 可以判断哪个接口当前是活跃的。
+      NetworkInterfaces is the most direct way to understand the device's network connectivity.
+      If the device has both WiFi and Thread interfaces, the list will contain multiple entries.
+      By checking <code>IsOperational</code>, you can determine which interface is currently active.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== 运行统计（0x0001-0x0004）====== -->
-  <h3 id="group-runtime">运行统计(0x0001-0x0004)</h3>
-  <p>设备的运行时间统计和启动原因，是判断设备稳定性的关键指标。</p>
+  <!-- ====== Runtime Statistics (0x0001-0x0004) ====== -->
+  <h3 id="group-runtime">Runtime Statistics (0x0001-0x0004)</h3>
+  <p>Device uptime statistics and boot reason — key indicators for assessing device stability.</p>
 
   <div class="table-wrap">
     <table>
@@ -1761,27 +1761,27 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x0001">
           <td><code>0x0001</code></td>
-          <td>RebootCount<br/><span class="attr-cn">重启次数</span></td>
+          <td>RebootCount<br/><span class="attr-cn">Reboot Count</span></td>
           <td>uint16</td>
-          <td>设备自出厂以来的累计重启次数。频繁重启通常意味着设备存在稳定性问题（电源不稳、固件崩溃等）</td>
+          <td>Total number of reboots since the device was manufactured. Frequent reboots usually indicate stability issues (unstable power supply, firmware crashes, etc.)</td>
         </tr>
         <tr id="attr-0x0002">
           <td><code>0x0002</code></td>
-          <td>UpTime<br/><span class="attr-cn">运行时间</span></td>
+          <td>UpTime<br/><span class="attr-cn">Uptime</span></td>
           <td>uint64</td>
-          <td>设备自最近一次启动以来已运行的时间，单位<strong>秒</strong>。可用来判断设备是否刚刚重启过</td>
+          <td>Time elapsed since the device's most recent boot, in <strong>seconds</strong>. Can be used to determine if the device has recently rebooted</td>
         </tr>
         <tr id="attr-0x0003">
           <td><code>0x0003</code></td>
-          <td>TotalOperationalHours<br/><span class="attr-cn">累计运行小时数</span></td>
+          <td>TotalOperationalHours<br/><span class="attr-cn">Total Operational Hours</span></td>
           <td>uint32</td>
-          <td>设备自出厂以来的累计运行小时数（取整）。这个值跨重启持久化保存，用于评估设备使用寿命</td>
+          <td>Total operational hours since the device was manufactured (rounded). This value is persisted across reboots and used for assessing device lifespan</td>
         </tr>
         <tr id="attr-0x0004">
           <td><code>0x0004</code></td>
-          <td>BootReason<br/><span class="attr-cn">启动原因</span></td>
+          <td>BootReason<br/><span class="attr-cn">Boot Reason</span></td>
           <td><a href="#enum-boot-reason">BootReasonEnum</a></td>
-          <td>设备最近一次启动的原因（见下方枚举）。排查异常重启时首先检查此字段</td>
+          <td>Reason for the device's most recent boot (see enum below). Check this field first when troubleshooting abnormal reboots</td>
         </tr>
       </tbody>
     </table>
@@ -1790,8 +1790,8 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-warning">
     <div class="callout-title">Time Unit Note</div>
     <p>
-      <code>UpTime</code> 的单位是<strong>秒</strong>，而 <code>TotalOperationalHours</code> 的单位是<strong>小时</strong>。
-      例如 <code>UpTime = 86400</code> 表示已运行 24 小时，而 <code>TotalOperationalHours = 720</code> 表示累计运行了 30 天。
+      <code>UpTime</code> is in <strong>seconds</strong>, while <code>TotalOperationalHours</code> is in <strong>hours</strong>.
+      For example, <code>UpTime = 86400</code> means 24 hours of uptime, while <code>TotalOperationalHours = 720</code> means 30 days of cumulative operation.
     </p>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>

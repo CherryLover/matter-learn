@@ -645,50 +645,50 @@ export const clusters: Record<string, ClusterContent> = {
     The device is responsible for collecting electrical data and updating attributes; the app only needs to Read or Subscribe to obtain data.
   </p>
 
-  <!-- ====== 示例数据 ====== -->
+  <!-- ====== Example Data ====== -->
   <h2 id="example-data">Example Data</h2>
-  <p>一个启用了 ALTC（交流电）特性的智能插座上报的电力数据：</p>
+  <p>Electrical data reported by a smart plug with the ALTC (AC) feature enabled:</p>
   <pre><code>{
-  // --- ElectricalPowerMeasurement Cluster（Endpoint 1）---
+  // --- ElectricalPowerMeasurement Cluster (Endpoint 1) ---
 
-  // --- 基本信息 ---
-  "0x0000": 2,              // PowerMode = AC（交流电）
+  // --- Basic Information ---
+  "0x0000": 2,              // PowerMode = AC (Alternating Current)
   "0x0001": 5,              // NumberOfMeasurementTypes = 5
 
-  // --- 实时测量值 ---
+  // --- Real-time Measurements ---
   "0x0004": 220300,         // Voltage = 220300 mV → 220.3 V
   "0x0005": 1520,           // ActiveCurrent = 1520 mA → 1.52 A
   "0x0008": 334856,         // ActivePower = 334856 mW → 334.856 W
   "0x0009": 28700,          // ReactivePower = 28700 mW → 28.7 VAR
   "0x000A": 336100,         // ApparentPower = 336100 mW → 336.1 VA
 
-  // --- RMS 测量值（交流电专用）---
+  // --- RMS Measurements (AC only) ---
   "0x000B": 219800,         // RMSVoltage = 219800 mV → 219.8 V
   "0x000C": 1530,           // RMSCurrent = 1530 mA → 1.53 A
   "0x000D": 335200,         // RMSPower = 335200 mW → 335.2 W
   "0x000E": 50000,          // Frequency = 50000 mHz → 50.0 Hz
 
-  // --- 功率因数 ---
+  // --- Power Factor ---
   "0x0011": 9960            // PowerFactor = 9960 → 99.60%
 }</code></pre>
 
-  <p>MeasurementPeriodRanges 事件示例 —— 设备在 1 小时周期内的电压和功率范围统计：</p>
+  <p>MeasurementPeriodRanges event example — voltage and power range statistics over a 1-hour period:</p>
   <pre><code>{
-  // MeasurementPeriodRanges 事件
-  // 设备在一个测量周期结束时上报，包含各测量类型的统计范围
+  // MeasurementPeriodRanges Event
+  // Reported when the device completes a measurement period, containing statistical ranges for each measurement type
   "MeasurementPeriodRanges": {
     "Ranges": [
       {
         "MeasurementType": 1,        // Voltage
-        "Min": 218500,               // 最低 218.5 V
-        "Max": 222100,               // 最高 222.1 V
+        "Min": 218500,               // Minimum 218.5 V
+        "Max": 222100,               // Maximum 222.1 V
         "StartTimestamp": 1695600000,
         "EndTimestamp": 1695603600
       },
       {
         "MeasurementType": 5,        // ActivePower
-        "Min": 280000,               // 最低 280.0 W
-        "Max": 350000,               // 最高 350.0 W
+        "Min": 280000,               // Minimum 280.0 W
+        "Max": 350000,               // Maximum 350.0 W
         "StartTimestamp": 1695600000,
         "EndTimestamp": 1695603600
       }
@@ -698,20 +698,20 @@ export const clusters: Record<string, ClusterContent> = {
 
   <div class="callout callout-tip">
     <div class="callout-title">Unit Conversion Code Reference</div>
-    <p>处理设备返回值时的关键逻辑：</p>
-    <pre><code>{\`// 设备返回值（int64, Nullable）
+    <p>Key logic for processing device return values:</p>
+    <pre><code>{\`// Device return values (int64, Nullable)
 val voltageRaw: Long? = 220300     // mV
 val powerRaw: Long? = 334856       // mW
 val freqRaw: Long? = 50000         // mHz
-val pfRaw: Long? = 9960            // 百分比 × 100
+val pfRaw: Long? = 9960            // percentage x 100
 
-// 转换为可读值
+// Convert to human-readable values
 val voltageV = voltageRaw?.let { it / 1000.0 }    // → 220.3 V
 val powerW = powerRaw?.let { it / 1000.0 }         // → 334.856 W
 val freqHz = freqRaw?.let { it / 1000.0 }          // → 50.0 Hz
 val powerFactor = pfRaw?.let { it / 100.0 }         // → 99.60%
 
-// 显示时处理 null
+// Handle null when displaying
 val display = voltageV?.let { String.format("%.1f V", it) } ?: "--"\`}</code></pre>
   </div>
 
