@@ -1,14 +1,15 @@
 ---
 import '../styles/global.css';
 import Header from '../components/Header.astro';
-import Sidebar from '../components/Sidebar.astro';
+import Footer from '../components/Footer.astro';
 
 interface Props {
   title: string;
   description?: string;
+  fullWidth?: boolean;
 }
 
-const { title, description = 'Matter 协议学习站点' } = Astro.props;
+const { title, description = 'Matter 协议学习站点', fullWidth = false } = Astro.props;
 const currentPath = Astro.url.pathname;
 ---
 
@@ -22,32 +23,39 @@ const currentPath = Astro.url.pathname;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body>
-    <Header />
-    <Sidebar currentPath={currentPath} />
-    <main class="main-content">
+    <Header currentPath={currentPath} />
+    <main class:list={['main-content', { 'main-full': fullWidth }]}>
       <slot />
     </main>
+    <Footer />
   </body>
 </html>
 
 <style>
-  .main-content {
-    margin-top: 56px;
-    margin-left: 260px;
-    min-height: calc(100vh - 56px);
-    padding: 2rem 2.5rem;
-    max-width: 100%;
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
   }
 
-  @media (max-width: 1200px) {
-    .main-content {
-      padding-right: 2rem;
-    }
+  .main-content {
+    margin-top: 60px;
+    flex: 1;
+    width: 100%;
+    max-width: 72rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2rem 1.5rem;
+  }
+
+  .main-content.main-full {
+    max-width: 100%;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
 
   @media (max-width: 768px) {
     .main-content {
-      margin-left: 0;
       padding: 1.5rem 1rem;
     }
   }

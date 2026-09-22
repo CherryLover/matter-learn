@@ -1,5 +1,80 @@
 ---
 import DocLayout from '../../layouts/DocLayout.astro';
+
+const clusters = [
+  {
+    id: '0x0101',
+    cnName: '门锁',
+    enName: 'DoorLock',
+    desc: '门锁控制：上锁、解锁、用户管理、凭据管理（PIN/指纹/NFC）',
+    href: '/clusters/door-lock/',
+    ready: true,
+  },
+  {
+    id: '0x002F',
+    cnName: '电源',
+    enName: 'PowerSource',
+    desc: '电源状态：电池电量、充电状态、供电方式',
+    href: '/clusters/power-source/',
+    ready: true,
+  },
+  {
+    id: '0x0006',
+    cnName: '开关',
+    enName: 'OnOff',
+    desc: '开关控制：开、关、切换，最基础的控制 Cluster',
+    href: '#',
+    ready: false,
+  },
+  {
+    id: '0x0008',
+    cnName: '亮度控制',
+    enName: 'LevelControl',
+    desc: '亮度/级别控制：调光、渐变、过渡时间设置',
+    href: '#',
+    ready: false,
+  },
+  {
+    id: '0x0300',
+    cnName: '颜色控制',
+    enName: 'ColorControl',
+    desc: '颜色控制：色温调节、HSV 色彩、XY 色坐标',
+    href: '#',
+    ready: false,
+  },
+  {
+    id: '0x0003',
+    cnName: '设备标识',
+    enName: 'Identify',
+    desc: '设备标识：触发闪灯或响铃，帮助用户定位设备',
+    href: '#',
+    ready: false,
+  },
+  {
+    id: '0x001D',
+    cnName: '端点描述',
+    enName: 'Descriptor',
+    desc: '端点描述：列出端点包含的 Cluster、Device Type 等信息',
+    href: '#',
+    ready: false,
+  },
+  {
+    id: '0x0028',
+    cnName: '基本信息',
+    enName: 'BasicInformation',
+    desc: '基本信息：厂商名称、产品名、硬件/固件版本、序列号',
+    href: '#',
+    ready: false,
+  },
+  {
+    id: '0x0031',
+    cnName: '网络配置',
+    enName: 'NetworkCommissioning',
+    desc: '网络配置：WiFi/Thread 网络扫描、连接、凭据管理',
+    href: '#',
+    ready: false,
+  },
+];
 ---
 
 <DocLayout
@@ -9,34 +84,45 @@ import DocLayout from '../../layouts/DocLayout.astro';
 >
   <h1>Cluster 手册</h1>
   <p>
-    本手册收录常用 Matter Cluster 的定义，包括 Attribute、Command、枚举值等，
-    方便开发过程中快速查阅。
+    Cluster 是 Matter 协议的核心构建单元，每个 Cluster 定义了一组相关的 Attribute（状态字段）和 Command（操作命令）。
+    本手册收录了 Matter 设备中常用的 Cluster 定义，方便开发和调试时快速查阅。
   </p>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">如何使用</div>
+    <p>点击已收录的 Cluster 卡片查看完整定义，包括所有 Attribute 的类型/枚举值、Command 的参数和安全要求、以及实际设备数据示例。</p>
+  </div>
 
   <h2 id="cluster-list">已收录 Cluster</h2>
 
   <div class="cluster-grid">
-    <a href="/clusters/door-lock/" class="cluster-card">
-      <div class="cluster-id">0x0101</div>
-      <div class="cluster-name">DoorLock</div>
-      <div class="cluster-desc">门锁控制：锁定/解锁、PIN/RFID 凭证管理、操作记录</div>
-    </a>
-
-    <a href="/clusters/power-source/" class="cluster-card">
-      <div class="cluster-id">0x002F</div>
-      <div class="cluster-name">PowerSource</div>
-      <div class="cluster-desc">电源信息：电池电量、充电状态、供电方式</div>
-    </a>
+    {clusters.map((c) => (
+      <a href={c.href} class:list={['cluster-card', { 'cluster-pending': !c.ready }]}>
+        <div class="cluster-header">
+          <span class="cluster-id">{c.id}</span>
+          {!c.ready && <span class="badge-pending">即将推出</span>}
+        </div>
+        <div class="cluster-name">{c.cnName}（{c.enName}）</div>
+        <div class="cluster-desc">{c.desc}</div>
+      </a>
+    ))}
   </div>
 
-  <h2 id="contributing">如何新增</h2>
-  <p>内容建设中...</p>
+  <h2 id="how-to-read">如何阅读 Cluster 详情页</h2>
+  <p>每个 Cluster 详情页按照以下结构组织：</p>
+  <ul>
+    <li><strong>概述</strong> —— Cluster 是干什么的、通常出现在哪个 Endpoint</li>
+    <li><strong>Attributes</strong> —— 所有状态字段，按功能分组，标注类型和枚举值</li>
+    <li><strong>Commands</strong> —— 支持的操作命令，标注参数和安全要求</li>
+    <li><strong>数据示例</strong> —— 来自真实设备的 JSON 数据，逐字段注释，帮助你对照理解</li>
+  </ul>
+
 </DocLayout>
 
 <style>
   .cluster-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 1rem;
     margin: 1rem 0;
   }
@@ -56,11 +142,36 @@ import DocLayout from '../../layouts/DocLayout.astro';
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   }
 
+  .cluster-pending {
+    opacity: 0.65;
+  }
+
+  .cluster-pending:hover {
+    border-color: var(--border-color);
+    box-shadow: none;
+    cursor: default;
+  }
+
+  .cluster-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.25rem;
+  }
+
   .cluster-id {
     font-family: var(--font-mono);
     font-size: 0.75rem;
     color: var(--text-muted);
-    margin-bottom: 0.25rem;
+  }
+
+  .badge-pending {
+    font-size: 0.6875rem;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    background: var(--bg-hover);
+    color: var(--text-muted);
+    font-weight: 500;
   }
 
   .cluster-name {

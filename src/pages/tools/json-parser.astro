@@ -1,19 +1,25 @@
 ---
 import DocLayout from '../../layouts/DocLayout.astro';
+import MatterJsonParser from '../../components/MatterJsonParser';
 ---
 
 <DocLayout
   title="JSON 解析器"
-  description="在线 JSON 结构解析工具"
+  description="解析 Matter 设备的标准数据格式"
 >
   <h1>JSON 解析器</h1>
   <p>
-    在线解析 Matter 设备上报的 JSON 数据，方便调试过程中查看字段结构与取值。
+    解析 Matter 设备的标准数据格式，自动识别数据类型，将 Cluster ID、属性 ID
+    翻译为可读名称，并对关键状态值给出中文释义。
   </p>
 
   <h2 id="parser">解析工具</h2>
-  <p>内容建设中...（将在此集成交互式 JSON 解析组件）</p>
+  <MatterJsonParser client:load />
 
-  <h2 id="examples">常见数据格式</h2>
-  <p>内容建设中...</p>
+  <h2 id="formats">支持的数据格式</h2>
+  <ul>
+    <li><strong>设备功能声明</strong> — 包含 <code>endpoints</code> 及 Cluster 的 <code>commands</code>，描述设备支持的端点、Cluster 和命令</li>
+    <li><strong>属性状态</strong> — 包含 <code>endpoints</code> 及 Cluster 的 <code>attributes</code>，描述设备当前各属性值</li>
+    <li><strong>ReadAttribute 响应</strong> — 包含 <code>read_results</code> 数组，Controller 读属性的返回结果</li>
+  </ul>
 </DocLayout>

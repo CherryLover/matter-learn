@@ -1,0 +1,224 @@
+---
+import { Layers, ArrowUpRight } from 'lucide-astro';
+---
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <!-- Column 1: About -->
+      <div class="footer-col">
+        <div class="footer-brand">
+          <Layers size={20} class="footer-logo-icon" />
+          <span class="footer-brand-text">Matter Learn</span>
+        </div>
+        <p class="footer-about">
+          Matter 协议学习与参考平台，帮助开发者理解智能家居统一标准。
+        </p>
+      </div>
+
+      <!-- Column 2: Site nav -->
+      <div class="footer-col">
+        <h3 class="footer-heading">站内导航</h3>
+        <ul class="footer-links">
+          <li><a href="/concepts/">概念总览</a></li>
+          <li><a href="/clusters/">Cluster 手册</a></li>
+          <li><a href="/tools/json-parser/">JSON 解析器</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 3: Official resources -->
+      <div class="footer-col">
+        <h3 class="footer-heading">官方资源</h3>
+        <ul class="footer-links">
+          <li>
+            <a href="https://csa-iot.org/" target="_blank" rel="noopener noreferrer">
+              CSA 官网
+              <ArrowUpRight class="ext-icon" size={11} strokeWidth={1.5} />
+            </a>
+          </li>
+          <li>
+            <a href="https://csa-iot.org/all-solutions/matter/" target="_blank" rel="noopener noreferrer">
+              Matter 规范
+              <ArrowUpRight class="ext-icon" size={11} strokeWidth={1.5} />
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/project-chip/connectedhomeip" target="_blank" rel="noopener noreferrer">
+              Matter GitHub
+              <ArrowUpRight class="ext-icon" size={11} strokeWidth={1.5} />
+            </a>
+          </li>
+          <li>
+            <a href="https://csa-iot.org/csa-iot/csa-device-library/" target="_blank" rel="noopener noreferrer">
+              Matter Device Library
+              <ArrowUpRight class="ext-icon" size={11} strokeWidth={1.5} />
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Column 4: More -->
+      <div class="footer-col">
+        <h3 class="footer-heading">更多</h3>
+        <p class="footer-note">
+          <span class="footer-note-label">数据来源说明</span>
+          本站数据基于 Matter 标准规范整理，部分示例来自真实设备采集。
+        </p>
+      </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="footer-bottom">
+      <p>&copy; 2026 Matter Learn &middot; 基于 Matter 标准规范整理</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: #1e293b;
+    color: #cbd5e1;
+    margin-top: auto;
+  }
+
+  :global(.dark) .footer {
+    background: #0f172a;
+    border-top: 1px solid #1e293b;
+  }
+
+  .footer-inner {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 0;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+    gap: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+
+  /* Brand */
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .footer-logo-icon {
+    color: #818cf8;
+  }
+
+  .footer-brand-text {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #e2e8f0;
+    letter-spacing: -0.025em;
+  }
+
+  .footer-about {
+    font-size: 0.8125rem;
+    line-height: 1.7;
+    color: #94a3b8;
+  }
+
+  /* Headings */
+  .footer-heading {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.875rem;
+  }
+
+  /* Links */
+  .footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .footer-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.8125rem;
+    color: #94a3b8;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .footer-links a:hover {
+    color: #e2e8f0;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .ext-icon {
+    flex-shrink: 0;
+    opacity: 0.5;
+  }
+
+  .footer-links a:hover .ext-icon {
+    opacity: 0.8;
+  }
+
+  /* Note */
+  .footer-note {
+    font-size: 0.8125rem;
+    color: #94a3b8;
+    line-height: 1.7;
+  }
+
+  .footer-note-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #64748b;
+    margin-bottom: 0.25rem;
+  }
+
+  /* Bottom bar */
+  .footer-bottom {
+    border-top: 1px solid #334155;
+    padding: 1.25rem 0;
+    text-align: center;
+  }
+
+  :global(.dark) .footer-bottom {
+    border-top-color: #1e293b;
+  }
+
+  .footer-bottom p {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin: 0;
+  }
+
+  /* Responsive: tablet (2 columns) */
+  @media (max-width: 1024px) {
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+  }
+
+  /* Responsive: mobile (1 column) */
+  @media (max-width: 640px) {
+    .footer-inner {
+      padding: 2rem 1rem 0;
+    }
+
+    .footer-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding-bottom: 1.5rem;
+    }
+  }
+</style>
