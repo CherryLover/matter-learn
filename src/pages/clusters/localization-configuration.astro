@@ -1,0 +1,209 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 属性 ---
+  "0x0": "en-US",           // ActiveLocale = 当前语言区域
+  "0x1": [                  // SupportedLocales = 设备支持的语言列表
+    "en-US",
+    "zh-CN",
+    "zh-TW",
+    "ja-JP",
+    "ko-KR",
+    "de-DE",
+    "fr-FR"
+  ]
+}`;
+
+const writeLocaleExample = `{
+  "writeRequests": [{
+    "attributePath": {
+      "endpointId": 0,
+      "clusterId": "0x002B",
+      "attributeId": "0x00"        // ActiveLocale
+    },
+    "attributeValue": "zh-CN"      // 切换为简体中文
+  }]
+}`;
+---
+
+<DocLayout
+  title="本地化配置 Cluster · LocalizationConfiguration（0x002B）"
+  description="Matter LocalizationConfiguration Cluster（0x002B）完整参考 — ActiveLocale / SupportedLocales 属性、BCP 47 语言标签、通过 Write 切换设备语言的操作方式。"
+  type="article"
+>
+  <h1>本地化配置 Cluster（LocalizationConfiguration）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x002B</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: <code>Endpoint 0</code>（Root / Node 级别）
+  </p>
+  <p>
+    LocalizationConfiguration 用于管理设备的语言和区域设置。它让控制端（App / 语音助手）能够查询设备支持哪些语言，
+    并切换设备当前使用的语言区域。语言标签遵循 <strong>BCP 47</strong> 标准（如 <code>"en-US"</code>、<code>"zh-CN"</code>）。
+  </p>
+  <p>
+    这个 Cluster 非常简单 —— 只有 <strong>2 个属性</strong>，<strong>没有命令</strong>。
+    语言切换通过直接 <strong>Write（写入）</strong> <code>ActiveLocale</code> 属性完成。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">什么时候用</div>
+    <p>
+      用户在 App 里切换设备语言（比如把门锁的语音提示从英文改成中文）时，
+      就是向这个 Cluster 写入新的 <code>ActiveLocale</code> 值。
+      也可以在配网完成后自动将设备语言设置为与手机系统语言一致。
+    </p>
+  </div>
+
+  <!-- ====== 属性总览 ====== -->
+  <h2 id="attributes">属性总览</h2>
+  <p>LocalizationConfiguration 只有两个属性，都是必须支持的。点击属性 ID 可跳转到详细说明。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>读写</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#attr-0x00">
+          <td><a href="#attr-0x00"><code>0x00</code></a></td>
+          <td>ActiveLocale</td>
+          <td>string</td>
+          <td>读写</td>
+          <td>当前生效的语言区域（BCP 47 标签）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x01">
+          <td><a href="#attr-0x01"><code>0x01</code></a></td>
+          <td>SupportedLocales</td>
+          <td>list&lt;string&gt;</td>
+          <td>只读</td>
+          <td>设备支持的所有语言区域列表</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 属性详解 ====== -->
+  <h3 id="attr-0x00">ActiveLocale（当前语言区域）</h3>
+  <p>
+    设备当前生效的语言区域标签，格式为 BCP 47（如 <code>"en-US"</code>、<code>"zh-CN"</code>）。
+    写入一个新值即可切换设备语言，但写入的值<strong>必须</strong>在 <code>SupportedLocales</code> 列表中，
+    否则设备会返回 <code>CONSTRAINT_ERROR</code>。
+  </p>
+  <div class="callout callout-tip">
+    <div class="callout-title">BCP 47 标签格式</div>
+    <p>
+      BCP 47 语言标签由语言代码和可选的区域代码组成，中间用连字符连接。常见示例：
+    </p>
+    <ul>
+      <li><code>en-US</code> — 英语（美国）</li>
+      <li><code>zh-CN</code> — 简体中文（中国大陆）</li>
+      <li><code>zh-TW</code> — 繁体中文（台湾）</li>
+      <li><code>ja-JP</code> — 日语（日本）</li>
+      <li><code>de-DE</code> — 德语（德国）</li>
+    </ul>
+  </div>
+  <p>写入示例（将设备切换为简体中文）：</p>
+  <pre><code set:html={writeLocaleExample} /></pre>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x01">SupportedLocales（支持的语言列表）</h3>
+  <p>
+    只读属性，返回设备支持的所有语言区域标签列表。列表内容由设备固件决定，App 端无法修改。
+    在切换语言之前，应先读取这个属性确认设备支持目标语言。
+  </p>
+  <div class="callout callout-warning">
+    <div class="callout-title">注意</div>
+    <p>
+      不同设备的支持列表差异很大。低成本设备可能只支持 <code>["en-US"]</code> 一种语言，
+      而高端设备可能支持十几种。App 切换语言前务必检查此列表，避免写入不支持的值导致错误。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 没有命令 ====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    LocalizationConfiguration Cluster <strong>没有定义任何命令</strong>。
+    所有操作都通过直接读写属性完成 —— 读取 <code>SupportedLocales</code> 查看支持的语言，
+    写入 <code>ActiveLocale</code> 切换语言。这是 Matter 中最简单的交互模式之一。
+  </p>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>读取一个智能门锁设备的 LocalizationConfiguration Cluster 属性：</p>
+  <pre><code set:html={exampleData} /></pre>
+
+  <!-- ====== 实际场景 ====== -->
+  <h2 id="scenarios">实际场景</h2>
+
+  <details>
+    <summary>场景一：配网后自动设置设备语言</summary>
+    <div class="scenario-content">
+      <p>
+        设备配网完成后，App 自动将设备语言与手机系统语言对齐，避免用户手动设置：
+      </p>
+      <ol>
+        <li>获取手机系统语言（如 <code>"zh-CN"</code>）</li>
+        <li>读取设备的 <code>SupportedLocales</code> 属性，得到支持列表</li>
+        <li>检查系统语言是否在支持列表中：
+          <ul>
+            <li>精确匹配优先（<code>"zh-CN"</code>）</li>
+            <li>无精确匹配则尝试语言前缀匹配（<code>"zh"</code> 开头的任意项）</li>
+            <li>都没有则保持设备默认语言，不做修改</li>
+          </ul>
+        </li>
+        <li>匹配成功后，Write 写入 <code>ActiveLocale</code> 完成切换</li>
+      </ol>
+    </div>
+  </details>
+
+  <details>
+    <summary>场景二：App 语言设置界面</summary>
+    <div class="scenario-content">
+      <p>
+        在设备详情页提供「语言设置」选项，让用户手动选择设备语言：
+      </p>
+      <ol>
+        <li>进入设备语言设置页，读取 <code>SupportedLocales</code> 渲染可选列表</li>
+        <li>读取 <code>ActiveLocale</code> 标记当前选中项</li>
+        <li>用户选择新语言后，Write 写入 <code>ActiveLocale</code></li>
+        <li>写入成功后刷新 UI；若返回 <code>CONSTRAINT_ERROR</code>，提示用户该语言不受支持</li>
+      </ol>
+      <p>
+        建议将 BCP 47 标签转换为用户可读的语言名称显示（如 <code>"zh-CN"</code> 显示为「简体中文」），
+        避免直接展示原始标签。
+      </p>
+    </div>
+  </details>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发建议</div>
+    <p>
+      LocalizationConfiguration 影响的是设备本身的语言行为（如语音提示、屏幕显示文字），
+      不影响 App 端的 UI 语言。切换后设备可能需要几秒钟才能完成内部语言资源的加载，
+      期间设备行为可能短暂保持旧语言。
+    </p>
+  </div>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>

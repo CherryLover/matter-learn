@@ -1,0 +1,351 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 显示配置 ---
+  "0x00": 0,             // TemperatureDisplayMode = Celsius（摄氏度显示）
+  "0x01": 0,             // KeypadLockout = NoLockout（按键无锁定）
+  "0x02": 0              // ScheduleProgrammingVisibility = ScheduleProgrammingPermitted（日程可见）
+}`;
+
+const writeDisplayModeExample = `{
+  "writeRequests": [{
+    "attributePath": {
+      "endpointId": 1,
+      "clusterId": "0x0204",
+      "attributeId": "0x00"           // TemperatureDisplayMode
+    },
+    "attributeValue": 1               // Fahrenheit（华氏度）
+  }]
+}`;
+
+const writeLockoutExample = `{
+  "writeRequests": [{
+    "attributePath": {
+      "endpointId": 1,
+      "clusterId": "0x0204",
+      "attributeId": "0x01"           // KeypadLockout
+    },
+    "attributeValue": 1               // LockoutLevel1（锁定一级）
+  }]
+}`;
+---
+
+<DocLayout
+  title="温控器界面配置 Cluster · ThermostatUserInterfaceConfiguration（0x0204）"
+  description="Matter ThermostatUserInterfaceConfiguration Cluster（0x0204）完整参考 — TemperatureDisplayMode 温度显示单位、KeypadLockout 按键锁定级别、ScheduleProgrammingVisibility 日程可见性，温控器物理面板行为配置。"
+  type="article"
+  prev={{ title: '温控（Thermostat）', href: '/clusters/thermostat/' }}
+>
+  <h1>温控器界面配置 Cluster（Thermostat User Interface Configuration）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x0204</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 与 Thermostat（0x0201）同一 Endpoint，通常在 <code>Endpoint 1</code>
+  </p>
+  <p>
+    ThermostatUserInterfaceConfiguration 用于配置温控器<strong>物理面板</strong>的显示和操作行为 ——
+    面板上温度用摄氏还是华氏显示、按键是否锁定、日程编排功能是否可见。
+    这是一个纯配置型 Cluster，<strong>只有 3 个属性、没有命令</strong>，全部通过 Write 操作完成配置。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">与 Thermostat Cluster 的关系</div>
+    <p>
+      <a href="/clusters/thermostat/">Thermostat（0x0201）</a> 负责温控的核心逻辑 —— 温度读取、设定点、运行模式、命令控制。
+      ThermostatUserInterfaceConfiguration（0x0204）则只管<strong>用户界面</strong> —— 面板显示什么、用户能操作什么。
+      两者在同一个 Endpoint 上共存，各司其职。
+    </p>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">与 Unit Localization 的区别</div>
+    <p>
+      <a href="/clusters/unit-localization/">Unit Localization（0x002D）</a> 在 Endpoint 0 上，控制的是<strong>全设备的温度显示偏好</strong>。
+      而这里的 TemperatureDisplayMode 控制的是<strong>温控器自身面板的温度显示</strong>。
+      两者可以独立设置，但通常建议保持一致以免造成用户困惑。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#attributes">属性详解</a>
+    <span class="nav-sep">|</span>
+    <a href="#commands">命令</a>
+    <span class="nav-sep">|</span>
+    <a href="#example-data">示例数据</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">实际场景</a>
+  </nav>
+
+  <!-- ====== 属性详解 ====== -->
+  <h2 id="attributes">属性详解</h2>
+  <p>
+    ThermostatUserInterfaceConfiguration 共有 3 个属性，全部可读写。
+    点击下方汇总表中的属性 ID 可跳转到对应的详细说明。
+  </p>
+
+  <!-- 属性汇总表 -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>读写</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#attr-0x00">
+          <td><a href="#attr-0x00"><code>0x00</code></a></td>
+          <td>TemperatureDisplayMode</td>
+          <td>enum8</td>
+          <td>读写</td>
+          <td>面板温度显示单位（摄氏 / 华氏）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x01">
+          <td><a href="#attr-0x01"><code>0x01</code></a></td>
+          <td>KeypadLockout</td>
+          <td>enum8</td>
+          <td>读写</td>
+          <td>面板按键锁定级别（无锁定 / 1~5 级）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x02">
+          <td><a href="#attr-0x02"><code>0x02</code></a></td>
+          <td>ScheduleProgrammingVisibility</td>
+          <td>enum8</td>
+          <td>读写</td>
+          <td>日程编排功能是否在面板上可见</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== TemperatureDisplayMode ====== -->
+  <h3 id="attr-0x00">TemperatureDisplayMode（温度显示模式）</h3>
+  <p>
+    控制温控器物理面板上温度的显示单位。写入后，面板上的温度数字会立即按新单位显示。
+    这个属性<strong>不影响</strong> Thermostat Cluster 通过 Matter 协议上报的温度值 ——
+    协议传输的温度始终以 0.01°C 为单位。
+  </p>
+
+  <h4>TemperatureDisplayModeEnum 枚举值</h4>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Celsius</span>
+        <span class="enum-desc">摄氏度（°C）—— 默认值，全球大多数地区使用</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Fahrenheit</span>
+        <span class="enum-desc">华氏度（°F）—— 美国等地区使用</span>
+      </div>
+    </div>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== KeypadLockout ====== -->
+  <h3 id="attr-0x01">KeypadLockout（按键锁定）</h3>
+  <p>
+    控制温控器面板上的按键锁定级别。锁定后，用户无法通过物理按键修改特定的设置项，
+    只能通过 Matter 协议（App / 自动化）远程修改。这在商业和公共场所非常有用 —— 防止人为随意调温。
+  </p>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">锁定级别说明</div>
+    <p>
+      Matter 规范定义了 5 个锁定级别，但<strong>每个级别具体锁定哪些功能由厂商自行决定</strong>。
+      规范只要求级别越高、锁定的范围越大。Level 5 锁定全部本地操作。
+      下方的功能限制描述是典型实现参考，实际以设备厂商文档为准。
+    </p>
+  </div>
+
+  <h4>KeypadLockoutEnum 枚举值</h4>
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">NoLockout</span>
+        <span class="enum-desc">无锁定 —— 面板按键全部可用（默认值）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">LockoutLevel1</span>
+        <span class="enum-desc">一级锁定 —— 通常锁定日程编排功能</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">LockoutLevel2</span>
+        <span class="enum-desc">二级锁定 —— 通常额外锁定模式切换（制热/制冷/自动）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">LockoutLevel3</span>
+        <span class="enum-desc">三级锁定 —— 通常额外锁定风速调节</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">4</span>
+      <div>
+        <span class="enum-name">LockoutLevel4</span>
+        <span class="enum-desc">四级锁定 —— 通常额外锁定温度设定点调节</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">5</span>
+      <div>
+        <span class="enum-name">LockoutLevel5</span>
+        <span class="enum-desc">五级锁定 —— 锁定全部本地操作，面板只能查看不能修改</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">锁定 ≠ 禁用</div>
+    <p>
+      按键锁定只是阻止通过<strong>物理面板</strong>修改设置，不影响通过 Matter 协议的远程操作。
+      即使 KeypadLockout = Level5，App 和自动化规则依然可以正常调节温度、切换模式。
+      这正是这个属性的核心用途 —— 把操作权集中在远程管理端。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== ScheduleProgrammingVisibility ====== -->
+  <h3 id="attr-0x02">ScheduleProgrammingVisibility（日程编排可见性）</h3>
+  <p>
+    控制温控器面板上是否显示日程编排（Schedule Programming）功能入口。
+    隐藏后，用户在面板上看不到日程相关的菜单或按钮，只能通过 App 管理日程。
+  </p>
+
+  <h4>ScheduleProgrammingVisibilityEnum 枚举值</h4>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">ScheduleProgrammingPermitted</span>
+        <span class="enum-desc">日程可见 —— 用户可以在面板上查看和编辑日程（默认值）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">ScheduleProgrammingDenied</span>
+        <span class="enum-desc">日程隐藏 —— 面板上不显示日程功能，只能通过 App 管理</span>
+      </div>
+    </div>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 命令 ====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    ThermostatUserInterfaceConfiguration <strong>没有定义任何命令</strong>。
+    所有配置通过直接 Write 属性完成。这在 Matter 中是常见的模式 ——
+    对于纯配置类的 Cluster，直接读写属性比定义专用命令更简洁。
+  </p>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">怎么配置</div>
+    <p>
+      想切换温度显示单位？直接对 <code>TemperatureDisplayMode</code> 属性发一个 Write 请求。
+      想锁定面板？写入 <code>KeypadLockout</code> 即可。不需要 Timed Interaction。
+    </p>
+  </div>
+
+  <p>Write 请求示例 —— 切换到华氏度显示：</p>
+  <pre><code set:html={writeDisplayModeExample} /></pre>
+
+  <p>Write 请求示例 —— 设置按键一级锁定：</p>
+  <pre><code set:html={writeLockoutExample} /></pre>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>读取一台温控器 Endpoint 1 上的 ThermostatUserInterfaceConfiguration 属性：</p>
+  <pre><code set:html={exampleData} /></pre>
+
+  <div class="callout callout-info">
+    <div class="callout-title">属性数量</div>
+    <p>
+      这个 Cluster 没有 Feature Map 控制属性可见性 —— 3 个属性始终全部暴露。
+      如果读取某个属性返回 <code>UNSUPPORTED_ATTRIBUTE</code>，说明设备没有实现这个可选属性
+      （ScheduleProgrammingVisibility 在 Matter 规范中是可选的）。
+    </p>
+  </div>
+
+  <!-- ====== 实际场景 ====== -->
+  <h2 id="scenarios">实际场景</h2>
+
+  <h3 id="scenario-hotel">场景一：酒店客房温控器 —— 锁定面板防止乱调</h3>
+  <details class="scenario">
+    <summary>展开场景</summary>
+    <div class="scenario-content">
+      <p>
+        一家酒店使用 Matter 温控器管理客房空调。为了防止客人随意修改空调模式和日程，
+        物业管理系统在每台温控器上做了如下配置：
+      </p>
+      <ol>
+        <li>写入 <code>KeypadLockout = 4</code>（LockoutLevel4）—— 客人只能看到温度，不能通过面板调温度和切换模式</li>
+        <li>写入 <code>ScheduleProgrammingVisibility = 1</code>（ScheduleProgrammingDenied）—— 隐藏日程功能</li>
+        <li>写入 <code>TemperatureDisplayMode = 0</code>（Celsius）—— 统一显示摄氏度</li>
+      </ol>
+      <p>
+        客人只能在面板上看到当前温度。所有温度调节通过客房 App 完成，
+        App 可以限制调节范围（比如只允许 20~26°C），避免客人把空调开到极端温度。
+        物业保洁时通过管理系统远程统一设置到节能温度。
+      </p>
+    </div>
+  </details>
+
+  <h3 id="scenario-region">场景二：出口到不同地区 —— 配网时自动设置显示单位</h3>
+  <details class="scenario">
+    <summary>展开场景</summary>
+    <div class="scenario-content">
+      <p>
+        一款面向全球市场的 Matter 温控器，出厂默认显示摄氏度。
+        App 在配网完成后，根据用户手机的地区设置自动配置温度显示：
+      </p>
+      <ol>
+        <li>读取手机 Locale：如果是 <code>en_US</code>（美国）或 <code>en_LR</code>（利比里亚）等，温度偏好为华氏度</li>
+        <li>向 Endpoint 1 写入 <code>TemperatureDisplayMode = 1</code>（Fahrenheit）</li>
+        <li>同时向 Endpoint 0 的 <a href="/clusters/unit-localization/">Unit Localization（0x002D）</a> 写入 <code>TemperatureUnit = 0</code>（Fahrenheit），保持全设备显示一致</li>
+        <li>App 界面也同步以 °F 显示温度</li>
+      </ol>
+      <p>
+        这样用户拿到设备后，面板、App 看到的都是自己熟悉的温度单位，无需手动切换。
+        如果用户后续想改，在 App 设置中选择另一个单位即可，App 同时更新两个 Cluster 的属性。
+      </p>
+    </div>
+  </details>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .scenario-content {
+    padding: 0.75rem 1rem;
+  }
+</style>

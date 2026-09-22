@@ -1,0 +1,545 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 当前输入源 ---
+  "0x0001": 1,                   // CurrentInput = 1（当前选中 HDMI 1）
+
+  // --- 输入源列表 ---
+  "0x0000": [                    // InputList
+    {
+      "Index": 0,
+      "InputType": 0,            // Internal（内置调谐器）
+      "Name": "TV Tuner",
+      "Description": "内置数字电视调谐器"
+    },
+    {
+      "Index": 1,
+      "InputType": 4,            // HDMI
+      "Name": "HDMI 1",
+      "Description": "客厅机顶盒"
+    },
+    {
+      "Index": 2,
+      "InputType": 4,            // HDMI
+      "Name": "HDMI 2",
+      "Description": "游戏主机"
+    },
+    {
+      "Index": 3,
+      "InputType": 10,           // USB
+      "Name": "USB",
+      "Description": "USB 媒体播放"
+    }
+  ]
+}`;
+
+const renameExample = `// RenameInput 命令示例
+// 将 Index=2 的输入源重命名为 "PS5"
+{
+  "Index": 2,
+  "Name": "PS5"
+}
+// 执行后 InputList 中 Index=2 的 Name 变为 "PS5"`;
+---
+
+<DocLayout
+  title="媒体输入 Cluster · MediaInput（0x0507）"
+  description="Matter MediaInput Cluster（0x0507）完整参考 — SelectInput/ShowInputStatus/HideInputStatus/RenameInput 命令、InputList 输入源列表、InputInfoStruct 结构体、InputTypeEnum 枚举值及 NameUpdates 特性说明。"
+  type="article"
+  prev={{ title: 'Cluster 手册', href: '/clusters/' }}
+>
+  <h1>媒体输入 Cluster（MediaInput）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x0507</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 媒体端点（电视、AV 接收器等）
+  </p>
+  <p>
+    MediaInput 负责管理设备的外部输入源 —— HDMI、USB、分量、光纤等各种音视频输入接口。
+    用户可以通过它查询设备有哪些输入源、当前选中哪个、切换到指定输入源，以及为输入源自定义名称。
+    它是智能电视和 AV 接收器等媒体设备的核心 Cluster 之一。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">NameUpdates（NU）特性</div>
+    <p>
+      MediaInput Cluster 定义了一个 <strong>NameUpdates（NU）</strong> Feature。
+      启用后，控制端可以通过 <code>RenameInput</code> 命令为输入源自定义名称
+      （例如把"HDMI 2"改成"PS5"）。未启用时，输入源名称由设备固定，不可修改。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#commands">命令列表</a>
+    <span class="nav-sep">|</span>
+    <a href="#attributes">属性详解</a>
+    <span class="nav-sep">|</span>
+    <a href="#structs">结构体定义</a>
+    <span class="nav-sep">|</span>
+    <a href="#features">Feature 位图</a>
+    <span class="nav-sep">|</span>
+    <a href="#example-data">示例数据</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">常见场景</a>
+  </nav>
+
+  <!-- ====== 命令（Commands）====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    MediaInput Cluster 共有 4 个命令。SelectInput 用于切换输入源，ShowInputStatus / HideInputStatus 控制输入源信息的 OSD 显示，
+    RenameInput 允许用户为输入源自定义名称（需要 NU 特性）。
+    点击下方表格中的命令 ID 可跳转到对应的详细说明。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>说明</th>
+          <th>所需特性</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#cmd-0x00">
+          <td><a href="#cmd-0x00"><code>0x00</code></a></td>
+          <td>SelectInput</td>
+          <td>切换到指定输入源</td>
+          <td class="col-optional">无</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x01">
+          <td><a href="#cmd-0x01"><code>0x01</code></a></td>
+          <td>ShowInputStatus</td>
+          <td>在屏幕上显示输入源信息</td>
+          <td class="col-optional">无</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x02">
+          <td><a href="#cmd-0x02"><code>0x02</code></a></td>
+          <td>HideInputStatus</td>
+          <td>隐藏输入源信息的屏幕显示</td>
+          <td class="col-optional">无</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x03">
+          <td><a href="#cmd-0x03"><code>0x03</code></a></td>
+          <td>RenameInput</td>
+          <td>重命名指定输入源</td>
+          <td class="col-required">NU</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 命令详解 ====== -->
+  <h3 id="cmd-0x00">SelectInput —— 切换输入源（0x00）</h3>
+  <p>
+    将设备切换到指定的输入源。<code>Index</code> 必须是 <code>InputList</code> 中某个
+    <code>InputInfoStruct</code> 的 <code>Index</code> 值，否则设备会返回错误。
+    执行成功后，<code>CurrentInput</code> 属性会更新为指定的 Index 值。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Index</td>
+          <td>uint8</td>
+          <td>目标输入源的索引值，必须存在于 <code>InputList</code> 中</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        用户在手机 App 上选择"HDMI 1"，App 读取 <code>InputList</code> 获取该输入源的 Index 值，
+        然后发送 <code>SelectInput</code> 命令。电视切换到对应的 HDMI 输入，<code>CurrentInput</code> 随之更新。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x01">ShowInputStatus —— 显示输入源信息（0x01）</h3>
+  <p>
+    请求设备在屏幕上显示当前输入源的信息（OSD 叠加层），类似按遥控器上的"信息"按钮。
+    不需要参数。显示的内容和持续时间由设备自行决定。
+  </p>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>用户想确认当前电视在哪个输入源上，通过 App 发送此命令，电视屏幕上会弹出输入源信息（如"HDMI 1 - 客厅机顶盒"）。</p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x02">HideInputStatus —— 隐藏输入源信息（0x02）</h3>
+  <p>
+    请求设备隐藏屏幕上的输入源信息显示。不需要参数。
+    如果当前没有显示输入源信息，此命令不产生任何效果。
+  </p>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>在 ShowInputStatus 弹出信息后，用户觉得碍眼，通过 App 发送此命令关闭 OSD 叠加层。</p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x03">RenameInput —— 重命名输入源（0x03）</h3>
+  <p>
+    为指定的输入源设置一个自定义名称。修改后，<code>InputList</code> 中对应条目的 <code>Name</code> 字段会更新。
+    此命令需要设备启用 <strong>NU（NameUpdates）</strong> 特性。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Index</td>
+          <td>uint8</td>
+          <td>要重命名的输入源索引，必须存在于 <code>InputList</code> 中</td>
+        </tr>
+        <tr>
+          <td>Name</td>
+          <td>string</td>
+          <td>新的输入源名称</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <pre><code set:html={renameExample} /></pre>
+
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        用户把游戏主机接到了 HDMI 2，但设备默认显示"HDMI 2"不够直观。
+        通过 App 发送 <code>RenameInput</code>，将 Index=2 的输入源重命名为"PS5"。
+        之后 InputList 中该条目的 Name 会变为"PS5"，UI 上也会显示新名称。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 属性详解 ====== -->
+  <h2 id="attributes">属性详解</h2>
+  <p>MediaInput Cluster 共有 2 个属性。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+
+  <!-- 属性汇总表 -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#attr-0x0000">
+          <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
+          <td>InputList</td>
+          <td>list&lt;<a href="#struct-input-info">InputInfoStruct</a>&gt;</td>
+          <td>设备所有输入源的列表</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0001">
+          <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
+          <td>CurrentInput</td>
+          <td>uint8</td>
+          <td>当前选中的输入源索引</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 属性详细说明 ====== -->
+  <h3 id="group-input">输入源状态（0x0000, 0x0001）</h3>
+  <p>描述设备当前可用的输入源列表和当前选中的输入源。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0000">
+          <td><code>0x0000</code></td>
+          <td>InputList（输入源列表）</td>
+          <td>list&lt;<a href="#struct-input-info">InputInfoStruct</a>&gt;</td>
+          <td>设备声明的全部可用输入源，每个元素是一个 <a href="#struct-input-info">InputInfoStruct</a>。列表内容反映设备实际的物理和虚拟输入接口，每个 Index 值唯一。当用户通过 <code>RenameInput</code> 修改名称后，对应条目的 Name 会更新</td>
+        </tr>
+        <tr id="attr-0x0001">
+          <td><code>0x0001</code></td>
+          <td>CurrentInput（当前输入源）</td>
+          <td>uint8</td>
+          <td>当前选中的输入源索引。该值始终指向 <code>InputList</code> 中某个 <code>InputInfoStruct.Index</code>。通过 <code>SelectInput</code> 命令改变，也可能由用户通过遥控器切换</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">订阅变化</div>
+    <p>
+      控制端应订阅 <code>CurrentInput</code> 属性的变化，以便在用户通过遥控器或设备面板切换输入源时同步 App 界面。
+      同样，如果设备支持 NU 特性，也应订阅 <code>InputList</code> 的变化以获取最新的输入源名称。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 结构体定义 ====== -->
+  <h2 id="structs">结构体定义</h2>
+  <p>MediaInput Cluster 使用一个结构体来描述输入源信息。</p>
+
+  <!-- InputInfoStruct -->
+  <h3 id="struct-input-info">InputInfoStruct</h3>
+  <p>描述一个输入源的完整信息，包括索引、类型、名称和描述。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>字段</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Index</td>
+          <td>uint8</td>
+          <td>输入源的唯一索引，用于 <code>SelectInput</code> 和 <code>RenameInput</code> 命令的定位</td>
+        </tr>
+        <tr>
+          <td>InputType</td>
+          <td><a href="#enum-input-type">InputTypeEnum</a></td>
+          <td>输入源的接口类型（见下方枚举）</td>
+        </tr>
+        <tr>
+          <td>Name</td>
+          <td>string</td>
+          <td>输入源的显示名称，如 <code>"HDMI 1"</code>、<code>"PS5"</code>。启用 NU 特性后可通过 <code>RenameInput</code> 修改</td>
+        </tr>
+        <tr>
+          <td>Description</td>
+          <td>string</td>
+          <td>输入源的补充描述，如 <code>"客厅机顶盒"</code>。由设备提供，供 UI 展示</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- InputTypeEnum -->
+  <h3 id="enum-input-type">InputTypeEnum</h3>
+  <p>
+    定义输入源的物理接口类型。共 12 个枚举值，涵盖常见的音视频输入接口。
+    控制端可据此在 UI 上展示对应的图标或分类。
+  </p>
+
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Internal</span>
+        <span class="enum-desc">内置源 —— 内置调谐器或流媒体应用</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Aux</span>
+        <span class="enum-desc">辅助输入 —— AUX 接口</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">Coax</span>
+        <span class="enum-desc">同轴 —— 同轴电缆输入</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">Composite</span>
+        <span class="enum-desc">复合 —— 复合视频（RCA 黄色接口）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">4</span>
+      <div>
+        <span class="enum-name">HDMI</span>
+        <span class="enum-desc">HDMI —— 最常用的高清数字接口</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">5</span>
+      <div>
+        <span class="enum-name">Input</span>
+        <span class="enum-desc">通用输入 —— 未分类的通用输入接口</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">6</span>
+      <div>
+        <span class="enum-name">Line</span>
+        <span class="enum-desc">线路输入 —— Line In 音频输入</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">7</span>
+      <div>
+        <span class="enum-name">Optical</span>
+        <span class="enum-desc">光纤 —— 光纤数字音频（TOSLINK/SPDIF）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">8</span>
+      <div>
+        <span class="enum-name">Video</span>
+        <span class="enum-desc">视频 —— 通用视频输入</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">9</span>
+      <div>
+        <span class="enum-name">SCART</span>
+        <span class="enum-desc">SCART —— 欧洲标准音视频接口</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">10</span>
+      <div>
+        <span class="enum-name">USB</span>
+        <span class="enum-desc">USB —— USB 媒体播放接口</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">11</span>
+      <div>
+        <span class="enum-name">Other</span>
+        <span class="enum-desc">其他 —— 以上类型未涵盖的接口</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== Feature 位图 ====== -->
+  <h2 id="features">Feature 位图</h2>
+  <p>MediaInput Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持的可选能力：</p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">Bit 0</span>
+      <div>
+        <span class="enum-name">NU（NameUpdates）</span>
+        <span class="enum-desc">名称更新 —— 启用后支持 RenameInput 命令，允许用户为输入源自定义名称</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">何时启用 NU</div>
+    <p>
+      大多数智能电视和 AV 接收器都应启用此特性 —— 用户通常希望把"HDMI 1"改成更有意义的名称（如"机顶盒""PS5"）。
+      如果设备的输入源名称是出厂固定的且不支持修改，则不启用 NU。
+    </p>
+  </div>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>一台智能电视的 MediaInput Cluster 读取结果 —— 当前选中 HDMI 1，共有 4 个输入源：</p>
+
+  <pre><code set:html={exampleData} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发提示</div>
+    <p>
+      控制端显示输入源切换 UI 时，应先读取 <code>InputList (0x0000)</code> 获取完整列表，
+      再读取 <code>CurrentInput (0x0001)</code> 高亮当前选中项。
+      可以根据 <code>InputType</code> 为不同接口类型显示不同图标（如 HDMI 图标、USB 图标等），
+      提升用户识别效率。
+    </p>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <details class="scenario">
+    <summary>场景 1：App 切换电视输入源</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>读取 <code>InputList (0x0000)</code>，获取所有输入源（Index、Name、InputType、Description）</li>
+        <li>读取 <code>CurrentInput (0x0001)</code>，高亮当前选中的输入源</li>
+        <li>在 UI 上展示输入源列表，根据 InputType 显示对应图标</li>
+        <li>用户点击目标输入源，发送 <code>SelectInput (0x00)</code>，Index 设为该输入源的索引值</li>
+        <li>订阅 <code>CurrentInput</code> 属性变化，确认切换成功后更新 UI</li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 2：用户自定义输入源名称</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>检查设备的 <code>FeatureMap (0xFFFC)</code>，确认支持 <strong>NU</strong>（Bit 0 = 1）</li>
+        <li>读取 <code>InputList (0x0000)</code>，展示输入源列表</li>
+        <li>用户长按某个输入源（如 Index=2，当前名称"HDMI 2"），弹出重命名输入框</li>
+        <li>用户输入新名称"PS5"，发送 <code>RenameInput (0x03)</code>，Index=2，Name="PS5"</li>
+        <li>订阅 <code>InputList</code> 变化，确认名称更新后刷新 UI</li>
+      </ol>
+      <p>
+        <strong>注意</strong>：如果 FeatureMap 不包含 NU 特性，UI 上不应显示重命名入口，
+        发送 RenameInput 命令会被设备拒绝。
+      </p>
+    </div>
+  </details>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .col-required {
+    color: #dc2626;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-required {
+    color: #f87171;
+  }
+
+  .col-optional {
+    color: #16a34a;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-optional {
+    color: #4ade80;
+  }
+</style>

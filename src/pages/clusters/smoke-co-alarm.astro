@@ -1,0 +1,899 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 报警综合状态 ---
+  "0x0000": 0,              // ExpressedState = Normal（当前无报警）
+  "0x0001": 0,              // SmokeState = Normal
+  "0x0002": 0,              // COState = Normal
+  "0x0003": 0,              // BatteryAlert = Normal
+  "0x0004": 0,              // DeviceMuted = NotMuted（未静音）
+  "0x0005": false,          // TestInProgress = false（未在自检）
+  "0x0006": false,          // HardwareFaultAlert = false
+  "0x0007": 0,              // EndOfServiceAlert = Normal
+
+  // --- 联动报警 ---
+  "0x0008": 0,              // InterconnectSmokeAlarm = Normal
+  "0x0009": 0,              // InterconnectCOAlarm = Normal
+
+  // --- 传感器与寿命 ---
+  "0x000A": 0,              // ContaminationState = Normal
+  "0x000B": 1,              // SmokeSensitivityLevel = Standard
+  "0x000C": 1893456000      // ExpiryDate = 2029-12-31（epoch_s）
+}`;
+---
+
+<DocLayout
+  title="烟雾/一氧化碳报警 Cluster · SmokeCOAlarm（0x005C）"
+  description="Matter SmokeCOAlarm Cluster（0x005C）完整参考 — 烟雾报警、CO 报警、电池状态、静音控制、自检命令、联动报警、事件定义及枚举值速查。"
+  type="article"
+  prev={{ title: 'Cluster 手册', href: '/clusters/' }}
+>
+  <h1>烟雾/一氧化碳报警 Cluster（SmokeCOAlarm）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x005C</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 通常在 <code>Endpoint 1</code>（功能端点）
+  </p>
+  <p>
+    SmokeCOAlarm 是 Matter 中消防安全设备的核心 Cluster，负责烟雾探测、一氧化碳（CO）探测、电池状态监控、设备自检和联动报警。
+    住宅中常见的独立式烟感、烟雾/CO 二合一探测器、互联式报警系统都依赖这个 Cluster。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">Feature 驱动的能力声明</div>
+    <p>
+      SmokeCOAlarm 的两个 Feature（<strong>SMOKE</strong> 和 <strong>CO</strong>）决定设备支持哪些报警类型。
+      纯烟感设备只启用 SMOKE，纯 CO 探测器只启用 CO，二合一设备同时启用两者。
+      Feature 的组合直接影响哪些属性和事件可用 —— 读取前务必先检查 <code>FeatureMap (0xFFFC)</code>。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#features">Feature 位图</a>
+    <span class="nav-sep">|</span>
+    <a href="#commands">命令</a>
+    <span class="nav-sep">|</span>
+    <a href="#attributes">属性详解</a>
+    <span class="nav-sep">|</span>
+    <a href="#events">事件</a>
+    <span class="nav-sep">|</span>
+    <a href="#example-data">示例数据</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">常见场景</a>
+  </nav>
+
+  <!-- ====== Feature 位图 ====== -->
+  <h2 id="features">Feature 位图</h2>
+  <p>SmokeCOAlarm 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持哪些报警能力：</p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">Bit 0</span>
+      <div>
+        <span class="enum-name">SMOKE（烟雾报警）</span>
+        <span class="enum-desc">启用烟雾探测能力 —— 提供 SmokeState 属性和 SmokeAlarm / InterconnectSmokeAlarm 事件</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 1</span>
+      <div>
+        <span class="enum-name">CO（一氧化碳报警）</span>
+        <span class="enum-desc">启用 CO 探测能力 —— 提供 COState 属性和 COAlarm / InterconnectCOAlarm 事件</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">常见组合</div>
+    <p>
+      <code>FeatureMap = 0x01</code>（Bit 0）：纯烟感设备。<br/>
+      <code>FeatureMap = 0x02</code>（Bit 1）：纯 CO 探测器。<br/>
+      <code>FeatureMap = 0x03</code>（Bit 0 + Bit 1）：烟雾/CO 二合一设备（最常见的家用设备）。
+    </p>
+  </div>
+
+  <!-- ====== 命令（Commands）====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    SmokeCOAlarm Cluster 只有一个命令 —— 触发设备自检。报警设备的核心动作（报警、静音等）
+    由设备自主触发，不需要外部命令控制。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>说明</th>
+          <th>所需特性</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#cmd-0x00">
+          <td><a href="#cmd-0x00"><code>0x00</code></a></td>
+          <td>SelfTestRequest</td>
+          <td>触发设备自检</td>
+          <td class="col-optional">无</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 命令详解 ====== -->
+  <h3 id="cmd-0x00">SelfTestRequest —— 触发自检（0x00）</h3>
+  <p>
+    请求设备执行自检流程。设备会检测传感器、蜂鸣器、电池等是否正常工作。
+    自检期间 <code>TestInProgress</code> 属性变为 <code>true</code>，完成后触发 <code>SelfTestComplete</code> 事件。
+    不需要任何参数。
+  </p>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">自检注意事项</div>
+    <p>
+      自检会让设备短暂发出报警声（测试蜂鸣器），需要提前告知用户。
+      如果设备当前已经处于报警状态（<code>ExpressedState ≠ Normal</code>），自检请求会被拒绝。
+    </p>
+  </div>
+
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        用户在 App 中点击「设备自检」按钮时调用。建议每月定期自检一次以确保设备正常工作。
+        发送命令后，订阅 <code>TestInProgress (0x0005)</code> 属性变化来跟踪自检进度，
+        监听 <code>SelfTestComplete</code> 事件获取自检结果。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 属性详解 ====== -->
+  <h2 id="attributes">属性详解</h2>
+  <p>SmokeCOAlarm Cluster 的属性按功能分为四组。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+
+  <!-- 属性汇总表 -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>分组</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 报警状态 -->
+        <tr class="clickable-row" data-href="#attr-0x0000">
+          <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
+          <td>ExpressedState</td>
+          <td>enum8</td>
+          <td><a href="#group-alarm">报警状态</a></td>
+          <td>设备当前最高优先级状态</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0001">
+          <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
+          <td>SmokeState</td>
+          <td>enum8</td>
+          <td><a href="#group-alarm">报警状态</a></td>
+          <td>烟雾探测状态（需 SMOKE feature）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0002">
+          <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
+          <td>COState</td>
+          <td>enum8</td>
+          <td><a href="#group-alarm">报警状态</a></td>
+          <td>一氧化碳探测状态（需 CO feature）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0003">
+          <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
+          <td>BatteryAlert</td>
+          <td>enum8</td>
+          <td><a href="#group-alarm">报警状态</a></td>
+          <td>电池电量报警级别</td>
+        </tr>
+        <!-- 设备控制 -->
+        <tr class="clickable-row" data-href="#attr-0x0004">
+          <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
+          <td>DeviceMuted</td>
+          <td>enum8</td>
+          <td><a href="#group-control">设备控制</a></td>
+          <td>报警是否被静音</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0005">
+          <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
+          <td>TestInProgress</td>
+          <td>bool</td>
+          <td><a href="#group-control">设备控制</a></td>
+          <td>是否正在自检</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0006">
+          <td><a href="#attr-0x0006"><code>0x0006</code></a></td>
+          <td>HardwareFaultAlert</td>
+          <td>bool</td>
+          <td><a href="#group-control">设备控制</a></td>
+          <td>是否存在硬件故障</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0007">
+          <td><a href="#attr-0x0007"><code>0x0007</code></a></td>
+          <td>EndOfServiceAlert</td>
+          <td>enum8</td>
+          <td><a href="#group-control">设备控制</a></td>
+          <td>设备是否已到使用寿命</td>
+        </tr>
+        <!-- 联动报警 -->
+        <tr class="clickable-row" data-href="#attr-0x0008">
+          <td><a href="#attr-0x0008"><code>0x0008</code></a></td>
+          <td>InterconnectSmokeAlarm</td>
+          <td>enum8</td>
+          <td><a href="#group-interconnect">联动报警</a></td>
+          <td>联动烟雾报警状态（需 SMOKE feature）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0009">
+          <td><a href="#attr-0x0009"><code>0x0009</code></a></td>
+          <td>InterconnectCOAlarm</td>
+          <td>enum8</td>
+          <td><a href="#group-interconnect">联动报警</a></td>
+          <td>联动 CO 报警状态（需 CO feature）</td>
+        </tr>
+        <!-- 传感器与寿命 -->
+        <tr class="clickable-row" data-href="#attr-0x000A">
+          <td><a href="#attr-0x000A"><code>0x000A</code></a></td>
+          <td>ContaminationState</td>
+          <td>enum8</td>
+          <td><a href="#group-sensor">传感器与寿命</a></td>
+          <td>传感器污染程度</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x000B">
+          <td><a href="#attr-0x000B"><code>0x000B</code></a></td>
+          <td>SmokeSensitivityLevel</td>
+          <td>enum8</td>
+          <td><a href="#group-sensor">传感器与寿命</a></td>
+          <td>烟雾灵敏度设置</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x000C">
+          <td><a href="#attr-0x000C"><code>0x000C</code></a></td>
+          <td>ExpiryDate</td>
+          <td>epoch_s</td>
+          <td><a href="#group-sensor">传感器与寿命</a></td>
+          <td>设备过期日期</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 报警状态（0x0000 - 0x0003）====== -->
+  <h3 id="group-alarm">报警状态（0x0000 - 0x0003）</h3>
+  <p>描述设备当前的各类报警状态。<code>ExpressedState</code> 是所有状态的综合优先级结果，其他三个是分项状态。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0000">
+          <td><code>0x0000</code></td>
+          <td>ExpressedState<br/><span class="attr-cn">综合状态</span></td>
+          <td>enum8</td>
+          <td>设备当前最高优先级的报警状态。当多个报警同时存在时，设备选择优先级最高的一个作为 ExpressedState（见下方枚举）。这是 SmokeCOAlarm 最核心的属性</td>
+        </tr>
+        <tr id="attr-0x0001">
+          <td><code>0x0001</code></td>
+          <td>SmokeState<br/><span class="attr-cn">烟雾状态</span></td>
+          <td>enum8</td>
+          <td>烟雾传感器当前探测到的报警级别。<strong>需要 SMOKE feature</strong></td>
+        </tr>
+        <tr id="attr-0x0002">
+          <td><code>0x0002</code></td>
+          <td>COState<br/><span class="attr-cn">CO 状态</span></td>
+          <td>enum8</td>
+          <td>一氧化碳传感器当前探测到的报警级别。<strong>需要 CO feature</strong></td>
+        </tr>
+        <tr id="attr-0x0003">
+          <td><code>0x0003</code></td>
+          <td>BatteryAlert<br/><span class="attr-cn">电池报警</span></td>
+          <td>enum8</td>
+          <td>电池电量状态的报警级别。电池供电的报警设备必须支持此属性</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>ExpressedState 枚举值</h4>
+  <p>
+    ExpressedState 反映设备当前最需要关注的状态。优先级从高到低排列：
+  </p>
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Normal</span>
+        <span class="enum-desc">正常 —— 无任何报警，一切正常</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">SmokeAlarm</span>
+        <span class="enum-desc">烟雾报警 —— 检测到烟雾，可能有火灾</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">COAlarm</span>
+        <span class="enum-desc">CO 报警 —— 检测到一氧化碳泄漏</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">BatteryAlert</span>
+        <span class="enum-desc">电池报警 —— 电量低或电池故障</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">4</span>
+      <div>
+        <span class="enum-name">Testing</span>
+        <span class="enum-desc">自检中 —— 设备正在执行自检流程</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">5</span>
+      <div>
+        <span class="enum-name">HardwareFault</span>
+        <span class="enum-desc">硬件故障 —— 设备自身检测到故障</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">6</span>
+      <div>
+        <span class="enum-name">EndOfService</span>
+        <span class="enum-desc">寿命到期 —— 设备已达使用年限，需更换</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">7</span>
+      <div>
+        <span class="enum-name">InterconnectSmoke</span>
+        <span class="enum-desc">联动烟雾 —— 其他联动设备触发了烟雾报警</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">8</span>
+      <div>
+        <span class="enum-name">InterconnectCO</span>
+        <span class="enum-desc">联动 CO —— 其他联动设备触发了 CO 报警</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">ExpressedState 的优先级机制</div>
+    <p>
+      当多种报警同时存在时，设备只在 ExpressedState 中反映优先级最高的那一个。
+      例如同时有烟雾报警和低电量，ExpressedState 会显示 <code>SmokeAlarm (1)</code>。
+      要获取所有分项状态，需要分别读取 SmokeState、COState、BatteryAlert 等属性。
+    </p>
+  </div>
+
+  <h4>SmokeState / COState / BatteryAlert / InterconnectSmokeAlarm / InterconnectCOAlarm 枚举值</h4>
+  <p>以上五个属性共用同一套三级报警枚举：</p>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Normal</span>
+        <span class="enum-desc">正常 —— 未检测到异常</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Warning</span>
+        <span class="enum-desc">预警 —— 检测到轻微异常，需注意</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">Critical</span>
+        <span class="enum-desc">严重 —— 确认危险，需要立即处理</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">Warning 与 Critical 的区别</div>
+    <p>
+      <strong>Warning</strong> 表示传感器检测到了异常但尚未确认为紧急情况（如轻微烟雾、电池电量偏低），
+      通常是预警级别，设备可能发出间歇性提示音。
+      <strong>Critical</strong> 表示已确认的紧急状况（如持续浓烟、CO 浓度超标、电池严重不足），
+      设备会持续发出高音量报警。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 设备控制（0x0004 - 0x0007）====== -->
+  <h3 id="group-control">设备控制（0x0004 - 0x0007）</h3>
+  <p>描述设备的静音状态、自检进度、硬件健康和使用寿命。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0004">
+          <td><code>0x0004</code></td>
+          <td>DeviceMuted<br/><span class="attr-cn">静音状态</span></td>
+          <td>enum8</td>
+          <td>报警是否已被用户静音。静音后设备停止发声，但报警状态仍然保持（见下方枚举）</td>
+        </tr>
+        <tr id="attr-0x0005">
+          <td><code>0x0005</code></td>
+          <td>TestInProgress<br/><span class="attr-cn">自检进行中</span></td>
+          <td>bool</td>
+          <td>设备是否正在执行自检。<code>true</code> = 自检中，此时不接受新的 SelfTestRequest</td>
+        </tr>
+        <tr id="attr-0x0006">
+          <td><code>0x0006</code></td>
+          <td>HardwareFaultAlert<br/><span class="attr-cn">硬件故障</span></td>
+          <td>bool</td>
+          <td>设备是否检测到自身硬件故障。<code>true</code> 表示设备可能无法正常工作，需要维修或更换</td>
+        </tr>
+        <tr id="attr-0x0007">
+          <td><code>0x0007</code></td>
+          <td>EndOfServiceAlert<br/><span class="attr-cn">寿命到期</span></td>
+          <td>enum8</td>
+          <td>设备是否已达到使用寿命（见下方枚举）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>DeviceMuted 枚举值</h4>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">NotMuted</span>
+        <span class="enum-desc">未静音 —— 报警声正常发出</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Muted</span>
+        <span class="enum-desc">已静音 —— 报警声被抑制，但报警状态仍保持</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">静音的限制</div>
+    <p>
+      静音是通过设备上的物理按键触发的，不能通过远程命令控制。
+      静音只会持续一段有限的时间（通常几分钟），之后报警会自动恢复。
+      如果危险持续存在，设备可能拒绝静音或缩短静音时间。
+    </p>
+  </div>
+
+  <h4>EndOfServiceAlert 枚举值</h4>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Normal</span>
+        <span class="enum-desc">正常 —— 设备在使用寿命内</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Expired</span>
+        <span class="enum-desc">已过期 —— 设备已达使用年限，传感器可能不再准确，应尽快更换</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">烟感的使用寿命</div>
+    <p>
+      烟雾/CO 探测器的传感器会随时间老化。大多数设备的设计寿命是 <strong>7~10 年</strong>。
+      当 <code>EndOfServiceAlert</code> 变为 <code>Expired</code> 时，App 应提醒用户更换设备，
+      即使设备看起来仍能工作。配合 <code>ExpiryDate (0x000C)</code> 可以提前预告过期时间。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 联动报警（0x0008 - 0x0009）====== -->
+  <h3 id="group-interconnect">联动报警（0x0008 - 0x0009）</h3>
+  <p>
+    当多个报警设备互联时，一个设备触发报警后，其他设备会通过联动属性反映该状态。
+    联动报警让整栋房屋都能听到警报声，即使火源不在当前设备所在的房间。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0008">
+          <td><code>0x0008</code></td>
+          <td>InterconnectSmokeAlarm<br/><span class="attr-cn">联动烟雾报警</span></td>
+          <td>enum8</td>
+          <td>其他联动设备触发的烟雾报警状态。枚举值与 SmokeState 相同（Normal / Warning / Critical）。<strong>需要 SMOKE feature</strong></td>
+        </tr>
+        <tr id="attr-0x0009">
+          <td><code>0x0009</code></td>
+          <td>InterconnectCOAlarm<br/><span class="attr-cn">联动 CO 报警</span></td>
+          <td>enum8</td>
+          <td>其他联动设备触发的 CO 报警状态。枚举值与 COState 相同（Normal / Warning / Critical）。<strong>需要 CO feature</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">联动与本机报警的区别</div>
+    <p>
+      <code>SmokeState</code> 是本机传感器的探测结果，<code>InterconnectSmokeAlarm</code> 是其他联动设备传来的报警。
+      在 <code>ExpressedState</code> 的优先级中，本机报警（SmokeAlarm = 1）高于联动报警（InterconnectSmoke = 7），
+      因为本机探测到的烟雾意味着危险就在附近。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 传感器与寿命（0x000A - 0x000C）====== -->
+  <h3 id="group-sensor">传感器与寿命（0x000A - 0x000C）</h3>
+  <p>传感器健康状态和设备使用寿命相关信息。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x000A">
+          <td><code>0x000A</code></td>
+          <td>ContaminationState<br/><span class="attr-cn">污染状态</span></td>
+          <td>enum8</td>
+          <td>烟雾传感器的污染程度。灰尘、油烟等会影响传感器灵敏度（见下方枚举）</td>
+        </tr>
+        <tr id="attr-0x000B">
+          <td><code>0x000B</code></td>
+          <td>SmokeSensitivityLevel<br/><span class="attr-cn">烟雾灵敏度</span></td>
+          <td>enum8</td>
+          <td>烟雾探测的灵敏度设置。可读可写（见下方枚举）</td>
+        </tr>
+        <tr id="attr-0x000C">
+          <td><code>0x000C</code></td>
+          <td>ExpiryDate<br/><span class="attr-cn">过期日期</span></td>
+          <td>epoch_s</td>
+          <td>设备的过期时间，以 Unix 时间戳（秒）表示。超过此时间后设备应被更换</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>ContaminationState 枚举值</h4>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Normal</span>
+        <span class="enum-desc">正常 —— 传感器清洁</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Low</span>
+        <span class="enum-desc">轻度污染 —— 不影响正常使用</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">Warning</span>
+        <span class="enum-desc">中度污染 —— 灵敏度可能降低，建议清洁</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">Critical</span>
+        <span class="enum-desc">严重污染 —— 传感器可能无法正常工作，必须清洁或更换</span>
+      </div>
+    </div>
+  </div>
+
+  <h4>SmokeSensitivityLevel 枚举值</h4>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">High</span>
+        <span class="enum-desc">高灵敏度 —— 轻微烟雾即触发，适合卧室等重要区域</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Standard</span>
+        <span class="enum-desc">标准灵敏度 —— 默认设置，适合大多数场景</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">Low</span>
+        <span class="enum-desc">低灵敏度 —— 降低误报，适合厨房等容易产生烟雾的区域</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">灵敏度调整建议</div>
+    <p>
+      <code>SmokeSensitivityLevel</code> 是可写属性，App 可以提供设置入口让用户调整。
+      如果设备安装在厨房附近频繁误报，可以建议用户调低灵敏度。
+      但要注意：<strong>低灵敏度意味着可能延迟发现真正的火灾</strong>，需要明确提示风险。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 事件（Events）====== -->
+  <h2 id="events">事件（Events）</h2>
+  <p>
+    SmokeCOAlarm 是 Matter 中事件最丰富的 Cluster 之一。事件记录了报警设备从触发到解除的完整生命周期，
+    是 App 推送通知和历史记录的主要数据来源。所有事件的优先级均为 <strong>Critical</strong>。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>事件名称</th>
+          <th>说明</th>
+          <th>所需特性</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>0x00</code></td>
+          <td>SmokeAlarm</td>
+          <td>本机烟雾报警触发</td>
+          <td class="col-required">SMOKE</td>
+        </tr>
+        <tr>
+          <td><code>0x01</code></td>
+          <td>COAlarm</td>
+          <td>本机 CO 报警触发</td>
+          <td class="col-required">CO</td>
+        </tr>
+        <tr>
+          <td><code>0x02</code></td>
+          <td>LowBattery</td>
+          <td>电池电量低</td>
+          <td class="col-optional">无</td>
+        </tr>
+        <tr>
+          <td><code>0x03</code></td>
+          <td>HardwareFault</td>
+          <td>硬件故障</td>
+          <td class="col-optional">无</td>
+        </tr>
+        <tr>
+          <td><code>0x04</code></td>
+          <td>EndOfService</td>
+          <td>设备到达使用寿命</td>
+          <td class="col-optional">无</td>
+        </tr>
+        <tr>
+          <td><code>0x05</code></td>
+          <td>SelfTestComplete</td>
+          <td>自检完成</td>
+          <td class="col-optional">无</td>
+        </tr>
+        <tr>
+          <td><code>0x06</code></td>
+          <td>AlarmMuted</td>
+          <td>报警已被静音</td>
+          <td class="col-optional">无</td>
+        </tr>
+        <tr>
+          <td><code>0x07</code></td>
+          <td>MuteEnded</td>
+          <td>静音结束，报警恢复</td>
+          <td class="col-optional">无</td>
+        </tr>
+        <tr>
+          <td><code>0x08</code></td>
+          <td>InterconnectSmokeAlarm</td>
+          <td>联动烟雾报警触发</td>
+          <td class="col-required">SMOKE</td>
+        </tr>
+        <tr>
+          <td><code>0x09</code></td>
+          <td>InterconnectCOAlarm</td>
+          <td>联动 CO 报警触发</td>
+          <td class="col-required">CO</td>
+        </tr>
+        <tr>
+          <td><code>0x0A</code></td>
+          <td>AllClear</td>
+          <td>所有报警已解除，恢复正常</td>
+          <td class="col-optional">无</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">事件与属性的关系</div>
+    <p>
+      事件是「发生了什么」（一次性记录），属性是「当前是什么」（持续状态）。
+      例如 <code>SmokeAlarm</code> 事件在烟雾报警触发时产生一次，
+      而 <code>SmokeState</code> 属性会一直保持 <code>Warning</code> 或 <code>Critical</code> 直到烟雾消散。
+      App 应同时订阅事件（用于推送通知）和属性（用于界面实时显示）。
+    </p>
+  </div>
+
+  <h3>事件的典型时序</h3>
+  <p>一次完整的烟雾报警生命周期会产生以下事件序列：</p>
+  <ol>
+    <li><code>SmokeAlarm</code> — 传感器检测到烟雾，报警开始</li>
+    <li><code>AlarmMuted</code> — 用户按下静音按钮（可选）</li>
+    <li><code>MuteEnded</code> — 静音超时，报警恢复（如果烟雾未消散）</li>
+    <li><code>AllClear</code> — 烟雾消散，所有报警状态恢复正常</li>
+  </ol>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">AllClear 的含义</div>
+    <p>
+      <code>AllClear</code> 事件只在<strong>所有</strong>报警都解除后才会触发。
+      如果烟雾报警解除但 CO 报警仍然存在，不会触发 AllClear。
+      收到 AllClear 后，<code>ExpressedState</code> 保证为 <code>Normal (0)</code>。
+    </p>
+  </div>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>一个支持烟雾和 CO 双报警的设备在正常状态下的 SmokeCOAlarm Cluster 读取结果：</p>
+
+  <pre><code set:html={exampleData} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发提示</div>
+    <p>
+      实际读取数据时，建议先检查 <code>FeatureMap (0xFFFC)</code> 确定设备支持哪些特性。
+      纯烟感设备不会上报 COState (0x0002) 和 InterconnectCOAlarm (0x0009)，
+      纯 CO 探测器不会上报 SmokeState (0x0001) 和 InterconnectSmokeAlarm (0x0008)。
+      <code>ExpiryDate (0x000C)</code> 的值是 Unix 时间戳（秒），需要转换为可读日期后展示给用户。
+    </p>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <details class="scenario">
+    <summary>场景 1：火灾探测与通知</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>订阅 <code>SmokeAlarm</code> 事件 —— 收到后立即推送紧急通知给用户</li>
+        <li>读取 <code>SmokeState (0x0001)</code> 确认报警级别（Warning / Critical）</li>
+        <li>读取 <code>ExpressedState (0x0000)</code> 了解设备综合状态</li>
+        <li>界面上用醒目颜色（红色）展示报警状态，提示用户检查现场并拨打消防电话</li>
+        <li>监听 <code>AllClear</code> 事件确认报警解除，界面恢复正常</li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 2：一氧化碳泄漏处理</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>订阅 <code>COAlarm</code> 事件 —— CO 泄漏比烟雾更危险（无色无味），推送必须即时</li>
+        <li>读取 <code>COState (0x0002)</code> 确认报警级别</li>
+        <li>
+          在通知中提供安全指引：
+          <ul>
+            <li>立即打开窗户通风</li>
+            <li>关闭燃气设备</li>
+            <li>撤离到室外安全区域</li>
+            <li>拨打 119 或燃气公司紧急电话</li>
+          </ul>
+        </li>
+        <li>检查 <code>InterconnectCOAlarm (0x0009)</code> 确认是否有其他区域也在报警</li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 3：设备维护与健康监控</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>定期读取 <code>BatteryAlert (0x0003)</code> —— 出现 Warning 时提醒用户更换电池</li>
+        <li>读取 <code>ContaminationState (0x000A)</code> —— 达到 Warning 时提醒用户清洁传感器</li>
+        <li>读取 <code>ExpiryDate (0x000C)</code> —— 临近过期时提前通知用户购买替换设备</li>
+        <li>监控 <code>HardwareFaultAlert (0x0006)</code> —— 为 <code>true</code> 时提醒用户联系售后</li>
+        <li>每月通过 <code>SelfTestRequest (0x00)</code> 命令触发一次自检，确保设备正常</li>
+        <li>监听 <code>SelfTestComplete</code> 事件获取自检结果</li>
+      </ol>
+    </div>
+  </details>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .col-required {
+    color: #dc2626;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-required {
+    color: #f87171;
+  }
+
+  .col-optional {
+    color: #16a34a;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-optional {
+    color: #4ade80;
+  }
+
+  .attr-cn {
+    font-size: 0.8125rem;
+    color: #6b7280;
+  }
+
+  :global(.dark) .attr-cn {
+    color: #9ca3af;
+  }
+</style>

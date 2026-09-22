@@ -1,0 +1,531 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 告警位图属性 ---
+  "0x0000": "0x0000003F",    // Mask = 0x3F（全部 6 种告警均已启用）
+  "0x0001": "0x00000003",    // Latch = 0x03（InflowError + DrainError 需手动复位）
+  "0x0002": "0x00000002",    // State = 0x02（当前 DrainError 告警激活）
+  "0x0003": "0x0000003F"     // Supported = 0x3F（设备支持全部 6 种告警位）
+}`;
+---
+
+<DocLayout
+  title="洗碗机告警 Cluster · DishwasherAlarm（0x005D）"
+  description="Matter DishwasherAlarm Cluster（0x005D）完整参考 — 告警位图、Mask/Latch/State/Supported 属性、Reset 与 ModifyEnabledAlarms 命令、Notify 事件及典型场景。"
+  type="article"
+>
+  <h1>洗碗机告警 Cluster（DishwasherAlarm）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x005D</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 通常在 <code>Endpoint 1</code>（功能端点）
+  </p>
+  <p>
+    DishwasherAlarm 是 Matter 中专门用于洗碗机告警和故障上报的 Cluster。
+    它通过一组位图（bitmap）来描述设备支持哪些告警、当前启用了哪些、哪些正在激活。
+    控制器可以订阅告警状态变化，也可以让用户自行配置关心哪些告警。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">RESET 特性</div>
+    <p>
+      DishwasherAlarm Cluster 定义了一个 <strong>RESET</strong> Feature。
+      启用 RESET 后，Cluster 提供 <code>Reset</code> 命令以及 <code>Latch</code> 属性，
+      允许用户手动复位已锁存（latch）的告警。不支持 RESET 特性的设备，
+      告警会在故障解除后自动清除，无法手动复位。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#commands">命令列表</a>
+    <span class="nav-sep">|</span>
+    <a href="#attributes">属性详解</a>
+    <span class="nav-sep">|</span>
+    <a href="#alarm-bits">告警位定义</a>
+    <span class="nav-sep">|</span>
+    <a href="#events">事件</a>
+    <span class="nav-sep">|</span>
+    <a href="#features">Feature 位图</a>
+    <span class="nav-sep">|</span>
+    <a href="#example-data">示例数据</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">常见场景</a>
+  </nav>
+
+  <!-- ====== 命令（Commands）====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    DishwasherAlarm Cluster 有 2 个命令。<code>ModifyEnabledAlarms</code> 允许用户选择关心哪些告警，
+    <code>Reset</code> 用于手动复位锁存的告警（需要 RESET 特性）。
+    点击下方表格中的命令 ID 可跳转到对应的详细说明。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>说明</th>
+          <th>所需特性</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#cmd-0x00">
+          <td><a href="#cmd-0x00"><code>0x00</code></a></td>
+          <td>Reset</td>
+          <td>复位指定的锁存告警</td>
+          <td class="col-required">RESET</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x01">
+          <td><a href="#cmd-0x01"><code>0x01</code></a></td>
+          <td>ModifyEnabledAlarms</td>
+          <td>修改启用的告警掩码</td>
+          <td class="col-optional">无</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 命令详解 ====== -->
+  <h3 id="cmd-0x00">Reset —— 复位告警（0x00）</h3>
+  <p>
+    手动复位一个或多个已锁存（latched）的告警。只有在 <code>Latch</code> 属性中标记为锁存的告警位才需要手动复位，
+    其他告警会在故障解除后自动清除。此命令需要设备支持 RESET 特性。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Alarms</td>
+          <td>bitmap32</td>
+          <td>要复位的告警位图。每一位对应一种告警（见<a href="#alarm-bits">告警位定义</a>），置 1 表示要复位该告警</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        洗碗机排水故障（DrainError）被修复后，由于该告警是锁存类型，State 中仍然保持激活。
+        用户在 App 上点击「清除告警」，App 发送 Reset 命令并将 Alarms 参数的 bit 1 置为 1，
+        设备收到后清除 State 中的 DrainError 位。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x01">ModifyEnabledAlarms —— 修改启用告警（0x01）</h3>
+  <p>
+    修改告警掩码（Mask），控制哪些告警处于启用状态。只有在 Mask 中启用的告警才会被设备上报。
+    用户可以通过这个命令屏蔽不关心的告警类型。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Mask</td>
+          <td>bitmap32</td>
+          <td>新的告警掩码。每一位对应一种告警（见<a href="#alarm-bits">告警位定义</a>），置 1 表示启用该告警的上报</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">Mask 限制</div>
+    <p>
+      写入的 Mask 值不能超出 <code>Supported</code> 属性的范围。
+      如果尝试启用设备不支持的告警位，命令会被拒绝。
+      例如设备 Supported = <code>0x07</code>（只支持前 3 种告警），
+      则 Mask 只能在 <code>0x00</code> ~ <code>0x07</code> 范围内设置。
+    </p>
+  </div>
+
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        用户在设置页面取消勾选「门未关好」告警（DoorError, bit 2），
+        App 发送 ModifyEnabledAlarms 命令，将 Mask 中的 bit 2 清零。
+        之后即使门未关好，设备也不会上报 DoorError 告警。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 属性详解 ====== -->
+  <h2 id="attributes">属性详解</h2>
+  <p>DishwasherAlarm Cluster 共有 4 个应用属性，全部为 bitmap32 类型。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+
+  <!-- 属性汇总表 -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+          <th>所需特性</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#attr-0x0000">
+          <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
+          <td>Mask</td>
+          <td>bitmap32</td>
+          <td>已启用的告警掩码</td>
+          <td class="col-optional">无</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0001">
+          <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
+          <td>Latch</td>
+          <td>bitmap32</td>
+          <td>需要手动复位的告警位</td>
+          <td class="col-required">RESET</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0002">
+          <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
+          <td>State</td>
+          <td>bitmap32</td>
+          <td>当前激活的告警</td>
+          <td class="col-optional">无</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0003">
+          <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
+          <td>Supported</td>
+          <td>bitmap32</td>
+          <td>设备支持的告警位</td>
+          <td class="col-optional">无</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 属性逐条详解 ====== -->
+  <h3 id="attr-0x0000">Mask —— 告警掩码（0x0000）</h3>
+  <p>
+    指示哪些告警当前处于启用状态。只有 Mask 中对应位为 1 的告警，设备才会在 State 中上报。
+    用户可以通过 <code>ModifyEnabledAlarms</code> 命令修改此属性。
+    Mask 的每一位含义见<a href="#alarm-bits">告警位定义</a>。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>0x0000</code></td>
+          <td>Mask（告警掩码）</td>
+          <td>bitmap32</td>
+          <td>每一位对应一种告警。<code>1</code> = 启用上报，<code>0</code> = 屏蔽。初始值通常等于 Supported（全部启用）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x0001">Latch —— 锁存位图（0x0001）</h3>
+  <p>
+    指示哪些告警是「锁存」类型 —— 即故障解除后告警不会自动清除，必须通过 <code>Reset</code> 命令手动复位。
+    此属性仅在设备支持 RESET 特性时存在。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>0x0001</code></td>
+          <td>Latch（锁存位图）</td>
+          <td>bitmap32</td>
+          <td>每一位对应一种告警。<code>1</code> = 锁存（需手动复位），<code>0</code> = 自动清除。<strong>需要 RESET 特性</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">锁存 vs 自动清除</div>
+    <p>
+      锁存告警的典型用途：即使进水故障已经物理排除，设备仍然保持告警状态，
+      直到用户确认已处理。这避免了用户错过重要的故障事件。
+      自动清除的告警则在故障消失后立即恢复正常，适合临时性异常（如瞬时温度波动）。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x0002">State —— 当前告警状态（0x0002）</h3>
+  <p>
+    反映设备当前正在激活的告警。每一位对应一种告警类型，置 1 表示该告警当前处于激活状态。
+    这是控制器最常订阅的属性，用于实时监测设备故障。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>0x0002</code></td>
+          <td>State（当前告警状态）</td>
+          <td>bitmap32</td>
+          <td>每一位对应一种告警。<code>1</code> = 告警激活，<code>0</code> = 正常。值始终是 Mask 的子集（被屏蔽的告警不会出现在 State 中）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x0003">Supported —— 支持的告警位（0x0003）</h3>
+  <p>
+    声明设备硬件层面支持哪些告警类型。这是一个只读属性，由设备固件决定。
+    Mask 和 State 的有效位不能超出 Supported 的范围。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>0x0003</code></td>
+          <td>Supported（支持的告警位）</td>
+          <td>bitmap32</td>
+          <td>每一位对应一种告警。<code>1</code> = 设备支持该告警。只读，不可写入</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 告警位定义 ====== -->
+  <h2 id="alarm-bits">告警位定义</h2>
+  <p>
+    Mask、Latch、State、Supported 四个属性共享同一套告警位定义。
+    每一位代表一种洗碗机可能出现的故障类型：
+  </p>
+
+  <div class="enum-cards">
+    <div class="enum-card">
+      <span class="enum-badge">Bit 0</span>
+      <div>
+        <span class="enum-name">InflowError（进水异常）</span>
+        <span class="enum-desc">进水管路故障 —— 水压不足、进水阀卡住或供水中断</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 1</span>
+      <div>
+        <span class="enum-name">DrainError（排水异常）</span>
+        <span class="enum-desc">排水管路故障 —— 排水泵故障、管路堵塞或排水超时</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 2</span>
+      <div>
+        <span class="enum-name">DoorError（门未关好）</span>
+        <span class="enum-desc">洗碗机门未完全关闭 —— 运行中门被打开或门锁故障</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 3</span>
+      <div>
+        <span class="enum-name">TempTooLow（温度过低）</span>
+        <span class="enum-desc">水温低于正常工作范围 —— 加热器故障或进水温度异常</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 4</span>
+      <div>
+        <span class="enum-name">TempTooHigh（温度过高）</span>
+        <span class="enum-desc">水温超出安全范围 —— 温控器失灵或加热器持续加热</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 5</span>
+      <div>
+        <span class="enum-name">WaterLevelError（水位异常）</span>
+        <span class="enum-desc">水位超出正常范围 —— 可能是溢水风险或水位传感器故障</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">位图读取示例</div>
+    <p>
+      State = <code>0x00000006</code>（二进制 <code>...000110</code>）
+      表示 bit 1（DrainError）和 bit 2（DoorError）同时处于激活状态。
+      应用层可以通过按位与操作逐一检查每种告警是否激活。
+    </p>
+  </div>
+
+  <!-- ====== 事件（Events）====== -->
+  <h2 id="events">事件（Events）</h2>
+  <p>
+    DishwasherAlarm Cluster 定义了一个 <code>Notify</code> 事件，在告警状态发生变化时触发。
+    控制器应当订阅此事件以实时获取告警变更通知。
+  </p>
+
+  <h3 id="event-notify">Notify —— 告警通知事件</h3>
+  <p>
+    当告警状态发生变化（告警激活或解除）时，设备会产生 Notify 事件。
+    事件携带变化时刻的完整快照，方便控制器精确掌握状态变更。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Active</td>
+          <td>bitmap32</td>
+          <td>本次变化中新激活的告警位（从 0 变为 1 的位）</td>
+        </tr>
+        <tr>
+          <td>Inactive</td>
+          <td>bitmap32</td>
+          <td>本次变化中已解除的告警位（从 1 变为 0 的位）</td>
+        </tr>
+        <tr>
+          <td>State</td>
+          <td>bitmap32</td>
+          <td>变化后的完整告警状态（与属性 State 一致）</td>
+        </tr>
+        <tr>
+          <td>Mask</td>
+          <td>bitmap32</td>
+          <td>变化时刻的告警掩码（与属性 Mask 一致）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <details class="scenario">
+    <summary>事件示例</summary>
+    <div class="scenario-content">
+      <p>
+        洗碗机排水故障触发：设备产生 Notify 事件，Active = <code>0x02</code>（DrainError 新激活），
+        Inactive = <code>0x00</code>（无告警解除），State = <code>0x02</code>（当前只有排水告警），
+        Mask = <code>0x3F</code>（全部告警已启用）。
+      </p>
+      <p>
+        故障修复后用户发送 Reset：设备产生另一个 Notify 事件，Active = <code>0x00</code>，
+        Inactive = <code>0x02</code>（DrainError 已解除），State = <code>0x00</code>（无活跃告警），
+        Mask = <code>0x3F</code>。
+      </p>
+    </div>
+  </details>
+
+  <!-- ====== Feature 位图 ====== -->
+  <h2 id="features">Feature 位图</h2>
+  <p>DishwasherAlarm Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持哪些高级能力：</p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">Bit 0</span>
+      <div>
+        <span class="enum-name">RESET</span>
+        <span class="enum-desc">支持告警复位 —— 启用 Reset 命令和 Latch 属性，允许手动复位锁存的告警</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">RESET 特性的影响</div>
+    <p>
+      <strong>启用 RESET</strong>：设备提供 Latch 属性和 Reset 命令。某些关键告警（如进水、排水故障）
+      可以设置为锁存，确保用户不会错过。<br/>
+      <strong>不启用 RESET</strong>：所有告警都是自动清除的，故障消失后 State 自动归零。
+      适合不需要用户确认的简单设备。
+    </p>
+  </div>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>一台支持全部 6 种告警、启用了 RESET 特性的洗碗机，当前存在排水告警时的 Cluster 读取结果：</p>
+
+  <pre><code set:html={exampleData} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发提示</div>
+    <p>
+      位图属性读取后，应用层需要逐位解析来确定各告警的状态。
+      建议先读 <code>Supported (0x0003)</code> 确认设备支持哪些告警位，
+      再结合 <code>Mask (0x0000)</code> 判断哪些已启用，
+      最后用 <code>State (0x0002)</code> 获取当前激活的告警。
+      三者的关系是：State 是 Mask 的子集，Mask 是 Supported 的子集。
+    </p>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <h3 id="scenario-monitoring">场景 1：告警监控与处理</h3>
+  <ol>
+    <li>订阅 <code>Notify</code> 事件，实时接收告警状态变化</li>
+    <li>收到事件后，检查 <code>Active</code> 字段确定哪些新告警被触发</li>
+    <li>在 App 上显示对应的告警信息（如「排水异常」、「门未关好」等）</li>
+    <li>读取 <code>Latch (0x0001)</code>，判断该告警是否需要手动复位</li>
+    <li>如果是锁存告警 —— 用户处理故障后，在 App 上点击「清除告警」，发送 <code>Reset (0x00)</code> 命令</li>
+    <li>如果是自动清除告警 —— 等待故障自行消除即可，State 会自动更新</li>
+  </ol>
+
+  <h3 id="scenario-config">场景 2：用户自定义告警配置</h3>
+  <ol>
+    <li>读取 <code>Supported (0x0003)</code>，获取设备支持的全部告警类型</li>
+    <li>读取 <code>Mask (0x0000)</code>，获取当前已启用的告警</li>
+    <li>在设置页面展示开关列表，让用户勾选/取消关心的告警类型</li>
+    <li>用户修改后，发送 <code>ModifyEnabledAlarms (0x01)</code> 写入新的 Mask 值</li>
+    <li>例如：用户只关心进水和排水告警，发送 Mask = <code>0x03</code>（bit 0 + bit 1）</li>
+    <li>之后设备只会上报 InflowError 和 DrainError，其他告警不再触发通知</li>
+  </ol>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .col-required {
+    color: #dc2626;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-required {
+    color: #f87171;
+  }
+
+  .col-optional {
+    color: #16a34a;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-optional {
+    color: #4ade80;
+  }
+</style>

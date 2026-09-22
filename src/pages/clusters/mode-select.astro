@@ -1,0 +1,497 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 基本信息 ---
+  "0x0000": "烘干模式",          // Description = "烘干模式"（集群用途描述）
+  "0x0001": 0,                   // StandardNamespace = 0（MfgSpecific 命名空间）
+  "0x0003": 1,                   // CurrentMode = 1（当前运行在"节能"模式）
+
+  // --- 支持的模式列表 ---
+  "0x0002": [                    // SupportedModes
+    {
+      "Label": "标准",           // 模式 0：标准烘干
+      "Mode": 0,
+      "SemanticTags": []
+    },
+    {
+      "Label": "节能",           // 模式 1：节能烘干
+      "Mode": 1,
+      "SemanticTags": [
+        { "MfgCode": 0, "Value": 16384 }
+      ]
+    },
+    {
+      "Label": "快速",           // 模式 2：快速烘干
+      "Mode": 2,
+      "SemanticTags": []
+    }
+  ],
+
+  // --- 启动与联动 ---
+  "0x0004": null,                // StartUpMode = null（上电恢复断电前的模式）
+  "0x0005": 0                    // OnMode = 0（设备开机时切换到"标准"模式）
+}`;
+---
+
+<DocLayout
+  title="模式选择 Cluster · ModeSelect（0x0050）"
+  description="Matter ModeSelect Cluster（0x0050）完整参考 — ChangeToMode 命令、SupportedModes 模式列表、ModeOptionStruct/SemanticTagStruct 结构体定义、StartUpMode 上电模式及 OnMode 联动设置。"
+  type="article"
+  prev={{ title: 'Cluster 手册', href: '/clusters/' }}
+>
+  <h1>模式选择 Cluster（ModeSelect）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x0050</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 通常在 <code>Endpoint 1</code>（功能端点）
+  </p>
+  <p>
+    ModeSelect 是一个通用的模式选择 Cluster —— 让设备声明自己支持哪些运行模式，控制端可以查询和切换这些模式。
+    它适用于任何有"多模式"概念的设备：洗衣机的洗涤模式、烘干机的烘干程序、咖啡机的冲泡方式等。
+  </p>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">历史遗留（Legacy）Cluster</div>
+    <p>
+      ModeSelect 是 Matter 早期定义的通用模式选择方案。
+      在较新的 Matter 规范中，它已被各设备类型专属的 Mode Cluster 替代
+      （如 <code>LaundryWasherMode</code>、<code>DishwasherMode</code>、<code>RefrigeratorAndTemperatureControlledCabinetMode</code> 等）。
+      新设备开发建议优先使用设备专属 Mode Cluster；ModeSelect 仍用于旧设备兼容和通用场景。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#commands">命令列表</a>
+    <span class="nav-sep">|</span>
+    <a href="#attributes">属性详解</a>
+    <span class="nav-sep">|</span>
+    <a href="#structs">结构体定义</a>
+    <span class="nav-sep">|</span>
+    <a href="#features">Feature 位图</a>
+    <span class="nav-sep">|</span>
+    <a href="#example-data">示例数据</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">常见场景</a>
+  </nav>
+
+  <!-- ====== 命令（Commands）====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    ModeSelect Cluster 只有 1 个命令，非常简洁 —— 指定目标模式的编号即可完成切换。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>说明</th>
+          <th>所需特性</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#cmd-0x00">
+          <td><a href="#cmd-0x00"><code>0x00</code></a></td>
+          <td>ChangeToMode</td>
+          <td>切换到指定模式</td>
+          <td class="col-optional">无</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 命令详解 ====== -->
+  <h3 id="cmd-0x00">ChangeToMode —— 切换模式（0x00）</h3>
+  <p>
+    将设备切换到指定的运行模式。<code>NewMode</code> 的值必须是 <code>SupportedModes</code> 列表中某个
+    <code>ModeOptionStruct</code> 的 <code>Mode</code> 字段值，否则设备会返回 <code>INVALID_COMMAND</code> 错误。
+    执行成功后，<code>CurrentMode</code> 属性会更新为 <code>NewMode</code> 的值。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>NewMode</td>
+          <td>uint8</td>
+          <td>目标模式编号，必须存在于 <code>SupportedModes</code> 列表中</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        用户在 App 上选择洗衣机的"快洗"模式，App 读取 <code>SupportedModes</code> 获取模式列表和对应编号，
+        然后发送 <code>ChangeToMode</code> 命令将 <code>NewMode</code> 设为该编号。
+        设备收到命令后切换模式，<code>CurrentMode</code> 随之更新。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 属性详解 ====== -->
+  <h2 id="attributes">属性详解</h2>
+  <p>ModeSelect Cluster 共有 6 个属性。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+
+  <!-- 属性汇总表 -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>分组</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 基本信息 -->
+        <tr class="clickable-row" data-href="#attr-0x0000">
+          <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
+          <td>Description</td>
+          <td>string</td>
+          <td><a href="#group-info">基本信息</a></td>
+          <td>集群用途的可读描述</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0001">
+          <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
+          <td>StandardNamespace</td>
+          <td>uint16 / null</td>
+          <td><a href="#group-info">基本信息</a></td>
+          <td>模式命名空间标识</td>
+        </tr>
+        <!-- 模式状态 -->
+        <tr class="clickable-row" data-href="#attr-0x0002">
+          <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
+          <td>SupportedModes</td>
+          <td>list&lt;ModeOptionStruct&gt;</td>
+          <td><a href="#group-modes">模式列表</a></td>
+          <td>设备支持的所有模式</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0003">
+          <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
+          <td>CurrentMode</td>
+          <td>uint8</td>
+          <td><a href="#group-modes">模式列表</a></td>
+          <td>当前运行模式的编号</td>
+        </tr>
+        <!-- 启动与联动 -->
+        <tr class="clickable-row" data-href="#attr-0x0004">
+          <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
+          <td>StartUpMode</td>
+          <td>uint8 / null</td>
+          <td><a href="#group-startup">启动与联动</a></td>
+          <td>上电时恢复的模式</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0005">
+          <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
+          <td>OnMode</td>
+          <td>uint8 / null</td>
+          <td><a href="#group-startup">启动与联动</a></td>
+          <td>设备开机时自动切换的模式</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 基本信息（0x0000, 0x0001）====== -->
+  <h3 id="group-info">基本信息（0x0000, 0x0001）</h3>
+  <p>描述这个 ModeSelect Cluster 实例的用途和模式命名空间。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0000">
+          <td><code>0x0000</code></td>
+          <td>Description（描述）</td>
+          <td>string</td>
+          <td>人类可读的字符串，描述这个 ModeSelect Cluster 的用途。例如 <code>"烘干模式"</code>、<code>"洗涤程序"</code>。同一设备可能有多个 ModeSelect 实例（分布在不同 Endpoint），每个实例通过 Description 区分功能</td>
+        </tr>
+        <tr id="attr-0x0001">
+          <td><code>0x0001</code></td>
+          <td>StandardNamespace（标准命名空间）</td>
+          <td>uint16 / null</td>
+          <td>标识 <code>SemanticTag</code> 值的含义来源。<code>null</code> 表示厂商自定义命名空间（MfgSpecific），标准值由 Matter 规范定义。有了命名空间，不同厂商的"节能"模式可以使用相同的 SemanticTag 值，控制端无需逐厂商适配</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 模式列表（0x0002, 0x0003）====== -->
+  <h3 id="group-modes">模式列表（0x0002, 0x0003）</h3>
+  <p>设备支持的所有运行模式及当前模式。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0002">
+          <td><code>0x0002</code></td>
+          <td>SupportedModes（支持的模式）</td>
+          <td>list&lt;ModeOptionStruct&gt;</td>
+          <td>设备声明的全部可用模式，每个元素是一个 <a href="#struct-mode-option">ModeOptionStruct</a>。列表至少包含 2 个条目，每个 Mode 值唯一、每个 Label 唯一。列表内容在设备生命周期内通常不变</td>
+        </tr>
+        <tr id="attr-0x0003">
+          <td><code>0x0003</code></td>
+          <td>CurrentMode（当前模式）</td>
+          <td>uint8</td>
+          <td>设备当前正在运行的模式编号。该值始终指向 <code>SupportedModes</code> 中某个 <code>ModeOptionStruct.Mode</code>。通过 <code>ChangeToMode</code> 命令改变，也可被 <code>OnMode</code> 或 <code>StartUpMode</code> 自动设置</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">Mode 值不一定连续</div>
+    <p>
+      <code>SupportedModes</code> 中的 <code>Mode</code> 值是任意 uint8，不要求从 0 开始、也不要求连续。
+      控制端应始终先读取 <code>SupportedModes</code>，拿到合法的 Mode 值列表后再发送 <code>ChangeToMode</code>。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 启动与联动（0x0004, 0x0005）====== -->
+  <h3 id="group-startup">启动与联动（0x0004, 0x0005）</h3>
+  <p>控制设备上电和开机时的模式行为。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0004">
+          <td><code>0x0004</code></td>
+          <td>StartUpMode（上电模式）</td>
+          <td>uint8 / null</td>
+          <td>设备上电（硬件重启）时自动切换到的模式。值必须存在于 <code>SupportedModes</code> 中。<code>null</code> 表示保持断电前的模式。Nullable 且可选</td>
+        </tr>
+        <tr id="attr-0x0005">
+          <td><code>0x0005</code></td>
+          <td>OnMode（开机模式）</td>
+          <td>uint8 / null</td>
+          <td>设备从 Off 变为 On 时自动切换到的模式（与 OnOff Cluster 联动）。值必须存在于 <code>SupportedModes</code> 中。<code>null</code> 表示开机不改变模式。<strong>需要 DEPONOFF 特性</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">StartUpMode 与 OnMode 的关系</div>
+    <p>
+      <code>StartUpMode</code> 在硬件上电时生效（类似 OnOff 的 <code>StartUpOnOff</code>），
+      <code>OnMode</code> 在软件层面开机时生效（OnOff 从 Off 切到 On 时触发）。
+      如果 <code>OnMode</code> 非空，它的优先级高于 <code>StartUpMode</code> ——
+      设备上电后，先应用 <code>StartUpMode</code>，再由 OnOff 触发 <code>OnMode</code>，最终模式以 <code>OnMode</code> 为准。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 结构体定义 ====== -->
+  <h2 id="structs">结构体定义</h2>
+  <p>ModeSelect Cluster 使用两个结构体来描述模式信息。</p>
+
+  <!-- ModeOptionStruct -->
+  <h3 id="struct-mode-option">ModeOptionStruct</h3>
+  <p>描述一个可选模式，包含显示标签、模式编号和语义标签列表。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>字段</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Label</td>
+          <td>string</td>
+          <td>人类可读的模式名称，如 <code>"标准"</code>、<code>"节能"</code>、<code>"快速"</code>。在同一个 <code>SupportedModes</code> 列表中唯一</td>
+        </tr>
+        <tr>
+          <td>Mode</td>
+          <td>uint8</td>
+          <td>模式编号，在同一个 <code>SupportedModes</code> 列表中唯一。此值用于 <code>ChangeToMode</code> 命令的 <code>NewMode</code> 参数</td>
+        </tr>
+        <tr>
+          <td>SemanticTags</td>
+          <td>list&lt;<a href="#struct-semantic-tag">SemanticTagStruct</a>&gt;</td>
+          <td>语义标签列表，让控制端理解模式含义而无需解析 Label 文本。可为空列表</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SemanticTagStruct -->
+  <h3 id="struct-semantic-tag">SemanticTagStruct</h3>
+  <p>
+    为模式附加机器可读的语义信息。通过标准化的标签值，不同厂商设备的"节能""快速"等模式可以被统一识别。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>字段</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>MfgCode</td>
+          <td>vendor-id（uint16）</td>
+          <td>厂商标识。<code>0x0000</code> 表示 Matter 标准定义的标签值；非零值表示该厂商自定义的标签值。配合 <code>StandardNamespace</code> 使用</td>
+        </tr>
+        <tr>
+          <td>Value</td>
+          <td>uint16</td>
+          <td>标签值，具体含义取决于 <code>MfgCode</code> 和 <code>StandardNamespace</code>。例如在标准命名空间中，特定值可能代表"节能"、"快速"等语义</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">SemanticTag 的意义</div>
+    <p>
+      如果只有 <code>Label</code>（如"ECO"），控制端需要做自然语言识别才能理解模式含义。
+      有了 <code>SemanticTag</code>，控制端可以直接通过数值判断 —— 比如语音助手可以识别出哪个模式是"节能"，
+      而不用解析各国语言的标签文本。
+    </p>
+  </div>
+
+  <!-- ====== Feature 位图 ====== -->
+  <h2 id="features">Feature 位图</h2>
+  <p>ModeSelect Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持的可选能力：</p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">Bit 0</span>
+      <div>
+        <span class="enum-name">DEPONOFF（Depends on OnOff）</span>
+        <span class="enum-desc">依赖 OnOff Cluster —— 启用后支持 OnMode 属性，设备从关变开时自动切换到指定模式</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">何时启用 DEPONOFF</div>
+    <p>
+      如果设备同时拥有 OnOff Cluster（即可以开关），且希望每次开机时自动切到特定模式（如空气净化器开机默认"自动"模式），
+      就应该启用 DEPONOFF 特性。纯模式选择、不涉及开关联动的场景则无需启用。
+    </p>
+  </div>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>一台烘干机的 ModeSelect Cluster 读取结果 —— 当前运行在"节能"模式：</p>
+
+  <pre><code set:html={exampleData} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发提示</div>
+    <p>
+      控制端显示模式选择 UI 时，应先读取 <code>SupportedModes (0x0002)</code> 获取完整模式列表，
+      再读取 <code>CurrentMode (0x0003)</code> 高亮当前模式。
+      切换模式前无需先读 CurrentMode —— 直接发 <code>ChangeToMode</code> 即可，设备会校验 NewMode 的合法性。
+    </p>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <h3 id="scenario-switch-mode">场景 1：App 切换设备运行模式</h3>
+  <ol>
+    <li>读取 <code>SupportedModes (0x0002)</code>，获取模式列表（Label + Mode 编号）</li>
+    <li>在 UI 上展示模式列表，读取 <code>CurrentMode (0x0003)</code> 高亮当前模式</li>
+    <li>用户点击目标模式，发送 <code>ChangeToMode (0x00)</code>，<code>NewMode</code> 设为该模式的 Mode 值</li>
+    <li>订阅 <code>CurrentMode</code> 属性变化，确认切换成功后更新 UI</li>
+  </ol>
+
+  <h3 id="scenario-startup-mode">场景 2：设置设备上电默认模式</h3>
+  <ol>
+    <li>读取 <code>SupportedModes (0x0002)</code>，让用户选择上电后希望恢复的模式</li>
+    <li>写入 <code>StartUpMode (0x0004)</code> 的值：
+      <ul>
+        <li>指定模式编号 —— 上电后始终切到该模式（如空调始终以"制冷"模式启动）</li>
+        <li><code>null</code> —— 恢复断电前的模式（推荐，用户上次选什么就继续用什么）</li>
+      </ul>
+    </li>
+    <li>注意：如果设备同时设置了 <code>OnMode</code>，开机后 OnMode 会覆盖 StartUpMode 的效果</li>
+  </ol>
+
+  <h3 id="scenario-on-mode">场景 3：开机自动切换模式（OnOff 联动）</h3>
+  <ol>
+    <li>确认设备的 <code>FeatureMap (0xFFFC)</code> 包含 <code>DEPONOFF</code>（Bit 0 = 1）</li>
+    <li>写入 <code>OnMode (0x0005)</code> 的值 —— 比如空气净化器开机自动进入"自动"模式</li>
+    <li>当设备通过 OnOff Cluster 从 Off 切到 On 时，<code>CurrentMode</code> 会自动变为 OnMode 指定的值</li>
+    <li>将 <code>OnMode</code> 设为 <code>null</code> 可取消联动 —— 开机后沿用上一次的模式</li>
+  </ol>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .col-required {
+    color: #dc2626;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-required {
+    color: #f87171;
+  }
+
+  .col-optional {
+    color: #16a34a;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-optional {
+    color: #4ade80;
+  }
+</style>

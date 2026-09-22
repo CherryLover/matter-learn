@@ -1,0 +1,1088 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 播放状态 ---
+  "0x0000": 0,                // CurrentState = Playing（正在播放）
+
+  // --- 时间信息（需要 AS 特性）---
+  "0x0001": 1695400000000000,  // StartTime（媒体起始时间，微秒级 epoch）
+  "0x0002": 5400000,           // Duration = 5,400,000 毫秒（90 分钟）
+  "0x0003": {                  // SampledPosition（采样位置）
+    "UpdatedAt": 1695401200000000,
+    "Position": 1230000
+  },
+  "0x0004": 1.0,               // PlaybackSpeed = 1.0（正常速度）
+  "0x0005": 5400000,           // SeekRangeEnd = 5,400,000 毫秒
+  "0x0006": 0,                 // SeekRangeStart = 0 毫秒
+
+  // --- 音轨信息（需要 AT 特性）---
+  "0x0007": {                  // ActiveAudioTrack
+    "ID": "audio-zh",
+    "TrackAttributes": {
+      "LanguageCode": "zh",
+      "DisplayName": "中文"
+    }
+  },
+  "0x0008": [                  // AvailableAudioTracks
+    { "ID": "audio-zh", "TrackAttributes": { "LanguageCode": "zh", "DisplayName": "中文" } },
+    { "ID": "audio-en", "TrackAttributes": { "LanguageCode": "en", "DisplayName": "English" } }
+  ],
+
+  // --- 字幕信息（需要 TT 特性）---
+  "0x0009": {                  // ActiveTextTrack
+    "ID": "sub-zh",
+    "TrackAttributes": {
+      "LanguageCode": "zh",
+      "DisplayName": "中文字幕"
+    }
+  },
+  "0x000A": [                  // AvailableTextTracks
+    { "ID": "sub-zh", "TrackAttributes": { "LanguageCode": "zh", "DisplayName": "中文字幕" } },
+    { "ID": "sub-en", "TrackAttributes": { "LanguageCode": "en", "DisplayName": "English Subtitles" } }
+  ]
+}`;
+
+const playbackResponseExample = `{
+  "Status": 0,     // Success
+  "Data": null      // 无附加数据
+}`;
+---
+
+<DocLayout
+  title="媒体播放 Cluster · MediaPlayback（0x0506）"
+  description="Matter MediaPlayback Cluster（0x0506）完整参考 — Play/Pause/Stop/Seek 播放控制、快进快退、音轨字幕切换、播放状态与进度追踪、Feature 位图及枚举值速查。"
+  type="article"
+>
+  <h1>媒体播放 Cluster（MediaPlayback）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x0506</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 媒体端点（电视、音箱、机顶盒等）
+  </p>
+  <p>
+    MediaPlayback 是 Matter 中用于控制媒体播放的核心 Cluster。
+    它提供了播放、暂停、停止、快进、快退、跳转等标准媒体控制操作，
+    适用于电视、智能音箱、机顶盒、流媒体播放器等所有需要媒体播放能力的设备。
+    所有播放控制命令都会返回统一的 <code>PlaybackResponse</code>，包含操作结果状态码。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">Feature 驱动的能力分级</div>
+    <p>
+      MediaPlayback 通过 5 个 Feature 位控制不同能力等级。
+      基础设备（如简单音箱）只需支持 Play/Pause/Stop 等基本命令；
+      高级设备（如智能电视）可启用 <strong>AdvancedSeek（AS）</strong> 支持进度跳转，
+      <strong>VariableSpeed（VS）</strong> 支持变速播放，
+      <strong>TextTracks（TT）</strong> 和 <strong>AudioTracks（AT）</strong> 支持字幕和多音轨切换。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#commands">命令列表</a>
+    <span class="nav-sep">|</span>
+    <a href="#attributes">属性详解</a>
+    <span class="nav-sep">|</span>
+    <a href="#enums">枚举定义</a>
+    <span class="nav-sep">|</span>
+    <a href="#structs">数据结构</a>
+    <span class="nav-sep">|</span>
+    <a href="#features">Feature 位图</a>
+    <span class="nav-sep">|</span>
+    <a href="#example-data">示例数据</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">常见场景</a>
+  </nav>
+
+  <!-- ====== 命令（Commands）====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    MediaPlayback Cluster 共有 14 个命令，覆盖从基础播控到高级跳转、音轨字幕切换等全部操作。
+    所有命令执行后都会返回 <a href="#struct-response">PlaybackResponse</a>，包含
+    <a href="#enum-status">StatusEnum</a> 状态码。
+    点击下方表格中的命令 ID 可跳转到对应的详细说明。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>说明</th>
+          <th>所需特性</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#cmd-0x00">
+          <td><a href="#cmd-0x00"><code>0x00</code></a></td>
+          <td>Play</td>
+          <td>开始或恢复播放</td>
+          <td class="col-optional">无</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x01">
+          <td><a href="#cmd-0x01"><code>0x01</code></a></td>
+          <td>Pause</td>
+          <td>暂停播放</td>
+          <td class="col-optional">无</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x02">
+          <td><a href="#cmd-0x02"><code>0x02</code></a></td>
+          <td>Stop</td>
+          <td>停止播放</td>
+          <td class="col-optional">无</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x03">
+          <td><a href="#cmd-0x03"><code>0x03</code></a></td>
+          <td>StartOver</td>
+          <td>从头播放</td>
+          <td class="col-optional">无</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x04">
+          <td><a href="#cmd-0x04"><code>0x04</code></a></td>
+          <td>Previous</td>
+          <td>上一曲/上一集</td>
+          <td class="col-optional">无</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x05">
+          <td><a href="#cmd-0x05"><code>0x05</code></a></td>
+          <td>Next</td>
+          <td>下一曲/下一集</td>
+          <td class="col-optional">无</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x06">
+          <td><a href="#cmd-0x06"><code>0x06</code></a></td>
+          <td>Rewind</td>
+          <td>快退</td>
+          <td class="col-optional">无</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x07">
+          <td><a href="#cmd-0x07"><code>0x07</code></a></td>
+          <td>FastForward</td>
+          <td>快进</td>
+          <td class="col-optional">无</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x08">
+          <td><a href="#cmd-0x08"><code>0x08</code></a></td>
+          <td>SkipForward</td>
+          <td>向前跳过指定时间</td>
+          <td class="col-optional">无</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x09">
+          <td><a href="#cmd-0x09"><code>0x09</code></a></td>
+          <td>SkipBackward</td>
+          <td>向后跳过指定时间</td>
+          <td class="col-optional">无</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x0B">
+          <td><a href="#cmd-0x0B"><code>0x0B</code></a></td>
+          <td>Seek</td>
+          <td>跳转到指定位置</td>
+          <td class="col-required">AS</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x0C">
+          <td><a href="#cmd-0x0C"><code>0x0C</code></a></td>
+          <td>ActivateAudioTrack</td>
+          <td>切换音轨</td>
+          <td class="col-required">AT</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x0D">
+          <td><a href="#cmd-0x0D"><code>0x0D</code></a></td>
+          <td>ActivateTextTrack</td>
+          <td>开启/切换字幕</td>
+          <td class="col-required">TT</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x0E">
+          <td><a href="#cmd-0x0E"><code>0x0E</code></a></td>
+          <td>DeactivateTextTrack</td>
+          <td>关闭字幕</td>
+          <td class="col-required">TT</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 命令详解 ====== -->
+  <h3 id="cmd-0x00">Play —— 播放（0x00）</h3>
+  <p>
+    开始或恢复媒体播放。执行成功后，<code>CurrentState</code> 属性变为
+    <code>Playing (0)</code>。如果当前已经在播放，命令仍然成功但不产生额外效果。
+    不需要参数。
+  </p>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>用户点击遥控器上的播放按钮、语音助手执行「播放」指令、暂停后恢复播放时调用。</p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x01">Pause —— 暂停（0x01）</h3>
+  <p>
+    暂停当前播放。执行成功后，<code>CurrentState</code> 属性变为
+    <code>Paused (1)</code>。设备保留当前播放进度，可通过 Play 命令恢复。
+    不需要参数。
+  </p>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>用户按下暂停键、来电时自动暂停、语音助手执行「暂停」指令时调用。</p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x02">Stop —— 停止（0x02）</h3>
+  <p>
+    停止媒体播放并释放播放资源。执行成功后，<code>CurrentState</code> 属性变为
+    <code>NotPlaying (2)</code>。与 Pause 不同，Stop 表示用户不打算继续观看当前内容。
+    不需要参数。
+  </p>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>用户退出当前播放内容、切换到其他 App、关闭播放器时调用。</p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x03">StartOver —— 从头播放（0x03）</h3>
+  <p>
+    将当前播放内容的进度重置到起始位置，并开始播放。
+    不需要参数。
+  </p>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>用户想重新观看当前集、语音助手执行「重头播放」指令时调用。</p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x04">Previous —— 上一个（0x04）</h3>
+  <p>
+    切换到播放列表中的上一个媒体项目（上一曲/上一集）。
+    如果已经是第一个项目，设备行为由实现决定（可能从头播放或忽略）。
+    不需要参数。
+  </p>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>用户按遥控器上一曲键、语音助手执行「上一首」指令时调用。</p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x05">Next —— 下一个（0x05）</h3>
+  <p>
+    切换到播放列表中的下一个媒体项目（下一曲/下一集）。
+    如果已经是最后一个项目，设备行为由实现决定（可能停止播放或循环到第一项）。
+    不需要参数。
+  </p>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>用户按遥控器下一曲键、语音助手执行「下一首」指令时调用。</p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x06">Rewind —— 快退（0x06）</h3>
+  <p>
+    开始快退播放。设备将以反向加速播放媒体内容。
+    如果设备支持 <strong>VariableSpeed（VS）</strong> 特性，连续多次调用可逐级增加快退速度
+    （如 -2x、-4x、-8x），<code>PlaybackSpeed</code> 会更新为负值。
+    不需要参数。
+  </p>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>用户长按遥控器快退键查找之前的画面，连续按可加速快退。</p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x07">FastForward —— 快进（0x07）</h3>
+  <p>
+    开始快进播放。设备将以正向加速播放媒体内容。
+    如果设备支持 <strong>VariableSpeed（VS）</strong> 特性，连续多次调用可逐级增加快进速度
+    （如 2x、4x、8x），<code>PlaybackSpeed</code> 会更新为对应倍速。
+    不需要参数。
+  </p>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>用户长按遥控器快进键跳过广告或无聊片段，连续按可加速快进。</p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x08">SkipForward —— 向前跳过（0x08）</h3>
+  <p>
+    从当前位置向前跳过指定的毫秒数。与 FastForward 的持续性不同，SkipForward 是一次性跳转。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>DeltaPositionMilliseconds</td>
+          <td>uint64</td>
+          <td>向前跳过的毫秒数。例如 <code>30000</code> = 向前跳 30 秒</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>App 上的「跳过 30 秒」按钮、语音助手执行「快进 1 分钟」指令时调用。</p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x09">SkipBackward —— 向后跳过（0x09）</h3>
+  <p>
+    从当前位置向后跳过指定的毫秒数。如果跳过量超过已播放时间，回到媒体起点。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>DeltaPositionMilliseconds</td>
+          <td>uint64</td>
+          <td>向后跳过的毫秒数。例如 <code>10000</code> = 向后跳 10 秒</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>用户错过了一段对话，按「后退 10 秒」按钮回看。</p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x0B">Seek —— 跳转（0x0B）</h3>
+  <p>
+    跳转到媒体的指定绝对位置。需要设备支持 <strong>AdvancedSeek（AS）</strong> 特性。
+    跳转位置必须在 <code>SeekRangeStart</code> 和 <code>SeekRangeEnd</code> 之间，
+    超出范围会返回 <code>SeekOutOfRange (5)</code> 错误。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Position</td>
+          <td>uint64</td>
+          <td>目标位置（毫秒）。例如 <code>600000</code> = 跳转到第 10 分钟</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout callout-warning">
+    <div class="callout-title">Seek 范围校验</div>
+    <p>
+      在调用 Seek 之前，应先读取 <code>SeekRangeStart</code> 和 <code>SeekRangeEnd</code>
+      属性来确认可跳转范围。对于直播流，可跳转范围可能是一个滑动窗口（例如最近 2 小时），
+      超出窗口的位置将被拒绝。
+    </p>
+  </div>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>用户拖动进度条到指定位置、语音助手执行「跳到第 30 分钟」指令时调用。</p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x0C">ActivateAudioTrack —— 切换音轨（0x0C）</h3>
+  <p>
+    切换到指定的音轨。需要设备支持 <strong>AudioTracks（AT）</strong> 特性。
+    可用音轨列表通过 <code>AvailableAudioTracks</code> 属性获取。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>TrackID</td>
+          <td>string</td>
+          <td>目标音轨 ID，来自 AvailableAudioTracks 列表</td>
+        </tr>
+        <tr>
+          <td>AudioOutputIndex</td>
+          <td>uint8</td>
+          <td>音频输出索引（指定音轨输出到哪个音频输出端）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>用户在电视上切换电影的音轨语言，从英文原声切换到中文配音。</p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x0D">ActivateTextTrack —— 开启字幕（0x0D）</h3>
+  <p>
+    开启或切换到指定的字幕轨道。需要设备支持 <strong>TextTracks（TT）</strong> 特性。
+    可用字幕列表通过 <code>AvailableTextTracks</code> 属性获取。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>TrackID</td>
+          <td>string</td>
+          <td>目标字幕轨道 ID，来自 AvailableTextTracks 列表</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>用户打开中文字幕观看英文电影、切换到英文字幕练习听力时调用。</p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x0E">DeactivateTextTrack —— 关闭字幕（0x0E）</h3>
+  <p>
+    关闭当前显示的字幕。执行成功后，<code>ActiveTextTrack</code> 属性变为 <code>null</code>。
+    需要设备支持 <strong>TextTracks（TT）</strong> 特性。不需要参数。
+  </p>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>用户不想看字幕时关闭、语音助手执行「关闭字幕」指令时调用。</p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 命令响应 ====== -->
+  <h3 id="struct-response">PlaybackResponse —— 命令响应</h3>
+  <p>
+    所有 14 个命令执行后都会返回此响应，包含操作结果状态码和可选数据。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Status</td>
+          <td><a href="#enum-status">StatusEnum</a></td>
+          <td>命令执行结果。<code>0 (Success)</code> 表示成功</td>
+        </tr>
+        <tr>
+          <td>Data</td>
+          <td>string / null</td>
+          <td>可选的附加数据，由设备实现决定内容</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p>响应示例：</p>
+  <pre><code set:html={playbackResponseExample} /></pre>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 属性详解 ====== -->
+  <h2 id="attributes">属性详解</h2>
+  <p>MediaPlayback Cluster 共有 11 个应用属性，分为播放状态、时间信息、音轨与字幕三组。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+
+  <!-- 属性汇总表 -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>分组</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 播放状态 -->
+        <tr class="clickable-row" data-href="#attr-0x0000">
+          <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
+          <td>CurrentState</td>
+          <td><a href="#enum-playbackstate">PlaybackStateEnum</a></td>
+          <td><a href="#group-state">播放状态</a></td>
+          <td>当前播放状态</td>
+        </tr>
+        <!-- 时间信息 -->
+        <tr class="clickable-row" data-href="#attr-0x0001">
+          <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
+          <td>StartTime</td>
+          <td>epoch_us / null</td>
+          <td><a href="#group-time">时间信息</a></td>
+          <td>媒体开始时间</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0002">
+          <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
+          <td>Duration</td>
+          <td>uint64 / null</td>
+          <td><a href="#group-time">时间信息</a></td>
+          <td>媒体总时长（毫秒）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0003">
+          <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
+          <td>SampledPosition</td>
+          <td><a href="#struct-position">PlaybackPositionStruct</a> / null</td>
+          <td><a href="#group-time">时间信息</a></td>
+          <td>采样播放位置</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0004">
+          <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
+          <td>PlaybackSpeed</td>
+          <td>single (float)</td>
+          <td><a href="#group-time">时间信息</a></td>
+          <td>当前播放速度</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0005">
+          <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
+          <td>SeekRangeEnd</td>
+          <td>uint64 / null</td>
+          <td><a href="#group-time">时间信息</a></td>
+          <td>可跳转范围终点（毫秒）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0006">
+          <td><a href="#attr-0x0006"><code>0x0006</code></a></td>
+          <td>SeekRangeStart</td>
+          <td>uint64 / null</td>
+          <td><a href="#group-time">时间信息</a></td>
+          <td>可跳转范围起点（毫秒）</td>
+        </tr>
+        <!-- 音轨与字幕 -->
+        <tr class="clickable-row" data-href="#attr-0x0007">
+          <td><a href="#attr-0x0007"><code>0x0007</code></a></td>
+          <td>ActiveAudioTrack</td>
+          <td><a href="#struct-track">TrackStruct</a> / null</td>
+          <td><a href="#group-tracks">音轨与字幕</a></td>
+          <td>当前音轨</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0008">
+          <td><a href="#attr-0x0008"><code>0x0008</code></a></td>
+          <td>AvailableAudioTracks</td>
+          <td>list&lt;<a href="#struct-track">TrackStruct</a>&gt; / null</td>
+          <td><a href="#group-tracks">音轨与字幕</a></td>
+          <td>可用音轨列表</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0009">
+          <td><a href="#attr-0x0009"><code>0x0009</code></a></td>
+          <td>ActiveTextTrack</td>
+          <td><a href="#struct-track">TrackStruct</a> / null</td>
+          <td><a href="#group-tracks">音轨与字幕</a></td>
+          <td>当前字幕轨道</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x000A">
+          <td><a href="#attr-0x000A"><code>0x000A</code></a></td>
+          <td>AvailableTextTracks</td>
+          <td>list&lt;<a href="#struct-track">TrackStruct</a>&gt; / null</td>
+          <td><a href="#group-tracks">音轨与字幕</a></td>
+          <td>可用字幕轨道列表</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 播放状态（0x0000）====== -->
+  <h3 id="group-state">播放状态（0x0000）</h3>
+  <p>描述设备当前的播放状态。这是 MediaPlayback 唯一的必选属性。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0000">
+          <td><code>0x0000</code></td>
+          <td>CurrentState（当前状态）</td>
+          <td><a href="#enum-playbackstate">PlaybackStateEnum</a></td>
+          <td>设备当前的播放状态。App 应订阅此属性来同步界面上的播放/暂停按钮状态。这是 MediaPlayback 唯一的必选属性</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 时间信息（0x0001 ~ 0x0006）====== -->
+  <h3 id="group-time">时间信息（0x0001 ~ 0x0006）</h3>
+  <p>描述当前播放内容的时间维度信息：起始时间、总时长、当前进度、播放速度和可跳转范围。这些属性大部分需要 <strong>AdvancedSeek（AS）</strong> 特性。</p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">时间单位</div>
+    <p>
+      <code>Duration</code>、<code>SampledPosition.Position</code>、<code>SeekRangeStart</code>、<code>SeekRangeEnd</code> 的单位都是<strong>毫秒</strong>。
+      <code>StartTime</code> 和 <code>SampledPosition.UpdatedAt</code> 的单位是<strong>微秒级 epoch</strong>（UTC 自 1970-01-01 以来的微秒数）。
+    </p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0001">
+          <td><code>0x0001</code></td>
+          <td>StartTime（开始时间）</td>
+          <td>epoch_us / null</td>
+          <td>
+            当前媒体内容的起始时间（微秒级 UTC epoch）。对于点播内容，通常是节目的发布时间；
+            对于直播流，是流的开始时间。<strong>Nullable</strong> —— <code>null</code> 表示不适用。
+            <strong>需要 AS 特性</strong>
+          </td>
+        </tr>
+        <tr id="attr-0x0002">
+          <td><code>0x0002</code></td>
+          <td>Duration（总时长）</td>
+          <td>uint64 / null</td>
+          <td>
+            当前媒体的总时长，单位<strong>毫秒</strong>。例如一部 90 分钟的电影为 <code>5400000</code>。
+            <strong>Nullable</strong> —— <code>null</code> 表示时长未知（如直播流）。
+            <strong>需要 AS 特性</strong>
+          </td>
+        </tr>
+        <tr id="attr-0x0003">
+          <td><code>0x0003</code></td>
+          <td>SampledPosition（采样位置）</td>
+          <td><a href="#struct-position">PlaybackPositionStruct</a> / null</td>
+          <td>
+            设备上次采样的播放位置，包含采样时间和对应的播放进度。
+            App 可结合 <code>PlaybackSpeed</code> 和采样时间差推算当前实际进度。
+            <strong>Nullable</strong> —— <code>null</code> 表示设备不支持进度报告。
+            <strong>需要 AS 特性</strong>
+          </td>
+        </tr>
+        <tr id="attr-0x0004">
+          <td><code>0x0004</code></td>
+          <td>PlaybackSpeed（播放速度）</td>
+          <td>single (float)</td>
+          <td>
+            当前播放速度倍率。<code>1.0</code> = 正常速度，<code>2.0</code> = 2 倍速快进，
+            <code>-1.0</code> = 正常速度快退，<code>0.0</code> = 暂停。
+            支持 <strong>VS 特性</strong>的设备允许更多速度档位。
+            <strong>需要 AS 特性</strong>
+          </td>
+        </tr>
+        <tr id="attr-0x0005">
+          <td><code>0x0005</code></td>
+          <td>SeekRangeEnd（跳转范围终点）</td>
+          <td>uint64 / null</td>
+          <td>
+            可跳转的最远位置，单位<strong>毫秒</strong>。对于点播内容通常等于 Duration；
+            对于直播流是当前可回看的最新位置。Seek 命令的 Position 不能超过此值。
+            <strong>Nullable</strong> —— <code>null</code> 表示无限制。
+            <strong>需要 AS 特性</strong>
+          </td>
+        </tr>
+        <tr id="attr-0x0006">
+          <td><code>0x0006</code></td>
+          <td>SeekRangeStart（跳转范围起点）</td>
+          <td>uint64 / null</td>
+          <td>
+            可跳转的最早位置，单位<strong>毫秒</strong>。对于点播内容通常是 <code>0</code>；
+            对于直播流是回看窗口的起始边界。Seek 命令的 Position 不能小于此值。
+            <strong>Nullable</strong> —— <code>null</code> 表示无限制。
+            <strong>需要 AS 特性</strong>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">推算实时进度</div>
+    <p>
+      设备不会实时推送进度，而是通过 <code>SampledPosition</code> 提供采样快照。
+      App 需要自行推算当前进度：<code>当前位置 = SampledPosition.Position + (当前时间 - SampledPosition.UpdatedAt) * PlaybackSpeed</code>。
+      注意 UpdatedAt 单位是微秒，Position 单位是毫秒，计算时需要对齐单位。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 音轨与字幕（0x0007 ~ 0x000A）====== -->
+  <h3 id="group-tracks">音轨与字幕（0x0007 ~ 0x000A）</h3>
+  <p>描述当前媒体可用的音轨和字幕信息，以及当前激活的音轨/字幕。需要 <strong>AudioTracks（AT）</strong> 或 <strong>TextTracks（TT）</strong> 特性。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0007">
+          <td><code>0x0007</code></td>
+          <td>ActiveAudioTrack（当前音轨）</td>
+          <td><a href="#struct-track">TrackStruct</a> / null</td>
+          <td>
+            当前正在使用的音轨。<strong>Nullable</strong> —— <code>null</code> 表示无音轨激活。
+            <strong>需要 AT 特性</strong>
+          </td>
+        </tr>
+        <tr id="attr-0x0008">
+          <td><code>0x0008</code></td>
+          <td>AvailableAudioTracks（可用音轨列表）</td>
+          <td>list&lt;<a href="#struct-track">TrackStruct</a>&gt; / null</td>
+          <td>
+            当前媒体提供的所有音轨。用于 App 展示音轨切换列表。
+            <strong>Nullable</strong> —— <code>null</code> 表示无音轨信息。
+            <strong>需要 AT 特性</strong>
+          </td>
+        </tr>
+        <tr id="attr-0x0009">
+          <td><code>0x0009</code></td>
+          <td>ActiveTextTrack（当前字幕）</td>
+          <td><a href="#struct-track">TrackStruct</a> / null</td>
+          <td>
+            当前正在显示的字幕轨道。<strong>Nullable</strong> —— <code>null</code> 表示字幕已关闭。
+            <strong>需要 TT 特性</strong>
+          </td>
+        </tr>
+        <tr id="attr-0x000A">
+          <td><code>0x000A</code></td>
+          <td>AvailableTextTracks（可用字幕列表）</td>
+          <td>list&lt;<a href="#struct-track">TrackStruct</a>&gt; / null</td>
+          <td>
+            当前媒体提供的所有字幕轨道。用于 App 展示字幕选择列表。
+            <strong>Nullable</strong> —— <code>null</code> 表示无字幕信息。
+            <strong>需要 TT 特性</strong>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 枚举定义 ====== -->
+  <h2 id="enums">枚举定义</h2>
+
+  <h3 id="enum-playbackstate">PlaybackStateEnum —— 播放状态</h3>
+  <p>设备的播放状态枚举。<code>CurrentState</code> 属性的取值范围。</p>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Playing</span>
+        <span class="enum-desc">播放中 —— 媒体正在正常播放</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Paused</span>
+        <span class="enum-desc">已暂停 —— 播放暂停，可恢复</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">NotPlaying</span>
+        <span class="enum-desc">未播放 —— 没有内容在播放（空闲或已停止）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">Buffering</span>
+        <span class="enum-desc">缓冲中 —— 正在加载媒体数据，播放暂时中断</span>
+      </div>
+    </div>
+  </div>
+
+  <h3 id="enum-status">StatusEnum —— 命令响应状态</h3>
+  <p><a href="#struct-response">PlaybackResponse</a> 中的状态码，指示命令执行结果。</p>
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Success</span>
+        <span class="enum-desc">成功 —— 命令已成功执行</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">InvalidStateForCommand</span>
+        <span class="enum-desc">状态不允许 —— 当前播放状态下不能执行此命令</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">NotAllowed</span>
+        <span class="enum-desc">不允许 —— 命令被拒绝（如权限不足）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">NotActive</span>
+        <span class="enum-desc">未激活 —— 没有活跃的播放会话</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">4</span>
+      <div>
+        <span class="enum-name">SpeedOutOfRange</span>
+        <span class="enum-desc">速度超限 —— 请求的播放速度不在设备支持范围内</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">5</span>
+      <div>
+        <span class="enum-name">SeekOutOfRange</span>
+        <span class="enum-desc">跳转超限 —— 请求的位置超出 SeekRange 范围</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== 数据结构 ====== -->
+  <h2 id="structs">数据结构</h2>
+
+  <h3 id="struct-position">PlaybackPositionStruct —— 播放位置</h3>
+  <p>
+    描述设备在某一时刻采样的播放进度。用于 <code>SampledPosition</code> 属性。
+    App 读取此结构后，结合 <code>PlaybackSpeed</code> 和当前时间可推算实时进度。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>UpdatedAt</td>
+          <td>epoch_us</td>
+          <td>采样时刻（微秒级 UTC epoch）。表示这个位置信息是什么时候获取的</td>
+        </tr>
+        <tr>
+          <td>Position</td>
+          <td>uint64 / null</td>
+          <td>采样时刻的播放位置，单位<strong>毫秒</strong>。<strong>Nullable</strong> —— <code>null</code> 表示位置未知</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="struct-track">TrackStruct —— 轨道信息</h3>
+  <p>
+    描述一个音轨或字幕轨道的信息。用于音轨和字幕相关的属性。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ID</td>
+          <td>string</td>
+          <td>轨道唯一标识符。用于 ActivateAudioTrack 和 ActivateTextTrack 命令的参数</td>
+        </tr>
+        <tr>
+          <td>TrackAttributes</td>
+          <td>TrackAttributesStruct</td>
+          <td>轨道的详细属性信息（见下方）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>TrackAttributesStruct —— 轨道属性</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>必选</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>LanguageCode</td>
+          <td>string</td>
+          <td>是</td>
+          <td>语言代码，遵循 ISO 639-1 标准（如 <code>"zh"</code>、<code>"en"</code>、<code>"ja"</code>）</td>
+        </tr>
+        <tr>
+          <td>DisplayName</td>
+          <td>string / null</td>
+          <td>否</td>
+          <td>可选的显示名称，供 App 直接展示给用户（如 <code>"中文"</code>、<code>"English"</code>）。<strong>Nullable</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== Feature 位图 ====== -->
+  <h2 id="features">Feature 位图</h2>
+  <p>MediaPlayback Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持哪些高级能力：</p>
+
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">Bit 0</span>
+      <div>
+        <span class="enum-name">AS（AdvancedSeek）</span>
+        <span class="enum-desc">高级跳转 —— 启用 Seek 命令、StartTime、Duration、SampledPosition、PlaybackSpeed、SeekRange 等属性</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 1</span>
+      <div>
+        <span class="enum-name">VS（VariableSpeed）</span>
+        <span class="enum-desc">变速播放 —— 允许 Rewind/FastForward 以多档速度播放（2x、4x 等）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 2</span>
+      <div>
+        <span class="enum-name">TT（TextTracks）</span>
+        <span class="enum-desc">字幕轨道 —— 启用字幕相关属性和 ActivateTextTrack / DeactivateTextTrack 命令</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 3</span>
+      <div>
+        <span class="enum-name">AT（AudioTracks）</span>
+        <span class="enum-desc">音轨切换 —— 启用音轨相关属性和 ActivateAudioTrack 命令</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 4</span>
+      <div>
+        <span class="enum-name">AA（AudioAdvance）</span>
+        <span class="enum-desc">高级音频 —— 支持音频输出路由等高级音频管理能力</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">Feature 组合示例</div>
+    <p>
+      简单蓝牙音箱：<code>FeatureMap = 0x00</code>（仅基础播控）。
+      智能电视：<code>FeatureMap = 0x0F</code>（AS + VS + TT + AT = 0b01111），支持进度条、变速、字幕、多音轨。
+      流媒体盒子：<code>FeatureMap = 0x1F</code>（全部特性），完整媒体播放体验。
+    </p>
+  </div>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>一台正在播放电影的智能电视（启用 AS + VS + AT + TT 特性）的 MediaPlayback Cluster 读取结果：</p>
+
+  <pre><code set:html={exampleData} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发提示</div>
+    <p>
+      大部分属性都是 <strong>Nullable</strong> 的，简单设备可能只上报 <code>CurrentState (0x0000)</code>。
+      读取前可先检查 <code>FeatureMap (0xFFFC)</code> 判断设备支持哪些特性，
+      再按需读取对应属性，避免读取不存在的属性导致错误。
+    </p>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <details class="scenario">
+    <summary>场景 1：智能电视播放控制与进度条</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>读取 <code>FeatureMap (0xFFFC)</code>，确认设备支持 AdvancedSeek（AS）特性</li>
+        <li>发送 <code>Play (0x00)</code> 开始播放，订阅 <code>CurrentState (0x0000)</code> 同步播放按钮状态</li>
+        <li>读取 <code>Duration (0x0002)</code> 获取总时长，渲染进度条</li>
+        <li>定期读取 <code>SampledPosition (0x0003)</code>，结合 <code>PlaybackSpeed (0x0004)</code> 推算当前进度，更新进度条位置</li>
+        <li>用户拖动进度条时，读取 <code>SeekRangeStart (0x0006)</code> 和 <code>SeekRangeEnd (0x0005)</code> 确认范围，然后发送 <code>Seek (0x0B)</code> 跳转</li>
+        <li>用户点击暂停按钮，发送 <code>Pause (0x01)</code>；再次点击播放，发送 <code>Play (0x00)</code></li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 2：多语言电影的音轨和字幕切换</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>读取 <code>FeatureMap</code>，确认设备支持 AudioTracks（AT）和 TextTracks（TT）</li>
+        <li>读取 <code>AvailableAudioTracks (0x0008)</code>，在 App 中展示音轨选择列表（如「中文配音」「英文原声」「日语」）</li>
+        <li>读取 <code>AvailableTextTracks (0x000A)</code>，在 App 中展示字幕选择列表（如「中文字幕」「英文字幕」「关闭」）</li>
+        <li>用户选择英文原声 + 中文字幕：
+          <ul>
+            <li>发送 <code>ActivateAudioTrack (0x0C)</code>，TrackID 设为英文音轨 ID</li>
+            <li>发送 <code>ActivateTextTrack (0x0D)</code>，TrackID 设为中文字幕 ID</li>
+          </ul>
+        </li>
+        <li>用户想关闭字幕：发送 <code>DeactivateTextTrack (0x0E)</code></li>
+        <li>订阅 <code>ActiveAudioTrack (0x0007)</code> 和 <code>ActiveTextTrack (0x0009)</code> 同步 App 显示的当前选中项</li>
+      </ol>
+    </div>
+  </details>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .col-required {
+    color: #dc2626;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-required {
+    color: #f87171;
+  }
+
+  .col-optional {
+    color: #16a34a;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-optional {
+    color: #4ade80;
+  }
+</style>

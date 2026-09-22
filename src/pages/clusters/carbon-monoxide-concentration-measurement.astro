@@ -1,0 +1,490 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 浓度测量值 ---
+  "0x0000": 3.2,          // MeasuredValue = 3.2 ppm（当前 CO 浓度）
+  "0x0001": 0.0,          // MinMeasuredValue = 0 ppm
+  "0x0002": 1000.0,       // MaxMeasuredValue = 1000 ppm（传感器量程上限）
+  "0x0003": null,         // PeakMeasuredValue = null（未启用 PEA Feature）
+  "0x0004": null,         // PeakMeasuredValueWindow（未启用）
+  "0x0005": 2.8,          // AverageMeasuredValue = 2.8 ppm
+  "0x0006": 3600,         // AverageMeasuredValueWindow = 3600 秒（1 小时均值）
+
+  // --- 不确定度 ---
+  "0x0007": 1.5,          // Uncertainty = ±1.5 ppm
+
+  // --- 单位与介质 ---
+  "0x0008": 0,            // MeasurementUnit = PPM
+  "0x0009": 0,            // MeasurementMedium = Air（空气）
+
+  // --- 等级判定 ---
+  "0x000A": 0             // LevelValue = Low（正常）
+}`;
+
+const subscribeExample = `{
+  "subscribeRequests": [{
+    "attributePath": {
+      "endpointId": 1,
+      "clusterId": "0x040C",
+      "attributeId": "0x0000"     // MeasuredValue
+    },
+    "minInterval": 10,
+    "maxInterval": 60
+  }, {
+    "attributePath": {
+      "endpointId": 1,
+      "clusterId": "0x040C",
+      "attributeId": "0x000A"     // LevelValue
+    },
+    "minInterval": 10,
+    "maxInterval": 60
+  }]
+}`;
+---
+
+<DocLayout
+  title="一氧化碳浓度测量 Cluster · CarbonMonoxideConcentrationMeasurement（0x040C）"
+  description="Matter CarbonMonoxideConcentrationMeasurement Cluster（0x040C）参考 — CO 浓度、安全阈值、等级判定、Feature 位图、枚举值速查及典型应用场景。"
+  type="article"
+  prev={{ title: '烟雾/CO 报警（SmokeCOAlarm）', href: '/clusters/smoke-co-alarm/' }}
+>
+  <h1>一氧化碳浓度测量 Cluster（CarbonMonoxideConcentrationMeasurement）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x040C</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 通常在 <code>Endpoint 1</code>（功能端点）
+  </p>
+  <p>
+    该 Cluster 用于报告空气中一氧化碳（CO）的浓度，属于 Matter 浓度测量（Concentration Measurement）家族。
+    它与 CO<sub>2</sub>、PM2.5 等浓度测量 Cluster 共享相同的属性结构、Feature 位图和枚举定义，
+    只是测量对象和安全阈值不同。
+  </p>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">安全关键 — CO 是无色无味的致命气体</div>
+    <p>
+      一氧化碳中毒是家庭意外死亡的主要原因之一。CO 传感器数据必须可靠传输、及时报警，
+      App 对 CO 读数的处理需要格外谨慎：
+    </p>
+    <ul>
+      <li>不要对 CO 读数做过度的平滑或延迟，避免掩盖突发峰值</li>
+      <li>LevelValue 跳到 <code>Warning</code> 或以上时，应立即推送通知</li>
+      <li>该 Cluster 通常与 <strong>SmokeCOAlarm（0x005C）</strong> 配合使用 —— SmokeCOAlarm 负责本地声光报警，本 Cluster 提供精确的 ppm 数值供远程监控和趋势分析</li>
+    </ul>
+  </div>
+
+  <!-- ====== Feature 位图 ====== -->
+  <h2 id="features">Feature 位图</h2>
+  <p>
+    浓度测量 Cluster 共享同一套 Feature 定义，设备通过 <code>FeatureMap (0xFFFC)</code> 声明支持哪些能力。
+    Feature 决定了哪些属性可用 —— 读取前务必先检查。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Bit</th>
+          <th>缩写</th>
+          <th>名称</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>0</td>
+          <td>MEA</td>
+          <td>NumericMeasurement</td>
+          <td>支持精确数值测量（MeasuredValue / Min / Max）</td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>LEV</td>
+          <td>LevelIndication</td>
+          <td>支持等级判定（LevelValue: Low / Medium / High / Critical）</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>MED</td>
+          <td>MediumLevel</td>
+          <td>LEV 的扩展 — LevelValue 可报告 Medium 等级</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>CRI</td>
+          <td>CriticalLevel</td>
+          <td>LEV 的扩展 — LevelValue 可报告 Critical 等级</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>PEA</td>
+          <td>PeakMeasurement</td>
+          <td>MEA 的扩展 — 记录峰值（PeakMeasuredValue）</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>AVG</td>
+          <td>AverageMeasurement</td>
+          <td>MEA 的扩展 — 记录时间窗口内均值</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">常见组合</div>
+    <p>
+      大多数 CO 传感器至少支持 <code>MEA + LEV</code>（数值 + 等级）。
+      安全等级较高的设备会加上 <code>CRI</code>（区分危急等级）和 <code>PEA</code>（记录峰值，用于事后分析）。
+    </p>
+  </div>
+
+  <!-- ====== 属性总览 ====== -->
+  <h2 id="attributes">属性总览</h2>
+  <p>所有属性均为只读，App 端通过 Read / Subscribe 获取数据。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>依赖 Feature</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>0x0000</code></td>
+          <td>MeasuredValue</td>
+          <td>float (nullable)</td>
+          <td>MEA</td>
+          <td>当前 CO 浓度（单位见 MeasurementUnit），null 表示无效</td>
+        </tr>
+        <tr>
+          <td><code>0x0001</code></td>
+          <td>MinMeasuredValue</td>
+          <td>float (nullable)</td>
+          <td>MEA</td>
+          <td>传感器可测最小值</td>
+        </tr>
+        <tr>
+          <td><code>0x0002</code></td>
+          <td>MaxMeasuredValue</td>
+          <td>float (nullable)</td>
+          <td>MEA</td>
+          <td>传感器可测最大值（量程上限）</td>
+        </tr>
+        <tr>
+          <td><code>0x0003</code></td>
+          <td>PeakMeasuredValue</td>
+          <td>float (nullable)</td>
+          <td>PEA</td>
+          <td>时间窗口内的峰值</td>
+        </tr>
+        <tr>
+          <td><code>0x0004</code></td>
+          <td>PeakMeasuredValueWindow</td>
+          <td>uint32</td>
+          <td>PEA</td>
+          <td>峰值统计的时间窗口（秒）</td>
+        </tr>
+        <tr>
+          <td><code>0x0005</code></td>
+          <td>AverageMeasuredValue</td>
+          <td>float (nullable)</td>
+          <td>AVG</td>
+          <td>时间窗口内的均值</td>
+        </tr>
+        <tr>
+          <td><code>0x0006</code></td>
+          <td>AverageMeasuredValueWindow</td>
+          <td>uint32</td>
+          <td>AVG</td>
+          <td>均值统计的时间窗口（秒）</td>
+        </tr>
+        <tr>
+          <td><code>0x0007</code></td>
+          <td>Uncertainty</td>
+          <td>float</td>
+          <td>MEA</td>
+          <td>测量不确定度（±范围）</td>
+        </tr>
+        <tr>
+          <td><code>0x0008</code></td>
+          <td>MeasurementUnit</td>
+          <td>enum8</td>
+          <td>MEA</td>
+          <td>测量单位（PPM / PPB / ...）</td>
+        </tr>
+        <tr>
+          <td><code>0x0009</code></td>
+          <td>MeasurementMedium</td>
+          <td>enum8</td>
+          <td>—</td>
+          <td>测量介质（Air / Water / Soil）</td>
+        </tr>
+        <tr>
+          <td><code>0x000A</code></td>
+          <td>LevelValue</td>
+          <td>enum8</td>
+          <td>LEV</td>
+          <td>当前浓度等级（Low / Medium / High / Critical）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 关键枚举 ====== -->
+  <h2 id="enums">关键枚举</h2>
+  <p>以下枚举与所有浓度测量 Cluster 共享，此处仅列出 CO 场景下最常用的两个。</p>
+
+  <h3 id="enum-level">LevelValueEnum（浓度等级）</h3>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Unknown</span>
+        <span class="enum-desc">未知（传感器初始化中）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Low</span>
+        <span class="enum-desc">正常 — 浓度处于安全范围</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">Medium</span>
+        <span class="enum-desc">需关注 — 浓度偏高（需 MED Feature）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">High</span>
+        <span class="enum-desc">危险 — 需要立即通风</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">4</span>
+      <div>
+        <span class="enum-name">Critical</span>
+        <span class="enum-desc">危急 — 立即撤离（需 CRI Feature）</span>
+      </div>
+    </div>
+  </div>
+
+  <h3 id="enum-unit">MeasurementUnitEnum（测量单位）</h3>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">PPM</span>
+        <span class="enum-desc">百万分之一 — CO 传感器最常用单位</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">PPB</span>
+        <span class="enum-desc">十亿分之一（高精度场景）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">PPT</span>
+        <span class="enum-desc">万亿分之一（极少用于 CO）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">MGM3</span>
+        <span class="enum-desc">毫克/立方米（mg/m³）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">4</span>
+      <div>
+        <span class="enum-name">UGM3</span>
+        <span class="enum-desc">微克/立方米（μg/m³）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">5</span>
+      <div>
+        <span class="enum-name">NGM3</span>
+        <span class="enum-desc">纳克/立方米（ng/m³）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">6</span>
+      <div>
+        <span class="enum-name">PM3</span>
+        <span class="enum-desc">颗粒/立方米（不适用于 CO）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">7</span>
+      <div>
+        <span class="enum-name">BQM3</span>
+        <span class="enum-desc">贝克勒尔/立方米（不适用于 CO）</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== CO 安全阈值参考 ====== -->
+  <h2 id="thresholds">CO 安全阈值参考</h2>
+  <p>
+    以下阈值来自 WHO 和 UL 2034 标准，供 App 设计报警策略时参考。
+    实际设备的 LevelValue 等级划分由制造商设定，可能与此表不完全一致。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>浓度范围</th>
+          <th>等级</th>
+          <th>含义</th>
+          <th>建议响应</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>&lt; 9 ppm</code></td>
+          <td style="color: var(--color-success, #16a34a);">正常</td>
+          <td>室内空气质量良好</td>
+          <td>无需操作</td>
+        </tr>
+        <tr>
+          <td><code>9 ~ 35 ppm</code></td>
+          <td style="color: var(--color-warning, #ca8a04);">需关注</td>
+          <td>轻度升高，可能有燃气泄漏或通风不良</td>
+          <td>开窗通风，检查燃气设备</td>
+        </tr>
+        <tr>
+          <td><code>36 ~ 70 ppm</code></td>
+          <td style="color: var(--color-warning, #ca8a04);">警告</td>
+          <td>持续暴露可能引起头痛、头晕</td>
+          <td>立即通风，关闭可能的 CO 源</td>
+        </tr>
+        <tr>
+          <td><code>71 ~ 150 ppm</code></td>
+          <td style="color: var(--color-danger, #dc2626);">危险</td>
+          <td>短时间内即可出现中毒症状</td>
+          <td>撤离房间，拨打急救电话</td>
+        </tr>
+        <tr>
+          <td><code>&gt; 150 ppm</code></td>
+          <td style="color: var(--color-danger, #dc2626);">致命</td>
+          <td>数分钟内可致意识丧失甚至死亡</td>
+          <td>立即撤离建筑，拨打 119/120</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">阈值仅供参考</div>
+    <p>
+      不同人群（老人、儿童、孕妇、心肺疾病患者）对 CO 的敏感度差异极大。
+      App 不应仅依赖 MeasuredValue 做安全判断 —— 应以设备报告的 <code>LevelValue</code> 为准，
+      并优先响应 SmokeCOAlarm Cluster 的报警状态。
+    </p>
+  </div>
+
+  <!-- ====== 与 SmokeCOAlarm 的配合 ====== -->
+  <h2 id="smoke-co-pairing">与 SmokeCOAlarm 的配合</h2>
+  <p>
+    在实际产品中，CO 传感器设备通常同时实现两个 Cluster：
+  </p>
+  <ul>
+    <li><strong>SmokeCOAlarm（0x005C）</strong> — 负责本地声光报警和设备联动，提供 <code>COState</code>（Normal / Warning / Critical）等布尔式状态</li>
+    <li><strong>CarbonMonoxideConcentrationMeasurement（0x040C）</strong> — 提供精确的 ppm 数值，支持趋势分析和远程监控</li>
+  </ul>
+  <p>
+    两者的分工是：SmokeCOAlarm 管「报不报警」，本 Cluster 管「具体多少 ppm」。
+    App 的报警逻辑应以 SmokeCOAlarm 的状态为主，本 Cluster 的数值作为辅助信息展示。
+  </p>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>读取一个 CO 传感器设备的全部属性（FeatureMap = MEA + LEV + AVG）：</p>
+  <pre><code set:html={exampleData} /></pre>
+
+  <p>订阅 CO 浓度和等级变化（推荐的最小间隔 10 秒，最大间隔 60 秒）：</p>
+  <pre><code set:html={subscribeExample} /></pre>
+
+  <!-- ====== 应用场景 ====== -->
+  <h2 id="scenarios">应用场景</h2>
+
+  <h3 id="scenario-garage">场景一：车库通风联动</h3>
+  <div class="callout callout-tip">
+    <div class="callout-title">车库 CO 监测 + 排风扇自动启停</div>
+    <p>
+      车库是 CO 积聚的高风险区域（汽车怠速、燃油设备）。典型方案：
+    </p>
+    <ol>
+      <li>Subscribe <code>MeasuredValue (0x0000)</code>，间隔 10~30 秒</li>
+      <li>浓度超过 <strong>9 ppm</strong> 时，通过自动化规则启动排风扇（OnOff Cluster）</li>
+      <li>浓度超过 <strong>35 ppm</strong> 时，推送手机通知，提醒用户检查车辆是否在运行</li>
+      <li>浓度回落到 <strong>5 ppm</strong> 以下并保持 5 分钟后，关闭排风扇</li>
+    </ol>
+    <p>
+      回落阈值（5 ppm）低于启动阈值（9 ppm）是为了避免排风扇频繁启停 —— 这是典型的迟滞控制策略。
+    </p>
+  </div>
+
+  <h3 id="scenario-kitchen">场景二：厨房燃气安全</h3>
+  <div class="callout callout-tip">
+    <div class="callout-title">厨房 CO 传感器 + 燃气阀门联动</div>
+    <p>
+      燃气灶不完全燃烧会产生 CO。在厨房场景中：
+    </p>
+    <ol>
+      <li>Subscribe <code>LevelValue (0x000A)</code>，关注等级跳变</li>
+      <li>LevelValue 跳到 <code>Medium (2)</code>：推送通知「厨房 CO 偏高，请检查燃气灶」</li>
+      <li>LevelValue 跳到 <code>High (3)</code>：触发紧急自动化 —— 关闭智能燃气阀门、打开油烟机/排气扇、全屋警报</li>
+      <li>同步检查 SmokeCOAlarm 的 <code>COState</code>，确认本地报警是否已触发</li>
+    </ol>
+    <p>
+      注意：厨房烹饪时 CO 短暂升高是正常的（尤其是炒菜、烤肉），
+      可以结合 <code>AverageMeasuredValue</code> 判断是持续泄漏还是短暂波动，避免误报。
+    </p>
+  </div>
+
+  <!-- ====== 开发建议 ====== -->
+  <h2 id="dev-tips">开发建议</h2>
+  <div class="callout callout-tip">
+    <div class="callout-title">实现要点</div>
+    <ol>
+      <li><strong>先读 FeatureMap</strong> — 不是所有 CO 传感器都支持 ppm 数值，便宜的设备可能只有 LEV（等级），没有 MEA（数值）</li>
+      <li><strong>Subscribe 优先于轮询</strong> — CO 浓度变化需要及时响应，用 Subscribe 而不是定时 Read</li>
+      <li><strong>处理 null</strong> — MeasuredValue 为 null 表示传感器读数无效（预热中、故障等），UI 应显示「传感器初始化中」而非 0</li>
+      <li><strong>注意单位</strong> — 虽然绝大多数 CO 传感器用 PPM，但仍应检查 MeasurementUnit，避免将 PPB 误当 PPM 显示</li>
+      <li><strong>该 Cluster 没有命令</strong> — 它是纯只读的传感器数据上报，不存在 Client → Server 的命令</li>
+    </ol>
+  </div>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>

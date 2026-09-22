@@ -1,0 +1,394 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 属性 ---
+  "0x0": 2,           // PHYRate = Rate1G（千兆以太网）
+  "0x1": true,        // FullDuplex = true（全双工）
+  "0x2": 1048576,     // PacketRxCount = 1048576（已接收约 100 万包）
+  "0x3": 524288,      // PacketTxCount = 524288（已发送约 50 万包）
+  "0x4": 3,           // TxErrCount = 3（发送错误 3 次）
+  "0x5": 0,           // CollisionCount = 0（无碰撞）
+  "0x6": 0,           // OverrunCount = 0（无溢出）
+  "0x7": true,        // CarrierDetect = true（载波检测正常）
+  "0x8": 86400        // TimeSinceReset = 86400（距上次重置 24 小时）
+}`;
+
+const resetCountsExample = `{
+  "invokeRequests": [{
+    "commandPath": {
+      "endpointId": 0,
+      "clusterId": "0x0037",
+      "commandId": "0x00"       // ResetCounts
+    },
+    "commandFields": {}
+  }]
+}`;
+---
+
+<DocLayout
+  title="以太网诊断 Cluster · EthernetNetworkDiagnostics（0x0037）"
+  description="Matter EthernetNetworkDiagnostics Cluster（0x0037）完整参考 — PHYRate / FullDuplex / PacketRxCount / TxErrCount 等属性、ResetCounts 命令、PKTCNT / ERRCNT Feature 位图速查，用于监控以太网连接健康状态。"
+  type="article"
+>
+  <h1>以太网诊断 Cluster（EthernetNetworkDiagnostics）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x0037</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: <code>Endpoint 0</code>（Root Node）
+  </p>
+  <p>
+    EthernetNetworkDiagnostics 提供以太网接口的运行状态和统计信息 —— 链路速率、双工模式、收发包计数、错误计数等。
+    这个 Cluster 只有 <strong>1 个命令</strong>和 <strong>9 个属性</strong>，结构简单，主要用于网络健康监控和故障排查。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">什么时候用</div>
+    <p>
+      Hub 或桥接器通过以太网连接，想确认链路是否正常？读取 PHYRate 和 CarrierDetect 即可判断。
+      设备网络不稳定、丢包严重？检查 TxErrCount 和 CollisionCount 定位问题。
+      需要重新开始统计？发一个 ResetCounts 命令清零所有计数器。
+    </p>
+  </div>
+
+  <!-- ====== Feature 位图 ====== -->
+  <h2 id="features">Feature 位图</h2>
+  <p>EthernetNetworkDiagnostics 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持哪些诊断能力：</p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">Bit 0</span>
+      <div>
+        <span class="enum-name">PKTCNT（PacketCounts）</span>
+        <span class="enum-desc">支持收发包计数 —— 启用 PacketRxCount、PacketTxCount 属性</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 1</span>
+      <div>
+        <span class="enum-name">ERRCNT（ErrorCounts）</span>
+        <span class="enum-desc">支持错误计数 —— 启用 TxErrCount、CollisionCount、OverrunCount 属性</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">Feature 与属性的关系</div>
+    <p>
+      并非所有设备都支持全部属性。PacketRxCount / PacketTxCount 需要 PKTCNT 特性，
+      TxErrCount / CollisionCount / OverrunCount 需要 ERRCNT 特性。
+      读取前先检查 <code>FeatureMap (0xFFFC)</code> 确认设备支持哪些特性。
+    </p>
+  </div>
+
+  <!-- ====== 属性总览 ====== -->
+  <h2 id="attributes">属性总览</h2>
+  <p>点击属性 ID 可跳转到详细说明。带 Feature 标记的属性仅在设备支持对应特性时才存在。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>Feature</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#attr-0x00">
+          <td><a href="#attr-0x00"><code>0x00</code></a></td>
+          <td>PHYRate</td>
+          <td>enum8, nullable</td>
+          <td>—</td>
+          <td>物理层链路速率</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x01">
+          <td><a href="#attr-0x01"><code>0x01</code></a></td>
+          <td>FullDuplex</td>
+          <td>bool, nullable</td>
+          <td>—</td>
+          <td>是否全双工模式</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x02">
+          <td><a href="#attr-0x02"><code>0x02</code></a></td>
+          <td>PacketRxCount</td>
+          <td>uint64</td>
+          <td>PKTCNT</td>
+          <td>已接收的数据包总数</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x03">
+          <td><a href="#attr-0x03"><code>0x03</code></a></td>
+          <td>PacketTxCount</td>
+          <td>uint64</td>
+          <td>PKTCNT</td>
+          <td>已发送的数据包总数</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x04">
+          <td><a href="#attr-0x04"><code>0x04</code></a></td>
+          <td>TxErrCount</td>
+          <td>uint64</td>
+          <td>ERRCNT</td>
+          <td>发送错误次数</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x05">
+          <td><a href="#attr-0x05"><code>0x05</code></a></td>
+          <td>CollisionCount</td>
+          <td>uint64</td>
+          <td>ERRCNT</td>
+          <td>碰撞次数</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x06">
+          <td><a href="#attr-0x06"><code>0x06</code></a></td>
+          <td>OverrunCount</td>
+          <td>uint64</td>
+          <td>ERRCNT</td>
+          <td>缓冲区溢出次数</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x07">
+          <td><a href="#attr-0x07"><code>0x07</code></a></td>
+          <td>CarrierDetect</td>
+          <td>bool, nullable</td>
+          <td>—</td>
+          <td>载波检测状态</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x08">
+          <td><a href="#attr-0x08"><code>0x08</code></a></td>
+          <td>TimeSinceReset</td>
+          <td>uint64</td>
+          <td>—</td>
+          <td>距上次计数器重置的秒数</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 属性详解 ====== -->
+  <h3 id="attr-0x00">PHYRate（物理层速率）</h3>
+  <p>
+    只读属性，表示当前以太网接口协商到的物理层链路速率。值为 <code>null</code> 时表示速率未知或接口未连接。
+  </p>
+
+  <h4>PHYRateEnum 枚举值</h4>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Rate10M</span>
+        <span class="enum-desc">10 Mbps</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Rate100M</span>
+        <span class="enum-desc">100 Mbps</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">Rate1G</span>
+        <span class="enum-desc">1 Gbps</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">Rate25G</span>
+        <span class="enum-desc">2.5 Gbps</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">4</span>
+      <div>
+        <span class="enum-name">Rate5G</span>
+        <span class="enum-desc">5 Gbps</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">5</span>
+      <div>
+        <span class="enum-name">Rate10G</span>
+        <span class="enum-desc">10 Gbps</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">6</span>
+      <div>
+        <span class="enum-name">Rate40G</span>
+        <span class="enum-desc">40 Gbps</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">7</span>
+      <div>
+        <span class="enum-name">Rate100G</span>
+        <span class="enum-desc">100 Gbps</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">8</span>
+      <div>
+        <span class="enum-name">Rate200G</span>
+        <span class="enum-desc">200 Gbps</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">9</span>
+      <div>
+        <span class="enum-name">Rate400G</span>
+        <span class="enum-desc">400 Gbps</span>
+      </div>
+    </div>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x01">FullDuplex（全双工模式）</h3>
+  <p>
+    只读属性，表示当前以太网链路是否工作在全双工模式。<code>true</code> 为全双工，<code>false</code> 为半双工，
+    <code>null</code> 表示无法确定。现代以太网设备几乎都是全双工，半双工通常意味着协商异常。
+  </p>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x02">PacketRxCount（接收包计数）</h3>
+  <p>
+    只读属性，自上次重置以来接收到的数据包总数。需要设备支持 <strong>PKTCNT</strong> 特性。
+    该计数器在调用 ResetCounts 命令或设备重启后归零。
+  </p>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x03">PacketTxCount（发送包计数）</h3>
+  <p>
+    只读属性，自上次重置以来发送的数据包总数。需要设备支持 <strong>PKTCNT</strong> 特性。
+  </p>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x04">TxErrCount（发送错误计数）</h3>
+  <p>
+    只读属性，自上次重置以来发送失败的次数。需要设备支持 <strong>ERRCNT</strong> 特性。
+    持续增长通常说明线缆质量差或交换机端口有问题。
+  </p>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x05">CollisionCount（碰撞计数）</h3>
+  <p>
+    只读属性，自上次重置以来的碰撞次数。需要设备支持 <strong>ERRCNT</strong> 特性。
+    在全双工链路上此值应始终为 0；如果持续增长，说明链路可能降级到了半双工。
+  </p>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x06">OverrunCount（溢出计数）</h3>
+  <p>
+    只读属性，自上次重置以来接收缓冲区溢出的次数。需要设备支持 <strong>ERRCNT</strong> 特性。
+    溢出意味着设备来不及处理收到的数据，可能是设备负载过高或网络流量过大。
+  </p>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x07">CarrierDetect（载波检测）</h3>
+  <p>
+    只读属性，表示以太网接口是否检测到载波信号。<code>true</code> 表示网线已连接且对端设备正常，
+    <code>false</code> 表示网线断开或对端无响应，<code>null</code> 表示无法确定。
+    这是判断物理连接状态最直接的指标。
+  </p>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x08">TimeSinceReset（计数器重置后经过时间）</h3>
+  <p>
+    只读属性，自上次计数器重置（ResetCounts 命令或设备重启）以来经过的秒数。
+    结合包计数和错误计数，可以计算出平均每秒的收发速率和错误率。
+  </p>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 命令 ====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    EthernetNetworkDiagnostics 只有一个命令。需要设备支持 PKTCNT 或 ERRCNT 特性才有实际意义。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#cmd-0x00">
+          <td><a href="#cmd-0x00"><code>0x00</code></a></td>
+          <td>ResetCounts</td>
+          <td>重置所有计数器归零</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="cmd-0x00">ResetCounts —— 重置计数器（0x00）</h3>
+  <p>
+    将 PacketRxCount、PacketTxCount、TxErrCount、CollisionCount、OverrunCount 全部归零，
+    同时 TimeSinceReset 也会重置为 0 并重新开始计时。无需任何参数，直接发送即可。
+  </p>
+  <p>请求示例：</p>
+  <pre><code set:html={resetCountsExample} /></pre>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>读取一个以太网 Hub 设备的 EthernetNetworkDiagnostics Cluster 属性：</p>
+  <pre><code set:html={exampleData} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发建议</div>
+    <p>
+      PHYRate 和 FullDuplex 反映的是链路协商结果，不会频繁变化，适合在设备详情页一次性展示。
+      包计数和错误计数则是累积值，适合定期轮询或订阅，用于绘制趋势图或触发告警。
+    </p>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <details class="scenario">
+    <summary>场景 1：链路健康检查</summary>
+    <div class="scenario-content">
+      <p>App 设备详情页展示以太网连接状态，帮助用户快速判断链路是否正常。</p>
+      <ol>
+        <li>读取 <code>CarrierDetect (0x07)</code>，确认物理连接正常（<code>true</code>）</li>
+        <li>读取 <code>PHYRate (0x00)</code> 和 <code>FullDuplex (0x01)</code>，展示链路速率和双工模式</li>
+        <li>如果 PHYRate 为 <code>null</code> 或 CarrierDetect 为 <code>false</code>，提示用户检查网线连接</li>
+        <li>如果 FullDuplex 为 <code>false</code>，提示链路降级到半双工，建议检查交换机端口配置</li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 2：网络故障排查</summary>
+    <div class="scenario-content">
+      <p>设备响应缓慢或通信不稳定时，通过计数器定位网络层问题。</p>
+      <ol>
+        <li>先检查 <code>FeatureMap (0xFFFC)</code>，确认设备支持 PKTCNT 和 ERRCNT</li>
+        <li>发送 <code>ResetCounts (0x00)</code> 清零所有计数器</li>
+        <li>等待一段时间后，读取 TxErrCount、CollisionCount、OverrunCount</li>
+        <li>用 <code>TimeSinceReset (0x08)</code> 计算错误率：<code>TxErrCount / TimeSinceReset</code></li>
+        <li>错误率持续偏高 → 检查网线质量和交换机端口；CollisionCount 非零 → 检查双工模式配置</li>
+      </ol>
+    </div>
+  </details>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>

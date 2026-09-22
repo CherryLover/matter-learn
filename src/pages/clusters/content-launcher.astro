@@ -1,0 +1,863 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 支持的内容类型 ---
+  "0x0000": [                        // AcceptHeader
+    "video/mp4",
+    "video/webm",
+    "audio/aac",
+    "application/dash+xml",
+    "application/x-mpegURL"
+  ],
+
+  // --- 支持的流媒体协议 ---
+  "0x0001": 3                         // SupportedStreamingProtocols
+                                      // = 0b11 (DASH + HLS)
+}`;
+
+const launchContentExample = `// LaunchContent 命令示例
+// 搜索"三体"并自动播放，偏好中文字幕
+{
+  "Search": {
+    "ParameterList": [
+      {
+        "Type": 12,
+        "Value": "Movie"
+      },
+      {
+        "Type": 0,
+        "Value": "三体"
+      }
+    ]
+  },
+  "AutoPlay": true,
+  "Data": "season=1&episode=1",
+  "PlaybackPreferences": {
+    "PlaybackPosition": 0,
+    "TextTrack": {
+      "LanguageCode": "zh-CN",
+      "Characteristics": [8]
+    }
+  },
+  "UseCurrentContext": false
+}`;
+
+const launchURLExample = `// LaunchURL 命令示例
+// 直接通过 URL 启动视频，附带品牌信息
+{
+  "ContentURL": "https://example.com/stream/movie-12345.m3u8",
+  "DisplayString": "三体 第一季 第1集",
+  "BrandingInformation": {
+    "ProviderName": "ExampleTV"
+  }
+}`;
+
+const launcherResponseExample = `// LauncherResponse 响应示例
+// 启动成功
+{
+  "Status": 0,
+  "Data": "playback-session-id=abc123"
+}
+
+// 启动失败 —— URL 不可用
+{
+  "Status": 1,
+  "Data": "URL expired or geo-restricted"
+}`;
+---
+
+<DocLayout
+  title="内容启动 Cluster · ContentLauncher（0x050A）"
+  description="Matter ContentLauncher Cluster（0x050A）完整参考 — LaunchContent 内容搜索启动、LaunchURL 链接播放、AcceptHeader 支持类型、SupportedStreamingProtocols 流协议、StatusEnum 状态码、ContentSearchStruct / ParameterStruct / BrandingInformationStruct 结构体及 Feature 位图说明。"
+  type="article"
+  prev={{ title: 'Cluster 手册', href: '/clusters/' }}
+>
+  <h1>内容启动 Cluster（ContentLauncher）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x050A</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 媒体端点（电视、机顶盒、流媒体设备等）
+  </p>
+  <p>
+    ContentLauncher 负责在媒体设备上启动内容播放 —— 既可以通过搜索条件查找内容，也可以直接通过 URL 启动。
+    它是智能电视、机顶盒、流媒体棒等设备的核心 Cluster 之一，是语音助手「播放 XXX」指令的底层实现。
+    控制端可以指定搜索关键词、播放偏好（字幕语言、起始位置）和品牌展示信息。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">三个 Feature 决定设备能力</div>
+    <p>
+      ContentLauncher 定义了三个 Feature：<strong>CS（ContentSearch）</strong>、<strong>UP（URLPlayback）</strong> 和 <strong>AP（AdvancedSeek）</strong>。
+      CS 启用后支持 <code>LaunchContent</code> 命令（按关键词搜索启动），UP 启用后支持 <code>LaunchURL</code> 命令（按 URL 直接启动），
+      AP 启用后 <code>LaunchContent</code> 可携带播放偏好（起始位置、字幕、音轨）。
+      设备至少应启用 CS 或 UP 中的一个，否则这个 Cluster 没有实际意义。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#commands">命令列表</a>
+    <span class="nav-sep">|</span>
+    <a href="#attributes">属性详解</a>
+    <span class="nav-sep">|</span>
+    <a href="#structs">结构体定义</a>
+    <span class="nav-sep">|</span>
+    <a href="#enums">枚举与位图</a>
+    <span class="nav-sep">|</span>
+    <a href="#features">Feature 位图</a>
+    <span class="nav-sep">|</span>
+    <a href="#example-data">示例数据</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">常见场景</a>
+  </nav>
+
+  <!-- ====== 命令（Commands）====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    ContentLauncher Cluster 有 2 个请求命令和 1 个响应命令。
+    LaunchContent 通过搜索条件查找并启动内容（需要 CS 特性），LaunchURL 通过 URL 直接启动（需要 UP 特性），
+    两者都返回 LauncherResponse 告知启动结果。
+    点击下方表格中的命令 ID 可跳转到对应的详细说明。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>方向</th>
+          <th>说明</th>
+          <th>所需特性</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#cmd-0x00">
+          <td><a href="#cmd-0x00"><code>0x00</code></a></td>
+          <td>LaunchContent</td>
+          <td>请求</td>
+          <td>按搜索条件查找并启动内容</td>
+          <td class="col-required">CS</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x01">
+          <td><a href="#cmd-0x01"><code>0x01</code></a></td>
+          <td>LaunchURL</td>
+          <td>请求</td>
+          <td>按 URL 直接启动内容</td>
+          <td class="col-required">UP</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x02">
+          <td><a href="#cmd-0x02"><code>0x02</code></a></td>
+          <td>LauncherResponse</td>
+          <td>响应</td>
+          <td>启动结果（两个命令共用）</td>
+          <td class="col-optional">无</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 命令详解 ====== -->
+  <h3 id="cmd-0x00">LaunchContent —— 搜索启动内容（0x00）</h3>
+  <p>
+    通过搜索条件在设备上查找并启动内容。搜索条件由 <a href="#struct-content-search">ContentSearchStruct</a> 描述，
+    可以组合多个参数（如类型 + 演员 + 流派）来精确定位内容。设备收到命令后，
+    根据搜索结果自动播放（AutoPlay = true）或展示搜索结果列表让用户选择。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>必选</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Search</td>
+          <td><a href="#struct-content-search">ContentSearchStruct</a></td>
+          <td>是</td>
+          <td>搜索条件，包含一组搜索参数</td>
+        </tr>
+        <tr>
+          <td>AutoPlay</td>
+          <td>bool</td>
+          <td>是</td>
+          <td><code>true</code> = 找到后自动播放；<code>false</code> = 只展示搜索结果</td>
+        </tr>
+        <tr>
+          <td>Data</td>
+          <td>string</td>
+          <td>否</td>
+          <td>应用特定的附加数据（如季/集信息、播放参数），由设备自行解析</td>
+        </tr>
+        <tr>
+          <td>PlaybackPreferences</td>
+          <td><a href="#struct-playback-prefs">PlaybackPreferencesStruct</a></td>
+          <td>否</td>
+          <td>播放偏好：起始位置、字幕语言、音轨选择。<strong>需要 AP 特性</strong></td>
+        </tr>
+        <tr>
+          <td>UseCurrentContext</td>
+          <td>bool</td>
+          <td>否</td>
+          <td><code>true</code> = 在当前播放上下文中启动（如当前 App 内搜索）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <pre><code set:html={launchContentExample} /></pre>
+
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        用户对语音助手说「播放三体第一季」，助手解析出搜索参数（Type=Movie，Value="三体"），
+        构造 ContentSearchStruct，设置 AutoPlay=true，发送 LaunchContent 命令。
+        电视在已安装的流媒体应用中搜索匹配内容并自动开始播放。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x01">LaunchURL —— URL 直接启动（0x01）</h3>
+  <p>
+    通过 URL 直接在设备上启动内容播放。适用于已知内容地址的场景，
+    比如从手机 App 分享一个视频链接到电视播放。可以附带显示文本和品牌信息。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>必选</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ContentURL</td>
+          <td>string</td>
+          <td>是</td>
+          <td>要播放的内容 URL，设备需要支持该 URL 指向的内容格式</td>
+        </tr>
+        <tr>
+          <td>DisplayString</td>
+          <td>string</td>
+          <td>否</td>
+          <td>在设备屏幕上展示的描述文本（如视频标题）</td>
+        </tr>
+        <tr>
+          <td>BrandingInformation</td>
+          <td><a href="#struct-branding">BrandingInformationStruct</a></td>
+          <td>否</td>
+          <td>内容提供商的品牌展示信息（名称、Logo、背景等）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <pre><code set:html={launchURLExample} /></pre>
+
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        用户在手机上看到一个视频，点击「投屏到电视」，App 获取视频的流媒体 URL，
+        发送 LaunchURL 命令到电视。电视收到后直接打开该 URL 播放，
+        屏幕上显示 DisplayString 作为视频标题，加载画面展示品牌 Logo。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x02">LauncherResponse —— 启动结果（0x02）</h3>
+  <p>
+    LaunchContent 和 LaunchURL 的统一响应。包含一个状态码和可选的附加数据。
+    控制端根据 Status 判断启动是否成功，失败时 Data 中可能包含错误详情。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Status</td>
+          <td><a href="#enum-status">StatusEnum</a></td>
+          <td>启动结果状态码（见下方枚举）</td>
+        </tr>
+        <tr>
+          <td>Data</td>
+          <td>string</td>
+          <td>可选的附加数据，成功时可能返回会话 ID，失败时返回错误信息</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <pre><code set:html={launcherResponseExample} /></pre>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 属性详解 ====== -->
+  <h2 id="attributes">属性详解</h2>
+  <p>ContentLauncher Cluster 共有 2 个属性。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+
+  <!-- 属性汇总表 -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#attr-0x0000">
+          <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
+          <td>AcceptHeader</td>
+          <td>list&lt;string&gt;</td>
+          <td>设备支持的内容 MIME 类型列表</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0001">
+          <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
+          <td>SupportedStreamingProtocols</td>
+          <td><a href="#bitmap-protocols">SupportedProtocolsBitmap</a></td>
+          <td>设备支持的流媒体协议位图</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 属性详细说明 ====== -->
+  <h3 id="group-content-caps">内容能力（0x0000, 0x0001）</h3>
+  <p>描述设备能够接受和播放的内容类型与流媒体协议。控制端在发送 LaunchURL 前应检查这些属性，确保设备支持目标内容格式。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0000">
+          <td><code>0x0000</code></td>
+          <td>AcceptHeader（支持的内容类型）</td>
+          <td>list&lt;string&gt;</td>
+          <td>设备能处理的 MIME 类型列表，格式遵循 HTTP Accept Header 规范（如 <code>"video/mp4"</code>、<code>"application/dash+xml"</code>）。控制端发送 LaunchURL 前应检查目标内容的 MIME 类型是否在此列表中。<strong>需要 UP 特性</strong></td>
+        </tr>
+        <tr id="attr-0x0001">
+          <td><code>0x0001</code></td>
+          <td>SupportedStreamingProtocols（支持的流协议）</td>
+          <td><a href="#bitmap-protocols">SupportedProtocolsBitmap</a></td>
+          <td>设备支持的流媒体协议位图。控制端据此选择合适的流地址格式（如 DASH 的 .mpd 或 HLS 的 .m3u8）。<strong>需要 UP 特性</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">属性与 Feature 的关系</div>
+    <p>
+      AcceptHeader 和 SupportedStreamingProtocols 只在启用 <strong>UP（URLPlayback）</strong> 特性时才有意义。
+      如果设备只支持 CS（内容搜索），这两个属性可能不存在 —— 因为搜索启动不涉及 URL 格式判断，
+      内容格式由设备内部的应用自行处理。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 结构体定义 ====== -->
+  <h2 id="structs">结构体定义</h2>
+  <p>ContentLauncher Cluster 使用多个结构体来描述搜索条件、播放偏好和品牌信息。</p>
+
+  <!-- ContentSearchStruct -->
+  <h3 id="struct-content-search">ContentSearchStruct</h3>
+  <p>描述一次内容搜索的完整条件，包含一组搜索参数。多个参数之间是 AND 关系 —— 设备需要同时满足所有条件。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>字段</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ParameterList</td>
+          <td>list&lt;<a href="#struct-parameter">ParameterStruct</a>&gt;</td>
+          <td>搜索参数列表，每个元素指定一个搜索维度（如类型、演员、流派）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ParameterStruct -->
+  <h3 id="struct-parameter">ParameterStruct</h3>
+  <p>描述单个搜索参数 —— 由参数类型、搜索值和可选的外部 ID 组成。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>字段</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Type</td>
+          <td><a href="#enum-parameter">ParameterEnum</a></td>
+          <td>参数类型（见下方枚举），决定 Value 的含义</td>
+        </tr>
+        <tr>
+          <td>Value</td>
+          <td>string</td>
+          <td>搜索值，如演员名 <code>"刘慈欣"</code>、流派 <code>"Sci-Fi"</code></td>
+        </tr>
+        <tr>
+          <td>ExternalIDList</td>
+          <td>list&lt;<a href="#struct-additional-info">AdditionalInfoStruct</a>&gt;</td>
+          <td>可选。外部平台的 ID 列表（如 IMDB ID、豆瓣 ID），帮助设备精确匹配内容</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- AdditionalInfoStruct -->
+  <h3 id="struct-additional-info">AdditionalInfoStruct</h3>
+  <p>描述一个外部标识符的键值对，用于跨平台内容匹配。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>字段</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Name</td>
+          <td>string</td>
+          <td>标识符名称，如 <code>"IMDB"</code>、<code>"Douban"</code>、<code>"TMDB"</code></td>
+        </tr>
+        <tr>
+          <td>Value</td>
+          <td>string</td>
+          <td>标识符的值，如 <code>"tt1234567"</code>（IMDB 编号）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- BrandingInformationStruct -->
+  <h3 id="struct-branding">BrandingInformationStruct</h3>
+  <p>
+    描述内容提供商的品牌展示信息，用于 LaunchURL 命令。设备在加载内容时可以显示提供商的品牌元素。
+    除 ProviderName 外，其他字段都是可选的 StyleInformationStruct（包含图片 URL、颜色、尺寸等样式信息）。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>字段</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ProviderName</td>
+          <td>string</td>
+          <td>内容提供商名称，如 <code>"Netflix"</code>、<code>"YouTube"</code></td>
+        </tr>
+        <tr>
+          <td>Background</td>
+          <td>StyleInformationStruct</td>
+          <td>可选。背景样式信息（图片 URL、颜色）</td>
+        </tr>
+        <tr>
+          <td>Logo</td>
+          <td>StyleInformationStruct</td>
+          <td>可选。Logo 样式信息</td>
+        </tr>
+        <tr>
+          <td>ProgressBar</td>
+          <td>StyleInformationStruct</td>
+          <td>可选。进度条样式信息</td>
+        </tr>
+        <tr>
+          <td>Splash</td>
+          <td>StyleInformationStruct</td>
+          <td>可选。启动画面样式信息</td>
+        </tr>
+        <tr>
+          <td>WaterMark</td>
+          <td>StyleInformationStruct</td>
+          <td>可选。水印样式信息</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PlaybackPreferencesStruct -->
+  <h3 id="struct-playback-prefs">PlaybackPreferencesStruct</h3>
+  <p>
+    描述播放偏好设置，包括起始播放位置、字幕和音轨选择。此结构体仅在启用 <strong>AP（AdvancedSeek）</strong> 特性时可用。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>字段</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>PlaybackPosition</td>
+          <td>uint64</td>
+          <td>起始播放位置，单位毫秒。<code>0</code> 表示从头开始</td>
+        </tr>
+        <tr>
+          <td>TextTrack</td>
+          <td>TrackPreferenceStruct</td>
+          <td>字幕轨道偏好（语言、特征）</td>
+        </tr>
+        <tr>
+          <td>AudioTracks</td>
+          <td>list&lt;TrackPreferenceStruct&gt;</td>
+          <td>可选。音轨偏好列表，按优先级排列</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">TrackPreferenceStruct</div>
+    <p>
+      轨道偏好结构体包含：<code>LanguageCode</code>（BCP-47 语言代码，如 <code>"zh-CN"</code>）、
+      可选的 <code>Characteristics</code>（轨道特征列表，如字幕、解说、配音等）和
+      可选的 <code>AudioOutputIndex</code>（指定音频输出端口索引）。
+    </p>
+  </div>
+
+  <!-- ====== 枚举与位图 ====== -->
+  <h2 id="enums">枚举与位图</h2>
+
+  <!-- StatusEnum -->
+  <h3 id="enum-status">StatusEnum</h3>
+  <p>LauncherResponse 中的状态码，表示内容启动的结果。</p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Success</span>
+        <span class="enum-desc">成功 —— 内容已启动或搜索结果已展示</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">URLNotAvailable</span>
+        <span class="enum-desc">URL 不可用 —— 链接无法访问、格式不支持或已过期</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">AuthFailed</span>
+        <span class="enum-desc">认证失败 —— 内容需要登录或权限不足</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">TextTrackNotAvailable</span>
+        <span class="enum-desc">字幕不可用 —— 请求的字幕语言或类型不存在</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">4</span>
+      <div>
+        <span class="enum-name">AudioTrackNotAvailable</span>
+        <span class="enum-desc">音轨不可用 —— 请求的音轨语言或类型不存在</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ParameterEnum -->
+  <h3 id="enum-parameter">ParameterEnum</h3>
+  <p>
+    定义搜索参数的类型。控制端通过不同的 Type 值指定搜索维度，
+    设备据此在内容库中匹配。共 14 个枚举值。
+  </p>
+
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Actor</span>
+        <span class="enum-desc">演员 —— 按演员名搜索</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Channel</span>
+        <span class="enum-desc">频道 —— 按频道名称或编号</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">Character</span>
+        <span class="enum-desc">角色 —— 按角色名搜索</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">Director</span>
+        <span class="enum-desc">导演 —— 按导演名搜索</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">4</span>
+      <div>
+        <span class="enum-name">Event</span>
+        <span class="enum-desc">事件 —— 按体育赛事或直播事件</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">5</span>
+      <div>
+        <span class="enum-name">Franchise</span>
+        <span class="enum-desc">系列 —— 按内容系列或 IP</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">6</span>
+      <div>
+        <span class="enum-name">Genre</span>
+        <span class="enum-desc">流派 —— 按类型标签（科幻、动作等）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">7</span>
+      <div>
+        <span class="enum-name">League</span>
+        <span class="enum-desc">联赛 —— 按体育联赛</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">8</span>
+      <div>
+        <span class="enum-name">Popularity</span>
+        <span class="enum-desc">热度 —— 按流行度排序</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">9</span>
+      <div>
+        <span class="enum-name">Provider</span>
+        <span class="enum-desc">提供商 —— 按内容提供方</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">10</span>
+      <div>
+        <span class="enum-name">Sport</span>
+        <span class="enum-desc">运动 —— 按运动类型</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">11</span>
+      <div>
+        <span class="enum-name">SportsTeam</span>
+        <span class="enum-desc">球队 —— 按运动队名</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">12</span>
+      <div>
+        <span class="enum-name">Type</span>
+        <span class="enum-desc">类型 —— 内容类型（Movie / TV / Music 等）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">13</span>
+      <div>
+        <span class="enum-name">Video</span>
+        <span class="enum-desc">视频 —— 按视频标题直接搜索</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SupportedProtocolsBitmap -->
+  <h3 id="bitmap-protocols">SupportedProtocolsBitmap</h3>
+  <p>设备支持的流媒体协议位图。控制端据此选择合适的流地址格式。</p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">Bit 0</span>
+      <div>
+        <span class="enum-name">DASH</span>
+        <span class="enum-desc">Dynamic Adaptive Streaming over HTTP —— 对应 <code>.mpd</code> 清单</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 1</span>
+      <div>
+        <span class="enum-name">HLS</span>
+        <span class="enum-desc">HTTP Live Streaming —— 对应 <code>.m3u8</code> 清单</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">协议选择</div>
+    <p>
+      如果设备同时支持 DASH 和 HLS（值 = <code>3</code>，即 <code>0b11</code>），
+      控制端可根据内容源的可用格式灵活选择。一般来说，Apple 生态优先用 HLS，跨平台场景优先用 DASH。
+    </p>
+  </div>
+
+  <!-- ====== Feature 位图 ====== -->
+  <h2 id="features">Feature 位图</h2>
+  <p>ContentLauncher Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持的能力：</p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">Bit 0</span>
+      <div>
+        <span class="enum-name">CS（ContentSearch）</span>
+        <span class="enum-desc">内容搜索 —— 启用后支持 LaunchContent 命令，通过搜索条件查找并启动内容</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 1</span>
+      <div>
+        <span class="enum-name">UP（URLPlayback）</span>
+        <span class="enum-desc">URL 播放 —— 启用后支持 LaunchURL 命令和 AcceptHeader / SupportedStreamingProtocols 属性</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 2</span>
+      <div>
+        <span class="enum-name">AP（AdvancedSeek）</span>
+        <span class="enum-desc">高级定位 —— 启用后 LaunchContent 可携带 PlaybackPreferences（播放位置、字幕、音轨偏好）</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">至少启用一个</div>
+    <p>
+      设备至少应启用 <strong>CS</strong> 或 <strong>UP</strong> 中的一个。如果两个都不启用，
+      ContentLauncher Cluster 没有可用的命令，声明这个 Cluster 就没有意义。
+      AP 特性是对 CS 的增强，必须在 CS 启用的基础上才有效。
+    </p>
+  </div>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>一台支持 DASH 和 HLS 的智能电视的 ContentLauncher Cluster 属性读取结果：</p>
+
+  <pre><code set:html={exampleData} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发提示</div>
+    <p>
+      发送 LaunchURL 前，应先检查 <code>AcceptHeader (0x0000)</code> 确认设备支持目标内容的 MIME 类型，
+      再检查 <code>SupportedStreamingProtocols (0x0001)</code> 确认设备支持的流协议。
+      如果目标格式不在支持范围内，应提前提示用户，避免收到 <code>URLNotAvailable</code> 错误。
+    </p>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <details class="scenario">
+    <summary>场景 1：语音助手「播放 XXX」</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>用户对语音助手说「在电视上播放三体」</li>
+        <li>检查设备 <code>FeatureMap (0xFFFC)</code>，确认支持 <strong>CS</strong> 特性</li>
+        <li>构造 <a href="#struct-content-search">ContentSearchStruct</a>：Type=Video(13)，Value="三体"</li>
+        <li>发送 <code>LaunchContent (0x00)</code>，AutoPlay=true</li>
+        <li>设备在已安装的流媒体应用中搜索匹配内容，找到后自动开始播放</li>
+        <li>检查 <a href="#cmd-0x02">LauncherResponse</a> 的 Status：
+          <ul>
+            <li><code>0</code>（Success）—— 播放已开始</li>
+            <li><code>2</code>（AuthFailed）—— 内容需要付费或登录，提示用户</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 2：手机视频投屏到电视</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>用户在手机 App 中观看视频，点击「投屏」按钮</li>
+        <li>检查设备 <code>FeatureMap (0xFFFC)</code>，确认支持 <strong>UP</strong> 特性</li>
+        <li>读取 <code>AcceptHeader (0x0000)</code>，确认电视支持 <code>video/mp4</code> 或 <code>application/x-mpegURL</code></li>
+        <li>读取 <code>SupportedStreamingProtocols (0x0001)</code>，选择合适的流地址（如 HLS 的 .m3u8）</li>
+        <li>发送 <code>LaunchURL (0x01)</code>，附带视频 URL、标题和品牌信息</li>
+        <li>电视开始播放，屏幕上展示品牌 Logo 和视频标题</li>
+        <li>检查 <a href="#cmd-0x02">LauncherResponse</a>：
+          <ul>
+            <li><code>0</code>（Success）—— 投屏成功</li>
+            <li><code>1</code>（URLNotAvailable）—— URL 不可用，可能是地域限制或格式不兼容</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+  </details>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .col-required {
+    color: #dc2626;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-required {
+    color: #f87171;
+  }
+
+  .col-optional {
+    color: #16a34a;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-optional {
+    color: #4ade80;
+  }
+</style>

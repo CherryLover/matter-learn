@@ -1,0 +1,386 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 时间格式 ---
+  "0x00": 1,              // HourFormat = 24hr（24 小时制）
+
+  // --- 日历格式（需 CALFMT Feature）---
+  "0x01": 4,              // ActiveCalendarType = Gregorian（公历）
+  "0x02": [4, 0, 1]       // SupportedCalendarTypes = [Gregorian, Buddhist, Chinese]
+}`;
+
+const writeHourFormatExample = `// App → Device：将时间显示切换为 12 小时制
+{
+  "writeRequests": [{
+    "attributePath": {
+      "endpointId": 0,
+      "clusterId": "0x002C",
+      "attributeId": "0x00"        // HourFormat
+    },
+    "data": 0                      // 12hr
+  }]
+}`;
+
+const writeCalendarExample = `// App → Device：将日历切换为中国农历
+{
+  "writeRequests": [{
+    "attributePath": {
+      "endpointId": 0,
+      "clusterId": "0x002C",
+      "attributeId": "0x01"        // ActiveCalendarType
+    },
+    "data": 1                      // Chinese（中国农历）
+  }]
+}`;
+---
+
+<DocLayout
+  title="时间格式本地化 Cluster · TimeFormatLocalization（0x002C）"
+  description="Matter TimeFormatLocalization Cluster（0x002C）完整参考 — HourFormat / ActiveCalendarType / SupportedCalendarTypes 属性、CALFMT Feature、枚举值速查及实际应用场景。"
+  type="article"
+>
+  <h1>时间格式本地化 Cluster（TimeFormatLocalization）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x002C</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: <code>Endpoint 0</code>（Root）&nbsp;|&nbsp;
+    <strong>角色</strong>: Server（通过 Write 属性配置，无命令）
+  </p>
+  <p>
+    TimeFormatLocalization 控制设备上的时间和日期<strong>显示格式</strong>偏好。
+    它不负责时间本身的获取或同步（那是 TimeSynchronization Cluster 的工作），
+    而是决定设备在屏幕、面板等界面上怎么<strong>展示</strong>时间 —— 用 12 小时制还是 24 小时制，用公历还是其他日历。
+  </p>
+  <p>
+    这个 Cluster 非常精简 —— 最少只有 <strong>1 个属性</strong>（HourFormat），
+    支持 CALFMT Feature 时再增加 2 个日历相关属性。没有任何命令，所有配置都通过<strong>直接写属性</strong>完成。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">什么时候用</div>
+    <p>
+      用户拿到一台带屏幕的智能设备（恒温器、智能面板、带显示的门锁），
+      发现上面的时间显示是 12 小时制，想改成 24 小时制？写一下 <code>HourFormat</code> 就行。
+      需要在设备屏幕上显示农历日期？先确认设备支持 CALFMT Feature，然后写 <code>ActiveCalendarType</code>。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#features">Feature 位图</a>
+    <span class="nav-sep">|</span>
+    <a href="#attributes">属性详解</a>
+    <span class="nav-sep">|</span>
+    <a href="#example-data">示例数据</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">常见场景</a>
+  </nav>
+
+  <!-- ====== Feature 位图 ====== -->
+  <h2 id="features">Feature 位图</h2>
+  <p>TimeFormatLocalization 通过 <code>FeatureMap</code>（0xFFFC）声明设备是否支持日历格式配置：</p>
+
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">Bit 0</span>
+      <div>
+        <span class="enum-name">CALFMT（CalendarFormat）</span>
+        <span class="enum-desc">日历格式 —— 支持 ActiveCalendarType 和 SupportedCalendarTypes 两个属性，可切换公历、农历等不同日历系统</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">Feature 影响哪些属性</div>
+    <p>
+      <code>HourFormat</code> 是必须支持的，与 Feature 无关。
+      只有当设备声明了 <strong>CALFMT</strong> Feature 时，<code>ActiveCalendarType</code> 和
+      <code>SupportedCalendarTypes</code> 才可用。
+      简单的设备（如只有时钟显示的插座）通常不支持 CALFMT，只有 HourFormat 一个属性。
+    </p>
+  </div>
+
+  <!-- ====== 属性总览 ====== -->
+  <h2 id="attributes">属性总览</h2>
+  <p>TimeFormatLocalization 最多有 3 个属性，其中 2 个依赖 CALFMT Feature。点击属性 ID 可跳转到详细说明。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>读写</th>
+          <th>Feature</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#attr-0x00">
+          <td><a href="#attr-0x00"><code>0x00</code></a></td>
+          <td>HourFormat</td>
+          <td>enum8</td>
+          <td>读写</td>
+          <td>-</td>
+          <td>时间显示格式（12/24 小时制）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x01">
+          <td><a href="#attr-0x01"><code>0x01</code></a></td>
+          <td>ActiveCalendarType</td>
+          <td>enum8</td>
+          <td>读写</td>
+          <td>CALFMT</td>
+          <td>当前使用的日历类型</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x02">
+          <td><a href="#attr-0x02"><code>0x02</code></a></td>
+          <td>SupportedCalendarTypes</td>
+          <td>list&lt;enum8&gt;</td>
+          <td>只读</td>
+          <td>CALFMT</td>
+          <td>设备支持的所有日历类型列表</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 属性详解 ====== -->
+  <h3 id="attr-0x00">HourFormat（时间显示格式）</h3>
+  <p>
+    控制设备以 12 小时制还是 24 小时制显示时间。这是 TimeFormatLocalization 唯一的必须属性，
+    所有支持此 Cluster 的设备都必须实现。可读可写，直接写属性即可切换。
+  </p>
+
+  <h4>HourFormatEnum 枚举值</h4>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">12hr</span>
+        <span class="enum-desc">12 小时制，带 AM/PM（如 2:30 PM）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">24hr</span>
+        <span class="enum-desc">24 小时制（如 14:30）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0xFF</span>
+      <div>
+        <span class="enum-name">UseActiveLocale</span>
+        <span class="enum-desc">跟随当前语言区域设置自动决定（由 LocalizationConfiguration Cluster 的 ActiveLocale 决定）</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">UseActiveLocale 的行为</div>
+    <p>
+      当 HourFormat 设为 <code>0xFF</code>（UseActiveLocale）时，设备会根据
+      LocalizationConfiguration Cluster 中的 <code>ActiveLocale</code> 属性自动选择时间格式。
+      例如 <code>en-US</code> 自动使用 12 小时制，<code>zh-CN</code> 自动使用 24 小时制。
+      这是最省心的选择，让设备自己跟随语言设置。
+    </p>
+  </div>
+  <p>写属性示例（切换为 12 小时制）：</p>
+  <pre><code set:html={writeHourFormatExample} /></pre>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x01">ActiveCalendarType（当前日历类型）</h3>
+  <p>
+    控制设备使用哪种日历系统来显示日期。可读可写，但只能写入 <code>SupportedCalendarTypes</code> 列表中包含的值。
+    需要设备支持 <strong>CALFMT</strong> Feature，否则此属性不存在。
+  </p>
+
+  <h4>CalendarTypeEnum 枚举值</h4>
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Buddhist</span>
+        <span class="enum-desc">佛历（泰国、斯里兰卡等国使用）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Chinese</span>
+        <span class="enum-desc">中国农历（含节气、生肖）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">Coptic</span>
+        <span class="enum-desc">科普特历（埃及科普特教会使用）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">Ethiopian</span>
+        <span class="enum-desc">埃塞俄比亚历</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">4</span>
+      <div>
+        <span class="enum-name">Gregorian</span>
+        <span class="enum-desc">公历（全球通用，最常见）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">5</span>
+      <div>
+        <span class="enum-name">Hebrew</span>
+        <span class="enum-desc">希伯来历（犹太历）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">6</span>
+      <div>
+        <span class="enum-name">Indian</span>
+        <span class="enum-desc">印度国定历</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">7</span>
+      <div>
+        <span class="enum-name">Islamic</span>
+        <span class="enum-desc">伊斯兰历（回历）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">8</span>
+      <div>
+        <span class="enum-name">Japanese</span>
+        <span class="enum-desc">日本和历（令和、平成等年号）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">9</span>
+      <div>
+        <span class="enum-name">Korean</span>
+        <span class="enum-desc">韩国檀纪历</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">10</span>
+      <div>
+        <span class="enum-name">Persian</span>
+        <span class="enum-desc">波斯历（伊朗历）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">11</span>
+      <div>
+        <span class="enum-name">Taiwanese</span>
+        <span class="enum-desc">民国纪年</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0xFF</span>
+      <div>
+        <span class="enum-name">UseActiveLocale</span>
+        <span class="enum-desc">跟随当前语言区域设置自动决定</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">写入前先检查支持列表</div>
+    <p>
+      不是所有设备都支持全部 12 种日历。写入 <code>ActiveCalendarType</code> 之前，
+      <strong>必须</strong>先读取 <code>SupportedCalendarTypes</code> 确认目标日历在列表中。
+      写入不支持的值会被设备拒绝（返回 CONSTRAINT_ERROR）。
+    </p>
+  </div>
+  <p>写属性示例（切换为中国农历）：</p>
+  <pre><code set:html={writeCalendarExample} /></pre>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x02">SupportedCalendarTypes（支持的日历列表）</h3>
+  <p>
+    只读属性，返回设备支持的所有日历类型列表。列表中的每个元素都是 <code>CalendarTypeEnum</code> 的一个值。
+    App 应该用这个列表来构建日历选择的 UI —— 只展示设备实际支持的选项。
+    需要设备支持 <strong>CALFMT</strong> Feature。
+  </p>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发建议</div>
+    <p>
+      读取 <code>SupportedCalendarTypes</code> 后，用它动态生成设置页面的日历选项列表。
+      大多数设备只会支持 Gregorian（公历）和当地常用的一两种日历，
+      不要硬编码全部 12 种。如果列表里只有一项，可以考虑隐藏日历切换入口。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>读取一台支持 CALFMT Feature 的智能恒温器的 TimeFormatLocalization 属性：</p>
+  <pre><code set:html={exampleData} /></pre>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <details class="scenario">
+    <summary>场景 1：恒温器时间格式设置</summary>
+    <div class="scenario-content">
+      <p>
+        用户新装了一台智能恒温器，屏幕上显示的是 12 小时制（如 2:30 PM），
+        习惯 24 小时制的用户希望通过 App 切换显示格式。
+      </p>
+      <ol>
+        <li>读取 <code>HourFormat</code> 确认当前值为 <code>0</code>（12hr）</li>
+        <li>App 设置页展示三个选项：12 小时制、24 小时制、跟随系统语言</li>
+        <li>用户选择 24 小时制，App 写入 <code>HourFormat = 1</code>（24hr）</li>
+        <li>设备屏幕立即从「2:30 PM」变为「14:30」</li>
+        <li>如果设备支持 CALFMT，同一设置页还可以展示日历切换选项</li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 2：多地区智能面板的日历本地化</summary>
+    <div class="scenario-content">
+      <p>
+        一款面向全球市场的智能家居面板，主屏幕显示日期和时间。
+        不同地区的用户需要看到不同的日历格式 —— 中国用户想看农历，中东用户想看伊斯兰历。
+      </p>
+      <ol>
+        <li>读取 <code>FeatureMap</code> 确认设备支持 CALFMT（Bit 0 = 1）</li>
+        <li>读取 <code>SupportedCalendarTypes</code>，假设返回 <code>[4, 1, 7]</code>（公历、农历、伊斯兰历）</li>
+        <li>App 设置页根据列表动态生成选项，附上本地化名称：「公历」「农历」「伊斯兰历」</li>
+        <li>中国用户选择农历，App 写入 <code>ActiveCalendarType = 1</code>（Chinese）</li>
+        <li>面板屏幕日期区域从「2024-09-22」变为同时显示「甲辰年八月二十」</li>
+        <li>也可以设为 <code>UseActiveLocale (0xFF)</code>，让面板根据语言设置自动选择合适的日历</li>
+      </ol>
+    </div>
+  </details>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .scenario-content {
+    padding: 0.5rem 0;
+  }
+</style>

@@ -1,0 +1,510 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 支持的运行模式 ---
+  "0x0000": [                                    // SupportedModes（设备支持的模式列表）
+    {
+      "Label": "空闲",
+      "Mode": 0,
+      "ModeTags": [{ "Value": 16384 }]           // 0x4000 = Idle
+    },
+    {
+      "Label": "清扫",
+      "Mode": 1,
+      "ModeTags": [{ "Value": 16385 }]           // 0x4001 = Cleaning
+    },
+    {
+      "Label": "建图",
+      "Mode": 2,
+      "ModeTags": [{ "Value": 16386 }]           // 0x4002 = Mapping
+    }
+  ],
+
+  // --- 当前状态 ---
+  "0x0001": 1,              // CurrentMode = 1（当前正在清扫）
+  "0x0003": 0               // OnMode = 0（设备唤醒后默认进入空闲模式）
+}`;
+---
+
+<DocLayout
+  title="扫地机运行模式 Cluster · RvcRunMode（0x0054）"
+  description="Matter RvcRunMode Cluster（0x0054）完整参考 — 扫地机器人运行模式管理，ChangeToMode 命令、SupportedModes/CurrentMode/OnMode 属性、ModeTag 枚举、StatusCode 错误码及常见场景。"
+  type="article"
+  prev={{ title: '操作状态（OperationalState）', href: '/clusters/operational-state/' }}
+>
+  <h1>扫地机运行模式 Cluster（RvcRunMode）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x0054</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 通常在 <code>Endpoint 1</code>（功能端点）&nbsp;|&nbsp;
+    <strong>基类</strong>: ModeBase（0x0050）
+  </p>
+  <p>
+    RvcRunMode 是 Matter 为<strong>扫地机器人（Robot Vacuum Cleaner）</strong>定义的运行模式 Cluster。
+    它继承自 ModeBase，专门管理扫地机的高级运行状态 —— 空闲、清扫、建图。
+    通过切换运行模式，用户可以控制扫地机是开始打扫、绘制地图还是返回待命。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">扫地机 Cluster 三件套</div>
+    <p>
+      Matter 为扫地机器人定义了三个协作 Cluster，各管一面：
+    </p>
+    <ul>
+      <li><strong>RvcRunMode（本页）</strong>—— 高级运行状态：空闲 / 清扫 / 建图</li>
+      <li><strong>RvcCleanMode</strong> —— 清扫强度：静音 / 标准 / 深度清洁</li>
+      <li><strong>RvcOperationalState</strong> —— 实时运行状态：寻找充电座、充电中、卡住等</li>
+    </ul>
+    <p>
+      典型流程：先通过 RvcCleanMode 设好清扫强度，再通过 RvcRunMode 切到清扫模式启动工作，
+      运行过程中的实时状态（充电、卡住、回充）由 RvcOperationalState 上报。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#commands">命令</a>
+    <span class="nav-sep">|</span>
+    <a href="#attributes">属性</a>
+    <span class="nav-sep">|</span>
+    <a href="#mode-tags">模式标签</a>
+    <span class="nav-sep">|</span>
+    <a href="#status-codes">状态码</a>
+    <span class="nav-sep">|</span>
+    <a href="#example-data">示例数据</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">常见场景</a>
+  </nav>
+
+  <!-- ====== 命令（Commands）====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    RvcRunMode 继承自 ModeBase，只有一对命令：发送模式切换请求，设备返回执行结果。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>方向</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#cmd-change-to-mode">
+          <td><a href="#cmd-change-to-mode"><code>0x00</code></a></td>
+          <td>ChangeToMode</td>
+          <td>客户端 → 设备</td>
+          <td>请求切换到指定运行模式</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-change-to-mode-response">
+          <td><a href="#cmd-change-to-mode-response"><code>0x01</code></a></td>
+          <td>ChangeToModeResponse</td>
+          <td>设备 → 客户端</td>
+          <td>返回模式切换的执行结果</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 命令详解 ====== -->
+  <h3 id="cmd-change-to-mode">ChangeToMode —— 切换运行模式（0x00）</h3>
+  <p>
+    请求设备切换到指定的运行模式。模式编号必须是 <code>SupportedModes</code> 中定义的有效值。
+    设备收到后会校验当前状态是否允许切换（例如正在充电时可能无法直接开始清扫），然后通过
+    <a href="#cmd-change-to-mode-response">ChangeToModeResponse</a> 返回结果。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>NewMode</td>
+          <td>uint8</td>
+          <td>目标模式编号，必须是 SupportedModes 列表中某个模式的 Mode 字段值</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        用户在 App 上点击「开始清扫」，App 发送 ChangeToMode(NewMode=1) 将扫地机从空闲切换到清扫模式。
+        如果扫地机电量过低或尘盒未安装，设备会在响应中返回对应的错误状态码。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-change-to-mode-response">ChangeToModeResponse —— 切换结果（0x01）</h3>
+  <p>
+    设备对 ChangeToMode 命令的响应。通过 Status 字段告知切换是否成功，失败时附带文字说明。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Status</td>
+          <td>uint8</td>
+          <td>
+            <code>0x00</code> = 成功；其他值为错误码（见<a href="#status-codes">状态码</a>章节）
+          </td>
+        </tr>
+        <tr>
+          <td>StatusText</td>
+          <td>string（可选）</td>
+          <td>人类可读的状态描述，用于调试或展示给用户</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">通用错误码 vs 扫地机专属错误码</div>
+    <p>
+      Status 字段的值空间分为两段：<code>0x00–0x3F</code> 是 ModeBase 通用错误码（如 GenericFailure、InvalidInMode），
+      <code>0x40–0x7F</code> 是<strong>扫地机专属</strong>的错误码（如卡住、尘盒缺失等）。
+      App 端处理时需要覆盖两段。
+    </p>
+  </div>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 属性详解 ====== -->
+  <h2 id="attributes">属性详解</h2>
+  <p>
+    RvcRunMode 继承 ModeBase 的三个属性。注意：ModeBase 定义了 StartUpMode（0x0002），
+    但<strong>扫地机不支持该属性</strong> —— 扫地机每次上电后的行为由 OnMode 决定。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#attr-0x0000">
+          <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
+          <td>SupportedModes</td>
+          <td>list&lt;ModeOptionStruct&gt;</td>
+          <td>设备支持的运行模式列表</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0001">
+          <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
+          <td>CurrentMode</td>
+          <td>uint8</td>
+          <td>当前运行模式</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0003">
+          <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
+          <td>OnMode</td>
+          <td>uint8 / null</td>
+          <td>设备唤醒时自动进入的模式</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 属性详细说明 -->
+  <h3 id="attr-0x0000">SupportedModes —— 支持的模式列表（0x0000）</h3>
+  <p>
+    设备支持的全部运行模式。每个模式包含标签名称、模式编号和一组模式标签（ModeTag）。
+    列表在设备整个生命周期中固定不变。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Label</td>
+          <td>string</td>
+          <td>模式的显示名称，如 "清扫"、"建图"</td>
+        </tr>
+        <tr>
+          <td>Mode</td>
+          <td>uint8</td>
+          <td>模式编号，在列表内唯一，作为 ChangeToMode 的参数</td>
+        </tr>
+        <tr>
+          <td>ModeTags</td>
+          <td>list&lt;ModeTagStruct&gt;</td>
+          <td>模式标签列表，标识该模式的语义（见<a href="#mode-tags">模式标签</a>章节）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x0001">CurrentMode —— 当前模式（0x0001）</h3>
+  <p>
+    设备当前的运行模式编号，值必须是 SupportedModes 中某个模式的 Mode 字段。
+    订阅此属性可以实时跟踪扫地机的运行状态变化。
+  </p>
+  <div class="callout callout-tip">
+    <div class="callout-title">订阅推荐</div>
+    <p>
+      建议 App 通过 Subscribe 订阅 CurrentMode 的变化，而不是轮询。
+      当扫地机完成清扫自动回到空闲模式、或因异常停止时，订阅能实时收到通知。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x0003">OnMode —— 唤醒模式（0x0003）</h3>
+  <p>
+    设备从非活跃状态唤醒时自动进入的模式。值为 SupportedModes 中某个模式的 Mode 字段，
+    或 <code>null</code> 表示不自动切换模式。
+  </p>
+  <div class="callout callout-warning">
+    <div class="callout-title">没有 StartUpMode</div>
+    <p>
+      ModeBase 定义了 <code>StartUpMode（0x0002）</code> 属性，但 RvcRunMode <strong>明确排除了它</strong>。
+      扫地机的上电行为仅由 OnMode 控制。如果你在读取属性时发现 0x0002 不存在，这是正常的。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 模式标签（ModeTag）====== -->
+  <h2 id="mode-tags">模式标签（ModeTag）</h2>
+  <p>
+    每个运行模式通过 ModeTag 标识其语义。ModeTag 让不同厂商的扫地机能用不同的 Label 文字，
+    但 App 仍然能通过标准化的 Tag 值识别出「这是清扫模式」还是「这是建图模式」。
+  </p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0x4000</span>
+      <div>
+        <span class="enum-name">Idle（空闲）</span>
+        <span class="enum-desc">扫地机处于待命状态，未执行任何任务</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x4001</span>
+      <div>
+        <span class="enum-name">Cleaning（清扫）</span>
+        <span class="enum-desc">扫地机正在执行清扫任务</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x4002</span>
+      <div>
+        <span class="enum-name">Mapping（建图）</span>
+        <span class="enum-desc">扫地机正在扫描环境、构建地图，不进行实际清扫</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">ModeTag 的实际用法</div>
+    <p>
+      厂商 A 的清扫模式叫 "Auto Clean"（Mode=1），厂商 B 叫 "智能清扫"（Mode=3），
+      但两者的 ModeTags 都包含 <code>0x4001 (Cleaning)</code>。
+      App 判断模式语义时应看 ModeTag 而非 Label 或 Mode 编号。
+    </p>
+  </div>
+
+  <!-- ====== 状态码（StatusCode）====== -->
+  <h2 id="status-codes">状态码（StatusCode）</h2>
+  <p>
+    ChangeToModeResponse 的 Status 字段使用以下错误码。<code>0x00</code> 表示成功，
+    <code>0x01–0x03</code> 是 ModeBase 通用错误码，<code>0x41–0x48</code> 是扫地机专属错误码。
+  </p>
+
+  <h3>通用状态码（ModeBase）</h3>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0x00</span>
+      <div>
+        <span class="enum-name">Success</span>
+        <span class="enum-desc">模式切换成功</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x01</span>
+      <div>
+        <span class="enum-name">UnsupportedMode</span>
+        <span class="enum-desc">请求的模式编号不在 SupportedModes 中</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x02</span>
+      <div>
+        <span class="enum-name">GenericFailure</span>
+        <span class="enum-desc">通用失败，无法归类到具体原因</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x03</span>
+      <div>
+        <span class="enum-name">InvalidInMode</span>
+        <span class="enum-desc">当前模式下不允许切换到目标模式</span>
+      </div>
+    </div>
+  </div>
+
+  <h3>扫地机专属状态码</h3>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0x41</span>
+      <div>
+        <span class="enum-name">Stuck（卡住）</span>
+        <span class="enum-desc">扫地机被障碍物卡住，无法移动</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x42</span>
+      <div>
+        <span class="enum-name">DustBinMissing（尘盒缺失）</span>
+        <span class="enum-desc">尘盒未安装到位，拒绝启动清扫</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x43</span>
+      <div>
+        <span class="enum-name">DustBinFull（尘盒已满）</span>
+        <span class="enum-desc">尘盒已满，需要清理后才能继续</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x44</span>
+      <div>
+        <span class="enum-name">WaterTankEmpty（水箱空）</span>
+        <span class="enum-desc">水箱无水，拖地功能无法启动</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x45</span>
+      <div>
+        <span class="enum-name">WaterTankMissing（水箱缺失）</span>
+        <span class="enum-desc">水箱未安装</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x46</span>
+      <div>
+        <span class="enum-name">WaterTankLidOpen（水箱盖未关）</span>
+        <span class="enum-desc">水箱盖子未正确关闭</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x47</span>
+      <div>
+        <span class="enum-name">MopCleaningPadMissing（拖布缺失）</span>
+        <span class="enum-desc">拖布 / 清洁垫未安装</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x48</span>
+      <div>
+        <span class="enum-name">BatteryLow（电量不足）</span>
+        <span class="enum-desc">电池电量过低，无法启动任务，需要先充电</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">App 端错误处理建议</div>
+    <p>
+      这些状态码对应的都是<strong>用户可以自行解决的物理问题</strong>。
+      App 收到错误码后应向用户展示明确的操作指引，例如「请清空尘盒后重试」「请安装水箱」，
+      而不是显示通用的「操作失败」。StatusText 字段也可作为兜底的展示文案。
+    </p>
+  </div>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>一台支持三种运行模式的扫地机器人，当前正在清扫中的 RvcRunMode Cluster 读取结果：</p>
+
+  <pre><code set:html={exampleData} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">关于 ModeTag 的数值</div>
+    <p>
+      示例中 ModeTags 的 Value 使用十进制：<code>16384</code> = <code>0x4000</code>（Idle），
+      <code>16385</code> = <code>0x4001</code>（Cleaning），<code>16386</code> = <code>0x4002</code>（Mapping）。
+      实际协议传输中使用的是整数值，文档中常写十六进制是为了方便对照规范。
+    </p>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <h3 id="scenario-start-cleaning">场景 1：启动清扫</h3>
+  <ol>
+    <li>读取 <code>SupportedModes（0x0000）</code>，找到 ModeTags 包含 <code>0x4001 (Cleaning)</code> 的模式，记下其 Mode 编号</li>
+    <li>发送 <code>ChangeToMode（0x00）</code>，NewMode 设为上一步得到的编号</li>
+    <li>检查 <code>ChangeToModeResponse</code> 的 Status：
+      <ul>
+        <li><code>0x00</code> —— 成功，扫地机开始清扫</li>
+        <li><code>0x42</code> —— 尘盒未安装，提示用户装好尘盒</li>
+        <li><code>0x43</code> —— 尘盒已满，提示用户清空</li>
+        <li><code>0x48</code> —— 电量不足，提示用户先充电</li>
+      </ul>
+    </li>
+    <li>订阅 <code>CurrentMode（0x0001）</code>，当值变回 Idle 对应的编号时，说明清扫完成</li>
+  </ol>
+
+  <h3 id="scenario-check-status">场景 2：查询当前状态并展示</h3>
+  <ol>
+    <li>读取 <code>SupportedModes（0x0000）</code> 获取完整模式列表</li>
+    <li>读取 <code>CurrentMode（0x0001）</code> 获取当前模式编号</li>
+    <li>在 SupportedModes 中找到匹配的模式，取其 Label 展示在 App 界面上（如「清扫中」）</li>
+    <li>同时检查 ModeTags 中的 Tag 值，用标准化语义辅助 UI 展示：
+      <ul>
+        <li><code>0x4000 (Idle)</code> —— 显示待命图标</li>
+        <li><code>0x4001 (Cleaning)</code> —— 显示清扫动画</li>
+        <li><code>0x4002 (Mapping)</code> —— 显示地图扫描进度</li>
+      </ul>
+    </li>
+  </ol>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .col-required {
+    color: #dc2626;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-required {
+    color: #f87171;
+  }
+
+  .col-optional {
+    color: #16a34a;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-optional {
+    color: #4ade80;
+  }
+</style>

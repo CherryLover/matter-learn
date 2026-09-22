@@ -1,0 +1,798 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 默认 OTA 提供者 ---
+  "0x0000": [                     // DefaultOTAProviders（可配置多个）
+    {
+      "providerNodeID": 12345,    // Provider 的 Node ID
+      "endpoint": 0,              // Provider 上 OTA Provider Cluster 所在的 Endpoint
+      "fabricIndex": 1            // 所属 Fabric 索引
+    }
+  ],
+
+  // --- 更新能力 ---
+  "0x0001": true,                 // UpdatePossible = true（设备当前可以接受更新）
+
+  // --- 更新状态 ---
+  "0x0002": 0,                    // UpdateState = Idle（当前空闲，未在更新流程中）
+  "0x0003": null                  // UpdateStateProgress = null（无进度信息）
+}`;
+
+const stateTransitionEventExample = `{
+  "eventReports": [{
+    "eventData": {
+      "path": {
+        "endpointId": 0,
+        "clusterId": "0x002A",
+        "eventId": "0x00"          // StateTransition
+      },
+      "eventNumber": 15,
+      "priority": "INFO",
+      "data": {
+        "0": 1,                    // PreviousState = Idle
+        "1": 4,                    // NewState = Downloading
+        "2": 1,                    // Reason = Success（查询成功，开始下载）
+        "3": 5                     // TargetSoftwareVersion = 5
+      }
+    }
+  }]
+}`;
+
+const versionAppliedEventExample = `{
+  "eventReports": [{
+    "eventData": {
+      "path": {
+        "endpointId": 0,
+        "clusterId": "0x002A",
+        "eventId": "0x01"          // VersionApplied
+      },
+      "eventNumber": 18,
+      "priority": "CRITICAL",
+      "data": {
+        "0": 5,                    // SoftwareVersion = 5（刚刚应用的版本号）
+        "1": 4                     // ProductID = 4（产品 ID）
+      }
+    }
+  }]
+}`;
+
+const downloadErrorEventExample = `{
+  "eventReports": [{
+    "eventData": {
+      "path": {
+        "endpointId": 0,
+        "clusterId": "0x002A",
+        "eventId": "0x02"          // DownloadError
+      },
+      "eventNumber": 16,
+      "priority": "INFO",
+      "data": {
+        "0": 5,                    // SoftwareVersion = 5
+        "1": 512,                  // BytesDownloaded = 512
+        "2": 75,                   // ProgressPercent = 75（下载到 75% 时出错）
+        "3": -1                    // PlatformCode = -1（平台错误码，nullable）
+      }
+    }
+  }]
+}`;
+---
+
+<DocLayout
+  title="OTA 更新请求者 Cluster · OtaSoftwareUpdateRequestor（0x002A）"
+  description="Matter OTA Software Update Requestor Cluster（0x002A）完整参考 — AnnounceOTAProvider 命令、DefaultOTAProviders / UpdateState / UpdateStateProgress 属性、UpdateStateEnum / AnnouncementReasonEnum / ChangeReasonEnum 枚举、StateTransition / VersionApplied / DownloadError 事件及典型 OTA 更新场景。"
+  type="article"
+>
+  <h1>OTA 更新请求者 Cluster（OtaSoftwareUpdateRequestor）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x002A</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: <code>Endpoint 0</code>（Root Endpoint）&nbsp;|&nbsp;
+    <strong>角色</strong>: Server（设备作为 OTA 客户端）
+  </p>
+  <p>
+    OtaSoftwareUpdateRequestor 是 Matter OTA 升级体系中的<strong>客户端侧</strong> —— 即<strong>需要被升级的设备</strong>。
+    它负责向 OTA Provider（升级提供者，对应 Cluster 0x0029）查询是否有新版本、下载固件、应用更新。
+    所有支持 OTA 的 Matter 设备都必须实现这个 Cluster。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">OTA 双 Cluster 架构</div>
+    <p>
+      Matter 的 OTA 升级由两个 Cluster 配合完成：
+      <strong>OtaSoftwareUpdateProvider（0x0029）</strong> 是「服务端」，负责托管固件并响应查询；
+      <strong>OtaSoftwareUpdateRequestor（0x002A）</strong> 是「客户端」，负责发起查询、下载并应用更新。
+      本页描述的是后者 —— 设备侧的行为。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#commands">命令列表</a>
+    <span class="nav-sep">|</span>
+    <a href="#attributes">属性详解</a>
+    <span class="nav-sep">|</span>
+    <a href="#enums">枚举速查</a>
+    <span class="nav-sep">|</span>
+    <a href="#events">事件</a>
+    <span class="nav-sep">|</span>
+    <a href="#example-data">示例数据</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">常见场景</a>
+  </nav>
+
+  <!-- ====== 命令（Commands）====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    OtaSoftwareUpdateRequestor 只有 1 个命令。它不是由设备自己发起的，而是由外部节点
+    （通常是 OTA Provider 或管理节点）发送给设备，告知设备可以去某个 Provider 查询更新。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>说明</th>
+          <th>方向</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#cmd-0x00">
+          <td><a href="#cmd-0x00"><code>0x00</code></a></td>
+          <td>AnnounceOTAProvider</td>
+          <td>通知设备有可用的 OTA Provider</td>
+          <td>Client → Server</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 命令详解 ====== -->
+  <h3 id="cmd-0x00">AnnounceOTAProvider —— 通告 OTA 提供者（0x00）</h3>
+  <p>
+    外部节点通过此命令告知设备：「有一个 OTA Provider 可以为你提供更新」。
+    收到此命令后，设备应尽快向指定的 Provider 发起更新查询（调用 Provider 的 QueryImage 命令）。
+    这是推送式 OTA 的核心触发机制 —— 让设备不必一直轮询，而是被动通知后再查询。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ProviderNodeID</td>
+          <td>node-id</td>
+          <td>是</td>
+          <td>OTA Provider 节点的 Node ID</td>
+        </tr>
+        <tr>
+          <td>VendorID</td>
+          <td>vendor-id</td>
+          <td>是</td>
+          <td>Provider 的 Vendor ID，设备可据此判断是否信任该 Provider</td>
+        </tr>
+        <tr>
+          <td>AnnouncementReason</td>
+          <td>AnnouncementReasonEnum</td>
+          <td>是</td>
+          <td>通告原因（见<a href="#enum-announcement-reason">枚举说明</a>）</td>
+        </tr>
+        <tr>
+          <td>MetadataForNode</td>
+          <td>octstr</td>
+          <td>否</td>
+          <td>Provider 传给设备的自定义元数据（最长 512 字节，可选）</td>
+        </tr>
+        <tr>
+          <td>Endpoint</td>
+          <td>endpoint-no</td>
+          <td>是</td>
+          <td>Provider 节点上 OTA Provider Cluster 所在的 Endpoint</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        管理后台发布了新固件，通过 Hub 或管理节点向所有目标设备发送 AnnounceOTAProvider 命令。
+        设备收到后，会向指定的 Provider 查询可用更新。如果 AnnouncementReason 是 UrgentUpdateAvailable，
+        设备应优先处理，可能跳过用户确认直接开始下载。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 属性详解 ====== -->
+  <h2 id="attributes">属性详解</h2>
+  <p>OtaSoftwareUpdateRequestor 有 4 个应用属性，分为「Provider 配置」和「更新状态」两组。</p>
+
+  <!-- 属性汇总表 -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>分组</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Provider 配置 -->
+        <tr class="clickable-row" data-href="#attr-0x0000">
+          <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
+          <td>DefaultOTAProviders</td>
+          <td>list&lt;ProviderLocation&gt;</td>
+          <td><a href="#group-provider">Provider 配置</a></td>
+          <td>默认 OTA Provider 列表</td>
+        </tr>
+        <!-- 更新状态 -->
+        <tr class="clickable-row" data-href="#attr-0x0001">
+          <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
+          <td>UpdatePossible</td>
+          <td>bool</td>
+          <td><a href="#group-state">更新状态</a></td>
+          <td>设备是否可以接受更新</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0002">
+          <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
+          <td>UpdateState</td>
+          <td>UpdateStateEnum</td>
+          <td><a href="#group-state">更新状态</a></td>
+          <td>当前 OTA 更新状态机的状态</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0003">
+          <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
+          <td>UpdateStateProgress</td>
+          <td>uint8 / null</td>
+          <td><a href="#group-state">更新状态</a></td>
+          <td>更新进度百分比（0-100）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== Provider 配置（0x0000）====== -->
+  <h3 id="group-provider">Provider 配置（0x0000）</h3>
+  <p>配置设备应该向哪些 OTA Provider 查询更新。每个 Fabric 最多配置一个 Provider。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0000">
+          <td><code>0x0000</code></td>
+          <td>DefaultOTAProviders（默认 OTA 提供者）</td>
+          <td>list&lt;ProviderLocation&gt;</td>
+          <td>
+            设备默认查询的 OTA Provider 列表。每个条目是一个 <code>ProviderLocation</code> 结构体。
+            写入需要 <strong>manage</strong> 权限（Administrator 角色）。
+            每个 Fabric 最多包含一个条目 —— 同一 Fabric 写入新的会覆盖旧的
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>ProviderLocation 结构体</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ProviderNodeID</td>
+          <td>node-id</td>
+          <td>OTA Provider 的 Node ID</td>
+        </tr>
+        <tr>
+          <td>Endpoint</td>
+          <td>endpoint-no</td>
+          <td>Provider 上 OTA Provider Cluster 所在的 Endpoint</td>
+        </tr>
+        <tr>
+          <td>FabricIndex</td>
+          <td>fabric-idx</td>
+          <td>此条目所属的 Fabric 索引（由系统自动填入）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">Fabric 级别隔离</div>
+    <p>
+      DefaultOTAProviders 是按 Fabric 隔离的 —— 每个 Fabric（管理域）只能看到和修改自己的条目。
+      这意味着设备同时加入多个 Fabric 时，各个 Fabric 的管理者可以各自指定自己的 OTA Provider，互不影响。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 更新状态（0x0001 - 0x0003）====== -->
+  <h3 id="group-state">更新状态（0x0001 - 0x0003）</h3>
+  <p>反映设备当前的 OTA 更新状态。这些属性均为只读，App 端通过订阅这些属性来跟踪更新进度。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0001">
+          <td><code>0x0001</code></td>
+          <td>UpdatePossible（可否更新）</td>
+          <td>bool</td>
+          <td>
+            设备当前是否能够接受 OTA 更新。<code>true</code> 表示可以，<code>false</code> 表示设备当前不允许更新
+            （例如正在执行关键操作、电量过低等）。默认值为 <code>true</code>
+          </td>
+        </tr>
+        <tr id="attr-0x0002">
+          <td><code>0x0002</code></td>
+          <td>UpdateState（更新状态）</td>
+          <td>UpdateStateEnum</td>
+          <td>
+            设备 OTA 状态机的当前状态（见<a href="#enum-update-state">枚举说明</a>）。
+            从这个属性可以知道设备正在查询、下载、应用还是空闲
+          </td>
+        </tr>
+        <tr id="attr-0x0003">
+          <td><code>0x0003</code></td>
+          <td>UpdateStateProgress（更新进度）</td>
+          <td>uint8 / null</td>
+          <td>
+            当前更新操作的进度百分比，取值 0-100。Nullable —— <code>null</code> 表示进度不可用
+            （例如设备处于 Idle 状态，或所处阶段无法计算进度时为 null）
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">进度百分比的含义随状态变化</div>
+    <p>
+      <code>UpdateStateProgress</code> 的含义取决于 <code>UpdateState</code> 的当前值。
+      在 Downloading 状态下表示下载进度，在 Applying 状态下表示安装/写入进度。
+      状态切换时进度可能重置为 0 或 null。不要假设它是一个线性增长的全局进度值。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 枚举速查 ====== -->
+  <h2 id="enums">枚举速查</h2>
+
+  <!-- UpdateStateEnum -->
+  <h3 id="enum-update-state">UpdateStateEnum —— 更新状态</h3>
+  <p>描述设备 OTA 状态机的完整生命周期，共 9 个状态：</p>
+
+  <div class="enum-cards">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Unknown</span>
+        <span class="enum-desc">未知 —— 设备刚启动、尚未确定更新状态</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Idle</span>
+        <span class="enum-desc">空闲 —— 无更新活动，正常运行中</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">Querying</span>
+        <span class="enum-desc">查询中 —— 正在向 Provider 查询是否有可用更新</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">DelayedOnQuery</span>
+        <span class="enum-desc">查询延迟 —— Provider 要求设备等待一段时间后再重试查询</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">4</span>
+      <div>
+        <span class="enum-name">Downloading</span>
+        <span class="enum-desc">下载中 —— 正在从 Provider 下载固件镜像</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">5</span>
+      <div>
+        <span class="enum-name">Applying</span>
+        <span class="enum-desc">应用中 —— 正在将下载的固件写入闪存并验证</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">6</span>
+      <div>
+        <span class="enum-name">DelayedOnApply</span>
+        <span class="enum-desc">应用延迟 —— 固件已就绪，等待合适时机重启应用（例如等待用户确认或低峰期）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">7</span>
+      <div>
+        <span class="enum-name">RollingBack</span>
+        <span class="enum-desc">回滚中 —— 更新失败，正在恢复到之前的固件版本</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">8</span>
+      <div>
+        <span class="enum-name">DelayedOnUserConsent</span>
+        <span class="enum-desc">等待用户同意 —— 更新已就绪，等待用户在设备或 App 上确认后再继续</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- AnnouncementReasonEnum -->
+  <h3 id="enum-announcement-reason">AnnouncementReasonEnum —— 通告原因</h3>
+  <p>AnnounceOTAProvider 命令中使用，告知设备此次通告的原因：</p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">SimpleAnnouncement</span>
+        <span class="enum-desc">普通通告 —— 仅告知存在一个 Provider，设备可自行决定是否查询</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">UpdateAvailable</span>
+        <span class="enum-desc">有更新可用 —— 明确告知有新版本，设备应尽快查询</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">UrgentUpdateAvailable</span>
+        <span class="enum-desc">紧急更新 —— 有安全补丁或严重 bug 修复，设备应立即查询并优先更新</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ChangeReasonEnum -->
+  <h3 id="enum-change-reason">ChangeReasonEnum —— 状态变更原因</h3>
+  <p>在 StateTransition 事件中使用，说明状态机发生状态转移的原因：</p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Unknown</span>
+        <span class="enum-desc">未知原因</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Success</span>
+        <span class="enum-desc">上一步操作成功，正常推进到下一阶段</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">Failure</span>
+        <span class="enum-desc">操作失败（如下载中断、校验失败）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">TimeOut</span>
+        <span class="enum-desc">操作超时（如 Provider 无响应）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">4</span>
+      <div>
+        <span class="enum-name">DelayByProvider</span>
+        <span class="enum-desc">Provider 要求延迟 —— Provider 返回了 Busy 或指定了重试等待时间</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== 事件 ====== -->
+  <h2 id="events">事件（Events）</h2>
+  <p>
+    OtaSoftwareUpdateRequestor 定义了 3 个事件，覆盖了 OTA 生命周期的关键节点。
+    订阅这些事件可以实时跟踪设备的更新流程，比轮询属性更及时。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>优先级</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#event-0x00">
+          <td><a href="#event-0x00"><code>0x00</code></a></td>
+          <td>StateTransition</td>
+          <td>Info</td>
+          <td>OTA 状态机发生状态转移时触发</td>
+        </tr>
+        <tr class="clickable-row" data-href="#event-0x01">
+          <td><a href="#event-0x01"><code>0x01</code></a></td>
+          <td>VersionApplied</td>
+          <td>Critical</td>
+          <td>新固件版本成功应用后触发</td>
+        </tr>
+        <tr class="clickable-row" data-href="#event-0x02">
+          <td><a href="#event-0x02"><code>0x02</code></a></td>
+          <td>DownloadError</td>
+          <td>Info</td>
+          <td>固件下载过程中发生错误时触发</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- StateTransition 事件详解 -->
+  <h3 id="event-0x00">StateTransition —— 状态转移事件（0x00）</h3>
+  <p>
+    每当 OTA 状态机从一个状态转移到另一个状态时触发。这是追踪更新流程最核心的事件 ——
+    通过监听它可以知道设备从空闲到查询、从下载到应用的每一步。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>ID</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>PreviousState</td>
+          <td><code>0x00</code></td>
+          <td>UpdateStateEnum</td>
+          <td>转移前的状态</td>
+        </tr>
+        <tr>
+          <td>NewState</td>
+          <td><code>0x01</code></td>
+          <td>UpdateStateEnum</td>
+          <td>转移后的新状态</td>
+        </tr>
+        <tr>
+          <td>Reason</td>
+          <td><code>0x02</code></td>
+          <td>ChangeReasonEnum</td>
+          <td>触发此次转移的原因</td>
+        </tr>
+        <tr>
+          <td>TargetSoftwareVersion</td>
+          <td><code>0x03</code></td>
+          <td>uint32 / null</td>
+          <td>目标固件版本号。null 表示尚未确定（例如从 Idle 到 Querying 时还不知道目标版本）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p>事件上报示例 —— 从 Idle 转入 Downloading：</p>
+  <pre><code set:html={stateTransitionEventExample} /></pre>
+  <p class="back-link"><a href="#events">&#8593; 返回事件列表</a></p>
+
+  <!-- VersionApplied 事件详解 -->
+  <h3 id="event-0x01">VersionApplied —— 版本已应用事件（0x01）</h3>
+  <p>
+    新固件版本成功应用后触发（通常在设备重启后上报）。这个事件是确认「更新真正完成」的标志。
+    优先级为 Critical，确保即使在事件队列满时也不会被丢弃。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>ID</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>SoftwareVersion</td>
+          <td><code>0x00</code></td>
+          <td>uint32</td>
+          <td>刚刚应用的新固件版本号</td>
+        </tr>
+        <tr>
+          <td>ProductID</td>
+          <td><code>0x01</code></td>
+          <td>uint16</td>
+          <td>设备的产品 ID</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p>事件上报示例：</p>
+  <pre><code set:html={versionAppliedEventExample} /></pre>
+  <p class="back-link"><a href="#events">&#8593; 返回事件列表</a></p>
+
+  <!-- DownloadError 事件详解 -->
+  <h3 id="event-0x02">DownloadError —— 下载错误事件（0x02）</h3>
+  <p>
+    固件下载过程中遇到错误时触发。此事件提供了出错时的上下文信息（已下载量、进度等），
+    有助于诊断网络问题或 Provider 端故障。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>ID</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>SoftwareVersion</td>
+          <td><code>0x00</code></td>
+          <td>uint32</td>
+          <td>正在下载的目标固件版本号</td>
+        </tr>
+        <tr>
+          <td>BytesDownloaded</td>
+          <td><code>0x01</code></td>
+          <td>uint64</td>
+          <td>出错前已成功下载的字节数</td>
+        </tr>
+        <tr>
+          <td>ProgressPercent</td>
+          <td><code>0x02</code></td>
+          <td>uint8 / null</td>
+          <td>出错时的下载进度百分比（0-100），null 表示无法计算</td>
+        </tr>
+        <tr>
+          <td>PlatformCode</td>
+          <td><code>0x03</code></td>
+          <td>int64 / null</td>
+          <td>平台特定的错误码，null 表示无额外信息。具体含义由设备厂商定义</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p>事件上报示例 —— 下载到 75% 时出错：</p>
+  <pre><code set:html={downloadErrorEventExample} /></pre>
+  <p class="back-link"><a href="#events">&#8593; 返回事件列表</a></p>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>一个处于空闲状态的设备的 OtaSoftwareUpdateRequestor Cluster 属性读取结果：</p>
+
+  <pre><code set:html={exampleData} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发提示</div>
+    <p>
+      OTA Requestor Cluster 位于 <code>Endpoint 0</code>（Root Endpoint），不在功能端点上。
+      读取属性时注意指定正确的 Endpoint。此外，<code>DefaultOTAProviders</code> 是 Fabric-scoped 列表，
+      你只能看到当前 Fabric 的条目。
+    </p>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <details class="scenario">
+    <summary>场景 1：正常 OTA 更新流程</summary>
+    <div class="scenario-content">
+      <p>一次完整的 OTA 更新从通告到应用的典型流程：</p>
+      <ol>
+        <li>管理节点向设备发送 <code>AnnounceOTAProvider (0x00)</code>，告知有可用的 Provider</li>
+        <li>设备向 Provider 发起 QueryImage 请求 —— UpdateState 从 Idle 变为 <strong>Querying</strong></li>
+        <li>Provider 返回可用更新 —— 设备开始下载，UpdateState 变为 <strong>Downloading</strong></li>
+        <li>下载过程中，UpdateStateProgress 从 0 逐渐增长到 100</li>
+        <li>下载完成，设备验证固件并开始写入 —— UpdateState 变为 <strong>Applying</strong></li>
+        <li>写入完成，设备重启应用新固件 —— 重启后触发 <strong>VersionApplied</strong> 事件</li>
+        <li>UpdateState 回到 <strong>Idle</strong>，整个流程结束</li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 2：Provider 通告触发更新</summary>
+    <div class="scenario-content">
+      <p>通过 AnnounceOTAProvider 命令的不同原因触发不同的设备行为：</p>
+      <ol>
+        <li><strong>SimpleAnnouncement (0)</strong>：设备可以在方便时查询，不急迫。适合常规固件发布场景</li>
+        <li><strong>UpdateAvailable (1)</strong>：明确告知有新版本，设备应尽快查询。适合功能更新</li>
+        <li><strong>UrgentUpdateAvailable (2)</strong>：紧急安全补丁，设备应立即查询并优先下载。
+          此时设备可能跳过 DelayedOnUserConsent 直接进入下载，确保安全漏洞尽快修补</li>
+      </ol>
+      <p>
+        App 端在收到 StateTransition 事件时，可根据 Reason 字段判断是否需要向用户展示通知。
+        UrgentUpdateAvailable 触发的更新建议弹出醒目提示。
+      </p>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 3：更新进度跟踪</summary>
+    <div class="scenario-content">
+      <p>App 端实时展示 OTA 更新进度的实现方式：</p>
+      <ol>
+        <li>订阅 <code>UpdateState (0x0002)</code> 和 <code>UpdateStateProgress (0x0003)</code> 属性</li>
+        <li>同时订阅 <code>StateTransition</code>、<code>VersionApplied</code>、<code>DownloadError</code> 三个事件</li>
+        <li>根据 UpdateState 的值显示不同的 UI 状态：
+          <ul>
+            <li>Idle → 显示「固件已是最新」或「检查更新」按钮</li>
+            <li>Querying → 显示「正在检查更新...」</li>
+            <li>Downloading → 显示下载进度条，数值来自 UpdateStateProgress</li>
+            <li>Applying → 显示「正在安装更新，请勿断电...」</li>
+            <li>DelayedOnUserConsent → 显示确认对话框，等待用户同意</li>
+            <li>RollingBack → 显示「更新失败，正在恢复...」</li>
+          </ul>
+        </li>
+        <li>收到 VersionApplied 事件 → 显示「更新成功！已升级到版本 X」</li>
+        <li>收到 DownloadError 事件 → 显示「下载失败」并展示已下载进度，提供重试按钮</li>
+      </ol>
+      <p>
+        <strong>注意</strong>：UpdateStateProgress 在状态切换时可能变为 null 或重置为 0，
+        UI 应处理好 null 的情况（例如隐藏进度条或显示不确定进度指示器）。
+      </p>
+    </div>
+  </details>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .col-required {
+    color: #dc2626;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-required {
+    color: #f87171;
+  }
+
+  .col-optional {
+    color: #16a34a;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-optional {
+    color: #4ade80;
+  }
+
+  .scenario-content {
+    padding: 0.5rem 0;
+  }
+</style>

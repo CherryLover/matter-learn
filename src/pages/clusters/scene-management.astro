@@ -1,0 +1,917 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 场景表信息 ---
+  "0x0000": null,          // LastConfiguredBy = null（未记录最后配置者）
+  "0x0001": 16,            // SceneTableSize = 16（最多存储 16 个场景）
+
+  // --- Fabric 场景信息 ---
+  "0x0002": [              // FabricSceneInfo（当前 Fabric 的场景概况）
+    {
+      "SceneCount": 3,           // 当前 Fabric 已存储 3 个场景
+      "CurrentScene": 1,         // 当前激活的场景 ID
+      "CurrentGroup": 0,         // 当前激活场景所属的组 ID
+      "SceneValid": true,        // 当前场景状态有效
+      "RemainingCapacity": 13,   // 还能再存 13 个场景
+      "FabricIndex": 1           // 所属 Fabric 索引
+    }
+  ]
+}`;
+
+const addSceneExample = `{
+  "invokeRequests": [{
+    "commandPath": {
+      "endpointId": 1,
+      "clusterId": "0x0062",
+      "commandId": "0x00"       // AddScene
+    },
+    "commandFields": {
+      "GroupID": 0,              // 组 ID（0 = 不属于任何组）
+      "SceneID": 1,              // 场景 ID
+      "TransitionTime": 10,      // 过渡时间 = 1.0 秒（单位 0.1 秒）
+      "SceneName": "Movie",      // 场景名称（需 SN 特性）
+      "ExtensionFieldSets": [    // 各 Cluster 的属性快照
+        {
+          "ClusterID": "0x0006", // OnOff Cluster
+          "AttributeValueList": [
+            { "AttributeID": "0x0000", "ValueUnsigned8": 1 }
+          ]
+        },
+        {
+          "ClusterID": "0x0008", // LevelControl Cluster
+          "AttributeValueList": [
+            { "AttributeID": "0x0000", "ValueUnsigned8": 25 }
+          ]
+        },
+        {
+          "ClusterID": "0x0300", // ColorControl Cluster
+          "AttributeValueList": [
+            { "AttributeID": "0x0003", "ValueUnsigned16": 370 },
+            { "AttributeID": "0x0004", "ValueUnsigned16": 300 }
+          ]
+        }
+      ]
+    }
+  }]
+}`;
+---
+
+<DocLayout
+  title="场景管理 Cluster · SceneManagement（0x0062）"
+  description="Matter SceneManagement Cluster（0x0062）完整参考 — AddScene/RecallScene/StoreScene 等全部命令、ExtensionFieldSets 结构、FabricSceneInfo 属性、场景过渡机制说明与实际应用场景示例。"
+  type="article"
+>
+  <h1>场景管理 Cluster（SceneManagement）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x0062</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 通常在 <code>Endpoint 1</code>（功能端点）
+  </p>
+  <p>
+    SceneManagement 是 Matter 中的场景管理 Cluster —— 负责将多个 Cluster 的属性值打包成一个「快照」，
+    然后通过一条命令一键恢复到这组状态。
+    比如「观影模式」可以同时把灯调暗、色温调暖、窗帘关上，这些动作就是一个场景。
+  </p>
+  <p>
+    每个场景由 <strong>GroupID + SceneID</strong> 唯一标识，属于某个组（Group），
+    组内可以包含多个场景。场景的核心数据结构是 <strong>ExtensionFieldSets</strong>
+    —— 一组「Cluster ID + 属性值列表」的快照，定义了这个场景要把哪些 Cluster 的哪些属性设成什么值。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">Matter 1.4+ 替代旧版 Scenes（0x0005）</div>
+    <p>
+      SceneManagement（0x0062）是 Matter 1.4 引入的新 Cluster，取代了旧版 Scenes（0x0005）。
+      新版本引入了 <strong>Fabric 级隔离</strong>（每个 Fabric 独立管理自己的场景表）和
+      <strong>FabricSceneInfo</strong> 结构体，解决了旧版多 Fabric 共享场景表的安全问题。
+      新项目应直接使用 0x0062，旧版 0x0005 已标记为弃用。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#commands">命令列表</a>
+    <span class="nav-sep">|</span>
+    <a href="#attributes">属性详解</a>
+    <span class="nav-sep">|</span>
+    <a href="#structs">核心数据结构</a>
+    <span class="nav-sep">|</span>
+    <a href="#features">Feature 位图</a>
+    <span class="nav-sep">|</span>
+    <a href="#example-data">示例数据</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">常见场景</a>
+  </nav>
+
+  <!-- ====== 命令（Commands）====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    SceneManagement Cluster 共有 8 个命令，覆盖场景的增删改查、一键召回和跨组复制。
+    其中 AddScene 和 RecallScene 是日常开发最常用的两个。
+    点击下方表格中的命令 ID 可跳转到对应的详细说明。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>说明</th>
+          <th>响应命令</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#cmd-0x00">
+          <td><a href="#cmd-0x00"><code>0x00</code></a></td>
+          <td>AddScene</td>
+          <td>添加或更新一个场景</td>
+          <td>AddSceneResponse</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x01">
+          <td><a href="#cmd-0x01"><code>0x01</code></a></td>
+          <td>ViewScene</td>
+          <td>查看指定场景的完整数据</td>
+          <td>ViewSceneResponse</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x02">
+          <td><a href="#cmd-0x02"><code>0x02</code></a></td>
+          <td>RemoveScene</td>
+          <td>删除指定场景</td>
+          <td>RemoveSceneResponse</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x03">
+          <td><a href="#cmd-0x03"><code>0x03</code></a></td>
+          <td>RemoveAllScenes</td>
+          <td>删除指定组内的所有场景</td>
+          <td>RemoveAllScenesResponse</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x04">
+          <td><a href="#cmd-0x04"><code>0x04</code></a></td>
+          <td>StoreScene</td>
+          <td>捕获当前状态存为场景</td>
+          <td>StoreSceneResponse</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x05">
+          <td><a href="#cmd-0x05"><code>0x05</code></a></td>
+          <td>RecallScene</td>
+          <td>一键恢复指定场景</td>
+          <td class="col-optional">无</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x06">
+          <td><a href="#cmd-0x06"><code>0x06</code></a></td>
+          <td>GetSceneMembership</td>
+          <td>查询组内已有的场景列表</td>
+          <td>GetSceneMembershipResponse</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x40">
+          <td><a href="#cmd-0x40"><code>0x40</code></a></td>
+          <td>CopyScene</td>
+          <td>在组之间复制场景</td>
+          <td>CopySceneResponse</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 命令详解 ====== -->
+  <h3 id="cmd-0x00">AddScene —— 添加场景（0x00）</h3>
+  <p>
+    向设备的场景表中添加一个新场景，或更新已有场景。
+    场景的核心数据通过 <code>ExtensionFieldSets</code> 传入 —— 它定义了这个场景要控制哪些 Cluster 的哪些属性值。
+    如果指定的 GroupID + SceneID 已存在，会覆盖更新。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>GroupID</td>
+          <td>group-id</td>
+          <td>场景所属的组 ID。<code>0x0000</code> 表示不属于任何组</td>
+        </tr>
+        <tr>
+          <td>SceneID</td>
+          <td>uint8</td>
+          <td>场景 ID，在组内唯一（0x00 ~ 0xFF）</td>
+        </tr>
+        <tr>
+          <td>TransitionTime</td>
+          <td>uint32</td>
+          <td>过渡时间，单位 <strong>0.1 秒</strong>（毫秒的十分之一）。例如 <code>10</code> = 1.0 秒</td>
+        </tr>
+        <tr>
+          <td>SceneName</td>
+          <td>string</td>
+          <td>场景名称（最长 16 字节）。需要设备支持 <strong>SN</strong> 特性</td>
+        </tr>
+        <tr>
+          <td>ExtensionFieldSets</td>
+          <td>list</td>
+          <td>各 Cluster 的属性快照列表（详见<a href="#struct-efs">数据结构说明</a>）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>AddSceneResponse 返回字段</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Status</td><td>status</td><td>操作结果状态码</td></tr>
+        <tr><td>GroupID</td><td>group-id</td><td>场景所属的组 ID</td></tr>
+        <tr><td>SceneID</td><td>uint8</td><td>场景 ID</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        用户在 App 中创建「观影模式」：灯光调到 10%、色温设为暖白、窗帘关闭。
+        App 将这些属性值封装进 ExtensionFieldSets，通过 AddScene 存入设备，
+        之后用 RecallScene 一键恢复。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x01">ViewScene —— 查看场景（0x01）</h3>
+  <p>
+    读取指定场景的完整数据，包括过渡时间、场景名称和 ExtensionFieldSets。
+    用于在 App 界面上展示场景详情或编辑前获取当前配置。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>GroupID</td><td>group-id</td><td>场景所属的组 ID</td></tr>
+        <tr><td>SceneID</td><td>uint8</td><td>要查看的场景 ID</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>ViewSceneResponse 返回字段</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Status</td><td>status</td><td>操作结果状态码</td></tr>
+        <tr><td>GroupID</td><td>group-id</td><td>组 ID</td></tr>
+        <tr><td>SceneID</td><td>uint8</td><td>场景 ID</td></tr>
+        <tr><td>TransitionTime</td><td>uint32</td><td>过渡时间（0.1 秒）</td></tr>
+        <tr><td>SceneName</td><td>string</td><td>场景名称</td></tr>
+        <tr><td>ExtensionFieldSets</td><td>list</td><td>各 Cluster 的属性快照</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        App 场景编辑页面加载时，先用 ViewScene 读取当前配置，展示给用户，
+        用户修改后再通过 AddScene 更新。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x02">RemoveScene —— 删除场景（0x02）</h3>
+  <p>
+    从设备的场景表中删除指定的一个场景。删除后该 SceneID 可以被重新使用。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>GroupID</td><td>group-id</td><td>场景所属的组 ID</td></tr>
+        <tr><td>SceneID</td><td>uint8</td><td>要删除的场景 ID</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>RemoveSceneResponse 返回字段</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Status</td><td>status</td><td>操作结果状态码</td></tr>
+        <tr><td>GroupID</td><td>group-id</td><td>组 ID</td></tr>
+        <tr><td>SceneID</td><td>uint8</td><td>场景 ID</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>用户在 App 中删除不再需要的场景，如删掉旧的「派对模式」。</p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x03">RemoveAllScenes —— 删除组内所有场景（0x03）</h3>
+  <p>
+    一次性删除指定组内的全部场景。适合重置或清空某个区域的场景配置。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>GroupID</td><td>group-id</td><td>要清空场景的组 ID</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>RemoveAllScenesResponse 返回字段</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Status</td><td>status</td><td>操作结果状态码</td></tr>
+        <tr><td>GroupID</td><td>group-id</td><td>组 ID</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>用户重新装修后，清空「客厅」组的所有旧场景，准备重新配置。</p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x04">StoreScene —— 捕获当前状态（0x04）</h3>
+  <p>
+    将设备当前的实际状态「拍快照」保存为一个场景。设备会自动读取自身各 Cluster 的当前属性值，
+    打包成 ExtensionFieldSets 存入场景表。相比 AddScene 需要手动指定每个属性值，
+    StoreScene 更像一个「保存当前状态」的快捷操作。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>GroupID</td><td>group-id</td><td>场景所属的组 ID</td></tr>
+        <tr><td>SceneID</td><td>uint8</td><td>场景 ID（如果已存在则覆盖）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>StoreSceneResponse 返回字段</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Status</td><td>status</td><td>操作结果状态码</td></tr>
+        <tr><td>GroupID</td><td>group-id</td><td>组 ID</td></tr>
+        <tr><td>SceneID</td><td>uint8</td><td>场景 ID</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        用户通过滑块把灯光调到自己喜欢的状态后，点击「保存为场景」按钮，
+        App 发送 StoreScene 命令，设备自动将当前亮度、色温等属性值存入场景表。
+        不需要 App 逐个读取属性值再用 AddScene 传入。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x05">RecallScene —— 恢复场景（0x05）</h3>
+  <p>
+    一键恢复指定场景。设备会读取场景中保存的 ExtensionFieldSets，
+    将各 Cluster 的属性值设置到场景记录的目标值。
+    如果指定了 TransitionTime，设备会在过渡时间内平滑切换（如灯光渐变）。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>GroupID</td>
+          <td>group-id</td>
+          <td>是</td>
+          <td>场景所属的组 ID</td>
+        </tr>
+        <tr>
+          <td>SceneID</td>
+          <td>uint8</td>
+          <td>是</td>
+          <td>要恢复的场景 ID</td>
+        </tr>
+        <tr>
+          <td>TransitionTime</td>
+          <td>uint32</td>
+          <td>否</td>
+          <td>覆盖场景自带的过渡时间（0.1 秒）。省略则使用场景存储时的值</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">过渡时间单位注意</div>
+    <p>
+      TransitionTime 的单位是 <strong>0.1 秒</strong>（100 毫秒），不是秒也不是毫秒。
+      例如值为 <code>10</code> 表示 1.0 秒，<code>30</code> 表示 3.0 秒。
+      这与旧版 Scenes Cluster 的秒级单位不同，新版精度更高。
+    </p>
+  </div>
+
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        用户点击 App 中的「观影模式」按钮，App 发送 RecallScene，
+        灯在 1 秒内从当前亮度渐暗到 10%，色温渐变为暖白，窗帘缓缓关闭。
+        所有设备同步执行，过渡自然流畅。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x06">GetSceneMembership —— 查询场景列表（0x06）</h3>
+  <p>
+    查询指定组内有哪些场景。返回该组下所有已存储的 SceneID 列表和剩余容量。
+    用于在 App 界面展示场景列表或判断还能创建多少个场景。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>GroupID</td><td>group-id</td><td>要查询的组 ID</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>GetSceneMembershipResponse 返回字段</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Status</td><td>status</td><td>操作结果状态码</td></tr>
+        <tr><td>Capacity</td><td>uint8 / null</td><td>剩余可存场景数量。<code>null</code> 表示未知</td></tr>
+        <tr><td>GroupID</td><td>group-id</td><td>组 ID</td></tr>
+        <tr><td>SceneList</td><td>list&lt;uint8&gt;</td><td>该组内已存储的 SceneID 列表</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        App 打开「场景管理」页面时，先调用 GetSceneMembership 获取当前组的所有场景 ID，
+        再逐个调用 ViewScene 拿到场景详情展示列表。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x40">CopyScene —— 复制场景（0x40）</h3>
+  <p>
+    在组之间复制场景。可以复制单个场景，也可以一次性复制源组的全部场景到目标组。
+    适合在不同房间之间共享相同的场景配置。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Mode</td>
+          <td>CopyModeBitmap</td>
+          <td>Bit 0: CopyAllScenes —— 为 1 时复制源组的全部场景</td>
+        </tr>
+        <tr>
+          <td>GroupIdentifierFrom</td>
+          <td>group-id</td>
+          <td>源组 ID</td>
+        </tr>
+        <tr>
+          <td>SceneIdentifierFrom</td>
+          <td>uint8</td>
+          <td>源场景 ID（CopyAllScenes = 1 时忽略）</td>
+        </tr>
+        <tr>
+          <td>GroupIdentifierTo</td>
+          <td>group-id</td>
+          <td>目标组 ID</td>
+        </tr>
+        <tr>
+          <td>SceneIdentifierTo</td>
+          <td>uint8</td>
+          <td>目标场景 ID（CopyAllScenes = 1 时忽略）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>CopySceneResponse 返回字段</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Status</td><td>status</td><td>操作结果状态码</td></tr>
+        <tr><td>GroupIdentifierFrom</td><td>group-id</td><td>源组 ID</td></tr>
+        <tr><td>SceneIdentifierFrom</td><td>uint8</td><td>源场景 ID</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        用户在客厅配置好了「阅读模式」场景，想要在书房也用同样的配置。
+        通过 CopyScene 把客厅组的场景复制到书房组，不需要重新设置每个属性值。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 属性详解 ====== -->
+  <h2 id="attributes">属性详解</h2>
+  <p>
+    SceneManagement Cluster 有 3 个属性。场景数据本身不通过属性暴露，
+    而是通过 ViewScene / GetSceneMembership 命令读取。
+    属性提供的是场景表的容量、当前状态等元信息。
+  </p>
+
+  <!-- 属性汇总表 -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#attr-0x0000">
+          <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
+          <td>LastConfiguredBy</td>
+          <td>node-id / null</td>
+          <td>最后修改场景表的节点 ID</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0001">
+          <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
+          <td>SceneTableSize</td>
+          <td>uint16</td>
+          <td>场景表总容量</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0002">
+          <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
+          <td>FabricSceneInfo</td>
+          <td>list&lt;FabricSceneInfo&gt;</td>
+          <td>各 Fabric 的场景概况信息</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="attr-0x0000">LastConfiguredBy（0x0000）</h3>
+  <p>
+    记录最后一次修改场景表的节点 ID（Node ID）。
+    可以用来排查「是谁改了场景配置」的问题。
+    值为 <code>null</code> 表示场景表从未被修改，或设备不支持追踪此信息。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr id="attr-detail-0x0000">
+          <td><code>0x0000</code></td>
+          <td>LastConfiguredBy</td>
+          <td>node-id / null</td>
+          <td>Nullable。记录最后一次通过 AddScene / RemoveScene / StoreScene 等命令修改场景表的节点。<code>null</code> = 未记录或从未修改</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x0001">SceneTableSize（0x0001）</h3>
+  <p>
+    设备场景表的最大容量，即最多能存储多少个场景。
+    这是所有 Fabric 共享的总容量。典型设备值在 8~16 之间。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr id="attr-detail-0x0001">
+          <td><code>0x0001</code></td>
+          <td>SceneTableSize</td>
+          <td>uint16</td>
+          <td>场景表总容量。多个 Fabric 共享这个容量上限，例如值为 16 表示所有 Fabric 加起来最多 16 个场景</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x0002">FabricSceneInfo（0x0002）</h3>
+  <p>
+    每个 Fabric 独立维护的场景状态信息。这是一个列表，每个元素对应一个 Fabric。
+    通过它可以知道当前 Fabric 有多少个场景、当前激活的是哪个场景、还能再存多少个。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">Fabric 级隔离</div>
+    <p>
+      SceneManagement 的一个重要设计是 <strong>Fabric 级隔离</strong>：
+      每个 Fabric（可以理解为每个智能家居平台，如 Apple Home、Google Home）只能看到和操作自己的场景，
+      无法读取或修改其他 Fabric 的场景数据。FabricSceneInfo 也只返回当前 Fabric 自己的信息。
+    </p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>SceneCount</td>
+          <td>uint8</td>
+          <td>当前 Fabric 已存储的场景数量</td>
+        </tr>
+        <tr>
+          <td>CurrentScene</td>
+          <td>uint8</td>
+          <td>当前激活的场景 ID（最后一次 RecallScene / StoreScene 的场景）</td>
+        </tr>
+        <tr>
+          <td>CurrentGroup</td>
+          <td>group-id</td>
+          <td>当前激活场景所属的组 ID</td>
+        </tr>
+        <tr>
+          <td>SceneValid</td>
+          <td>bool</td>
+          <td>当前场景状态是否仍然有效。如果设备属性被手动修改（不通过场景），会变为 <code>false</code></td>
+        </tr>
+        <tr>
+          <td>RemainingCapacity</td>
+          <td>uint8</td>
+          <td>当前 Fabric 还能再存储多少个场景</td>
+        </tr>
+        <tr>
+          <td>FabricIndex</td>
+          <td>fabric-idx</td>
+          <td>此记录对应的 Fabric 索引</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">SceneValid 的含义</div>
+    <p>
+      当通过 RecallScene 恢复了一个场景后，<code>SceneValid</code> 变为 <code>true</code>。
+      但如果之后用户手动调节了亮度或色温（不通过场景操作），设备的实际状态就与场景记录不一致了，
+      <code>SceneValid</code> 会变回 <code>false</code>。
+      可以用这个字段判断当前设备状态是否仍然匹配某个场景。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 核心数据结构 ====== -->
+  <h2 id="structs">核心数据结构</h2>
+
+  <h3 id="struct-efs">ExtensionFieldSets（扩展字段集）</h3>
+  <p>
+    ExtensionFieldSets 是场景的核心数据 —— 它记录了「这个场景要把哪些 Cluster 的哪些属性设成什么值」。
+    结构是一个列表，每个元素包含一个 Cluster ID 和该 Cluster 下要设置的属性值列表。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>层级</th><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td rowspan="2">ExtensionFieldSet</td>
+          <td>ClusterID</td>
+          <td>cluster-id</td>
+          <td>要控制的 Cluster ID，如 <code>0x0006</code>（OnOff）</td>
+        </tr>
+        <tr>
+          <td>AttributeValueList</td>
+          <td>list</td>
+          <td>该 Cluster 下的属性值列表</td>
+        </tr>
+        <tr>
+          <td rowspan="2">AttributeValuePair</td>
+          <td>AttributeID</td>
+          <td>attrib-id</td>
+          <td>属性 ID，如 <code>0x0000</code>（OnOff 的开关状态）</td>
+        </tr>
+        <tr>
+          <td>ValueUnsigned8/16/...</td>
+          <td>各类型</td>
+          <td>属性值，类型取决于该属性的定义</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>举个例子，一个「观影模式」场景的 ExtensionFieldSets 可能包含：</p>
+  <ul>
+    <li><strong>OnOff（0x0006）</strong>：开关 = 开启</li>
+    <li><strong>LevelControl（0x0008）</strong>：亮度 = 25（约 10%）</li>
+    <li><strong>ColorControl（0x0300）</strong>：色温 X = 370，色温 Y = 300（暖白光）</li>
+  </ul>
+  <p>
+    设备执行 RecallScene 时，会逐个读取这些属性对，调用对应 Cluster 的逻辑设置属性值。
+    每个 Cluster 需要实现 <code>ScenesManagement</code> 的回调接口来支持场景存取。
+  </p>
+
+  <!-- ====== Feature 位图 ====== -->
+  <h2 id="features">Feature 位图</h2>
+  <p>SceneManagement Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持的高级能力：</p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">Bit 0</span>
+      <div>
+        <span class="enum-name">SN（SceneNames）</span>
+        <span class="enum-desc">场景名称 —— 启用后 AddScene 可以设置 SceneName 字段，ViewScene 返回场景名称</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">SN 特性是否必须</div>
+    <p>
+      SN 特性是可选的。不支持 SN 的设备在 AddScene 时会忽略 SceneName 参数，
+      ViewScene 返回的 SceneName 也会是空字符串。
+      如果 App 需要展示场景名称，可以在 App 本地存储，不依赖设备端。
+    </p>
+  </div>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+
+  <h3>属性读取示例</h3>
+  <p>读取 SceneManagement Cluster 属性时的返回数据：</p>
+  <pre><code set:html={exampleData} /></pre>
+
+  <h3>AddScene 命令示例</h3>
+  <p>创建一个「观影模式」场景，包含 OnOff、LevelControl、ColorControl 三个 Cluster 的属性快照：</p>
+  <pre><code set:html={addSceneExample} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发提示</div>
+    <p>
+      实际开发中，ExtensionFieldSets 里应该只包含设备实际支持的 Cluster。
+      发送前可以先通过 Descriptor Cluster（0x001D）的 ServerList 确认设备有哪些 Cluster，
+      避免传入设备不支持的 Cluster 导致命令失败。
+    </p>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <details class="scenario">
+    <summary>场景 1：观影模式 —— 一键调暗灯光</summary>
+    <div class="scenario-content">
+      <p><strong>目标</strong>：用户点击「观影模式」按钮，灯光在 2 秒内渐变到暗暖光。</p>
+      <ol>
+        <li>创建场景时，用 <code>AddScene (0x00)</code> 设置 ExtensionFieldSets：
+          <ul>
+            <li>OnOff：开启</li>
+            <li>LevelControl：亮度 = 25（约 10%）</li>
+            <li>ColorControl：色温设为暖白</li>
+          </ul>
+          TransitionTime = 20（即 2.0 秒渐变）
+        </li>
+        <li>日常使用时，App 发送 <code>RecallScene (0x05)</code>，传入 GroupID 和 SceneID</li>
+        <li>设备在 2 秒内平滑切换到目标状态，灯光自然变暗变暖</li>
+        <li>如果用户想快速切换不要渐变，在 RecallScene 中覆盖 TransitionTime = 0</li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 2：起床模式 —— 清晨自然唤醒</summary>
+    <div class="scenario-content">
+      <p><strong>目标</strong>：每天早上 7:00 灯光从关闭渐亮到明亮冷白光，模拟日出。</p>
+      <ol>
+        <li>用 <code>AddScene (0x00)</code> 创建「起床」场景：
+          <ul>
+            <li>OnOff：开启</li>
+            <li>LevelControl：亮度 = 254（100%）</li>
+            <li>ColorControl：色温设为冷白（日光色）</li>
+          </ul>
+          TransitionTime = 600（即 60 秒渐变，1 分钟日出效果）
+        </li>
+        <li>在自动化规则中设定：每天 07:00 触发 <code>RecallScene (0x05)</code></li>
+        <li>灯光在 1 分钟内从关闭状态缓缓亮起到日光白，自然唤醒</li>
+        <li>可配合 OnOff Cluster 的 OnWithTimedOff 做防忘关灯：起床 30 分钟后自动关闭</li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 3：一键场景切换 —— 物理按钮触发</summary>
+    <div class="scenario-content">
+      <p><strong>目标</strong>：墙壁开关的单击 / 双击分别切换不同场景。</p>
+      <ol>
+        <li>预先配置两个场景：
+          <ul>
+            <li>SceneID = 1「日常」：亮度 80%，自然白光</li>
+            <li>SceneID = 2「观影」：亮度 10%，暖白光</li>
+          </ul>
+        </li>
+        <li>在绑定规则（Binding）中配置：
+          <ul>
+            <li>开关单击 → RecallScene（GroupID=0, SceneID=1）</li>
+            <li>开关双击 → RecallScene（GroupID=0, SceneID=2）</li>
+          </ul>
+        </li>
+        <li>场景切换完全在本地执行（通过 Group 组播），不依赖云端，响应速度极快</li>
+        <li>
+          用 <code>StoreScene (0x04)</code> 可以让用户自定义：把灯调到喜欢的状态，
+          长按开关触发 StoreScene，当前状态就保存为该按键对应的场景
+        </li>
+      </ol>
+    </div>
+  </details>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .col-required {
+    color: #dc2626;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-required {
+    color: #f87171;
+  }
+
+  .col-optional {
+    color: #16a34a;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-optional {
+    color: #4ade80;
+  }
+</style>

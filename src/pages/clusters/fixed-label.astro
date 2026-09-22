@@ -1,0 +1,286 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 属性 ---
+  "0x0": [                    // LabelList — 出厂标签列表
+    {
+      "Label": "room",        // 标签键：房间
+      "Value": "kitchen"      // 标签值：厨房
+    },
+    {
+      "Label": "floor",       // 标签键：楼层
+      "Value": "2"            // 标签值：2 楼
+    },
+    {
+      "Label": "orientation", // 标签键：朝向
+      "Value": "N"            // 标签值：北
+    }
+  ]
+}`;
+
+const scenarioSmartHome = `// 场景：App 读取设备的出厂标签，自动归类到对应房间
+{
+  "readRequests": [{
+    "attributePath": {
+      "endpointId": 0,
+      "clusterId": "0x0040",
+      "attributeId": "0x00"     // LabelList
+    }
+  }]
+}
+
+// 返回结果
+{
+  "attributeReports": [{
+    "attributeData": {
+      "dataVersion": 1,
+      "data": [
+        { "Label": "room", "Value": "kitchen" },
+        { "Label": "floor", "Value": "2" }
+      ]
+    }
+  }]
+}`;
+
+const scenarioMultiEndpoint = `// 场景：多 Endpoint 设备，每个 Endpoint 有不同的出厂标签
+// Endpoint 1 — 左侧开关
+{
+  "readRequests": [{
+    "attributePath": {
+      "endpointId": 1,
+      "clusterId": "0x0040",
+      "attributeId": "0x00"
+    }
+  }]
+}
+// 返回: [{ "Label": "position", "Value": "left" }]
+
+// Endpoint 2 — 右侧开关
+{
+  "readRequests": [{
+    "attributePath": {
+      "endpointId": 2,
+      "clusterId": "0x0040",
+      "attributeId": "0x00"
+    }
+  }]
+}
+// 返回: [{ "Label": "position", "Value": "right" }]`;
+---
+
+<DocLayout
+  title="固定标签 Cluster · FixedLabel（0x0040）"
+  description="Matter Fixed Label Cluster（0x0040）完整参考 — LabelList 属性、LabelStruct 结构体、出厂标签的读取与应用场景。设备出厂时写入的只读键值对标签。"
+  type="article"
+>
+  <h1>固定标签 Cluster（Fixed Label）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x0040</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: <code>Endpoint 0</code>（Root）或各功能 Endpoint
+  </p>
+  <p>
+    Fixed Label 存储设备在出厂时写入的标签（键值对），用于描述设备的物理属性或预设分类。
+    这些标签是<strong>只读的</strong> —— 用户和 App 都无法修改，只能读取。
+    标签内容由制造商在生产阶段确定，比如设备预设的房间、楼层、朝向等信息。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">和 UserLabel 的关系</div>
+    <p>
+      Fixed Label（<code>0x0040</code>）是只读的出厂标签，UserLabel（<code>0x0041</code>）是用户可写的自定义标签。
+      两者结构完全相同（都用 <code>LabelStruct</code>），区别只在于谁能改 ——
+      Fixed Label 由制造商在工厂写入后锁定，UserLabel 由用户随时修改。
+      App 通常会合并读取两者，出厂标签作为默认值，用户标签作为覆盖。
+    </p>
+  </div>
+
+  <!-- ====== 属性总览 ====== -->
+  <h2 id="attributes">属性总览</h2>
+  <p>Fixed Label 只有一个属性，非常简单。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>读写</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#attr-0x00">
+          <td><a href="#attr-0x00"><code>0x00</code></a></td>
+          <td>LabelList</td>
+          <td>list&lt;LabelStruct&gt;</td>
+          <td>只读</td>
+          <td>出厂标签列表（键值对数组）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 属性详解 ====== -->
+  <h3 id="attr-0x00">LabelList（出厂标签列表）</h3>
+  <p>
+    一个 <code>LabelStruct</code> 数组，每个元素是一个键值对。列表可以为空（设备没有预设标签），
+    也可以包含多个条目。标签的键（Label）在同一个列表中<strong>不应重复</strong>。
+  </p>
+  <p>
+    这个属性是只读的，设备启动后内容固定不变。如果需要可写的标签，使用 UserLabel Cluster（<code>0x0041</code>）。
+  </p>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">空列表也是合法的</div>
+    <p>
+      并非所有设备都有出厂标签。很多设备的 <code>LabelList</code> 返回空数组 <code>[]</code>，
+      这是完全正常的。App 应当处理空列表的情况，不要假设一定有标签数据。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== LabelStruct 结构体 ====== -->
+  <h2 id="label-struct">LabelStruct 结构体</h2>
+  <p>
+    <code>LabelStruct</code> 是 Fixed Label 和 UserLabel 共用的数据结构，定义了一个标签的键和值。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>字段</th>
+          <th>类型</th>
+          <th>最大长度</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>Label</code></td>
+          <td>string</td>
+          <td>16 字符</td>
+          <td>标签键，描述标签的含义（如 "room"、"floor"）</td>
+        </tr>
+        <tr>
+          <td><code>Value</code></td>
+          <td>string</td>
+          <td>16 字符</td>
+          <td>标签值，键对应的具体内容（如 "kitchen"、"2"）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>常见的出厂标签示例</h4>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">room</span>
+      <div>
+        <span class="enum-name">房间</span>
+        <span class="enum-desc">如 "kitchen"、"bedroom"、"living room"</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">floor</span>
+      <div>
+        <span class="enum-name">楼层</span>
+        <span class="enum-desc">如 "1"、"2"、"B1"</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">orientation</span>
+      <div>
+        <span class="enum-name">朝向</span>
+        <span class="enum-desc">如 "N"、"S"、"NE"</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">position</span>
+      <div>
+        <span class="enum-name">位置</span>
+        <span class="enum-desc">如 "left"、"right"、"top"</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">zone</span>
+      <div>
+        <span class="enum-name">区域</span>
+        <span class="enum-desc">如 "A"、"B"、"public"</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">标签键没有强制规范</div>
+    <p>
+      Matter 规范没有定义标签键的固定列表，上面只是常见用法。
+      制造商可以使用任意字符串作为键，只要不超过 16 个字符。
+      App 端不应硬编码对特定键的依赖，而应优雅地展示任何键值对。
+    </p>
+  </div>
+
+  <!-- ====== 命令 ====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    Fixed Label Cluster <strong>没有任何命令</strong>。这是一个纯数据 Cluster ——
+    只提供只读属性供 App 读取，不接受任何写入或操作指令。
+    如果需要修改标签，请使用 UserLabel Cluster（<code>0x0041</code>）。
+  </p>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>读取一个厨房传感器设备的 Fixed Label 属性：</p>
+  <pre><code set:html={exampleData} /></pre>
+
+  <!-- ====== 应用场景 ====== -->
+  <h2 id="scenarios">应用场景</h2>
+
+  <h3 id="scenario-1">场景一：自动归类设备到房间</h3>
+  <p>
+    用户配网完成后，App 读取设备的出厂标签。如果标签中包含 <code>room</code> 键，
+    App 可以自动将设备归类到对应房间，省去用户手动选择的步骤。
+  </p>
+  <pre><code set:html={scenarioSmartHome} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发建议</div>
+    <p>
+      配网完成后自动读取 Fixed Label，用已知的键（room、floor）做初始分组建议，
+      但始终让用户确认或修改。出厂标签只是参考，用户的实际安装位置可能不同。
+    </p>
+  </div>
+
+  <h3 id="scenario-2">场景二：多 Endpoint 设备区分子功能</h3>
+  <p>
+    一个双路开关有两个 Endpoint，每个 Endpoint 上的 Fixed Label 标注了物理位置（左/右）。
+    App 读取标签后可以直接在 UI 上标注「左开关」「右开关」，而不是显示无意义的 Endpoint 编号。
+  </p>
+  <pre><code set:html={scenarioMultiEndpoint} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发建议</div>
+    <p>
+      对于多 Endpoint 设备，逐个读取每个 Endpoint 的 Fixed Label。
+      如果标签中有 <code>position</code> 键，用它来标注 UI 中的子设备名称，
+      给用户更直观的控制界面。
+    </p>
+  </div>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>

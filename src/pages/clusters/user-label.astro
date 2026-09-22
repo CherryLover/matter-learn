@@ -1,0 +1,255 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 属性 ---
+  "0x0": [                    // LabelList（标签列表）
+    {
+      "0": "zone",            // Label = "zone"
+      "1": "living-room"      // Value = "living-room"
+    },
+    {
+      "0": "owner",           // Label = "owner"
+      "1": "alice"            // Value = "alice"
+    },
+    {
+      "0": "floor",           // Label = "floor"
+      "1": "2F"               // Value = "2F"
+    }
+  ]
+}`;
+
+const writeExample = `{
+  "writeRequests": [{
+    "attributePath": {
+      "endpointId": 1,
+      "clusterId": "0x0041",
+      "attributeId": "0x00"       // LabelList
+    },
+    "data": [
+      { "0": "zone",  "1": "living-room" },
+      { "0": "owner", "1": "alice" },
+      { "0": "floor", "1": "2F" }
+    ]
+  }]
+}`;
+---
+
+<DocLayout
+  title="用户标签 Cluster · UserLabel（0x0041）"
+  description="Matter UserLabel Cluster（0x0041）完整参考 — LabelList 属性、LabelStruct 结构体、与 FixedLabel 的区别、用户自定义设备标签的使用场景。"
+  type="article"
+>
+  <h1>用户标签 Cluster（UserLabel）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x0041</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 通常在 <code>Endpoint 0</code>（Root）或功能端点 &nbsp;|&nbsp;
+    <strong>角色</strong>: Server（可读写，无命令）
+  </p>
+  <p>
+    UserLabel 允许用户或 App 为设备打上自定义的键值对标签，用于分类、分组、备注等用途。
+    这是一个极其简单的 Cluster —— <strong>0 个命令</strong>、<strong>0 个事件</strong>，
+    只有 <strong>1 个可写属性</strong> <code>LabelList</code>，通过直接写属性来管理标签。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">UserLabel vs FixedLabel</div>
+    <p>
+      Matter 有两个标签 Cluster，区别在于谁能改：
+    </p>
+    <ul>
+      <li><strong>FixedLabel（0x0040）</strong> —— 厂商在出厂时写入的标签，<strong>只读</strong>，App 无法修改。例如 <code>"room"/"factory-default"</code>、<code>"model"/"v2"</code></li>
+      <li><strong>UserLabel（0x0041）</strong> —— 用户自定义的标签，<strong>可读写</strong>，App 可以随时增删改。例如 <code>"zone"/"living-room"</code>、<code>"owner"/"alice"</code></li>
+    </ul>
+    <p>
+      两者数据结构完全相同（都是 <code>LabelStruct</code> 列表），只是读写权限不同。
+      读取设备标签时，应该合并两个 Cluster 的结果，FixedLabel 提供厂商默认值，UserLabel 提供用户自定义值。
+    </p>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">Per-Fabric 隔离</div>
+    <p>
+      UserLabel 的标签是 <strong>per-fabric（按 Fabric 隔离）</strong>的。
+      每个 Fabric 只能看到和修改自己写入的标签，无法访问其他 Fabric 的标签。
+      例如，用户通过 Apple Home 写入的 <code>"zone"/"kitchen"</code>，在 Google Home 上是看不到的。
+    </p>
+  </div>
+
+  <!-- ====== 属性总览 ====== -->
+  <h2 id="attributes">属性</h2>
+  <p>UserLabel 只有一个属性，且是必须支持的。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>读写</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#attr-0x00">
+          <td><a href="#attr-0x00"><code>0x00</code></a></td>
+          <td>LabelList</td>
+          <td>list&lt;LabelStruct&gt;</td>
+          <td>读写</td>
+          <td>用户自定义的标签列表</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 属性详解 ====== -->
+  <h3 id="attr-0x00">LabelList（标签列表）</h3>
+  <p>
+    一个 <code>LabelStruct</code> 的列表，每个元素是一对 Label（键）+ Value（值）字符串。
+    App 通过 <strong>Write Attribute</strong> 操作来增删改标签 —— 每次写入都是<strong>整体替换</strong>，
+    不是追加。如果想新增一个标签，需要先读取现有列表，追加后再整体写回。
+  </p>
+  <div class="callout callout-tip">
+    <div class="callout-title">没有命令，全靠写属性</div>
+    <p>
+      UserLabel 没有定义任何命令。所有操作（新增、修改、删除标签）都通过写 <code>LabelList</code> 属性完成。
+      这是 Matter 中少数「纯属性驱动」的 Cluster 之一。写入时要注意整体替换的语义 —— 漏掉已有标签相当于删除它。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== LabelStruct 结构体 ====== -->
+  <h2 id="label-struct">LabelStruct 结构体</h2>
+  <p>
+    <code>LabelStruct</code> 是 UserLabel 和 FixedLabel 共用的数据结构，表示一个键值对标签。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>字段 ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>约束</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>0x00</code></td>
+          <td>Label</td>
+          <td>string</td>
+          <td>最长 16 字符</td>
+          <td>标签的键名，如 <code>"zone"</code>、<code>"owner"</code></td>
+        </tr>
+        <tr>
+          <td><code>0x01</code></td>
+          <td>Value</td>
+          <td>string</td>
+          <td>最长 16 字符</td>
+          <td>标签的值，如 <code>"living-room"</code>、<code>"alice"</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">长度限制</div>
+    <p>
+      Label 和 Value 都有 <strong>最长 16 字符</strong>的硬限制。
+      App 端在写入前应做校验，超出长度的写入会被设备拒绝（返回 <code>CONSTRAINT_ERROR</code>）。
+      建议使用短小精悍的英文缩写作为键名，值可以适当使用中文但要注意字符长度（中文字符按 UTF-8 编码计算可能占 3 字节，但 Matter 按字符数计算，16 个中文字符是允许的）。
+    </p>
+  </div>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>读取一台智能灯的 UserLabel Cluster 属性：</p>
+  <pre><code set:html={exampleData} /></pre>
+
+  <p>写入标签（Write Attribute 请求）：</p>
+  <pre><code set:html={writeExample} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发建议</div>
+    <p>
+      写属性的流程是<strong>读 → 改 → 写</strong>三步：
+    </p>
+    <ol>
+      <li>先 Read Attribute 获取当前 <code>LabelList</code></li>
+      <li>在本地修改列表（增 / 删 / 改某个标签）</li>
+      <li>将完整列表通过 Write Attribute 写回设备</li>
+    </ol>
+    <p>
+      直接写入新列表而不先读取，会丢失其他 App 之前写入的标签。
+      如果多个 App 可能同时操作标签，建议加上乐观锁逻辑（读取时记录版本，写入前再次确认）。
+    </p>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <details class="scenario">
+    <summary>场景 1：按区域分组管理设备</summary>
+    <div class="scenario-content">
+      <p>
+        用户家中有多台同类设备（例如 5 个智能灯泡），需要按房间、楼层等维度组织管理。
+        通过 UserLabel 为每台设备打上位置标签，App 就可以按标签分组展示。
+      </p>
+      <ol>
+        <li>配网完成后，引导用户为设备设置区域标签</li>
+        <li>写入标签：<code>{'{"zone": "living-room", "floor": "1F"}'}</code></li>
+        <li>App 首页按 <code>zone</code> 值分组显示设备</li>
+        <li>用户搬动设备后，可在 App 中修改 <code>zone</code> 值</li>
+        <li>支持自定义区域名，不限于预置列表</li>
+      </ol>
+      <p>
+        与 Matter 的 Groups Cluster 不同，UserLabel 是纯元数据标记，不影响设备的群组控制行为。
+        适合做 App 层面的 UI 分组，而非设备层面的联动控制。
+      </p>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 2：多用户家庭的设备归属标记</summary>
+    <div class="scenario-content">
+      <p>
+        一个家庭中有多个成员，某些设备归属于特定成员（如儿童房的灯、书房的台灯）。
+        通过 UserLabel 记录归属信息，App 可以为不同成员展示不同的设备视图。
+      </p>
+      <ol>
+        <li>为设备写入归属标签：<code>{'{"owner": "alice", "usage": "reading"}'}</code></li>
+        <li>App 根据当前登录用户的名字过滤 <code>owner</code> 标签</li>
+        <li>「我的设备」页面只展示 owner 匹配的设备</li>
+        <li>管理员视图仍可看到全部设备</li>
+      </ol>
+      <p>
+        注意：UserLabel 是 per-fabric 的，如果家庭成员使用不同的 Fabric（不同品牌的 App），
+        各自的标签互相不可见。同一 Fabric 下的所有 App 共享同一套标签。
+      </p>
+    </div>
+  </details>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .scenario-content {
+    padding: 0.5rem 0;
+  }
+</style>

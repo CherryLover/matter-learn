@@ -1,0 +1,878 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 风扇模式 ---
+  "0x00": 5,              // FanMode = Auto（自动模式）
+  "0x01": 2,              // FanModeSequence = OffLowMedHighAuto
+
+  // --- 百分比控制 ---
+  "0x02": 60,             // PercentSetting = 60（目标风速 60%）
+  "0x03": 58,             // PercentCurrent = 58（实际风速 58%）
+
+  // --- 多档位控制（SPD Feature）---
+  "0x04": 10,             // SpeedMax = 10（最多 10 档）
+  "0x05": 6,              // SpeedSetting = 6（目标档位 6）
+  "0x06": 6,              // SpeedCurrent = 6（实际档位 6）
+
+  // --- 摇头功能（RCK Feature）---
+  "0x07": 0x03,           // RockSupport = 0x03（支持左右 + 上下）
+  "0x08": 0x01,           // RockSetting = 0x01（当前左右摇头）
+
+  // --- 风感模式（WND Feature）---
+  "0x09": 0x03,           // WindSupport = 0x03（支持睡眠风 + 自然风）
+  "0x0A": 0x02,           // WindSetting = 0x02（当前自然风）
+
+  // --- 送风方向（AIRDIR Feature）---
+  "0x0B": 0               // AirflowDirection = Forward（正转送风）
+}`;
+---
+
+<DocLayout
+  title="风扇 Cluster · FanControl（0x0202）"
+  description="Matter FanControl Cluster（0x0202）完整参考 — FanMode/Step 命令、百分比与多档位风速控制、摇头/风感/送风方向等全部属性与枚举值速查及真实设备数据示例。"
+  type="article"
+  prev={{ title: '温控（Thermostat）', href: '/clusters/thermostat/' }}
+>
+  <h1>风扇 Cluster（FanControl）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x0202</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 通常在 <code>Endpoint 1</code>（功能端点）
+  </p>
+  <p>
+    FanControl 是 Matter 中控制风扇设备的核心 Cluster，适用于 HVAC 系统风扇、吊扇、独立风扇等场景。
+    它定义了风扇模式切换、转速控制、摇头、风感模式、送风方向等全部能力。
+    风扇类设备的日常开发基本都围绕这个 Cluster 展开。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">Feature 驱动的能力差异</div>
+    <p>
+      FanControl 的能力差异很大 —— 一个简单的 HVAC 风扇可能只支持百分比调速，
+      而一台高端吊扇可能同时支持多档位、自动模式、摇头、自然风和正反转。
+      开发前先读取 <code>FeatureMap (0xFFFC)</code>，确认设备支持哪些 Feature，再决定 UI 布局。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#features">Feature 位图</a>
+    <span class="nav-sep">|</span>
+    <a href="#commands">命令列表</a>
+    <span class="nav-sep">|</span>
+    <a href="#attributes">属性详解</a>
+    <span class="nav-sep">|</span>
+    <a href="#example-data">示例数据</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">常见场景</a>
+  </nav>
+
+  <!-- ====== Feature 位图 ====== -->
+  <h2 id="features">Feature 位图</h2>
+  <p>FanControl Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持哪些能力。Feature 直接决定了哪些属性和命令可用：</p>
+
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">Bit 0</span>
+      <div>
+        <span class="enum-name">SPD（MultiSpeed）</span>
+        <span class="enum-desc">多档位 —— 支持 SpeedMax / SpeedSetting / SpeedCurrent 三个档位属性</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 1</span>
+      <div>
+        <span class="enum-name">AUT（Auto）</span>
+        <span class="enum-desc">自动模式 —— FanMode 可选 Auto，设备自行调节转速</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 2</span>
+      <div>
+        <span class="enum-name">RCK（Rocking）</span>
+        <span class="enum-desc">摇头 —— 支持 RockSupport / RockSetting，控制风扇摆动方向</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 3</span>
+      <div>
+        <span class="enum-name">WND（Wind）</span>
+        <span class="enum-desc">风感模式 —— 支持 WindSupport / WindSetting，提供睡眠风、自然风等模式</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 4</span>
+      <div>
+        <span class="enum-name">STEP（Step）</span>
+        <span class="enum-desc">步进调速 —— 支持 Step 命令，逐级增减风速</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 5</span>
+      <div>
+        <span class="enum-name">AIRDIR（AirDirection）</span>
+        <span class="enum-desc">送风方向 —— 支持 AirflowDirection 属性，控制正转/反转</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">Feature 组合示例</div>
+    <p>
+      一台普通 HVAC 风扇：<code>FeatureMap = 0x00</code>（无额外 Feature，仅百分比调速）。<br/>
+      一台高端吊扇：<code>FeatureMap = 0x3F</code>（全部 6 个 Feature），支持多档位、自动模式、摇头、风感、步进和正反转。<br/>
+      独立落地扇：<code>FeatureMap = 0x0F</code>（SPD + AUT + RCK + WND），有档位、自动、摇头和风感，但不支持步进和反转。
+    </p>
+  </div>
+
+  <!-- ====== 命令（Commands）====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    FanControl Cluster 只有一个命令 —— <code>Step</code>，用于步进式调整风速。
+    大部分风扇控制通过直接写属性完成（如写入 FanMode、PercentSetting、SpeedSetting 等），
+    Step 命令提供了一种不需要知道当前状态就能增减风速的便捷方式。
+    点击下方表格中的命令 ID 可跳转到详细说明。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>说明</th>
+          <th>Feature 要求</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#cmd-0x00">
+          <td><a href="#cmd-0x00"><code>0x00</code></a></td>
+          <td>Step</td>
+          <td>步进调速（增加或减少一档）</td>
+          <td class="col-feature">STEP</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 命令详解 ====== -->
+  <h3 id="cmd-0x00">Step —— 步进调速（0x00）</h3>
+  <p>
+    向风扇发送步进调速指令，逐级增大或减小风速。
+    具体增减的幅度由设备自行决定（通常对应一个百分比或一个档位）。
+    如果当前风速已到最大或最小值，再向同方向调整时设备会忽略（不报错）。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Direction</td>
+          <td>StepDirectionEnum</td>
+          <td>是</td>
+          <td>步进方向（见下方枚举）</td>
+        </tr>
+        <tr>
+          <td>Wrap</td>
+          <td>bool</td>
+          <td>否</td>
+          <td>是否循环。<code>true</code> 表示到最大后再 Increase 会回到最小值（反之亦然）</td>
+        </tr>
+        <tr>
+          <td>LowestOff</td>
+          <td>bool</td>
+          <td>否</td>
+          <td>循环时最低档是否为关闭。<code>true</code> 表示减到最低后再减一步会关闭风扇</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>StepDirection 枚举值</h4>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Increase</span>
+        <span class="enum-desc">增大风速（升一档）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Decrease</span>
+        <span class="enum-desc">减小风速（降一档）</span>
+      </div>
+    </div>
+  </div>
+
+  <details class="scenario">
+    <summary>使用场景与参数</summary>
+    <div class="scenario-content">
+      <p>
+        适合物理遥控器的「风速+」「风速-」按键 —— 每按一次发送一个 Step 命令，不需要事先读取当前速度。
+        如果 <code>Wrap = true</code>，用户可以不断按「风速+」循环切换档位（如：低 → 中 → 高 → 关 → 低 ...）。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 属性详解 ====== -->
+  <h2 id="attributes">属性详解</h2>
+  <p>FanControl Cluster 的属性按功能分为五组。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+
+  <!-- 属性汇总表 -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>分组</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 风扇模式 -->
+        <tr class="clickable-row" data-href="#attr-0x00">
+          <td><a href="#attr-0x00"><code>0x00</code></a></td>
+          <td>FanMode</td>
+          <td>enum8</td>
+          <td><a href="#group-mode">风扇模式</a></td>
+          <td>当前工作模式</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x01">
+          <td><a href="#attr-0x01"><code>0x01</code></a></td>
+          <td>FanModeSequence</td>
+          <td>enum8</td>
+          <td><a href="#group-mode">风扇模式</a></td>
+          <td>支持的模式序列</td>
+        </tr>
+        <!-- 百分比控制 -->
+        <tr class="clickable-row" data-href="#attr-0x02">
+          <td><a href="#attr-0x02"><code>0x02</code></a></td>
+          <td>PercentSetting</td>
+          <td>uint8 / null</td>
+          <td><a href="#group-percent">百分比控制</a></td>
+          <td>目标风速百分比</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x03">
+          <td><a href="#attr-0x03"><code>0x03</code></a></td>
+          <td>PercentCurrent</td>
+          <td>uint8</td>
+          <td><a href="#group-percent">百分比控制</a></td>
+          <td>实际风速百分比</td>
+        </tr>
+        <!-- 多档位控制 -->
+        <tr class="clickable-row" data-href="#attr-0x04">
+          <td><a href="#attr-0x04"><code>0x04</code></a></td>
+          <td>SpeedMax</td>
+          <td>uint8</td>
+          <td><a href="#group-speed">多档位控制</a></td>
+          <td>最大档位数</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x05">
+          <td><a href="#attr-0x05"><code>0x05</code></a></td>
+          <td>SpeedSetting</td>
+          <td>uint8 / null</td>
+          <td><a href="#group-speed">多档位控制</a></td>
+          <td>目标档位</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x06">
+          <td><a href="#attr-0x06"><code>0x06</code></a></td>
+          <td>SpeedCurrent</td>
+          <td>uint8</td>
+          <td><a href="#group-speed">多档位控制</a></td>
+          <td>实际档位</td>
+        </tr>
+        <!-- 摇头功能 -->
+        <tr class="clickable-row" data-href="#attr-0x07">
+          <td><a href="#attr-0x07"><code>0x07</code></a></td>
+          <td>RockSupport</td>
+          <td>bitmap8</td>
+          <td><a href="#group-rock">摇头功能</a></td>
+          <td>支持的摇头方向</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x08">
+          <td><a href="#attr-0x08"><code>0x08</code></a></td>
+          <td>RockSetting</td>
+          <td>bitmap8</td>
+          <td><a href="#group-rock">摇头功能</a></td>
+          <td>当前摇头设置</td>
+        </tr>
+        <!-- 风感模式 -->
+        <tr class="clickable-row" data-href="#attr-0x09">
+          <td><a href="#attr-0x09"><code>0x09</code></a></td>
+          <td>WindSupport</td>
+          <td>bitmap8</td>
+          <td><a href="#group-wind">风感模式</a></td>
+          <td>支持的风感模式</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0A">
+          <td><a href="#attr-0x0A"><code>0x0A</code></a></td>
+          <td>WindSetting</td>
+          <td>bitmap8</td>
+          <td><a href="#group-wind">风感模式</a></td>
+          <td>当前风感设置</td>
+        </tr>
+        <!-- 送风方向 -->
+        <tr class="clickable-row" data-href="#attr-0x0B">
+          <td><a href="#attr-0x0B"><code>0x0B</code></a></td>
+          <td>AirflowDirection</td>
+          <td>enum8</td>
+          <td><a href="#group-airdir">送风方向</a></td>
+          <td>送风方向（正转/反转）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 风扇模式（0x00, 0x01）====== -->
+  <h3 id="group-mode">风扇模式（0x00, 0x01）</h3>
+  <p>控制风扇的工作模式和模式切换范围。FanMode 是最核心的控制属性 —— 大部分 App 界面上的模式按钮直接对应它。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x00">
+          <td><code>0x00</code></td>
+          <td>FanMode<br/><span class="attr-cn">风扇模式</span></td>
+          <td>enum8</td>
+          <td>风扇当前的工作模式。写入新值可切换模式。<code>Auto</code> 和 <code>Smart</code> 模式下设备自行调节转速。见下方枚举</td>
+        </tr>
+        <tr id="attr-0x01">
+          <td><code>0x01</code></td>
+          <td>FanModeSequence<br/><span class="attr-cn">模式序列</span></td>
+          <td>enum8</td>
+          <td>声明设备支持的模式组合。决定 FanMode 可写入哪些值 —— 如果序列里没有 Auto，就不能写 Auto。见下方枚举</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>FanMode 枚举值</h4>
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Off</span>
+        <span class="enum-desc">关闭，风扇停转</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Low</span>
+        <span class="enum-desc">低速挡</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">Medium</span>
+        <span class="enum-desc">中速挡</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">High</span>
+        <span class="enum-desc">高速挡</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">4</span>
+      <div>
+        <span class="enum-name">On</span>
+        <span class="enum-desc">开启（具体速度由设备决定，通常恢复上次的速度）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">5</span>
+      <div>
+        <span class="enum-name">Auto</span>
+        <span class="enum-desc">自动模式 —— 设备根据环境自动调节转速。需要 AUT Feature</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">6</span>
+      <div>
+        <span class="enum-name">Smart</span>
+        <span class="enum-desc">智能模式 —— 已废弃，等同于 Auto。兼容旧设备保留</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">FanMode 写入与 PercentSetting / SpeedSetting 的联动</div>
+    <p>
+      写入 <code>FanMode</code> 时，设备会自动更新 <code>PercentSetting</code> 和 <code>SpeedSetting</code>（如果支持 SPD Feature）。
+      例如写入 <code>FanMode = High</code> 后，<code>PercentSetting</code> 可能自动变为 <code>100</code>。
+      反过来，直接写 <code>PercentSetting</code> 或 <code>SpeedSetting</code> 也可能导致 <code>FanMode</code> 联动变化。
+      读取状态时以 <code>PercentCurrent</code> / <code>SpeedCurrent</code> 为准，不要依赖 Setting 值。
+    </p>
+  </div>
+
+  <h4>FanModeSequence 枚举值</h4>
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">OffLowMedHigh</span>
+        <span class="enum-desc">Off / Low / Medium / High</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">OffLowHigh</span>
+        <span class="enum-desc">Off / Low / High（无中速挡）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">OffLowMedHighAuto</span>
+        <span class="enum-desc">Off / Low / Medium / High / Auto</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">OffLowHighAuto</span>
+        <span class="enum-desc">Off / Low / High / Auto（无中速挡）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">4</span>
+      <div>
+        <span class="enum-name">OffHighAuto</span>
+        <span class="enum-desc">Off / High / Auto（仅两挡 + 自动）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">5</span>
+      <div>
+        <span class="enum-name">OffHigh</span>
+        <span class="enum-desc">Off / High（仅开关，无中间挡位）</span>
+      </div>
+    </div>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 百分比控制（0x02, 0x03）====== -->
+  <h3 id="group-percent">百分比控制（0x02, 0x03）</h3>
+  <p>所有风扇都支持百分比控制 —— 这是最通用的调速方式，不依赖任何 Feature。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x02">
+          <td><code>0x02</code></td>
+          <td>PercentSetting<br/><span class="attr-cn">目标风速百分比</span></td>
+          <td>uint8 / null</td>
+          <td>目标风速百分比，范围 0~100。写入 <code>0</code> 等同于 <code>FanMode = Off</code>。Nullable —— <code>null</code> 表示设备处于自动/智能模式，风速由设备自行管理</td>
+        </tr>
+        <tr id="attr-0x03">
+          <td><code>0x03</code></td>
+          <td>PercentCurrent<br/><span class="attr-cn">实际风速百分比</span></td>
+          <td>uint8</td>
+          <td>风扇当前实际运转的风速百分比，范围 0~100。这是只读属性，反映真实物理状态。界面展示应以此值为准</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">Setting 与 Current 的区别</div>
+    <p>
+      <code>PercentSetting</code> 是「目标值」（你想要多少），<code>PercentCurrent</code> 是「实际值」（风扇真正在转多少）。
+      两者可能不一致 —— 例如写入 <code>PercentSetting = 60</code> 后，由于电机特性或档位量化，
+      实际转速可能是 58% 或 65%。App 界面上展示风速时应使用 <code>PercentCurrent</code>。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 多档位控制（0x04, 0x05, 0x06）====== -->
+  <h3 id="group-speed">多档位控制（0x04, 0x05, 0x06）</h3>
+  <p>
+    需要 <strong>SPD（MultiSpeed）</strong> Feature。百分比是连续值，档位是离散值 ——
+    对于有物理挡位的风扇（如 3 挡吊扇），用 SpeedSetting 比百分比更自然。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x04">
+          <td><code>0x04</code></td>
+          <td>SpeedMax<br/><span class="attr-cn">最大档位</span></td>
+          <td>uint8</td>
+          <td>设备支持的最大档位数，范围 1~100。只读属性。例如 <code>SpeedMax = 3</code> 表示风扇有 3 个档位（1、2、3）</td>
+        </tr>
+        <tr id="attr-0x05">
+          <td><code>0x05</code></td>
+          <td>SpeedSetting<br/><span class="attr-cn">目标档位</span></td>
+          <td>uint8 / null</td>
+          <td>目标档位，范围 0~SpeedMax。写入 <code>0</code> 等同于关闭。Nullable —— <code>null</code> 表示自动模式下由设备决定。<strong>需要 SPD Feature</strong></td>
+        </tr>
+        <tr id="attr-0x06">
+          <td><code>0x06</code></td>
+          <td>SpeedCurrent<br/><span class="attr-cn">实际档位</span></td>
+          <td>uint8</td>
+          <td>风扇当前实际运转的档位，范围 0~SpeedMax。只读属性。<strong>需要 SPD Feature</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">百分比与档位的自动换算</div>
+    <p>
+      设备内部会在百分比和档位之间自动换算。例如 <code>SpeedMax = 4</code> 的风扇：
+      写入 <code>SpeedSetting = 2</code> 后，<code>PercentCurrent</code> 大约是 50%；
+      写入 <code>PercentSetting = 75</code> 后，<code>SpeedCurrent</code> 大约是 3。
+      具体换算逻辑由设备固件决定，不一定是精确的线性映射。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 摇头功能（0x07, 0x08）====== -->
+  <h3 id="group-rock">摇头功能（0x07, 0x08）</h3>
+  <p>
+    需要 <strong>RCK（Rocking）</strong> Feature。控制风扇的物理摆动方向 —— 常见于独立风扇和部分吊扇。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x07">
+          <td><code>0x07</code></td>
+          <td>RockSupport<br/><span class="attr-cn">摇头能力位图</span></td>
+          <td>bitmap8</td>
+          <td>设备支持哪些摇头方向（只读）。见下方位图</td>
+        </tr>
+        <tr id="attr-0x08">
+          <td><code>0x08</code></td>
+          <td>RockSetting<br/><span class="attr-cn">摇头设置位图</span></td>
+          <td>bitmap8</td>
+          <td>当前启用的摇头方向。可读写，写入的值必须是 RockSupport 的子集。全部清零表示停止摇头</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Rock 位图定义</h4>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">Bit 0</span>
+      <div>
+        <span class="enum-name">RockLeftRight</span>
+        <span class="enum-desc">左右摇头</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 1</span>
+      <div>
+        <span class="enum-name">RockUpDown</span>
+        <span class="enum-desc">上下摇头</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 2</span>
+      <div>
+        <span class="enum-name">RockRound</span>
+        <span class="enum-desc">环绕摇头（360 度旋转）</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">摇头组合</div>
+    <p>
+      RockSetting 是位图，可以同时启用多个方向。例如 <code>RockSetting = 0x03</code>（Bit 0 + Bit 1）表示同时左右 + 上下摇头。
+      但前提是 <code>RockSupport</code> 的对应位也是 1 —— 写入不支持的方向会被设备拒绝。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 风感模式（0x09, 0x0A）====== -->
+  <h3 id="group-wind">风感模式（0x09, 0x0A）</h3>
+  <p>
+    需要 <strong>WND（Wind）</strong> Feature。提供模拟自然风、睡眠风等非匀速送风模式，让体感更舒适。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x09">
+          <td><code>0x09</code></td>
+          <td>WindSupport<br/><span class="attr-cn">风感能力位图</span></td>
+          <td>bitmap8</td>
+          <td>设备支持哪些风感模式（只读）。见下方位图</td>
+        </tr>
+        <tr id="attr-0x0A">
+          <td><code>0x0A</code></td>
+          <td>WindSetting<br/><span class="attr-cn">风感设置位图</span></td>
+          <td>bitmap8</td>
+          <td>当前启用的风感模式。可读写，写入值必须是 WindSupport 的子集。全部清零表示匀速送风</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Wind 位图定义</h4>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">Bit 0</span>
+      <div>
+        <span class="enum-name">SleepWind</span>
+        <span class="enum-desc">睡眠风 —— 风速随时间逐渐降低，适合入睡</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 1</span>
+      <div>
+        <span class="enum-name">NaturalWind</span>
+        <span class="enum-desc">自然风 —— 风速随机波动，模拟户外微风</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">风感模式是互斥的</div>
+    <p>
+      虽然 WindSetting 是位图格式，但 <strong>SleepWind 和 NaturalWind 通常互斥</strong> —— 不应同时启用两种风感。
+      规范未明确禁止同时设置，但实际设备的行为未定义。建议 App 界面上设计为单选按钮。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 送风方向（0x0B）====== -->
+  <h3 id="group-airdir">送风方向（0x0B）</h3>
+  <p>
+    需要 <strong>AIRDIR（AirDirection）</strong> Feature。控制风扇叶片的旋转方向 —— 主要用于吊扇的夏/冬模式切换。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0B">
+          <td><code>0x0B</code></td>
+          <td>AirflowDirection<br/><span class="attr-cn">送风方向</span></td>
+          <td>enum8</td>
+          <td>风扇叶片的旋转方向。对于吊扇，正转向下送风（夏季），反转向上循环（冬季）。见下方枚举</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>AirflowDirection 枚举值</h4>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Forward</span>
+        <span class="enum-desc">正转 —— 向下送风（吊扇夏季模式）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Reverse</span>
+        <span class="enum-desc">反转 —— 向上送风，利用天花板反射促进空气循环（吊扇冬季模式）</span>
+      </div>
+    </div>
+  </div>
+
+  <details class="scenario">
+    <summary>吊扇正反转的实际用途</summary>
+    <div class="scenario-content">
+      <p>
+        <strong>夏季（Forward / 正转）</strong>：叶片逆时针旋转，产生向下气流，人站在扇下感受到凉风。<br/>
+        <strong>冬季（Reverse / 反转）</strong>：叶片顺时针旋转，将热空气沿天花板向下推送。
+        人不会直接感受到风吹，但房间温度更均匀，暖气效率更高。<br/>
+        很多用户不知道吊扇有这个功能 —— App 可以在换季时主动提示切换方向。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>一台支持全部 Feature 的智能吊扇在运转中的 FanControl Cluster 读取结果：</p>
+
+  <pre><code set:html={exampleData} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发提示</div>
+    <p>
+      最简单的风扇可能只有 FanMode（0x00）、FanModeSequence（0x01）、PercentSetting（0x02）和 PercentCurrent（0x03）四个属性。
+      其余属性都依赖 Feature。读取前先检查 <code>FeatureMap (0xFFFC)</code>，
+      对不支持的属性发起读取会返回 <code>UNSUPPORTED_ATTRIBUTE</code>。
+    </p>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <h3 id="scenario-basic">场景 1：基础风扇控制</h3>
+  <details class="scenario">
+    <summary>查看步骤</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>读取 <code>FanModeSequence (0x01)</code> 确定设备支持哪些模式</li>
+        <li>写入 <code>FanMode (0x00)</code> 切换模式（Off / Low / Medium / High）</li>
+        <li>或者写入 <code>PercentSetting (0x02)</code> 直接设置百分比风速</li>
+        <li>订阅 <code>PercentCurrent (0x03)</code> 实时同步 App 界面的风速显示</li>
+      </ol>
+    </div>
+  </details>
+
+  <h3 id="scenario-speed">场景 2：多档位风扇界面</h3>
+  <details class="scenario">
+    <summary>查看步骤</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>确认 <code>FeatureMap</code> 包含 SPD（Bit 0），读取 <code>SpeedMax (0x04)</code> 获取最大档位数</li>
+        <li>根据 SpeedMax 动态生成档位按钮（例如 SpeedMax = 5 就显示 1~5 五个按钮）</li>
+        <li>写入 <code>SpeedSetting (0x05)</code> 切换档位</li>
+        <li>订阅 <code>SpeedCurrent (0x06)</code> 更新界面上的当前档位高亮</li>
+        <li>如果同时支持 STEP Feature，可以用 <code>Step</code> 命令配合遥控器的 +/- 按键</li>
+      </ol>
+    </div>
+  </details>
+
+  <h3 id="scenario-ceiling">场景 3：吊扇完整控制面板</h3>
+  <details class="scenario">
+    <summary>查看步骤</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>读取 <code>FeatureMap</code>，按支持的 Feature 显示/隐藏对应 UI 模块</li>
+        <li>风速区域：如有 SPD 显示档位滑块，否则显示百分比滑块</li>
+        <li>摇头区域（RCK）：读取 <code>RockSupport (0x07)</code>，只显示支持的方向选项。写入 <code>RockSetting (0x08)</code> 控制摇头</li>
+        <li>风感区域（WND）：读取 <code>WindSupport (0x09)</code>，显示支持的模式（睡眠风/自然风）。写入 <code>WindSetting (0x0A)</code> 切换风感</li>
+        <li>方向区域（AIRDIR）：显示正转/反转切换按钮，写入 <code>AirflowDirection (0x0B)</code></li>
+        <li>提示：切换送风方向前建议先将风扇停止（<code>FanMode = Off</code>），待方向切换完成后再开启</li>
+      </ol>
+    </div>
+  </details>
+
+  <h3 id="scenario-hvac">场景 4：HVAC 系统联动</h3>
+  <details class="scenario">
+    <summary>查看步骤</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>FanControl 通常和 Thermostat Cluster（0x0201）在同一个 Endpoint 上配合使用</li>
+        <li>当 Thermostat 的 <code>SystemMode</code> 切换为 <code>FanOnly</code> 时，对应的 FanControl 开始工作</li>
+        <li>如果风扇支持 AUT Feature，可以设为 <code>FanMode = Auto</code>，让风扇根据温控需求自动调节转速</li>
+        <li>读取 Thermostat 的 <code>ThermostatRunningState (0x29)</code> 中的 FanState 位，确认风扇是否在运转</li>
+      </ol>
+    </div>
+  </details>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .col-required {
+    color: #dc2626;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-required {
+    color: #f87171;
+  }
+
+  .col-optional {
+    color: #16a34a;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-optional {
+    color: #4ade80;
+  }
+
+  .col-feature {
+    color: #2563eb;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-feature {
+    color: #60a5fa;
+  }
+
+  .attr-cn {
+    font-size: 0.8125rem;
+    color: #6b7280;
+  }
+
+  :global(.dark) .attr-cn {
+    color: #9ca3af;
+  }
+</style>

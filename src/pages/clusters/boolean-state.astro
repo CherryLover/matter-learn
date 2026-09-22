@@ -1,0 +1,280 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 属性 ---
+  "0x0": true          // StateValue = true（正常状态，如门已关闭、无漏水）
+}`;
+
+const subscribeExample = `{
+  "subscribeRequests": [{
+    "attributeRequests": [{
+      "endpointId": 1,
+      "clusterId": "0x0045",
+      "attributeId": "0x00"     // StateValue
+    }],
+    "eventRequests": [{
+      "endpointId": 1,
+      "clusterId": "0x0045",
+      "eventId": "0x00"         // StateChange
+    }]
+  }],
+  "minIntervalFloor": 0,        // 最短上报间隔（秒）
+  "maxIntervalCeiling": 300     // 最长上报间隔（秒）
+}`;
+
+const stateChangeEventExample = `{
+  "eventReports": [{
+    "eventData": {
+      "path": {
+        "endpointId": 1,
+        "clusterId": "0x0045",
+        "eventId": "0x00"       // StateChange
+      },
+      "eventNumber": 42,
+      "priority": "INFO",
+      "data": {
+        "0": false              // StateValue = false（状态变化：如门被打开）
+      }
+    }
+  }]
+}`;
+---
+
+<DocLayout
+  title="布尔状态 Cluster · BooleanState（0x0045）"
+  description="Matter BooleanState Cluster（0x0045）完整参考 — StateValue 属性、StateChange 事件、门窗传感器 / 水浸传感器等典型设备的布尔语义说明。"
+  type="article"
+>
+  <h1>布尔状态 Cluster（BooleanState）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x0045</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 通常在 <code>Endpoint 1</code>（功能端点）&nbsp;|&nbsp;
+    <strong>角色</strong>: Server（只读，无命令）
+  </p>
+  <p>
+    BooleanState 是 Matter 中最简单的 Cluster 之一 —— 只有 <strong>1 个属性</strong>、<strong>0 个命令</strong>、<strong>1 个事件</strong>。
+    它用于报告一个通用的布尔（true/false）状态，典型的使用场景包括门窗传感器、水浸传感器、烟雾报警器等只需要表达「正常 / 异常」两态的设备。
+  </p>
+  <p>
+    这个 Cluster 是<strong>纯只读</strong>的 —— App 端只能读取状态和订阅变化，不能向设备发送任何命令来改变状态。
+    状态的变化完全由设备端的物理传感器驱动。
+  </p>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">true 和 false 到底代表什么？</div>
+    <p>
+      BooleanState 本身<strong>不定义</strong> true/false 的具体含义 —— 语义由搭配的<strong>设备类型（Device Type）</strong>决定。
+      这是开发中最容易踩的坑。
+    </p>
+    <p>
+      例如，对于 <strong>ContactSensor（门窗传感器，Device Type 0x0015）</strong>：
+    </p>
+    <ul>
+      <li><code>true</code> = 门/窗<strong>已关闭</strong>（正常，触点闭合）</li>
+      <li><code>false</code> = 门/窗<strong>已打开</strong>（告警，触点断开）</li>
+    </ul>
+    <p>
+      这和直觉可能相反 —— 很多人会以为 <code>true = 打开</code>。
+      Matter 的设计逻辑是：<strong>true 表示「正常/安全」状态，false 表示「需要注意」的状态</strong>。
+      务必根据具体设备类型的规范来解读，不要想当然。
+    </p>
+  </div>
+
+  <!-- ====== 属性总览 ====== -->
+  <h2 id="attributes">属性</h2>
+  <p>BooleanState 只有一个属性，且是必须支持的。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>读写</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#attr-0x00">
+          <td><a href="#attr-0x00"><code>0x00</code></a></td>
+          <td>StateValue</td>
+          <td>bool</td>
+          <td>只读</td>
+          <td>当前布尔状态</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 属性详解 ====== -->
+  <h3 id="attr-0x00">StateValue（当前状态）</h3>
+  <p>
+    设备当前的布尔状态值。只读，不能通过写属性或命令来改变 —— 只有设备端的物理传感器触发才会更新这个值。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>值</th><th>通用含义</th><th>ContactSensor 含义</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>true</code></td>
+          <td>正常 / 安全</td>
+          <td>门窗已关闭（触点闭合）</td>
+        </tr>
+        <tr>
+          <td><code>false</code></td>
+          <td>异常 / 需注意</td>
+          <td>门窗已打开（触点断开）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发建议</div>
+    <p>
+      不要在代码里硬写 <code>if (stateValue) "已关闭"</code>。应该根据设备的 Device Type
+      （从 Descriptor Cluster 的 DeviceTypeList 获取）来决定如何展示文案。
+      未来可能有新的设备类型复用 BooleanState，true/false 的含义可能完全不同。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 事件 ====== -->
+  <h2 id="events">事件（Events）</h2>
+  <p>
+    BooleanState 定义了一个事件，当 <code>StateValue</code> 发生变化时由设备端主动上报。
+    相比轮询属性，订阅事件是监听状态变化的推荐方式。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>优先级</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#event-0x00">
+          <td><a href="#event-0x00"><code>0x00</code></a></td>
+          <td>StateChange</td>
+          <td>Info</td>
+          <td>StateValue 发生变化时触发</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="event-0x00">StateChange —— 状态变更事件（0x00）</h3>
+  <p>
+    当设备的物理状态发生变化（如门被打开、检测到漏水）时，设备会发出此事件。
+    事件数据中携带变化后的新 <code>StateValue</code>。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>ID</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>StateValue</td>
+          <td><code>0x00</code></td>
+          <td>bool</td>
+          <td>变化后的新状态值</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p>事件上报示例：</p>
+  <pre><code set:html={stateChangeEventExample} /></pre>
+
+  <div class="callout callout-info">
+    <div class="callout-title">订阅 vs 轮询</div>
+    <p>
+      对于门窗传感器这类设备，状态变化通常很突然且不频繁。
+      推荐使用 Subscribe 同时订阅 <code>StateValue</code> 属性和 <code>StateChange</code> 事件，
+      这样既能在连接建立时立即获取当前状态，又能实时收到变化通知。
+    </p>
+  </div>
+  <p>订阅请求示例：</p>
+  <pre><code set:html={subscribeExample} /></pre>
+  <p class="back-link"><a href="#events">&#8593; 返回事件列表</a></p>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>读取一个门窗传感器的 BooleanState Cluster 属性：</p>
+  <pre><code set:html={exampleData} /></pre>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <details class="scenario">
+    <summary>场景 1：门窗传感器（ContactSensor）</summary>
+    <div class="scenario-content">
+      <p>最常见的使用场景。门窗传感器由磁铁和簧片开关组成，门关闭时磁铁靠近簧片，触点闭合。</p>
+      <ol>
+        <li>从 Descriptor Cluster 确认设备类型为 <code>0x0015</code>（ContactSensor）</li>
+        <li>订阅 BooleanState 的 <code>StateValue</code> 属性和 <code>StateChange</code> 事件</li>
+        <li>收到 <code>true</code> → 显示「门已关闭」（绿色安全状态）</li>
+        <li>收到 <code>false</code> → 显示「门已打开」（黄色提醒状态）</li>
+        <li>可结合自动化：门打开超过 5 分钟未关 → 推送提醒</li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 2：水浸传感器（Water Leak Detector）</summary>
+    <div class="scenario-content">
+      <p>水浸传感器放置在可能漏水的位置（洗衣机旁、热水器下方），检测到水时触发告警。</p>
+      <ol>
+        <li>订阅 <code>StateChange</code> 事件</li>
+        <li>收到 <code>true</code> → 正常，无漏水</li>
+        <li>收到 <code>false</code> → 检测到漏水，触发紧急通知</li>
+        <li>建议搭配自动化规则：漏水时自动关闭对应区域的智能水阀</li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 3：通用接触式传感器</summary>
+    <div class="scenario-content">
+      <p>BooleanState 不局限于门窗和水浸，任何需要二值状态的传感器都可以复用。</p>
+      <ul>
+        <li><strong>冰箱门传感器</strong> —— 门开着时 <code>false</code>，搭配定时提醒</li>
+        <li><strong>邮箱传感器</strong> —— 邮箱被打开时触发通知</li>
+        <li><strong>抽屉/柜门传感器</strong> —— 安防场景，异常打开时告警</li>
+      </ul>
+      <p>
+        关键是要从 Descriptor Cluster 读取设备类型，根据具体类型决定 UI 文案和图标，
+        而不是假设所有 BooleanState 都是门窗传感器。
+      </p>
+    </div>
+  </details>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .scenario-content {
+    padding: 0.5rem 0;
+  }
+</style>

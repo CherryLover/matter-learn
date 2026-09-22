@@ -1,0 +1,451 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 属性 ---
+  "0x0": [                       // ThreadMetrics（线程指标列表）
+    {
+      "0": 1,                    // Id = 1
+      "1": "Main",               // Name = "Main"
+      "2": 2048,                 // StackFreeCurrent = 2048 字节
+      "3": 1024,                 // StackFreeMinimum = 1024 字节
+      "4": 8192                  // StackSize = 8192 字节
+    },
+    {
+      "0": 2,                    // Id = 2
+      "1": "BLE",                // Name = "BLE"
+      "2": 4096,                 // StackFreeCurrent = 4096 字节
+      "3": 2048,                 // StackFreeMinimum = 2048 字节
+      "4": 8192                  // StackSize = 8192 字节
+    }
+  ],
+  "0x1": 65536,                  // CurrentHeapFree = 64 KB
+  "0x2": 131072,                 // CurrentHeapUsed = 128 KB
+  "0x3": 196608                  // CurrentHeapHighWatermark = 192 KB（需 WTRMRK Feature）
+}`;
+
+const resetWatermarksExample = `{
+  "invokeRequests": [{
+    "commandPath": {
+      "endpointId": 0,
+      "clusterId": "0x0034",
+      "commandId": "0x00"       // ResetWatermarks
+    },
+    "commandFields": {}         // 无参数
+  }]
+}`;
+
+const softwareFaultEventExample = `{
+  "eventReports": [{
+    "eventData": {
+      "path": {
+        "endpointId": 0,
+        "clusterId": "0x0034",
+        "eventId": "0x00"       // SoftwareFault
+      },
+      "eventNumber": 7,
+      "priority": "INFO",
+      "data": {
+        "0": 42,                // Id = 42（故障线程 ID）
+        "1": "BLE",             // Name = "BLE"（故障线程名）
+        "2": "RkVUQ0g6IDB4..."  // FaultRecording（Base64 编码的故障现场数据）
+      }
+    }
+  }]
+}`;
+---
+
+<DocLayout
+  title="软件诊断 Cluster · SoftwareDiagnostics（0x0034）"
+  description="Matter SoftwareDiagnostics Cluster（0x0034）完整参考 — 线程指标、堆内存监控、高水位线追踪、软件故障事件，嵌入式设备运行时健康诊断的基础 Cluster。"
+  type="article"
+>
+  <h1>软件诊断 Cluster（SoftwareDiagnostics）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x0034</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: <code>Endpoint 0</code>（Root / Node 级别）&nbsp;|&nbsp;
+    <strong>角色</strong>: Server（只读 + 一个重置命令）
+  </p>
+  <p>
+    SoftwareDiagnostics 用于暴露设备固件的运行时健康状态 —— 包括<strong>线程栈使用情况</strong>、<strong>堆内存分配</strong>和<strong>软件故障记录</strong>。
+    这是 Matter 中面向开发者和运维人员的诊断 Cluster，帮助在不连接调试器的情况下了解嵌入式设备的内部状态。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">什么时候用</div>
+    <p>
+      设备运行一段时间后行为异常？读取堆内存属性检查是否存在内存泄漏。
+      怀疑某个线程栈溢出？查看 ThreadMetrics 中的 StackFreeMinimum。
+      OTA 升级后想确认固件稳定性？监控 SoftwareFault 事件和高水位线变化。
+      这些信息在产品量产后的远程诊断中尤其有用。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#features">Feature 位图</a>
+    <span class="nav-sep">|</span>
+    <a href="#attributes">属性</a>
+    <span class="nav-sep">|</span>
+    <a href="#commands">命令</a>
+    <span class="nav-sep">|</span>
+    <a href="#events">事件</a>
+    <span class="nav-sep">|</span>
+    <a href="#example-data">示例数据</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">常见场景</a>
+  </nav>
+
+  <!-- ====== Feature 位图 ====== -->
+  <h2 id="features">Feature 位图</h2>
+  <p>SoftwareDiagnostics Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持的可选能力：</p>
+
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">Bit 0</span>
+      <div>
+        <span class="enum-name">WTRMRK（Watermarks）</span>
+        <span class="enum-desc">高水位线追踪 —— 支持 CurrentHeapHighWatermark 属性和 ResetWatermarks 命令，记录堆内存使用的历史峰值</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">Feature 含义</div>
+    <p>
+      <code>FeatureMap = 0x01</code>（WTRMRK）：设备追踪堆内存使用峰值，可通过 ResetWatermarks 命令重置。<br/>
+      <code>FeatureMap = 0x00</code>（无 Feature）：仅提供实时堆内存和线程指标，不记录历史峰值。
+    </p>
+  </div>
+
+  <!-- ====== 属性总览 ====== -->
+  <h2 id="attributes">属性</h2>
+  <p>所有属性均为只读。堆内存相关属性为可选，ThreadMetrics 也为可选。点击属性 ID 可跳转到详细说明。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>条件</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#attr-0x00">
+          <td><a href="#attr-0x00"><code>0x00</code></a></td>
+          <td>ThreadMetrics</td>
+          <td>list&lt;ThreadMetricsStruct&gt;</td>
+          <td>可选</td>
+          <td>当前运行的线程列表及栈使用情况</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x01">
+          <td><a href="#attr-0x01"><code>0x01</code></a></td>
+          <td>CurrentHeapFree</td>
+          <td>uint64</td>
+          <td>可选</td>
+          <td>当前堆空闲字节数</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x02">
+          <td><a href="#attr-0x02"><code>0x02</code></a></td>
+          <td>CurrentHeapUsed</td>
+          <td>uint64</td>
+          <td>可选</td>
+          <td>当前堆已用字节数</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x03">
+          <td><a href="#attr-0x03"><code>0x03</code></a></td>
+          <td>CurrentHeapHighWatermark</td>
+          <td>uint64</td>
+          <td>WTRMRK</td>
+          <td>堆使用历史峰值（高水位线）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 属性详解 ====== -->
+  <h3 id="attr-0x00">ThreadMetrics（线程指标列表）</h3>
+  <p>
+    返回设备当前所有运行线程的栈使用信息。每个条目是一个 <code>ThreadMetricsStruct</code>，包含线程 ID、名称和栈使用统计。
+    这是排查栈溢出的关键数据来源。
+  </p>
+
+  <h4 id="thread-metrics-struct">ThreadMetricsStruct 结构</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>字段</th>
+          <th>类型</th>
+          <th>必填</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>0x00</code></td>
+          <td>Id</td>
+          <td>uint64</td>
+          <td>是</td>
+          <td>线程唯一标识符</td>
+        </tr>
+        <tr>
+          <td><code>0x01</code></td>
+          <td>Name</td>
+          <td>string（最长 8 字符）</td>
+          <td>可选</td>
+          <td>线程名称（如 "Main"、"BLE"、"WiFi"）</td>
+        </tr>
+        <tr>
+          <td><code>0x02</code></td>
+          <td>StackFreeCurrent</td>
+          <td>uint32</td>
+          <td>可选</td>
+          <td>当前栈剩余空闲字节数</td>
+        </tr>
+        <tr>
+          <td><code>0x03</code></td>
+          <td>StackFreeMinimum</td>
+          <td>uint32</td>
+          <td>可选</td>
+          <td>栈剩余空闲的历史最小值（栈使用水位线）</td>
+        </tr>
+        <tr>
+          <td><code>0x04</code></td>
+          <td>StackSize</td>
+          <td>uint32</td>
+          <td>可选</td>
+          <td>线程栈总大小（字节）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">栈溢出判断</div>
+    <p>
+      当 <code>StackFreeMinimum</code> 接近 0 时，意味着该线程曾经几乎用完了栈空间，存在栈溢出风险。
+      一般建议保持 <code>StackFreeMinimum / StackSize &gt; 10%</code> 的安全余量。
+      如果低于这个阈值，应考虑增大该线程的栈分配或优化其调用深度。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x01">CurrentHeapFree（堆空闲字节数）</h3>
+  <p>
+    设备堆内存中当前可用于分配的字节数。在资源受限的嵌入式设备上（如 ESP32 系列），
+    这个值持续下降可能意味着内存泄漏。
+  </p>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x02">CurrentHeapUsed（堆已用字节数）</h3>
+  <p>
+    设备堆内存中当前已被分配使用的字节数。与 <code>CurrentHeapFree</code> 互补 ——
+    两者之和近似等于堆总大小（可能有碎片和管理开销的差异）。
+  </p>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x03">CurrentHeapHighWatermark（堆使用高水位线）</h3>
+  <p>
+    自上次 <code>ResetWatermarks</code> 命令或设备启动以来，<code>CurrentHeapUsed</code> 达到过的最大值。
+    这个属性需要 <strong>WTRMRK</strong> Feature 支持。
+  </p>
+  <p>
+    高水位线是评估设备内存裕度的重要指标 —— 它反映的是「最坏情况下用了多少内存」，
+    而不是某一时刻的快照。即使当前 <code>CurrentHeapUsed</code> 看起来正常，高水位线也可能揭示间歇性的内存尖峰。
+  </p>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 命令 ====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    SoftwareDiagnostics 只有一个命令，需要 <strong>WTRMRK</strong> Feature 支持。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>条件</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#cmd-0x00">
+          <td><a href="#cmd-0x00"><code>0x00</code></a></td>
+          <td>ResetWatermarks</td>
+          <td>WTRMRK</td>
+          <td>重置堆使用高水位线和线程栈最小空闲值</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="cmd-0x00">ResetWatermarks —— 重置水位线（0x00）</h3>
+  <p>
+    将 <code>CurrentHeapHighWatermark</code> 重置为当前的 <code>CurrentHeapUsed</code> 值，
+    同时将所有线程的 <code>StackFreeMinimum</code> 重置为当前的 <code>StackFreeCurrent</code> 值。
+    该命令不接受任何参数。
+  </p>
+  <div class="callout callout-tip">
+    <div class="callout-title">使用时机</div>
+    <p>
+      典型用法：OTA 升级后发一次 ResetWatermarks，然后观察新固件运行一段时间后的高水位线，
+      评估新版本的内存占用是否有回退。也适用于排查特定操作的内存影响 —— 重置后执行操作，再读取水位线。
+    </p>
+  </div>
+  <p>请求示例：</p>
+  <pre><code set:html={resetWatermarksExample} /></pre>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 事件 ====== -->
+  <h2 id="events">事件（Events）</h2>
+  <p>
+    设备运行过程中检测到软件故障时，会上报 SoftwareFault 事件。该事件为可选支持。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>优先级</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#event-0x00">
+          <td><a href="#event-0x00"><code>0x00</code></a></td>
+          <td>SoftwareFault</td>
+          <td>Info</td>
+          <td>检测到软件故障时触发</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="event-0x00">SoftwareFault —— 软件故障事件（0x00）</h3>
+  <p>
+    当设备固件检测到软件异常（如未处理的异常、断言失败、看门狗触发等）时上报此事件。
+    事件数据携带故障线程信息和可选的故障现场记录。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>ID</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Id</td>
+          <td><code>0x00</code></td>
+          <td>uint64</td>
+          <td>故障发生时的线程 ID</td>
+        </tr>
+        <tr>
+          <td>Name</td>
+          <td><code>0x01</code></td>
+          <td>string（最长 8 字符）</td>
+          <td>故障线程名称（可选）</td>
+        </tr>
+        <tr>
+          <td>FaultRecording</td>
+          <td><code>0x02</code></td>
+          <td>octstr（最长 1024 字节）</td>
+          <td>故障现场数据，格式由厂商定义（可选）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">FaultRecording 的用途</div>
+    <p>
+      <code>FaultRecording</code> 是一段厂商自定义的二进制数据，可能包含寄存器快照、调用栈回溯、
+      崩溃地址等调试信息。不同芯片平台的格式不同，需要配合厂商的解码工具使用。
+      App 端通常只需要将原始数据上传到云端，由后台服务解析。
+    </p>
+  </div>
+
+  <p>事件上报示例：</p>
+  <pre><code set:html={softwareFaultEventExample} /></pre>
+  <p class="back-link"><a href="#events">&#8593; 返回事件列表</a></p>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>读取一个 ESP32 设备的 SoftwareDiagnostics Cluster 属性：</p>
+  <pre><code set:html={exampleData} /></pre>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <details class="scenario">
+    <summary>场景 1：内存泄漏监控</summary>
+    <div class="scenario-content">
+      <p>设备长时间运行后响应变慢、功能异常，怀疑存在内存泄漏。</p>
+      <ol>
+        <li>定期读取 <code>CurrentHeapFree</code> 和 <code>CurrentHeapUsed</code>（如每小时一次）</li>
+        <li>记录到时序数据库或日志中，绘制内存趋势图</li>
+        <li>如果 <code>CurrentHeapFree</code> 持续下降且不回升，基本可以确认存在内存泄漏</li>
+        <li>结合 <code>ThreadMetrics</code> 排查是否某个线程的栈使用异常</li>
+        <li>进一步通过 OTA 修复后，重置水位线观察新版本表现</li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 2：线程栈健康检查</summary>
+    <div class="scenario-content">
+      <p>设备偶发崩溃重启，怀疑某个线程栈空间不足导致溢出。</p>
+      <ol>
+        <li>读取 <code>ThreadMetrics</code> 列表，关注每个线程的 <code>StackFreeMinimum</code></li>
+        <li>计算栈使用率：<code>(StackSize - StackFreeMinimum) / StackSize</code></li>
+        <li>使用率超过 90% 的线程有栈溢出风险，需要关注</li>
+        <li>对比 <code>StackFreeCurrent</code> 和 <code>StackFreeMinimum</code> 的差距 —— 差距越大说明栈使用波动越剧烈</li>
+        <li>调整固件中对应线程的栈分配大小，OTA 后再次检查</li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 3：OTA 后高水位线对比</summary>
+    <div class="scenario-content">
+      <p>固件升级后需要评估新版本的内存表现是否有回退。需要 WTRMRK Feature 支持。</p>
+      <ol>
+        <li>OTA 完成后，设备重启，水位线自动重置</li>
+        <li>让设备正常运行一段时间（建议 24-48 小时，覆盖各种使用场景）</li>
+        <li>读取 <code>CurrentHeapHighWatermark</code>，与旧版本的记录对比</li>
+        <li>如果新版本水位线明显高于旧版本，说明新代码引入了额外的内存开销</li>
+        <li>也可以手动发 <code>ResetWatermarks</code> 后执行特定操作，精确测量该操作的内存峰值</li>
+      </ol>
+    </div>
+  </details>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .scenario-content {
+    padding: 0.5rem 0;
+  }
+</style>

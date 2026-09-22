@@ -1,0 +1,796 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 配网追踪 ---
+  "0x0000": 3,                // Breadcrumb = 3（Commissioner 设置的进度标记）
+
+  // --- 基础配网信息 ---
+  "0x0001": {                 // BasicCommissioningInfo
+    "failSafeExpiryLengthSeconds": 60,    // Fail-Safe 默认 60 秒
+    "maxCumulativeFailsafeSeconds": 900   // 最长累计 900 秒（15 分钟）
+  },
+
+  // --- 法规配置 ---
+  "0x0002": 2,                // RegulatoryConfig = IndoorOutdoor（当前配置）
+  "0x0003": 2,                // LocationCapability = IndoorOutdoor（设备能力）
+
+  // --- 并发连接 ---
+  "0x0004": true              // SupportsConcurrentConnection = true（支持并发连接）
+}`;
+
+const armFailSafeExample = `// Commissioner → Device：启动 Fail-Safe 计时器
+{
+  "invokeRequests": [{
+    "commandPath": {
+      "endpointId": 0,
+      "clusterId": "0x0030",
+      "commandId": "0x00"        // ArmFailSafe
+    },
+    "commandFields": {
+      "expiryLengthSeconds": 60, // 60 秒超时
+      "breadcrumb": 1            // 配网进度标记
+    }
+  }]
+}
+
+// Device → Commissioner：确认 Fail-Safe 已启动
+{
+  "errorCode": 0,               // OK
+  "debugText": ""
+}`;
+
+const commissioningCompleteExample = `// Commissioner → Device：完成配网
+{
+  "invokeRequests": [{
+    "commandPath": {
+      "endpointId": 0,
+      "clusterId": "0x0030",
+      "commandId": "0x04"        // CommissioningComplete
+    },
+    "commandFields": {}          // 无参数
+  }]
+}
+
+// Device → Commissioner：确认配网完成
+{
+  "errorCode": 0,               // OK
+  "debugText": ""
+}`;
+---
+
+<DocLayout
+  title="通用配网 Cluster · GeneralCommissioning（0x0030）"
+  description="Matter GeneralCommissioning Cluster（0x0030）完整参考 — ArmFailSafe / SetRegulatoryConfig / CommissioningComplete 命令详解、Fail-Safe 机制、法规配置、配网流程与错误恢复场景。"
+  type="article"
+  prev={{ title: 'Cluster 手册', href: '/clusters/' }}
+>
+  <h1>通用配网 Cluster（GeneralCommissioning）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x0030</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 固定在 <code>Endpoint 0</code>（Root Endpoint）
+  </p>
+  <p>
+    GeneralCommissioning 是 Matter 配网（Commissioning）流程的总控 Cluster —— 负责管理整个配网过程的生命周期。
+    它不处理具体的网络凭据（那是 <a href="/clusters/network-commissioning/">NetworkCommissioning</a> 的事），
+    而是控制配网流程的「开始」「推进」和「结束」，并通过 Fail-Safe 机制保证配网失败时设备能安全回滚。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">核心定位</div>
+    <p>
+      如果把配网流程比作一次数据库事务，GeneralCommissioning 就是负责 <code>BEGIN</code> / <code>COMMIT</code> / <code>ROLLBACK</code> 的那个角色。
+      <strong>ArmFailSafe</strong> 相当于 <code>BEGIN</code>（开启事务），<strong>CommissioningComplete</strong> 相当于 <code>COMMIT</code>（提交事务），
+      而 Fail-Safe 超时则自动触发 <code>ROLLBACK</code>（回滚所有变更）。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#commands">命令列表</a>
+    <span class="nav-sep">|</span>
+    <a href="#attributes">属性详解</a>
+    <span class="nav-sep">|</span>
+    <a href="#enums">枚举定义</a>
+    <span class="nav-sep">|</span>
+    <a href="#example-data">示例数据</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">常见场景</a>
+  </nav>
+
+  <!-- ====== 命令（Commands）====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    GeneralCommissioning Cluster 共有 3 个请求命令，每个都有对应的响应命令。
+    这三个命令构成了配网流程的骨架：先启动安全计时器，再设置法规配置，最后提交完成。
+    点击下方表格中的命令 ID 可跳转到对应的详细说明。
+  </p>
+
+  <h3>Client → Server（请求命令）</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>说明</th>
+          <th>响应</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#cmd-0x00">
+          <td><a href="#cmd-0x00"><code>0x00</code></a></td>
+          <td>ArmFailSafe</td>
+          <td>启动/续期 Fail-Safe 计时器</td>
+          <td>ArmFailSafeResponse</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x02">
+          <td><a href="#cmd-0x02"><code>0x02</code></a></td>
+          <td>SetRegulatoryConfig</td>
+          <td>设置设备的法规区域配置</td>
+          <td>SetRegulatoryConfigResponse</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x04">
+          <td><a href="#cmd-0x04"><code>0x04</code></a></td>
+          <td>CommissioningComplete</td>
+          <td>确认配网完成，提交所有变更</td>
+          <td>CommissioningCompleteResponse</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Server → Client（响应命令）</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>说明</th>
+          <th>对应请求</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>0x01</code></td>
+          <td>ArmFailSafeResponse</td>
+          <td>返回 Fail-Safe 启动结果</td>
+          <td>ArmFailSafe</td>
+        </tr>
+        <tr>
+          <td><code>0x03</code></td>
+          <td>SetRegulatoryConfigResponse</td>
+          <td>返回法规配置结果</td>
+          <td>SetRegulatoryConfig</td>
+        </tr>
+        <tr>
+          <td><code>0x05</code></td>
+          <td>CommissioningCompleteResponse</td>
+          <td>返回配网完成结果</td>
+          <td>CommissioningComplete</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 命令详解 ====== -->
+  <h3 id="cmd-0x00">ArmFailSafe —— 启动 Fail-Safe（0x00）</h3>
+  <p>
+    启动或续期 Fail-Safe 计时器。这是配网流程的<strong>第一步</strong> —— 在做任何配网操作之前，必须先调用它开启安全保护。
+    Fail-Safe 计时器一旦启动，设备会进入「可配网」状态；如果计时器超时而配网未完成（未收到 CommissioningComplete），
+    设备会<strong>自动回滚所有已执行的配网变更</strong>，恢复到配网前的状态。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ExpiryLengthSeconds</td>
+          <td>uint16</td>
+          <td>Fail-Safe 超时秒数。设为 <code>0</code> 表示立即取消当前 Fail-Safe（主动回滚）</td>
+        </tr>
+        <tr>
+          <td>Breadcrumb</td>
+          <td>uint64</td>
+          <td>配网进度标记，写入设备的 Breadcrumb 属性</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>ArmFailSafeResponse 响应字段</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ErrorCode</td>
+          <td><a href="#enum-error">CommissioningErrorEnum</a></td>
+          <td>操作结果</td>
+        </tr>
+        <tr>
+          <td>DebugText</td>
+          <td>String</td>
+          <td>可选的调试信息</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">Fail-Safe 的核心约束</div>
+    <p>
+      <strong>ExpiryLengthSeconds</strong> 不能超过 <code>BasicCommissioningInfo.MaxCumulativeFailsafeSeconds</code>（通常 900 秒 = 15 分钟）。
+      超过此上限会返回 <code>ValueOutsideRange</code> 错误。
+      此外，同一时间只有一个 Commissioner 能持有 Fail-Safe —— 如果另一个 Commissioner 已经在配网，
+      会返回 <code>BusyWithOtherAdmin</code>。
+    </p>
+  </div>
+
+  <details class="scenario">
+    <summary>使用场景与注意事项</summary>
+    <div class="scenario-content">
+      <p>
+        Commissioner（App）在开始配网时调用 ArmFailSafe 启动计时器。
+        如果配网过程耗时较长（比如等用户输入 Wi-Fi 密码），可以在超时前再次调用 ArmFailSafe 续期。
+        将 ExpiryLengthSeconds 设为 <code>0</code> 是主动放弃配网的方式 —— 设备会立即回滚所有变更。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x02">SetRegulatoryConfig —— 设置法规配置（0x02）</h3>
+  <p>
+    设置设备的法规区域（室内/室外）和国家代码。不同国家和地区对无线电设备有不同的法规要求（如发射功率、可用频段），
+    设备需要根据法规配置来调整自己的无线参数。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>NewRegulatoryConfig</td>
+          <td><a href="#enum-location">RegulatoryLocationTypeEnum</a></td>
+          <td>目标法规配置（Indoor / Outdoor / IndoorOutdoor）</td>
+        </tr>
+        <tr>
+          <td>CountryCode</td>
+          <td>String (2 字符)</td>
+          <td>ISO 3166-1 alpha-2 国家代码（如 <code>"CN"</code>、<code>"US"</code>）。<code>"XX"</code> 表示不指定</td>
+        </tr>
+        <tr>
+          <td>Breadcrumb</td>
+          <td>uint64</td>
+          <td>配网进度标记</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>SetRegulatoryConfigResponse 响应字段</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ErrorCode</td>
+          <td><a href="#enum-error">CommissioningErrorEnum</a></td>
+          <td>操作结果</td>
+        </tr>
+        <tr>
+          <td>DebugText</td>
+          <td>String</td>
+          <td>可选的调试信息</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">法规配置与设备能力</div>
+    <p>
+      设置的 <code>NewRegulatoryConfig</code> 不能超出设备的 <code>LocationCapability</code>。
+      例如：如果设备的 LocationCapability 是 <code>Indoor</code>（仅支持室内），
+      你不能把 RegulatoryConfig 设置为 <code>Outdoor</code>，否则会返回 <code>ValueOutsideRange</code>。
+      大多数消费级设备的 LocationCapability 都是 <code>IndoorOutdoor</code>（不限制），所以这个检查很少失败。
+    </p>
+  </div>
+
+  <details class="scenario">
+    <summary>使用场景与注意事项</summary>
+    <div class="scenario-content">
+      <p>
+        在 ArmFailSafe 之后、CommissioningComplete 之前调用。通常 Commissioner 会自动获取用户的地理位置，
+        填入对应的国家代码。如果无法确定位置，可以使用 <code>"XX"</code> 表示不指定。
+        法规配置影响设备可使用的 Wi-Fi 信道和发射功率，设置错误可能导致设备无法连接某些网络。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x04">CommissioningComplete —— 完成配网（0x04）</h3>
+  <p>
+    配网流程的<strong>最后一步</strong>。调用成功后，设备会：
+  </p>
+  <ol>
+    <li>停止 Fail-Safe 计时器</li>
+    <li>永久保存所有配网期间的变更（网络凭据、NOC 证书、ACL 权限等）</li>
+    <li>将 Breadcrumb 重置为 <code>0</code></li>
+  </ol>
+  <p>
+    此命令<strong>没有参数</strong>。只有当前持有 Fail-Safe 的 Commissioner 才能调用它。
+  </p>
+
+  <h4>CommissioningCompleteResponse 响应字段</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ErrorCode</td>
+          <td><a href="#enum-error">CommissioningErrorEnum</a></td>
+          <td>操作结果</td>
+        </tr>
+        <tr>
+          <td>DebugText</td>
+          <td>String</td>
+          <td>可选的调试信息</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">调用前提</div>
+    <p>
+      CommissioningComplete 必须在 Fail-Safe 激活状态下调用，并且调用者必须是启动 Fail-Safe 的同一个 Commissioner。
+      如果没有活跃的 Fail-Safe，会返回 <code>NoFailSafe</code> 错误；
+      如果是另一个 Commissioner 调用，会返回 <code>InvalidAuthentication</code>。
+    </p>
+  </div>
+
+  <details class="scenario">
+    <summary>使用场景与注意事项</summary>
+    <div class="scenario-content">
+      <p>
+        所有配网步骤（网络配置、NOC 证书安装、ACL 权限设置等）都完成后，发送此命令锁定变更。
+        一旦调用成功，设备就正式加入 Matter Fabric，可以被 Fabric 内的控制器管理。
+        如果此命令失败或未发送，Fail-Safe 超时后设备会自动回滚，一切恢复原样。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 属性详解 ====== -->
+  <h2 id="attributes">属性详解</h2>
+  <p>GeneralCommissioning Cluster 共有 5 个属性。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+
+  <!-- 属性汇总表 -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>分组</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#attr-0x0000">
+          <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
+          <td>Breadcrumb</td>
+          <td>uint64</td>
+          <td><a href="#group-tracking">配网追踪</a></td>
+          <td>Commissioner 设置的进度标记</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0001">
+          <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
+          <td>BasicCommissioningInfo</td>
+          <td>struct</td>
+          <td><a href="#group-info">基础配网信息</a></td>
+          <td>Fail-Safe 超时参数</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0002">
+          <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
+          <td>RegulatoryConfig</td>
+          <td>RegulatoryLocationTypeEnum</td>
+          <td><a href="#group-regulatory">法规配置</a></td>
+          <td>当前法规区域配置</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0003">
+          <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
+          <td>LocationCapability</td>
+          <td>RegulatoryLocationTypeEnum</td>
+          <td><a href="#group-regulatory">法规配置</a></td>
+          <td>设备支持的法规区域能力</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0004">
+          <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
+          <td>SupportsConcurrentConnection</td>
+          <td>bool</td>
+          <td><a href="#group-connection">连接能力</a></td>
+          <td>是否支持配网期间并发连接</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 配网追踪（0x0000）====== -->
+  <h3 id="group-tracking">配网追踪（0x0000）</h3>
+  <p>用于 Commissioner 追踪配网流程的推进状态。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0000">
+          <td><code>0x0000</code></td>
+          <td>Breadcrumb<br/><span class="attr-cn">进度标记</span></td>
+          <td>uint64</td>
+          <td>
+            由 Commissioner 通过命令参数写入的进度追踪值。
+            每个配网命令（ArmFailSafe、SetRegulatoryConfig 等）都带有 Breadcrumb 参数，
+            执行成功后设备会更新此属性。Commissioner 可以读取它来确认上一步命令是否真正生效。
+            配网完成（CommissioningComplete）后自动重置为 <code>0</code>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">Breadcrumb 的实际用途</div>
+    <p>
+      Breadcrumb 是一个简单但实用的「已执行到哪一步」标记。
+      例如 Commissioner 在 ArmFailSafe 时设 Breadcrumb = 1，SetRegulatoryConfig 时设为 2，写入网络凭据时设为 3。
+      如果配网中途出错需要重试，读取 Breadcrumb 就知道上次执行到了第几步，可以从断点继续而不必从头来过。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 基础配网信息（0x0001）====== -->
+  <h3 id="group-info">基础配网信息（0x0001）</h3>
+  <p>描述设备的 Fail-Safe 时间限制，Commissioner 据此设置合理的超时参数。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0001">
+          <td><code>0x0001</code></td>
+          <td>BasicCommissioningInfo<br/><span class="attr-cn">基础配网信息</span></td>
+          <td>struct</td>
+          <td>包含 Fail-Safe 超时的关键参数（见下方结构体）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>BasicCommissioningInfo 结构体</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>FailSafeExpiryLengthSeconds</td>
+          <td>uint16</td>
+          <td>Fail-Safe 默认超时秒数。Commissioner 通常在 ArmFailSafe 命令中使用此值</td>
+        </tr>
+        <tr>
+          <td>MaxCumulativeFailsafeSeconds</td>
+          <td>uint16</td>
+          <td>Fail-Safe 的最大累计时长。ArmFailSafe 的 ExpiryLengthSeconds 不能超过此值，否则返回 ValueOutsideRange</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">典型值</div>
+    <p>
+      大多数设备的 <code>FailSafeExpiryLengthSeconds</code> 为 60 秒，<code>MaxCumulativeFailsafeSeconds</code> 为 900 秒（15 分钟）。
+      这意味着单次 ArmFailSafe 最长可设 900 秒。如果配网流程需要更长时间（如等用户操作），
+      Commissioner 需要在超时前重新调用 ArmFailSafe 续期，但总时长不能超过 900 秒。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 法规配置（0x0002, 0x0003）====== -->
+  <h3 id="group-regulatory">法规配置（0x0002, 0x0003）</h3>
+  <p>描述设备的法规区域配置及其能力限制。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0002">
+          <td><code>0x0002</code></td>
+          <td>RegulatoryConfig<br/><span class="attr-cn">当前法规配置</span></td>
+          <td><a href="#enum-location">RegulatoryLocationTypeEnum</a></td>
+          <td>设备当前的法规区域设置。通过 <a href="#cmd-0x02">SetRegulatoryConfig</a> 命令修改</td>
+        </tr>
+        <tr id="attr-0x0003">
+          <td><code>0x0003</code></td>
+          <td>LocationCapability<br/><span class="attr-cn">区域能力</span></td>
+          <td><a href="#enum-location">RegulatoryLocationTypeEnum</a></td>
+          <td>设备硬件支持的法规区域范围。RegulatoryConfig 的取值不能超出此能力。只读属性，由设备固件决定</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发提示</div>
+    <p>
+      实际开发中，大多数消费级 Matter 设备的 <code>LocationCapability</code> 都是 <code>IndoorOutdoor (2)</code>，
+      对应地 <code>RegulatoryConfig</code> 也默认设为 <code>IndoorOutdoor</code>。
+      只有工业级或特殊用途的设备才会限制为纯 Indoor 或纯 Outdoor。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 连接能力（0x0004）====== -->
+  <h3 id="group-connection">连接能力（0x0004）</h3>
+  <p>描述设备在配网期间的网络连接能力。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0004">
+          <td><code>0x0004</code></td>
+          <td>SupportsConcurrentConnection<br/><span class="attr-cn">支持并发连接</span></td>
+          <td>bool</td>
+          <td>
+            设备是否能在配网期间同时维持多个网络连接。
+            <code>true</code> = 设备可以在连接 Wi-Fi 的同时保持 BLE 通道（大多数设备）；
+            <code>false</code> = 设备连接 Wi-Fi 后会断开 BLE，Commissioner 需要通过 Wi-Fi 网络重新发现设备
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">SupportsConcurrentConnection = false 的影响</div>
+    <p>
+      当此属性为 <code>false</code> 时，Commissioner 在发送 <code>ConnectNetwork</code> 后会失去与设备的通信。
+      此时 Commissioner 需要：
+      (1) 通过 mDNS 在目标网络上重新发现设备；
+      (2) 建立 CASE 安全通道（因为 PASE 通道已断开）；
+      (3) 然后才能继续发送 <code>CommissioningComplete</code>。
+      这增加了配网流程的复杂性和耗时。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 枚举定义 ====== -->
+  <h2 id="enums">枚举定义</h2>
+
+  <h3 id="enum-error">CommissioningErrorEnum</h3>
+  <p>所有 GeneralCommissioning 命令的响应都包含此错误码，用于表示操作结果。</p>
+
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">OK</span>
+        <span class="enum-desc">操作成功</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">ValueOutsideRange</span>
+        <span class="enum-desc">参数值超出允许范围（如 ExpiryLengthSeconds 超过上限，或 RegulatoryConfig 超出设备能力）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">InvalidAuthentication</span>
+        <span class="enum-desc">认证无效 —— 调用者不是启动 Fail-Safe 的那个 Commissioner</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">NoFailSafe</span>
+        <span class="enum-desc">没有活跃的 Fail-Safe —— 在未调用 ArmFailSafe 的情况下尝试 CommissioningComplete</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">4</span>
+      <div>
+        <span class="enum-name">BusyWithOtherAdmin</span>
+        <span class="enum-desc">另一个 Commissioner 正在配网中 —— 同一时间只允许一个 Fail-Safe 会话</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">常见错误速查</div>
+    <p>
+      <strong>ArmFailSafe 返回 BusyWithOtherAdmin</strong> → 另一个 App 或控制器正在配网这个设备，等待其完成或超时；
+      <strong>CommissioningComplete 返回 NoFailSafe</strong> → Fail-Safe 已经超时自动回滚了，需要重新开始整个配网流程；
+      <strong>SetRegulatoryConfig 返回 ValueOutsideRange</strong> → 检查设备的 LocationCapability，选择其支持的区域类型。
+    </p>
+  </div>
+
+  <h3 id="enum-location">RegulatoryLocationTypeEnum</h3>
+  <p>标识设备的法规使用场景。用于 <code>RegulatoryConfig</code>、<code>LocationCapability</code> 属性和 <code>SetRegulatoryConfig</code> 命令。</p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Indoor</span>
+        <span class="enum-desc">仅限室内使用 —— 设备遵守室内无线电法规（通常限制更宽松）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Outdoor</span>
+        <span class="enum-desc">仅限室外使用 —— 设备遵守室外无线电法规（某些频段限制更严格）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">IndoorOutdoor</span>
+        <span class="enum-desc">室内外均可 —— 设备同时满足室内和室外法规要求（最常见）</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+
+  <h3>属性数据示例</h3>
+  <p>以下是一个正在配网中的设备的 GeneralCommissioning Cluster 典型属性数据：</p>
+  <pre><code set:html={exampleData} /></pre>
+
+  <h3>ArmFailSafe 交互示例</h3>
+  <p>Commissioner 启动 Fail-Safe 计时器的请求与响应：</p>
+  <pre><code set:html={armFailSafeExample} /></pre>
+
+  <h3>CommissioningComplete 交互示例</h3>
+  <p>配网完成时的最终确认：</p>
+  <pre><code set:html={commissioningCompleteExample} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发提示</div>
+    <p>
+      在实际开发中，Commissioner SDK（如 Android 的 chip-tool 或 iOS 的 Matter.framework）通常会自动处理 GeneralCommissioning 的命令序列。
+      App 开发者很少需要手动发送这些命令，但理解它们的工作原理有助于排查配网失败的问题。
+    </p>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <details class="scenario">
+    <summary>场景 1：标准配网流程（正常路径）</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>Commissioner 通过 BLE 与设备建立 PASE 安全通道</li>
+        <li>读取 <code>BasicCommissioningInfo (0x0001)</code> 获取 Fail-Safe 超时参数</li>
+        <li>发送 <a href="#cmd-0x00"><code>ArmFailSafe (0x00)</code></a>，ExpiryLengthSeconds = 60，Breadcrumb = 1</li>
+        <li>发送 <a href="#cmd-0x02"><code>SetRegulatoryConfig (0x02)</code></a>，设置国家代码和法规区域，Breadcrumb = 2</li>
+        <li>通过 <a href="/clusters/network-commissioning/">NetworkCommissioning (0x0031)</a> 配置网络凭据并连接</li>
+        <li>安装 NOC 证书（OperationalCredentials Cluster）</li>
+        <li>设置 ACL 权限（AccessControl Cluster）</li>
+        <li>发送 <a href="#cmd-0x04"><code>CommissioningComplete (0x04)</code></a> 提交所有变更</li>
+        <li>配网完成，设备正式加入 Fabric</li>
+      </ol>
+      <p>整个流程通常在 30 秒内完成（不计用户输入时间）。</p>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 2：Fail-Safe 超时回滚</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>Commissioner 发送 ArmFailSafe（60 秒超时）</li>
+        <li>成功写入了 Wi-Fi 凭据</li>
+        <li>但在安装 NOC 证书时出错，Commissioner 决定放弃</li>
+        <li>Commissioner 未发送 CommissioningComplete</li>
+        <li>60 秒后 Fail-Safe 计时器超时</li>
+        <li>设备自动回滚：<strong>删除刚写入的 Wi-Fi 凭据</strong>、重置 Breadcrumb 为 0</li>
+        <li>设备恢复到配网前的状态，可以重新开始配网</li>
+      </ol>
+      <p>
+        <strong>也可以主动回滚</strong>：发送 <code>ArmFailSafe(ExpiryLengthSeconds = 0)</code> 立即触发回滚，
+        不需要等待 60 秒超时。这比等超时更快，也更礼貌。
+      </p>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 3：法规配置处理</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>读取 <code>LocationCapability (0x0003)</code> 确认设备支持的区域类型</li>
+        <li>根据用户所在地区确定 CountryCode（如中国 = <code>"CN"</code>，美国 = <code>"US"</code>）</li>
+        <li>根据设备的实际使用场景选择 RegulatoryConfig：
+          <ul>
+            <li>智能灯、插座、传感器 → 通常 <code>IndoorOutdoor (2)</code></li>
+            <li>户外安防摄像头 → <code>Outdoor (1)</code></li>
+            <li>不确定 → 使用 <code>IndoorOutdoor (2)</code>（如果设备支持）</li>
+          </ul>
+        </li>
+        <li>发送 <a href="#cmd-0x02"><code>SetRegulatoryConfig</code></a></li>
+        <li>如果返回 <code>ValueOutsideRange</code>，降级到设备的 LocationCapability 允许的值重试</li>
+      </ol>
+    </div>
+  </details>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .col-required {
+    color: #dc2626;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-required {
+    color: #f87171;
+  }
+
+  .col-optional {
+    color: #16a34a;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-optional {
+    color: #4ade80;
+  }
+
+  .attr-cn {
+    font-size: 0.8125rem;
+    color: #6b7280;
+  }
+
+  :global(.dark) .attr-cn {
+    color: #9ca3af;
+  }
+</style>

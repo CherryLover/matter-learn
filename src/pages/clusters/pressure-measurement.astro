@@ -1,0 +1,378 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- PressureMeasurement Cluster（Endpoint 1）---
+  "0x0": 101,         // MeasuredValue = 101 → 实际 101 kPa（≈标准大气压）
+  "0x1": 30,          // MinMeasuredValue = 30 → 30 kPa
+  "0x2": 110,         // MaxMeasuredValue = 110 → 110 kPa
+  "0x3": 1            // Tolerance = 1 → ±1 kPa
+}`;
+
+const extExampleData = `{
+  // --- 扩展精度属性（需要 EXT Feature）---
+  "0x10": 10132,      // ScaledValue = 10132，Scale = -1 → 10132 × 10⁻¹ = 1013.2 kPa？
+                       // 不，Scale 用于细分：10132 × 10⁻¹ = 1013.2 hPa = 101.32 kPa
+  "0x11": 3000,       // MinScaledValue = 3000
+  "0x12": 11000,      // MaxScaledValue = 11000
+  "0x13": 10,         // ScaledTolerance = 10
+  "0x14": -1          // Scale = -1（指数）
+  // 实际值 = ScaledValue × 10^Scale kPa = 10132 × 0.1 = 1013.2 hPa
+}`;
+
+const subscribeExample = `{
+  // 订阅气压变化（每 60 秒~10 分钟上报一次）
+  "subscribeRequests": [{
+    "attributePath": {
+      "endpointId": 1,
+      "clusterId": "0x0403",
+      "attributeId": "0x00"        // MeasuredValue
+    },
+    "minIntervalFloor": 60,        // 最少 60 秒上报一次
+    "maxIntervalCeiling": 600      // 最多 10 分钟上报一次
+  }]
+}`;
+---
+
+<DocLayout
+  title="气压测量 Cluster · PressureMeasurement（0x0403）"
+  description="Matter PressureMeasurement Cluster（0x0403）完整参考 — MeasuredValue / Tolerance / EXT 扩展精度属性、kPa 单位说明、气象站与 HVAC 气压监控场景。"
+  type="article"
+  prev={{ title: '温度测量（TemperatureMeasurement）', href: '/clusters/temperature-measurement/' }}
+>
+  <h1>气压测量 Cluster（PressureMeasurement）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x0403</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 通常在 <code>Endpoint 1+</code>（功能端点）
+  </p>
+  <p>
+    PressureMeasurement 用于上报大气压/气压传感器测量到的压力值。
+    这个 Cluster 是<strong>纯只读的</strong> —— 没有 Command，设备作为 Server 被动上报数据，App（Client）读取或订阅即可。
+    常见于气象站、温湿度气压计、HVAC 系统等设备。
+  </p>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">单位是 kPa，不是 hPa！</div>
+    <p>
+      <code>MeasuredValue</code> 的单位是 <strong>kPa</strong>（千帕），不是气象领域常用的 hPa（百帕）。
+      标准大气压 ≈ <strong>101.325 kPa = 1013.25 hPa</strong>，所以设备返回的值大约在 <code>101</code> 左右。
+      如果需要展示 hPa，需要 <strong>乘以 10</strong>：<code>101 kPa × 10 = 1010 hPa</code>。
+    </p>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">null 值含义</div>
+    <p>
+      <code>MeasuredValue</code>、<code>MinMeasuredValue</code>、<code>MaxMeasuredValue</code> 都是 Nullable。
+      返回 <code>null</code> 表示传感器数据无效或尚未完成测量。App 应展示「--」而非 0。
+    </p>
+  </div>
+
+  <!-- ====== Feature Map ====== -->
+  <h2 id="features">Feature Map</h2>
+  <p>PressureMeasurement 定义了一个可选 Feature，用于提供更高精度的压力数据。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Bit</th>
+          <th>名称</th>
+          <th>代码</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>0</td>
+          <td>Extended</td>
+          <td><code>EXT</code></td>
+          <td>扩展精度 —— 启用 ScaledValue 等高精度属性</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">EXT 有什么用？</div>
+    <p>
+      基础属性 <code>MeasuredValue</code> 是 int16 类型，单位 kPa，精度只到 1 kPa。
+      对于气象应用来说太粗 —— 天气变化引起的气压波动通常只有几个 hPa（零点几 kPa）。
+      启用 EXT 后，设备可以通过 <code>ScaledValue</code> + <code>Scale</code>（指数）提供任意精度的压力值。
+    </p>
+  </div>
+
+  <!-- ====== 基础属性 ====== -->
+  <h2 id="attributes">基础属性</h2>
+  <p>以下 4 个属性所有 PressureMeasurement 设备都支持。点击属性 ID 可跳转到详细说明。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>读写</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#attr-0x00">
+          <td><a href="#attr-0x00"><code>0x00</code></a></td>
+          <td>MeasuredValue</td>
+          <td>int16 / null</td>
+          <td>只读</td>
+          <td>当前气压（单位 kPa），Nullable</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x01">
+          <td><a href="#attr-0x01"><code>0x01</code></a></td>
+          <td>MinMeasuredValue</td>
+          <td>int16 / null</td>
+          <td>只读</td>
+          <td>传感器可测最低气压，Nullable</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x02">
+          <td><a href="#attr-0x02"><code>0x02</code></a></td>
+          <td>MaxMeasuredValue</td>
+          <td>int16 / null</td>
+          <td>只读</td>
+          <td>传感器可测最高气压，Nullable</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x03">
+          <td><a href="#attr-0x03"><code>0x03</code></a></td>
+          <td>Tolerance</td>
+          <td>uint16</td>
+          <td>只读</td>
+          <td>测量容差（单位 kPa）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="attr-0x00">MeasuredValue（当前测量气压）</h3>
+  <p>
+    传感器最近一次测量到的气压值，单位 kPa。这是整个 Cluster 最核心的属性。
+  </p>
+  <ul>
+    <li><strong>类型</strong>: int16（有符号），Nullable</li>
+    <li><strong>范围</strong>: -32767 到 32767 kPa</li>
+    <li><strong>换算</strong>: <code>hPa = MeasuredValue × 10</code></li>
+  </ul>
+  <div class="callout callout-tip">
+    <div class="callout-title">常见值速查</div>
+    <p>
+      <code>101</code> = 101 kPa ≈ 标准大气压 &nbsp;|&nbsp;
+      <code>100</code> = 1000 hPa（低气压）&nbsp;|&nbsp;
+      <code>103</code> = 1030 hPa（高气压）&nbsp;|&nbsp;
+      <code>70</code> = 700 hPa（约海拔 3000m）
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x01">MinMeasuredValue（可测最低气压）</h3>
+  <p>
+    传感器能够测量的最低气压值，单位 kPa。
+    值为 <code>null</code> 时表示设备未定义下限。
+  </p>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x02">MaxMeasuredValue（可测最高气压）</h3>
+  <p>
+    传感器能够测量的最高气压值，单位 kPa。
+    值为 <code>null</code> 时表示设备未定义上限。
+  </p>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x03">Tolerance（测量容差）</h3>
+  <p>
+    传感器的测量精度容差，单位 kPa。例如值为 <code>1</code>，表示精度为 &plusmn;1 kPa（&plusmn;10 hPa）。
+    可选属性，不是所有设备都上报。
+  </p>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 扩展属性 ====== -->
+  <h2 id="ext-attributes">扩展属性（EXT Feature）</h2>
+  <p>以下属性仅在设备支持 <code>EXT</code> Feature 时存在，提供比基础 kPa 整数更高的精度。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>读写</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#attr-0x10">
+          <td><a href="#attr-0x10"><code>0x10</code></a></td>
+          <td>ScaledValue</td>
+          <td>int16 / null</td>
+          <td>只读</td>
+          <td>高精度气压值，需配合 Scale 换算</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x11">
+          <td><a href="#attr-0x11"><code>0x11</code></a></td>
+          <td>MinScaledValue</td>
+          <td>int16 / null</td>
+          <td>只读</td>
+          <td>ScaledValue 的最小值，Nullable</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x12">
+          <td><a href="#attr-0x12"><code>0x12</code></a></td>
+          <td>MaxScaledValue</td>
+          <td>int16 / null</td>
+          <td>只读</td>
+          <td>ScaledValue 的最大值，Nullable</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x13">
+          <td><a href="#attr-0x13"><code>0x13</code></a></td>
+          <td>ScaledTolerance</td>
+          <td>uint16</td>
+          <td>只读</td>
+          <td>ScaledValue 的测量容差</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x14">
+          <td><a href="#attr-0x14"><code>0x14</code></a></td>
+          <td>Scale</td>
+          <td>int8</td>
+          <td>只读</td>
+          <td>指数因子，实际值 = ScaledValue &times; 10<sup>Scale</sup> kPa</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="attr-0x10">ScaledValue（高精度气压值）</h3>
+  <p>
+    高精度的压力测量值，需要配合 <code>Scale</code> 属性换算：
+  </p>
+  <p><strong>实际压力 = ScaledValue &times; 10<sup>Scale</sup> kPa</strong></p>
+  <div class="callout callout-tip">
+    <div class="callout-title">换算示例</div>
+    <p>
+      <code>ScaledValue = 10132</code>，<code>Scale = -1</code><br/>
+      实际压力 = 10132 &times; 10<sup>-1</sup> = <strong>1013.2 hPa = 101.32 kPa</strong><br/><br/>
+      <code>ScaledValue = 101325</code>... 不可能，int16 最大 32767。
+      所以 Scale 的选择决定了精度和量程的平衡 —— <code>Scale = -1</code> 时精度 0.1 kPa（1 hPa），
+      <code>Scale = -2</code> 时精度 0.01 kPa 但量程缩小到 &plusmn;327.67 kPa。
+    </p>
+  </div>
+  <p class="back-link"><a href="#ext-attributes">&#8593; 返回扩展属性列表</a></p>
+
+  <h3 id="attr-0x11">MinScaledValue / <span id="attr-0x12">MaxScaledValue</span></h3>
+  <p>
+    <code>ScaledValue</code> 的有效范围上下限，含义与基础属性的 Min/Max 对应。
+    同样是 Nullable，为 <code>null</code> 表示未定义。换算方式与 ScaledValue 一致（乘以 10<sup>Scale</sup>）。
+  </p>
+  <p class="back-link"><a href="#ext-attributes">&#8593; 返回扩展属性列表</a></p>
+
+  <h3 id="attr-0x13">ScaledTolerance（扩展容差）</h3>
+  <p>
+    <code>ScaledValue</code> 的测量精度容差，换算方式同上。
+    例如 <code>ScaledTolerance = 10</code>，<code>Scale = -1</code>，则精度为 &plusmn;1 hPa。
+  </p>
+  <p class="back-link"><a href="#ext-attributes">&#8593; 返回扩展属性列表</a></p>
+
+  <h3 id="attr-0x14">Scale（指数因子）</h3>
+  <p>
+    int8 类型的指数值，决定 ScaledValue 系列属性的实际精度。
+    常见值：
+  </p>
+  <ul>
+    <li><code>0</code> —— 与基础属性相同，单位 kPa，无额外精度</li>
+    <li><code>-1</code> —— 精度 0.1 kPa（= 1 hPa），最常用</li>
+    <li><code>-2</code> —— 精度 0.01 kPa（= 0.1 hPa），高精度气象站</li>
+  </ul>
+  <p class="back-link"><a href="#ext-attributes">&#8593; 返回扩展属性列表</a></p>
+
+  <!-- ====== 命令说明 ====== -->
+  <h2 id="commands">命令</h2>
+  <p>
+    PressureMeasurement 是一个<strong>纯只读的 Server Cluster</strong>，没有任何命令。
+    设备负责采集气压数据并更新属性，App 端只需读取（Read）或订阅（Subscribe）即可获取数据。
+  </p>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>读取一个气象站设备的 PressureMeasurement 基础属性：</p>
+  <pre><code set:html={exampleData} /></pre>
+
+  <p>支持 EXT Feature 的设备还会返回扩展属性：</p>
+  <pre><code set:html={extExampleData} /></pre>
+
+  <p>订阅气压变化 —— 实时跟踪气压趋势：</p>
+  <pre><code set:html={subscribeExample} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">单位转换代码参考</div>
+    <p>处理设备返回值时的关键逻辑：</p>
+    <pre><code>{`// 基础属性：MeasuredValue 单位 kPa
+val rawKpa: Int? = 101               // Nullable
+val hPa = rawKpa?.let { it * 10.0 }  // → 1010.0 hPa
+val display = hPa?.let { "%.0f hPa".format(it) } ?: "--"
+
+// EXT 扩展属性：ScaledValue + Scale
+val scaled: Int? = 10132
+val scale: Int = -1
+val actualKpa = scaled?.let { it * Math.pow(10.0, scale.toDouble()) }  // → 1013.2 hPa
+val displayExt = actualKpa?.let { "%.1f hPa".format(it) } ?: "--"`}</code></pre>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <details class="scenario">
+    <summary>场景 1：气象站 —— 气压趋势监测</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>检查设备 FeatureMap 是否包含 <code>EXT</code>（bit 0），有则优先使用 <code>ScaledValue</code> 获取高精度数据</li>
+        <li>订阅气压变化，记录历史数据绘制趋势图</li>
+        <li>气压持续下降（3 小时内下降 &gt; 3 hPa）通常预示天气转差，可推送提醒</li>
+        <li>展示时建议使用 hPa（气象习惯），基础属性 <code>MeasuredValue × 10</code> 即可</li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 2：海拔高度估算</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>利用气压与海拔的关系进行粗略估算（气压测高法）</li>
+        <li>国际标准大气近似公式：<code>海拔(m) ≈ 44330 × (1 - (P/P₀)^0.1903)</code>，P₀ = 101.325 kPa</li>
+        <li>精度受温度、湿度、天气系统影响较大，仅供参考</li>
+        <li>建议使用 EXT 扩展属性以获得更精确的气压值，提高海拔估算准确度</li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 3：HVAC 气压监控</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>洁净室、实验室等场景需要监控室内外压差</li>
+        <li>订阅 <code>MeasuredValue</code>，设定正压/负压阈值</li>
+        <li>压差异常时触发报警或自动调节新风系统</li>
+        <li>结合 TemperatureMeasurement（0x0402）和 RelativeHumidityMeasurement（0x0405）实现环境综合监控</li>
+      </ol>
+    </div>
+  </details>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>

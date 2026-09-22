@@ -1,0 +1,425 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 模式列表 ---
+  "0x0000": [                              // SupportedModes
+    {
+      "Label": "深度清洁",
+      "Mode": 0,
+      "ModeTags": [{ "Value": 16384 }]    // DeepClean (0x4000)
+    },
+    {
+      "Label": "仅吸尘",
+      "Mode": 1,
+      "ModeTags": [{ "Value": 16385 }]    // VacuumOnly (0x4001)
+    },
+    {
+      "Label": "仅拖地",
+      "Mode": 2,
+      "ModeTags": [{ "Value": 16386 }]    // MopOnly (0x4002)
+    },
+    {
+      "Label": "吸拖一体",
+      "Mode": 3,
+      "ModeTags": [{ "Value": 16387 }]    // VacuumAndMop (0x4003)
+    }
+  ],
+
+  // --- 当前模式 ---
+  "0x0001": 3,                             // CurrentMode = 3（吸拖一体）
+  "0x0003": 3                              // OnMode = 3（开机默认吸拖一体）
+}`;
+---
+
+<DocLayout
+  title="扫地机清洁模式 Cluster · RvcCleanMode（0x0055）"
+  description="Matter RvcCleanMode Cluster（0x0055）完整参考 — 扫地机器人清洁强度模式，ChangeToMode 命令、SupportedModes / CurrentMode / OnMode 属性、DeepClean / VacuumOnly / MopOnly / VacuumAndMop 模式标签定义及枚举值速查。"
+  type="article"
+>
+  <h1>扫地机清洁模式 Cluster（RvcCleanMode）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x0055</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 通常在 <code>Endpoint 1</code>（功能端点）
+  </p>
+  <p>
+    RvcCleanMode 是扫地机器人（Robotic Vacuum Cleaner）的<strong>清洁强度模式</strong> Cluster，
+    派生自 ModeBase（0x0049）。它定义了扫地机不同的清洁方式 —— 深度清洁、仅吸尘、仅拖地、吸拖一体等。
+    与 <strong>RvcRunMode</strong>（0x0054，运行模式：清扫/映射/回充）搭配使用：RvcRunMode 决定「做什么任务」，
+    RvcCleanMode 决定「用什么强度做」。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">ModeBase 派生 Cluster</div>
+    <p>
+      RvcCleanMode 继承 ModeBase 的全部命令和属性结构，但<strong>不支持</strong> <code>StartUpMode</code> 属性
+      （规范明确禁止）。开机后的默认清洁模式由 <code>OnMode</code> 控制。
+      模式标签（ModeTag）在 0x4000~0x4003 范围内定义了 RVC 专属的清洁类型。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#commands">命令</a>
+    <span class="nav-sep">|</span>
+    <a href="#attributes">属性</a>
+    <span class="nav-sep">|</span>
+    <a href="#mode-tags">模式标签</a>
+    <span class="nav-sep">|</span>
+    <a href="#status-codes">状态码</a>
+    <span class="nav-sep">|</span>
+    <a href="#example-data">示例数据</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">常见场景</a>
+  </nav>
+
+  <!-- ====== 命令（Commands）====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    RvcCleanMode 只有一个命令 <code>ChangeToMode</code>，继承自 ModeBase。
+    设备收到后切换清洁模式，并通过 <code>ChangeToModeResponse</code> 返回执行结果。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>方向</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#cmd-0x00">
+          <td><a href="#cmd-0x00"><code>0x00</code></a></td>
+          <td>ChangeToMode</td>
+          <td>客户端 → 设备</td>
+          <td>切换清洁模式</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x01">
+          <td><a href="#cmd-0x01"><code>0x01</code></a></td>
+          <td>ChangeToModeResponse</td>
+          <td>设备 → 客户端</td>
+          <td>模式切换结果</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 命令详解 ====== -->
+  <h3 id="cmd-0x00">ChangeToMode —— 切换模式（0x00）</h3>
+  <p>
+    请求设备切换到指定的清洁模式。<code>NewMode</code> 必须是
+    <code>SupportedModes</code> 列表中存在的 Mode 值，否则设备会拒绝。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>NewMode</td>
+          <td>uint8</td>
+          <td>目标模式编号，取自 SupportedModes 中的 Mode 字段</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">切换时机限制</div>
+    <p>
+      扫地机<strong>运行中</strong>时切换清洁模式，设备可能会拒绝并返回
+      <code>InvalidInMode (0x03)</code>。部分设备只允许在空闲或回充状态下切换。
+      建议先检查 RvcRunMode 的 CurrentMode，确认设备处于非活动状态再切换。
+    </p>
+  </div>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x01">ChangeToModeResponse —— 响应（0x01）</h3>
+  <p>
+    设备收到 ChangeToMode 后返回此响应，指示切换是否成功。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Status</td>
+          <td>uint8</td>
+          <td>状态码。<code>0x00 (Success)</code> 表示切换成功，其余见<a href="#status-codes">状态码</a></td>
+        </tr>
+        <tr>
+          <td>StatusText</td>
+          <td>string</td>
+          <td>可选的说明文字，失败时提供更多信息</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 属性详解 ====== -->
+  <h2 id="attributes">属性详解</h2>
+  <p>
+    RvcCleanMode 继承 ModeBase 的三个属性。注意：ModeBase 定义的 <code>StartUpMode (0x0002)</code>
+    在 RvcCleanMode 中<strong>被禁止</strong>，不会出现。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#attr-0x0000">
+          <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
+          <td>SupportedModes</td>
+          <td>list&lt;ModeOptionStruct&gt;</td>
+          <td>设备支持的所有清洁模式</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0001">
+          <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
+          <td>CurrentMode</td>
+          <td>uint8</td>
+          <td>当前清洁模式</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0003">
+          <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
+          <td>OnMode</td>
+          <td>uint8 / null</td>
+          <td>开机后自动切换到的模式</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 属性详解 -->
+  <h3 id="attr-0x0000">SupportedModes —— 模式列表（0x0000）</h3>
+  <p>
+    设备支持的全部清洁模式列表。每个模式包含编号、标签和模式标签（ModeTag），
+    ModeTag 用于标识该模式的清洁类型（如深度清洁、仅吸尘等）。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段（ModeOptionStruct）</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Label</td>
+          <td>string</td>
+          <td>模式的可读名称，最长 64 字符，如「深度清洁」「仅吸尘」</td>
+        </tr>
+        <tr>
+          <td>Mode</td>
+          <td>uint8</td>
+          <td>模式编号，在列表内唯一。ChangeToMode 命令的参数就是这个值</td>
+        </tr>
+        <tr>
+          <td>ModeTags</td>
+          <td>list&lt;ModeTagStruct&gt;</td>
+          <td>模式标签列表，至少一个。详见<a href="#mode-tags">模式标签</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x0001">CurrentMode —— 当前模式（0x0001）</h3>
+  <p>
+    设备当前的清洁模式编号，始终是 SupportedModes 中某个条目的 Mode 值。
+    订阅此属性可以在模式切换时同步更新 App 界面。
+  </p>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x0003">OnMode —— 开机模式（0x0003）</h3>
+  <p>
+    设备开机后自动切换到的清洁模式。<strong>Nullable</strong> —— <code>null</code>
+    表示开机后保持上次使用的模式。写入需要操作权限。
+  </p>
+  <div class="callout callout-tip">
+    <div class="callout-title">OnMode vs StartUpMode</div>
+    <p>
+      ModeBase 规范中定义了 <code>StartUpMode (0x0002)</code>，但 RvcCleanMode
+      <strong>明确禁止</strong>使用 StartUpMode。开机模式的控制统一通过 OnMode 完成。
+      如果 OnMode 为 <code>null</code>，设备保持断电前的清洁模式。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 模式标签（ModeTag）====== -->
+  <h2 id="mode-tags">模式标签（ModeTag）</h2>
+  <p>
+    RvcCleanMode 在 0x4000~0x4003 范围内定义了 4 个专属标签，用于标识清洁方式的语义。
+    App 可以根据 ModeTag 展示对应的图标或分类，而不依赖 Label 字符串匹配。
+  </p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0x4000</span>
+      <div>
+        <span class="enum-name">DeepClean</span>
+        <span class="enum-desc">深度清洁 —— 最大吸力 + 多次覆盖，适合重度脏污场景</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x4001</span>
+      <div>
+        <span class="enum-name">VacuumOnly</span>
+        <span class="enum-desc">仅吸尘 —— 只启动吸尘功能，不启用拖地模块</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x4002</span>
+      <div>
+        <span class="enum-name">MopOnly</span>
+        <span class="enum-desc">仅拖地 —— 只启用拖地模块，不启动吸尘</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x4003</span>
+      <div>
+        <span class="enum-name">VacuumAndMop</span>
+        <span class="enum-desc">吸拖一体 —— 同时吸尘和拖地（最常用的日常模式）</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">ModeTag 与 ModeBase 通用标签</div>
+    <p>
+      除了上述 RVC 专属标签，每个模式还可以携带 ModeBase 定义的通用标签，
+      如 <code>Auto (0x0000)</code>、<code>Quick (0x0001)</code>、<code>Quiet (0x0002)</code> 等。
+      一个模式可以同时拥有多个标签 —— 例如「安静吸尘」可以标记为
+      <code>VacuumOnly (0x4001)</code> + <code>Quiet (0x0002)</code>。
+    </p>
+  </div>
+
+  <!-- ====== 状态码 ====== -->
+  <h2 id="status-codes">状态码（StatusCode）</h2>
+  <p>
+    ChangeToModeResponse 中的 Status 字段使用以下状态码，与 RvcRunMode 共享同一套扩展定义。
+  </p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0x00</span>
+      <div>
+        <span class="enum-name">Success</span>
+        <span class="enum-desc">成功 —— 模式已切换</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x01</span>
+      <div>
+        <span class="enum-name">UnsupportedMode</span>
+        <span class="enum-desc">不支持的模式 —— NewMode 不在 SupportedModes 中</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x02</span>
+      <div>
+        <span class="enum-name">GenericFailure</span>
+        <span class="enum-desc">通用失败 —— 未知原因导致无法切换</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x03</span>
+      <div>
+        <span class="enum-name">InvalidInMode</span>
+        <span class="enum-desc">当前状态不允许 —— 如扫地机正在运行时切换清洁模式</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">RVC 专属约束</div>
+    <p>
+      扫地机在「清扫中」「回充中」等运行状态下，切换清洁模式通常会被拒绝
+      （返回 <code>InvalidInMode</code>）。建议在发送 ChangeToMode 前，
+      先读取 RvcRunMode 的 CurrentMode 确认设备处于空闲或待机状态。
+    </p>
+  </div>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>一台支持四种清洁模式的扫地机器人，当前处于「吸拖一体」模式：</p>
+
+  <pre><code set:html={exampleData} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发提示</div>
+    <p>
+      不同厂商的扫地机支持的模式数量和标签可能不同。有些机型没有拖地模块，
+      就不会出现 <code>MopOnly</code> 和 <code>VacuumAndMop</code> 标签。
+      App 应始终以 <code>SupportedModes</code> 返回的实际列表为准，
+      通过 ModeTag 识别清洁类型，用 Label 作为展示文字。
+    </p>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <h3 id="scenario-switch">场景 1：用户切换清洁模式</h3>
+  <ol>
+    <li>App 读取 <code>SupportedModes (0x0000)</code>，获取设备支持的所有清洁模式列表</li>
+    <li>根据每个模式的 ModeTag 展示对应图标 —— 如 VacuumOnly 显示吸尘器图标，MopOnly 显示拖布图标</li>
+    <li>用户选择「仅拖地」（Mode = 2），App 发送 <code>ChangeToMode</code>，NewMode = 2</li>
+    <li>设备返回 <code>ChangeToModeResponse</code>，Status = <code>0x00 (Success)</code></li>
+    <li>App 订阅 <code>CurrentMode (0x0001)</code> 变化，确认已切换到目标模式并更新高亮</li>
+  </ol>
+
+  <h3 id="scenario-onmode">场景 2：设置开机默认清洁模式</h3>
+  <ol>
+    <li>用户在设置页选择「开机默认使用深度清洁」</li>
+    <li>App 写入 <code>OnMode (0x0003)</code> = 0（深度清洁的 Mode 值）</li>
+    <li>下次扫地机开机或从充电桩激活时，自动切换到深度清洁模式</li>
+    <li>如果用户选择「保持上次模式」，App 写入 <code>OnMode = null</code></li>
+  </ol>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .col-required {
+    color: #dc2626;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-required {
+    color: #f87171;
+  }
+
+  .col-optional {
+    color: #16a34a;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-optional {
+    color: #4ade80;
+  }
+</style>

@@ -1,0 +1,424 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 当前目标 ---
+  "0x0001": 2,                   // CurrentTarget = 2（当前在"设置"页面）
+
+  // --- 目标列表 ---
+  "0x0000": [                    // TargetList
+    {
+      "Identifier": 0,
+      "Name": "Home"              // 主屏幕
+    },
+    {
+      "Identifier": 1,
+      "Name": "Netflix"           // Netflix 应用
+    },
+    {
+      "Identifier": 2,
+      "Name": "Settings"          // 系统设置
+    },
+    {
+      "Identifier": 3,
+      "Name": "YouTube"           // YouTube 应用
+    }
+  ]
+}`;
+
+const navigateExample = `// NavigateTarget 命令示例
+// 导航到 Identifier=1 的目标（Netflix），附带启动参数
+{
+  "Target": 1,
+  "Data": "movie/12345"
+}
+
+// NavigateTargetResponse 响应
+{
+  "Status": 0,                   // Success
+  "Data": "launched"
+}`;
+---
+
+<DocLayout
+  title="目标导航 Cluster · TargetNavigator（0x0505）"
+  description="Matter TargetNavigator Cluster（0x0505）完整参考 — NavigateTarget 导航命令、TargetList 目标列表、CurrentTarget 当前目标、TargetInfoStruct 结构体、StatusEnum 状态枚举及常见场景说明。"
+  type="article"
+  prev={{ title: 'Cluster 手册', href: '/clusters/' }}
+>
+  <h1>目标导航 Cluster（TargetNavigator）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x0505</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 媒体端点（电视、机顶盒等）
+  </p>
+  <p>
+    TargetNavigator 负责在设备的内容目标之间进行导航 —— 这些目标可以是应用、屏幕页面、菜单项等。
+    用户可以通过它查询设备有哪些可导航的目标、当前处于哪个目标，并跳转到指定目标。
+    它是智能电视和机顶盒等媒体设备中用于应用切换和界面导航的核心 Cluster。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">与 MediaInput 的区别</div>
+    <p>
+      <a href="/clusters/media-input/">MediaInput（0x0507）</a>管理的是物理/虚拟输入源（如 HDMI 1、USB），
+      而 TargetNavigator 管理的是软件层面的内容目标（如 Netflix、YouTube、设置页面）。
+      一台智能电视可能同时拥有两个 Cluster：MediaInput 切换输入接口，TargetNavigator 切换应用。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#commands">命令列表</a>
+    <span class="nav-sep">|</span>
+    <a href="#attributes">属性详解</a>
+    <span class="nav-sep">|</span>
+    <a href="#structs">结构体定义</a>
+    <span class="nav-sep">|</span>
+    <a href="#enums">枚举定义</a>
+    <span class="nav-sep">|</span>
+    <a href="#example-data">示例数据</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">常见场景</a>
+  </nav>
+
+  <!-- ====== 命令（Commands）====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    TargetNavigator Cluster 只有 1 个命令和 1 个响应。
+    NavigateTarget 用于跳转到指定目标，设备返回 NavigateTargetResponse 告知导航结果。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>方向</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#cmd-0x00">
+          <td><a href="#cmd-0x00"><code>0x00</code></a></td>
+          <td>NavigateTarget</td>
+          <td>Client &rarr; Server</td>
+          <td>导航到指定目标</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x01">
+          <td><a href="#cmd-0x01"><code>0x01</code></a></td>
+          <td>NavigateTargetResponse</td>
+          <td>Server &rarr; Client</td>
+          <td>导航结果响应</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 命令详解 ====== -->
+  <h3 id="cmd-0x00">NavigateTarget —— 导航到目标（0x00）</h3>
+  <p>
+    请求设备跳转到指定的目标。<code>Target</code> 必须是 <code>TargetList</code> 中某个
+    <code>TargetInfoStruct</code> 的 <code>Identifier</code> 值。
+    可选的 <code>Data</code> 字段可以传递额外的导航参数（如深度链接路径）。
+    设备收到命令后会返回 <a href="#cmd-0x01">NavigateTargetResponse</a> 告知结果。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>必选</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Target</td>
+          <td>uint8</td>
+          <td>是</td>
+          <td>目标的标识符，必须存在于 <code>TargetList</code> 中</td>
+        </tr>
+        <tr>
+          <td>Data</td>
+          <td>string</td>
+          <td>否</td>
+          <td>传递给目标的应用自定义数据，如深度链接 URL、启动参数等</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <pre><code set:html={navigateExample} /></pre>
+
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        用户在手机 App 上选择打开电视上的 Netflix。App 读取 <code>TargetList</code> 找到 Netflix 对应的 Identifier，
+        发送 <code>NavigateTarget</code> 命令，并在 Data 字段传入要播放的影片 ID。
+        电视启动 Netflix 并直接跳转到对应影片页面。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x01">NavigateTargetResponse —— 导航结果响应（0x01）</h3>
+  <p>
+    设备对 NavigateTarget 命令的响应。通过 <code>Status</code> 字段告知导航是否成功，
+    可选的 <code>Data</code> 字段可以携带设备返回的额外信息。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>必选</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Status</td>
+          <td><a href="#enum-status">StatusEnum</a></td>
+          <td>是</td>
+          <td>导航结果状态（见下方枚举）</td>
+        </tr>
+        <tr>
+          <td>Data</td>
+          <td>string</td>
+          <td>否</td>
+          <td>设备返回的附加信息，内容由应用自定义</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 属性详解 ====== -->
+  <h2 id="attributes">属性详解</h2>
+  <p>TargetNavigator Cluster 共有 2 个属性。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+
+  <!-- 属性汇总表 -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#attr-0x0000">
+          <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
+          <td>TargetList</td>
+          <td>list&lt;<a href="#struct-target-info">TargetInfoStruct</a>&gt;</td>
+          <td>设备所有可导航目标的列表</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0001">
+          <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
+          <td>CurrentTarget</td>
+          <td>uint8</td>
+          <td>当前所在目标的标识符</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 属性详细说明 ====== -->
+  <h3 id="group-target">目标状态（0x0000, 0x0001）</h3>
+  <p>描述设备当前可导航的目标列表和当前所在的目标。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0000">
+          <td><code>0x0000</code></td>
+          <td>TargetList（目标列表）</td>
+          <td>list&lt;<a href="#struct-target-info">TargetInfoStruct</a>&gt;</td>
+          <td>设备声明的全部可导航目标，每个元素是一个 <a href="#struct-target-info">TargetInfoStruct</a>。列表内容反映设备上已安装的应用、可访问的页面或菜单项。每个 Identifier 值唯一。列表可能随设备安装或卸载应用而变化</td>
+        </tr>
+        <tr id="attr-0x0001">
+          <td><code>0x0001</code></td>
+          <td>CurrentTarget（当前目标）</td>
+          <td>uint8</td>
+          <td>当前所在目标的标识符。该值指向 <code>TargetList</code> 中某个 <code>TargetInfoStruct.Identifier</code>。值为 <code>0xFF</code> 时表示当前没有处于任何已知目标上。通过 <code>NavigateTarget</code> 命令或用户在设备上手动切换时改变</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">订阅变化</div>
+    <p>
+      控制端应订阅 <code>CurrentTarget</code> 属性的变化，以便在用户通过遥控器或设备界面手动切换应用时同步 App 界面上的高亮状态。
+      同时也应订阅 <code>TargetList</code>，以便在设备安装或卸载应用后及时更新可用目标列表。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 结构体定义 ====== -->
+  <h2 id="structs">结构体定义</h2>
+  <p>TargetNavigator Cluster 使用一个结构体来描述导航目标信息。</p>
+
+  <!-- TargetInfoStruct -->
+  <h3 id="struct-target-info">TargetInfoStruct</h3>
+  <p>描述一个导航目标的基本信息，包括唯一标识和显示名称。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>字段</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Identifier</td>
+          <td>uint8</td>
+          <td>目标的唯一标识符，在 <code>TargetList</code> 内唯一。用于 <code>NavigateTarget</code> 命令定位目标</td>
+        </tr>
+        <tr>
+          <td>Name</td>
+          <td>string</td>
+          <td>目标的显示名称，如 <code>"Netflix"</code>、<code>"Settings"</code>。供 UI 展示给用户</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">与 MediaInput.InputInfoStruct 的对比</div>
+    <p>
+      TargetInfoStruct 比 <a href="/clusters/media-input/#struct-input-info">InputInfoStruct</a> 更简洁 ——
+      只有 Identifier 和 Name 两个字段，没有类型枚举和描述字段。
+      这是因为导航目标的性质由应用自身决定，不像物理输入接口那样有固定的分类（HDMI、USB 等）。
+    </p>
+  </div>
+
+  <!-- ====== 枚举定义 ====== -->
+  <h2 id="enums">枚举定义</h2>
+
+  <h3 id="enum-status">StatusEnum</h3>
+  <p>NavigateTargetResponse 中 Status 字段的枚举值，表示导航操作的结果。</p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Success</span>
+        <span class="enum-desc">导航成功 —— 设备已成功切换到目标</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">TargetNotFound</span>
+        <span class="enum-desc">目标未找到 —— 指定的 Target 标识符不存在于 TargetList 中</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">NotAllowed</span>
+        <span class="enum-desc">不允许导航 —— 设备当前状态不允许切换到该目标（如家长控制限制）</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>一台智能电视的 TargetNavigator Cluster 读取结果 —— 当前在设置页面，共有 4 个可导航目标：</p>
+
+  <pre><code set:html={exampleData} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发提示</div>
+    <p>
+      控制端展示目标列表 UI 时，应先读取 <code>TargetList (0x0000)</code> 获取完整列表，
+      再读取 <code>CurrentTarget (0x0001)</code> 高亮当前所在目标。
+      由于 TargetInfoStruct 没有类型枚举，如果需要为不同目标显示图标，
+      可能需要通过 Name 字段匹配已知的应用名称（如"Netflix""YouTube"）来选择图标。
+    </p>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <details class="scenario">
+    <summary>场景 1：App 远程启动电视上的流媒体应用</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>读取 <code>TargetList (0x0000)</code>，获取电视上所有可导航目标（Identifier、Name）</li>
+        <li>读取 <code>CurrentTarget (0x0001)</code>，高亮当前所在目标</li>
+        <li>在 App UI 上展示目标列表，用户点击"Netflix"</li>
+        <li>发送 <code>NavigateTarget (0x00)</code>，Target 设为 Netflix 的 Identifier 值，Data 可传入要播放内容的深度链接</li>
+        <li>检查 <code>NavigateTargetResponse</code> 的 Status：
+          <ul>
+            <li><code>Success (0)</code> —— 导航成功，订阅 <code>CurrentTarget</code> 确认更新后刷新 UI</li>
+            <li><code>TargetNotFound (1)</code> —— 目标已不存在（可能应用被卸载），刷新 TargetList</li>
+            <li><code>NotAllowed (2)</code> —— 被限制访问，提示用户可能受家长控制等策略限制</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 2：自动化场景 —— 语音指令切换应用</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>用户对语音助手说"打开 YouTube"</li>
+        <li>语音助手读取 <code>TargetList (0x0000)</code>，在列表中按 Name 匹配"YouTube"</li>
+        <li>找到匹配项后，发送 <code>NavigateTarget (0x00)</code>，Target 设为对应 Identifier</li>
+        <li>如果 TargetList 中没有匹配的名称，语音助手回复"该应用不在可用列表中"</li>
+        <li>如果返回 <code>NotAllowed</code>，语音助手提示"当前无法打开该应用，可能受到使用限制"</li>
+      </ol>
+      <p>
+        <strong>注意</strong>：Name 字段的匹配需要考虑大小写和本地化差异。
+        设备厂商可能使用不同的名称格式（如"YouTube"vs"youtube"vs"YouTube TV"），
+        语音助手的匹配逻辑应做模糊匹配或规范化处理。
+      </p>
+    </div>
+  </details>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .col-required {
+    color: #dc2626;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-required {
+    color: #f87171;
+  }
+
+  .col-optional {
+    color: #16a34a;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-optional {
+    color: #4ade80;
+  }
+</style>

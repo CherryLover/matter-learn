@@ -1,0 +1,636 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- GroupKeyMap（密钥映射表）---
+  "0x0000": [
+    {
+      "GroupId": 1,
+      "GroupKeySetID": 1,
+      "FabricIndex": 1
+    },
+    {
+      "GroupId": 2,
+      "GroupKeySetID": 1,
+      "FabricIndex": 1
+    }
+  ],
+
+  // --- GroupTable（组信息表，只读）---
+  "0x0001": [
+    {
+      "GroupId": 1,
+      "Endpoints": [1, 2],
+      "GroupName": "客厅灯组",
+      "FabricIndex": 1
+    },
+    {
+      "GroupId": 2,
+      "Endpoints": [3],
+      "GroupName": "卧室灯组",
+      "FabricIndex": 1
+    }
+  ],
+
+  // --- 容量限制 ---
+  "0x0002": 4,               // MaxGroupsPerFabric = 4
+  "0x0003": 3                // MaxGroupKeysPerFabric = 3
+}`;
+---
+
+<DocLayout
+  title="组密钥管理 Cluster · GroupKeyManagement（0x003F）"
+  description="Matter GroupKeyManagement Cluster（0x003F）完整参考 — 组播通信密钥管理、KeySetWrite/Read/Remove 命令、GroupKeyMap 映射、GroupTable 查询、密钥轮换与 CacheAndSync 特性。"
+  type="article"
+>
+  <h1>组密钥管理 Cluster（GroupKeyManagement）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x003F</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: <code>Endpoint 0</code>（根端点）
+  </p>
+  <p>
+    GroupKeyManagement 负责管理 Matter 网络中用于组播（multicast）通信的加密密钥。
+    当你需要向一组设备同时发送命令（比如「关闭客厅所有灯」）时，设备之间需要共享一套对称密钥来加密和验证组播消息。
+    这个 Cluster 就是用来写入、读取、删除和维护这些密钥集的。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">CacheAndSync 特性（CS）</div>
+    <p>
+      GroupKeyManagement 定义了一个 <strong>CacheAndSync（CS）</strong> Feature。
+      启用 CS 后，设备支持从 Distributed Compliance Ledger（DCL）缓存和同步信任的根证书，
+      并允许使用 <code>CacheAndSync</code> 安全策略。未启用 CS 的设备只能使用 <code>TrustFirst</code> 策略。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#commands">命令列表</a>
+    <span class="nav-sep">|</span>
+    <a href="#attributes">属性详解</a>
+    <span class="nav-sep">|</span>
+    <a href="#structs">数据结构</a>
+    <span class="nav-sep">|</span>
+    <a href="#enums">枚举类型</a>
+    <span class="nav-sep">|</span>
+    <a href="#features">Feature 位图</a>
+    <span class="nav-sep">|</span>
+    <a href="#example-data">示例数据</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">常见场景</a>
+  </nav>
+
+  <!-- ====== 命令（Commands）====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    GroupKeyManagement Cluster 共有 4 个命令，用于管理密钥集（KeySet）的完整生命周期：
+    写入、读取、删除和列举。点击下方表格中的命令 ID 可跳转到对应的详细说明。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>方向</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#cmd-0x00">
+          <td><a href="#cmd-0x00"><code>0x00</code></a></td>
+          <td>KeySetWrite</td>
+          <td>Client &rarr; Server</td>
+          <td>写入或更新一个密钥集</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x01">
+          <td><a href="#cmd-0x01"><code>0x01</code></a></td>
+          <td>KeySetRead</td>
+          <td>Client &rarr; Server</td>
+          <td>读取指定密钥集的信息</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x03">
+          <td><a href="#cmd-0x03"><code>0x03</code></a></td>
+          <td>KeySetRemove</td>
+          <td>Client &rarr; Server</td>
+          <td>删除一个密钥集</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x04">
+          <td><a href="#cmd-0x04"><code>0x04</code></a></td>
+          <td>KeySetReadAllIndices</td>
+          <td>Client &rarr; Server</td>
+          <td>列出当前 Fabric 的所有密钥集 ID</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 命令详解 ====== -->
+  <h3 id="cmd-0x00">KeySetWrite -- 写入密钥集（0x00）</h3>
+  <p>
+    写入一个完整的密钥集（GroupKeySet）到设备中。如果指定的 GroupKeySetID 已存在，则更新它。
+    每个密钥集包含最多三个 Epoch 密钥，用于支持密钥轮换时的平滑过渡。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>GroupKeySet</td>
+          <td><a href="#struct-groupkeyset">GroupKeySetStruct</a></td>
+          <td>完整的密钥集结构体，包含 ID、安全策略和最多三组 Epoch 密钥</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">密钥安全</div>
+    <p>
+      写入的 EpochKey 是敏感数据。设备在存储后不会回传明文密钥 ——
+      通过 KeySetRead 读取时，EpochKey 字段会返回 <code>null</code>，只能看到 EpochStartTime。
+    </p>
+  </div>
+
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        Commissioner（如手机 App）在建立组播通信前，需要先通过 KeySetWrite
+        将共享密钥写入所有参与组播的设备。通常在设备配网成功后、加入组之前调用。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x01">KeySetRead -- 读取密钥集（0x01）</h3>
+  <p>
+    读取指定 ID 的密钥集信息。返回 <strong>KeySetReadResponse</strong>，
+    其中包含密钥集的元数据（ID、安全策略、各 Epoch 起始时间），但不包含密钥明文。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>GroupKeySetID</td>
+          <td>uint16</td>
+          <td>要读取的密钥集 ID</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>KeySetReadResponse</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>GroupKeySet</td>
+          <td><a href="#struct-groupkeyset">GroupKeySetStruct</a></td>
+          <td>密钥集信息（EpochKey 字段为 null，不返回明文）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        管理端需要确认某个密钥集是否已成功写入、查看其安全策略和 Epoch 时间窗口时调用。
+        常用于密钥轮换前检查当前密钥集的状态。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x03">KeySetRemove -- 删除密钥集（0x03）</h3>
+  <p>
+    删除指定 ID 的密钥集。删除前需要确保没有 GroupKeyMap 条目仍在引用该密钥集，
+    否则相关组将无法正常收发加密组播消息。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>GroupKeySetID</td>
+          <td>uint16</td>
+          <td>要删除的密钥集 ID（不能为 0，ID 0 是 IPK 密钥集，不可删除）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">IPK 不可删除</div>
+    <p>
+      GroupKeySetID 为 <code>0</code> 的密钥集是 Identity Protection Key（IPK），
+      由 Fabric 建立时自动创建。尝试删除 ID 0 会返回 <code>INVALID_COMMAND</code> 错误。
+    </p>
+  </div>
+
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        密钥轮换完成后，旧密钥集不再被任何组引用时，可以通过 KeySetRemove 清理掉，释放设备存储空间。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x04">KeySetReadAllIndices -- 列举所有密钥集（0x04）</h3>
+  <p>
+    列出当前 Fabric 下所有已存储的密钥集 ID。返回 <strong>KeySetReadAllIndicesResponse</strong>。
+    不需要任何参数。
+  </p>
+
+  <h4>KeySetReadAllIndicesResponse</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>GroupKeySetIDs</td>
+          <td>list&lt;uint16&gt;</td>
+          <td>当前 Fabric 拥有的所有密钥集 ID 列表</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        管理端在执行密钥审计或轮换前，先调用此命令获取设备上所有密钥集的 ID，
+        再逐个通过 KeySetRead 查看详情，决定哪些需要更新或删除。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 属性详解 ====== -->
+  <h2 id="attributes">属性详解</h2>
+  <p>GroupKeyManagement Cluster 共有 4 个应用属性。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>可写</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#attr-0x0000">
+          <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
+          <td>GroupKeyMap</td>
+          <td>list&lt;GroupKeyMapStruct&gt;</td>
+          <td class="col-required">是</td>
+          <td>组 ID 与密钥集的映射关系</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0001">
+          <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
+          <td>GroupTable</td>
+          <td>list&lt;GroupTableStruct&gt;</td>
+          <td class="col-optional">否</td>
+          <td>设备上所有组的信息表</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0002">
+          <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
+          <td>MaxGroupsPerFabric</td>
+          <td>uint16</td>
+          <td class="col-optional">否</td>
+          <td>每个 Fabric 最多支持的组数量</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0003">
+          <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
+          <td>MaxGroupKeysPerFabric</td>
+          <td>uint16</td>
+          <td class="col-optional">否</td>
+          <td>每个 Fabric 最多支持的密钥集数量</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- GroupKeyMap -->
+  <h3 id="attr-0x0000">GroupKeyMap -- 组密钥映射（0x0000）</h3>
+  <p>
+    这是本 Cluster 最核心的属性。它定义了「哪个组使用哪个密钥集」的映射关系。
+    每个条目将一个 GroupId 关联到一个 GroupKeySetID，设备根据这个映射来选择加解密组播消息所用的密钥。
+  </p>
+  <p>
+    <strong>可写属性</strong> —— 管理端可以直接写入来建立或修改映射。
+    一个密钥集可以被多个组共享，也可以为每个组分配独立的密钥集。
+  </p>
+
+  <h4>GroupKeyMapStruct 结构</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>GroupId</td>
+          <td>group-id</td>
+          <td>组 ID（对应 Groups Cluster 中注册的组）</td>
+        </tr>
+        <tr>
+          <td>GroupKeySetID</td>
+          <td>uint16</td>
+          <td>关联的密钥集 ID（必须是已通过 KeySetWrite 写入的）</td>
+        </tr>
+        <tr>
+          <td>FabricIndex</td>
+          <td>fabric-idx</td>
+          <td>所属 Fabric 索引（自动填充，Fabric 隔离）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- GroupTable -->
+  <h3 id="attr-0x0001">GroupTable -- 组信息表（0x0001）</h3>
+  <p>
+    只读属性，展示设备上所有已注册组的详细信息。
+    这个表由设备根据 Groups Cluster 的操作和 GroupKeyMap 自动维护，不能直接写入。
+  </p>
+
+  <h4>GroupTableStruct 结构</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>GroupId</td>
+          <td>group-id</td>
+          <td>组 ID</td>
+        </tr>
+        <tr>
+          <td>Endpoints</td>
+          <td>list&lt;endpoint-no&gt;</td>
+          <td>该组包含的 Endpoint 列表</td>
+        </tr>
+        <tr>
+          <td>GroupName</td>
+          <td>string</td>
+          <td>组名称（最长 16 字节，可选）</td>
+        </tr>
+        <tr>
+          <td>FabricIndex</td>
+          <td>fabric-idx</td>
+          <td>所属 Fabric 索引</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- MaxGroupsPerFabric & MaxGroupKeysPerFabric -->
+  <h3 id="attr-0x0002">MaxGroupsPerFabric -- 最大组数（0x0002）</h3>
+  <p>
+    只读属性，标识每个 Fabric 最多可以注册多少个组。
+    这是设备的硬件/固件限制，管理端在规划组播拓扑时需要参考这个值。
+  </p>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x0003">MaxGroupKeysPerFabric -- 最大密钥集数（0x0003）</h3>
+  <p>
+    只读属性，标识每个 Fabric 最多可以存储多少个密钥集。
+    包括 IPK（ID = 0）在内。如果值为 3，则除了 IPK 外还能存 2 个自定义密钥集。
+  </p>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">容量规划</div>
+    <p>
+      在写入密钥集或添加组映射前，先读取 <code>MaxGroupsPerFabric</code> 和
+      <code>MaxGroupKeysPerFabric</code> 确认设备还有空间。
+      超出限制的写入操作会返回 <code>RESOURCE_EXHAUSTED</code> 错误。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 数据结构 ====== -->
+  <h2 id="structs">数据结构</h2>
+
+  <h3 id="struct-groupkeyset">GroupKeySetStruct（密钥集结构体）</h3>
+  <p>
+    描述一个完整的组播密钥集。包含密钥集 ID、安全策略、以及最多三组 Epoch 密钥和对应的起始时间。
+    三个 Epoch 插槽用于支持密钥轮换 —— 设备可以同时持有旧密钥和新密钥，实现无缝切换。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>GroupKeySetID</td>
+          <td>uint16</td>
+          <td>密钥集唯一标识。<code>0</code> 为 IPK（Identity Protection Key），由 Fabric 自动管理</td>
+        </tr>
+        <tr>
+          <td>GroupKeySecurityPolicy</td>
+          <td><a href="#enum-security-policy">GroupKeySecurityPolicyEnum</a></td>
+          <td>安全策略 —— TrustFirst 或 CacheAndSync</td>
+        </tr>
+        <tr>
+          <td>EpochKey0</td>
+          <td>octstr (16 bytes) / null</td>
+          <td>第一个 Epoch 密钥（128 位 AES 密钥）。读取时返回 null</td>
+        </tr>
+        <tr>
+          <td>EpochStartTime0</td>
+          <td>epoch-us / null</td>
+          <td>EpochKey0 的生效时间（微秒级 UTC 时间戳）</td>
+        </tr>
+        <tr>
+          <td>EpochKey1</td>
+          <td>octstr (16 bytes) / null</td>
+          <td>第二个 Epoch 密钥。用于密钥轮换过渡期</td>
+        </tr>
+        <tr>
+          <td>EpochStartTime1</td>
+          <td>epoch-us / null</td>
+          <td>EpochKey1 的生效时间</td>
+        </tr>
+        <tr>
+          <td>EpochKey2</td>
+          <td>octstr (16 bytes) / null</td>
+          <td>第三个 Epoch 密钥。完成轮换后的最终密钥</td>
+        </tr>
+        <tr>
+          <td>EpochStartTime2</td>
+          <td>epoch-us / null</td>
+          <td>EpochKey2 的生效时间</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">Epoch 密钥轮换机制</div>
+    <p>
+      三个 Epoch 插槽按时间顺序排列：EpochStartTime0 &lt; EpochStartTime1 &lt; EpochStartTime2。
+      设备在当前时间到达对应的 EpochStartTime 后自动切换到新密钥。
+      在切换窗口期内，设备能同时用旧密钥解密收到的消息、用新密钥加密发出的消息，
+      保证组内设备逐步更新密钥时不会中断通信。
+    </p>
+  </div>
+
+  <!-- ====== 枚举类型 ====== -->
+  <h2 id="enums">枚举类型</h2>
+
+  <h3 id="enum-security-policy">GroupKeySecurityPolicyEnum（安全策略）</h3>
+  <p>定义密钥集使用的安全验证策略。决定设备如何验证组播消息的来源可信度。</p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">TrustFirst</span>
+        <span class="enum-desc">信任优先 —— 首次收到的组播密钥即被信任。适用于大多数场景，是默认策略</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">CacheAndSync</span>
+        <span class="enum-desc">缓存与同步 —— 需要从 DCL 验证证书链后才信任。安全性更高，需要设备支持 CS 特性</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">CacheAndSync 前提</div>
+    <p>
+      只有设备的 <code>FeatureMap</code> 中启用了 <strong>CS</strong> 位后，
+      才能在 KeySetWrite 中使用 <code>CacheAndSync</code> 策略。
+      向不支持 CS 的设备写入 CacheAndSync 密钥集会返回 <code>INVALID_COMMAND</code>。
+    </p>
+  </div>
+
+  <!-- ====== Feature 位图 ====== -->
+  <h2 id="features">Feature 位图</h2>
+  <p>GroupKeyManagement Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持的高级能力：</p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">Bit 0</span>
+      <div>
+        <span class="enum-name">CS（CacheAndSync）</span>
+        <span class="enum-desc">缓存与同步 —— 支持从 DCL 同步信任根证书，允许使用 CacheAndSync 安全策略</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>一个已配置两个组的设备上，GroupKeyManagement Cluster 的属性读取结果：</p>
+
+  <pre><code set:html={exampleData} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发提示</div>
+    <p>
+      GroupKeyMap 是唯一可写的属性 —— 通过写入它来绑定组和密钥集。
+      GroupTable 是只读的，由设备自动根据 Groups Cluster 和 GroupKeyMap 计算生成。
+      密钥集本身通过 KeySetWrite / KeySetRead 命令管理，不通过属性读写。
+    </p>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <h3 id="scenario-setup">场景 1：为一组设备建立组播密钥</h3>
+  <p>当你需要让多个设备加入同一个组并支持组播通信时：</p>
+  <ol>
+    <li>先读取目标设备的 <code>MaxGroupKeysPerFabric (0x0003)</code>，确认还有密钥集配额</li>
+    <li>通过 <code>KeySetWrite (0x00)</code> 向每个目标设备写入相同的密钥集（相同的 GroupKeySetID 和 EpochKey）</li>
+    <li>在每个设备上写入 <code>GroupKeyMap (0x0000)</code> 属性，将 GroupId 映射到刚写入的 GroupKeySetID</li>
+    <li>通过 Groups Cluster 的 AddGroup 命令将设备加入对应的组</li>
+    <li>读取 <code>GroupTable (0x0001)</code> 确认组信息和 Endpoint 映射正确</li>
+    <li>现在可以向该组发送组播命令了，所有成员设备都能用共享密钥解密和执行</li>
+  </ol>
+
+  <h3 id="scenario-rotation">场景 2：密钥轮换（Key Rotation）</h3>
+  <p>定期更换组播密钥是安全最佳实践。Matter 的三 Epoch 机制让轮换可以无缝进行：</p>
+  <ol>
+    <li>通过 <code>KeySetReadAllIndices (0x04)</code> 列出当前所有密钥集 ID</li>
+    <li>通过 <code>KeySetRead (0x01)</code> 读取目标密钥集，检查当前的 Epoch 时间窗口</li>
+    <li>生成新的 128 位 AES 密钥作为下一个 Epoch 密钥</li>
+    <li>通过 <code>KeySetWrite (0x00)</code> 更新密钥集 —— 保留当前活跃的 EpochKey，将新密钥写入下一个 Epoch 插槽，设置未来的 EpochStartTime</li>
+    <li>依次向组内每个设备写入相同的更新后密钥集</li>
+    <li>等待所有设备都更新完毕后，新 EpochStartTime 到达时自动切换到新密钥</li>
+    <li>确认所有设备已切换后，可以移除不再使用的旧 Epoch 密钥（通过下一次 KeySetWrite 覆盖）</li>
+  </ol>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">轮换要点</div>
+    <p>
+      密钥轮换的关键是 <strong>先写入所有设备，再让新密钥生效</strong>。
+      如果部分设备还持有旧密钥而其他设备已切换到新密钥，这些设备之间的组播通信将中断。
+      因此建议将 EpochStartTime 设置到足够远的未来，确保所有设备都有时间完成更新。
+    </p>
+  </div>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .col-required {
+    color: #dc2626;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-required {
+    color: #f87171;
+  }
+
+  .col-optional {
+    color: #16a34a;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-optional {
+    color: #4ade80;
+  }
+</style>

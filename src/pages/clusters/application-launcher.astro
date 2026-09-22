@@ -1,0 +1,637 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 支持的应用目录 ---
+  "0x0000": [24742, 4996],           // CatalogList = 支持的目录厂商 ID 列表
+                                      // 24742 = CSA 官方目录
+                                      // 4996 = 某 OTT 平台目录
+
+  // --- 当前前台应用 ---
+  "0x0001": {                         // CurrentApp（当前应用，nullable）
+    "Application": {                  //   ApplicationStruct
+      "CatalogVendorID": 24742,       //     目录厂商 ID（CSA 官方）
+      "ApplicationID": "com.streamco.player"  //  应用 ID
+    },
+    "Endpoint": 3                     //   应用所在 Endpoint 编号
+  }
+}`;
+
+const launchAppExample = `// LaunchApp 命令示例
+// 启动 CSA 目录中的 StreamCo Player 应用
+{
+  "Application": {
+    "CatalogVendorID": 24742,
+    "ApplicationID": "com.streamco.player"
+  },
+  "Data": "source=voice&deeplink=/home"
+}`;
+
+const stopAppExample = `// StopApp 命令示例
+// 停止当前运行的 StreamCo Player 应用
+{
+  "Application": {
+    "CatalogVendorID": 24742,
+    "ApplicationID": "com.streamco.player"
+  }
+}`;
+
+const hideAppExample = `// HideApp 命令示例
+// 隐藏应用（退到后台，不终止进程）
+{
+  "Application": {
+    "CatalogVendorID": 24742,
+    "ApplicationID": "com.streamco.player"
+  }
+}`;
+
+const launcherResponseExample = `// LauncherResponse 响应示例
+// 启动成功
+{
+  "Status": 0,
+  "Data": "session-id=xyz789"
+}
+
+// 应用不可用（未安装或不在目录中）
+{
+  "Status": 1,
+  "Data": "Application not found in catalog"
+}
+
+// 等待用户确认（如首次启动需要同意条款）
+{
+  "Status": 3,
+  "Data": "User approval required for first launch"
+}`;
+---
+
+<DocLayout
+  title="应用启动器 Cluster · ApplicationLauncher（0x050C）"
+  description="Matter ApplicationLauncher Cluster（0x050C）完整参考 — LaunchApp 启动应用、StopApp 停止应用、HideApp 隐藏应用、LauncherResponse 响应、CatalogList 目录列表、CurrentApp 当前应用、ApplicationEPStruct / ApplicationStruct 结构体、StatusEnum 状态码及 Feature 位图说明。"
+  type="article"
+  prev={{ title: 'Cluster 手册', href: '/clusters/' }}
+>
+  <h1>应用启动器 Cluster（ApplicationLauncher）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x050C</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 媒体端点（智能电视、机顶盒、流媒体设备等）
+  </p>
+  <p>
+    ApplicationLauncher 负责在媒体设备上启动、停止和隐藏内容应用 ——
+    是语音助手「打开 Netflix」「关闭当前应用」等指令的底层实现。
+    它管理的是应用的生命周期（启动/停止/隐藏），而不是应用内的内容播放。
+    通常部署在智能电视或机顶盒的媒体端点上，与
+    <a href="/clusters/application-basic/">ApplicationBasic</a>（应用信息查询）配合使用。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">与 ApplicationBasic 的分工</div>
+    <p>
+      <a href="/clusters/application-basic/">ApplicationBasic</a>（0x050D）负责<strong>只读的信息查询</strong> —— 告诉 Controller「这个应用是什么、当前什么状态」。
+      ApplicationLauncher（0x050C）负责<strong>操作</strong> —— 启动、停止、隐藏应用。
+      两者通常部署在同一个 Endpoint 上：先通过 ApplicationBasic 获取应用信息，再通过 ApplicationLauncher 控制应用生命周期。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#commands">命令列表</a>
+    <span class="nav-sep">|</span>
+    <a href="#attributes">属性详解</a>
+    <span class="nav-sep">|</span>
+    <a href="#structs">结构体定义</a>
+    <span class="nav-sep">|</span>
+    <a href="#enums">枚举</a>
+    <span class="nav-sep">|</span>
+    <a href="#features">Feature 位图</a>
+    <span class="nav-sep">|</span>
+    <a href="#example-data">示例数据</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">常见场景</a>
+  </nav>
+
+  <!-- ====== 命令（Commands）====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    ApplicationLauncher Cluster 有 3 个请求命令和 1 个响应命令。
+    LaunchApp 启动应用，StopApp 停止应用，HideApp 隐藏应用（退到后台），三者都返回 LauncherResponse 告知操作结果。
+    点击下方表格中的命令 ID 可跳转到对应的详细说明。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>方向</th>
+          <th>说明</th>
+          <th>所需特性</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#cmd-0x00">
+          <td><a href="#cmd-0x00"><code>0x00</code></a></td>
+          <td>LaunchApp</td>
+          <td>请求</td>
+          <td>启动指定应用</td>
+          <td class="col-optional">无</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x01">
+          <td><a href="#cmd-0x01"><code>0x01</code></a></td>
+          <td>StopApp</td>
+          <td>请求</td>
+          <td>停止指定应用</td>
+          <td class="col-optional">无</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x02">
+          <td><a href="#cmd-0x02"><code>0x02</code></a></td>
+          <td>HideApp</td>
+          <td>请求</td>
+          <td>隐藏指定应用（退到后台）</td>
+          <td class="col-optional">无</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x03">
+          <td><a href="#cmd-0x03"><code>0x03</code></a></td>
+          <td>LauncherResponse</td>
+          <td>响应</td>
+          <td>操作结果（三个命令共用）</td>
+          <td class="col-optional">无</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 命令详解 ====== -->
+  <h3 id="cmd-0x00">LaunchApp —— 启动应用（0x00）</h3>
+  <p>
+    启动设备上的指定应用。如果应用已在运行，则将其带到前台。
+    通过 <a href="#struct-application">ApplicationStruct</a> 唯一标识目标应用，
+    可附带应用特定数据（如 DeepLink、启动参数）。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>必选</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Application</td>
+          <td><a href="#struct-application">ApplicationStruct</a></td>
+          <td>否</td>
+          <td>要启动的应用标识。省略时表示启动当前 Endpoint 上的应用</td>
+        </tr>
+        <tr>
+          <td>Data</td>
+          <td>octstr</td>
+          <td>否</td>
+          <td>应用特定的附加数据（如 DeepLink、启动参数），由应用自行解析</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <pre><code set:html={launchAppExample} /></pre>
+
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        用户对语音助手说「打开 Netflix」，助手查找到 Netflix 对应的 ApplicationStruct（CatalogVendorID + ApplicationID），
+        发送 LaunchApp 命令。电视启动 Netflix 并切换到前台显示。
+        如果附带 Data 参数（如 DeepLink），Netflix 可以直接跳转到指定页面。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x01">StopApp —— 停止应用（0x01）</h3>
+  <p>
+    停止设备上的指定应用。应用的运行状态会变为 Stopped。
+    如果该应用正在播放内容，播放也会一并终止。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>必选</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Application</td>
+          <td><a href="#struct-application">ApplicationStruct</a></td>
+          <td>否</td>
+          <td>要停止的应用标识。省略时表示停止当前 Endpoint 上的应用</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <pre><code set:html={stopAppExample} /></pre>
+
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        用户说「关闭 Netflix」，或自动化规则在晚上 11 点后自动停止所有正在运行的娱乐应用。
+        StopApp 会彻底终止应用进程，释放系统资源。与 HideApp 不同，被 Stop 的应用需要重新启动才能使用。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x02">HideApp —— 隐藏应用（0x02）</h3>
+  <p>
+    将应用退到后台，但不终止其进程。应用状态变为 ActiveHidden，
+    仍然可以执行后台任务（如继续播放音乐）。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>必选</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Application</td>
+          <td><a href="#struct-application">ApplicationStruct</a></td>
+          <td>否</td>
+          <td>要隐藏的应用标识。省略时表示隐藏当前 Endpoint 上的应用</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <pre><code set:html={hideAppExample} /></pre>
+
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        用户在看视频时收到来电，系统发送 HideApp 将视频应用退到后台，显示来电界面。
+        通话结束后再通过 LaunchApp 将视频应用切回前台，应用可以从中断处继续播放。
+        与 StopApp 的区别：HideApp 保留应用状态，适合临时切换；StopApp 彻底关闭，适合不再使用时释放资源。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x03">LauncherResponse —— 操作结果（0x03）</h3>
+  <p>
+    LaunchApp、StopApp 和 HideApp 的统一响应。包含一个状态码和可选的附加数据。
+    控制端根据 Status 判断操作是否成功，失败时 Data 中可能包含错误详情。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Status</td>
+          <td><a href="#enum-status">StatusEnum</a></td>
+          <td>操作结果状态码（见下方枚举）</td>
+        </tr>
+        <tr>
+          <td>Data</td>
+          <td>octstr</td>
+          <td>可选的附加数据，成功时可能返回会话信息，失败时返回错误描述</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <pre><code set:html={launcherResponseExample} /></pre>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 属性详解 ====== -->
+  <h2 id="attributes">属性详解</h2>
+  <p>ApplicationLauncher Cluster 共有 2 个属性。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+
+  <!-- 属性汇总表 -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#attr-0x0000">
+          <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
+          <td>CatalogList</td>
+          <td>list&lt;uint16&gt;</td>
+          <td>设备支持的应用目录厂商 ID 列表</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0001">
+          <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
+          <td>CurrentApp</td>
+          <td>nullable <a href="#struct-app-ep">ApplicationEPStruct</a></td>
+          <td>当前前台运行的应用</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 属性详细说明 ====== -->
+  <h3 id="group-attrs">应用管理（0x0000, 0x0001）</h3>
+  <p>描述设备支持的应用目录范围和当前前台应用的状态。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0000">
+          <td><code>0x0000</code></td>
+          <td>CatalogList（目录列表）</td>
+          <td>list&lt;uint16&gt;</td>
+          <td>
+            设备支持的应用目录厂商 ID（CatalogVendorID）列表。
+            Controller 发送 LaunchApp 时，Application 参数中的 CatalogVendorID 必须在此列表中，否则设备无法识别该应用标识。
+            <strong>需要 AP 特性</strong>
+          </td>
+        </tr>
+        <tr id="attr-0x0001">
+          <td><code>0x0001</code></td>
+          <td>CurrentApp（当前应用）</td>
+          <td>nullable <a href="#struct-app-ep">ApplicationEPStruct</a></td>
+          <td>
+            当前处于前台的应用信息，包括应用标识和所在 Endpoint。
+            当没有应用在前台时为 <code>null</code>。
+            <strong>需要 AP 特性</strong>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">CurrentApp 与 ApplicationBasic.Status 的区别</div>
+    <p>
+      <code>CurrentApp</code> 是从设备全局视角看「谁在前台」，而
+      <a href="/clusters/application-basic/">ApplicationBasic</a> 的 <code>Status</code> 属性是每个应用各自报告自己的运行状态。
+      一台电视上同时有多个应用的 Status 为 ActiveHidden（后台运行），但 CurrentApp 只指向一个前台应用（或 null）。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 结构体定义 ====== -->
+  <h2 id="structs">结构体定义</h2>
+  <p>ApplicationLauncher Cluster 使用两个结构体来标识应用。</p>
+
+  <!-- ApplicationEPStruct -->
+  <h3 id="struct-app-ep">ApplicationEPStruct（应用端点结构体）</h3>
+  <p>
+    描述一个应用及其在设备上对应的 Endpoint。用于 <code>CurrentApp</code> 属性，
+    让 Controller 既能知道当前前台应用是什么，也能直接定位到它的 Endpoint 进行进一步交互。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>字段</th>
+          <th>类型</th>
+          <th>必选</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Application</td>
+          <td><a href="#struct-application">ApplicationStruct</a></td>
+          <td>是</td>
+          <td>应用的唯一标识（目录厂商 ID + 应用 ID）</td>
+        </tr>
+        <tr>
+          <td>Endpoint</td>
+          <td>endpoint-no</td>
+          <td>否</td>
+          <td>应用所在的 Endpoint 编号。有了这个编号，Controller 可以直接访问该 Endpoint 上的其他 Cluster（如 MediaPlayback、ContentLauncher）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ApplicationStruct -->
+  <h3 id="struct-application">ApplicationStruct（应用标识结构体）</h3>
+  <p>
+    通过目录体系唯一标识一个内容应用。这个结构体在 LaunchApp / StopApp / HideApp 命令和 CurrentApp 属性中都会用到，
+    也与 <a href="/clusters/application-basic/">ApplicationBasic</a> Cluster 的 Application（0x0004）属性共用同一结构。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>字段</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>CatalogVendorID</td>
+          <td>uint16</td>
+          <td>应用目录的厂商 ID，标识应用来源于哪个目录/平台。例如 CSA 官方目录的 ID 为 <code>0x60AE</code>（24750）</td>
+        </tr>
+        <tr>
+          <td>ApplicationID</td>
+          <td>string</td>
+          <td>在目录内唯一标识应用的字符串，通常是反向域名风格。如 <code>"com.netflix.app"</code>、<code>"com.youtube.tv"</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">CatalogVendorID 不是应用开发商</div>
+    <p>
+      <code>CatalogVendorID</code> 是<strong>应用目录提供商</strong>的 VendorID，不是应用开发商的 VendorID。
+      可以理解为「这个应用在哪个应用商店上架的」。
+      同一个应用在不同目录中可能有不同的 ApplicationID，但 CatalogVendorID + ApplicationID 的组合在全局唯一。
+    </p>
+  </div>
+
+  <!-- ====== 枚举 ====== -->
+  <h2 id="enums">枚举</h2>
+
+  <!-- StatusEnum -->
+  <h3 id="enum-status">StatusEnum</h3>
+  <p>LauncherResponse 中的状态码，表示应用操作的结果。相比 ContentLauncher 的 StatusEnum，ApplicationLauncher 的状态码涵盖了应用安装和权限审批等场景。</p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Success</span>
+        <span class="enum-desc">成功 —— 应用已启动/停止/隐藏</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">AppNotAvailable</span>
+        <span class="enum-desc">应用不可用 —— 未安装、不在目录中或已下架</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">SystemBusy</span>
+        <span class="enum-desc">系统繁忙 —— 设备资源不足，无法启动新应用</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">PendingUserApproval</span>
+        <span class="enum-desc">等待用户确认 —— 首次启动需要用户同意条款或授权</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">4</span>
+      <div>
+        <span class="enum-name">Downloading</span>
+        <span class="enum-desc">下载中 —— 应用正在下载，尚未安装完成</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">5</span>
+      <div>
+        <span class="enum-name">Installing</span>
+        <span class="enum-desc">安装中 —— 应用已下载，正在安装过程中</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">非终态：Downloading 和 Installing</div>
+    <p>
+      <code>Downloading (4)</code> 和 <code>Installing (5)</code> 是中间状态 —— 收到后不代表操作失败，
+      而是需要 Controller 等待一段时间后重试 LaunchApp，或订阅相关属性变化来获知安装完成的时机。
+      <code>PendingUserApproval (3)</code> 同理，需要用户在设备端完成确认后才能继续。
+    </p>
+  </div>
+
+  <!-- ====== Feature 位图 ====== -->
+  <h2 id="features">Feature 位图</h2>
+  <p>ApplicationLauncher Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持的能力：</p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">Bit 0</span>
+      <div>
+        <span class="enum-name">AP（ApplicationPlatform）</span>
+        <span class="enum-desc">应用平台 —— 设备是一个应用平台（如智能电视），支持多个可独立管理的内容应用。启用后提供 CatalogList 和 CurrentApp 属性</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">AP 特性的含义</div>
+    <p>
+      不启用 AP 特性的设备是<strong>单应用设备</strong> —— 设备本身就是一个应用，LaunchApp/StopApp/HideApp 操作的就是这个设备自身。
+      启用 AP 后，设备是一个<strong>应用平台</strong>（如智能电视、机顶盒），上面安装了多个独立应用，
+      每个应用有自己的 Endpoint 和 ApplicationBasic Cluster。
+      AP 特性启用后才有 CatalogList（设备支持哪些应用目录）和 CurrentApp（当前前台是哪个应用）两个属性。
+    </p>
+  </div>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>一台启用了 AP（ApplicationPlatform）特性的智能电视的 ApplicationLauncher Cluster 属性读取结果：</p>
+
+  <pre><code set:html={exampleData} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发提示</div>
+    <p>
+      发送 LaunchApp 前，应先读取 <code>CatalogList (0x0000)</code> 确认设备支持目标应用所在的目录。
+      如果 CatalogVendorID 不在列表中，LaunchApp 会返回 <code>AppNotAvailable (1)</code>。
+      发送后检查 <code>CurrentApp (0x0001)</code> 的变化来确认应用是否成功切换到前台。
+    </p>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <details class="scenario">
+    <summary>场景 1：语音助手「打开 XXX 应用」</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>用户对语音助手说「在电视上打开 Netflix」</li>
+        <li>检查设备 <code>FeatureMap (0xFFFC)</code>，确认支持 <strong>AP</strong> 特性</li>
+        <li>读取 <code>CatalogList (0x0000)</code>，确认设备支持 CSA 官方目录（24742）</li>
+        <li>遍历设备的各个 Endpoint，读取 <a href="/clusters/application-basic/">ApplicationBasic</a> 的 <code>Application (0x0004)</code> 属性，找到 Netflix 对应的 ApplicationStruct</li>
+        <li>发送 <code>LaunchApp (0x00)</code>，传入 Netflix 的 ApplicationStruct</li>
+        <li>检查 <a href="#cmd-0x03">LauncherResponse</a> 的 Status：
+          <ul>
+            <li><code>0</code>（Success）—— Netflix 已启动</li>
+            <li><code>1</code>（AppNotAvailable）—— Netflix 未安装，提示用户</li>
+            <li><code>3</code>（PendingUserApproval）—— 首次启动需要在电视上确认</li>
+          </ul>
+        </li>
+        <li>确认 <code>CurrentApp (0x0001)</code> 已更新为 Netflix</li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 2：自动化场景 —— 睡眠模式关闭所有应用</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>用户设置了「睡眠模式」自动化规则：每晚 11 点自动关闭电视上的所有应用</li>
+        <li>读取 <code>CurrentApp (0x0001)</code> 获取当前前台应用信息</li>
+        <li>如果 CurrentApp 不为 <code>null</code>，发送 <code>StopApp (0x01)</code> 停止该应用</li>
+        <li>遍历设备上所有应用 Endpoint，检查各自的 <a href="/clusters/application-basic/">ApplicationBasic</a> 的 <code>Status</code> 属性</li>
+        <li>对所有 Status 不为 Stopped（0）的应用，逐个发送 <code>StopApp (0x01)</code></li>
+        <li>全部停止后，可配合 <a href="/clusters/on-off/">OnOff Cluster</a> 将电视关闭或进入待机模式</li>
+      </ol>
+    </div>
+  </details>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .col-required {
+    color: #dc2626;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-required {
+    color: #f87171;
+  }
+
+  .col-optional {
+    color: #16a34a;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-optional {
+    color: #4ade80;
+  }
+</style>

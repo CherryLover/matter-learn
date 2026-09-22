@@ -1,0 +1,846 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 当前状态 ---
+  "0x0": 127,                // CurrentLevel = 127（约 50% 亮度）
+  "0x1": 0,                  // RemainingTime = 0（无进行中的过渡）
+  "0x2": 1,                  // MinLevel = 1（最低可用级别）
+  "0x3": 254,                // MaxLevel = 254（最高可用级别）
+
+  // --- 过渡与开关联动 ---
+  "0xF": 0,                  // Options = 0（无特殊选项）
+  "0x10": 10,                // OnOffTransitionTime = 10（1 秒过渡）
+  "0x11": null,              // OnLevel = null（On 时恢复之前亮度）
+  "0x12": null,              // OnTransitionTime = null（使用 OnOffTransitionTime）
+  "0x13": null,              // OffTransitionTime = null（使用 OnOffTransitionTime）
+  "0x14": 50,                // DefaultMoveRate = 50（每秒变化 50 个单位）
+
+  // --- 启动行为 ---
+  "0x4000": null              // StartUpCurrentLevel = null（上电恢复断电前亮度）
+}`;
+---
+
+<DocLayout
+  title="亮度控制 Cluster · LevelControl（0x0008）"
+  description="Matter LevelControl Cluster（0x0008）完整参考 — MoveToLevel/Move/Step 命令、CurrentLevel/OnLevel 等全部属性定义、枚举值速查、过渡时间机制说明与真实设备数据示例。"
+  type="article"
+  prev={{ title: '电源（PowerSource）', href: '/clusters/power-source/' }}
+>
+  <h1>亮度控制 Cluster（LevelControl）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x0008</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 通常在 <code>Endpoint 1</code>（功能端点）
+  </p>
+  <p>
+    LevelControl 提供了对设备「可调级别」的完整控制能力 —— 最典型的场景是灯的亮度调节，但也适用于风扇转速、窗帘开合度等任何可以用数值表示「程度」的设备。
+    它定义了两组命令：一组不影响 OnOff 状态，另一组会联动 OnOff Cluster 的开关状态。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">与 OnOff Cluster 的关系</div>
+    <p>
+      LevelControl 通常和 <strong>OnOff Cluster（0x0006）</strong>配合使用。
+      带 <code>WithOnOff</code> 后缀的命令（如 <code>MoveToLevelWithOnOff</code>）会在亮度为 0 时自动关灯、在亮度大于 0 时自动开灯。
+      不带后缀的命令只调亮度，不动开关。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#commands">命令列表</a>
+    <span class="nav-sep">|</span>
+    <a href="#attributes">属性详解</a>
+    <span class="nav-sep">|</span>
+    <a href="#enums">枚举与位图</a>
+    <span class="nav-sep">|</span>
+    <a href="#features">Feature Map</a>
+    <span class="nav-sep">|</span>
+    <a href="#example-data">示例数据</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">常见场景</a>
+  </nav>
+
+  <!-- ====== 命令（Commands）====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    LevelControl 提供两组命令：基本组（0x00~0x03）和 WithOnOff 组（0x04~0x07）。
+    两组命令的参数完全一样，区别在于 WithOnOff 组会联动 OnOff Cluster 的开关状态。
+    此外还有一个频率控制命令（0x08），仅在设备支持 Frequency feature 时可用。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>说明</th>
+          <th>联动 OnOff</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#cmd-0x00">
+          <td><a href="#cmd-0x00"><code>0x00</code></a></td>
+          <td>MoveToLevel</td>
+          <td>移动到指定亮度</td>
+          <td class="col-optional">不联动</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x01">
+          <td><a href="#cmd-0x01"><code>0x01</code></a></td>
+          <td>Move</td>
+          <td>持续向上/向下移动亮度</td>
+          <td class="col-optional">不联动</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x02">
+          <td><a href="#cmd-0x02"><code>0x02</code></a></td>
+          <td>Step</td>
+          <td>按步进值调整亮度</td>
+          <td class="col-optional">不联动</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x03">
+          <td><a href="#cmd-0x03"><code>0x03</code></a></td>
+          <td>Stop</td>
+          <td>停止正在进行的亮度移动</td>
+          <td class="col-optional">不联动</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x04">
+          <td><a href="#cmd-0x04"><code>0x04</code></a></td>
+          <td>MoveToLevelWithOnOff</td>
+          <td>移动到指定亮度（联动开关）</td>
+          <td class="col-required">联动</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x05">
+          <td><a href="#cmd-0x05"><code>0x05</code></a></td>
+          <td>MoveWithOnOff</td>
+          <td>持续移动亮度（联动开关）</td>
+          <td class="col-required">联动</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x06">
+          <td><a href="#cmd-0x06"><code>0x06</code></a></td>
+          <td>StepWithOnOff</td>
+          <td>按步进值调整亮度（联动开关）</td>
+          <td class="col-required">联动</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x07">
+          <td><a href="#cmd-0x07"><code>0x07</code></a></td>
+          <td>StopWithOnOff</td>
+          <td>停止移动（联动开关）</td>
+          <td class="col-required">联动</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x08">
+          <td><a href="#cmd-0x08"><code>0x08</code></a></td>
+          <td>MoveToClosestFrequency</td>
+          <td>移动到最接近的频率值</td>
+          <td class="col-optional">不联动</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">过渡时间单位</div>
+    <p>
+      所有命令中的 <code>TransitionTime</code> 参数单位是<strong>十分之一秒</strong>（0.1s）。
+      例如传入 <code>10</code> 表示 1 秒，传入 <code>50</code> 表示 5 秒。
+      如果传入 <code>0xFFFF</code>（65535），设备会使用 <code>OnOffTransitionTime</code> 属性的值作为默认过渡时间。
+    </p>
+  </div>
+
+  <!-- ====== 命令详解 ====== -->
+  <h3 id="cmd-0x00">MoveToLevel —— 移动到指定亮度（0x00）</h3>
+  <p>
+    将 <code>CurrentLevel</code> 从当前值平滑过渡到指定的目标亮度。这是最常用的命令 —— App 上的亮度滑块松手时就是发这个命令。
+    不会影响 OnOff 状态，即使目标亮度是 0 也不会关灯。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Level</td><td>uint8</td><td>目标亮度值，范围 0~254</td></tr>
+        <tr><td>TransitionTime</td><td>uint16 / null</td><td>过渡时间（0.1s 为单位）。<code>null</code> 使用 <code>OnOffTransitionTime</code></td></tr>
+        <tr><td>OptionsMask</td><td>bitmap8</td><td>选项掩码（见 <a href="#bitmap-options">OptionsBitmap</a>）</td></tr>
+        <tr><td>OptionsOverride</td><td>bitmap8</td><td>选项覆盖值</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景与参数</summary>
+    <div class="scenario-content">
+      <p>用户在 App 上拖动亮度滑块时调用。发送前读取 <code>MinLevel (0x02)</code> 和 <code>MaxLevel (0x03)</code> 确认有效范围，将 UI 滑块的百分比映射到这个范围内。</p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x01">Move —— 持续移动亮度（0x01）</h3>
+  <p>
+    让 <code>CurrentLevel</code> 以指定速率持续向上或向下变化，直到达到 MinLevel/MaxLevel 或收到 Stop 命令。
+    适合长按按钮持续调光的场景。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>MoveMode</td><td>enum8</td><td>移动方向：<code>0</code> = Up，<code>1</code> = Down（见 <a href="#enum-movemode">MoveModeEnum</a>）</td></tr>
+        <tr><td>Rate</td><td>uint8 / null</td><td>每秒变化的单位数。<code>null</code> 使用 <code>DefaultMoveRate</code></td></tr>
+        <tr><td>OptionsMask</td><td>bitmap8</td><td>选项掩码</td></tr>
+        <tr><td>OptionsOverride</td><td>bitmap8</td><td>选项覆盖值</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景与参数</summary>
+    <div class="scenario-content">
+      <p>用户长按物理调光按钮时触发。按下时发送 <code>Move</code>（指定方向），松手时发送 <code>Stop</code> 停止变化。适合实体开关或遥控器的持续调光交互。</p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x02">Step —— 按步进值调整亮度（0x02）</h3>
+  <p>
+    将 <code>CurrentLevel</code> 按指定步进值向上或向下调整一档。适合短按按钮「调亮一格」「调暗一格」的场景。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>StepMode</td><td>enum8</td><td>步进方向：<code>0</code> = Up，<code>1</code> = Down（见 <a href="#enum-stepmode">StepModeEnum</a>）</td></tr>
+        <tr><td>StepSize</td><td>uint8</td><td>步进大小（变化的绝对值）</td></tr>
+        <tr><td>TransitionTime</td><td>uint16 / null</td><td>过渡时间（0.1s 为单位）。<code>null</code> 使用 <code>OnOffTransitionTime</code></td></tr>
+        <tr><td>OptionsMask</td><td>bitmap8</td><td>选项掩码</td></tr>
+        <tr><td>OptionsOverride</td><td>bitmap8</td><td>选项覆盖值</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景与参数</summary>
+    <div class="scenario-content">
+      <p>用户短按物理按钮或 App 中的「+/-」按钮调光时使用。每次按下发送一次 Step 命令，实现逐级调光。典型步进值为 25~50（约 10%~20% 亮度变化）。</p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x03">Stop —— 停止移动（0x03）</h3>
+  <p>
+    停止正在进行的 Move 或 Step 过渡。<code>CurrentLevel</code> 会保持在收到 Stop 命令时的值。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>OptionsMask</td><td>bitmap8</td><td>选项掩码</td></tr>
+        <tr><td>OptionsOverride</td><td>bitmap8</td><td>选项覆盖值</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x04">MoveToLevelWithOnOff —— 移动到指定亮度（联动开关）（0x04）</h3>
+  <p>
+    功能与 <code>MoveToLevel</code> 完全相同，区别在于会联动 OnOff Cluster：目标亮度为 0 时自动关灯（OnOff 变为 Off），目标亮度大于 0 时自动开灯（OnOff 变为 On）。
+    <strong>App 调光时应优先使用这个命令</strong>，确保亮度和开关状态始终一致。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Level</td><td>uint8</td><td>目标亮度值，范围 0~254</td></tr>
+        <tr><td>TransitionTime</td><td>uint16 / null</td><td>过渡时间（0.1s 为单位）</td></tr>
+        <tr><td>OptionsMask</td><td>bitmap8</td><td>选项掩码</td></tr>
+        <tr><td>OptionsOverride</td><td>bitmap8</td><td>选项覆盖值</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景与参数</summary>
+    <div class="scenario-content">
+      <p>App 调光的首选命令。拖动亮度滑块到 0 时灯会自动关掉，拖到任意正值时灯会自动亮起，保证用户看到的 UI 状态与实际设备一致。</p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x05">MoveWithOnOff —— 持续移动亮度（联动开关）（0x05）</h3>
+  <p>功能与 <code>Move</code> 相同，但移动过程中会联动 OnOff 状态。参数与 <code>Move</code> 一致。</p>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x06">StepWithOnOff —— 按步进值调整亮度（联动开关）（0x06）</h3>
+  <p>功能与 <code>Step</code> 相同，但步进过程中会联动 OnOff 状态。参数与 <code>Step</code> 一致。</p>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x07">StopWithOnOff —— 停止移动（联动开关）（0x07）</h3>
+  <p>功能与 <code>Stop</code> 相同，但联动 OnOff 状态。参数与 <code>Stop</code> 一致。</p>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x08">MoveToClosestFrequency —— 移动到最近频率（0x08）</h3>
+  <p>
+    将 <code>CurrentFrequency</code> 移动到设备支持的最接近目标频率的值。仅在设备支持 <strong>Frequency</strong> feature 时可用，日常灯控开发中很少用到。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Frequency</td><td>uint16</td><td>目标频率值</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 属性详解 ====== -->
+  <h2 id="attributes">属性详解</h2>
+  <p>LevelControl 的属性按功能分为四组。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+
+  <!-- 属性汇总表 -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>分组</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 当前状态 -->
+        <tr class="clickable-row" data-href="#attr-0x00">
+          <td><a href="#attr-0x00"><code>0x00</code></a></td>
+          <td>CurrentLevel</td>
+          <td>uint8 / null</td>
+          <td><a href="#group-state">当前状态</a></td>
+          <td>当前亮度值</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x01">
+          <td><a href="#attr-0x01"><code>0x01</code></a></td>
+          <td>RemainingTime</td>
+          <td>uint16</td>
+          <td><a href="#group-state">当前状态</a></td>
+          <td>过渡剩余时间</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x02">
+          <td><a href="#attr-0x02"><code>0x02</code></a></td>
+          <td>MinLevel</td>
+          <td>uint8</td>
+          <td><a href="#group-state">当前状态</a></td>
+          <td>最低可用级别</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x03">
+          <td><a href="#attr-0x03"><code>0x03</code></a></td>
+          <td>MaxLevel</td>
+          <td>uint8</td>
+          <td><a href="#group-state">当前状态</a></td>
+          <td>最高可用级别</td>
+        </tr>
+        <!-- 频率控制 -->
+        <tr class="clickable-row" data-href="#attr-0x04">
+          <td><a href="#attr-0x04"><code>0x04</code></a></td>
+          <td>CurrentFrequency</td>
+          <td>uint16</td>
+          <td><a href="#group-frequency">频率控制</a></td>
+          <td>当前频率</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x05">
+          <td><a href="#attr-0x05"><code>0x05</code></a></td>
+          <td>MinFrequency</td>
+          <td>uint16</td>
+          <td><a href="#group-frequency">频率控制</a></td>
+          <td>最低频率</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x06">
+          <td><a href="#attr-0x06"><code>0x06</code></a></td>
+          <td>MaxFrequency</td>
+          <td>uint16</td>
+          <td><a href="#group-frequency">频率控制</a></td>
+          <td>最高频率</td>
+        </tr>
+        <!-- 过渡与开关联动 -->
+        <tr class="clickable-row" data-href="#attr-0x0F">
+          <td><a href="#attr-0x0F"><code>0x0F</code></a></td>
+          <td>Options</td>
+          <td>bitmap8</td>
+          <td><a href="#group-transition">过渡与开关联动</a></td>
+          <td>命令执行选项</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x10">
+          <td><a href="#attr-0x10"><code>0x10</code></a></td>
+          <td>OnOffTransitionTime</td>
+          <td>uint16</td>
+          <td><a href="#group-transition">过渡与开关联动</a></td>
+          <td>开关过渡时间</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x11">
+          <td><a href="#attr-0x11"><code>0x11</code></a></td>
+          <td>OnLevel</td>
+          <td>uint8 / null</td>
+          <td><a href="#group-transition">过渡与开关联动</a></td>
+          <td>开灯时的目标亮度</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x12">
+          <td><a href="#attr-0x12"><code>0x12</code></a></td>
+          <td>OnTransitionTime</td>
+          <td>uint16 / null</td>
+          <td><a href="#group-transition">过渡与开关联动</a></td>
+          <td>开灯过渡时间</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x13">
+          <td><a href="#attr-0x13"><code>0x13</code></a></td>
+          <td>OffTransitionTime</td>
+          <td>uint16 / null</td>
+          <td><a href="#group-transition">过渡与开关联动</a></td>
+          <td>关灯过渡时间</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x14">
+          <td><a href="#attr-0x14"><code>0x14</code></a></td>
+          <td>DefaultMoveRate</td>
+          <td>uint8 / null</td>
+          <td><a href="#group-transition">过渡与开关联动</a></td>
+          <td>默认移动速率</td>
+        </tr>
+        <!-- 启动行为 -->
+        <tr class="clickable-row" data-href="#attr-0x4000">
+          <td><a href="#attr-0x4000"><code>0x4000</code></a></td>
+          <td>StartUpCurrentLevel</td>
+          <td>uint8 / null</td>
+          <td><a href="#group-startup">启动行为</a></td>
+          <td>上电初始亮度</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 当前状态（0x00-0x03）====== -->
+  <h3 id="group-state">当前状态（0x00 – 0x03）</h3>
+  <p>描述设备当前的亮度级别和允许的范围。这是 App 展示亮度状态最直接的数据来源。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x00">
+          <td><code>0x00</code></td>
+          <td>CurrentLevel<br/><span class="attr-cn">当前亮度</span></td>
+          <td>uint8 / null</td>
+          <td>设备当前的亮度级别。有效范围 <code>MinLevel</code>~<code>MaxLevel</code>（通常 1~254）。<strong>Nullable</strong> —— 设备不确定当前级别时返回 <code>null</code></td>
+        </tr>
+        <tr id="attr-0x01">
+          <td><code>0x01</code></td>
+          <td>RemainingTime<br/><span class="attr-cn">剩余过渡时间</span></td>
+          <td>uint16</td>
+          <td>当前过渡动画的剩余时间，单位 <strong>0.1 秒</strong>。无过渡进行时为 <code>0</code></td>
+        </tr>
+        <tr id="attr-0x02">
+          <td><code>0x02</code></td>
+          <td>MinLevel<br/><span class="attr-cn">最低级别</span></td>
+          <td>uint8</td>
+          <td>设备支持的最低亮度值。支持 Lighting feature 时默认 <code>1</code>，不支持时默认 <code>0</code></td>
+        </tr>
+        <tr id="attr-0x03">
+          <td><code>0x03</code></td>
+          <td>MaxLevel<br/><span class="attr-cn">最高级别</span></td>
+          <td>uint8</td>
+          <td>设备支持的最高亮度值。默认 <code>254</code>（0xFE）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">CurrentLevel 是 Nullable</div>
+    <p>
+      和 DoorLock 的 <code>LockState</code> 一样，<code>CurrentLevel</code> 可能为 <code>null</code>。
+      设备刚上电、固件升级后或硬件异常时都可能出现。
+      App 端显示亮度时务必处理 <code>null</code> 值，可以显示为「未知」或使用 <code>MinLevel</code> 作为默认值。
+    </p>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">亮度值映射</div>
+    <p>
+      <code>CurrentLevel</code> 的范围是 <code>MinLevel</code>~<code>MaxLevel</code>（通常 1~254），不是 0~100。
+      转换为百分比的公式：<code>百分比 = (CurrentLevel - MinLevel) / (MaxLevel - MinLevel) * 100</code>。
+      例如 MinLevel=1, MaxLevel=254, CurrentLevel=127 时约为 <strong>50%</strong> 亮度。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 频率控制（0x04-0x06）====== -->
+  <h3 id="group-frequency">频率控制（0x04 – 0x06）</h3>
+  <p>描述设备的频率控制能力。仅在设备支持 <strong>Frequency</strong> feature（Feature Map Bit 2）时才有这些属性。</p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">适用范围</div>
+    <p>
+      频率控制属性在普通灯具开发中<strong>很少用到</strong>。它主要用于需要精确控制输出频率的特殊设备（如某些工业照明或信号设备）。
+      绝大多数智能灯只用到当前状态和过渡相关的属性。
+    </p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x04">
+          <td><code>0x04</code></td>
+          <td>CurrentFrequency<br/><span class="attr-cn">当前频率</span></td>
+          <td>uint16</td>
+          <td>设备当前的输出频率</td>
+        </tr>
+        <tr id="attr-0x05">
+          <td><code>0x05</code></td>
+          <td>MinFrequency<br/><span class="attr-cn">最低频率</span></td>
+          <td>uint16</td>
+          <td>设备支持的最低频率</td>
+        </tr>
+        <tr id="attr-0x06">
+          <td><code>0x06</code></td>
+          <td>MaxFrequency<br/><span class="attr-cn">最高频率</span></td>
+          <td>uint16</td>
+          <td>设备支持的最高频率</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 过渡与开关联动（0x0F-0x14）====== -->
+  <h3 id="group-transition">过渡与开关联动（0x0F – 0x14）</h3>
+  <p>
+    控制亮度变化的过渡行为，以及 OnOff Cluster 开灯/关灯时如何影响亮度。
+    这组属性直接决定了用户体验 —— 灯是突然亮/灭还是平滑过渡。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0F">
+          <td><code>0x0F</code></td>
+          <td>Options<br/><span class="attr-cn">选项</span></td>
+          <td>bitmap8</td>
+          <td>命令执行的全局选项。可写（见下方 <a href="#bitmap-options">OptionsBitmap</a>）</td>
+        </tr>
+        <tr id="attr-0x10">
+          <td><code>0x10</code></td>
+          <td>OnOffTransitionTime<br/><span class="attr-cn">开关过渡时间</span></td>
+          <td>uint16</td>
+          <td>开灯/关灯时亮度从 MinLevel 到 MaxLevel（或反向）的过渡时间，单位 <strong>0.1 秒</strong>。默认 <code>0</code>（瞬间切换）。可写</td>
+        </tr>
+        <tr id="attr-0x11">
+          <td><code>0x11</code></td>
+          <td>OnLevel<br/><span class="attr-cn">开灯亮度</span></td>
+          <td>uint8 / null</td>
+          <td>OnOff Cluster 的 On 命令执行时，亮度设为此值。<code>null</code> 表示恢复到上次关灯前的亮度。范围 1~254，可写</td>
+        </tr>
+        <tr id="attr-0x12">
+          <td><code>0x12</code></td>
+          <td>OnTransitionTime<br/><span class="attr-cn">开灯过渡时间</span></td>
+          <td>uint16 / null</td>
+          <td>OnOff 开灯时的过渡时间，单位 <strong>0.1 秒</strong>。<code>null</code> 时使用 <code>OnOffTransitionTime</code>。可写</td>
+        </tr>
+        <tr id="attr-0x13">
+          <td><code>0x13</code></td>
+          <td>OffTransitionTime<br/><span class="attr-cn">关灯过渡时间</span></td>
+          <td>uint16 / null</td>
+          <td>OnOff 关灯时的过渡时间，单位 <strong>0.1 秒</strong>。<code>null</code> 时使用 <code>OnOffTransitionTime</code>。可写</td>
+        </tr>
+        <tr id="attr-0x14">
+          <td><code>0x14</code></td>
+          <td>DefaultMoveRate<br/><span class="attr-cn">默认移动速率</span></td>
+          <td>uint8 / null</td>
+          <td>Move 命令不指定 Rate 时使用的默认速率（每秒变化的单位数）。<code>null</code> 表示设备自行决定。可写</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">OnLevel 的作用</div>
+    <p>
+      <code>OnLevel</code> 决定了用户按「开灯」时灯亮到什么程度：
+    </p>
+    <ul>
+      <li><code>null</code>（推荐默认）—— 记忆上次关灯前的亮度，开灯后恢复到上次的亮度。用户体验最自然</li>
+      <li>具体数值（如 <code>254</code>）—— 每次开灯都亮到这个固定值，忽略上次关灯时的亮度</li>
+    </ul>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 启动行为（0x4000）====== -->
+  <h3 id="group-startup">启动行为（0x4000）</h3>
+  <p>控制设备重新上电后的初始亮度。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x4000">
+          <td><code>0x4000</code></td>
+          <td>StartUpCurrentLevel<br/><span class="attr-cn">上电初始亮度</span></td>
+          <td>uint8 / null</td>
+          <td>设备上电时 <code>CurrentLevel</code> 的初始值。可写</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>StartUpCurrentLevel 特殊值</h4>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0x00</span>
+      <div>
+        <span class="enum-name">MinLevel</span>
+        <span class="enum-desc">上电时设为 MinLevel（最低亮度）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1~254</span>
+      <div>
+        <span class="enum-name">指定亮度</span>
+        <span class="enum-desc">上电时设为这个固定值</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">null</span>
+      <div>
+        <span class="enum-name">恢复断电前</span>
+        <span class="enum-desc">上电时恢复到断电前的亮度值（推荐默认）</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">断电恢复的陷阱</div>
+    <p>
+      <code>StartUpCurrentLevel</code> 只控制 <code>CurrentLevel</code>，不控制 OnOff 状态。
+      如果用户希望「来电后灯自动亮」，还需要配合 OnOff Cluster 的 <code>StartUpOnOff</code> 属性一起设置。
+      只设 <code>StartUpCurrentLevel</code> 而不设 <code>StartUpOnOff</code>，可能出现亮度恢复了但灯是关的情况。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 枚举与位图 ====== -->
+  <h2 id="enums">枚举与位图</h2>
+
+  <h3 id="enum-movemode">MoveModeEnum</h3>
+  <p>Move 和 MoveWithOnOff 命令中的 <code>MoveMode</code> 参数使用此枚举，指定亮度移动方向。</p>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Up</span>
+        <span class="enum-desc">向上移动（增加亮度），直到 MaxLevel</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Down</span>
+        <span class="enum-desc">向下移动（降低亮度），直到 MinLevel</span>
+      </div>
+    </div>
+  </div>
+
+  <h3 id="enum-stepmode">StepModeEnum</h3>
+  <p>Step 和 StepWithOnOff 命令中的 <code>StepMode</code> 参数使用此枚举，指定步进方向。</p>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Up</span>
+        <span class="enum-desc">向上步进（增加亮度）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Down</span>
+        <span class="enum-desc">向下步进（降低亮度）</span>
+      </div>
+    </div>
+  </div>
+
+  <h3 id="bitmap-options">OptionsBitmap</h3>
+  <p>
+    <code>Options</code> 属性以及所有命令中 <code>OptionsMask</code> / <code>OptionsOverride</code> 参数使用此位图。
+    它控制命令在特定条件下是否执行。
+  </p>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">Bit 0</span>
+      <div>
+        <span class="enum-name">ExecuteIfOff</span>
+        <span class="enum-desc">设备处于 Off 状态时是否仍执行 Level 命令。置 1 = 即使灯是关的也执行调光</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 1</span>
+      <div>
+        <span class="enum-name">CoupleColorTempToLevel</span>
+        <span class="enum-desc">亮度变化时是否联动色温。置 1 = 亮度降低时色温自动变暖（需 ColorControl Cluster 配合）</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">OptionsMask / OptionsOverride 怎么用</div>
+    <p>
+      这两个参数用于<strong>临时覆盖</strong>设备的 <code>Options</code> 属性。计算逻辑：
+      <code>effectiveOptions = (Options AND NOT OptionsMask) OR (OptionsOverride AND OptionsMask)</code>。
+      简单理解：<code>OptionsMask</code> 标记哪些位要被覆盖，<code>OptionsOverride</code> 提供覆盖值。
+      两者都传 <code>0</code> 则直接使用设备的 <code>Options</code> 属性。
+    </p>
+  </div>
+
+  <!-- ====== Feature Map ====== -->
+  <h2 id="features">Feature Map</h2>
+  <p>LevelControl 通过 Feature Map 声明设备支持的可选能力。</p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">Bit 0</span>
+      <div>
+        <span class="enum-name">OnOff (OO)</span>
+        <span class="enum-desc">依赖 OnOff Cluster，支持 WithOnOff 系列命令联动开关状态</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 1</span>
+      <div>
+        <span class="enum-name">Lighting (LT)</span>
+        <span class="enum-desc">支持灯光应用行为。MinLevel 默认 1（非 0），支持 StartUpCurrentLevel 和 OnTransitionTime/OffTransitionTime</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 2</span>
+      <div>
+        <span class="enum-name">Frequency (FQ)</span>
+        <span class="enum-desc">支持频率控制（Provisional）。启用 CurrentFrequency/MinFrequency/MaxFrequency 属性和 MoveToClosestFrequency 命令</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">常见组合</div>
+    <p>
+      绝大多数智能灯的 Feature Map 是 <code>0x03</code>（OnOff + Lighting），表示同时支持开关联动和灯光行为。
+      读到 Feature Map 后可以判断哪些属性和命令可用，避免读取不存在的属性导致错误。
+    </p>
+  </div>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>一个典型可调光灯具的 LevelControl Cluster 读取结果：</p>
+
+  <pre><code set:html={exampleData} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">亮度展示处理逻辑</div>
+    <p>
+      App 展示亮度信息时，典型的处理流程：
+    </p>
+    <ol>
+      <li>读取 <code>CurrentLevel (0x00)</code>，处理 <code>null</code> 情况</li>
+      <li>读取 <code>MinLevel (0x02)</code> 和 <code>MaxLevel (0x03)</code>，确定滑块范围</li>
+      <li>将 <code>CurrentLevel</code> 换算为百分比：<code>(CurrentLevel - MinLevel) / (MaxLevel - MinLevel) * 100</code></li>
+      <li>如果 <code>RemainingTime (0x01)</code> 大于 0，说明正在过渡中，UI 可以显示过渡动画</li>
+    </ol>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <h3 id="scenario-dimming">场景 1：App 调光</h3>
+  <ol>
+    <li>读取 <code>MinLevel (0x02)</code> 和 <code>MaxLevel (0x03)</code>，映射到滑块 0%~100%</li>
+    <li>用户拖动滑块时，将百分比换算为目标亮度值</li>
+    <li>发送 <code>MoveToLevelWithOnOff (0x04)</code>（推荐使用 WithOnOff 版本，保证开关状态一致）</li>
+    <li>订阅 <code>CurrentLevel (0x00)</code> 的变化，实时更新 UI 显示</li>
+  </ol>
+
+  <h3 id="scenario-on-off-brightness">场景 2：记忆亮度开关灯</h3>
+  <ol>
+    <li>设置 <code>OnLevel (0x11)</code> 为 <code>null</code> —— 让设备记忆上次关灯前的亮度</li>
+    <li>用户点击「开灯」→ OnOff Cluster 发 On 命令 → 灯自动恢复到上次的亮度</li>
+    <li>用户点击「关灯」→ OnOff Cluster 发 Off 命令 → 亮度渐暗到 0</li>
+    <li>可选：设置 <code>OnTransitionTime (0x12)</code> 和 <code>OffTransitionTime (0x13)</code> 控制过渡速度</li>
+  </ol>
+
+  <h3 id="scenario-startup">场景 3：断电恢复设置</h3>
+  <ol>
+    <li>设置 <code>StartUpCurrentLevel (0x4000)</code>：<code>null</code> = 恢复断电前亮度，<code>0x00</code> = 最低亮度，具体值 = 固定亮度</li>
+    <li>同时设置 OnOff Cluster 的 <code>StartUpOnOff</code>，确保开关状态和亮度配合正确</li>
+    <li>典型配置：<code>StartUpCurrentLevel=null</code> + <code>StartUpOnOff=RestorePrevious</code> → 完整恢复断电前状态</li>
+  </ol>
+
+  <h3 id="scenario-physical-button">场景 4：物理按钮调光（长按 + 短按）</h3>
+  <ol>
+    <li>短按 → 发送 <code>StepWithOnOff (0x06)</code>，每次增减固定步进值（如 25）</li>
+    <li>长按按下 → 发送 <code>MoveWithOnOff (0x05)</code>，持续变化</li>
+    <li>长按松手 → 发送 <code>StopWithOnOff (0x07)</code>，停在当前亮度</li>
+  </ol>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .col-required {
+    color: #dc2626;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-required {
+    color: #f87171;
+  }
+
+  .col-optional {
+    color: #16a34a;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-optional {
+    color: #4ade80;
+  }
+
+  .attr-cn {
+    font-size: 0.8125rem;
+    color: #6b7280;
+  }
+
+  :global(.dark) .attr-cn {
+    color: #9ca3af;
+  }
+</style>

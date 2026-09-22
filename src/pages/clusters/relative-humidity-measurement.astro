@@ -1,0 +1,207 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 湿度测量 ---
+  "0x0": 6500,          // MeasuredValue = 6500 → 实际 65.00% RH
+  "0x1": 0,             // MinMeasuredValue = 0 → 0.00% RH
+  "0x2": 10000,         // MaxMeasuredValue = 10000 → 100.00% RH
+  "0x3": 200            // Tolerance = 200 → ±2.00% RH
+}`;
+---
+
+<DocLayout
+  title="相对湿度测量 Cluster · RelativeHumidityMeasurement（0x0405）"
+  description="Matter RelativeHumidityMeasurement Cluster（0x0405）完整参考 — MeasuredValue / MinMeasuredValue / MaxMeasuredValue / Tolerance 属性定义、0.01% RH 单位换算、湿度传感器数据读取与自动化场景。"
+  type="article"
+  prev={{ title: '温控（Thermostat）', href: '/clusters/thermostat/' }}
+>
+  <h1>相对湿度测量 Cluster（RelativeHumidityMeasurement）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x0405</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 通常在 <code>Endpoint 1</code>（功能端点）
+  </p>
+  <p>
+    RelativeHumidityMeasurement 用于上报设备测量到的相对湿度值。
+    这个 Cluster 是<strong>纯只读的</strong> —— 没有 Command，只有 4 个 Attribute，结构与 TemperatureMeasurement 完全一致。
+    湿度传感器、温湿度计、恒温恒湿箱等设备都会用到它。
+  </p>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">湿度单位陷阱</div>
+    <p>
+      所有湿度属性的单位都是 <strong>0.01% RH</strong>（百分之一的相对湿度百分比）。
+      例如设备返回 <code>6500</code>，实际湿度是 <strong>65.00% RH</strong>。
+      有效范围 <code>0</code> ~ <code>10000</code>，对应 0% ~ 100% RH。
+      值为 <code>null</code> 表示当前测量值无效或未知。
+    </p>
+  </div>
+
+  <!-- ====== 属性总览 ====== -->
+  <h2 id="attributes">属性总览</h2>
+  <p>RelativeHumidityMeasurement 只有 4 个属性，其中 MeasuredValue 是必须支持的。点击属性 ID 可跳转到详细说明。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>读写</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#attr-0x00">
+          <td><a href="#attr-0x00"><code>0x00</code></a></td>
+          <td>MeasuredValue</td>
+          <td>uint16 / null</td>
+          <td>只读</td>
+          <td>当前测量湿度（0.01% RH）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x01">
+          <td><a href="#attr-0x01"><code>0x01</code></a></td>
+          <td>MinMeasuredValue</td>
+          <td>uint16 / null</td>
+          <td>只读</td>
+          <td>传感器可测量的最小湿度</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x02">
+          <td><a href="#attr-0x02"><code>0x02</code></a></td>
+          <td>MaxMeasuredValue</td>
+          <td>uint16 / null</td>
+          <td>只读</td>
+          <td>传感器可测量的最大湿度</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x03">
+          <td><a href="#attr-0x03"><code>0x03</code></a></td>
+          <td>Tolerance</td>
+          <td>uint16</td>
+          <td>只读</td>
+          <td>测量精度/容差（0.01% RH）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 属性详解 ====== -->
+  <h3 id="attr-0x00">MeasuredValue（当前测量湿度）</h3>
+  <p>
+    设备传感器当前测量到的相对湿度值，单位 0.01% RH。
+    有效范围是 <code>MinMeasuredValue</code> 到 <code>MaxMeasuredValue</code> 之间。
+    值为 <code>null</code> 表示传感器暂时无法提供有效读数（如传感器故障或正在初始化）。
+  </p>
+  <div class="callout callout-tip">
+    <div class="callout-title">换算公式</div>
+    <p>
+      <code>实际湿度 = MeasuredValue / 100</code><br/>
+      例如：<code>6500 / 100 = 65.00% RH</code>，<code>3275 / 100 = 32.75% RH</code>
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x01">MinMeasuredValue（最小可测量湿度）</h3>
+  <p>
+    传感器能够测量的最小相对湿度值，单位 0.01% RH。
+    这是硬件能力的下限 —— <code>MeasuredValue</code> 不会低于此值。
+    值为 <code>null</code> 表示最小值未定义。范围 <code>0</code> ~ <code>9999</code>（0% ~ 99.99% RH）。
+  </p>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x02">MaxMeasuredValue（最大可测量湿度）</h3>
+  <p>
+    传感器能够测量的最大相对湿度值，单位 0.01% RH。
+    <code>MeasuredValue</code> 不会超过此值。
+    值为 <code>null</code> 表示最大值未定义。范围 <code>1</code> ~ <code>10000</code>（0.01% ~ 100% RH），且必须大于 <code>MinMeasuredValue</code>。
+  </p>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x03">Tolerance（测量容差）</h3>
+  <p>
+    传感器的测量精度，单位 0.01% RH。表示实际值与上报值之间的最大偏差。
+    例如 <code>Tolerance = 200</code> 表示精度为 &#177;2.00% RH。
+    范围 <code>0</code> ~ <code>2048</code>（0% ~ 20.48% RH）。这是可选属性，不是所有设备都支持。
+  </p>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>读取一个温湿度传感器的 RelativeHumidityMeasurement Cluster 属性：</p>
+
+  <pre><code set:html={exampleData} /></pre>
+
+  <div class="callout callout-info">
+    <div class="callout-title">数据解读</div>
+    <p>
+      上面的示例表示：当前湿度 <strong>65.00% RH</strong>，传感器量程 0% ~ 100%，精度 &#177;2.00%。
+      App 展示时只需读取 <code>MeasuredValue</code> 并除以 100 即可。如果值为 <code>null</code>，
+      界面应显示"--"或"暂无数据"而非 0。
+    </p>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <details class="scenario">
+    <summary>场景 1：读取并展示当前湿度</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>读取 <code>MeasuredValue (0x00)</code>，注意处理 <code>null</code>（传感器未就绪或故障）</li>
+        <li>除以 100 得到实际百分比，保留两位小数</li>
+        <li>可选读取 <code>Tolerance (0x03)</code>，在详情页展示精度信息（如"&#177;2%"）</li>
+        <li>订阅 <code>MeasuredValue</code> 的变化通知，实时更新界面</li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 2：舒适区间自动化</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>定义舒适湿度区间，例如 40% ~ 60% RH（对应原始值 4000 ~ 6000）</li>
+        <li>订阅 <code>MeasuredValue</code> 变化，当湿度低于 4000 时触发加湿器开启</li>
+        <li>当湿度回到 5000 以上时关闭加湿器（留出回差避免频繁开关）</li>
+        <li>结合 TemperatureMeasurement Cluster 的温度数据，综合判断环境舒适度</li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 3：除湿机联动控制</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>读取 <code>MaxMeasuredValue (0x02)</code> 确认传感器量程覆盖高湿场景</li>
+        <li>设定除湿阈值（如 70% RH = 7000），当 <code>MeasuredValue</code> 超过阈值时启动除湿</li>
+        <li>除湿目标达到 55% RH（5500）后停止，预留回差防止反复启停</li>
+        <li>利用 <code>Tolerance</code> 属性评估判断精度 —— 如果容差较大（如 &#177;5%），阈值设置应更保守</li>
+      </ol>
+    </div>
+  </details>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .attr-cn {
+    font-size: 0.8125rem;
+    color: #6b7280;
+  }
+
+  :global(.dark) .attr-cn {
+    color: #9ca3af;
+  }
+</style>

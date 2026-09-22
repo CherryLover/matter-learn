@@ -1,0 +1,557 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 烹饪时间 ---
+  "0x0001": 120,            // CookTime = 120 秒（当前设定烹饪 2 分钟）
+  "0x0002": 5400,           // MaxCookTime = 5400 秒（最大可设 90 分钟）
+
+  // --- 功率设置（PWRNUM 特性）---
+  "0x0003": 80,             // PowerSetting = 80（当前功率 80%）
+  "0x0004": 10,             // MinPower = 10（最低功率 10%）
+  "0x0005": 100,            // MaxPower = 100（最高功率 100%）
+  "0x0006": 10,             // PowerStep = 10（功率调节步长 10%）
+
+  // --- 瓦数设置（WATTS 特性）---
+  "0x0007": [100, 300, 500, 700, 900, 1100],  // SupportedWatts（支持的瓦数列表）
+  "0x0008": 4,              // SelectedWattIndex = 4 → 对应 900W
+  "0x0009": 900             // WattRating = 900（当前瓦数额定值）
+}`;
+
+const setCookingParamsExample = `{
+  "CookTime": 180,          // 烹饪 3 分钟
+  "PowerSetting": 70        // 功率 70%
+}`;
+
+const setCookingWattsExample = `{
+  "CookTime": 300,          // 烹饪 5 分钟
+  "WattSettingIndex": 3     // 选择 SupportedWatts[3] 对应的瓦数
+}`;
+---
+
+<DocLayout
+  title="微波炉控制 Cluster · MicrowaveOvenControl（0x005F）"
+  description="Matter MicrowaveOvenControl Cluster（0x005F）完整参考 — SetCookingParameters 命令、CookTime/PowerSetting/SupportedWatts 等属性定义、PWRNUM/WATTS/PWRLMTS 特性位与枚举值速查。"
+  type="article"
+  prev={{ title: 'Cluster 手册', href: '/clusters/' }}
+>
+  <h1>微波炉控制 Cluster（MicrowaveOvenControl）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x005F</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 微波炉功能端点（Microwave Oven Endpoint）
+  </p>
+  <p>
+    MicrowaveOvenControl 是 Matter 厨电设备中微波炉的核心控制 Cluster，负责管理烹饪时间、功率等级和瓦数设定。
+    它不负责启动/停止烹饪（由 OperationalState Cluster 处理），也不负责模式选择（由 MicrowaveOvenMode Cluster 处理），
+    专注于「烹饪参数」这一件事。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">三个 Cluster 协同工作</div>
+    <p>
+      微波炉设备通常需要三个 Cluster 配合：<br/>
+      <strong>MicrowaveOvenMode</strong>（0x005E）—— 选择烹饪模式（如普通加热、解冻、预设菜单等）<br/>
+      <strong>MicrowaveOvenControl</strong>（0x005F）—— 设置烹饪参数（时间、功率、瓦数）<br/>
+      <strong>OperationalState</strong>（0x0060）—— 控制烹饪流程（开始、暂停、停止）<br/>
+      典型流程：先选模式 → 再设参数 → 最后启动烹饪。
+    </p>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">功率表示方式由 Feature 决定</div>
+    <p>
+      微波炉的功率有两种表示方式：<strong>数值百分比</strong>（PWRNUM 特性，如 80%）和<strong>瓦数等级</strong>（WATTS 特性，如 900W）。
+      设备至少支持其中一种。读写功率属性前，务必先检查 FeatureMap 确定设备使用哪种方式，否则会读到不支持的属性。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#commands">命令列表</a>
+    <span class="nav-sep">|</span>
+    <a href="#attributes">属性详解</a>
+    <span class="nav-sep">|</span>
+    <a href="#features">Feature 位图</a>
+    <span class="nav-sep">|</span>
+    <a href="#example-data">示例数据</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">常见场景</a>
+  </nav>
+
+  <!-- ====== 命令（Commands）====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    MicrowaveOvenControl Cluster 只有一个命令 —— <code>SetCookingParameters</code>。
+    它是设置烹饪参数的唯一入口，所有参数（时间、功率、瓦数）都通过这一个命令设置。
+    注意：这个命令只设置参数，不会启动烹饪。启动烹饪需要调用 OperationalState Cluster 的 Start 命令。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>说明</th>
+          <th>所需特性</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#cmd-0x00">
+          <td><a href="#cmd-0x00"><code>0x00</code></a></td>
+          <td>SetCookingParameters</td>
+          <td>设置烹饪参数（时间、功率、瓦数）</td>
+          <td class="col-optional">无</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 命令详解 ====== -->
+  <h3 id="cmd-0x00">SetCookingParameters —— 设置烹饪参数（0x00）</h3>
+  <p>
+    设置微波炉的烹饪参数。所有参数都是可选的 —— 只传需要修改的字段即可，未传的参数保持当前值不变。
+    设备处于非运行状态时可以设置参数；某些设备也允许在运行中修改（取决于具体实现）。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>CookMode</td>
+          <td>uint8</td>
+          <td>否</td>
+          <td>烹饪模式编号，对应 MicrowaveOvenMode Cluster 中定义的模式值</td>
+        </tr>
+        <tr>
+          <td>CookTime</td>
+          <td>uint32</td>
+          <td>否</td>
+          <td>烹饪时间，单位秒。范围 <code>1</code> ~ <code>MaxCookTime</code></td>
+        </tr>
+        <tr>
+          <td>PowerSetting</td>
+          <td>uint8</td>
+          <td>否</td>
+          <td>功率等级数值。范围 <code>MinPower</code> ~ <code>MaxPower</code>，步长为 <code>PowerStep</code>。<strong>需要 PWRNUM 特性</strong></td>
+        </tr>
+        <tr>
+          <td>WattSettingIndex</td>
+          <td>uint8</td>
+          <td>否</td>
+          <td><code>SupportedWatts</code> 列表的索引（从 0 开始）。<strong>需要 WATTS 特性</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">PowerSetting 与 WattSettingIndex 互斥</div>
+    <p>
+      一次调用中只能传 <code>PowerSetting</code> 或 <code>WattSettingIndex</code> 之一，不能同时传。
+      传哪个取决于设备支持的 Feature：支持 PWRNUM 用 PowerSetting，支持 WATTS 用 WattSettingIndex。
+      同时传两个会返回 <code>INVALID_COMMAND</code>。
+    </p>
+  </div>
+
+  <h4>使用示例：按功率百分比设置（PWRNUM）</h4>
+  <pre><code set:html={setCookingParamsExample} /></pre>
+
+  <h4>使用示例：按瓦数等级设置（WATTS）</h4>
+  <pre><code set:html={setCookingWattsExample} /></pre>
+
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        用户在 App 上选择「加热 3 分钟、中高火」时，App 发送 <code>SetCookingParameters(CookTime=180, PowerSetting=70)</code>。
+        参数设好后，再调用 OperationalState 的 <code>Start</code> 命令启动烹饪。
+        如果需要在烹饪中途加时间（如「再加 1 分钟」），可以在运行状态下再次调用此命令更新 CookTime。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 属性详解 ====== -->
+  <h2 id="attributes">属性详解</h2>
+  <p>
+    MicrowaveOvenControl 的属性按功能分为三组：烹饪时间、功率数值、瓦数等级。
+    后两组分别由 PWRNUM 和 WATTS Feature 门控。
+    点击下方汇总表中的属性 ID 可跳转到对应的详细说明。
+  </p>
+
+  <!-- 属性汇总表 -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>分组</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 烹饪时间 -->
+        <tr class="clickable-row" data-href="#attr-0x0001">
+          <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
+          <td>CookTime</td>
+          <td>uint32</td>
+          <td><a href="#group-time">烹饪时间</a></td>
+          <td>当前设定的烹饪时间（秒）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0002">
+          <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
+          <td>MaxCookTime</td>
+          <td>uint32</td>
+          <td><a href="#group-time">烹饪时间</a></td>
+          <td>允许的最大烹饪时间（秒）</td>
+        </tr>
+        <!-- 功率数值 -->
+        <tr class="clickable-row" data-href="#attr-0x0003">
+          <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
+          <td>PowerSetting</td>
+          <td>uint8</td>
+          <td><a href="#group-power">功率数值</a></td>
+          <td>当前功率等级</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0004">
+          <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
+          <td>MinPower</td>
+          <td>uint8</td>
+          <td><a href="#group-power">功率数值</a></td>
+          <td>最低可设功率</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0005">
+          <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
+          <td>MaxPower</td>
+          <td>uint8</td>
+          <td><a href="#group-power">功率数值</a></td>
+          <td>最高可设功率</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0006">
+          <td><a href="#attr-0x0006"><code>0x0006</code></a></td>
+          <td>PowerStep</td>
+          <td>uint8</td>
+          <td><a href="#group-power">功率数值</a></td>
+          <td>功率调节步长</td>
+        </tr>
+        <!-- 瓦数等级 -->
+        <tr class="clickable-row" data-href="#attr-0x0007">
+          <td><a href="#attr-0x0007"><code>0x0007</code></a></td>
+          <td>SupportedWatts</td>
+          <td>list[uint16]</td>
+          <td><a href="#group-watts">瓦数等级</a></td>
+          <td>设备支持的瓦数列表</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0008">
+          <td><a href="#attr-0x0008"><code>0x0008</code></a></td>
+          <td>SelectedWattIndex</td>
+          <td>uint8</td>
+          <td><a href="#group-watts">瓦数等级</a></td>
+          <td>当前选中的瓦数索引</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0009">
+          <td><a href="#attr-0x0009"><code>0x0009</code></a></td>
+          <td>WattRating</td>
+          <td>uint16</td>
+          <td><a href="#group-watts">瓦数等级</a></td>
+          <td>当前瓦数额定值</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 烹饪时间（0x0001, 0x0002）====== -->
+  <h3 id="group-time">烹饪时间（0x0001, 0x0002）</h3>
+  <p>烹饪时间是所有微波炉都支持的基础属性，不需要特殊 Feature 门控。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0001">
+          <td><code>0x0001</code></td>
+          <td>CookTime<br/><span class="attr-cn">烹饪时间</span></td>
+          <td>uint32</td>
+          <td>当前设定的烹饪时间，单位秒。默认值 <code>30</code>（30 秒）。烹饪过程中此值会倒计时递减，实时反映剩余时间。范围 <code>1</code> ~ <code>MaxCookTime</code></td>
+        </tr>
+        <tr id="attr-0x0002">
+          <td><code>0x0002</code></td>
+          <td>MaxCookTime<br/><span class="attr-cn">最大烹饪时间</span></td>
+          <td>uint32</td>
+          <td>设备允许的最大烹饪时间，单位秒，只读。用于 App 端校验用户输入和限制时间选择器的上限。典型值如 <code>5400</code>（90 分钟）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">时间单位是秒，不是分钟</div>
+    <p>
+      与日常使用习惯不同，<code>CookTime</code> 的单位是<strong>秒</strong>。
+      App 展示时需要转换为分:秒格式（如 <code>120</code> 秒 → <code>2:00</code>）。
+      用户输入「3 分钟」时需要转换为 <code>180</code> 再写入。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 功率数值（0x0003 ~ 0x0006）====== -->
+  <h3 id="group-power">功率数值（0x0003 ~ 0x0006）</h3>
+  <p>
+    用数值表示功率等级的一组属性。这组属性需要 <strong>PWRNUM</strong> 特性支持。
+    无 PWRNUM 特性时，<code>PowerSetting</code> 仍然存在但默认值固定为 <code>100</code>（满功率），不可修改。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0003">
+          <td><code>0x0003</code></td>
+          <td>PowerSetting<br/><span class="attr-cn">功率设置</span></td>
+          <td>uint8</td>
+          <td>当前功率等级。无 PWRNUM 时固定为 <code>100</code>；有 PWRNUM 时范围为 <code>MinPower</code> ~ <code>MaxPower</code>，步长 <code>PowerStep</code>。默认值 <code>100</code>（满功率）</td>
+        </tr>
+        <tr id="attr-0x0004">
+          <td><code>0x0004</code></td>
+          <td>MinPower<br/><span class="attr-cn">最低功率</span></td>
+          <td>uint8</td>
+          <td>设备支持的最低功率值。默认 <code>10</code>。<strong>需要 PWRLMTS 特性</strong>（无 PWRLMTS 时固定为 10）</td>
+        </tr>
+        <tr id="attr-0x0005">
+          <td><code>0x0005</code></td>
+          <td>MaxPower<br/><span class="attr-cn">最高功率</span></td>
+          <td>uint8</td>
+          <td>设备支持的最高功率值。默认 <code>100</code>。<strong>需要 PWRLMTS 特性</strong>（无 PWRLMTS 时固定为 100）</td>
+        </tr>
+        <tr id="attr-0x0006">
+          <td><code>0x0006</code></td>
+          <td>PowerStep<br/><span class="attr-cn">功率步长</span></td>
+          <td>uint8</td>
+          <td>功率调节的步进值。默认 <code>10</code>。例如步长为 10 时，功率只能是 10、20、30...100。<strong>需要 PWRLMTS 特性</strong>（无 PWRLMTS 时固定为 10）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">PWRNUM 与 PWRLMTS 的关系</div>
+    <p>
+      <strong>PWRNUM</strong> 启用功率数值调节能力 —— 没有它，功率只能是满功率 100。<br/>
+      <strong>PWRLMTS</strong> 是 PWRNUM 的扩展，允许自定义 Min/Max/Step 三个限制参数。
+      PWRLMTS 必须和 PWRNUM 一起启用（不能单独启用 PWRLMTS）。
+      如果只有 PWRNUM 没有 PWRLMTS，则使用默认限制：Min=10, Max=100, Step=10。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 瓦数等级（0x0007 ~ 0x0009）====== -->
+  <h3 id="group-watts">瓦数等级（0x0007 ~ 0x0009）</h3>
+  <p>
+    用实际瓦数表示功率的一组属性。这组属性需要 <strong>WATTS</strong> 特性支持。
+    与 PWRNUM 的百分比方式不同，WATTS 用离散的瓦数列表让用户选择。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0007">
+          <td><code>0x0007</code></td>
+          <td>SupportedWatts<br/><span class="attr-cn">支持的瓦数列表</span></td>
+          <td>list[uint16]</td>
+          <td>设备支持的所有瓦数等级列表，升序排列。例如 <code>[100, 300, 500, 700, 900, 1100]</code>。只读</td>
+        </tr>
+        <tr id="attr-0x0008">
+          <td><code>0x0008</code></td>
+          <td>SelectedWattIndex<br/><span class="attr-cn">选中的瓦数索引</span></td>
+          <td>uint8</td>
+          <td>当前选中的瓦数在 <code>SupportedWatts</code> 列表中的索引（从 0 开始）。通过 <code>SetCookingParameters</code> 的 WattSettingIndex 参数修改</td>
+        </tr>
+        <tr id="attr-0x0009">
+          <td><code>0x0009</code></td>
+          <td>WattRating<br/><span class="attr-cn">瓦数额定值</span></td>
+          <td>uint16</td>
+          <td>微波炉的额定功率（瓦），只读。这是设备的标称最大瓦数，通常等于 <code>SupportedWatts</code> 列表中的最大值</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">用索引而非瓦数值设置功率</div>
+    <p>
+      设置瓦数时使用的是 <code>SupportedWatts</code> 的<strong>索引</strong>（WattSettingIndex），不是瓦数值本身。
+      例如 <code>SupportedWatts = [100, 300, 500, 700, 900, 1100]</code>，要设置 700W 需要传 <code>WattSettingIndex = 3</code>。
+      App 端应先读取 SupportedWatts 列表，展示为可选项（如「低火 100W」「中火 500W」「高火 1100W」），用户选择后传对应索引。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== Feature 位图 ====== -->
+  <h2 id="features">Feature 位图</h2>
+  <p>MicrowaveOvenControl Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持哪些功率控制方式：</p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">Bit 0</span>
+      <div>
+        <span class="enum-name">PWRNUM（PowerAsNumber）</span>
+        <span class="enum-desc">功率以数值表示 —— 启用 PowerSetting 的读写（10~100 范围）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 1</span>
+      <div>
+        <span class="enum-name">WATTS（WattRating）</span>
+        <span class="enum-desc">功率以瓦数表示 —— 启用 SupportedWatts 列表和 WattSettingIndex 选择</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 2</span>
+      <div>
+        <span class="enum-name">PWRLMTS（PowerNumberLimits）</span>
+        <span class="enum-desc">自定义功率限制 —— 启用 MinPower、MaxPower、PowerStep 属性（需同时启用 PWRNUM）</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">Feature 组合约束</div>
+    <p>
+      <strong>PWRNUM 和 WATTS 互斥</strong> —— 设备只能选择一种功率表示方式，不能同时支持两种。<br/>
+      <strong>PWRLMTS 依赖 PWRNUM</strong> —— 启用 PWRLMTS 时必须同时启用 PWRNUM。<br/>
+      常见组合：无 Feature（仅时间控制）、PWRNUM（百分比功率）、PWRNUM + PWRLMTS（自定义范围的百分比功率）、WATTS（瓦数等级选择）。
+    </p>
+  </div>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>一个同时支持 PWRNUM 和 WATTS 特性的微波炉设备的属性读取结果（实际设备只会支持其中一种功率方式，此处为展示完整属性）：</p>
+
+  <pre><code set:html={exampleData} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发提示</div>
+    <p>
+      App 展示功率时，先检查 <code>FeatureMap</code>：<br/>
+      &bull; 有 PWRNUM → 展示为百分比滑块或档位选择器（10% / 20% / ... / 100%）<br/>
+      &bull; 有 WATTS → 读取 <code>SupportedWatts</code> 列表，展示为瓦数选项（100W / 300W / 500W ...）<br/>
+      &bull; 两者都没有 → 设备只支持满功率，不需要展示功率控制 UI
+    </p>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <details class="scenario">
+    <summary>场景 1：App 设置烹饪参数并启动加热</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>读取 <code>MaxCookTime (0x0002)</code> 确定时间上限，用于限制时间选择器范围</li>
+        <li>读取 <code>FeatureMap (0xFFFC)</code> 判断功率控制方式：
+          <ul>
+            <li>PWRNUM → 读取 <code>MinPower (0x0004)</code>、<code>MaxPower (0x0005)</code>、<code>PowerStep (0x0006)</code> 构建功率选择器</li>
+            <li>WATTS → 读取 <code>SupportedWatts (0x0007)</code> 列表，展示可选瓦数</li>
+          </ul>
+        </li>
+        <li>用户选好时间和功率后，发送 <code>SetCookingParameters (0x00)</code> 写入参数</li>
+        <li>调用 OperationalState Cluster 的 <code>Start</code> 命令启动烹饪</li>
+        <li>订阅 <code>CookTime (0x0001)</code> 属性变化，实时更新倒计时显示</li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 2：烹饪中途调整时间或功率</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>通过 OperationalState Cluster 读取当前状态，确认设备正在运行</li>
+        <li>读取 <code>CookTime (0x0001)</code> 获取当前剩余时间</li>
+        <li>用户点击「加 30 秒」→ 发送 <code>SetCookingParameters(CookTime=当前值+30)</code></li>
+        <li>用户调低功率 → 发送 <code>SetCookingParameters(PowerSetting=50)</code> 或 <code>SetCookingParameters(WattSettingIndex=2)</code></li>
+        <li>注意：能否在运行中修改参数取决于设备实现，部分设备可能要求先暂停再修改</li>
+      </ol>
+    </div>
+  </details>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .col-required {
+    color: #dc2626;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-required {
+    color: #f87171;
+  }
+
+  .col-optional {
+    color: #16a34a;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-optional {
+    color: #4ade80;
+  }
+
+  .col-feature {
+    color: #2563eb;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-feature {
+    color: #60a5fa;
+  }
+
+  .attr-cn {
+    font-size: 0.8125rem;
+    color: #6b7280;
+  }
+
+  :global(.dark) .attr-cn {
+    color: #9ca3af;
+  }
+</style>

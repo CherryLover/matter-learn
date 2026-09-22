@@ -1,0 +1,1039 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 网络接口 ---
+  "0x0000": [                   // NetworkInterfaces
+    {
+      "Name": "wlan0",
+      "IsOperational": true,
+      "OffPremiseServicesReachableIPv4": true,
+      "OffPremiseServicesReachableIPv6": null,
+      "HardwareAddress": "AA:BB:CC:DD:EE:FF",
+      "IPv4Addresses": ["192.168.1.100"],
+      "IPv6Addresses": ["fe80::1"],
+      "Type": 1                 // WiFi
+    }
+  ],
+
+  // --- 运行统计 ---
+  "0x0001": 12,                 // RebootCount = 12（累计重启 12 次）
+  "0x0002": 86400,              // UpTime = 86400 秒（已运行 24 小时）
+  "0x0003": 720,                // TotalOperationalHours = 720（累计运行 30 天）
+  "0x0004": 1,                  // BootReason = PowerOnReboot（正常上电启动）
+
+  // --- 故障状态 ---
+  "0x0005": [],                 // ActiveHardwareFaults = []（无硬件故障）
+  "0x0006": [],                 // ActiveRadioFaults = []（无射频故障）
+  "0x0007": [],                 // ActiveNetworkFaults = []（无网络故障）
+
+  // --- 测试配置 ---
+  "0x0008": false               // TestEventTriggersEnabled = false（测试触发器未启用）
+}`;
+
+const networkInterfaceExample = `{
+  "Name": "wlan0",                              // 接口名称
+  "IsOperational": true,                        // 接口正在运行
+  "OffPremiseServicesReachableIPv4": true,       // IPv4 可达外部服务
+  "OffPremiseServicesReachableIPv6": null,       // IPv6 可达性未知
+  "HardwareAddress": "AA:BB:CC:DD:EE:FF",       // MAC 地址
+  "IPv4Addresses": ["192.168.1.100"],            // IPv4 地址列表
+  "IPv6Addresses": ["fe80::1", "2001:db8::1"],  // IPv6 地址列表
+  "Type": 1                                     // WiFi 接口
+}`;
+---
+
+<DocLayout
+  title="通用诊断 Cluster · GeneralDiagnostics（0x0033）"
+  description="Matter GeneralDiagnostics Cluster（0x0033）完整参考 — 设备健康状态、网络接口信息、重启统计、故障追踪、TestEventTrigger 测试命令及所有枚举值速查。"
+  type="article"
+  prev={{ title: 'Cluster 手册', href: '/clusters/' }}
+>
+  <h1>通用诊断 Cluster（GeneralDiagnostics）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x0033</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 固定在 <code>Endpoint 0</code>（根端点）
+  </p>
+  <p>
+    GeneralDiagnostics 提供设备的健康状态和运行诊断信息 —— 包括网络接口详情、重启次数、运行时长、启动原因，
+    以及硬件/射频/网络三类故障的实时追踪。所有 Matter 设备都必须实现这个 Cluster，是设备运维和问题排查的第一入口。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">Endpoint 0 专属</div>
+    <p>
+      GeneralDiagnostics 只出现在 <strong>Endpoint 0</strong>（根端点），不会出现在功能端点上。
+      它反映的是整个设备的健康状态，不是某个功能模块的状态。
+      读取时请确保指定 <code>endpointId = 0</code>。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#commands">命令列表</a>
+    <span class="nav-sep">|</span>
+    <a href="#attributes">属性详解</a>
+    <span class="nav-sep">|</span>
+    <a href="#enums">枚举速查</a>
+    <span class="nav-sep">|</span>
+    <a href="#structs">数据结构</a>
+    <span class="nav-sep">|</span>
+    <a href="#events">事件</a>
+    <span class="nav-sep">|</span>
+    <a href="#example-data">示例数据</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">常见场景</a>
+  </nav>
+
+  <!-- ====== 命令（Commands）====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    GeneralDiagnostics 只有两个命令。<code>TestEventTrigger</code> 用于测试认证，生产环境通常禁用；
+    <code>TimeSnapshot</code> 用于获取设备当前的时间快照。
+    点击下方表格中的命令 ID 可跳转到对应的详细说明。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>方向</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#cmd-0x00">
+          <td><a href="#cmd-0x00"><code>0x00</code></a></td>
+          <td>TestEventTrigger</td>
+          <td>Client → Server</td>
+          <td>触发设备内部的测试事件</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x01">
+          <td><a href="#cmd-0x01"><code>0x01</code></a></td>
+          <td>TimeSnapshot</td>
+          <td>Client → Server</td>
+          <td>获取设备当前时间快照</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 命令详解 ====== -->
+  <h3 id="cmd-0x00">TestEventTrigger —— 测试事件触发（0x00）</h3>
+  <p>
+    触发设备预置的测试事件。这个命令主要用于 Matter 认证测试期间，允许测试工具在不拆机的情况下模拟特定的设备行为
+    （如模拟传感器告警、触发故障状态等）。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>EnableKey</td>
+          <td>octstr (16 bytes)</td>
+          <td>启用密钥 —— 必须与设备预设的密钥匹配，否则命令被拒绝。生产设备应将此密钥设为全零以禁用测试功能</td>
+        </tr>
+        <tr>
+          <td>EventTrigger</td>
+          <td>uint64</td>
+          <td>触发器编号 —— 标识要触发的具体测试事件，由厂商或 Matter 测试规范定义</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">安全提示</div>
+    <p>
+      <code>TestEventTriggersEnabled</code> 属性为 <code>true</code> 时此命令才生效。
+      生产环境的设备<strong>必须</strong>禁用测试触发器（将 EnableKey 设为全零），否则存在安全风险 ——
+      攻击者可能利用此命令模拟故障或篡改设备行为。
+    </p>
+  </div>
+
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        Matter 认证测试时，测试工具通过此命令让设备模拟特定状态（如烟感报警、网络断开等），
+        验证设备的事件上报和故障处理逻辑是否符合规范。App 开发中几乎不会用到此命令。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x01">TimeSnapshot —— 时间快照（0x01）</h3>
+  <p>
+    请求设备返回当前的系统时间。不需要参数。
+    设备会返回一个 <code>TimeSnapshotResponse</code>，包含系统启动后的毫秒计时和 POSIX 时间戳（如果设备有可靠时钟）。
+  </p>
+
+  <h4>TimeSnapshotResponse 响应字段</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>SystemTimeMs</td>
+          <td>uint64</td>
+          <td>设备启动后经过的毫秒数（单调递增，不受时钟校准影响）</td>
+        </tr>
+        <tr>
+          <td>PosixTimeMs</td>
+          <td>uint64 / null</td>
+          <td>POSIX 时间戳（毫秒精度）。如果设备没有可靠的 UTC 时钟，此字段为 <code>null</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        排查设备时间同步问题时使用。例如设备的日志时间戳明显偏差，可以通过 TimeSnapshot 确认设备当前的内部时钟是否准确。
+        <code>SystemTimeMs</code> 是从启动开始的单调时钟，配合 <code>UpTime</code> 属性可以交叉验证。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 属性详解 ====== -->
+  <h2 id="attributes">属性详解</h2>
+  <p>GeneralDiagnostics 的属性按功能分为四组。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+
+  <!-- 属性汇总表 -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>分组</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 网络接口 -->
+        <tr class="clickable-row" data-href="#attr-0x0000">
+          <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
+          <td>NetworkInterfaces</td>
+          <td>list&lt;NetworkInterface&gt;</td>
+          <td><a href="#group-network">网络接口</a></td>
+          <td>设备所有网络接口信息</td>
+        </tr>
+        <!-- 运行统计 -->
+        <tr class="clickable-row" data-href="#attr-0x0001">
+          <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
+          <td>RebootCount</td>
+          <td>uint16</td>
+          <td><a href="#group-runtime">运行统计</a></td>
+          <td>累计重启次数</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0002">
+          <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
+          <td>UpTime</td>
+          <td>uint64</td>
+          <td><a href="#group-runtime">运行统计</a></td>
+          <td>设备已运行时间（秒）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0003">
+          <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
+          <td>TotalOperationalHours</td>
+          <td>uint32</td>
+          <td><a href="#group-runtime">运行统计</a></td>
+          <td>累计运行小时数</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0004">
+          <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
+          <td>BootReason</td>
+          <td>BootReasonEnum</td>
+          <td><a href="#group-runtime">运行统计</a></td>
+          <td>最近一次启动的原因</td>
+        </tr>
+        <!-- 故障追踪 -->
+        <tr class="clickable-row" data-href="#attr-0x0005">
+          <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
+          <td>ActiveHardwareFaults</td>
+          <td>list&lt;HardwareFaultEnum&gt;</td>
+          <td><a href="#group-faults">故障追踪</a></td>
+          <td>当前活跃的硬件故障列表</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0006">
+          <td><a href="#attr-0x0006"><code>0x0006</code></a></td>
+          <td>ActiveRadioFaults</td>
+          <td>list&lt;RadioFaultEnum&gt;</td>
+          <td><a href="#group-faults">故障追踪</a></td>
+          <td>当前活跃的射频故障列表</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0007">
+          <td><a href="#attr-0x0007"><code>0x0007</code></a></td>
+          <td>ActiveNetworkFaults</td>
+          <td>list&lt;NetworkFaultEnum&gt;</td>
+          <td><a href="#group-faults">故障追踪</a></td>
+          <td>当前活跃的网络故障列表</td>
+        </tr>
+        <!-- 测试配置 -->
+        <tr class="clickable-row" data-href="#attr-0x0008">
+          <td><a href="#attr-0x0008"><code>0x0008</code></a></td>
+          <td>TestEventTriggersEnabled</td>
+          <td>bool</td>
+          <td><a href="#group-test">测试配置</a></td>
+          <td>测试事件触发器是否启用</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 网络接口（0x0000）====== -->
+  <h3 id="group-network">网络接口（0x0000）</h3>
+  <p>设备当前可用的所有网络接口的详细信息列表。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0000">
+          <td><code>0x0000</code></td>
+          <td>NetworkInterfaces<br/><span class="attr-cn">网络接口列表</span></td>
+          <td>list&lt;NetworkInterface&gt;</td>
+          <td>设备当前所有网络接口的信息列表。每个元素是一个 <a href="#struct-network-interface">NetworkInterface</a> 结构体，包含接口名称、状态、IP 地址等详情。最多 8 个接口</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发提示</div>
+    <p>
+      NetworkInterfaces 是了解设备网络连接状况的最直接途径。
+      如果设备同时有 WiFi 和 Thread 接口，列表中会包含多个条目。
+      通过检查 <code>IsOperational</code> 可以判断哪个接口当前是活跃的。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 运行统计（0x0001-0x0004）====== -->
+  <h3 id="group-runtime">运行统计（0x0001-0x0004）</h3>
+  <p>设备的运行时间统计和启动原因，是判断设备稳定性的关键指标。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0001">
+          <td><code>0x0001</code></td>
+          <td>RebootCount<br/><span class="attr-cn">重启次数</span></td>
+          <td>uint16</td>
+          <td>设备自出厂以来的累计重启次数。频繁重启通常意味着设备存在稳定性问题（电源不稳、固件崩溃等）</td>
+        </tr>
+        <tr id="attr-0x0002">
+          <td><code>0x0002</code></td>
+          <td>UpTime<br/><span class="attr-cn">运行时间</span></td>
+          <td>uint64</td>
+          <td>设备自最近一次启动以来已运行的时间，单位<strong>秒</strong>。可用来判断设备是否刚刚重启过</td>
+        </tr>
+        <tr id="attr-0x0003">
+          <td><code>0x0003</code></td>
+          <td>TotalOperationalHours<br/><span class="attr-cn">累计运行小时数</span></td>
+          <td>uint32</td>
+          <td>设备自出厂以来的累计运行小时数（取整）。这个值跨重启持久化保存，用于评估设备使用寿命</td>
+        </tr>
+        <tr id="attr-0x0004">
+          <td><code>0x0004</code></td>
+          <td>BootReason<br/><span class="attr-cn">启动原因</span></td>
+          <td><a href="#enum-boot-reason">BootReasonEnum</a></td>
+          <td>设备最近一次启动的原因（见下方枚举）。排查异常重启时首先检查此字段</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">时间单位注意</div>
+    <p>
+      <code>UpTime</code> 的单位是<strong>秒</strong>，而 <code>TotalOperationalHours</code> 的单位是<strong>小时</strong>。
+      例如 <code>UpTime = 86400</code> 表示已运行 24 小时，而 <code>TotalOperationalHours = 720</code> 表示累计运行了 30 天。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 故障追踪（0x0005-0x0007）====== -->
+  <h3 id="group-faults">故障追踪（0x0005-0x0007）</h3>
+  <p>
+    三个列表属性分别追踪硬件、射频和网络层面的当前活跃故障。
+    正常运行的设备这三个列表都应该为空。一旦出现非空值，说明设备检测到了对应类型的故障。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0005">
+          <td><code>0x0005</code></td>
+          <td>ActiveHardwareFaults<br/><span class="attr-cn">活跃硬件故障</span></td>
+          <td>list&lt;<a href="#enum-hardware-fault">HardwareFaultEnum</a>&gt;</td>
+          <td>当前存在的硬件故障列表。空列表 = 无故障。可能同时包含多个不同类型的故障</td>
+        </tr>
+        <tr id="attr-0x0006">
+          <td><code>0x0006</code></td>
+          <td>ActiveRadioFaults<br/><span class="attr-cn">活跃射频故障</span></td>
+          <td>list&lt;<a href="#enum-radio-fault">RadioFaultEnum</a>&gt;</td>
+          <td>当前存在的射频（无线通信）故障列表。WiFi/BLE/Thread 模块异常时会出现</td>
+        </tr>
+        <tr id="attr-0x0007">
+          <td><code>0x0007</code></td>
+          <td>ActiveNetworkFaults<br/><span class="attr-cn">活跃网络故障</span></td>
+          <td>list&lt;<a href="#enum-network-fault">NetworkFaultEnum</a>&gt;</td>
+          <td>当前存在的网络层故障列表。如连接失败、网络干扰等</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">故障列表与事件的关系</div>
+    <p>
+      这三个列表记录的是<strong>当前</strong>存在的故障。当故障状态发生变化时（新增或恢复），设备会同时发出对应的变更事件
+      （<a href="#event-0x00">HardwareFaultChange</a>、<a href="#event-0x01">RadioFaultChange</a>、<a href="#event-0x02">NetworkFaultChange</a>），
+      事件中包含变化前后的完整列表，方便追踪故障的出现和恢复过程。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 测试配置（0x0008）====== -->
+  <h3 id="group-test">测试配置（0x0008）</h3>
+  <p>与认证测试相关的配置属性。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0008">
+          <td><code>0x0008</code></td>
+          <td>TestEventTriggersEnabled<br/><span class="attr-cn">测试触发器启用</span></td>
+          <td>bool</td>
+          <td>标识设备是否启用了 <code>TestEventTrigger</code> 命令。生产设备<strong>必须</strong>设为 <code>false</code>。如果在已上市的产品上读到 <code>true</code>，说明厂商的安全配置有缺陷</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 枚举速查 ====== -->
+  <h2 id="enums">枚举速查</h2>
+  <p>GeneralDiagnostics 涉及多个枚举类型，下面逐一列出所有枚举值。</p>
+
+  <!-- BootReasonEnum -->
+  <h3 id="enum-boot-reason">BootReasonEnum —— 启动原因</h3>
+  <p>描述设备最近一次启动的原因，对应 <code>BootReason (0x0004)</code> 属性和 <a href="#event-0x03">BootReason 事件</a>。</p>
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Unspecified</span>
+        <span class="enum-desc">未指定 —— 设备无法确定启动原因</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">PowerOnReboot</span>
+        <span class="enum-desc">正常上电 —— 设备接通电源后启动</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">BrownOutReset</span>
+        <span class="enum-desc">欠压重启 —— 电源电压降到临界值以下触发复位</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">SoftwareWatchdogReset</span>
+        <span class="enum-desc">软件看门狗重启 —— 固件运行异常，看门狗定时器超时触发复位</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">4</span>
+      <div>
+        <span class="enum-name">HardwareWatchdogReset</span>
+        <span class="enum-desc">硬件看门狗重启 —— 硬件级别的看门狗超时，通常比软件看门狗更严重</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">5</span>
+      <div>
+        <span class="enum-name">SoftwareUpdateCompleted</span>
+        <span class="enum-desc">固件更新完成 —— OTA 升级成功后自动重启</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">6</span>
+      <div>
+        <span class="enum-name">SoftwareReset</span>
+        <span class="enum-desc">软件重启 —— 由软件主动触发的重启（如远程重启命令、恢复出厂设置）</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HardwareFaultEnum -->
+  <h3 id="enum-hardware-fault">HardwareFaultEnum —— 硬件故障</h3>
+  <p>描述设备可能遇到的硬件层故障，对应 <code>ActiveHardwareFaults (0x0005)</code> 属性。</p>
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Unspecified</span>
+        <span class="enum-desc">未指定的硬件故障</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Radio</span>
+        <span class="enum-desc">射频模块故障 —— 无线通信硬件异常</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">Sensor</span>
+        <span class="enum-desc">传感器故障 —— 温度、湿度等传感器异常</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">ResettableOverTemp</span>
+        <span class="enum-desc">可恢复过温 —— 温度过高，冷却后可自动恢复</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">4</span>
+      <div>
+        <span class="enum-name">NonResettableOverTemp</span>
+        <span class="enum-desc">不可恢复过温 —— 严重过温，可能已造成永久损坏</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">5</span>
+      <div>
+        <span class="enum-name">PowerSource</span>
+        <span class="enum-desc">电源故障 —— 供电模块异常</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">6</span>
+      <div>
+        <span class="enum-name">VisualDisplayFault</span>
+        <span class="enum-desc">显示屏故障 —— 屏幕或 LED 指示异常</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">7</span>
+      <div>
+        <span class="enum-name">AudioOutputFault</span>
+        <span class="enum-desc">音频输出故障 —— 扬声器或蜂鸣器异常</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">8</span>
+      <div>
+        <span class="enum-name">UserInterfaceFault</span>
+        <span class="enum-desc">用户界面故障 —— 按键、触摸板等输入设备异常</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">9</span>
+      <div>
+        <span class="enum-name">NonVolatileMemoryError</span>
+        <span class="enum-desc">非易失存储错误 —— Flash/EEPROM 读写异常，数据可能丢失</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">10</span>
+      <div>
+        <span class="enum-name">TamperDetected</span>
+        <span class="enum-desc">检测到拆机 —— 设备外壳被打开或传感器触发防拆报警</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RadioFaultEnum -->
+  <h3 id="enum-radio-fault">RadioFaultEnum —— 射频故障</h3>
+  <p>描述设备无线通信模块的故障类型，对应 <code>ActiveRadioFaults (0x0006)</code> 属性。</p>
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Unspecified</span>
+        <span class="enum-desc">未指定的射频故障</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">WiFiFault</span>
+        <span class="enum-desc">WiFi 模块故障</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">CellularFault</span>
+        <span class="enum-desc">蜂窝网络模块故障</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">ThreadFault</span>
+        <span class="enum-desc">Thread 模块故障</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">4</span>
+      <div>
+        <span class="enum-name">NFCFault</span>
+        <span class="enum-desc">NFC 模块故障</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">5</span>
+      <div>
+        <span class="enum-name">BLEFault</span>
+        <span class="enum-desc">蓝牙低功耗模块故障</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">6</span>
+      <div>
+        <span class="enum-name">EthernetFault</span>
+        <span class="enum-desc">以太网模块故障</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- NetworkFaultEnum -->
+  <h3 id="enum-network-fault">NetworkFaultEnum —— 网络故障</h3>
+  <p>描述设备网络层面的故障类型，对应 <code>ActiveNetworkFaults (0x0007)</code> 属性。</p>
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Unspecified</span>
+        <span class="enum-desc">未指定的网络故障</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">HardwareFailure</span>
+        <span class="enum-desc">网络硬件故障 —— 网卡或物理连接异常</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">NetworkJammed</span>
+        <span class="enum-desc">网络干扰 —— 检测到信道拥塞或电磁干扰</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">ConnectionFailed</span>
+        <span class="enum-desc">连接失败 —— 无法建立或维持网络连接</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- InterfaceTypeEnum -->
+  <h3 id="enum-interface-type">InterfaceTypeEnum —— 网络接口类型</h3>
+  <p>描述网络接口的物理类型，对应 <a href="#struct-network-interface">NetworkInterface</a> 结构体中的 <code>Type</code> 字段。</p>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Unspecified</span>
+        <span class="enum-desc">未指定类型</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">WiFi</span>
+        <span class="enum-desc">WiFi 无线接口</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">Ethernet</span>
+        <span class="enum-desc">以太网有线接口</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">Cellular</span>
+        <span class="enum-desc">蜂窝移动网络接口</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">4</span>
+      <div>
+        <span class="enum-name">Thread</span>
+        <span class="enum-desc">Thread 网格网络接口</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== 数据结构 ====== -->
+  <h2 id="structs">数据结构</h2>
+
+  <h3 id="struct-network-interface">NetworkInterface 结构体</h3>
+  <p>描述一个网络接口的完整信息，是 <code>NetworkInterfaces (0x0000)</code> 属性中每个列表元素的结构。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Name</td>
+          <td>string (max 32)</td>
+          <td>接口名称，如 <code>"wlan0"</code>、<code>"eth0"</code>、<code>"Thread"</code></td>
+        </tr>
+        <tr>
+          <td>IsOperational</td>
+          <td>bool</td>
+          <td>接口是否正在运行并可用于通信</td>
+        </tr>
+        <tr>
+          <td>OffPremiseServicesReachableIPv4</td>
+          <td>bool / null</td>
+          <td>通过此接口的 IPv4 是否可达外部（互联网）服务。<code>null</code> = 未知</td>
+        </tr>
+        <tr>
+          <td>OffPremiseServicesReachableIPv6</td>
+          <td>bool / null</td>
+          <td>通过此接口的 IPv6 是否可达外部服务。<code>null</code> = 未知</td>
+        </tr>
+        <tr>
+          <td>HardwareAddress</td>
+          <td>octstr (6 or 8 bytes)</td>
+          <td>接口的硬件地址（MAC 地址）。WiFi/Ethernet 为 6 字节，IEEE 802.15.4（Thread）为 8 字节</td>
+        </tr>
+        <tr>
+          <td>IPv4Addresses</td>
+          <td>list&lt;octstr&gt;</td>
+          <td>分配给此接口的所有 IPv4 地址列表</td>
+        </tr>
+        <tr>
+          <td>IPv6Addresses</td>
+          <td>list&lt;octstr&gt;</td>
+          <td>分配给此接口的所有 IPv6 地址列表（通常包含链路本地地址和全局地址）</td>
+        </tr>
+        <tr>
+          <td>Type</td>
+          <td><a href="#enum-interface-type">InterfaceTypeEnum</a></td>
+          <td>接口的物理类型</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>NetworkInterface 数据示例：</p>
+  <pre><code set:html={networkInterfaceExample} /></pre>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 事件 ====== -->
+  <h2 id="events">事件（Events）</h2>
+  <p>
+    GeneralDiagnostics 定义了 4 个事件，均为 <strong>Critical</strong> 优先级。
+    前三个分别对应硬件/射频/网络故障状态的变更通知，第四个是设备启动原因通知。
+    订阅这些事件可以实时感知设备健康状态的变化。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>优先级</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#event-0x00">
+          <td><a href="#event-0x00"><code>0x00</code></a></td>
+          <td>HardwareFaultChange</td>
+          <td class="col-required">Critical</td>
+          <td>硬件故障列表发生变化</td>
+        </tr>
+        <tr class="clickable-row" data-href="#event-0x01">
+          <td><a href="#event-0x01"><code>0x01</code></a></td>
+          <td>RadioFaultChange</td>
+          <td class="col-required">Critical</td>
+          <td>射频故障列表发生变化</td>
+        </tr>
+        <tr class="clickable-row" data-href="#event-0x02">
+          <td><a href="#event-0x02"><code>0x02</code></a></td>
+          <td>NetworkFaultChange</td>
+          <td class="col-required">Critical</td>
+          <td>网络故障列表发生变化</td>
+        </tr>
+        <tr class="clickable-row" data-href="#event-0x03">
+          <td><a href="#event-0x03"><code>0x03</code></a></td>
+          <td>BootReason</td>
+          <td class="col-required">Critical</td>
+          <td>设备启动时上报启动原因</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 事件详解 -->
+  <h3 id="event-0x00">HardwareFaultChange —— 硬件故障变更（0x00）</h3>
+  <p>
+    当设备的硬件故障状态发生变化时触发 —— 无论是新增故障还是故障恢复。
+    事件数据中同时包含变化前后的完整故障列表，方便对比分析。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Current</td>
+          <td>list&lt;<a href="#enum-hardware-fault">HardwareFaultEnum</a>&gt;</td>
+          <td>变化后的当前硬件故障列表（与 <code>ActiveHardwareFaults</code> 属性一致）</td>
+        </tr>
+        <tr>
+          <td>Previous</td>
+          <td>list&lt;<a href="#enum-hardware-fault">HardwareFaultEnum</a>&gt;</td>
+          <td>变化前的硬件故障列表</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>解读示例</summary>
+    <div class="scenario-content">
+      <p>
+        假设收到事件 <code>Previous = [3]</code>，<code>Current = [3, 9]</code>。
+        说明之前已有「可恢复过温（3）」故障，现在又新增了「非易失存储错误（9）」。
+        如果后续收到 <code>Previous = [3, 9]</code>，<code>Current = [9]</code>，说明过温故障已恢复，但存储错误仍在。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#events">&#8593; 返回事件列表</a></p>
+
+  <h3 id="event-0x01">RadioFaultChange —— 射频故障变更（0x01）</h3>
+  <p>当设备的射频故障状态发生变化时触发。结构与 HardwareFaultChange 相同。</p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Current</td>
+          <td>list&lt;<a href="#enum-radio-fault">RadioFaultEnum</a>&gt;</td>
+          <td>变化后的当前射频故障列表</td>
+        </tr>
+        <tr>
+          <td>Previous</td>
+          <td>list&lt;<a href="#enum-radio-fault">RadioFaultEnum</a>&gt;</td>
+          <td>变化前的射频故障列表</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#events">&#8593; 返回事件列表</a></p>
+
+  <h3 id="event-0x02">NetworkFaultChange —— 网络故障变更（0x02）</h3>
+  <p>当设备的网络故障状态发生变化时触发。结构与 HardwareFaultChange 相同。</p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Current</td>
+          <td>list&lt;<a href="#enum-network-fault">NetworkFaultEnum</a>&gt;</td>
+          <td>变化后的当前网络故障列表</td>
+        </tr>
+        <tr>
+          <td>Previous</td>
+          <td>list&lt;<a href="#enum-network-fault">NetworkFaultEnum</a>&gt;</td>
+          <td>变化前的网络故障列表</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#events">&#8593; 返回事件列表</a></p>
+
+  <h3 id="event-0x03">BootReason —— 启动原因事件（0x03）</h3>
+  <p>
+    设备每次启动时都会发出此事件，上报启动的原因。
+    这是排查设备异常重启的第一手线索 —— 配合 <code>RebootCount</code> 属性使用效果更佳。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>BootReason</td>
+          <td><a href="#enum-boot-reason">BootReasonEnum</a></td>
+          <td>本次启动的原因</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>解读示例</summary>
+    <div class="scenario-content">
+      <p>
+        收到 <code>BootReason = 3（SoftwareWatchdogReset）</code>，说明设备因固件异常被看门狗强制重启。
+        如果短时间内多次收到同一原因的 BootReason 事件，强烈建议联系厂商排查固件问题。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#events">&#8593; 返回事件列表</a></p>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>一个正常运行中的 WiFi 智能设备的 GeneralDiagnostics Cluster 读取结果：</p>
+
+  <pre><code set:html={exampleData} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发提示</div>
+    <p>
+      正常设备的三个故障列表（0x0005 ~ 0x0007）都应该为空数组。如果读到非空值，说明设备当前存在异常。
+      配合 <code>BootReason (0x0004)</code> 和 <code>RebootCount (0x0001)</code> 可以初步判断设备的稳定性 ——
+      频繁重启 + 看门狗原因 + 硬件故障列表非空，基本可以断定设备硬件有问题。
+    </p>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <details class="scenario">
+    <summary>场景 1：设备健康状态总览</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>读取 <code>UpTime (0x0002)</code> 确认设备运行时间，判断是否刚刚重启过</li>
+        <li>读取 <code>BootReason (0x0004)</code>，如果不是 PowerOnReboot(1) 或 SoftwareReset(6)，可能存在异常</li>
+        <li>读取 <code>ActiveHardwareFaults (0x0005)</code>、<code>ActiveRadioFaults (0x0006)</code>、<code>ActiveNetworkFaults (0x0007)</code>，确认无活跃故障</li>
+        <li>读取 <code>RebootCount (0x0001)</code>，如果值异常高，配合 <code>TotalOperationalHours (0x0003)</code> 计算平均重启频率</li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 2：排查设备离线问题</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>设备重新上线后，读取 <code>BootReason (0x0004)</code> —— 看是重启了还是只是网络断开</li>
+        <li>读取 <code>NetworkInterfaces (0x0000)</code>，检查 <code>IsOperational</code> 和 <code>OffPremiseServicesReachableIPv4</code> 状态</li>
+        <li>检查 <code>ActiveNetworkFaults (0x0007)</code>，看是否有 ConnectionFailed(3) 或 NetworkJammed(2)</li>
+        <li>订阅 <code>NetworkFaultChange</code> 事件，监控后续是否再次出现网络异常</li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 3：固件更新后验证</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>OTA 升级完成后，设备应自动重启</li>
+        <li>读取 <code>BootReason (0x0004)</code>，期望值为 <code>SoftwareUpdateCompleted (5)</code></li>
+        <li>如果是 <code>SoftwareWatchdogReset (3)</code> 或 <code>HardwareWatchdogReset (4)</code>，说明新固件可能有问题</li>
+        <li>持续监控 <code>ActiveHardwareFaults</code> 和 <code>RebootCount</code>，确保新版本运行稳定</li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 4：生产安全检查</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>读取 <code>TestEventTriggersEnabled (0x0008)</code>，<strong>必须</strong>为 <code>false</code></li>
+        <li>如果为 <code>true</code>，设备未关闭测试模式，存在安全风险 —— 攻击者可通过 TestEventTrigger 命令操纵设备行为</li>
+        <li>这个检查通常在产品出厂前和安全审计时执行</li>
+      </ol>
+    </div>
+  </details>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .col-required {
+    color: #dc2626;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-required {
+    color: #f87171;
+  }
+
+  .col-optional {
+    color: #16a34a;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-optional {
+    color: #4ade80;
+  }
+
+  .attr-cn {
+    font-size: 0.8125rem;
+    color: #6b7280;
+  }
+
+  :global(.dark) .attr-cn {
+    color: #9ca3af;
+  }
+</style>

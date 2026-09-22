@@ -1,0 +1,956 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- ESA 基本信息 ---
+  "0x0000": 0,              // ESAType = EVSE（电动车充电桩）
+  "0x0001": false,          // ESACanGenerate = false（只消耗不产生能源）
+  "0x0002": 1,              // ESAState = Online（在线运行中）
+
+  // --- 功率范围 ---
+  "0x0003": 0,              // AbsMinPower = 0 mW（可完全停止消耗）
+  "0x0004": 7200000,        // AbsMaxPower = 7200000 mW（最大 7.2 kW）
+
+  // --- 功率调整能力 ---
+  "0x0005": {               // PowerAdjustmentCapability
+    "powerAdjustCapability": [
+      {
+        "minPower": 1400000,       // 最低可调功率 1.4 kW
+        "maxPower": 7200000,       // 最高可调功率 7.2 kW
+        "minDuration": 60,         // 最短调整持续 60 秒
+        "maxDuration": 28800       // 最长调整持续 8 小时
+      }
+    ],
+    "cause": 0                     // NoRateChange（无费率变化触发）
+  },
+
+  // --- 预测 ---
+  "0x0006": {               // Forecast
+    "forecastID": 1,
+    "activeSlotNumber": 0,
+    "startTime": 1700000000,
+    "endTime": 1700028800,
+    "slots": [
+      {
+        "minDuration": 3600,
+        "maxDuration": 7200,
+        "defaultDuration": 5400,
+        "nominalPower": 7200000,
+        "minPower": 1400000,
+        "maxPower": 7200000
+      }
+    ]
+  },
+
+  // --- 退出状态 ---
+  "0x0007": 0               // OptOutState = NoOptOut（未退出任何优化）
+}`;
+---
+
+<DocLayout
+  title="设备能源管理 Cluster · DeviceEnergyManagement（0x0098）"
+  description="Matter DeviceEnergyManagement Cluster（0x0098）完整参考 — PowerAdjustRequest/ModifyForecastRequest 等命令、ESAType/Forecast/PowerAdjustmentCapability 等属性定义、Feature 位图、枚举值速查与数据示例。"
+  type="article"
+>
+  <h1>设备能源管理 Cluster（DeviceEnergyManagement）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x0098</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 具有能源管理能力的设备端点
+  </p>
+  <p>
+    DeviceEnergyManagement（DEM）是 Matter 1.4 引入的能源管理核心 Cluster，
+    用于让能源管理系统（EMS）与各种能源消耗或产生设备协商功率调整、预测用电计划和优化能源使用。
+    它适用于电动车充电桩（EVSE）、热泵、储能电池、太阳能系统、洗碗机、洗衣机等各类 ESA（Energy Smart Appliance）设备。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">ESA（Energy Smart Appliance）</div>
+    <p>
+      ESA 是 Matter 能源管理体系中的核心概念，指具有能源感知和管理能力的智能设备。
+      每个 ESA 通过 <code>ESAType</code> 标识自己的设备类别，通过 <code>ESAState</code> 报告当前状态，
+      并借助 <strong>Forecast</strong>（预测）向 EMS 声明自己的用电计划。EMS 根据这些信息发出功率调整、时间调整等优化指令。
+    </p>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">功率单位</div>
+    <p>
+      DeviceEnergyManagement Cluster 中所有功率属性的单位都是 <strong>毫瓦（mW）</strong>。
+      例如 <code>AbsMaxPower = 7200000</code> 表示最大功率 <strong>7.2 kW</strong>（7200 W）。
+      读写功率属性时务必做好单位换算。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#commands">命令列表</a>
+    <span class="nav-sep">|</span>
+    <a href="#attributes">属性详解</a>
+    <span class="nav-sep">|</span>
+    <a href="#features">Feature 位图</a>
+    <span class="nav-sep">|</span>
+    <a href="#example-data">示例数据</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">常见场景</a>
+  </nav>
+
+  <!-- ====== 命令（Commands）====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    DeviceEnergyManagement Cluster 共有 8 个命令，分别对应不同的 Feature 能力。
+    EMS（能源管理系统）通过这些命令调整设备的功率、启动时间、运行状态和用电预测。
+    点击下方表格中的命令 ID 可跳转到对应的详细说明。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>说明</th>
+          <th>Feature 要求</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#cmd-0x00">
+          <td><a href="#cmd-0x00"><code>0x00</code></a></td>
+          <td>PowerAdjustRequest</td>
+          <td>请求设备调整到指定功率</td>
+          <td class="col-feature">PA</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x01">
+          <td><a href="#cmd-0x01"><code>0x01</code></a></td>
+          <td>CancelPowerAdjustRequest</td>
+          <td>取消正在进行的功率调整</td>
+          <td class="col-feature">PA</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x02">
+          <td><a href="#cmd-0x02"><code>0x02</code></a></td>
+          <td>StartTimeAdjustRequest</td>
+          <td>请求调整预测的启动时间</td>
+          <td class="col-feature">STA</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x03">
+          <td><a href="#cmd-0x03"><code>0x03</code></a></td>
+          <td>PauseRequest</td>
+          <td>请求设备暂停运行</td>
+          <td class="col-feature">PAU</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x04">
+          <td><a href="#cmd-0x04"><code>0x04</code></a></td>
+          <td>ResumeRequest</td>
+          <td>请求设备恢复运行</td>
+          <td class="col-feature">PAU</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x05">
+          <td><a href="#cmd-0x05"><code>0x05</code></a></td>
+          <td>ModifyForecastRequest</td>
+          <td>修改设备的用电预测</td>
+          <td class="col-feature">FA</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x06">
+          <td><a href="#cmd-0x06"><code>0x06</code></a></td>
+          <td>RequestConstraintBasedForecast</td>
+          <td>基于约束条件请求设备重新生成预测</td>
+          <td class="col-feature">CON</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x07">
+          <td><a href="#cmd-0x07"><code>0x07</code></a></td>
+          <td>CancelRequest</td>
+          <td>取消所有进行中的优化请求</td>
+          <td class="col-feature">STA | PAU | FA | CON</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 命令详解 ====== -->
+  <h3 id="cmd-0x00">PowerAdjustRequest -- 功率调整请求（0x00）</h3>
+  <p>
+    请求设备在指定时间段内调整到目标功率。EMS 用这个命令在电价高峰时段降低设备功率、
+    或在电价低谷时段提高功率来优化用电成本。执行成功后，<code>ESAState</code> 变为 <code>PowerAdjustActive (3)</code>。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Power</td>
+          <td>int64</td>
+          <td>目标功率，单位 mW。必须在设备的 PowerAdjustmentCapability 范围内</td>
+        </tr>
+        <tr>
+          <td>Duration</td>
+          <td>uint32</td>
+          <td>调整持续时间，单位秒。必须在设备声明的 minDuration ~ maxDuration 范围内</td>
+        </tr>
+        <tr>
+          <td>Cause</td>
+          <td>AdjustmentCauseEnum</td>
+          <td>调整原因：<code>0</code> = LocalOptimization，<code>1</code> = GridOptimization</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        电价高峰期间，EMS 向 EVSE 发送 <code>PowerAdjustRequest(Power=1400000, Duration=7200, Cause=1)</code>，
+        将充电功率从 7.2 kW 降到 1.4 kW 持续 2 小时。设备会在功率调整期间持续以低功率充电，
+        到期后自动恢复正常功率。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x01">CancelPowerAdjustRequest -- 取消功率调整（0x01）</h3>
+  <p>
+    取消正在进行的功率调整，设备立即恢复到正常运行状态。无参数。
+    执行成功后，<code>ESAState</code> 从 <code>PowerAdjustActive</code> 恢复为 <code>Online</code>。
+  </p>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        EMS 之前请求了降功率运行，但电网负荷突然下降，不再需要限制。
+        发送 CancelPowerAdjustRequest 让设备恢复全速运行。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x02">StartTimeAdjustRequest -- 启动时间调整（0x02）</h3>
+  <p>
+    请求设备将预测（Forecast）中的启动时间调整到指定时刻。
+    用于在不改变总用电量的前提下，将设备的运行时段从高峰移到低谷。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>RequestedStartTime</td>
+          <td>epoch-s</td>
+          <td>请求的新启动时间（UTC 时间戳）</td>
+        </tr>
+        <tr>
+          <td>Cause</td>
+          <td>AdjustmentCauseEnum</td>
+          <td>调整原因：<code>0</code> = LocalOptimization，<code>1</code> = GridOptimization</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        洗衣机预计 18:00 启动洗涤程序，但 EMS 发现 18:00-20:00 是用电高峰。
+        发送 <code>StartTimeAdjustRequest(RequestedStartTime=22:00的UTC时间戳, Cause=1)</code>，
+        将洗涤推迟到 22:00 低谷时段启动。设备会在新的时间自动开始运行。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x03">PauseRequest -- 暂停运行（0x03）</h3>
+  <p>
+    请求设备暂停当前运行。仅适用于支持暂停的设备（PAU Feature）。
+    执行成功后，<code>ESAState</code> 变为 <code>Paused (4)</code>。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Duration</td>
+          <td>uint32</td>
+          <td>暂停持续时间，单位秒。到期后设备自动恢复运行</td>
+        </tr>
+        <tr>
+          <td>Cause</td>
+          <td>AdjustmentCauseEnum</td>
+          <td>暂停原因：<code>0</code> = LocalOptimization，<code>1</code> = GridOptimization</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        洗碗机正在运行，EMS 检测到电网负荷即将达到峰值。
+        发送 <code>PauseRequest(Duration=1800, Cause=1)</code> 暂停洗碗机 30 分钟。
+        设备在暂停期间保持当前状态，30 分钟后自动恢复洗涤程序。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x04">ResumeRequest -- 恢复运行（0x04）</h3>
+  <p>
+    请求设备恢复已暂停的运行。无参数。
+    执行成功后，<code>ESAState</code> 从 <code>Paused</code> 恢复为 <code>Online</code>。
+  </p>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x05">ModifyForecastRequest -- 修改预测（0x05）</h3>
+  <p>
+    修改设备当前 Forecast 中一个或多个 Slot 的功率和时间参数。
+    EMS 通过此命令直接调整设备的用电计划，比如降低某个时段的预期功率。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ForecastID</td>
+          <td>uint32</td>
+          <td>要修改的 Forecast ID，必须与当前 Forecast 属性中的 forecastID 匹配</td>
+        </tr>
+        <tr>
+          <td>SlotAdjustments</td>
+          <td>list</td>
+          <td>Slot 调整列表，每项包含 SlotIndex、NominalPower、Duration 等字段</td>
+        </tr>
+        <tr>
+          <td>Cause</td>
+          <td>AdjustmentCauseEnum</td>
+          <td>调整原因：<code>0</code> = LocalOptimization，<code>1</code> = GridOptimization</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        EVSE 的 Forecast 显示将在 Slot 0 以 7.2 kW 充电 2 小时。EMS 希望将其分成两段：
+        先以 3.6 kW 充 1 小时（避开高峰），再以 7.2 kW 充 1 小时。
+        通过 ModifyForecastRequest 修改 Slot 参数实现这种分段充电策略。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x06">RequestConstraintBasedForecast -- 基于约束请求预测（0x06）</h3>
+  <p>
+    向设备提供一组功率/能量约束条件，请求设备据此重新生成 Forecast。
+    与 ModifyForecastRequest 直接修改参数不同，这个命令告诉设备"你自己想办法满足这些约束"。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Constraints</td>
+          <td>list</td>
+          <td>约束条件列表。每项包含 StartTime、Duration、NominalPower / MaximumEnergy 等限制</td>
+        </tr>
+        <tr>
+          <td>Cause</td>
+          <td>AdjustmentCauseEnum</td>
+          <td>约束原因：<code>0</code> = LocalOptimization，<code>1</code> = GridOptimization</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        EMS 知道明天 14:00-16:00 电网可能过载，向热泵发送约束：
+        "14:00-16:00 最大功率不超过 2 kW"。热泵根据约束自行调整内部运行计划，
+        可能选择提前预冷或推迟启动，以确保在约束时段内不超过 2 kW。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x07">CancelRequest -- 取消请求（0x07）</h3>
+  <p>
+    取消所有当前进行中的优化请求（StartTimeAdjust、Pause、ModifyForecast、ConstraintBasedForecast），
+    设备恢复到原始的自主运行计划。无参数。
+    需要设备支持 STA、PAU、FA 或 CON 中的至少一个 Feature。
+  </p>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        EMS 此前发出了多项优化请求，现在需要释放所有限制让设备恢复自主运行。
+        发送 CancelRequest 一次性清除所有进行中的时间调整、暂停和预测修改。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 属性详解 ====== -->
+  <h2 id="attributes">属性详解</h2>
+  <p>DeviceEnergyManagement Cluster 的属性按功能分为三组。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+
+  <!-- 属性汇总表 -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>分组</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- ESA 基本信息 -->
+        <tr class="clickable-row" data-href="#attr-0x0000">
+          <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
+          <td>ESAType</td>
+          <td>ESATypeEnum</td>
+          <td><a href="#group-esa">ESA 基本信息</a></td>
+          <td>设备类型标识</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0001">
+          <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
+          <td>ESACanGenerate</td>
+          <td>bool</td>
+          <td><a href="#group-esa">ESA 基本信息</a></td>
+          <td>设备是否能产生能源</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0002">
+          <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
+          <td>ESAState</td>
+          <td>ESAStateEnum</td>
+          <td><a href="#group-esa">ESA 基本信息</a></td>
+          <td>设备当前能源管理状态</td>
+        </tr>
+        <!-- 功率范围 -->
+        <tr class="clickable-row" data-href="#attr-0x0003">
+          <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
+          <td>AbsMinPower</td>
+          <td>int64</td>
+          <td><a href="#group-power">功率与调整</a></td>
+          <td>设备绝对最小功率 (mW)</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0004">
+          <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
+          <td>AbsMaxPower</td>
+          <td>int64</td>
+          <td><a href="#group-power">功率与调整</a></td>
+          <td>设备绝对最大功率 (mW)</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0005">
+          <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
+          <td>PowerAdjustmentCapability</td>
+          <td>struct / null</td>
+          <td><a href="#group-power">功率与调整</a></td>
+          <td>功率可调范围和时间限制</td>
+        </tr>
+        <!-- 预测与优化 -->
+        <tr class="clickable-row" data-href="#attr-0x0006">
+          <td><a href="#attr-0x0006"><code>0x0006</code></a></td>
+          <td>Forecast</td>
+          <td>struct / null</td>
+          <td><a href="#group-forecast">预测与优化</a></td>
+          <td>设备的用电/产电预测计划</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0007">
+          <td><a href="#attr-0x0007"><code>0x0007</code></a></td>
+          <td>OptOutState</td>
+          <td>OptOutStateEnum</td>
+          <td><a href="#group-forecast">预测与优化</a></td>
+          <td>用户退出优化的状态</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== ESA 基本信息（0x0000-0x0002）====== -->
+  <h3 id="group-esa">ESA 基本信息（0x0000-0x0002）</h3>
+  <p>描述设备的类型、能源产生能力和当前状态。这三个属性是所有 DEM 设备的基础属性。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0000">
+          <td><code>0x0000</code></td>
+          <td>ESAType<br/><span class="attr-cn">设备类型</span></td>
+          <td>ESATypeEnum</td>
+          <td>标识 ESA 设备的类型。EMS 根据此值了解设备的能源特性和调度策略。见下方枚举</td>
+        </tr>
+        <tr id="attr-0x0001">
+          <td><code>0x0001</code></td>
+          <td>ESACanGenerate<br/><span class="attr-cn">可产生能源</span></td>
+          <td>bool</td>
+          <td><code>true</code> 表示设备可以向电网输出能源（如太阳能逆变器、储能电池放电）。<code>false</code> 表示设备只消耗能源</td>
+        </tr>
+        <tr id="attr-0x0002">
+          <td><code>0x0002</code></td>
+          <td>ESAState<br/><span class="attr-cn">设备状态</span></td>
+          <td>ESAStateEnum</td>
+          <td>设备当前的能源管理状态。见下方枚举</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>ESATypeEnum 枚举值</h4>
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">EVSE</span>
+        <span class="enum-desc">电动车充电桩</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">SpaceHeating</span>
+        <span class="enum-desc">空间加热（暖气）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">WaterHeating</span>
+        <span class="enum-desc">热水器</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">SpaceCooling</span>
+        <span class="enum-desc">空间制冷（空调）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">4</span>
+      <div>
+        <span class="enum-name">SpaceHeatingCooling</span>
+        <span class="enum-desc">冷暖两用（热泵）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">5</span>
+      <div>
+        <span class="enum-name">BatteryStorage</span>
+        <span class="enum-desc">储能电池</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">6</span>
+      <div>
+        <span class="enum-name">SolarPV</span>
+        <span class="enum-desc">太阳能光伏</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">7</span>
+      <div>
+        <span class="enum-name">FridgeFreezer</span>
+        <span class="enum-desc">冰箱/冷柜</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">8</span>
+      <div>
+        <span class="enum-name">WashingMachine</span>
+        <span class="enum-desc">洗衣机</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">9</span>
+      <div>
+        <span class="enum-name">Dishwasher</span>
+        <span class="enum-desc">洗碗机</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">10</span>
+      <div>
+        <span class="enum-name">Cooking</span>
+        <span class="enum-desc">烹饪设备</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">11</span>
+      <div>
+        <span class="enum-name">HomeWaterPump</span>
+        <span class="enum-desc">家用水泵</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">12</span>
+      <div>
+        <span class="enum-name">IrrigationWaterPump</span>
+        <span class="enum-desc">灌溉水泵</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">13</span>
+      <div>
+        <span class="enum-name">PoolPump</span>
+        <span class="enum-desc">泳池水泵</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">255</span>
+      <div>
+        <span class="enum-name">Other</span>
+        <span class="enum-desc">其他类型</span>
+      </div>
+    </div>
+  </div>
+
+  <h4>ESAStateEnum 枚举值</h4>
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Offline</span>
+        <span class="enum-desc">离线 -- 设备不参与能源管理</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Online</span>
+        <span class="enum-desc">在线 -- 正常运行，可接受优化指令</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">Fault</span>
+        <span class="enum-desc">故障 -- 设备发生错误，暂停能源管理</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">PowerAdjustActive</span>
+        <span class="enum-desc">功率调整中 -- 正在执行 PowerAdjustRequest</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">4</span>
+      <div>
+        <span class="enum-name">Paused</span>
+        <span class="enum-desc">已暂停 -- 因 PauseRequest 暂停运行</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">ESAState 与命令的关系</div>
+    <p>
+      只有 <code>ESAState = Online (1)</code> 时，设备才接受新的优化命令。
+      处于 <code>Offline</code> 或 <code>Fault</code> 状态时，所有命令都会被拒绝。
+      <code>PowerAdjustActive</code> 状态下只能发送 <code>CancelPowerAdjustRequest</code>，
+      <code>Paused</code> 状态下只能发送 <code>ResumeRequest</code>。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 功率与调整（0x0003-0x0005）====== -->
+  <h3 id="group-power">功率与调整（0x0003-0x0005）</h3>
+  <p>定义设备的功率范围和可调整能力。EMS 在发送 PowerAdjustRequest 之前需要先读取这些属性确认调整范围。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0003">
+          <td><code>0x0003</code></td>
+          <td>AbsMinPower<br/><span class="attr-cn">绝对最小功率</span></td>
+          <td>int64</td>
+          <td>设备可运行的绝对最小功率，单位 mW。可为负值（表示向电网输出）。<code>0</code> 表示设备可完全停止消耗</td>
+        </tr>
+        <tr id="attr-0x0004">
+          <td><code>0x0004</code></td>
+          <td>AbsMaxPower<br/><span class="attr-cn">绝对最大功率</span></td>
+          <td>int64</td>
+          <td>设备可运行的绝对最大功率，单位 mW。例如 <code>7200000</code> 表示 7.2 kW</td>
+        </tr>
+        <tr id="attr-0x0005">
+          <td><code>0x0005</code></td>
+          <td>PowerAdjustmentCapability<br/><span class="attr-cn">功率调整能力</span></td>
+          <td>struct / null</td>
+          <td>描述设备当前可接受的功率调整范围和时间限制。<code>null</code> 表示设备当前不接受功率调整。<strong>需要 PA Feature</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">PowerAdjustmentCapability 结构</div>
+    <p>
+      该属性是一个复合结构，包含 <code>powerAdjustCapability</code>（功率调整能力列表）和 <code>cause</code>（原因）。
+      列表中每个条目定义了一组可调范围：<code>minPower</code> / <code>maxPower</code>（功率范围）和 <code>minDuration</code> / <code>maxDuration</code>（时间范围）。
+      设备可以提供多个不连续的功率调整区间。EMS 在发送 PowerAdjustRequest 时，参数必须落在其中一个区间内。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 预测与优化（0x0006-0x0007）====== -->
+  <h3 id="group-forecast">预测与优化（0x0006-0x0007）</h3>
+  <p>设备的用电预测计划和用户退出优化的状态。Forecast 是 DEM 最核心的数据结构。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0006">
+          <td><code>0x0006</code></td>
+          <td>Forecast<br/><span class="attr-cn">用电预测</span></td>
+          <td>struct / null</td>
+          <td>设备对未来用电或产电的预测计划。包含多个时间 Slot，每个 Slot 定义了时间段和功率参数。<code>null</code> 表示设备没有可用的预测。<strong>需要 PFR 或 SFR Feature</strong></td>
+        </tr>
+        <tr id="attr-0x0007">
+          <td><code>0x0007</code></td>
+          <td>OptOutState<br/><span class="attr-cn">退出优化状态</span></td>
+          <td>OptOutStateEnum</td>
+          <td>用户是否选择退出能源优化。见下方枚举</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">Forecast 结构详解</div>
+    <p>
+      Forecast 包含以下关键字段：<br/>
+      <code>forecastID</code> -- 预测的唯一标识，每次更新递增<br/>
+      <code>activeSlotNumber</code> -- 当前正在执行的 Slot 编号（<code>null</code> 表示尚未开始）<br/>
+      <code>startTime</code> / <code>endTime</code> -- 整个预测的起止时间<br/>
+      <code>slots</code> -- 时间段列表，每个 Slot 包含 <code>minDuration</code>、<code>maxDuration</code>、<code>defaultDuration</code>、
+      <code>nominalPower</code>（标称功率）、<code>minPower</code>、<code>maxPower</code> 等参数
+    </p>
+  </div>
+
+  <h4>OptOutStateEnum 枚举值</h4>
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">NoOptOut</span>
+        <span class="enum-desc">未退出 -- 接受所有优化请求</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">LocalOptOut</span>
+        <span class="enum-desc">退出本地优化 -- 拒绝 LocalOptimization 类型的请求</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">GridOptOut</span>
+        <span class="enum-desc">退出电网优化 -- 拒绝 GridOptimization 类型的请求</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">OptOut</span>
+        <span class="enum-desc">全部退出 -- 拒绝所有优化请求</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">OptOutState 的影响</div>
+    <p>
+      当用户设置了 <code>OptOutState</code> 退出优化后，EMS 发送的相应类型的命令会被设备拒绝。
+      EMS 在发送命令前应先检查此属性，避免发送注定会失败的请求。
+      <code>OptOut (3)</code> 状态下，除了 <code>CancelPowerAdjustRequest</code> 和 <code>CancelRequest</code> 之外的所有命令都会被拒绝。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== Feature 位图 ====== -->
+  <h2 id="features">Feature 位图</h2>
+  <p>DeviceEnergyManagement Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持的能源管理能力。不同 Feature 组合决定了可用的命令和属性：</p>
+
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">Bit 0</span>
+      <div>
+        <span class="enum-name">PA（PowerAdjustment）</span>
+        <span class="enum-desc">功率调整 -- 支持 PowerAdjustRequest / CancelPowerAdjustRequest 命令，提供 PowerAdjustmentCapability 属性</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 1</span>
+      <div>
+        <span class="enum-name">PFR（PowerForecastReporting）</span>
+        <span class="enum-desc">功率预测上报 -- 设备以功率为单位上报 Forecast（每个 Slot 包含功率参数）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 2</span>
+      <div>
+        <span class="enum-name">SFR（StateForecastReporting）</span>
+        <span class="enum-desc">状态预测上报 -- 设备以运行状态为单位上报 Forecast（每个 Slot 描述运行阶段）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 3</span>
+      <div>
+        <span class="enum-name">STA（StartTimeAdjustment）</span>
+        <span class="enum-desc">启动时间调整 -- 支持 StartTimeAdjustRequest 命令，允许 EMS 推迟或提前设备启动</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 4</span>
+      <div>
+        <span class="enum-name">PAU（Pausable）</span>
+        <span class="enum-desc">可暂停 -- 支持 PauseRequest / ResumeRequest 命令，设备可在运行中暂停</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 5</span>
+      <div>
+        <span class="enum-name">FA（ForecastAdjustment）</span>
+        <span class="enum-desc">预测调整 -- 支持 ModifyForecastRequest 命令，允许 EMS 直接修改预测参数</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 6</span>
+      <div>
+        <span class="enum-name">CON（ConstraintBasedAdjustment）</span>
+        <span class="enum-desc">基于约束调整 -- 支持 RequestConstraintBasedForecast 命令，允许 EMS 提供约束让设备自行优化</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">PFR 与 SFR 互斥</div>
+    <p>
+      <strong>PFR</strong>（PowerForecastReporting）和 <strong>SFR</strong>（StateForecastReporting）是互斥的 -- 设备只能选择其中一种预测上报方式。
+      PFR 适用于功率可连续调节的设备（如 EVSE），SFR 适用于按固定程序运行的设备（如洗衣机、洗碗机）。
+      FA 和 CON Feature 需要 PFR 或 SFR 中的至少一个作为前提。
+    </p>
+  </div>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>一个 EVSE（电动车充电桩）在线运行时的 DeviceEnergyManagement Cluster 读取结果：</p>
+
+  <pre><code set:html={exampleData} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发提示</div>
+    <p>
+      所有功率值的单位是毫瓦（mW），需除以 1000 得到瓦（W），再除以 1000 得到千瓦（kW）。
+      <code>Forecast</code> 和 <code>PowerAdjustmentCapability</code> 是复合结构体，解析时需要递归处理嵌套字段。
+      <code>null</code> 值表示该能力当前不可用 -- 例如设备处于 Offline 状态时 PowerAdjustmentCapability 可能为 null。
+    </p>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <details class="scenario">
+    <summary>场景 1：EVSE 分时充电 -- 错峰降低电费</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>读取 <code>ESAType (0x0000)</code> 确认是 EVSE 设备，读取 <code>ESAState (0x0002)</code> 确认为 <code>Online (1)</code></li>
+        <li>读取 <code>PowerAdjustmentCapability (0x0005)</code> 获取可调功率范围（如 1.4 kW ~ 7.2 kW）</li>
+        <li>电价高峰时段（18:00-22:00）：发送 <code>PowerAdjustRequest(Power=1400000, Duration=14400, Cause=1)</code> 降到最低功率</li>
+        <li>订阅 <code>ESAState</code>，确认变为 <code>PowerAdjustActive (3)</code></li>
+        <li>高峰结束后：发送 <code>CancelPowerAdjustRequest</code> 恢复全速充电，或等待 Duration 到期自动恢复</li>
+        <li>全程订阅 <code>Forecast (0x0006)</code> 变化，监控充电进度和预计完成时间</li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 2：洗碗机延迟启动 -- 利用低谷电价</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>用户设置洗碗机准备运行，设备上报 <code>Forecast</code> 显示预计立即启动</li>
+        <li>EMS 检查电价时间表，发现 23:00 后进入低谷电价</li>
+        <li>发送 <code>StartTimeAdjustRequest(RequestedStartTime=23:00的UTC时间戳, Cause=0)</code> 推迟启动</li>
+        <li>洗碗机在 23:00 自动启动洗涤程序，<code>Forecast</code> 中的 <code>activeSlotNumber</code> 开始更新</li>
+        <li>如果用户需要提前使用洗碗机，检查 <code>OptOutState</code>，用户可以通过设备面板退出优化，或 EMS 发送 <code>CancelRequest</code> 取消延迟</li>
+      </ol>
+    </div>
+  </details>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .col-required {
+    color: #dc2626;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-required {
+    color: #f87171;
+  }
+
+  .col-optional {
+    color: #16a34a;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-optional {
+    color: #4ade80;
+  }
+
+  .col-feature {
+    color: #2563eb;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-feature {
+    color: #60a5fa;
+  }
+
+  .attr-cn {
+    font-size: 0.8125rem;
+    color: #6b7280;
+  }
+
+  :global(.dark) .attr-cn {
+    color: #9ca3af;
+  }
+</style>

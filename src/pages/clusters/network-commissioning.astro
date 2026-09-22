@@ -1,0 +1,1341 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const commissioningExample = `{
+  // --- 网络容量 ---
+  "0x00": 1,             // MaxNetworks = 1（最多存 1 个网络凭据）
+  "0x01": [{             // Networks = 已配置的网络列表
+    "networkID": "TXlIb21lV2lGaQ==",  // Base64 编码的 SSID
+    "connected": true                   // 当前已连接
+  }],
+
+  // --- 扫描与连接超时 ---
+  "0x02": 30,            // ScanMaxTimeSeconds = 30 秒
+  "0x03": 60,            // ConnectMaxTimeSeconds = 60 秒
+
+  // --- 接口状态 ---
+  "0x04": true,          // InterfaceEnabled = true（网络接口已启用）
+
+  // --- 上次操作结果 ---
+  "0x05": 0,             // LastNetworkingStatus = Success
+  "0x06": "TXlIb21lV2lGaQ==",  // LastNetworkID（上次操作的网络 ID）
+  "0x07": null           // LastConnectErrorValue = null（无错误）
+}`;
+
+const scanExample = `// Commissioner → Device：扫描 Wi-Fi 网络
+{
+  "invokeRequests": [{
+    "commandPath": {
+      "endpointId": 0,
+      "clusterId": "0x0031",
+      "commandId": "0x00"        // ScanNetworks
+    },
+    "commandFields": {
+      "ssid": null,              // null = 扫描所有网络
+      "breadcrumb": 1            // 配网进度标记
+    }
+  }]
+}
+
+// Device → Commissioner：返回扫描结果
+{
+  "networkingStatus": 0,         // Success
+  "wiFiScanResults": [
+    {
+      "security": 4,             // WPA2-Personal
+      "ssid": "MyHomeWiFi",
+      "bssid": "AA:BB:CC:DD:EE:FF",
+      "channel": 6,
+      "wiFiBand": 0,             // 2.4GHz
+      "rssi": -45
+    },
+    {
+      "security": 8,             // WPA3-Personal
+      "ssid": "Office5G",
+      "bssid": "11:22:33:44:55:66",
+      "channel": 36,
+      "wiFiBand": 1,             // 5GHz
+      "rssi": -62
+    }
+  ]
+}`;
+
+const addWiFiExample = `// 添加 Wi-Fi 网络凭据
+{
+  "invokeRequests": [{
+    "commandPath": {
+      "endpointId": 0,
+      "clusterId": "0x0031",
+      "commandId": "0x02"        // AddOrUpdateWiFiNetwork
+    },
+    "commandFields": {
+      "ssid": "TXlIb21lV2lGaQ==",  // "MyHomeWiFi" 的 Base64
+      "credentials": "cGFzc3dvcmQ=", // 密码的 Base64
+      "breadcrumb": 2
+    }
+  }]
+}
+
+// 设备回复 NetworkConfigResponse
+{
+  "networkingStatus": 0,         // Success
+  "networkIndex": 0              // 存储在索引 0
+}`;
+---
+
+<DocLayout
+  title="网络配置 Cluster · NetworkCommissioning（0x0031）"
+  description="Matter NetworkCommissioning Cluster（0x0031）完整参考 — Wi-Fi/Thread/Ethernet 网络扫描、凭据管理、连接控制命令详解，NetworkCommissioningStatusEnum 枚举速查，配网流程示例。"
+  type="article"
+  prev={{ title: 'Cluster 手册', href: '/clusters/' }}
+>
+  <h1>网络配置 Cluster（NetworkCommissioning）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x0031</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 通常在 <code>Endpoint 0</code>（Root Endpoint）
+  </p>
+  <p>
+    NetworkCommissioning 是 Matter 设备配网过程中最关键的 Cluster，负责管理设备的网络凭据 —— 包括 Wi-Fi 密码、Thread 网络参数或以太网配置。
+    Commissioner（手机 App）通过这个 Cluster 扫描设备周围的可用网络、写入网络凭据、指示设备连接到指定网络。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">核心定位</div>
+    <p>
+      这个 Cluster 是<strong>配网流程的基础设施</strong>。几乎所有 Matter 设备（除了纯以太网设备）都需要通过它完成网络接入。
+      它不控制设备的业务功能，而是让设备「上网」—— 只有网络配置完成后，其他 Cluster 的远程操作才有意义。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#features">Feature 特性</a>
+    <span class="nav-sep">|</span>
+    <a href="#commands">命令列表</a>
+    <span class="nav-sep">|</span>
+    <a href="#attributes">属性详解</a>
+    <span class="nav-sep">|</span>
+    <a href="#enums">枚举与结构体</a>
+    <span class="nav-sep">|</span>
+    <a href="#standard-example">标准示例</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">常见场景</a>
+  </nav>
+
+  <!-- ====== Feature 特性 ====== -->
+  <h2 id="features">Feature 特性（Feature Map）</h2>
+  <p>
+    NetworkCommissioning Cluster 通过 Feature Map 标识设备支持的网络接口类型。
+    一个设备<strong>必须且只能</strong>支持以下三种特性之一（互斥关系）：
+  </p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">Bit 0</span>
+      <div>
+        <span class="enum-name">WI — WiFiNetworkInterface</span>
+        <span class="enum-desc">设备支持 Wi-Fi 网络接口，可扫描 Wi-Fi 网络并存储 SSID + 密码</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 1</span>
+      <div>
+        <span class="enum-name">TH — ThreadNetworkInterface</span>
+        <span class="enum-desc">设备支持 Thread 网络接口，可扫描 Thread 网络并存储 Operational Dataset</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 2</span>
+      <div>
+        <span class="enum-name">ET — EthernetNetworkInterface</span>
+        <span class="enum-desc">设备使用以太网连接，无需扫描或配置凭据（即插即用）</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发提示</div>
+    <p>
+      以太网设备的 NetworkCommissioning Cluster 只有只读属性，不支持任何命令（没有扫描、添加网络等操作）。
+      判断 Feature Map 是开发配网流程的第一步 —— 它决定了后续要调用哪些命令。
+    </p>
+  </div>
+
+  <!-- ====== 命令（Commands）====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    NetworkCommissioning 的命令分为两类：<strong>Client → Server</strong>（Commissioner 发给设备的请求）和
+    <strong>Server → Client</strong>（设备返回的响应）。配网操作是请求-响应模式，每个请求命令都有对应的响应命令。
+  </p>
+
+  <h3>Client → Server（请求命令）</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>说明</th>
+          <th>依赖 Feature</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#cmd-0x00">
+          <td><a href="#cmd-0x00"><code>0x00</code></a></td>
+          <td>ScanNetworks</td>
+          <td>扫描周围可用网络</td>
+          <td>WI 或 TH</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x02">
+          <td><a href="#cmd-0x02"><code>0x02</code></a></td>
+          <td>AddOrUpdateWiFiNetwork</td>
+          <td>添加或更新 Wi-Fi 网络凭据</td>
+          <td>WI</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x03">
+          <td><a href="#cmd-0x03"><code>0x03</code></a></td>
+          <td>AddOrUpdateThreadNetwork</td>
+          <td>添加或更新 Thread 网络凭据</td>
+          <td>TH</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x04">
+          <td><a href="#cmd-0x04"><code>0x04</code></a></td>
+          <td>RemoveNetwork</td>
+          <td>删除已存储的网络凭据</td>
+          <td>WI 或 TH</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x06">
+          <td><a href="#cmd-0x06"><code>0x06</code></a></td>
+          <td>ConnectNetwork</td>
+          <td>指示设备连接到指定网络</td>
+          <td>WI 或 TH</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x08">
+          <td><a href="#cmd-0x08"><code>0x08</code></a></td>
+          <td>ReorderNetwork</td>
+          <td>调整网络优先级顺序</td>
+          <td>WI 或 TH</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Server → Client（响应命令）</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>说明</th>
+          <th>对应请求</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#cmd-0x01">
+          <td><a href="#cmd-0x01"><code>0x01</code></a></td>
+          <td>ScanNetworksResponse</td>
+          <td>返回扫描结果列表</td>
+          <td>ScanNetworks</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x05">
+          <td><a href="#cmd-0x05"><code>0x05</code></a></td>
+          <td>NetworkConfigResponse</td>
+          <td>返回网络配置操作结果</td>
+          <td>Add / Remove / Reorder</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x07">
+          <td><a href="#cmd-0x07"><code>0x07</code></a></td>
+          <td>ConnectNetworkResponse</td>
+          <td>返回网络连接结果</td>
+          <td>ConnectNetwork</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 命令详解 ====== -->
+  <h3 id="cmd-0x00">ScanNetworks —— 扫描网络（0x00）</h3>
+  <p>
+    指示设备扫描周围可用的 Wi-Fi 或 Thread 网络。这通常是配网流程的第一步 —— 让用户看到可以连接的网络列表。
+    设备会返回 <a href="#cmd-0x01">ScanNetworksResponse</a>。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>SSID</td>
+          <td>OctetString / Nullable</td>
+          <td>否</td>
+          <td><code>null</code> = 扫描所有网络；指定值 = 只扫描匹配的 SSID（仅 Wi-Fi）</td>
+        </tr>
+        <tr>
+          <td>Breadcrumb</td>
+          <td>uint64</td>
+          <td>否</td>
+          <td>配网进度标记，Commissioner 用来追踪配网步骤是否按预期执行</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景与注意事项</summary>
+    <div class="scenario-content">
+      <p>Commissioner（App）发起扫描后，设备会在 <code>ScanMaxTimeSeconds</code> 时间内完成扫描并返回结果。扫描期间设备可能无法处理其他命令。Wi-Fi 设备返回 <a href="#struct-wifi-scan">WiFiInterfaceScanResultStruct</a> 列表，Thread 设备返回 <a href="#struct-thread-scan">ThreadInterfaceScanResultStruct</a> 列表。</p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x01">ScanNetworksResponse —— 扫描结果（0x01）</h3>
+  <p>
+    设备完成网络扫描后返回的响应，包含扫描到的网络列表。Wi-Fi 和 Thread 设备返回的结构体不同。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>NetworkingStatus</td>
+          <td><a href="#enum-status">NetworkCommissioningStatusEnum</a></td>
+          <td>操作结果状态码</td>
+        </tr>
+        <tr>
+          <td>DebugText</td>
+          <td>String</td>
+          <td>可选的调试信息（如错误描述）</td>
+        </tr>
+        <tr>
+          <td>WiFiScanResults</td>
+          <td><a href="#struct-wifi-scan">WiFiInterfaceScanResultStruct</a>[]</td>
+          <td>Wi-Fi 扫描结果列表（仅 WI feature）</td>
+        </tr>
+        <tr>
+          <td>ThreadScanResults</td>
+          <td><a href="#struct-thread-scan">ThreadInterfaceScanResultStruct</a>[]</td>
+          <td>Thread 扫描结果列表（仅 TH feature）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x02">AddOrUpdateWiFiNetwork —— 添加/更新 Wi-Fi 网络（0x02）</h3>
+  <p>
+    向设备写入 Wi-Fi 网络凭据（SSID + 密码）。如果设备已存储相同 SSID 的凭据，则更新密码；否则新增一条。
+    设备返回 <a href="#cmd-0x05">NetworkConfigResponse</a>。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>SSID</td>
+          <td>OctetString</td>
+          <td>是</td>
+          <td>目标 Wi-Fi 网络的 SSID（最长 32 字节）</td>
+        </tr>
+        <tr>
+          <td>Credentials</td>
+          <td>OctetString</td>
+          <td>是</td>
+          <td>Wi-Fi 密码（最长 64 字节）</td>
+        </tr>
+        <tr>
+          <td>Breadcrumb</td>
+          <td>uint64</td>
+          <td>否</td>
+          <td>配网进度标记</td>
+        </tr>
+        <tr>
+          <td>NetworkIdentity</td>
+          <td>OctetString</td>
+          <td>否</td>
+          <td>网络身份标识（Matter 1.3+，用于 Per-Device Credentials）</td>
+        </tr>
+        <tr>
+          <td>ClientIdentifier</td>
+          <td>OctetString</td>
+          <td>否</td>
+          <td>客户端标识（Matter 1.3+，用于 Per-Device Credentials）</td>
+        </tr>
+        <tr>
+          <td>PossessionNonce</td>
+          <td>OctetString</td>
+          <td>否</td>
+          <td>持有者证明随机数（Matter 1.3+，用于 Per-Device Credentials）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景与注意事项</summary>
+    <div class="scenario-content">
+      <p>这是配网流程中写入 Wi-Fi 凭据的关键步骤。SSID 和密码都是 OctetString 类型（二进制），通常以 Base64 编码传输。注意：此命令<strong>只是存储凭据</strong>，不会立即连接 —— 需要后续发送 <a href="#cmd-0x06">ConnectNetwork</a> 才会真正连接。</p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x03">AddOrUpdateThreadNetwork —— 添加/更新 Thread 网络（0x03）</h3>
+  <p>
+    向设备写入 Thread 网络凭据（Operational Dataset）。Thread 的凭据是一个完整的 Operational Dataset，
+    包含 PAN ID、Channel、Network Key 等信息。设备返回 <a href="#cmd-0x05">NetworkConfigResponse</a>。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>OperationalDataset</td>
+          <td>OctetString</td>
+          <td>是</td>
+          <td>Thread Operational Dataset（TLV 编码的完整网络参数）</td>
+        </tr>
+        <tr>
+          <td>Breadcrumb</td>
+          <td>uint64</td>
+          <td>否</td>
+          <td>配网进度标记</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景与注意事项</summary>
+    <div class="scenario-content">
+      <p>Thread 网络的凭据不是简单的 SSID + 密码，而是一个包含多种参数的二进制数据块（Operational Dataset）。Commissioner 通常从 Thread Border Router 获取这个 Dataset，然后写入设备。同样需要后续 <a href="#cmd-0x06">ConnectNetwork</a> 才会真正加入 Thread 网络。</p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x04">RemoveNetwork —— 删除网络（0x04）</h3>
+  <p>
+    删除设备上已存储的网络凭据。通过 NetworkID 指定要删除的网络。设备返回 <a href="#cmd-0x05">NetworkConfigResponse</a>。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>NetworkID</td>
+          <td>OctetString</td>
+          <td>是</td>
+          <td>要删除的网络 ID（Wi-Fi 为 SSID，Thread 为 Extended PAN ID）</td>
+        </tr>
+        <tr>
+          <td>Breadcrumb</td>
+          <td>uint64</td>
+          <td>否</td>
+          <td>配网进度标记</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景与注意事项</summary>
+    <div class="scenario-content">
+      <p>用于切换网络时先移除旧凭据，或者恢复出厂设置前清理网络配置。如果删除的是当前连接的网络，设备会断开连接。</p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x05">NetworkConfigResponse —— 网络配置响应（0x05）</h3>
+  <p>
+    设备对 AddOrUpdateWiFiNetwork、AddOrUpdateThreadNetwork、RemoveNetwork、ReorderNetwork 命令的统一响应。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>NetworkingStatus</td>
+          <td><a href="#enum-status">NetworkCommissioningStatusEnum</a></td>
+          <td>操作结果状态码</td>
+        </tr>
+        <tr>
+          <td>DebugText</td>
+          <td>String</td>
+          <td>可选的调试信息</td>
+        </tr>
+        <tr>
+          <td>NetworkIndex</td>
+          <td>uint8</td>
+          <td>被操作的网络在列表中的索引位置</td>
+        </tr>
+        <tr>
+          <td>ClientIdentity</td>
+          <td>OctetString</td>
+          <td>客户端身份（Matter 1.3+，Per-Device Credentials 响应）</td>
+        </tr>
+        <tr>
+          <td>PossessionSignature</td>
+          <td>OctetString</td>
+          <td>持有者证明签名（Matter 1.3+，Per-Device Credentials 响应）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x06">ConnectNetwork —— 连接网络（0x06）</h3>
+  <p>
+    指示设备连接到之前通过 AddOrUpdateWiFiNetwork / AddOrUpdateThreadNetwork 存储的网络。
+    这是配网流程中让设备「真正上网」的那一步。设备返回 <a href="#cmd-0x07">ConnectNetworkResponse</a>。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>NetworkID</td>
+          <td>OctetString</td>
+          <td>是</td>
+          <td>要连接的网络 ID（必须是已存储的网络）</td>
+        </tr>
+        <tr>
+          <td>Breadcrumb</td>
+          <td>uint64</td>
+          <td>否</td>
+          <td>配网进度标记</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景与注意事项</summary>
+    <div class="scenario-content">
+      <p>
+        发送 ConnectNetwork 后，设备会在 <code>ConnectMaxTimeSeconds</code> 时间内尝试连接。
+        <strong>重要</strong>：连接过程中，Commissioner 和设备之间的 BLE 或现有通信链路可能会中断（因为设备切换到了新网络）。
+        Commissioner 需要通过新网络重新发现并连接设备。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x07">ConnectNetworkResponse —— 连接结果（0x07）</h3>
+  <p>
+    设备返回的网络连接结果。如果连接失败，<code>ErrorValue</code> 会包含平台层的错误码，有助于排查问题。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>NetworkingStatus</td>
+          <td><a href="#enum-status">NetworkCommissioningStatusEnum</a></td>
+          <td>连接结果状态码</td>
+        </tr>
+        <tr>
+          <td>DebugText</td>
+          <td>String</td>
+          <td>可选的调试信息</td>
+        </tr>
+        <tr>
+          <td>ErrorValue</td>
+          <td>int32 / Nullable</td>
+          <td>平台层错误码。Wi-Fi 为 <code>Status</code>（802.11 定义），Thread 为 <code>OperationalError</code>（Thread 协议定义）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout callout-warning">
+    <div class="callout-title">ErrorValue 的实际含义</div>
+    <p>
+      <code>ErrorValue</code> 不是 Matter 定义的错误码，而是底层平台（Wi-Fi 芯片驱动或 Thread 协议栈）返回的原始错误码。
+      Wi-Fi 场景下常见的值包括：密码错误（认证失败）、信号太弱（超时）、DHCP 失败等。
+      需要结合具体芯片平台的文档来解读。
+    </p>
+  </div>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x08">ReorderNetwork —— 调整网络优先级（0x08）</h3>
+  <p>
+    调整已存储网络的优先级顺序。设备在重启或网络切换时，会按优先级从高到低尝试连接。
+    设备返回 <a href="#cmd-0x05">NetworkConfigResponse</a>。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>NetworkID</td>
+          <td>OctetString</td>
+          <td>是</td>
+          <td>要调整位置的网络 ID</td>
+        </tr>
+        <tr>
+          <td>NetworkIndex</td>
+          <td>uint8</td>
+          <td>是</td>
+          <td>目标位置索引（0 = 最高优先级）</td>
+        </tr>
+        <tr>
+          <td>Breadcrumb</td>
+          <td>uint64</td>
+          <td>否</td>
+          <td>配网进度标记</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景与注意事项</summary>
+    <div class="scenario-content">
+      <p>当设备存储了多个网络凭据时（MaxNetworks > 1），可以通过此命令调整连接优先级。大多数消费级设备 MaxNetworks 为 1，此命令较少使用。</p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 属性详解 ====== -->
+  <h2 id="attributes">属性详解</h2>
+  <p>NetworkCommissioning Cluster 的属性描述了网络接口的能力和当前状态。点击下方汇总表中的属性 ID 可跳转到详细说明。</p>
+
+  <!-- 属性汇总表 -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>分组</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#attr-0x00">
+          <td><a href="#attr-0x00"><code>0x00</code></a></td>
+          <td>MaxNetworks</td>
+          <td>uint8</td>
+          <td><a href="#attr-capacity">网络容量</a></td>
+          <td>最大可存储网络数</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x01">
+          <td><a href="#attr-0x01"><code>0x01</code></a></td>
+          <td>Networks</td>
+          <td>list&lt;NetworkInfoStruct&gt;</td>
+          <td><a href="#attr-capacity">网络容量</a></td>
+          <td>已配置的网络列表</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x02">
+          <td><a href="#attr-0x02"><code>0x02</code></a></td>
+          <td>ScanMaxTimeSeconds</td>
+          <td>uint8</td>
+          <td><a href="#attr-timing">时间参数</a></td>
+          <td>扫描最大耗时（秒）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x03">
+          <td><a href="#attr-0x03"><code>0x03</code></a></td>
+          <td>ConnectMaxTimeSeconds</td>
+          <td>uint8</td>
+          <td><a href="#attr-timing">时间参数</a></td>
+          <td>连接最大耗时（秒）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x04">
+          <td><a href="#attr-0x04"><code>0x04</code></a></td>
+          <td>InterfaceEnabled</td>
+          <td>bool</td>
+          <td><a href="#attr-status">接口状态</a></td>
+          <td>网络接口是否启用</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x05">
+          <td><a href="#attr-0x05"><code>0x05</code></a></td>
+          <td>LastNetworkingStatus</td>
+          <td>enum8 / null</td>
+          <td><a href="#attr-status">接口状态</a></td>
+          <td>上次网络操作的结果状态</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x06">
+          <td><a href="#attr-0x06"><code>0x06</code></a></td>
+          <td>LastNetworkID</td>
+          <td>octstr / null</td>
+          <td><a href="#attr-status">接口状态</a></td>
+          <td>上次操作涉及的网络 ID</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x07">
+          <td><a href="#attr-0x07"><code>0x07</code></a></td>
+          <td>LastConnectErrorValue</td>
+          <td>int32 / null</td>
+          <td><a href="#attr-status">接口状态</a></td>
+          <td>上次连接失败的平台层错误码</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x08">
+          <td><a href="#attr-0x08"><code>0x08</code></a></td>
+          <td>SupportedWiFiBands</td>
+          <td>list&lt;WiFiBandEnum&gt;</td>
+          <td><a href="#attr-wifi-extra">Wi-Fi 扩展</a></td>
+          <td>支持的 Wi-Fi 频段列表</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x09">
+          <td><a href="#attr-0x09"><code>0x09</code></a></td>
+          <td>SupportedThreadFeatures</td>
+          <td>bitmap16</td>
+          <td><a href="#attr-thread-extra">Thread 扩展</a></td>
+          <td>支持的 Thread 特性位图</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0A">
+          <td><a href="#attr-0x0A"><code>0x0A</code></a></td>
+          <td>ThreadVersion</td>
+          <td>uint16</td>
+          <td><a href="#attr-thread-extra">Thread 扩展</a></td>
+          <td>Thread 协议版本</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 属性分组详解 -->
+
+  <h3 id="attr-capacity">网络容量（0x00-0x01）</h3>
+  <p>描述设备能存储多少个网络凭据，以及当前已配置了哪些网络。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x00">
+          <td><code>0x00</code></td>
+          <td>MaxNetworks<br/><span class="attr-cn">最大网络数</span></td>
+          <td>uint8</td>
+          <td>设备最多可存储的网络凭据数量。大多数消费级设备为 <code>1</code></td>
+        </tr>
+        <tr id="attr-0x01">
+          <td><code>0x01</code></td>
+          <td>Networks<br/><span class="attr-cn">网络列表</span></td>
+          <td>list&lt;NetworkInfoStruct&gt;</td>
+          <td>已配置的网络凭据列表。每项包含 NetworkID（Wi-Fi 的 SSID 或 Thread 的 Extended PAN ID）和连接状态</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>NetworkInfoStruct 结构体</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>NetworkID</td>
+          <td>OctetString (1-32 字节)</td>
+          <td>网络标识。Wi-Fi 为 SSID，Thread 为 Extended PAN ID</td>
+        </tr>
+        <tr>
+          <td>Connected</td>
+          <td>bool</td>
+          <td>是否当前已连接到此网络</td>
+        </tr>
+        <tr>
+          <td>NetworkIdentifier</td>
+          <td>OctetString</td>
+          <td>可选，网络身份标识（Matter 1.3+）</td>
+        </tr>
+        <tr>
+          <td>ClientIdentifier</td>
+          <td>OctetString</td>
+          <td>可选，客户端标识（Matter 1.3+）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发提示</div>
+    <p>
+      Networks 列表<strong>不包含密码</strong> —— 出于安全考虑，网络凭据一旦写入设备就无法读回。
+      你只能看到网络的 ID 和连接状态，无法获取密码原文。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-timing">时间参数（0x02-0x03）</h3>
+  <p>定义扫描和连接操作的最大耗时，帮助 Commissioner 设置合理的超时等待。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x02">
+          <td><code>0x02</code></td>
+          <td>ScanMaxTimeSeconds<br/><span class="attr-cn">扫描超时</span></td>
+          <td>uint8</td>
+          <td>设备完成网络扫描的最大时间（秒）。Commissioner 应至少等待这么长时间再判定超时</td>
+        </tr>
+        <tr id="attr-0x03">
+          <td><code>0x03</code></td>
+          <td>ConnectMaxTimeSeconds<br/><span class="attr-cn">连接超时</span></td>
+          <td>uint8</td>
+          <td>设备完成网络连接的最大时间（秒）。包括 DHCP 获取 IP 的时间</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">超时设置建议</div>
+    <p>
+      实际开发中，App 端的超时时间应该设置为 <code>ScanMaxTimeSeconds + 适当余量</code>（如 +5 秒）。
+      Wi-Fi 设备的扫描通常在 10-30 秒内完成，Thread 设备可能更快。
+      连接超时一般在 30-120 秒，取决于网络环境和 DHCP 响应速度。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-status">接口状态（0x04-0x07）</h3>
+  <p>网络接口的启用状态和上次操作结果，是排查配网问题的核心信息。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x04">
+          <td><code>0x04</code></td>
+          <td>InterfaceEnabled<br/><span class="attr-cn">接口启用</span></td>
+          <td>bool</td>
+          <td>网络接口是否启用。<code>false</code> 时设备不会连接任何网络，扫描和连接命令也可能被拒绝</td>
+        </tr>
+        <tr id="attr-0x05">
+          <td><code>0x05</code></td>
+          <td>LastNetworkingStatus<br/><span class="attr-cn">上次操作状态</span></td>
+          <td><a href="#enum-status">NetworkCommissioningStatusEnum</a> / null</td>
+          <td>上次网络操作的结果状态码。<code>null</code> 表示尚未执行过任何网络操作</td>
+        </tr>
+        <tr id="attr-0x06">
+          <td><code>0x06</code></td>
+          <td>LastNetworkID<br/><span class="attr-cn">上次操作网络</span></td>
+          <td>OctetString / null</td>
+          <td>上次网络操作涉及的网络 ID。配合 LastNetworkingStatus 可定位是哪个网络出了问题</td>
+        </tr>
+        <tr id="attr-0x07">
+          <td><code>0x07</code></td>
+          <td>LastConnectErrorValue<br/><span class="attr-cn">上次连接错误码</span></td>
+          <td>int32 / null</td>
+          <td>上次 ConnectNetwork 失败时的平台层错误码。<code>null</code> 表示无错误或尚未执行过连接</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">排查配网失败</div>
+    <p>
+      配网失败时，优先读取这三个「Last*」属性：<code>LastNetworkingStatus</code> 告诉你大类原因（密码错误？网络找不到？），
+      <code>LastNetworkID</code> 确认是哪个网络，<code>LastConnectErrorValue</code> 给出底层的具体错误码。
+      三者配合使用，能快速定位绝大多数配网问题。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-wifi-extra">Wi-Fi 扩展（0x08）</h3>
+  <p>Matter 1.3 新增的 Wi-Fi 相关属性，仅当 Feature Map 包含 WI 时存在。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x08">
+          <td><code>0x08</code></td>
+          <td>SupportedWiFiBands<br/><span class="attr-cn">支持的 Wi-Fi 频段</span></td>
+          <td>list&lt;<a href="#enum-wifiband">WiFiBandEnum</a>&gt;</td>
+          <td>设备支持的 Wi-Fi 频段列表（如 2.4GHz、5GHz）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-thread-extra">Thread 扩展（0x09-0x0A）</h3>
+  <p>Matter 1.3 新增的 Thread 相关属性，仅当 Feature Map 包含 TH 时存在。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x09">
+          <td><code>0x09</code></td>
+          <td>SupportedThreadFeatures<br/><span class="attr-cn">Thread 特性支持</span></td>
+          <td>bitmap16</td>
+          <td>设备支持的 Thread 协议特性位图</td>
+        </tr>
+        <tr id="attr-0x0A">
+          <td><code>0x0A</code></td>
+          <td>ThreadVersion<br/><span class="attr-cn">Thread 版本</span></td>
+          <td>uint16</td>
+          <td>设备支持的 Thread 协议版本号</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 枚举与结构体 ====== -->
+  <h2 id="enums">枚举与结构体</h2>
+
+  <h3 id="enum-status">NetworkCommissioningStatusEnum</h3>
+  <p>所有网络操作命令的响应都会包含这个状态码，用于表示操作结果。这是排查配网问题时最先看的字段。</p>
+
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Success</span>
+        <span class="enum-desc">操作成功</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">OutOfRange</span>
+        <span class="enum-desc">值超出有效范围</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">BoundsExceeded</span>
+        <span class="enum-desc">已达网络存储上限（MaxNetworks）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">NetworkIDNotFound</span>
+        <span class="enum-desc">指定的网络 ID 在已存储列表中找不到</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">4</span>
+      <div>
+        <span class="enum-name">DuplicateNetworkID</span>
+        <span class="enum-desc">网络 ID 重复（已存在相同 ID）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">5</span>
+      <div>
+        <span class="enum-name">NetworkNotFound</span>
+        <span class="enum-desc">扫描或连接时找不到目标网络（不在空中）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">6</span>
+      <div>
+        <span class="enum-name">RegulatoryError</span>
+        <span class="enum-desc">因法规限制无法使用该网络（如频段在当前国家/地区不合规）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">7</span>
+      <div>
+        <span class="enum-name">AuthFailure</span>
+        <span class="enum-desc">认证失败（通常是 Wi-Fi 密码错误）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">8</span>
+      <div>
+        <span class="enum-name">UnsupportedSecurity</span>
+        <span class="enum-desc">不支持目标网络的安全协议（如设备不支持 WPA3）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">9</span>
+      <div>
+        <span class="enum-name">OtherConnectionFailure</span>
+        <span class="enum-desc">其他连接失败（不属于以上任何类别）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">10</span>
+      <div>
+        <span class="enum-name">IPV6Failed</span>
+        <span class="enum-desc">IPv6 地址获取失败</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">11</span>
+      <div>
+        <span class="enum-name">IPBindFailed</span>
+        <span class="enum-desc">IP 地址绑定失败</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">12</span>
+      <div>
+        <span class="enum-name">UnknownError</span>
+        <span class="enum-desc">未知错误</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">常见错误速查</div>
+    <p>
+      <strong>密码错了</strong> → <code>7 (AuthFailure)</code>；
+      <strong>网络名写错或路由器关了</strong> → <code>5 (NetworkNotFound)</code>；
+      <strong>网络存满了</strong> → <code>2 (BoundsExceeded)</code>；
+      <strong>设备不支持 5GHz</strong> → 扫描结果里就没有该网络，硬连可能得到 <code>8 (UnsupportedSecurity)</code> 或 <code>9 (OtherConnectionFailure)</code>。
+    </p>
+  </div>
+
+  <h3 id="enum-wifiband">WiFiBandEnum</h3>
+  <p>标识 Wi-Fi 工作频段，用于扫描结果和 SupportedWiFiBands 属性。</p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">2G4</span>
+        <span class="enum-desc">2.4 GHz 频段（802.11b/g/n）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">3G65</span>
+        <span class="enum-desc">3.65 GHz 频段</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">5G</span>
+        <span class="enum-desc">5 GHz 频段（802.11a/n/ac）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">6G</span>
+        <span class="enum-desc">6 GHz 频段（802.11ax / Wi-Fi 6E）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">4</span>
+      <div>
+        <span class="enum-name">60G</span>
+        <span class="enum-desc">60 GHz 频段（802.11ad / WiGig）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">5</span>
+      <div>
+        <span class="enum-name">1G</span>
+        <span class="enum-desc">Sub-1 GHz 频段（802.11ah / Wi-Fi HaLow）</span>
+      </div>
+    </div>
+  </div>
+
+  <h3 id="enum-wifi-security">WiFiSecurityBitmap</h3>
+  <p>Wi-Fi 网络的安全类型位图，一个网络可以同时支持多种安全协议（多个 bit 为 1）。</p>
+
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">Bit 0</span>
+      <div>
+        <span class="enum-name">Unencrypted</span>
+        <span class="enum-desc">开放网络，无加密</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 1</span>
+      <div>
+        <span class="enum-name">WEP</span>
+        <span class="enum-desc">WEP 加密（已不安全，逐步淘汰）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 2</span>
+      <div>
+        <span class="enum-name">WPA-PERSONAL</span>
+        <span class="enum-desc">WPA 个人版（PSK）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 3</span>
+      <div>
+        <span class="enum-name">WPA2-PERSONAL</span>
+        <span class="enum-desc">WPA2 个人版（PSK），目前最常见</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 4</span>
+      <div>
+        <span class="enum-name">WPA3-PERSONAL</span>
+        <span class="enum-desc">WPA3 个人版（SAE），更安全的新标准</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">位图读取示例</div>
+    <p>
+      扫描结果中 <code>security = 12</code>（二进制 <code>01100</code>）表示该网络同时支持 WPA2-PERSONAL（Bit 3）和 WPA-PERSONAL（Bit 2）。
+      值为 <code>4</code>（二进制 <code>00100</code>）表示只支持 WPA-PERSONAL。
+    </p>
+  </div>
+
+  <h3 id="struct-wifi-scan">WiFiInterfaceScanResultStruct</h3>
+  <p>Wi-Fi 扫描结果中每个网络的详细信息。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Security</td>
+          <td><a href="#enum-wifi-security">WiFiSecurityBitmap</a></td>
+          <td>安全类型位图</td>
+        </tr>
+        <tr>
+          <td>SSID</td>
+          <td>OctetString (0-32 字节)</td>
+          <td>网络名称</td>
+        </tr>
+        <tr>
+          <td>BSSID</td>
+          <td>OctetString (6 字节)</td>
+          <td>接入点 MAC 地址</td>
+        </tr>
+        <tr>
+          <td>Channel</td>
+          <td>uint16</td>
+          <td>Wi-Fi 信道号</td>
+        </tr>
+        <tr>
+          <td>WiFiBand</td>
+          <td><a href="#enum-wifiband">WiFiBandEnum</a></td>
+          <td>工作频段（2.4G / 5G 等）</td>
+        </tr>
+        <tr>
+          <td>RSSI</td>
+          <td>int8</td>
+          <td>信号强度（dBm），值越大信号越好（通常 -30 极好，-70 一般，-90 很差）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#enums">&#8593; 返回枚举列表</a></p>
+
+  <h3 id="struct-thread-scan">ThreadInterfaceScanResultStruct</h3>
+  <p>Thread 扫描结果中每个网络的详细信息。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>PanId</td>
+          <td>uint16</td>
+          <td>Personal Area Network ID（PAN 标识）</td>
+        </tr>
+        <tr>
+          <td>ExtendedPanId</td>
+          <td>uint64</td>
+          <td>Extended PAN ID（全局唯一网络标识）</td>
+        </tr>
+        <tr>
+          <td>NetworkName</td>
+          <td>String (1-16 字符)</td>
+          <td>Thread 网络名称</td>
+        </tr>
+        <tr>
+          <td>Channel</td>
+          <td>uint16</td>
+          <td>Thread 信道号</td>
+        </tr>
+        <tr>
+          <td>Version</td>
+          <td>uint8</td>
+          <td>Thread 协议版本</td>
+        </tr>
+        <tr>
+          <td>ExtendedAddress</td>
+          <td>OctetString (8 字节)</td>
+          <td>设备扩展 MAC 地址（IEEE EUI-64）</td>
+        </tr>
+        <tr>
+          <td>RSSI</td>
+          <td>int8</td>
+          <td>信号强度（dBm）</td>
+        </tr>
+        <tr>
+          <td>LQI</td>
+          <td>uint8</td>
+          <td>Link Quality Indicator（链路质量指标，0-255，越大越好）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#enums">&#8593; 返回枚举列表</a></p>
+
+  <!-- ====== 标准示例 ====== -->
+  <h2 id="standard-example">标准示例</h2>
+
+  <h3>属性数据示例</h3>
+  <p>以下是一个已配网的 Wi-Fi 设备的典型属性数据：</p>
+  <pre><code set:html={commissioningExample} /></pre>
+
+  <h3>扫描网络流程示例</h3>
+  <p>Commissioner 发起 Wi-Fi 扫描并获取结果：</p>
+  <pre><code set:html={scanExample} /></pre>
+
+  <h3>添加 Wi-Fi 网络示例</h3>
+  <p>向设备写入 Wi-Fi 凭据：</p>
+  <pre><code set:html={addWiFiExample} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发提示</div>
+    <p>
+      SSID 和密码在 Matter 协议中都是 <strong>OctetString</strong>（字节数组），传输时通常使用 Base64 编码。
+      上面示例中的 <code>"TXlIb21lV2lGaQ=="</code> 解码后就是 <code>"MyHomeWiFi"</code>。
+    </p>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <details class="scenario">
+    <summary>场景 1：Wi-Fi 设备配网完整流程</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>Commissioner 通过 BLE 与设备建立 PASE 安全通道</li>
+        <li>读取 <code>FeatureMap</code> 确认是 Wi-Fi 设备（Bit 0 = 1）</li>
+        <li>读取 <code>ScanMaxTimeSeconds (0x02)</code> 获取扫描超时</li>
+        <li>发送 <a href="#cmd-0x00"><code>ScanNetworks (0x00)</code></a>，SSID 传 <code>null</code> 扫描所有网络</li>
+        <li>收到 <a href="#cmd-0x01"><code>ScanNetworksResponse (0x01)</code></a>，展示 Wi-Fi 列表给用户</li>
+        <li>用户选择网络并输入密码</li>
+        <li>发送 <a href="#cmd-0x02"><code>AddOrUpdateWiFiNetwork (0x02)</code></a> 写入 SSID + 密码</li>
+        <li>收到 <a href="#cmd-0x05"><code>NetworkConfigResponse (0x05)</code></a>，确认 <code>NetworkingStatus = 0 (Success)</code></li>
+        <li>发送 <a href="#cmd-0x06"><code>ConnectNetwork (0x06)</code></a> 指示设备连接</li>
+        <li>设备连接 Wi-Fi，通过 <a href="#cmd-0x07"><code>ConnectNetworkResponse (0x07)</code></a> 返回结果</li>
+        <li>Commissioner 通过 Wi-Fi 网络重新发现设备，继续后续配网步骤（NOC 证书安装等）</li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 2：Thread 设备配网</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>Commissioner 通过 BLE 与设备建立 PASE 安全通道</li>
+        <li>读取 <code>FeatureMap</code> 确认是 Thread 设备（Bit 1 = 1）</li>
+        <li>Commissioner 从 Thread Border Router 获取 Operational Dataset</li>
+        <li>发送 <a href="#cmd-0x03"><code>AddOrUpdateThreadNetwork (0x03)</code></a> 写入 Dataset</li>
+        <li>发送 <a href="#cmd-0x06"><code>ConnectNetwork (0x06)</code></a> 指示设备加入 Thread 网络</li>
+        <li>设备加入 Thread 网络后，Commissioner 通过 Thread 网络继续配网</li>
+      </ol>
+      <p>注意：Thread 配网通常不需要先扫描，因为 Dataset 已经包含了目标网络的全部参数。</p>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 3：配网失败排查</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>读取 <code>LastNetworkingStatus (0x05)</code> 查看错误类型</li>
+        <li>读取 <code>LastNetworkID (0x06)</code> 确认是哪个网络</li>
+        <li>读取 <code>LastConnectErrorValue (0x07)</code> 获取平台层错误码</li>
+      </ol>
+      <p>常见问题对照：</p>
+      <ul>
+        <li><strong>Status = 7 (AuthFailure)</strong>：密码错误，让用户重新输入</li>
+        <li><strong>Status = 5 (NetworkNotFound)</strong>：网络不在范围内，检查路由器是否开启、信号是否太弱</li>
+        <li><strong>Status = 10 (IPV6Failed)</strong>：路由器可能不支持 IPv6，检查路由器设置</li>
+        <li><strong>Status = 8 (UnsupportedSecurity)</strong>：设备不支持目标网络的加密方式，检查 SupportedWiFiBands 和扫描结果</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 4：切换 Wi-Fi 网络</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>读取 <code>Networks (0x01)</code> 查看当前已存储的网络</li>
+        <li>读取 <code>MaxNetworks (0x00)</code>，如果只能存 1 个，需要先删除旧网络</li>
+        <li>发送 <a href="#cmd-0x04"><code>RemoveNetwork (0x04)</code></a> 删除旧凭据</li>
+        <li>按照场景 1 的流程添加并连接新网络</li>
+      </ol>
+      <p>注意：删除当前连接的网络会导致设备断网。如果 MaxNetworks > 1，可以先添加新网络再删除旧网络，减少断网时间。</p>
+    </div>
+  </details>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .col-required {
+    color: #dc2626;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-required {
+    color: #f87171;
+  }
+
+  .col-optional {
+    color: #16a34a;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-optional {
+    color: #4ade80;
+  }
+
+  .attr-cn {
+    font-size: 0.8125rem;
+    color: #6b7280;
+  }
+
+  :global(.dark) .attr-cn {
+    color: #9ca3af;
+  }
+</style>

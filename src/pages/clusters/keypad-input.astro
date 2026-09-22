@@ -1,0 +1,739 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleSendKey = `// SendKey 命令示例
+// 发送"确认"键（Select = 0x00）
+{
+  "KeyCode": 0       // CecKeyCode.Select
+}
+
+// 设备返回 SendKeyResponse
+{
+  "Status": 0        // StatusEnum.Success
+}`;
+
+const exampleData = `{
+  // --- Feature Map ---
+  "0xFFFC": 7          // FeatureMap = 0b111（NV + LK + NK 全部启用）
+
+  // KeypadInput 没有应用属性，
+  // 只通过 SendKey 命令接收按键输入。
+  // 读取 FeatureMap 可判断设备支持哪些按键类别。
+}`;
+---
+
+<DocLayout
+  title="键盘输入 Cluster · KeypadInput（0x0509）"
+  description="Matter KeypadInput Cluster（0x0509）完整参考 — SendKey 命令、CecKeyCode 按键枚举（导航/数字/媒体控制/颜色/功能键）、StatusEnum 响应状态、NV/LK/NK 特性说明及实际场景示例。"
+  type="article"
+  prev={{ title: 'Cluster 手册', href: '/clusters/' }}
+>
+  <h1>键盘输入 Cluster（KeypadInput）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x0509</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 媒体端点（电视、机顶盒等）
+  </p>
+  <p>
+    KeypadInput 负责接收遥控器和外部控制端的按键输入 —— 方向导航、数字键、媒体控制键、颜色功能键等。
+    它是智能电视、机顶盒等媒体设备的核心交互 Cluster，让手机 App 可以充当遥控器使用。
+    按键编码沿用 HDMI-CEC 标准（CEC Key Code），覆盖了遥控器上常见的所有按键。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">三类按键特性</div>
+    <p>
+      KeypadInput 通过三个 Feature 标记设备支持哪些按键类别：
+      <strong>NV</strong>（导航键：方向、确认、菜单等）、
+      <strong>LK</strong>（位置键：频道号、收藏等）、
+      <strong>NK</strong>（数字键：0~9、Enter 等）。
+      发送按键前应先检查 FeatureMap，避免发送设备不支持的按键类别。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#commands">命令</a>
+    <span class="nav-sep">|</span>
+    <a href="#enums">枚举定义</a>
+    <span class="nav-sep">|</span>
+    <a href="#features">Feature 位图</a>
+    <span class="nav-sep">|</span>
+    <a href="#example-data">示例数据</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">常见场景</a>
+  </nav>
+
+  <!-- ====== 命令（Commands）====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    KeypadInput Cluster 只有 1 个命令和 1 个响应。控制端发送 <code>SendKey</code>，设备返回 <code>SendKeyResponse</code> 表示处理结果。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>方向</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#cmd-0x00">
+          <td><a href="#cmd-0x00"><code>0x00</code></a></td>
+          <td>SendKey</td>
+          <td>Client &rarr; Server</td>
+          <td>发送一个按键到设备</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x01">
+          <td><a href="#cmd-0x01"><code>0x01</code></a></td>
+          <td>SendKeyResponse</td>
+          <td>Server &rarr; Client</td>
+          <td>设备对 SendKey 的处理结果</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 命令详解 ====== -->
+  <h3 id="cmd-0x00">SendKey —— 发送按键（0x00）</h3>
+  <p>
+    向设备发送一个 CEC 按键码，模拟遥控器按键操作。
+    设备收到后根据当前状态处理按键，并返回 <code>SendKeyResponse</code> 告知处理结果。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>KeyCode</td>
+          <td><a href="#enum-cec-key-code">CecKeyCode</a></td>
+          <td>要发送的按键码（见下方枚举）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        手机 App 充当遥控器时，用户点击方向键或确认键，App 将对应的 CecKeyCode 通过 SendKey 发送给电视。
+        例如用户按"确认"，发送 <code>KeyCode = 0x00 (Select)</code>。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x01">SendKeyResponse —— 按键响应（0x01）</h3>
+  <p>
+    设备对 SendKey 命令的响应，告知控制端按键是否被成功处理。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Status</td>
+          <td><a href="#enum-status">StatusEnum</a></td>
+          <td>按键处理结果（见下方枚举）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <pre><code set:html={exampleSendKey} /></pre>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">错误处理</div>
+    <p>
+      控制端应根据 <code>StatusEnum</code> 处理异常情况：
+      收到 <code>UnsupportedKey</code> 时，UI 上对应按键可置灰或隐藏；
+      收到 <code>InvalidKeyInCurrentState</code> 时，可提示用户当前状态下该按键不可用（如非播放状态下按暂停）。
+    </p>
+  </div>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 枚举定义 ====== -->
+  <h2 id="enums">枚举定义</h2>
+
+  <!-- StatusEnum -->
+  <h3 id="enum-status">StatusEnum</h3>
+  <p>SendKeyResponse 的处理结果。</p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Success</span>
+        <span class="enum-desc">成功 —— 按键已被设备正常处理</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">UnsupportedKey</span>
+        <span class="enum-desc">不支持 —— 设备不识别该按键码</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">InvalidKeyInCurrentState</span>
+        <span class="enum-desc">状态无效 —— 当前状态下不接受该按键（如未播放时按暂停）</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CecKeyCode -->
+  <h3 id="enum-cec-key-code">CecKeyCode（CEC 按键码）</h3>
+  <p>
+    沿用 HDMI-CEC 标准的按键码定义，覆盖遥控器上常见的所有按键。
+    按功能分为以下几组，方便按需查阅。
+  </p>
+
+  <!-- 导航键 -->
+  <h4 id="keys-navigation">导航键（NV 特性）</h4>
+  <p>方向导航、确认、返回、菜单等基础交互按键，是遥控器最核心的操作区域。</p>
+
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">0x00</span>
+      <div>
+        <span class="enum-name">Select</span>
+        <span class="enum-desc">确认 / OK</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x01</span>
+      <div>
+        <span class="enum-name">Up</span>
+        <span class="enum-desc">上</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x02</span>
+      <div>
+        <span class="enum-name">Down</span>
+        <span class="enum-desc">下</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x03</span>
+      <div>
+        <span class="enum-name">Left</span>
+        <span class="enum-desc">左</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x04</span>
+      <div>
+        <span class="enum-name">Right</span>
+        <span class="enum-desc">右</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x05</span>
+      <div>
+        <span class="enum-name">RightUp</span>
+        <span class="enum-desc">右上</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x06</span>
+      <div>
+        <span class="enum-name">RightDown</span>
+        <span class="enum-desc">右下</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x07</span>
+      <div>
+        <span class="enum-name">LeftUp</span>
+        <span class="enum-desc">左上</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x08</span>
+      <div>
+        <span class="enum-name">LeftDown</span>
+        <span class="enum-desc">左下</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x09</span>
+      <div>
+        <span class="enum-name">RootMenu</span>
+        <span class="enum-desc">主菜单</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x0A</span>
+      <div>
+        <span class="enum-name">SetupMenu</span>
+        <span class="enum-desc">设置菜单</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x0B</span>
+      <div>
+        <span class="enum-name">ContentsMenu</span>
+        <span class="enum-desc">内容菜单</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x0D</span>
+      <div>
+        <span class="enum-name">Exit</span>
+        <span class="enum-desc">退出</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 数字键 -->
+  <h4 id="keys-number">数字键（NK 特性）</h4>
+  <p>0~9 数字输入和 Enter 确认，用于频道号输入、密码输入等场景。</p>
+
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">0x20</span>
+      <div>
+        <span class="enum-name">Number0OrNumber10</span>
+        <span class="enum-desc">数字 0（或 10）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x21</span>
+      <div>
+        <span class="enum-name">Numbers1</span>
+        <span class="enum-desc">数字 1</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x22</span>
+      <div>
+        <span class="enum-name">Numbers2</span>
+        <span class="enum-desc">数字 2</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x23</span>
+      <div>
+        <span class="enum-name">Numbers3</span>
+        <span class="enum-desc">数字 3</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x24</span>
+      <div>
+        <span class="enum-name">Numbers4</span>
+        <span class="enum-desc">数字 4</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x25</span>
+      <div>
+        <span class="enum-name">Numbers5</span>
+        <span class="enum-desc">数字 5</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x26</span>
+      <div>
+        <span class="enum-name">Numbers6</span>
+        <span class="enum-desc">数字 6</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x27</span>
+      <div>
+        <span class="enum-name">Numbers7</span>
+        <span class="enum-desc">数字 7</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x28</span>
+      <div>
+        <span class="enum-name">Numbers8</span>
+        <span class="enum-desc">数字 8</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x29</span>
+      <div>
+        <span class="enum-name">Numbers9</span>
+        <span class="enum-desc">数字 9</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x2B</span>
+      <div>
+        <span class="enum-name">NumbersEnter</span>
+        <span class="enum-desc">数字输入确认</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 媒体控制键 -->
+  <h4 id="keys-media">媒体控制键</h4>
+  <p>播放、暂停、快进、快退、录制等媒体播放控制按键。</p>
+
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">0x41</span>
+      <div>
+        <span class="enum-name">Play</span>
+        <span class="enum-desc">播放</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x42</span>
+      <div>
+        <span class="enum-name">Stop</span>
+        <span class="enum-desc">停止</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x43</span>
+      <div>
+        <span class="enum-name">Pause</span>
+        <span class="enum-desc">暂停</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x44</span>
+      <div>
+        <span class="enum-name">Record</span>
+        <span class="enum-desc">录制</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x45</span>
+      <div>
+        <span class="enum-name">Rewind</span>
+        <span class="enum-desc">快退</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x46</span>
+      <div>
+        <span class="enum-name">FastForward</span>
+        <span class="enum-desc">快进</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x47</span>
+      <div>
+        <span class="enum-name">Eject</span>
+        <span class="enum-desc">弹出</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x48</span>
+      <div>
+        <span class="enum-name">Forward</span>
+        <span class="enum-desc">下一曲 / 下一章</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x49</span>
+      <div>
+        <span class="enum-name">Backward</span>
+        <span class="enum-desc">上一曲 / 上一章</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x4B</span>
+      <div>
+        <span class="enum-name">PausePlayFunction</span>
+        <span class="enum-desc">播放/暂停切换</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 位置/频道键 -->
+  <h4 id="keys-location">位置 / 频道键（LK 特性）</h4>
+  <p>频道切换、收藏频道、节目指南等与频道定位相关的按键。</p>
+
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">0x30</span>
+      <div>
+        <span class="enum-name">ChannelUp</span>
+        <span class="enum-desc">频道 +</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x31</span>
+      <div>
+        <span class="enum-name">ChannelDown</span>
+        <span class="enum-desc">频道 -</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x32</span>
+      <div>
+        <span class="enum-name">PreviousChannel</span>
+        <span class="enum-desc">上一个频道（回看）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x60</span>
+      <div>
+        <span class="enum-name">Data</span>
+        <span class="enum-desc">数据 / 信息</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x53</span>
+      <div>
+        <span class="enum-name">ElectronicProgramGuide</span>
+        <span class="enum-desc">电子节目指南（EPG）</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 音量/电源键 -->
+  <h4 id="keys-power-volume">电源 / 音量键</h4>
+  <p>设备电源控制和音量调节。这些按键通常不受 Feature 限制，大多数设备都支持。</p>
+
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">0x40</span>
+      <div>
+        <span class="enum-name">Power</span>
+        <span class="enum-desc">电源开/关</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x6B</span>
+      <div>
+        <span class="enum-name">PowerOffFunction</span>
+        <span class="enum-desc">关机</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x6C</span>
+      <div>
+        <span class="enum-name">PowerOnFunction</span>
+        <span class="enum-desc">开机</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x41</span>
+      <div>
+        <span class="enum-name">VolumeUp</span>
+        <span class="enum-desc">音量 +</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x42</span>
+      <div>
+        <span class="enum-name">VolumeDown</span>
+        <span class="enum-desc">音量 -</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x43</span>
+      <div>
+        <span class="enum-name">Mute</span>
+        <span class="enum-desc">静音</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x6D</span>
+      <div>
+        <span class="enum-name">MuteFunction</span>
+        <span class="enum-desc">静音（仅静音）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x6E</span>
+      <div>
+        <span class="enum-name">RestoreVolumeFunction</span>
+        <span class="enum-desc">恢复音量（取消静音）</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 颜色功能键 -->
+  <h4 id="keys-color">颜色功能键</h4>
+  <p>遥控器上的四色快捷键（红、绿、黄、蓝），功能由当前界面上下文决定。</p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0x72</span>
+      <div>
+        <span class="enum-name">F2Red</span>
+        <span class="enum-desc">红色键</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x73</span>
+      <div>
+        <span class="enum-name">F3Green</span>
+        <span class="enum-desc">绿色键</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x74</span>
+      <div>
+        <span class="enum-name">F4Yellow</span>
+        <span class="enum-desc">黄色键</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x75</span>
+      <div>
+        <span class="enum-name">F5Blue</span>
+        <span class="enum-desc">蓝色键</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">CEC 按键码完整列表</div>
+    <p>
+      以上仅列出最常用的按键码。完整的 CecKeyCode 枚举定义在 Matter 1.4 规范 Section 9.10.4.1 中，
+      共计 80+ 个值，还包括文字输入键（F1~F5）、音频选择、字幕控制等。
+      实际开发中，只需实现设备和 App UI 用到的按键即可。
+    </p>
+  </div>
+
+  <!-- ====== Feature 位图 ====== -->
+  <h2 id="features">Feature 位图</h2>
+  <p>KeypadInput Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持的按键类别：</p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">Bit 0</span>
+      <div>
+        <span class="enum-name">NV（NavigationKeyCodes）</span>
+        <span class="enum-desc">导航键 —— 支持方向键、确认、菜单、返回等导航操作</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 1</span>
+      <div>
+        <span class="enum-name">LK（LocationKeys）</span>
+        <span class="enum-desc">位置键 —— 支持频道切换、频道号输入、节目指南等频道定位操作</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 2</span>
+      <div>
+        <span class="enum-name">NK（NumberKeys）</span>
+        <span class="enum-desc">数字键 —— 支持 0~9 数字输入和数字确认键</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">Feature 与按键的对应关系</div>
+    <p>
+      设备不一定支持所有按键。发送 SendKey 前应检查 FeatureMap：
+      没有 <strong>NV</strong> 就不要发方向键和菜单键；
+      没有 <strong>NK</strong> 就不要发数字键；
+      没有 <strong>LK</strong> 就不要发频道相关的键。
+      发送不支持的按键，设备会返回 <code>UnsupportedKey</code>。
+    </p>
+  </div>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>KeypadInput Cluster 没有应用属性，以下是读取 FeatureMap 判断设备能力的示例：</p>
+
+  <pre><code set:html={exampleData} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发提示</div>
+    <p>
+      KeypadInput 是一个「纯命令型」Cluster —— 没有可读取的应用属性，只通过 SendKey 命令进行交互。
+      控制端的遥控器 UI 应根据 <code>FeatureMap</code> 动态显示按键区域：
+      支持 NV 就显示方向键区域，支持 NK 就显示数字键盘，支持 LK 就显示频道切换按钮。
+    </p>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <details class="scenario">
+    <summary>场景 1：手机 App 充当遥控器</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>读取设备的 <code>FeatureMap (0xFFFC)</code>，判断支持哪些按键类别</li>
+        <li>根据 Feature 动态渲染遥控器 UI：
+          <ul>
+            <li>NV 启用 &rarr; 显示方向键十字盘 + 确认键 + 菜单/返回</li>
+            <li>NK 启用 &rarr; 显示数字键盘（0~9 + Enter）</li>
+            <li>LK 启用 &rarr; 显示频道 +/- 按钮和 EPG 入口</li>
+          </ul>
+        </li>
+        <li>用户点击 UI 上的按键，发送 <code>SendKey (0x00)</code>，KeyCode 对应 CecKeyCode 枚举值</li>
+        <li>检查 <code>SendKeyResponse</code> 的 Status：
+          <ul>
+            <li><code>Success (0)</code> —— 正常，无需额外处理</li>
+            <li><code>UnsupportedKey (1)</code> —— 该按键不受支持，UI 上标记为不可用</li>
+            <li><code>InvalidKeyInCurrentState (2)</code> —— 当前状态下不可用，提示用户</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 2：语音助手控制电视播放</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>用户说"暂停"，语音助手解析意图为暂停播放</li>
+        <li>发送 <code>SendKey</code>，KeyCode = <code>0x43 (Pause)</code></li>
+        <li>设备返回 <code>Success</code>，播放暂停</li>
+        <li>用户说"继续播放"，发送 <code>SendKey</code>，KeyCode = <code>0x41 (Play)</code></li>
+        <li>
+          <strong>注意</strong>：如果设备正在菜单界面而非播放状态，发送 Pause 可能返回
+          <code>InvalidKeyInCurrentState</code>，语音助手应给出相应的语音反馈
+        </li>
+      </ol>
+    </div>
+  </details>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .col-required {
+    color: #dc2626;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-required {
+    color: #f87171;
+  }
+
+  .col-optional {
+    color: #16a34a;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-optional {
+    color: #4ade80;
+  }
+</style>

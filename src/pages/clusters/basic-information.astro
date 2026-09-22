@@ -1,0 +1,872 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 厂商信息 ---
+  "0x0": 17,                   // DataModelRevision = 17
+  "0x1": "Acme Corp",          // VendorName
+  "0x2": 65521,                // VendorID = 0xFFF1（测试厂商）
+  "0x3": "Smart Light",        // ProductName
+  "0x4": 32769,                // ProductID = 0x8001
+
+  // --- 产品信息 ---
+  "0x5": "Living Room Light",  // NodeLabel（用户自定义名称）
+  "0x6": "CN",                 // Location = 中国
+  "0xB": "2025-01-15",         // ManufacturingDate
+  "0xC": "ABC-1234",           // PartNumber
+  "0xD": "https://example.com/product",  // ProductURL
+  "0xE": "Smart Light Pro",    // ProductLabel
+  "0xF": "SN20250115001",      // SerialNumber
+  "0x12": "a1b2c3d4e5f6",     // UniqueID
+
+  // --- 版本信息 ---
+  "0x7": 1,                    // HardwareVersion = 1
+  "0x8": "v1.0",               // HardwareVersionString
+  "0x9": 2,                    // SoftwareVersion = 2
+  "0xA": "v2.0.1",             // SoftwareVersionString
+
+  // --- 设备状态 ---
+  "0x10": false,               // LocalConfigDisabled = false（允许本地配置）
+  "0x11": true,                // Reachable = true（设备可达）
+
+  // --- 规格能力 ---
+  "0x13": {                    // CapabilityMinima
+    "CaseSessionsPerFabric": 3,
+    "SubscriptionsPerFabric": 3
+  },
+  "0x14": {                    // ProductAppearance
+    "Finish": 1,               // Matte（哑光）
+    "PrimaryColor": 7          // Gray（灰色）
+  },
+  "0x15": 65792,               // SpecificationVersion = 0x01010000 → 1.1.0.0
+  "0x16": 1                    // MaxPathsPerInvoke = 1
+}`;
+---
+
+<DocLayout
+  title="基本信息 Cluster · BasicInformation（0x0028）"
+  description="Matter BasicInformation Cluster（0x0028）完整参考 — 厂商名称、产品 ID、硬件/软件版本、序列号、设备外观、CapabilityMinima 等全部属性定义与枚举值速查。"
+  type="article"
+  prev={{ title: '电源（PowerSource）', href: '/clusters/power-source/' }}
+>
+  <h1>基本信息 Cluster（BasicInformation）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x0028</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 仅在 <code>Endpoint 0</code>（Root Node）
+  </p>
+  <p>
+    BasicInformation 提供设备的核心元数据 —— 包括厂商信息、产品标识、硬件/软件版本、序列号、设备外观和协议能力。
+    这是<strong>每个 Matter 设备必须实现</strong>的 Cluster，且<strong>只存在于 Endpoint 0</strong>。
+    它的属性大多是<strong>只读的</strong>，仅 <code>NodeLabel</code> 和 <code>LocalConfigDisabled</code> 可写。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">仅在 Endpoint 0</div>
+    <p>
+      与大多数功能 Cluster 不同，BasicInformation <strong>只能出现在 Endpoint 0</strong>（Root Node Endpoint）。
+      如果你在 Endpoint 1 上读取这个 Cluster，会得到 <code>UNSUPPORTED_CLUSTER</code> 错误。
+      在代码中读取设备信息时，始终指定 <code>endpointId = 0</code>。
+    </p>
+  </div>
+
+  <!-- ====== 属性总览 ====== -->
+  <h2 id="attributes">属性总览</h2>
+  <p>BasicInformation 共有 23 个属性，按功能分为五组。点击属性 ID 可跳转到对应的详细说明。</p>
+
+  <!-- 属性汇总表 -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>分组</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 厂商信息 -->
+        <tr class="clickable-row" data-href="#attr-0x00">
+          <td><a href="#attr-0x00"><code>0x00</code></a></td>
+          <td>DataModelRevision</td>
+          <td>uint16</td>
+          <td><a href="#group-vendor">厂商信息</a></td>
+          <td>Data Model 版本号</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x01">
+          <td><a href="#attr-0x01"><code>0x01</code></a></td>
+          <td>VendorName</td>
+          <td>string</td>
+          <td><a href="#group-vendor">厂商信息</a></td>
+          <td>厂商名称</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x02">
+          <td><a href="#attr-0x02"><code>0x02</code></a></td>
+          <td>VendorID</td>
+          <td>vendor-id</td>
+          <td><a href="#group-vendor">厂商信息</a></td>
+          <td>厂商 ID（CSA 分配）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x03">
+          <td><a href="#attr-0x03"><code>0x03</code></a></td>
+          <td>ProductName</td>
+          <td>string</td>
+          <td><a href="#group-vendor">厂商信息</a></td>
+          <td>产品名称</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x04">
+          <td><a href="#attr-0x04"><code>0x04</code></a></td>
+          <td>ProductID</td>
+          <td>uint16</td>
+          <td><a href="#group-vendor">厂商信息</a></td>
+          <td>产品 ID（厂商自定义）</td>
+        </tr>
+        <!-- 产品信息 -->
+        <tr class="clickable-row" data-href="#attr-0x05">
+          <td><a href="#attr-0x05"><code>0x05</code></a></td>
+          <td>NodeLabel</td>
+          <td>string</td>
+          <td><a href="#group-product">产品信息</a></td>
+          <td>用户自定义设备名称（可写）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x06">
+          <td><a href="#attr-0x06"><code>0x06</code></a></td>
+          <td>Location</td>
+          <td>string</td>
+          <td><a href="#group-product">产品信息</a></td>
+          <td>ISO 3166-1 alpha-2 国家代码</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0B">
+          <td><a href="#attr-0x0B"><code>0x0B</code></a></td>
+          <td>ManufacturingDate</td>
+          <td>string</td>
+          <td><a href="#group-product">产品信息</a></td>
+          <td>生产日期（ISO 8601 格式）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0C">
+          <td><a href="#attr-0x0C"><code>0x0C</code></a></td>
+          <td>PartNumber</td>
+          <td>string</td>
+          <td><a href="#group-product">产品信息</a></td>
+          <td>零件编号</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0D">
+          <td><a href="#attr-0x0D"><code>0x0D</code></a></td>
+          <td>ProductURL</td>
+          <td>string</td>
+          <td><a href="#group-product">产品信息</a></td>
+          <td>产品页面 URL</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0E">
+          <td><a href="#attr-0x0E"><code>0x0E</code></a></td>
+          <td>ProductLabel</td>
+          <td>string</td>
+          <td><a href="#group-product">产品信息</a></td>
+          <td>产品标签（面向用户的简称）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0F">
+          <td><a href="#attr-0x0F"><code>0x0F</code></a></td>
+          <td>SerialNumber</td>
+          <td>string</td>
+          <td><a href="#group-product">产品信息</a></td>
+          <td>序列号</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x12">
+          <td><a href="#attr-0x12"><code>0x12</code></a></td>
+          <td>UniqueID</td>
+          <td>string</td>
+          <td><a href="#group-product">产品信息</a></td>
+          <td>设备唯一标识符</td>
+        </tr>
+        <!-- 版本信息 -->
+        <tr class="clickable-row" data-href="#attr-0x07">
+          <td><a href="#attr-0x07"><code>0x07</code></a></td>
+          <td>HardwareVersion</td>
+          <td>uint16</td>
+          <td><a href="#group-version">版本信息</a></td>
+          <td>硬件版本号</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x08">
+          <td><a href="#attr-0x08"><code>0x08</code></a></td>
+          <td>HardwareVersionString</td>
+          <td>string</td>
+          <td><a href="#group-version">版本信息</a></td>
+          <td>硬件版本字符串</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x09">
+          <td><a href="#attr-0x09"><code>0x09</code></a></td>
+          <td>SoftwareVersion</td>
+          <td>uint32</td>
+          <td><a href="#group-version">版本信息</a></td>
+          <td>软件版本号（用于 OTA 比较）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0A">
+          <td><a href="#attr-0x0A"><code>0x0A</code></a></td>
+          <td>SoftwareVersionString</td>
+          <td>string</td>
+          <td><a href="#group-version">版本信息</a></td>
+          <td>软件版本字符串（面向用户）</td>
+        </tr>
+        <!-- 设备状态 -->
+        <tr class="clickable-row" data-href="#attr-0x10">
+          <td><a href="#attr-0x10"><code>0x10</code></a></td>
+          <td>LocalConfigDisabled</td>
+          <td>bool</td>
+          <td><a href="#group-state">设备状态</a></td>
+          <td>是否禁用本地配置（可写）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x11">
+          <td><a href="#attr-0x11"><code>0x11</code></a></td>
+          <td>Reachable</td>
+          <td>bool</td>
+          <td><a href="#group-state">设备状态</a></td>
+          <td>设备是否可达</td>
+        </tr>
+        <!-- 规格能力 -->
+        <tr class="clickable-row" data-href="#attr-0x13">
+          <td><a href="#attr-0x13"><code>0x13</code></a></td>
+          <td>CapabilityMinima</td>
+          <td>struct</td>
+          <td><a href="#group-capability">规格能力</a></td>
+          <td>设备最小能力声明</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x14">
+          <td><a href="#attr-0x14"><code>0x14</code></a></td>
+          <td>ProductAppearance</td>
+          <td>struct</td>
+          <td><a href="#group-capability">规格能力</a></td>
+          <td>产品外观描述（材质 + 颜色）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x15">
+          <td><a href="#attr-0x15"><code>0x15</code></a></td>
+          <td>SpecificationVersion</td>
+          <td>uint32</td>
+          <td><a href="#group-capability">规格能力</a></td>
+          <td>设备实现的 Matter 规范版本</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x16">
+          <td><a href="#attr-0x16"><code>0x16</code></a></td>
+          <td>MaxPathsPerInvoke</td>
+          <td>uint16</td>
+          <td><a href="#group-capability">规格能力</a></td>
+          <td>单次 Invoke 最大路径数</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 厂商信息（0x00-0x04）====== -->
+  <h3 id="group-vendor">厂商信息（0x00 – 0x04）</h3>
+  <p>设备的厂商和产品标识，由 CSA 分配或厂商自行设定。这些属性在设备出厂时就已固定，运行时不可更改。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x00">
+          <td><code>0x00</code></td>
+          <td>DataModelRevision（数据模型版本）</td>
+          <td>uint16</td>
+          <td>设备实现的 Data Model 版本号。用于判断设备支持哪些数据模型特性</td>
+        </tr>
+        <tr id="attr-0x01">
+          <td><code>0x01</code></td>
+          <td>VendorName（厂商名称）</td>
+          <td>string</td>
+          <td>厂商的人类可读名称，最长 32 字符。如 <code>"Acme Corp"</code>、<code>"Espressif"</code></td>
+        </tr>
+        <tr id="attr-0x02">
+          <td><code>0x02</code></td>
+          <td>VendorID（厂商 ID）</td>
+          <td>vendor-id</td>
+          <td>由 CSA（Connectivity Standards Alliance）统一分配的厂商编号。测试用 VID 为 <code>0xFFF1</code>–<code>0xFFF4</code></td>
+        </tr>
+        <tr id="attr-0x03">
+          <td><code>0x03</code></td>
+          <td>ProductName（产品名称）</td>
+          <td>string</td>
+          <td>产品的人类可读名称，最长 32 字符。如 <code>"Smart Light"</code>、<code>"Door Lock Pro"</code></td>
+        </tr>
+        <tr id="attr-0x04">
+          <td><code>0x04</code></td>
+          <td>ProductID（产品 ID）</td>
+          <td>uint16</td>
+          <td>由厂商自行分配的产品编号，与 VendorID 组合唯一标识一款产品</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">VendorID + ProductID 组合</div>
+    <p>
+      <code>VendorID</code> 和 <code>ProductID</code> 的组合可以唯一标识一款 Matter 产品。
+      在配网流程中，Commissioner（如手机 App）通过这两个值匹配正确的设备驱动和 UI 配置。
+      DCL（Distributed Compliance Ledger）也使用这个组合来查询设备的认证信息。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 产品信息（0x05-0x06, 0x0B-0x0F, 0x12）====== -->
+  <h3 id="group-product">产品信息（0x05 – 0x06, 0x0B – 0x0F, 0x12）</h3>
+  <p>
+    描述产品的详细信息 —— 用户标签、生产日期、序列号等。
+    这些属性中大部分是可选的，实际设备可能只实现其中几个。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x05">
+          <td><code>0x05</code></td>
+          <td>NodeLabel（设备标签）</td>
+          <td>string</td>
+          <td>用户自定义的设备名称，最长 32 字符。<strong>可写</strong> —— App 可以通过 Write 操作修改，如改为 <code>"客厅灯"</code></td>
+        </tr>
+        <tr id="attr-0x06">
+          <td><code>0x06</code></td>
+          <td>Location（位置）</td>
+          <td>string</td>
+          <td>设备所在国家/地区，ISO 3166-1 alpha-2 格式，如 <code>"CN"</code>、<code>"US"</code>。固定 2 字符</td>
+        </tr>
+        <tr id="attr-0x0B">
+          <td><code>0x0B</code></td>
+          <td>ManufacturingDate（生产日期）</td>
+          <td>string</td>
+          <td>生产日期，ISO 8601 格式，如 <code>"2025-01-15"</code>。可选属性</td>
+        </tr>
+        <tr id="attr-0x0C">
+          <td><code>0x0C</code></td>
+          <td>PartNumber（零件编号）</td>
+          <td>string</td>
+          <td>厂商内部的零件编号，最长 32 字符。可选属性</td>
+        </tr>
+        <tr id="attr-0x0D">
+          <td><code>0x0D</code></td>
+          <td>ProductURL（产品链接）</td>
+          <td>string</td>
+          <td>产品页面 URL，最长 256 字符。可选属性。用于引导用户查看产品详情或手册</td>
+        </tr>
+        <tr id="attr-0x0E">
+          <td><code>0x0E</code></td>
+          <td>ProductLabel（产品标签）</td>
+          <td>string</td>
+          <td>面向用户的产品简称，最长 64 字符。通常比 ProductName 更短，适合在 UI 上展示</td>
+        </tr>
+        <tr id="attr-0x0F">
+          <td><code>0x0F</code></td>
+          <td>SerialNumber（序列号）</td>
+          <td>string</td>
+          <td>设备序列号，最长 32 字符。每台设备唯一</td>
+        </tr>
+        <tr id="attr-0x12">
+          <td><code>0x12</code></td>
+          <td>UniqueID（唯一标识）</td>
+          <td>string</td>
+          <td>设备全局唯一标识符，最长 32 字符。即使恢复出厂设置也不会变化，可用于设备去重</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">NodeLabel 是唯一常用的可写属性</div>
+    <p>
+      BasicInformation 的 23 个属性中，只有 <code>NodeLabel</code> 和 <code>LocalConfigDisabled</code> 支持 Write 操作。
+      其中 <code>NodeLabel</code> 是最常用的 —— 用户在 App 里重命名设备时，实际就是修改这个属性。
+      写入时需要通过 ACL 权限检查，默认需要 <strong>Manage</strong> 级别权限。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 版本信息（0x07-0x0A）====== -->
+  <h3 id="group-version">版本信息（0x07 – 0x0A）</h3>
+  <p>设备的硬件和软件版本信息。OTA 升级流程依赖这些版本号来判断是否需要更新。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x07">
+          <td><code>0x07</code></td>
+          <td>HardwareVersion（硬件版本号）</td>
+          <td>uint16</td>
+          <td>硬件版本数字编号，厂商自定义。用于区分不同硬件批次</td>
+        </tr>
+        <tr id="attr-0x08">
+          <td><code>0x08</code></td>
+          <td>HardwareVersionString（硬件版本字符串）</td>
+          <td>string</td>
+          <td>人类可读的硬件版本，1–64 字符，如 <code>"v1.0"</code>、<code>"Rev B"</code></td>
+        </tr>
+        <tr id="attr-0x09">
+          <td><code>0x09</code></td>
+          <td>SoftwareVersion（软件版本号）</td>
+          <td>uint32</td>
+          <td>固件版本数字编号。OTA Provider 用这个值与新固件的版本号比较，决定是否推送更新。<strong>值越大版本越新</strong></td>
+        </tr>
+        <tr id="attr-0x0A">
+          <td><code>0x0A</code></td>
+          <td>SoftwareVersionString（软件版本字符串）</td>
+          <td>string</td>
+          <td>人类可读的软件版本，1–64 字符，如 <code>"v2.0.1"</code>。展示给用户看的版本号</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">版本号 vs 版本字符串</div>
+    <p>
+      每个版本都有两个属性：<strong>数字编号</strong>（Version）和<strong>字符串</strong>（VersionString）。
+      数字编号用于程序逻辑比较（如 OTA 版本判断），字符串用于 UI 展示。
+      App 展示固件版本时应使用 <code>SoftwareVersionString</code>；
+      判断是否需要升级时应比较 <code>SoftwareVersion</code> 的数值大小。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 设备状态（0x10-0x11）====== -->
+  <h3 id="group-state">设备状态（0x10 – 0x11）</h3>
+  <p>描述设备当前的运行状态和配置模式。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x10">
+          <td><code>0x10</code></td>
+          <td>LocalConfigDisabled（禁用本地配置）</td>
+          <td>bool</td>
+          <td><strong>可写</strong>。设为 <code>true</code> 时，设备应禁止通过物理按钮等本地方式修改配置。默认 <code>false</code></td>
+        </tr>
+        <tr id="attr-0x11">
+          <td><code>0x11</code></td>
+          <td>Reachable（可达状态）</td>
+          <td>bool</td>
+          <td>设备是否当前可达。对于 Bridged 设备尤其重要 —— Bridge 通过此属性告知 Controller 子设备的在线状态。直连设备通常始终为 <code>true</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">Reachable 与 Bridged 设备</div>
+    <p>
+      对于直接连入 Matter Fabric 的设备，<code>Reachable</code> 基本等同于 "只要能通信就是 <code>true</code>"。
+      但对于通过 Bridge 接入的子设备（如 Zigbee 灯泡通过 Matter Bridge 暴露），<code>Reachable</code> 反映的是
+      Bridge 到子设备之间的连接状态。当子设备离线时，Bridge 会将 <code>Reachable</code> 设为 <code>false</code>
+      并触发 <code>ReachableChanged</code> 事件。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 规格能力（0x13-0x16）====== -->
+  <h3 id="group-capability">规格能力（0x13 – 0x16）</h3>
+  <p>描述设备支持的协议能力和产品外观。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x13">
+          <td><code>0x13</code></td>
+          <td>CapabilityMinima（最小能力）</td>
+          <td>struct</td>
+          <td>设备声明的最小协议能力（见下方结构体说明）</td>
+        </tr>
+        <tr id="attr-0x14">
+          <td><code>0x14</code></td>
+          <td>ProductAppearance（产品外观）</td>
+          <td>struct</td>
+          <td>产品的物理外观描述：表面材质和主要颜色（见下方结构体和枚举说明）</td>
+        </tr>
+        <tr id="attr-0x15">
+          <td><code>0x15</code></td>
+          <td>SpecificationVersion（规范版本）</td>
+          <td>uint32</td>
+          <td>设备实现的 Matter 规范版本。编码为 <code>Major.Minor.Patch.Reserved</code>，每段 8 位。例如 <code>0x01010000</code> = Matter 1.1.0</td>
+        </tr>
+        <tr id="attr-0x16">
+          <td><code>0x16</code></td>
+          <td>MaxPathsPerInvoke（单次调用最大路径数）</td>
+          <td>uint16</td>
+          <td>单次 Invoke Request 中允许携带的最大 Command 路径数。至少为 <code>1</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- CapabilityMinima 结构体 -->
+  <h4 id="struct-capability-minima">CapabilityMinima 结构体</h4>
+  <p>描述设备的最小协议处理能力，Controller 可据此调整交互策略。</p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>字段</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>CaseSessionsPerFabric</td>
+          <td>uint16</td>
+          <td>每个 Fabric 支持的最大并发 CASE Session 数量。至少为 <code>3</code></td>
+        </tr>
+        <tr>
+          <td>SubscriptionsPerFabric</td>
+          <td>uint16</td>
+          <td>每个 Fabric 支持的最大并发 Subscription 数量。至少为 <code>3</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">CapabilityMinima 的实际意义</div>
+    <p>
+      如果 Controller 需要为同一台设备建立多个 CASE Session（如同时做 OTA 和控制），
+      应先检查 <code>CaseSessionsPerFabric</code> 确认设备是否支持。
+      <code>SubscriptionsPerFabric</code> 同理 —— 如果 App 需要订阅多组属性变更通知，
+      需要确保总订阅数不超过设备声明的上限。
+    </p>
+  </div>
+
+  <!-- ProductAppearance 结构体 -->
+  <h4 id="struct-product-appearance">ProductAppearance 结构体</h4>
+  <p>描述产品的物理外观特征，用于在 App 中展示设备图标或配色。</p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>字段</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Finish</td>
+          <td>ProductFinishEnum</td>
+          <td>产品表面材质（见下方枚举）</td>
+        </tr>
+        <tr>
+          <td>PrimaryColor</td>
+          <td>ColorEnum</td>
+          <td>产品主要颜色（见下方枚举）。Nullable —— 不适用时为 <code>null</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>ProductFinishEnum（表面材质）</h4>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Other</span>
+        <span class="enum-desc">其他</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Matte</span>
+        <span class="enum-desc">哑光</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">Satin</span>
+        <span class="enum-desc">缎面</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">Polished</span>
+        <span class="enum-desc">抛光</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">4</span>
+      <div>
+        <span class="enum-name">Rugged</span>
+        <span class="enum-desc">粗糙（工业风）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">5</span>
+      <div>
+        <span class="enum-name">Fabric</span>
+        <span class="enum-desc">织物</span>
+      </div>
+    </div>
+  </div>
+
+  <h4>ColorEnum（产品颜色）</h4>
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Black</span>
+        <span class="enum-desc">黑色</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Navy</span>
+        <span class="enum-desc">藏青</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">Green</span>
+        <span class="enum-desc">绿色</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">Teal</span>
+        <span class="enum-desc">青色</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">4</span>
+      <div>
+        <span class="enum-name">Maroon</span>
+        <span class="enum-desc">栗色</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">5</span>
+      <div>
+        <span class="enum-name">Purple</span>
+        <span class="enum-desc">紫色</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">6</span>
+      <div>
+        <span class="enum-name">Olive</span>
+        <span class="enum-desc">橄榄色</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">7</span>
+      <div>
+        <span class="enum-name">Gray</span>
+        <span class="enum-desc">灰色</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">8</span>
+      <div>
+        <span class="enum-name">Blue</span>
+        <span class="enum-desc">蓝色</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">9</span>
+      <div>
+        <span class="enum-name">Lime</span>
+        <span class="enum-desc">青柠色</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">10</span>
+      <div>
+        <span class="enum-name">Aqua</span>
+        <span class="enum-desc">水蓝色</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">11</span>
+      <div>
+        <span class="enum-name">Red</span>
+        <span class="enum-desc">红色</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">12</span>
+      <div>
+        <span class="enum-name">Fuchsia</span>
+        <span class="enum-desc">品红色</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">13</span>
+      <div>
+        <span class="enum-name">Yellow</span>
+        <span class="enum-desc">黄色</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">14</span>
+      <div>
+        <span class="enum-name">White</span>
+        <span class="enum-desc">白色</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">15</span>
+      <div>
+        <span class="enum-name">Nickel</span>
+        <span class="enum-desc">镍色</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">16</span>
+      <div>
+        <span class="enum-name">Chrome</span>
+        <span class="enum-desc">铬色</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">17</span>
+      <div>
+        <span class="enum-name">Brass</span>
+        <span class="enum-desc">黄铜色</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">18</span>
+      <div>
+        <span class="enum-name">Copper</span>
+        <span class="enum-desc">铜色</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">19</span>
+      <div>
+        <span class="enum-name">Silver</span>
+        <span class="enum-desc">银色</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">20</span>
+      <div>
+        <span class="enum-name">Gold</span>
+        <span class="enum-desc">金色</span>
+      </div>
+    </div>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== Command ====== -->
+  <h2 id="commands">Command</h2>
+  <p>BasicInformation 只有一个可选的 Command：</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>方向</th>
+          <th>必选</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>0x00</code></td>
+          <td>MfgSpecificPing</td>
+          <td>Client &rarr; Server</td>
+          <td>可选</td>
+          <td>厂商自定义的 Ping 命令，用于检测设备响应。无参数，无返回值</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">大部分设备不实现 MfgSpecificPing</div>
+    <p>
+      这是一个<strong>可选</strong>命令，实际上很少有设备实现。
+      如果需要检测设备是否在线，通常直接读取任意属性（如 <code>SoftwareVersion</code>）即可 ——
+      能读成功就说明设备在线。
+    </p>
+  </div>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>一个典型 Matter 设备的 BasicInformation Cluster 读取结果：</p>
+
+  <pre><code set:html={exampleData} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">读取设备信息的典型流程</div>
+    <p>
+      App 首次连接到设备后，通常会读取 BasicInformation 来展示设备详情页：
+    </p>
+    <ol>
+      <li>读取 <code>VendorName (0x01)</code> + <code>ProductName (0x03)</code> 作为设备标题</li>
+      <li>读取 <code>NodeLabel (0x05)</code> 展示用户自定义名称（如果有）</li>
+      <li>读取 <code>SoftwareVersionString (0x0A)</code> 展示当前固件版本</li>
+      <li>读取 <code>SerialNumber (0x0F)</code> 用于售后或设备管理</li>
+      <li>读取 <code>Reachable (0x11)</code> 判断设备在线状态（Bridged 设备）</li>
+    </ol>
+    <p>
+      注意所有读取都要指定 <code>endpointId = 0</code>，因为 BasicInformation 只在 Root Node 上。
+    </p>
+  </div>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>

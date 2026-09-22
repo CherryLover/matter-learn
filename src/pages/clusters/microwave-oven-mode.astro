@@ -1,0 +1,416 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 支持的模式列表 ---
+  "0x0000": [                    // SupportedModes
+    {
+      "Label": "Normal",
+      "Mode": 0,
+      "ModeTags": [{ "Value": 16384 }]   // 0x4000 = Normal
+    },
+    {
+      "Label": "Defrost",
+      "Mode": 1,
+      "ModeTags": [{ "Value": 16385 }]   // 0x4001 = Defrost
+    }
+  ],
+
+  // --- 当前模式 ---
+  "0x0001": 0,                   // CurrentMode = 0（Normal）
+
+  // --- 启动与开机模式 ---
+  "0x0002": null,                // StartUpMode = null（保持上次模式）
+  "0x0003": null                 // OnMode = null（不覆盖，保持 CurrentMode）
+}`;
+---
+
+<DocLayout
+  title="微波炉模式 Cluster · MicrowaveOvenMode（0x005E）"
+  description="Matter MicrowaveOvenMode Cluster（0x005E）完整参考 — 基于 ModeBase 派生，支持 Normal/Defrost 模式选择，ChangeToMode 命令、ModeTag 语义标签及与 MicrowaveOvenControl 的协作关系。"
+  type="article"
+>
+  <h1>微波炉模式 Cluster（MicrowaveOvenMode）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x005E</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 微波炉功能端点（Microwave Oven Endpoint）
+  </p>
+  <p>
+    MicrowaveOvenMode 是 Matter 中用于微波炉模式选择的 Cluster，派生自 ModeBase Cluster。
+    它允许用户在微波炉支持的多种加热模式之间切换，例如常规加热和解冻。
+    每种模式通过语义标签（ModeTag）描述其用途，使不同厂商的微波炉能以统一方式被控制。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">派生自 ModeBase</div>
+    <p>
+      MicrowaveOvenMode 继承了 ModeBase Cluster 的全部命令和属性结构，
+      并定义了微波炉专属的 ModeTag 值（0x4000 ~ 0x4001）。
+      如果你已经熟悉 ModeBase 的工作方式，这个 Cluster 的使用方式完全一致，只是模式标签不同。
+    </p>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">与 MicrowaveOvenControl 协作</div>
+    <p>
+      MicrowaveOvenMode 只负责「选择加热模式」，不控制具体的烹饪参数。
+      微波炉的完整操作需要配合 <strong>MicrowaveOvenControl（0x005F）</strong> Cluster，
+      后者负责设置烹饪时间、功率等级、启动/停止加热等。
+      典型流程是：先用 MicrowaveOvenMode 选择模式，再用 MicrowaveOvenControl 设置参数并启动。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#commands">命令列表</a>
+    <span class="nav-sep">|</span>
+    <a href="#attributes">属性详解</a>
+    <span class="nav-sep">|</span>
+    <a href="#mode-tags">ModeTag 标签</a>
+    <span class="nav-sep">|</span>
+    <a href="#status-codes">状态码</a>
+    <span class="nav-sep">|</span>
+    <a href="#example-data">示例数据</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">常见场景</a>
+  </nav>
+
+  <!-- ====== 命令（Commands）====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    MicrowaveOvenMode Cluster 只有一个命令 ChangeToMode，用于切换加热模式。
+    命令执行后设备返回 ChangeToModeResponse，告知切换是否成功。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>方向</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#cmd-0x00">
+          <td><a href="#cmd-0x00"><code>0x00</code></a></td>
+          <td>ChangeToMode</td>
+          <td>Client &rarr; Server</td>
+          <td>切换到指定加热模式</td>
+        </tr>
+        <tr>
+          <td><code>0x01</code></td>
+          <td>ChangeToModeResponse</td>
+          <td>Server &rarr; Client</td>
+          <td>切换结果响应（Status + StatusText）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 命令详解 ====== -->
+  <h3 id="cmd-0x00">ChangeToMode -- 切换模式（0x00）</h3>
+  <p>
+    请求微波炉切换到指定的加热模式。NewMode 的值必须是 SupportedModes 列表中某个 ModeOptionStruct 的 Mode 字段。
+    设备收到后返回 ChangeToModeResponse。
+  </p>
+
+  <h4>请求参数</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>NewMode</td>
+          <td>uint8</td>
+          <td>目标模式编号，必须存在于 SupportedModes 列表中</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>响应字段（ChangeToModeResponse）</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Status</td>
+          <td>enum8</td>
+          <td>操作结果状态码（见<a href="#status-codes">状态码</a>）</td>
+        </tr>
+        <tr>
+          <td>StatusText</td>
+          <td>string（可选）</td>
+          <td>人类可读的状态描述，失败时提供原因</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        用户在 App 上选择「解冻」模式，App 发送 ChangeToMode（NewMode = 1）。
+        微波炉返回 ChangeToModeResponse（Status = 0x00, Success），CurrentMode 更新为 1。
+        如果微波炉正在加热中不允许切换，会返回 GenericFailure 并在 StatusText 中说明原因。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 属性详解 ====== -->
+  <h2 id="attributes">属性详解</h2>
+  <p>MicrowaveOvenMode Cluster 继承 ModeBase 的 4 个属性。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#attr-0x0000">
+          <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
+          <td>SupportedModes</td>
+          <td>list&lt;ModeOptionStruct&gt;</td>
+          <td>设备支持的所有加热模式</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0001">
+          <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
+          <td>CurrentMode</td>
+          <td>uint8</td>
+          <td>当前选中的模式</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0002">
+          <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
+          <td>StartUpMode</td>
+          <td>uint8 / null</td>
+          <td>设备启动时的默认模式</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0003">
+          <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
+          <td>OnMode</td>
+          <td>uint8 / null</td>
+          <td>设备开机时自动切换到的模式</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 属性逐个说明 -->
+  <h3 id="attr-0x0000">SupportedModes -- 支持的模式列表（0x0000）</h3>
+  <p>
+    设备支持的全部加热模式，每个元素是一个 ModeOptionStruct：
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Label</td>
+          <td>string</td>
+          <td>模式名称，供人类阅读（如 "Normal"、"Defrost"）</td>
+        </tr>
+        <tr>
+          <td>Mode</td>
+          <td>uint8</td>
+          <td>模式编号，在列表中唯一，用于 ChangeToMode 命令</td>
+        </tr>
+        <tr>
+          <td>ModeTags</td>
+          <td>list&lt;ModeTagStruct&gt;</td>
+          <td>语义标签列表，描述模式的用途（见<a href="#mode-tags">ModeTag 标签</a>）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">Label 与 ModeTag 的区别</div>
+    <p>
+      Label 是厂商自定义的显示文字，不同厂商可能用不同措辞（"Normal"、"Standard"、"Regular"）。
+      ModeTag 是标准化的语义标签，App 应优先根据 ModeTag 值判断模式类型，Label 仅用于界面展示。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x0001">CurrentMode -- 当前模式（0x0001）</h3>
+  <p>
+    当前选中的加热模式编号。值必须是 SupportedModes 中某个 ModeOptionStruct 的 Mode 字段。
+    通过 ChangeToMode 命令修改。可订阅此属性获取模式变更通知。
+  </p>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x0002">StartUpMode -- 启动模式（0x0002）</h3>
+  <p>
+    设备上电或重启后的初始模式。Nullable -- 值为 <code>null</code> 时表示保持上次断电前的模式。
+    设置具体值时，该值必须存在于 SupportedModes 列表中。
+  </p>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x0003">OnMode -- 开机模式（0x0003）</h3>
+  <p>
+    当设备从 Off 切换到 On 时自动应用的模式。Nullable -- 值为 <code>null</code> 时不覆盖，保持 CurrentMode 不变。
+    如果 OnMode 有值，每次开机都会将 CurrentMode 强制设为该值，忽略 StartUpMode 的设置。
+  </p>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">OnMode 与 StartUpMode 的优先级</div>
+    <p>
+      如果 OnMode 不为 null，它的优先级高于 StartUpMode。
+      设备上电流程：先应用 StartUpMode（如果有），再在 Off &rarr; On 时应用 OnMode 覆盖。
+      实际效果是开机后始终使用 OnMode 指定的模式。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== ModeTag 语义标签 ====== -->
+  <h2 id="mode-tags">ModeTag 语义标签</h2>
+  <p>
+    MicrowaveOvenMode 定义了 2 个专属 ModeTag 值，用于标准化描述微波炉加热模式的类型。
+    App 应根据这些标签识别模式用途，而不是依赖厂商自定义的 Label 文字。
+  </p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0x4000</span>
+      <div>
+        <span class="enum-name">Normal</span>
+        <span class="enum-desc">常规加热 -- 日常食物加热的默认模式，按设定功率持续加热</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x4001</span>
+      <div>
+        <span class="enum-name">Defrost</span>
+        <span class="enum-desc">解冻 -- 以较低功率间歇加热，用于解冻冷冻食品而不过度烹饪</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">厂商可扩展自定义模式</div>
+    <p>
+      除了规范定义的 Normal 和 Defrost，厂商可以在 SupportedModes 中添加额外的自定义模式
+      （如 "Popcorn"、"Beverage"、"Reheat" 等），使用厂商自定义的 ModeTag 值（0x8000 ~ 0xBFFF 范围）。
+      App 遇到不认识的 ModeTag 时，应回退到显示 Label 文字。
+    </p>
+  </div>
+
+  <!-- ====== 状态码 ====== -->
+  <h2 id="status-codes">状态码（StatusCode）</h2>
+  <p>ChangeToModeResponse 中 Status 字段的可能取值：</p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0x00</span>
+      <div>
+        <span class="enum-name">Success</span>
+        <span class="enum-desc">模式切换成功</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x01</span>
+      <div>
+        <span class="enum-name">UnsupportedMode</span>
+        <span class="enum-desc">请求的模式编号不存在于 SupportedModes 中</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x02</span>
+      <div>
+        <span class="enum-name">GenericFailure</span>
+        <span class="enum-desc">通用失败 -- 设备当前状态不允许切换（如正在加热中）</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>一台支持常规加热和解冻两种模式、当前处于常规加热的微波炉的 MicrowaveOvenMode Cluster 读取结果：</p>
+
+  <pre><code set:html={exampleData} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发提示</div>
+    <p>
+      SupportedModes 的内容由设备厂商定义，不同微波炉支持的模式数量和编号可能不同。
+      App 展示模式列表时应动态读取 SupportedModes，不要硬编码模式选项。
+      使用 ModeTag 值判断模式类型，而不是比较 Label 字符串。
+      完整的微波炉控制还需要读取 MicrowaveOvenControl Cluster（0x005F）的烹饪时间和功率属性。
+    </p>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <details class="scenario">
+    <summary>场景 1：选择加热模式并启动微波炉</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>读取 <code>SupportedModes (0x0000)</code> 获取微波炉支持的所有加热模式</li>
+        <li>在 App 界面展示模式列表，根据 ModeTag 值显示对应图标和说明（如 0x4000 显示「常规加热」图标，0x4001 显示「解冻」图标）</li>
+        <li>用户选择「解冻」，发送 <code>ChangeToMode (0x00)</code>，NewMode 填入对应的 Mode 编号</li>
+        <li>检查 ChangeToModeResponse 的 Status：
+          <ul>
+            <li><code>0x00</code>（Success）-- 切换成功，订阅 CurrentMode 确认更新</li>
+            <li><code>0x02</code>（GenericFailure）-- 微波炉正在加热中，读取 StatusText 展示原因</li>
+          </ul>
+        </li>
+        <li>模式选定后，通过 MicrowaveOvenControl Cluster（0x005F）设置烹饪时间和功率，然后启动加热</li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 2：解冻冷冻食品的完整流程</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>读取 <code>SupportedModes (0x0000)</code>，找到带有 ModeTag 0x4001（Defrost）的模式项</li>
+        <li>发送 <code>ChangeToMode</code>，将 NewMode 设为该模式项的 Mode 编号</li>
+        <li>确认 ChangeToModeResponse 返回 Success</li>
+        <li>通过 MicrowaveOvenControl 设置解冻时间（解冻模式通常使用较低功率，设备可能自动调整功率等级）</li>
+        <li>启动加热，订阅 MicrowaveOvenControl 的 OperationalState 跟踪加热进度</li>
+        <li>加热完成后，微波炉自动停止并发出通知，App 提示用户取出食物</li>
+      </ol>
+      <p>
+        <strong>注意</strong>：解冻模式下微波炉通常以间歇方式工作（加热一段时间、暂停一段时间），
+        避免外层过度加热而内层仍是冰冻状态。具体的功率和间歇策略由设备固件控制，App 无需干预。
+      </p>
+    </div>
+  </details>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .scenario-content {
+    padding: 0.75rem 1rem;
+  }
+</style>

@@ -13,6 +13,8 @@ interface NavItem {
   external?: boolean;
   children?: NavItem[];
   dividerBefore?: boolean;
+  megaMenu?: boolean;
+  group?: boolean;
 }
 
 const navigation: NavItem[] = [
@@ -20,10 +22,51 @@ const navigation: NavItem[] = [
   { title: '概念总览', href: '/concepts/' },
   {
     title: 'Cluster 手册',
+    megaMenu: true,
     children: [
-      { title: 'DoorLock (0x0101)', href: '/clusters/door-lock/' },
-      { title: 'PowerSource (0x002F)', href: '/clusters/power-source/' },
-      { title: '查看全部', href: '/clusters/', dividerBefore: true },
+      { title: '照明控制', group: true },
+      { title: '开关 OnOff', href: '/clusters/on-off/' },
+      { title: '亮度 LevelControl', href: '/clusters/level-control/' },
+      { title: '颜色 ColorControl', href: '/clusters/color-control/' },
+      { title: '闭合设备', group: true },
+      { title: '门锁 DoorLock', href: '/clusters/door-lock/' },
+      { title: '窗帘 WindowCovering', href: '/clusters/window-covering/' },
+      { title: '阀门 ValveConfig', href: '/clusters/valve-configuration-and-control/' },
+      { title: '暖通空调', group: true },
+      { title: '温控 Thermostat', href: '/clusters/thermostat/' },
+      { title: '风扇 FanControl', href: '/clusters/fan-control/' },
+      { title: '传感与测量', group: true },
+      { title: '温度 Temperature', href: '/clusters/temperature-measurement/' },
+      { title: '湿度 Humidity', href: '/clusters/relative-humidity-measurement/' },
+      { title: '占位 Occupancy', href: '/clusters/occupancy-sensing/' },
+      { title: '空气 AirQuality', href: '/clusters/air-quality/' },
+      { title: '安防与输入', group: true },
+      { title: '烟感 SmokeCOAlarm', href: '/clusters/smoke-co-alarm/' },
+      { title: '布尔 BooleanState', href: '/clusters/boolean-state/' },
+      { title: '家电', group: true },
+      { title: '运行状态 OperationalState', href: '/clusters/operational-state/' },
+      { title: '洗衣机 LaundryWasher', href: '/clusters/laundry-washer-mode/' },
+      { title: '扫地机 RvcRunMode', href: '/clusters/rvc-run-mode/' },
+      { title: '媒体', group: true },
+      { title: '播放 MediaPlayback', href: '/clusters/media-playback/' },
+      { title: '频道 Channel', href: '/clusters/channel/' },
+      { title: '通用功能', group: true },
+      { title: '标识 Identify', href: '/clusters/identify/' },
+      { title: '描述 Descriptor', href: '/clusters/descriptor/' },
+      { title: '权限 AccessControl', href: '/clusters/access-control/' },
+      { title: '节点与配置', group: true },
+      { title: '基本信息 BasicInfo', href: '/clusters/basic-information/' },
+      { title: '电源 PowerSource', href: '/clusters/power-source/' },
+      { title: '时间 TimeSynchronization', href: '/clusters/time-synchronization/' },
+      { title: '配网与安全', group: true },
+      { title: '网络配置 NetworkComm', href: '/clusters/network-commissioning/' },
+      { title: '凭据 OperationalCred', href: '/clusters/operational-credentials/' },
+      { title: 'OTA 与诊断', group: true },
+      { title: 'OTA Provider', href: '/clusters/ota-software-update-provider/' },
+      { title: '通用诊断 GeneralDiag', href: '/clusters/general-diagnostics/' },
+      { title: '能源管理', group: true },
+      { title: '电功率 ElecPower', href: '/clusters/electrical-power-measurement/' },
+      { title: '查看全部 82 个 Cluster', href: '/clusters/', dividerBefore: true },
     ],
   },
   {
@@ -69,7 +112,7 @@ function isDropdownActive(item: NavItem, current: string): boolean {
     <nav class="desktop-nav">
       {navigation.map((item) =>
         item.children ? (
-          <div class="dropdown">
+          <div class:list={['dropdown', { 'mega': item.megaMenu }]}>
             <button
               class:list={['nav-item', 'dropdown-trigger', { active: isDropdownActive(item, currentPath) }]}
               aria-haspopup="true"
@@ -78,20 +121,24 @@ function isDropdownActive(item: NavItem, current: string): boolean {
               {item.title}
               <ChevronDown class="chevron" size={12} />
             </button>
-            <div class="dropdown-menu">
+            <div class:list={['dropdown-menu', { 'mega-menu': item.megaMenu }]}>
               {item.children.map((child) => (
                 <Fragment>
                   {child.dividerBefore && <div class="dropdown-divider"></div>}
-                  <a
-                    href={child.href}
-                    class:list={['dropdown-item', { active: !child.external && isActive(child.href, currentPath) }]}
-                    {...(child.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                  >
-                    <span>{child.title}</span>
-                    {child.external && (
-                      <ArrowUpRight class="external-icon" size={12} strokeWidth={1.5} />
-                    )}
-                  </a>
+                  {child.group ? (
+                    <div class="dropdown-group">{child.title}</div>
+                  ) : (
+                    <a
+                      href={child.href}
+                      class:list={['dropdown-item', { active: !child.external && isActive(child.href, currentPath) }]}
+                      {...(child.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                    >
+                      <span>{child.title}</span>
+                      {child.external && (
+                        <ArrowUpRight class="external-icon" size={12} strokeWidth={1.5} />
+                      )}
+                    </a>
+                  )}
                 </Fragment>
               ))}
             </div>
@@ -133,16 +180,20 @@ function isDropdownActive(item: NavItem, current: string): boolean {
             {item.children.map((child) => (
               <Fragment>
                 {child.dividerBefore && <div class="mobile-divider"></div>}
-                <a
-                  href={child.href}
-                  class:list={['mobile-link', 'mobile-child', { active: !child.external && isActive(child.href, currentPath) }]}
-                  {...(child.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                >
-                  <span>{child.title}</span>
-                  {child.external && (
-                    <ArrowUpRight class="external-icon" size={12} strokeWidth={1.5} />
-                  )}
-                </a>
+                {child.group ? (
+                  <div class="mobile-group">{child.title}</div>
+                ) : (
+                  <a
+                    href={child.href}
+                    class:list={['mobile-link', 'mobile-child', { active: !child.external && isActive(child.href, currentPath) }]}
+                    {...(child.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  >
+                    <span>{child.title}</span>
+                    {child.external && (
+                      <ArrowUpRight class="external-icon" size={12} strokeWidth={1.5} />
+                    )}
+                  </a>
+                )}
               </Fragment>
             ))}
           </div>
@@ -410,6 +461,39 @@ function isDropdownActive(item: NavItem, current: string): boolean {
     background: rgba(99, 102, 241, 0.1);
   }
 
+  .dropdown-group {
+    padding: 0.5rem 0.75rem 0.25rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-primary-600, #4f46e5);
+  }
+
+  :global(.dark) .dropdown-group {
+    color: var(--color-primary-400, #818cf8);
+  }
+
+  .dropdown-group:not(:first-child) {
+    margin-top: 0.25rem;
+    border-top: 1px solid var(--border-color);
+    padding-top: 0.5rem;
+  }
+
+  .mega-menu {
+    columns: 3;
+    column-gap: 0.25rem;
+    min-width: 540px;
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
+  }
+
+  .mega-menu .dropdown-group,
+  .mega-menu .dropdown-item,
+  .mega-menu .dropdown-divider {
+    break-inside: avoid;
+  }
+
   .dropdown-divider {
     height: 1px;
     margin: 0.25rem 0.5rem;
@@ -544,6 +628,25 @@ function isDropdownActive(item: NavItem, current: string): boolean {
 
   .mobile-section-children.open {
     display: block;
+  }
+
+  .mobile-group {
+    padding: 0.5rem 1.5rem 0.125rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-primary-600, #4f46e5);
+  }
+
+  :global(.dark) .mobile-group {
+    color: var(--color-primary-400, #818cf8);
+  }
+
+  .mobile-group:not(:first-child) {
+    margin-top: 0.25rem;
+    border-top: 1px solid var(--border-color);
+    padding-top: 0.5rem;
   }
 
   .mobile-divider {

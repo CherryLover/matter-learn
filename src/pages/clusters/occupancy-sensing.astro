@@ -1,0 +1,546 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 核心状态 ---
+  "0x0": 1,              // Occupancy = 0b00000001（bit 0 = 1，检测到占用）
+  "0x1": 0,              // OccupancySensorType = PIR（被动红外）
+  "0x2": 1,              // OccupancySensorTypeBitmap = 0b00000001（PIR）
+
+  // --- PIR 传感器参数 ---
+  "0x10": 0,             // PIROccupiedToUnoccupiedDelay = 0 秒（立即切换）
+  "0x11": 10,            // PIRUnoccupiedToOccupiedDelay = 10 秒（延迟切换）
+  "0x12": 1,             // PIRUnoccupiedToOccupiedThreshold = 1（触发 1 次即切换）
+
+  // --- 保持时间 ---
+  "0x3": 30,             // HoldTime = 30 秒
+  "0x4": {               // HoldTimeLimits
+    "HoldTimeMin": 1,
+    "HoldTimeMax": 600,
+    "HoldTimeDefault": 10
+  }
+}`;
+---
+
+<DocLayout
+  title="占用感应 Cluster · OccupancySensing（0x0406）"
+  description="Matter OccupancySensing Cluster（0x0406）完整参考 — Occupancy 位图、PIR / 超声波 / 物理接触 / 雷达传感器类型、延迟与阈值参数、HoldTime 配置，纯只读 Cluster，无命令。"
+  type="article"
+  prev={{ title: 'Cluster 手册', href: '/clusters/' }}
+>
+  <h1>占用感应 Cluster（OccupancySensing）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x0406</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 通常在 <code>Endpoint 1</code>（功能端点）
+  </p>
+  <p>
+    OccupancySensing 用于报告设备所在区域是否有人（或物体）存在。
+    传感器类型包括 <strong>被动红外（PIR）</strong>、<strong>超声波</strong>、<strong>物理接触</strong>和<strong>雷达</strong>。
+    这个 Cluster 是<strong>纯只读的</strong> —— 只有属性，没有命令。App 通过订阅属性变化来获取占用状态的实时更新。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">传感器类型决定行为</div>
+    <p>
+      不同传感器类型的工作原理差异很大：PIR 靠检测人体热辐射变化，超声波通过反射波检测运动，物理接触依赖压力传感器，雷达则用微波信号穿墙检测。
+      <code>OccupancySensorType</code> 属性决定了设备支持哪组延迟/阈值参数，App 应根据传感器类型展示不同的配置界面。
+    </p>
+  </div>
+
+  <!-- ====== 属性总览 ====== -->
+  <h2 id="attributes">属性总览</h2>
+  <p>属性按功能分为四组：核心状态、PIR 传感器参数、超声波传感器参数、物理接触传感器参数。点击属性 ID 可跳转到详细说明。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>分组</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 核心状态 -->
+        <tr class="clickable-row" data-href="#attr-0x00">
+          <td><a href="#attr-0x00"><code>0x00</code></a></td>
+          <td>Occupancy</td>
+          <td>bitmap8</td>
+          <td><a href="#group-core">核心状态</a></td>
+          <td>当前占用状态位图</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x01">
+          <td><a href="#attr-0x01"><code>0x01</code></a></td>
+          <td>OccupancySensorType</td>
+          <td>enum8</td>
+          <td><a href="#group-core">核心状态</a></td>
+          <td>传感器类型</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x02">
+          <td><a href="#attr-0x02"><code>0x02</code></a></td>
+          <td>OccupancySensorTypeBitmap</td>
+          <td>bitmap8</td>
+          <td><a href="#group-core">核心状态</a></td>
+          <td>传感器类型位图（支持多种类型）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x03">
+          <td><a href="#attr-0x03"><code>0x03</code></a></td>
+          <td>HoldTime</td>
+          <td>uint16</td>
+          <td><a href="#group-core">核心状态</a></td>
+          <td>占用状态保持时间（秒）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x04">
+          <td><a href="#attr-0x04"><code>0x04</code></a></td>
+          <td>HoldTimeLimits</td>
+          <td>struct</td>
+          <td><a href="#group-core">核心状态</a></td>
+          <td>HoldTime 的可调范围</td>
+        </tr>
+        <!-- PIR 传感器 -->
+        <tr class="clickable-row" data-href="#attr-0x10">
+          <td><a href="#attr-0x10"><code>0x10</code></a></td>
+          <td>PIROccupiedToUnoccupiedDelay</td>
+          <td>uint16</td>
+          <td><a href="#group-pir">PIR 传感器</a></td>
+          <td>PIR 占用→未占用延迟（秒）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x11">
+          <td><a href="#attr-0x11"><code>0x11</code></a></td>
+          <td>PIRUnoccupiedToOccupiedDelay</td>
+          <td>uint16</td>
+          <td><a href="#group-pir">PIR 传感器</a></td>
+          <td>PIR 未占用→占用延迟（秒）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x12">
+          <td><a href="#attr-0x12"><code>0x12</code></a></td>
+          <td>PIRUnoccupiedToOccupiedThreshold</td>
+          <td>uint8</td>
+          <td><a href="#group-pir">PIR 传感器</a></td>
+          <td>PIR 触发次数阈值</td>
+        </tr>
+        <!-- 超声波传感器 -->
+        <tr class="clickable-row" data-href="#attr-0x20">
+          <td><a href="#attr-0x20"><code>0x20</code></a></td>
+          <td>UltrasonicOccupiedToUnoccupiedDelay</td>
+          <td>uint16</td>
+          <td><a href="#group-ultrasonic">超声波传感器</a></td>
+          <td>超声波 占用→未占用延迟（秒）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x21">
+          <td><a href="#attr-0x21"><code>0x21</code></a></td>
+          <td>UltrasonicUnoccupiedToOccupiedDelay</td>
+          <td>uint16</td>
+          <td><a href="#group-ultrasonic">超声波传感器</a></td>
+          <td>超声波 未占用→占用延迟（秒）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x22">
+          <td><a href="#attr-0x22"><code>0x22</code></a></td>
+          <td>UltrasonicUnoccupiedToOccupiedThreshold</td>
+          <td>uint8</td>
+          <td><a href="#group-ultrasonic">超声波传感器</a></td>
+          <td>超声波触发次数阈值</td>
+        </tr>
+        <!-- 物理接触传感器 -->
+        <tr class="clickable-row" data-href="#attr-0x30">
+          <td><a href="#attr-0x30"><code>0x30</code></a></td>
+          <td>PhysicalContactOccupiedToUnoccupiedDelay</td>
+          <td>uint16</td>
+          <td><a href="#group-physical">物理接触传感器</a></td>
+          <td>物理接触 占用→未占用延迟（秒）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x31">
+          <td><a href="#attr-0x31"><code>0x31</code></a></td>
+          <td>PhysicalContactUnoccupiedToOccupiedDelay</td>
+          <td>uint16</td>
+          <td><a href="#group-physical">物理接触传感器</a></td>
+          <td>物理接触 未占用→占用延迟（秒）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x32">
+          <td><a href="#attr-0x32"><code>0x32</code></a></td>
+          <td>PhysicalContactUnoccupiedToOccupiedThreshold</td>
+          <td>uint8</td>
+          <td><a href="#group-physical">物理接触传感器</a></td>
+          <td>物理接触触发次数阈值</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 核心状态（0x00-0x04）====== -->
+  <h3 id="group-core">核心状态（0x00 - 0x04）</h3>
+  <p>所有 OccupancySensing 设备必须支持的属性，描述当前占用状态和传感器类型。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>读写</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x00">
+          <td><code>0x00</code></td>
+          <td>Occupancy（占用状态）</td>
+          <td>bitmap8</td>
+          <td>只读</td>
+          <td>bit 0（SensedOccupancy）：<code>1</code> = 已占用，<code>0</code> = 未占用。其余 bit 保留</td>
+        </tr>
+        <tr id="attr-0x01">
+          <td><code>0x01</code></td>
+          <td>OccupancySensorType（传感器类型）</td>
+          <td>enum8</td>
+          <td>只读</td>
+          <td>设备使用的主要传感器类型（见下方枚举）</td>
+        </tr>
+        <tr id="attr-0x02">
+          <td><code>0x02</code></td>
+          <td>OccupancySensorTypeBitmap（传感器类型位图）</td>
+          <td>bitmap8</td>
+          <td>只读</td>
+          <td>设备支持的所有传感器类型的位图（见下方位定义）</td>
+        </tr>
+        <tr id="attr-0x03">
+          <td><code>0x03</code></td>
+          <td>HoldTime（保持时间）</td>
+          <td>uint16</td>
+          <td>读写</td>
+          <td>最后一次检测到占用后，状态保持「已占用」的秒数。防止状态在短暂离开时频繁翻转</td>
+        </tr>
+        <tr id="attr-0x04">
+          <td><code>0x04</code></td>
+          <td>HoldTimeLimits（保持时间范围）</td>
+          <td>struct</td>
+          <td>只读</td>
+          <td>包含 HoldTimeMin、HoldTimeMax、HoldTimeDefault 三个字段，描述 HoldTime 的可调范围</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">Occupancy 是位图，不是布尔值</div>
+    <p>
+      <code>Occupancy</code> 的类型是 <code>bitmap8</code>，不是 <code>bool</code>。只有 <strong>bit 0</strong>（SensedOccupancy）表示占用状态，其余 bit 保留供未来使用。
+      读取时应做位运算：<code>isOccupied = (Occupancy &amp; 0x01) != 0</code>，不要直接判断是否等于 <code>1</code>。
+    </p>
+  </div>
+
+  <h4>OccupancySensorTypeEnum 枚举值</h4>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">PIR</span>
+        <span class="enum-desc">被动红外 —— 检测人体热辐射变化，最常见的类型</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Ultrasonic</span>
+        <span class="enum-desc">超声波 —— 发射超声波并检测反射变化，适合检测微小运动</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">PIRAndUltrasonic</span>
+        <span class="enum-desc">PIR + 超声波双重检测，精度更高，误报更少</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">PhysicalContact</span>
+        <span class="enum-desc">物理接触 —— 压力传感器、座椅感应器等</span>
+      </div>
+    </div>
+  </div>
+
+  <h4>OccupancySensorTypeBitmap 位定义</h4>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">bit 0</span>
+      <div>
+        <span class="enum-name">PIR</span>
+        <span class="enum-desc">支持被动红外传感</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">bit 1</span>
+      <div>
+        <span class="enum-name">Ultrasonic</span>
+        <span class="enum-desc">支持超声波传感</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">bit 2</span>
+      <div>
+        <span class="enum-name">PhysicalContact</span>
+        <span class="enum-desc">支持物理接触传感</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">HoldTime 的作用</div>
+    <p>
+      想象一个会议室人体传感器：有人短暂离开去接水，不希望灯立即关闭。
+      <code>HoldTime</code> 就是这个「缓冲期」—— 设置为 <code>30</code> 秒意味着最后一次检测到人之后，设备会再保持 30 秒的「已占用」状态，然后才切换到「未占用」。
+      App 可以让用户在 <code>HoldTimeLimits</code> 范围内自行调整这个值。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== PIR 传感器（0x10-0x12）====== -->
+  <h3 id="group-pir">PIR 传感器参数（0x10 - 0x12）</h3>
+  <p>
+    仅当 <code>OccupancySensorType</code> 为 PIR（0）或 PIRAndUltrasonic（2）时才有意义。
+    控制 PIR 传感器状态切换的延迟和灵敏度。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>读写</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x10">
+          <td><code>0x10</code></td>
+          <td>PIROccupiedToUnoccupiedDelay（占用→未占用延迟）</td>
+          <td>uint16</td>
+          <td>读写</td>
+          <td>PIR 检测到占用消失后，延迟多少秒才切换到「未占用」。默认 <code>0</code>（立即切换）</td>
+        </tr>
+        <tr id="attr-0x11">
+          <td><code>0x11</code></td>
+          <td>PIRUnoccupiedToOccupiedDelay（未占用→占用延迟）</td>
+          <td>uint16</td>
+          <td>读写</td>
+          <td>PIR 检测到占用出现后，延迟多少秒才切换到「已占用」。用于过滤瞬间误触发</td>
+        </tr>
+        <tr id="attr-0x12">
+          <td><code>0x12</code></td>
+          <td>PIRUnoccupiedToOccupiedThreshold（触发阈值）</td>
+          <td>uint8</td>
+          <td>读写</td>
+          <td>在延迟时间内需要检测到多少次占用事件才触发切换。范围 1~254，默认 <code>1</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">延迟与阈值配合使用</div>
+    <p>
+      假设 <code>PIRUnoccupiedToOccupiedDelay = 10</code>，<code>PIRUnoccupiedToOccupiedThreshold = 3</code>：
+      传感器需要在 10 秒内检测到 3 次占用事件，才会从「未占用」切换到「已占用」。
+      这种组合能有效过滤宠物经过、窗帘飘动等误触发。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 超声波传感器（0x20-0x22）====== -->
+  <h3 id="group-ultrasonic">超声波传感器参数（0x20 - 0x22）</h3>
+  <p>
+    仅当 <code>OccupancySensorType</code> 为 Ultrasonic（1）或 PIRAndUltrasonic（2）时才有意义。
+    参数含义与 PIR 组完全对称。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>读写</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x20">
+          <td><code>0x20</code></td>
+          <td>UltrasonicOccupiedToUnoccupiedDelay（占用→未占用延迟）</td>
+          <td>uint16</td>
+          <td>读写</td>
+          <td>超声波检测到占用消失后，延迟多少秒才切换到「未占用」。默认 <code>0</code></td>
+        </tr>
+        <tr id="attr-0x21">
+          <td><code>0x21</code></td>
+          <td>UltrasonicUnoccupiedToOccupiedDelay（未占用→占用延迟）</td>
+          <td>uint16</td>
+          <td>读写</td>
+          <td>超声波检测到占用出现后，延迟多少秒才切换到「已占用」</td>
+        </tr>
+        <tr id="attr-0x22">
+          <td><code>0x22</code></td>
+          <td>UltrasonicUnoccupiedToOccupiedThreshold（触发阈值）</td>
+          <td>uint8</td>
+          <td>读写</td>
+          <td>延迟时间内需要检测到多少次占用事件才触发切换。范围 1~254，默认 <code>1</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 物理接触传感器（0x30-0x32）====== -->
+  <h3 id="group-physical">物理接触传感器参数（0x30 - 0x32）</h3>
+  <p>
+    仅当 <code>OccupancySensorType</code> 为 PhysicalContact（3）时才有意义。
+    参数含义与 PIR 组完全对称。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>读写</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x30">
+          <td><code>0x30</code></td>
+          <td>PhysicalContactOccupiedToUnoccupiedDelay（占用→未占用延迟）</td>
+          <td>uint16</td>
+          <td>读写</td>
+          <td>物理接触检测到占用消失后，延迟多少秒才切换到「未占用」。默认 <code>0</code></td>
+        </tr>
+        <tr id="attr-0x31">
+          <td><code>0x31</code></td>
+          <td>PhysicalContactUnoccupiedToOccupiedDelay（未占用→占用延迟）</td>
+          <td>uint16</td>
+          <td>读写</td>
+          <td>物理接触检测到占用出现后，延迟多少秒才切换到「已占用」</td>
+        </tr>
+        <tr id="attr-0x32">
+          <td><code>0x32</code></td>
+          <td>PhysicalContactUnoccupiedToOccupiedThreshold（触发阈值）</td>
+          <td>uint8</td>
+          <td>读写</td>
+          <td>延迟时间内需要检测到多少次占用事件才触发切换。范围 1~254，默认 <code>1</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>一个典型 PIR 人体传感器的 OccupancySensing Cluster 读取结果：</p>
+  <pre><code set:html={exampleData} /></pre>
+
+  <!-- ====== 应用场景 ====== -->
+  <h2 id="scenarios">应用场景</h2>
+  <p>OccupancySensing 是智能家居自动化的核心触发源之一，以下是三个典型集成场景。</p>
+
+  <details class="scenario">
+    <summary>场景 1：智能家居自动化（灯光联动）</summary>
+    <div class="scenario-content">
+      <p>
+        最经典的用法 —— 人来灯亮，人走灯灭。
+      </p>
+      <ol>
+        <li>订阅 <code>Occupancy (0x00)</code> 属性变化</li>
+        <li>当 <code>Occupancy</code> bit 0 从 <code>0</code> 变为 <code>1</code>（有人进入），发送 OnOff Cluster 的 <code>On</code> 命令开灯</li>
+        <li>当 <code>Occupancy</code> bit 0 从 <code>1</code> 变为 <code>0</code>（无人），发送 <code>Off</code> 命令关灯</li>
+        <li>通过调整 <code>HoldTime</code> 控制关灯延迟 —— 会议室建议 300 秒（5 分钟），走廊建议 30 秒</li>
+      </ol>
+      <p>
+        <strong>进阶</strong>：结合 LevelControl Cluster，夜间检测到人时只开到 20% 亮度，白天开到 100%。
+        还可以结合多个传感器做区域联动 —— 走廊传感器触发后开启走廊灯和目标房间灯。
+      </p>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 2：HVAC 节能集成</summary>
+    <div class="scenario-content">
+      <p>
+        将占用感应与 Thermostat Cluster 联动，实现「人在舒适、人走节能」。
+      </p>
+      <ol>
+        <li>订阅 <code>Occupancy (0x00)</code> 属性变化</li>
+        <li>检测到占用时，将 Thermostat 的 <code>OccupiedCoolingSetpoint</code> / <code>OccupiedHeatingSetpoint</code> 设为舒适温度（如 24°C / 22°C）</li>
+        <li>检测到无人后（经过 <code>HoldTime</code> 延迟），切换到 <code>UnoccupiedCoolingSetpoint</code> / <code>UnoccupiedHeatingSetpoint</code> 节能温度（如 28°C / 18°C）</li>
+        <li>建议 <code>HoldTime</code> 设置为 600~900 秒（10~15 分钟），避免短暂离开就切换温度</li>
+      </ol>
+      <p>
+        <strong>注意</strong>：Thermostat Cluster 本身有 Occupancy 属性（<code>0x02</code>），但它只是被动接收状态。
+        真正的占用检测数据来源是 OccupancySensing Cluster，通常由自动化规则桥接两者。
+      </p>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 3：安防与入侵检测</summary>
+    <div class="scenario-content">
+      <p>
+        用户离家设防后，占用传感器检测到异常活动即触发报警。
+      </p>
+      <ol>
+        <li>用户通过 App 启用「离家模式」（设防）</li>
+        <li>订阅所有占用传感器的 <code>Occupancy (0x00)</code> 变化</li>
+        <li>设防状态下检测到 <code>Occupancy</code> bit 0 = <code>1</code>，触发安防联动：
+          <ul>
+            <li>推送报警通知到用户手机</li>
+            <li>开启摄像头录像</li>
+            <li>触发声光报警器</li>
+          </ul>
+        </li>
+        <li>为减少误报，建议提高灵敏度要求：<code>PIRUnoccupiedToOccupiedThreshold = 3</code>，<code>PIRUnoccupiedToOccupiedDelay = 5</code></li>
+      </ol>
+      <p>
+        <strong>提示</strong>：安防场景下建议使用 PIRAndUltrasonic 双模传感器，PIR 容易被宠物误触发，超声波可以做二次确认。
+        同时要注意区分设防区域和非设防区域的传感器。
+      </p>
+    </div>
+  </details>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发建议</div>
+    <p>
+      App 展示占用传感器状态时，典型的处理流程：
+    </p>
+    <ol>
+      <li>读取 <code>OccupancySensorType (0x01)</code>，在 UI 上显示传感器类型图标和名称</li>
+      <li>订阅 <code>Occupancy (0x00)</code>，用位运算 <code>&amp; 0x01</code> 取 bit 0，展示「有人 / 无人」状态</li>
+      <li>根据传感器类型，仅展示对应的延迟/阈值配置项（PIR 设备不显示超声波参数）</li>
+      <li>让用户在 <code>HoldTimeLimits</code> 的范围内调整 <code>HoldTime</code>，用滑块控件更直观</li>
+      <li>提供事件历史记录 —— 记录每次占用状态变化的时间，帮助用户了解活动规律</li>
+    </ol>
+  </div>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>

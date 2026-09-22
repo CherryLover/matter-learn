@@ -1,0 +1,375 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 属性（ActivatedCarbonFilterMonitoring Cluster） ---
+  "0x0": 72,          // Condition = 72%（滤芯剩余寿命）
+  "0x1": 0,           // DegradationDirection = Down（值越小越需更换）
+  "0x2": 1,           // ChangeIndication = Warning（建议更换）
+  "0x3": true,        // InPlaceIndicator = true（滤芯已安装）
+  "0x4": 1718380800,  // LastChangedTime = 2024-06-15T00:00:00Z
+  "0x5": [{           // ReplacementProductList
+    "productIdentifierType": 3,
+    "productIdentifierValue": "AC-FILTER-2024-VOC"
+  }]
+}`;
+
+const resetConditionExample = `{
+  "invokeRequests": [{
+    "commandPath": {
+      "endpointId": 1,
+      "clusterId": "0x0072",
+      "commandId": "0x00"          // ResetCondition
+    },
+    "commandFields": {}
+  }]
+}`;
+
+const dualFilterExample = `{
+  // Endpoint 1 — HEPA 滤芯（HEPAFilterMonitoring 0x0071）
+  "hepa": {
+    "0x0": 45,         // Condition = 45%
+    "0x2": 1           // ChangeIndication = Warning
+  },
+  // Endpoint 2 — 活性炭滤芯（ActivatedCarbonFilterMonitoring 0x0072）
+  "carbon": {
+    "0x0": 78,         // Condition = 78%
+    "0x2": 0           // ChangeIndication = OK
+  }
+}`;
+---
+
+<DocLayout
+  title="活性炭滤芯监测 Cluster · ActivatedCarbonFilterMonitoring（0x0072）"
+  description="Matter ActivatedCarbonFilterMonitoring Cluster（0x0072）完整参考 — 滤芯寿命、更换提醒、ResetCondition 命令，用于监测活性炭滤芯状态的 Cluster。"
+  type="article"
+>
+  <h1>活性炭滤芯监测 Cluster（ActivatedCarbonFilterMonitoring）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x0072</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 功能端点（通常为 <code>Endpoint 1</code> 或独立滤芯端点）
+  </p>
+  <p>
+    ActivatedCarbonFilterMonitoring 用于监测活性炭滤芯的生命周期 —— 剩余寿命、降解方向、更换提醒、替换产品信息。
+    它与 HEPA Filter Monitoring（<code>0x0071</code>）<strong>结构完全相同</strong>（相同的属性、命令、枚举），区别仅在滤芯类型。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">活性炭 vs HEPA：过滤对象不同</div>
+    <p>
+      <strong>HEPA 滤芯</strong>捕捉<strong>颗粒物</strong>（PM2.5、粉尘、花粉、宠物毛发），靠物理拦截。<br/>
+      <strong>活性炭滤芯</strong>吸附<strong>气态污染物</strong>（甲醛、VOC、异味、烟味），靠化学吸附。<br/>
+      空气净化器通常同时搭载两层滤芯，各自有独立的寿命周期 —— 因此需要两个独立的 Cluster 分别监测。
+    </p>
+  </div>
+
+  <!-- ====== Feature Map ====== -->
+  <h2 id="features">Feature Map（功能位）</h2>
+  <p>三个可选功能位决定设备支持哪些属性，与 HEPA Filter Monitoring 完全一致。</p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0x01</span>
+      <div>
+        <span class="enum-name">CON（Condition）</span>
+        <span class="enum-desc">支持 Condition 属性，报告滤芯剩余百分比</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x02</span>
+      <div>
+        <span class="enum-name">WAR（Warning）</span>
+        <span class="enum-desc">支持 ChangeIndication 属性，发出更换提醒</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x04</span>
+      <div>
+        <span class="enum-name">REP（ReplacementProductList）</span>
+        <span class="enum-desc">支持 ReplacementProductList 属性，提供替换滤芯产品信息</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== 属性总览 ====== -->
+  <h2 id="attributes">属性总览</h2>
+  <p>所有属性均与 HEPA Filter Monitoring 相同，Feature 列标注需要哪个功能位。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>Feature</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#attr-0x00">
+          <td><a href="#attr-0x00"><code>0x00</code></a></td>
+          <td>Condition</td>
+          <td>percent</td>
+          <td>CON</td>
+          <td>滤芯剩余寿命百分比（0~100）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x01">
+          <td><a href="#attr-0x01"><code>0x01</code></a></td>
+          <td>DegradationDirection</td>
+          <td>enum8</td>
+          <td>CON</td>
+          <td>降解方向（值变小=更旧 or 值变大=更旧）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x02">
+          <td><a href="#attr-0x02"><code>0x02</code></a></td>
+          <td>ChangeIndication</td>
+          <td>enum8</td>
+          <td>必选</td>
+          <td>当前更换状态（OK / Warning / Critical）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x03">
+          <td><a href="#attr-0x03"><code>0x03</code></a></td>
+          <td>InPlaceIndicator</td>
+          <td>bool</td>
+          <td>可选</td>
+          <td>滤芯是否已安装到位</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x04">
+          <td><a href="#attr-0x04"><code>0x04</code></a></td>
+          <td>LastChangedTime</td>
+          <td>epoch-s</td>
+          <td>可选</td>
+          <td>上次更换滤芯的时间戳</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x05">
+          <td><a href="#attr-0x05"><code>0x05</code></a></td>
+          <td>ReplacementProductList</td>
+          <td>list</td>
+          <td>REP</td>
+          <td>推荐替换产品列表</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 属性详解 ====== -->
+  <h3 id="attr-0x00">Condition（滤芯剩余寿命）</h3>
+  <p>
+    0~100 的百分比值，表示活性炭滤芯的剩余吸附能力。<code>100</code> 表示全新，<code>0</code> 表示完全耗尽（当 DegradationDirection = Down 时）。
+    活性炭的衰减速度取决于环境中 VOC/异味的浓度，高污染环境下消耗更快。
+  </p>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x01">DegradationDirection（降解方向）</h3>
+  <p>告诉 App 端 Condition 值的含义方向。</p>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Down</span>
+        <span class="enum-desc">值从 100 降到 0，越小越需更换（最常见）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Up</span>
+        <span class="enum-desc">值从 0 升到 100，越大越需更换</span>
+      </div>
+    </div>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x02">ChangeIndication（更换状态）</h3>
+  <p>设备对滤芯当前状态的综合判断。<strong>必选属性</strong>，即使不支持 CON Feature 也必须实现。</p>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">OK</span>
+        <span class="enum-desc">滤芯状态良好，无需更换</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Warning</span>
+        <span class="enum-desc">建议尽快更换（吸附能力下降）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">Critical</span>
+        <span class="enum-desc">必须立即更换（已丧失吸附能力）</span>
+      </div>
+    </div>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x03">InPlaceIndicator（滤芯安装状态）</h3>
+  <p>
+    <code>true</code> 表示滤芯已正确安装，<code>false</code> 表示滤芯缺失或未装好。
+    带有物理检测开关的设备可以在用户取出滤芯时自动更新此值。
+  </p>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x04">LastChangedTime（上次更换时间）</h3>
+  <p>
+    Unix 时间戳（秒），记录上一次更换活性炭滤芯的时间。配合 Condition 可以计算滤芯的实际使用天数和平均消耗速度。
+    用户更换滤芯并执行 ResetCondition 命令后，设备应更新此值。
+  </p>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <h3 id="attr-0x05">ReplacementProductList（替换产品列表）</h3>
+  <p>
+    设备推荐的替换滤芯产品列表，每条记录包含产品标识类型和标识值。App 可据此直接引导用户购买。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ProductIdentifierType</td>
+          <td>enum8</td>
+          <td>标识类型（见下方枚举）</td>
+        </tr>
+        <tr>
+          <td>ProductIdentifierValue</td>
+          <td>string</td>
+          <td>标识值（如 UPC 码、EAN 码、型号等）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>ProductIdentifierTypeEnum 枚举值</h4>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">UPC</span>
+        <span class="enum-desc">通用产品代码</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">GTIN-8</span>
+        <span class="enum-desc">8 位全球贸易项目代码</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">EAN</span>
+        <span class="enum-desc">欧洲商品编号</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">GTIN-14</span>
+        <span class="enum-desc">14 位全球贸易项目代码</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">4</span>
+      <div>
+        <span class="enum-name">OEM</span>
+        <span class="enum-desc">厂商自定义型号</span>
+      </div>
+    </div>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 命令 ====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>只有一个命令，用于更换滤芯后重置状态。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#cmd-0x00">
+          <td><a href="#cmd-0x00"><code>0x00</code></a></td>
+          <td>ResetCondition</td>
+          <td>重置滤芯状态（更换滤芯后调用）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="cmd-0x00">ResetCondition —— 重置滤芯状态（0x00）</h3>
+  <p>
+    用户更换活性炭滤芯后，通过 App 发送此命令。设备收到后应将 Condition 恢复到 100（或 0，取决于 DegradationDirection），
+    将 ChangeIndication 重置为 OK，并更新 LastChangedTime 为当前时间。无参数，直接发送即可。
+  </p>
+  <p>请求示例：</p>
+  <pre><code set:html={resetConditionExample} /></pre>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>读取一台空气净化器的活性炭滤芯状态：</p>
+  <pre><code set:html={exampleData} /></pre>
+
+  <!-- ====== 场景 ====== -->
+  <h2 id="scenarios">应用场景</h2>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">场景一：双滤芯空气净化器</div>
+    <p>
+      一台空气净化器同时搭载 HEPA 滤芯和活性炭滤芯，分别放在两个 Endpoint 上（或同一 Endpoint 上两个不同的 Cluster）。
+      App 需要分别显示两层滤芯的寿命，因为它们的消耗速度不同 —— PM2.5 高的环境 HEPA 先耗尽，装修房间则活性炭先耗尽。
+    </p>
+    <pre><code set:html={dualFilterExample} /></pre>
+    <p>
+      App 端建议用双进度条或双环形图分别展示，让用户一目了然知道该换哪层滤芯。
+    </p>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">场景二：VOC 吸附能力追踪</div>
+    <p>
+      智能新风系统内置 VOC 传感器，结合活性炭滤芯的 Condition 属性，可以分析滤芯的实际吸附效率 ——
+      当 VOC 浓度持续偏高且 Condition 下降到 50% 以下时，说明吸附能力明显衰减，App 可提前推送更换建议，
+      而不是等到 ChangeIndication 变为 Critical 才通知用户。
+    </p>
+    <p>
+      结合 LastChangedTime 还可以统计滤芯的平均使用寿命，帮助用户规划耗材采购周期。
+    </p>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">与 HEPA Filter Monitoring 的关系</div>
+    <p>
+      两个 Cluster 的属性、命令、枚举定义<strong>完全一致</strong>，仅 Cluster ID 不同（HEPA = <code>0x0071</code>，活性炭 = <code>0x0072</code>）。
+      App 开发时可以复用同一套 UI 组件和数据解析逻辑，只需根据 Cluster ID 显示不同的滤芯名称和图标即可。
+    </p>
+  </div>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>

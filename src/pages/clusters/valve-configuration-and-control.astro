@@ -1,0 +1,729 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 定时参数 ---
+  "0x0000": 1800,            // OpenDuration = 1800 秒（本次开阀 30 分钟）
+  "0x0001": 3600,            // DefaultOpenDuration = 3600 秒（默认每次开阀 1 小时）
+  "0x0002": null,            // AutoCloseTime = null（未设置自动关阀时间点）
+  "0x0003": 1200,            // RemainingDuration = 1200 秒（还剩 20 分钟关阀）
+
+  // --- 阀门状态 ---
+  "0x0004": 1,               // CurrentState = Open（当前已打开）
+  "0x0005": 1,               // TargetState = Open（目标也是打开）
+
+  // --- 开度控制（LVL Feature）---
+  "0x0006": 75,              // CurrentLevel = 75%（当前开度 75%）
+  "0x0007": 75,              // TargetLevel = 75%（目标开度 75%）
+
+  // --- 故障状态 ---
+  "0x0008": 0                // ValveFault = 0（无故障）
+}`;
+---
+
+<DocLayout
+  title="阀门控制 Cluster · ValveConfigurationAndControl（0x0081）"
+  description="Matter ValveConfigurationAndControl Cluster（0x0081）完整参考 — Open/Close 开关命令、开度百分比控制、定时自动关阀、阀门状态枚举、故障位图、事件上报等全部属性与命令定义及枚举值速查。"
+  type="article"
+>
+  <h1>阀门控制 Cluster（ValveConfigurationAndControl）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x0081</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 通常在 <code>Valve Endpoint</code>（阀门功能端点）
+  </p>
+  <p>
+    ValveConfigurationAndControl 是 Matter 中控制阀门设备的核心 Cluster，
+    适用于水阀、燃气阀、灌溉阀等需要「开/关/定时/开度调节」能力的场景。
+    它定义了阀门的开关命令、持续时间控制、当前/目标状态、开度百分比、故障检测和事件上报等全部能力。
+    与简单的 OnOff 开关不同，阀门 Cluster 内置了定时自动关阀和精确开度控制，
+    更适合需要安全保护的流体控制场景。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">Feature 驱动的能力差异</div>
+    <p>
+      ValveConfigurationAndControl 的能力取决于两个 Feature：
+      <strong>TimeSync（TS）</strong> 启用基于 UTC 时间戳的自动关阀能力，
+      <strong>Level（LVL）</strong> 启用百分比开度控制（0~100%）。
+      一个简单的水阀可能只支持全开/全关，而一个灌溉控制阀可能同时支持定时和开度调节。
+      开发前先读取 <code>FeatureMap (0xFFFC)</code>，确认设备支持哪些能力，再决定 UI 布局。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#commands">命令列表</a>
+    <span class="nav-sep">|</span>
+    <a href="#attributes">属性详解</a>
+    <span class="nav-sep">|</span>
+    <a href="#enums">枚举与位图</a>
+    <span class="nav-sep">|</span>
+    <a href="#features">Feature 位图</a>
+    <span class="nav-sep">|</span>
+    <a href="#events">事件列表</a>
+    <span class="nav-sep">|</span>
+    <a href="#example-data">示例数据</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">常见场景</a>
+  </nav>
+
+  <!-- ====== 命令（Commands）====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    ValveConfigurationAndControl Cluster 共有 2 个命令：Open 和 Close。
+    Open 命令支持可选的持续时间和目标开度参数，Close 命令无参数直接关阀。
+    点击下方表格中的命令 ID 可跳转到对应的详细说明。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>说明</th>
+          <th>所需特性</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#cmd-0x00">
+          <td><a href="#cmd-0x00"><code>0x00</code></a></td>
+          <td>Open</td>
+          <td>打开阀门（可指定持续时间和开度）</td>
+          <td class="col-optional">无</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x01">
+          <td><a href="#cmd-0x01"><code>0x01</code></a></td>
+          <td>Close</td>
+          <td>关闭阀门</td>
+          <td class="col-optional">无</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 命令详解 ====== -->
+  <h3 id="cmd-0x00">Open —— 打开阀门（0x00）</h3>
+  <p>
+    打开阀门。可以通过可选参数指定开阀持续时间和目标开度。
+    如果不传任何参数，阀门按 <code>DefaultOpenDuration</code> 的时间全开。
+    如果阀门已经打开，再次发送 Open 命令会更新持续时间和目标开度。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>参数</th><th>类型</th><th>是否必选</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>OpenDuration</td>
+          <td>elapsed-s / null</td>
+          <td>可选</td>
+          <td>开阀持续时间，单位秒。<code>null</code> 表示使用 DefaultOpenDuration 的值。省略时也使用默认值</td>
+        </tr>
+        <tr>
+          <td>TargetLevel</td>
+          <td>percent</td>
+          <td>可选（需 LVL）</td>
+          <td>目标开度百分比，1~100。省略时全开（100%）。需要 <strong>LVL</strong> Feature</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">安全提示：DefaultOpenDuration</div>
+    <p>
+      如果 <code>DefaultOpenDuration</code> 为 <code>null</code> 且 Open 命令也未指定 OpenDuration，
+      阀门将无限期保持打开状态，直到收到 Close 命令。对于水阀和燃气阀，
+      建议始终设置 DefaultOpenDuration 作为安全兜底，防止网络断连后阀门长期开启导致水漫或气泄。
+    </p>
+  </div>
+
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        用户在 App 上点击「打开水阀」按钮，发送 Open 命令，阀门打开。
+        花园灌溉系统发送 Open(OpenDuration=1800)，阀门开启 30 分钟后自动关闭。
+        智能暖通系统发送 Open(TargetLevel=50)，阀门打开到 50% 开度，精确控制热水流量。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x01">Close —— 关闭阀门（0x01）</h3>
+  <p>
+    关闭阀门。没有任何参数。执行成功后，<code>TargetState</code> 变为 <code>Closed (0)</code>，
+    阀门开始执行关闭动作。如果阀门正在定时开启中，Close 命令会取消定时并立即关阀。
+  </p>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        用户手动关闭水阀、水浸传感器检测到漏水后自动化规则触发紧急关阀、
+        燃气报警器联动关闭燃气阀门时调用。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 属性详解 ====== -->
+  <h2 id="attributes">属性详解</h2>
+  <p>ValveConfigurationAndControl Cluster 的属性按功能分为四组。点击下方汇总表中的属性 ID 可跳转到对应的详细说明。</p>
+
+  <!-- 属性汇总表 -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>分组</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 定时参数 -->
+        <tr class="clickable-row" data-href="#attr-0x0000">
+          <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
+          <td>OpenDuration</td>
+          <td>elapsed-s / null</td>
+          <td><a href="#group-timing">定时参数</a></td>
+          <td>当前开阀持续时间（秒）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0001">
+          <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
+          <td>DefaultOpenDuration</td>
+          <td>elapsed-s / null</td>
+          <td><a href="#group-timing">定时参数</a></td>
+          <td>默认开阀持续时间（秒）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0002">
+          <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
+          <td>AutoCloseTime</td>
+          <td>epoch-us / null</td>
+          <td><a href="#group-timing">定时参数</a></td>
+          <td>自动关阀的 UTC 时间戳</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0003">
+          <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
+          <td>RemainingDuration</td>
+          <td>elapsed-s / null</td>
+          <td><a href="#group-timing">定时参数</a></td>
+          <td>剩余开阀时间（秒）</td>
+        </tr>
+        <!-- 阀门状态 -->
+        <tr class="clickable-row" data-href="#attr-0x0004">
+          <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
+          <td>CurrentState</td>
+          <td>ValveStateEnum / null</td>
+          <td><a href="#group-state">阀门状态</a></td>
+          <td>当前阀门状态</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0005">
+          <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
+          <td>TargetState</td>
+          <td>ValveStateEnum / null</td>
+          <td><a href="#group-state">阀门状态</a></td>
+          <td>目标阀门状态</td>
+        </tr>
+        <!-- 开度控制 -->
+        <tr class="clickable-row" data-href="#attr-0x0006">
+          <td><a href="#attr-0x0006"><code>0x0006</code></a></td>
+          <td>CurrentLevel</td>
+          <td>percent / null</td>
+          <td><a href="#group-level">开度控制</a></td>
+          <td>当前开度百分比</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0007">
+          <td><a href="#attr-0x0007"><code>0x0007</code></a></td>
+          <td>TargetLevel</td>
+          <td>percent / null</td>
+          <td><a href="#group-level">开度控制</a></td>
+          <td>目标开度百分比</td>
+        </tr>
+        <!-- 故障状态 -->
+        <tr class="clickable-row" data-href="#attr-0x0008">
+          <td><a href="#attr-0x0008"><code>0x0008</code></a></td>
+          <td>ValveFault</td>
+          <td>ValveFaultBitmap</td>
+          <td><a href="#group-fault">故障状态</a></td>
+          <td>阀门故障位图</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 定时参数（0x0000 ~ 0x0003）====== -->
+  <h3 id="group-timing">定时参数（0x0000 ~ 0x0003）</h3>
+  <p>控制阀门的开启持续时间和自动关闭机制。这是阀门 Cluster 区别于简单 OnOff 开关的关键能力 —— 内置定时保护，防止阀门意外长期开启。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0000">
+          <td><code>0x0000</code></td>
+          <td>OpenDuration<br/><span class="attr-cn">开阀持续时间</span></td>
+          <td>elapsed-s / null</td>
+          <td>本次开阀的持续时间，单位秒。由 Open 命令设置。<code>null</code> 表示无限期开启（直到收到 Close 命令）。阀门关闭后此值变为 <code>null</code></td>
+        </tr>
+        <tr id="attr-0x0001">
+          <td><code>0x0001</code></td>
+          <td>DefaultOpenDuration<br/><span class="attr-cn">默认开阀时间</span></td>
+          <td>elapsed-s / null</td>
+          <td>当 Open 命令未指定 OpenDuration 时使用的默认值，单位秒。<strong>可读写</strong>。<code>null</code> 表示无默认时间（Open 不带参数时将无限期开启）。建议设置一个合理的安全值</td>
+        </tr>
+        <tr id="attr-0x0002">
+          <td><code>0x0002</code></td>
+          <td>AutoCloseTime<br/><span class="attr-cn">自动关阀时间</span></td>
+          <td>epoch-us / null</td>
+          <td>阀门将自动关闭的 UTC 时间戳，单位微秒。由设备根据 OpenDuration 和开阀时间自动计算。<code>null</code> 表示无自动关闭计划。<strong>需要 TS Feature</strong></td>
+        </tr>
+        <tr id="attr-0x0003">
+          <td><code>0x0003</code></td>
+          <td>RemainingDuration<br/><span class="attr-cn">剩余开阀时间</span></td>
+          <td>elapsed-s / null</td>
+          <td>距离自动关阀还剩多少秒。设备自动维护，倒计时归零后阀门关闭。<code>null</code> 表示无定时或阀门已关闭</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">定时参数之间的关系</div>
+    <p>
+      <code>DefaultOpenDuration</code> 是预设值，<code>OpenDuration</code> 是本次实际生效值，
+      <code>RemainingDuration</code> 是实时倒计时，<code>AutoCloseTime</code> 是绝对时间点。
+      Open 命令不带参数时，<code>OpenDuration</code> = <code>DefaultOpenDuration</code>；
+      带参数时，<code>OpenDuration</code> = 命令参数值。
+      App 界面通常显示 <code>RemainingDuration</code> 作为倒计时。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 阀门状态（0x0004 ~ 0x0005）====== -->
+  <h3 id="group-state">阀门状态（0x0004 ~ 0x0005）</h3>
+  <p>描述阀门当前的开关状态和目标状态。阀门动作需要时间（电机驱动），所以 CurrentState 和 TargetState 可能不一致 —— 阀门正在动作时 CurrentState 为 Transitioning。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0004">
+          <td><code>0x0004</code></td>
+          <td>CurrentState<br/><span class="attr-cn">当前状态</span></td>
+          <td>ValveStateEnum / null</td>
+          <td>阀门当前的实际状态。Nullable —— <code>null</code> 表示设备无法确定当前状态（如刚上电、无位置传感器）</td>
+        </tr>
+        <tr id="attr-0x0005">
+          <td><code>0x0005</code></td>
+          <td>TargetState<br/><span class="attr-cn">目标状态</span></td>
+          <td>ValveStateEnum / null</td>
+          <td>阀门的目标状态。发送 Open 命令后变为 <code>Open (1)</code>，发送 Close 后变为 <code>Closed (0)</code>。Nullable —— <code>null</code> 表示无待执行的目标</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">状态转换流程</div>
+    <p>
+      发送 Open 命令后：<code>TargetState</code> 立即变为 <code>Open</code>，<code>CurrentState</code> 变为 <code>Transitioning</code>，
+      阀门电机开始动作。到位后 <code>CurrentState</code> 变为 <code>Open</code>。
+      Close 命令同理。App 界面应根据 <code>CurrentState</code> 显示实时状态，
+      当值为 <code>Transitioning</code> 时可显示加载动画。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 开度控制（0x0006 ~ 0x0007）====== -->
+  <h3 id="group-level">开度控制（0x0006 ~ 0x0007）</h3>
+  <p>
+    控制阀门的精确开度百分比。需要设备支持 <strong>Level（LVL）</strong> Feature。
+    不支持 LVL 的阀门只有全开/全关两种状态。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0006">
+          <td><code>0x0006</code></td>
+          <td>CurrentLevel<br/><span class="attr-cn">当前开度</span></td>
+          <td>percent / null</td>
+          <td>阀门当前的实际开度百分比，0~100。<code>0</code> = 全关，<code>100</code> = 全开。Nullable —— <code>null</code> 表示无法确定当前开度。<strong>需要 LVL Feature</strong></td>
+        </tr>
+        <tr id="attr-0x0007">
+          <td><code>0x0007</code></td>
+          <td>TargetLevel<br/><span class="attr-cn">目标开度</span></td>
+          <td>percent / null</td>
+          <td>阀门的目标开度百分比，1~100。由 Open 命令的 TargetLevel 参数设置。Nullable —— <code>null</code> 表示无待执行的目标开度。<strong>需要 LVL Feature</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开度与状态的关系</div>
+    <p>
+      <code>CurrentLevel = 0</code> 等价于 <code>CurrentState = Closed</code>，
+      <code>CurrentLevel > 0</code> 等价于 <code>CurrentState = Open</code>。
+      对于支持 LVL 的设备，App 可以用滑块控件让用户精确设置开度，
+      Open 命令的 TargetLevel 参数值即对应滑块位置。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 故障状态（0x0008）====== -->
+  <h3 id="group-fault">故障状态（0x0008）</h3>
+  <p>记录阀门的故障信息。ValveFault 是一个位图属性，多个故障可以同时存在。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0008">
+          <td><code>0x0008</code></td>
+          <td>ValveFault<br/><span class="attr-cn">阀门故障</span></td>
+          <td>ValveFaultBitmap</td>
+          <td>阀门故障位图，每个位代表一种故障类型。<code>0</code> = 无故障。详见下方 <a href="#valve-fault-bitmap">ValveFaultBitmap</a> 章节</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 枚举与位图 ====== -->
+  <h2 id="enums">枚举与位图</h2>
+
+  <!-- ValveStateEnum -->
+  <h3 id="valve-state-enum">ValveStateEnum（阀门状态枚举）</h3>
+  <p>用于 <code>CurrentState</code> 和 <code>TargetState</code> 属性，描述阀门的开关状态。</p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Closed</span>
+        <span class="enum-desc">关闭 —— 阀门完全关闭，无流体通过</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Open</span>
+        <span class="enum-desc">打开 —— 阀门已打开（全开或部分开启）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">Transitioning</span>
+        <span class="enum-desc">过渡中 —— 阀门正在执行开启或关闭动作（电机运转中）</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ValveFaultBitmap -->
+  <h3 id="valve-fault-bitmap">ValveFaultBitmap（阀门故障位图）</h3>
+  <p>
+    <code>ValveFault (0x0008)</code> 属性的位图定义。每个位代表一种故障类型，多个位可以同时置位。
+    当任意位从 0 变为 1 时，设备会上报 <code>ValveFault</code> 事件。
+  </p>
+
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">Bit 0</span>
+      <div>
+        <span class="enum-name">GeneralFault</span>
+        <span class="enum-desc">通用故障 —— 未归类的一般性硬件或软件问题</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 1</span>
+      <div>
+        <span class="enum-name">Blocked</span>
+        <span class="enum-desc">阻塞 —— 阀门机械卡住，无法正常开启或关闭</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 2</span>
+      <div>
+        <span class="enum-name">Leaking</span>
+        <span class="enum-desc">泄漏 —— 阀门关闭状态下仍检测到流体通过</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 3</span>
+      <div>
+        <span class="enum-name">NotConnected</span>
+        <span class="enum-desc">未连接 —— 阀门执行器与控制器之间通信断开</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 4</span>
+      <div>
+        <span class="enum-name">ShortCircuit</span>
+        <span class="enum-desc">短路 —— 阀门电机或驱动电路发生短路</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 5</span>
+      <div>
+        <span class="enum-name">CurrentExceeded</span>
+        <span class="enum-desc">过流 —— 阀门电机电流超出安全范围</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">故障位图读取示例</div>
+    <p>
+      <code>ValveFault = 0x00</code>（十进制 0）= 无故障，一切正常。<br/>
+      <code>ValveFault = 0x06</code>（十进制 6）= Bit 1 + Bit 2 = 阀门卡住且有泄漏 —— 需要立即检修。<br/>
+      <code>ValveFault = 0x30</code>（十进制 48）= Bit 4 + Bit 5 = 电路短路且过流 —— 可能是电机损坏，需要断电检查。
+    </p>
+  </div>
+
+  <!-- ====== Feature 位图 ====== -->
+  <h2 id="features">Feature 位图</h2>
+  <p>ValveConfigurationAndControl Cluster 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持哪些高级能力：</p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">Bit 0</span>
+      <div>
+        <span class="enum-name">TS（TimeSync）</span>
+        <span class="enum-desc">时间同步 —— 启用 AutoCloseTime 属性，设备可基于 UTC 时间戳精确计算自动关阀时刻。需要设备接入 Time Synchronization Cluster</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 1</span>
+      <div>
+        <span class="enum-name">LVL（Level）</span>
+        <span class="enum-desc">开度控制 —— 启用 CurrentLevel、TargetLevel 属性和 Open 命令的 TargetLevel 参数，支持 0~100% 精确开度调节</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">Feature 组合示例</div>
+    <p>
+      一个简单的水阀（开/关）：<code>FeatureMap = 0x00</code>，只支持全开全关和基于秒数的定时。<br/>
+      一个灌溉控制阀：<code>FeatureMap = 0x03</code>（TS + LVL），支持精确开度调节和基于 UTC 时间的自动关阀。<br/>
+      一个带时间同步的燃气阀：<code>FeatureMap = 0x01</code>（仅 TS），只能全开全关，但支持 UTC 时间戳的精确定时。
+    </p>
+  </div>
+
+  <!-- ====== 事件（Events）====== -->
+  <h2 id="events">事件（Events）</h2>
+  <p>
+    ValveConfigurationAndControl Cluster 定义了 2 个事件，分别用于阀门状态变化通知和故障上报。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>优先级</th>
+          <th>数据字段</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>0x00</code></td>
+          <td>ValveStateChanged</td>
+          <td class="col-event-info">INFO</td>
+          <td>ValveState (ValveStateEnum), ValveLevel (percent)</td>
+          <td>阀门状态或开度发生变化时触发</td>
+        </tr>
+        <tr>
+          <td><code>0x01</code></td>
+          <td>ValveFault</td>
+          <td class="col-event-warning">WARNING</td>
+          <td>ValveFault (ValveFaultBitmap)</td>
+          <td>阀门故障位图发生变化时触发（新增或清除故障）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">事件订阅建议</div>
+    <p>
+      <strong>ValveStateChanged</strong> 事件包含变化后的状态和开度值，App 订阅后可实时更新界面，
+      无需轮询 CurrentState 和 CurrentLevel 属性。
+      <strong>ValveFault</strong> 事件在故障出现或消除时都会触发，携带最新的完整故障位图。
+      对于水阀和燃气阀，建议始终订阅 ValveFault 事件并在收到 Leaking（泄漏）故障时立即告警。
+    </p>
+  </div>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>一个支持 Level（LVL）特性的智能水阀在 75% 开度运行中的 ValveConfigurationAndControl Cluster 读取结果：</p>
+
+  <pre><code set:html={exampleData} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发提示</div>
+    <p>
+      最简单的阀门可能只有 OpenDuration、DefaultOpenDuration、RemainingDuration、CurrentState、TargetState 和 ValveFault 这几个核心属性。
+      CurrentLevel / TargetLevel 需要 LVL Feature，AutoCloseTime 需要 TS Feature。
+      读取前先检查 <code>FeatureMap (0xFFFC)</code>，对不支持的属性发起读取会返回 <code>UNSUPPORTED_ATTRIBUTE</code>。
+    </p>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <h3 id="scenario-irrigation">场景 1：花园灌溉定时浇水</h3>
+  <details class="scenario">
+    <summary>查看步骤</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>写入 <code>DefaultOpenDuration (0x0001) = 1800</code>，预设每次浇水 30 分钟</li>
+        <li>自动化规则在早晨 6 点触发，发送 <code>Open (0x00)</code> 命令（不带参数，使用默认时间）</li>
+        <li>阀门打开，<code>CurrentState</code> 变为 <code>Open (1)</code>，<code>RemainingDuration</code> 开始从 1800 倒计时</li>
+        <li>App 订阅 <code>RemainingDuration (0x0003)</code>，界面显示「还剩 XX 分钟自动关闭」</li>
+        <li>30 分钟后阀门自动关闭，<code>CurrentState</code> 变为 <code>Closed (0)</code></li>
+        <li>如果需要中途取消浇水，发送 <code>Close (0x01)</code> 命令立即关阀</li>
+        <li>订阅 <code>ValveFault</code> 事件，当检测到 <code>Blocked (Bit 1)</code> 时提醒用户清理阀门</li>
+      </ol>
+    </div>
+  </details>
+
+  <h3 id="scenario-leak">场景 2：水浸传感器联动紧急关阀</h3>
+  <details class="scenario">
+    <summary>查看步骤</summary>
+    <div class="scenario-content">
+      <ol>
+        <li>水浸传感器（BooleanState Cluster）检测到漏水，<code>StateValue</code> 变为 <code>true</code></li>
+        <li>自动化规则触发，向水阀发送 <code>Close (0x01)</code> 命令紧急关阀</li>
+        <li>读取 <code>CurrentState (0x0004)</code> 确认阀门已关闭（<code>Closed = 0</code>）</li>
+        <li>如果 CurrentState 为 <code>Transitioning (2)</code>，等待几秒后再次确认</li>
+        <li>检查 <code>ValveFault (0x0008)</code> 位图中的 <code>Leaking (Bit 2)</code> 位 —— 如果阀门关闭后仍检测到泄漏，说明阀门密封失效，需要人工干预</li>
+        <li>向用户推送告警通知：「检测到漏水，已自动关闭水阀。请检查现场。」</li>
+        <li>漏水解除后，用户手动发送 <code>Open</code> 命令恢复供水</li>
+      </ol>
+    </div>
+  </details>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .col-required {
+    color: #dc2626;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-required {
+    color: #f87171;
+  }
+
+  .col-optional {
+    color: #16a34a;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-optional {
+    color: #4ade80;
+  }
+
+  .col-feature {
+    color: #2563eb;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-feature {
+    color: #60a5fa;
+  }
+
+  .attr-cn {
+    font-size: 0.8125rem;
+    color: #6b7280;
+  }
+
+  :global(.dark) .attr-cn {
+    color: #9ca3af;
+  }
+
+  .col-event-critical {
+    color: #dc2626;
+    font-weight: 600;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-event-critical {
+    color: #f87171;
+  }
+
+  .col-event-warning {
+    color: #d97706;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-event-warning {
+    color: #fbbf24;
+  }
+
+  .col-event-info {
+    color: #2563eb;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-event-info {
+    color: #60a5fa;
+  }
+</style>

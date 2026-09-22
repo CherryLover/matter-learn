@@ -1,0 +1,477 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 厂商信息 ---
+  "0x0000": "StreamCo",            // VendorName = 应用开发商名称
+  "0x0001": 4996,                  // VendorID = 0x1384（CSA 分配）
+  "0x0002": "StreamCo Player",     // ApplicationName = 应用名称
+
+  // --- 产品标识 ---
+  "0x0003": 101,                   // ProductID = 应用产品 ID
+  "0x0004": {                      // Application（应用标识结构体）
+    "CatalogVendorID": 24742,      //   CatalogVendorID = CSA 目录
+    "ApplicationID": "com.streamco.player"  //   ApplicationID = 应用 ID
+  },
+
+  // --- 运行状态 ---
+  "0x0005": 1,                     // Status = ActiveVisibleFocus（前台可见且有焦点）
+  "0x0006": "2.1.0",               // ApplicationVersion = 应用版本号
+
+  // --- 访问控制 ---
+  "0x0007": [4996, 65521]          // AllowedVendorList = 允许访问此应用的厂商 ID 列表
+}`;
+---
+
+<DocLayout
+  title="应用信息 Cluster · ApplicationBasic（0x050D）"
+  description="Matter ApplicationBasic Cluster（0x050D）完整参考 — 内容应用基本信息、ApplicationStruct 结构体、ApplicationStatusEnum 运行状态枚举、AllowedVendorList 访问控制等全部属性定义及速查。"
+  type="article"
+  prev={{ title: '媒体播放（MediaPlayback）', href: '/clusters/media-playback/' }}
+>
+  <h1>应用信息 Cluster（ApplicationBasic）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x050D</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 应用端点（每个内容应用占用一个独立的 Endpoint）
+  </p>
+  <p>
+    ApplicationBasic 提供内容应用（Content App）的基本信息 —— 包括应用名称、开发商、版本号、运行状态和唯一标识。
+    它是 Matter 媒体/电视设备生态中的核心 Cluster，每个安装在电视或机顶盒上的内容应用都通过一个独立的 Endpoint 暴露这个 Cluster。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">每个应用 = 一个 Endpoint</div>
+    <p>
+      Matter 的媒体架构采用<strong>「每个应用一个 Endpoint」</strong>的模型。
+      例如一台智能电视上装了 3 个流媒体应用（视频、音乐、直播），设备就会在 Endpoint 3、4、5 上分别暴露各自的 ApplicationBasic Cluster。
+      Controller 通过枚举 Endpoint 来发现设备上安装了哪些应用，再读取每个 Endpoint 的 ApplicationBasic 获取应用详情。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#attributes">属性详解</a>
+    <span class="nav-sep">|</span>
+    <a href="#structs-enums">结构体与枚举</a>
+    <span class="nav-sep">|</span>
+    <a href="#example-data">示例数据</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">常见场景</a>
+  </nav>
+
+  <!-- ====== 属性总览 ====== -->
+  <h2 id="attributes">属性总览</h2>
+  <p>ApplicationBasic 共有 8 个属性，按功能分为四组。点击属性 ID 可跳转到对应的详细说明。</p>
+
+  <!-- 属性汇总表 -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>分组</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 厂商信息 -->
+        <tr class="clickable-row" data-href="#attr-0x0000">
+          <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
+          <td>VendorName</td>
+          <td>string</td>
+          <td><a href="#group-vendor">厂商信息</a></td>
+          <td>应用开发商名称</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0001">
+          <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
+          <td>VendorID</td>
+          <td>vendor-id</td>
+          <td><a href="#group-vendor">厂商信息</a></td>
+          <td>应用开发商 ID（CSA 分配）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0002">
+          <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
+          <td>ApplicationName</td>
+          <td>string</td>
+          <td><a href="#group-vendor">厂商信息</a></td>
+          <td>应用名称</td>
+        </tr>
+        <!-- 产品标识 -->
+        <tr class="clickable-row" data-href="#attr-0x0003">
+          <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
+          <td>ProductID</td>
+          <td>uint16</td>
+          <td><a href="#group-product">产品标识</a></td>
+          <td>应用产品 ID</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0004">
+          <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
+          <td>Application</td>
+          <td>ApplicationStruct</td>
+          <td><a href="#group-product">产品标识</a></td>
+          <td>应用唯一标识（目录 + ID）</td>
+        </tr>
+        <!-- 运行状态 -->
+        <tr class="clickable-row" data-href="#attr-0x0005">
+          <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
+          <td>Status</td>
+          <td>ApplicationStatusEnum</td>
+          <td><a href="#group-status">运行状态</a></td>
+          <td>应用当前运行状态</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0006">
+          <td><a href="#attr-0x0006"><code>0x0006</code></a></td>
+          <td>ApplicationVersion</td>
+          <td>string</td>
+          <td><a href="#group-status">运行状态</a></td>
+          <td>应用版本号</td>
+        </tr>
+        <!-- 访问控制 -->
+        <tr class="clickable-row" data-href="#attr-0x0007">
+          <td><a href="#attr-0x0007"><code>0x0007</code></a></td>
+          <td>AllowedVendorList</td>
+          <td>list&lt;vendor-id&gt;</td>
+          <td><a href="#group-acl">访问控制</a></td>
+          <td>允许访问此应用的厂商 ID 列表</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 厂商信息（0x0000-0x0002）====== -->
+  <h3 id="group-vendor">厂商信息（0x0000 – 0x0002）</h3>
+  <p>描述应用的开发商和名称。这些属性在应用安装后就已确定，运行时不可更改。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0000">
+          <td><code>0x0000</code></td>
+          <td>VendorName（开发商名称）</td>
+          <td>string</td>
+          <td>应用开发商的人类可读名称，最长 32 字符。如 <code>"Netflix"</code>、<code>"YouTube"</code>。可选属性</td>
+        </tr>
+        <tr id="attr-0x0001">
+          <td><code>0x0001</code></td>
+          <td>VendorID（开发商 ID）</td>
+          <td>vendor-id</td>
+          <td>应用开发商的 CSA 厂商编号。如果应用开发商未向 CSA 注册，此值为 <code>0</code>。可选属性</td>
+        </tr>
+        <tr id="attr-0x0002">
+          <td><code>0x0002</code></td>
+          <td>ApplicationName（应用名称）</td>
+          <td>string</td>
+          <td>应用的人类可读名称，最长 32 字符。如 <code>"Netflix"</code>、<code>"Spotify"</code>。<strong>必选属性</strong>，也是 ApplicationBasic 中唯一的必选属性</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 产品标识（0x0003-0x0004）====== -->
+  <h3 id="group-product">产品标识（0x0003 – 0x0004）</h3>
+  <p>
+    应用的产品编号和全局唯一标识。<code>Application</code> 属性是最重要的标识 —— 它通过目录体系唯一定位一个应用。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0003">
+          <td><code>0x0003</code></td>
+          <td>ProductID（产品 ID）</td>
+          <td>uint16</td>
+          <td>应用开发商自行分配的产品编号。与 VendorID 组合可标识一款特定应用产品。可选属性</td>
+        </tr>
+        <tr id="attr-0x0004">
+          <td><code>0x0004</code></td>
+          <td>Application（应用标识）</td>
+          <td>ApplicationStruct</td>
+          <td>应用的全局唯一标识，由目录厂商 ID 和应用 ID 两个字段组成（见下方 <a href="#struct-application">ApplicationStruct</a>）。可选属性</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">Application 与 VendorID + ProductID 的区别</div>
+    <p>
+      <code>VendorID + ProductID</code> 标识的是「谁开发的哪款产品」，是厂商维度的标识。
+      <code>Application</code>（ApplicationStruct）标识的是「在哪个应用目录中的哪个应用」，是平台维度的标识。
+      例如同一个视频应用，在 CSA 目录中的 ID 是 <code>"com.example.video"</code>，在另一个平台目录中可能有不同的 ID。
+      Controller 通常用 <code>Application</code> 来定位和启动特定的内容应用。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 运行状态（0x0005-0x0006）====== -->
+  <h3 id="group-status">运行状态（0x0005 – 0x0006）</h3>
+  <p>描述应用的当前运行状态和版本信息。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0005">
+          <td><code>0x0005</code></td>
+          <td>Status（运行状态）</td>
+          <td>ApplicationStatusEnum</td>
+          <td>应用当前的运行状态（见下方 <a href="#enum-status">ApplicationStatusEnum</a>）。可选属性</td>
+        </tr>
+        <tr id="attr-0x0006">
+          <td><code>0x0006</code></td>
+          <td>ApplicationVersion（应用版本）</td>
+          <td>string</td>
+          <td>应用的版本字符串，最长 32 字符。如 <code>"2.1.0"</code>、<code>"3.0.0-beta"</code>。<strong>必选属性</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 访问控制（0x0007）====== -->
+  <h3 id="group-acl">访问控制（0x0007）</h3>
+  <p>控制哪些厂商的 Controller 可以访问此应用的 Cluster。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0007">
+          <td><code>0x0007</code></td>
+          <td>AllowedVendorList（允许的厂商列表）</td>
+          <td>list&lt;vendor-id&gt;</td>
+          <td>
+            允许访问此内容应用的厂商 ID 列表。
+            只有列表中的厂商所生产的 Controller 才能与此应用的 Cluster 交互。
+            <strong>必选属性</strong>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">AllowedVendorList 与 ACL 的关系</div>
+    <p>
+      <code>AllowedVendorList</code> 是在标准 ACL（Access Control List）之上的<strong>额外</strong>访问控制层。
+      即使 Controller 通过了 ACL 检查，如果它的 VendorID 不在 AllowedVendorList 中，
+      仍然无法访问这个应用 Endpoint 上的 Cluster（ApplicationBasic 本身除外）。
+      这个机制允许内容提供商限制只有合作方的设备才能控制自己的应用。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 结构体与枚举 ====== -->
+  <h2 id="structs-enums">结构体与枚举</h2>
+
+  <!-- ApplicationStruct -->
+  <h3 id="struct-application">ApplicationStruct（应用标识结构体）</h3>
+  <p>
+    通过目录体系唯一标识一个内容应用。不同的应用目录（如 CSA、Google Play、Apple App Store）
+    各自有独立的编号体系，<code>CatalogVendorID</code> 指明使用哪个目录，<code>ApplicationID</code> 是该目录内的应用标识。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>字段</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>CatalogVendorID</td>
+          <td>uint16</td>
+          <td>应用目录的厂商 ID。标识应用来源于哪个应用目录/平台。例如 CSA 自己的目录、或某个 OTT 平台的目录</td>
+        </tr>
+        <tr>
+          <td>ApplicationID</td>
+          <td>string</td>
+          <td>在目录内唯一标识应用的字符串。格式由目录定义，通常是反向域名风格，如 <code>"com.netflix.app"</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">CatalogVendorID 的含义</div>
+    <p>
+      <code>CatalogVendorID</code> 不是应用开发商的 VendorID，而是<strong>应用目录提供商</strong>的 VendorID。
+      可以理解为：这个应用是在哪个「应用商店」上架的。
+      如果 CatalogVendorID 对应 CSA 官方目录（值为 <code>0x60AE</code> = 24750），
+      那么 ApplicationID 就是 CSA 目录体系下的应用标识。
+    </p>
+  </div>
+
+  <!-- ApplicationStatusEnum -->
+  <h3 id="enum-status">ApplicationStatusEnum（应用运行状态枚举）</h3>
+  <p>描述内容应用当前的运行和可见状态。</p>
+
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Stopped</span>
+        <span class="enum-desc">已停止 —— 应用未运行，需要先启动才能使用</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">ActiveVisibleFocus</span>
+        <span class="enum-desc">前台运行 —— 应用正在运行、可见，且拥有用户输入焦点（当前正在使用的应用）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">ActiveHidden</span>
+        <span class="enum-desc">后台运行 —— 应用正在运行但不可见（如后台播放音乐）</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">ActiveVisibleNotFocus</span>
+        <span class="enum-desc">可见但无焦点 —— 应用正在运行且可见，但用户焦点在其他应用上（如画中画模式）</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">状态转换场景</div>
+    <p>
+      典型的状态变化路径：用户打开应用时 <code>Stopped &rarr; ActiveVisibleFocus</code>；
+      切换到另一个应用时 <code>ActiveVisibleFocus &rarr; ActiveHidden</code>（完全隐藏）或
+      <code>ActiveVisibleFocus &rarr; ActiveVisibleNotFocus</code>（画中画）；
+      用户关闭应用时回到 <code>Stopped</code>。
+      Controller 可以订阅 Status 属性变化来追踪应用的生命周期。
+    </p>
+  </div>
+
+  <!-- ====== 命令 ====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    ApplicationBasic 没有定义任何命令。应用的启动和控制由其他 Cluster 负责：
+  </p>
+  <ul>
+    <li><strong>ApplicationLauncher</strong>（0x050C）—— 负责启动、停止和隐藏应用</li>
+    <li><strong>MediaPlayback</strong>（0x0506）—— 负责播放控制（播放、暂停、快进等）</li>
+    <li><strong>ContentLauncher</strong>（0x050A）—— 负责启动特定内容（如打开某个视频）</li>
+  </ul>
+  <p>
+    ApplicationBasic 的定位是<strong>只读的信息查询</strong> —— 它告诉 Controller「这个应用是什么」，
+    而不负责「对这个应用做什么」。
+  </p>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>一台智能电视上某个流媒体应用（Endpoint 3）的 ApplicationBasic Cluster 读取结果：</p>
+
+  <pre><code set:html={exampleData} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">读取应用信息的典型流程</div>
+    <p>
+      Controller 发现设备上安装了哪些应用的常规流程：
+    </p>
+    <ol>
+      <li>读取 Endpoint 0 的 <code>Descriptor Cluster (0x001D)</code> 的 <code>PartsList</code> 获取所有 Endpoint 编号</li>
+      <li>对每个 Endpoint，读取其 Descriptor 的 <code>ServerList</code>，检查是否包含 <code>0x050D</code>（ApplicationBasic）</li>
+      <li>找到后，读取该 Endpoint 的 <code>ApplicationName (0x0002)</code> 和 <code>Application (0x0004)</code> 获取应用名和标识</li>
+      <li>读取 <code>Status (0x0005)</code> 判断应用当前是否在运行</li>
+    </ol>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <details class="scenario">
+    <summary>场景 1：发现并展示电视上的所有内容应用</summary>
+    <div class="scenario-content">
+      <p>
+        手机 App 连接到一台智能电视后，需要在界面上列出电视上安装的所有内容应用（类似电视遥控器的应用列表）。
+      </p>
+      <ol>
+        <li>读取 Endpoint 0 的 Descriptor Cluster，获取 <code>PartsList</code>（所有子 Endpoint）</li>
+        <li>逐个检查每个 Endpoint 的 <code>ServerList</code>，过滤出包含 <code>0x050D</code> 的 Endpoint</li>
+        <li>对每个应用 Endpoint，批量读取 <code>ApplicationName</code>、<code>VendorName</code>、<code>ApplicationVersion</code>、<code>Status</code></li>
+        <li>在 App 界面上渲染应用列表，显示名称、版本和运行状态（如「运行中」或「已停止」）</li>
+      </ol>
+      <p>
+        <strong>注意</strong>：不是所有 Endpoint 都是内容应用，有些可能是灯、传感器等其他设备类型。
+        通过检查 Descriptor 的 <code>DeviceTypeList</code> 是否包含 Content App（0x0024）可以更精确地过滤。
+      </p>
+    </div>
+  </details>
+
+  <details class="scenario">
+    <summary>场景 2：通过应用标识定位并启动特定应用</summary>
+    <div class="scenario-content">
+      <p>
+        用户说「打开 Netflix」，Controller 需要找到 Netflix 对应的 Endpoint 并启动它。
+      </p>
+      <ol>
+        <li>遍历所有应用 Endpoint，读取每个 Endpoint 的 <code>Application (0x0004)</code> 属性</li>
+        <li>比对 <code>ApplicationStruct</code> 中的 <code>CatalogVendorID</code> 和 <code>ApplicationID</code>，找到目标应用</li>
+        <li>检查 <code>Status (0x0005)</code>：如果已经是 <code>ActiveVisibleFocus (1)</code>，无需操作</li>
+        <li>如果是 <code>Stopped (0)</code> 或其他状态，通过 <strong>ApplicationLauncher Cluster (0x050C)</strong> 发送 LaunchApp 命令启动应用</li>
+        <li>订阅 <code>Status</code> 属性变化，确认应用成功进入 <code>ActiveVisibleFocus</code> 状态</li>
+      </ol>
+      <p>
+        <strong>注意</strong>：启动应用不是 ApplicationBasic 的职责 —— 它只提供信息查询。
+        实际启动操作由同一 Endpoint 上的 ApplicationLauncher Cluster 完成。
+      </p>
+    </div>
+  </details>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>

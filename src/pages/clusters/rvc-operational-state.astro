@@ -1,0 +1,816 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 阶段信息 ---
+  "0x0000": ["主刷清扫", "沿边清扫", "回充中"],  // PhaseList（操作阶段列表）
+  "0x0001": 0,                                    // CurrentPhase = 0（当前处于「主刷清扫」阶段）
+  "0x0002": 2400,                                  // CountdownTime = 2400 秒（剩余约 40 分钟）
+
+  // --- 运行状态 ---
+  "0x0003": [                                      // OperationalStateList（设备支持的状态列表）
+    { "OperationalStateID": 0, "OperationalStateLabel": "已停止" },
+    { "OperationalStateID": 1, "OperationalStateLabel": "运行中" },
+    { "OperationalStateID": 2, "OperationalStateLabel": "已暂停" },
+    { "OperationalStateID": 3, "OperationalStateLabel": "错误" },
+    { "OperationalStateID": 64, "OperationalStateLabel": "寻找充电座" },
+    { "OperationalStateID": 65, "OperationalStateLabel": "充电中" },
+    { "OperationalStateID": 66, "OperationalStateLabel": "已停靠" }
+  ],
+  "0x0004": 1,                                     // OperationalState = Running（正在清扫）
+  "0x0005": {                                      // OperationalError（当前无错误）
+    "ErrorStateID": 0,
+    "ErrorStateLabel": "",
+    "ErrorStateDetails": ""
+  }
+}`;
+---
+
+<DocLayout
+  title="扫地机器人操作状态 Cluster · RvcOperationalState（0x0061）"
+  description="Matter RvcOperationalState Cluster（0x0061）完整参考 — 继承自 OperationalState 的扫地机器人专用状态机，Pause/Stop/GoHome 命令、充电/停靠/寻充扩展状态、8 种 RVC 专属错误码、事件通知等全部定义及枚举值速查。"
+  type="article"
+  prev={{ title: '操作状态（OperationalState）', href: '/clusters/operational-state/' }}
+>
+  <h1>扫地机器人操作状态 Cluster（RvcOperationalState）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x0061</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: 通常在 <code>Endpoint 1</code>（功能端点）&nbsp;|&nbsp;
+    <strong>继承自</strong>: <a href="/clusters/operational-state/">OperationalState（0x0060）</a>
+  </p>
+  <p>
+    RvcOperationalState 是 <a href="/clusters/operational-state/">OperationalState（0x0060）</a>
+    的<strong>扫地机器人专用派生 Cluster</strong>。它继承了基础状态机的所有属性和事件结构，
+    但根据扫地机器人的实际使用场景做了重要调整：
+  </p>
+  <ul>
+    <li><strong>去掉了 Start 和 Resume 命令</strong> —— 扫地机器人通过 RvcRunMode Cluster 选择清扫模式来启动，不直接用 Start</li>
+    <li><strong>新增了 GoHome 命令（0x80）</strong> —— 让机器人主动回充电座</li>
+    <li><strong>扩展了 3 个 RVC 专属运行状态</strong> —— SeekingCharger（寻找充电座）、Charging（充电中）、Docked（已停靠）</li>
+    <li><strong>扩展了 8 个 RVC 专属错误码</strong> —— 涵盖充电座、卡住、尘盒、水箱、拖布等常见故障</li>
+  </ul>
+
+  <div class="callout callout-info">
+    <div class="callout-title">与基础 OperationalState 的关系</div>
+    <p>
+      RvcOperationalState 并非替代 OperationalState，而是在其基础上<strong>定制</strong>了扫地机器人的行为。
+      基础的 4 个状态（Stopped/Running/Paused/Error）仍然保留，RVC 扩展的 3 个状态（0x40~0x42）
+      是在此基础上增加的。同样，基础的 4 个错误码（NoError/UnableToStartOrResume 等）仍然有效，
+      RVC 扩展的 8 个错误码（0x40~0x47）用于描述扫地机器人特有的故障场景。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#commands">命令列表</a>
+    <span class="nav-sep">|</span>
+    <a href="#attributes">属性详解</a>
+    <span class="nav-sep">|</span>
+    <a href="#enums">枚举定义</a>
+    <span class="nav-sep">|</span>
+    <a href="#structs">数据结构</a>
+    <span class="nav-sep">|</span>
+    <a href="#events">事件</a>
+    <span class="nav-sep">|</span>
+    <a href="#example-data">示例数据</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">常见场景</a>
+  </nav>
+
+  <!-- ====== 命令（Commands）====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    RvcOperationalState Cluster 共有 3 个命令。相比基础 OperationalState 的 4 个命令，
+    <strong>去掉了 Start（0x02）和 Resume（0x03）</strong>，
+    因为扫地机器人的启动和模式切换由 RvcRunMode Cluster 负责。
+    新增了 <strong>GoHome（0x80）</strong> 命令，用于让机器人返回充电座。
+    所有命令执行后都会返回 <code>OperationalCommandResponse</code>，包含一个
+    <a href="#struct-errorstate">ErrorStateStruct</a> 用于指示操作是否成功。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>说明</th>
+          <th>响应</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-href="#cmd-0x00">
+          <td><a href="#cmd-0x00"><code>0x00</code></a></td>
+          <td>Pause</td>
+          <td>暂停当前操作</td>
+          <td>OperationalCommandResponse</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x01">
+          <td><a href="#cmd-0x01"><code>0x01</code></a></td>
+          <td>Stop</td>
+          <td>停止操作</td>
+          <td>OperationalCommandResponse</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x80">
+          <td><a href="#cmd-0x80"><code>0x80</code></a></td>
+          <td>GoHome</td>
+          <td>返回充电座</td>
+          <td>OperationalCommandResponse</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">没有 Start 和 Resume 命令</div>
+    <p>
+      扫地机器人的启动不是通过 OperationalState 的 Start 命令，而是通过
+      <strong>RvcRunMode Cluster</strong> 的 ChangeToMode 命令来实现。
+      选择清扫模式（如标准清扫、深度清扫）后，机器人自动开始工作。
+      同理，暂停后的恢复也通过 RvcRunMode 来控制。
+      如果向 RvcOperationalState 发送 Start 或 Resume 命令，会收到
+      <code>CommandInvalidInState (3)</code> 错误。
+    </p>
+  </div>
+
+  <!-- ====== 命令详解 ====== -->
+  <h3 id="cmd-0x00">Pause —— 暂停（0x00）</h3>
+  <p>
+    暂停机器人当前正在进行的操作（清扫、回充等）。执行成功后，<code>OperationalState</code>
+    属性变为 <code>Paused (2)</code>。机器人会原地停止并保留当前位置和清扫进度。不需要参数。
+  </p>
+  <div class="callout callout-warning">
+    <div class="callout-title">状态限制</div>
+    <p>
+      只有当机器人处于 <code>Running (1)</code> 或 <code>SeekingCharger (0x40)</code> 状态时才能暂停。
+      如果在 <code>Stopped (0)</code>、<code>Charging (0x41)</code>、<code>Docked (0x42)</code>
+      或 <code>Error (3)</code> 状态下调用，会返回 <code>CommandInvalidInState (3)</code> 错误。
+    </p>
+  </div>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        机器人正在清扫客厅，用户需要临时搬开地上的杂物。App 发送 Pause 命令，
+        机器人原地停止等待。整理完毕后通过 RvcRunMode 恢复清扫。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x01">Stop —— 停止（0x01）</h3>
+  <p>
+    完全停止机器人的当前操作。执行成功后，<code>OperationalState</code> 属性变为
+    <code>Stopped (0)</code>。与 Pause 不同，Stop 会结束本次清扫任务，
+    需要通过 RvcRunMode 重新选择模式才能开始新的清扫。不需要参数。
+  </p>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        用户要出门，不想让机器人继续清扫。发送 Stop 命令终止清扫任务。
+        回家后可以通过 RvcRunMode 重新启动清扫。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <h3 id="cmd-0x80">GoHome —— 返回充电座（0x80）</h3>
+  <p>
+    <strong>RVC 专属命令</strong>。指示机器人停止当前操作并返回充电座。
+    执行成功后，<code>OperationalState</code> 属性变为 <code>SeekingCharger (0x40)</code>，
+    机器人开始自动导航回充电座。到达后状态依次变为 <code>Charging (0x41)</code>
+    → <code>Docked (0x42)</code>。不需要参数。
+  </p>
+  <div class="callout callout-warning">
+    <div class="callout-title">状态限制</div>
+    <p>
+      当机器人已经处于 <code>Charging (0x41)</code> 或 <code>Docked (0x42)</code> 状态时，
+      调用 GoHome 会返回 <code>CommandInvalidInState (3)</code> 错误 —— 机器人已经在充电座上了。
+    </p>
+  </div>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        机器人清扫到一半，用户想让它提前回充电座。App 发送 GoHome 命令，
+        机器人放弃剩余清扫区域，自动导航回充电座充电。
+        也常用于清扫完成后未自动回充的情况。
+      </p>
+    </div>
+  </details>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 命令响应 ====== -->
+  <h3 id="cmd-response">OperationalCommandResponse —— 命令响应</h3>
+  <p>
+    所有三个命令（Pause/Stop/GoHome）执行后都会返回此响应。
+    它包含一个 <a href="#struct-errorstate">ErrorStateStruct</a>，用于指示命令是否成功。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>CommandResponseState</td>
+          <td><a href="#struct-errorstate">ErrorStateStruct</a></td>
+          <td>命令执行结果。<code>ErrorStateID = 0 (NoError)</code> 表示成功</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
+
+  <!-- ====== 属性详解 ====== -->
+  <h2 id="attributes">属性详解</h2>
+  <p>
+    RvcOperationalState Cluster 继承了基础 OperationalState 的全部 6 个属性，定义完全一致。
+    点击下方汇总表中的属性 ID 可跳转到对应的详细说明。
+  </p>
+
+  <!-- 属性汇总表 -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>分组</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 阶段信息 -->
+        <tr class="clickable-row" data-href="#attr-0x0000">
+          <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
+          <td>PhaseList</td>
+          <td>list&lt;string&gt; / null</td>
+          <td><a href="#group-phase">阶段信息</a></td>
+          <td>操作阶段列表</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0001">
+          <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
+          <td>CurrentPhase</td>
+          <td>uint8 / null</td>
+          <td><a href="#group-phase">阶段信息</a></td>
+          <td>当前所处阶段索引</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0002">
+          <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
+          <td>CountdownTime</td>
+          <td>elapsed_s / null</td>
+          <td><a href="#group-phase">阶段信息</a></td>
+          <td>剩余时间（秒）</td>
+        </tr>
+        <!-- 运行状态 -->
+        <tr class="clickable-row" data-href="#attr-0x0003">
+          <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
+          <td>OperationalStateList</td>
+          <td>list&lt;OperationalStateStruct&gt;</td>
+          <td><a href="#group-state">运行状态</a></td>
+          <td>设备支持的所有状态（含 RVC 扩展）</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0004">
+          <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
+          <td>OperationalState</td>
+          <td><a href="#enum-opstate">OperationalStateEnum</a></td>
+          <td><a href="#group-state">运行状态</a></td>
+          <td>当前运行状态</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x0005">
+          <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
+          <td>OperationalError</td>
+          <td><a href="#struct-errorstate">ErrorStateStruct</a></td>
+          <td><a href="#group-state">运行状态</a></td>
+          <td>当前错误信息</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 阶段信息（0x0000, 0x0001, 0x0002）====== -->
+  <h3 id="group-phase">阶段信息（0x0000, 0x0001, 0x0002）</h3>
+  <p>
+    描述机器人当前清扫任务的阶段进度和剩余时间。
+    扫地机器人的阶段划分可能包括：主区域清扫、沿边清扫、拖地、回充等。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0000">
+          <td><code>0x0000</code></td>
+          <td>PhaseList（阶段列表）</td>
+          <td>list&lt;string&gt; / null</td>
+          <td>
+            机器人清扫操作的有序阶段名称列表。例如 <code>["主刷清扫", "沿边清扫", "回充中"]</code>。
+            <strong>Nullable</strong> —— <code>null</code> 表示机器人不支持阶段划分。
+            列表最多 32 项
+          </td>
+        </tr>
+        <tr id="attr-0x0001">
+          <td><code>0x0001</code></td>
+          <td>CurrentPhase（当前阶段）</td>
+          <td>uint8 / null</td>
+          <td>
+            当前所处阶段在 PhaseList 中的索引（从 0 开始）。
+            <strong>Nullable</strong> —— 当 PhaseList 为 <code>null</code> 时，此值也为 <code>null</code>
+          </td>
+        </tr>
+        <tr id="attr-0x0002">
+          <td><code>0x0002</code></td>
+          <td>CountdownTime（剩余时间）</td>
+          <td>elapsed_s / null</td>
+          <td>
+            当前清扫任务的预计剩余时间，单位<strong>秒</strong>。机器人会根据剩余面积和电量定期更新此值。
+            <strong>Nullable</strong> —— <code>null</code> 表示机器人无法预估剩余时间
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">扫地机器人的阶段特殊性</div>
+    <p>
+      与洗衣机等家电不同，扫地机器人的阶段划分不一定是固定的线性流程。
+      有些机器人可能在清扫过程中动态调整阶段（如发现电量不足时插入回充阶段），
+      因此 <code>PhaseList</code> 的内容可能随任务执行而变化。
+      App 应定期重新读取 PhaseList，而不是只在任务开始时读取一次。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 运行状态（0x0003, 0x0004, 0x0005）====== -->
+  <h3 id="group-state">运行状态（0x0003, 0x0004, 0x0005）</h3>
+  <p>
+    描述机器人的运行状态和错误信息。<code>OperationalStateList</code> 会包含基础的 4 个状态
+    以及 RVC 扩展的 3 个状态（SeekingCharger/Charging/Docked）。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>类型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0003">
+          <td><code>0x0003</code></td>
+          <td>OperationalStateList（状态列表）</td>
+          <td>list&lt;OperationalStateStruct&gt;</td>
+          <td>
+            机器人支持的所有运行状态。除了基础的 0~3 四个状态之外，
+            RVC 还会在列表中包含 0x40~0x42 三个扩展状态（寻找充电座/充电中/已停靠）
+          </td>
+        </tr>
+        <tr id="attr-0x0004">
+          <td><code>0x0004</code></td>
+          <td>OperationalState（运行状态）</td>
+          <td><a href="#enum-opstate">OperationalStateEnum</a></td>
+          <td>
+            机器人当前的运行状态，取值范围见
+            <a href="#enum-opstate">OperationalStateEnum</a>（含 RVC 扩展值）。
+            这是 App 展示机器人状态的核心属性
+          </td>
+        </tr>
+        <tr id="attr-0x0005">
+          <td><code>0x0005</code></td>
+          <td>OperationalError（当前错误）</td>
+          <td><a href="#struct-errorstate">ErrorStateStruct</a></td>
+          <td>
+            机器人当前的错误状态。当 <code>OperationalState</code> 为
+            <code>Error (3)</code> 时，此属性包含具体的错误信息（含 RVC 扩展错误码）。
+            无错误时 <code>ErrorStateID = 0 (NoError)</code>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
+
+  <!-- ====== 枚举定义 ====== -->
+  <h2 id="enums">枚举定义</h2>
+
+  <h3 id="enum-opstate">OperationalStateEnum —— 运行状态</h3>
+  <p>
+    RVC 的运行状态枚举继承了基础 OperationalState 的 4 个标准值（0~3），
+    并在 0x40~0x42 范围内扩展了 3 个扫地机器人专属状态。
+  </p>
+
+  <h4>基础状态（继承自 OperationalState）</h4>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Stopped</span>
+        <span class="enum-desc">已停止 —— 机器人空闲，可以通过 RvcRunMode 启动清扫</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Running</span>
+        <span class="enum-desc">运行中 —— 正在执行清扫任务，可以 Pause、Stop 或 GoHome</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">Paused</span>
+        <span class="enum-desc">已暂停 —— 清扫被暂停，可以通过 RvcRunMode 恢复或 Stop</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">Error</span>
+        <span class="enum-desc">错误 —— 发生故障，查看 OperationalError 获取详情</span>
+      </div>
+    </div>
+  </div>
+
+  <h4>RVC 扩展状态</h4>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0x40</span>
+      <div>
+        <span class="enum-name">SeekingCharger</span>
+        <span class="enum-desc">寻找充电座 —— 机器人正在自动导航回充电座的途中</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x41</span>
+      <div>
+        <span class="enum-name">Charging</span>
+        <span class="enum-desc">充电中 —— 已停靠在充电座上并正在充电</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x42</span>
+      <div>
+        <span class="enum-name">Docked</span>
+        <span class="enum-desc">已停靠 —— 停靠在充电座上，电量已满或待机中</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">充电状态的变迁</div>
+    <p>
+      典型的充电流程是：<code>SeekingCharger (0x40)</code> → <code>Charging (0x41)</code>
+      → <code>Docked (0x42)</code>。机器人回到充电座后先进入 Charging 状态充电，
+      电量充满后转为 Docked 待机状态。从 Docked 或 Charging 状态启动清扫，
+      需要通过 RvcRunMode Cluster 发送 ChangeToMode 命令。
+    </p>
+  </div>
+
+  <h3 id="enum-errorstate">ErrorStateEnum —— 错误类型</h3>
+  <p>
+    RVC 的错误状态枚举继承了基础的 4 个通用错误码（0~3），
+    并在 0x40~0x47 范围内扩展了 8 个扫地机器人专属错误码，涵盖充电座、机械故障、耗材等常见问题。
+  </p>
+
+  <h4>基础错误码（继承自 OperationalState）</h4>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">NoError</span>
+        <span class="enum-desc">无错误 —— 一切正常</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">UnableToStartOrResume</span>
+        <span class="enum-desc">无法启动或恢复 —— 机器人因某种原因无法开始清扫</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">UnableToCompleteOperation</span>
+        <span class="enum-desc">无法完成操作 —— 清扫过程中遇到了不可恢复的问题</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">CommandInvalidInState</span>
+        <span class="enum-desc">命令在当前状态无效 —— 如在 Docked 状态下调用 GoHome</span>
+      </div>
+    </div>
+  </div>
+
+  <h4>RVC 扩展错误码</h4>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0x40</span>
+      <div>
+        <span class="enum-name">FailedToFindChargingDock</span>
+        <span class="enum-desc">找不到充电座 —— 机器人无法定位或导航到充电座</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x41</span>
+      <div>
+        <span class="enum-name">Stuck</span>
+        <span class="enum-desc">卡住了 —— 机器人被障碍物或地形困住无法移动</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x42</span>
+      <div>
+        <span class="enum-name">DustBinMissing</span>
+        <span class="enum-desc">尘盒未安装 —— 尘盒被取出后未放回</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x43</span>
+      <div>
+        <span class="enum-name">DustBinFull</span>
+        <span class="enum-desc">尘盒已满 —— 需要清倒尘盒才能继续清扫</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x44</span>
+      <div>
+        <span class="enum-name">WaterTankEmpty</span>
+        <span class="enum-desc">水箱无水 —— 拖地模式下水箱已空，需要加水</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x45</span>
+      <div>
+        <span class="enum-name">WaterTankMissing</span>
+        <span class="enum-desc">水箱未安装 —— 水箱被取出后未放回</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x46</span>
+      <div>
+        <span class="enum-name">WaterTankLidOpen</span>
+        <span class="enum-desc">水箱盖未关 —— 水箱盖子未正确关闭，有漏水风险</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">0x47</span>
+      <div>
+        <span class="enum-name">MopCleaningPadMissing</span>
+        <span class="enum-desc">拖布未安装 —— 拖地模式需要安装拖布才能工作</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">错误处理建议</div>
+    <p>
+      RVC 的 8 个扩展错误码都是<strong>用户可自行解决的物理问题</strong>。
+      App 在收到这些错误时，应该给出明确的操作指引（如「请清倒尘盒后重启清扫」），
+      而不只是显示错误码。用户处理完问题后，通过 RvcRunMode 重新启动清扫即可。
+    </p>
+  </div>
+
+  <!-- ====== 数据结构 ====== -->
+  <h2 id="structs">数据结构</h2>
+
+  <h3 id="struct-errorstate">ErrorStateStruct —— 错误状态结构</h3>
+  <p>
+    用于描述机器人的错误信息。既用于 <code>OperationalError</code> 属性，也用于命令响应。
+    结构与基础 OperationalState 完全一致。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>必选</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ErrorStateID</td>
+          <td><a href="#enum-errorstate">ErrorStateEnum</a></td>
+          <td>是</td>
+          <td>错误类型编码。<code>0</code> 表示无错误。RVC 扩展错误码范围 0x40~0x47</td>
+        </tr>
+        <tr>
+          <td>ErrorStateLabel</td>
+          <td>string</td>
+          <td>否</td>
+          <td>可选的本地化错误标签，供 App 直接展示。对于 RVC 扩展错误码（0x40~0x47），此字段<strong>必须</strong>提供</td>
+        </tr>
+        <tr>
+          <td>ErrorStateDetails</td>
+          <td>string</td>
+          <td>否</td>
+          <td>可选的错误详细描述，提供更多诊断信息（如「左侧轮子被线缆缠绕」）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="struct-opstate">OperationalStateStruct —— 操作状态结构</h3>
+  <p>
+    用于 <code>OperationalStateList</code> 属性中，描述机器人支持的每一个运行状态。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>必选</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>OperationalStateID</td>
+          <td>uint8</td>
+          <td>是</td>
+          <td>状态编码。0~3 为标准状态，0x40~0x42 为 RVC 扩展状态</td>
+        </tr>
+        <tr>
+          <td>OperationalStateLabel</td>
+          <td>string</td>
+          <td>否</td>
+          <td>可选的本地化状态标签。对于标准状态（0~3）可省略；对于 RVC 扩展状态（0x40~0x42）<strong>必须</strong>提供</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== 事件 ====== -->
+  <h2 id="events">事件（Events）</h2>
+  <p>
+    RvcOperationalState Cluster 继承了基础 OperationalState 的 2 个事件，
+    用于通知控制端机器人的重要状态变化。
+  </p>
+
+  <h3 id="event-error">OperationalError 事件</h3>
+  <p>
+    当机器人进入错误状态时触发此事件。事件优先级为 <strong>CRITICAL</strong>，
+    确保 App 能及时收到错误通知（如机器人卡住、尘盒已满等）。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ErrorState</td>
+          <td><a href="#struct-errorstate">ErrorStateStruct</a></td>
+          <td>当前的错误信息，ErrorStateID 可能是 RVC 扩展错误码（0x40~0x47）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="event-completion">OperationCompletion 事件</h3>
+  <p>
+    当机器人完成一个完整清扫周期时触发此事件。事件优先级为 <strong>INFO</strong>。
+    该事件携带清扫的时间统计信息，方便 App 展示清扫报告。
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>必选</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>CompletionErrorCode</td>
+          <td><a href="#enum-errorstate">ErrorStateEnum</a></td>
+          <td>是</td>
+          <td>清扫完成时的错误码。<code>0 (NoError)</code> 表示正常完成</td>
+        </tr>
+        <tr>
+          <td>TotalOperationalTime</td>
+          <td>elapsed_s / null</td>
+          <td>否</td>
+          <td>清扫总耗时（秒），包含暂停时间。<code>null</code> 表示机器人不支持统计</td>
+        </tr>
+        <tr>
+          <td>PausedTime</td>
+          <td>elapsed_s / null</td>
+          <td>否</td>
+          <td>暂停累计时长（秒）。<code>null</code> 表示机器人不支持统计</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">清扫报告</div>
+    <p>
+      App 可以结合 <code>OperationCompletion</code> 事件的时间统计和清扫面积等信息，
+      生成清扫报告。例如：「本次清扫耗时 45 分钟，实际清扫 40 分钟，暂停 5 分钟」。
+      注意 <code>CompletionErrorCode</code> 不一定是 NoError —— 机器人可能因为
+      电量耗尽或故障而提前结束清扫，此时会携带对应的错误码。
+    </p>
+  </div>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>一台正在清扫中的扫地机器人的 RvcOperationalState Cluster 读取结果：</p>
+
+  <pre><code set:html={exampleData} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发提示</div>
+    <p>
+      RVC 设备的 <code>OperationalStateList (0x0003)</code> 会比基础 OperationalState 多出
+      3 个扩展状态条目（ID 64/65/66 即 0x40/0x41/0x42）。App 在渲染状态选择或状态指示时，
+      需要处理这些 RVC 专属状态的 UI 展示（如为「寻找充电座」显示导航动画、为「充电中」显示电量进度）。
+      同样，错误处理逻辑也需要覆盖 0x40~0x47 范围的 RVC 扩展错误码。
+    </p>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <h3 id="scenario-cleaning">场景 1：完整清扫生命周期</h3>
+  <ol>
+    <li>机器人处于 <code>Docked (0x42)</code> 状态，停靠在充电座上待机</li>
+    <li>用户通过 <strong>RvcRunMode</strong> Cluster 发送 ChangeToMode 命令，选择「标准清扫」模式</li>
+    <li>机器人离开充电座，状态变为 <code>Running (1)</code>，开始清扫</li>
+    <li>App 订阅 <code>OperationalState</code>、<code>CurrentPhase</code>、<code>CountdownTime</code>，
+      实时更新清扫进度和剩余时间</li>
+    <li>清扫完成后，机器人自动进入 <code>SeekingCharger (0x40)</code> 状态回充</li>
+    <li>到达充电座后变为 <code>Charging (0x41)</code>，充满电后变为 <code>Docked (0x42)</code></li>
+    <li>触发 <code>OperationCompletion</code> 事件，App 展示清扫报告：「清扫完成，总耗时 45 分钟」</li>
+  </ol>
+
+  <h3 id="scenario-error">场景 2：清扫中的错误处理</h3>
+  <ol>
+    <li>机器人正在清扫（<code>Running (1)</code>），突然被地毯边缘卡住</li>
+    <li>机器人尝试脱困失败，状态变为 <code>Error (3)</code>，<code>OperationalError</code> 更新为：
+      <ul>
+        <li><code>ErrorStateID = 0x41 (Stuck)</code></li>
+        <li><code>ErrorStateLabel = "机器人卡住"</code></li>
+        <li><code>ErrorStateDetails = "左侧轮子无法转动，请检查是否有异物缠绕"</code></li>
+      </ul>
+    </li>
+    <li>设备触发 <code>OperationalError</code> 事件（CRITICAL 优先级），App 弹出推送通知</li>
+    <li>App 根据错误码 0x41（Stuck）展示对应的操作指引：「请将机器人搬到开阔位置」</li>
+    <li>用户处理完毕后，发送 <code>Stop (0x01)</code> 清除错误状态</li>
+    <li>通过 RvcRunMode 重新启动清扫任务</li>
+  </ol>
+
+  <h3 id="scenario-gohome">场景 3：手动回充（GoHome）</h3>
+  <ol>
+    <li>机器人正在清扫（<code>Running (1)</code>），用户想让它提前回充</li>
+    <li>App 发送 <code>GoHome (0x80)</code> 命令</li>
+    <li>机器人停止清扫，状态变为 <code>SeekingCharger (0x40)</code>，开始自动导航回充电座</li>
+    <li>App 可以展示「正在返回充电座...」的状态提示</li>
+    <li>机器人到达充电座后，状态变为 <code>Charging (0x41)</code></li>
+    <li>如果导航过程中找不到充电座，状态变为 <code>Error (3)</code>，
+      错误码为 <code>FailedToFindChargingDock (0x40)</code></li>
+    <li>App 展示：「找不到充电座，请检查充电座是否通电并且前方无障碍物」</li>
+  </ol>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .col-required {
+    color: #dc2626;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-required {
+    color: #f87171;
+  }
+
+  .col-optional {
+    color: #16a34a;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-optional {
+    color: #4ade80;
+  }
+</style>

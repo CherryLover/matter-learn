@@ -1,0 +1,878 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+
+const exampleData = `{
+  // --- 网络标识 ---
+  "0x0000": 15,              // Channel = 15（Thread 信道）
+  "0x0001": 5,               // RoutingRole = Router
+  "0x0002": "MyThreadNet",   // NetworkName
+  "0x0003": 4660,            // PanId = 0x1234
+  "0x0004": "1111111122222222", // ExtendedPanId
+  "0x0005": "fd11:2233:4455::/64", // MeshLocalPrefix
+
+  // --- 拓扑信息 ---
+  "0x0009": 12345678,        // PartitionId（网络分区标识）
+  "0x000A": 64,              // Weighting（分区权重）
+  "0x000D": 42,              // LeaderRouterId（Leader 路由 ID）
+
+  // --- 发送计数器（PKTCNT）---
+  "0x000E": 158432,          // TxTotalCount（累计发送总数）
+  "0x000F": 120050,          // TxUnicastCount（单播发送）
+  "0x0010": 38382,           // TxBroadcastCount（广播发送）
+  "0x0019": 1024,            // TxRetryCount（重试次数）
+
+  // --- 接收计数器（PKTCNT）---
+  "0x001F": 203841,          // RxTotalCount（累计接收总数）
+  "0x0020": 185200,          // RxUnicastCount（单播接收）
+  "0x0021": 18641,           // RxBroadcastCount（广播接收）
+
+  // --- 错误计数器（ERRCNT）---
+  "0x0006": 0,               // OverrunCount（缓冲区溢出次数）
+  "0x002E": 3,               // RxErrFcsCount（FCS 校验错误）
+
+  // --- 活跃网络故障 ---
+  "0x003E": []               // ActiveNetworkFaults = 空（当前无故障）
+}`;
+---
+
+<DocLayout
+  title="Thread 网络诊断 Cluster · ThreadNetworkDiagnostics（0x0035）"
+  description="Matter ThreadNetworkDiagnostics Cluster（0x0035）完整参考 — Thread Mesh 网络诊断、信道/拓扑/路由信息、TX/RX 收发计数器、MLE/MAC 计数器、错误统计、网络故障事件及枚举值速查。"
+  type="article"
+>
+  <h1>Thread 网络诊断 Cluster（ThreadNetworkDiagnostics）</h1>
+  <p>
+    <strong>Cluster ID</strong>: <code>0x0035</code> &nbsp;|&nbsp;
+    <strong>所在 Endpoint</strong>: <code>Endpoint 0</code>（根端点）
+  </p>
+  <p>
+    ThreadNetworkDiagnostics 是 Thread 设备的网络诊断 Cluster，提供 Thread Mesh 网络的完整运行状态。
+    它包含网络标识、拓扑路由、收发包统计、错误计数等 60+ 个属性，是排查 Thread 设备连接问题和分析网络质量的核心工具。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">适用场景</div>
+    <p>
+      这个 Cluster 主要用于<strong>诊断和调试</strong>，不控制设备功能。当 Thread 设备连接不稳定、网络延迟高、丢包严重时，
+      通过读取此 Cluster 可以快速定位问题 —— 是信号差（看 RSSI/LQI）、路由不优（看 RouteTable）、
+      还是链路错误多（看错误计数器）。
+    </p>
+  </div>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav">
+    <a href="#features">Feature 位图</a>
+    <span class="nav-sep">|</span>
+    <a href="#commands">命令</a>
+    <span class="nav-sep">|</span>
+    <a href="#attributes">属性详解</a>
+    <span class="nav-sep">|</span>
+    <a href="#enums">枚举值速查</a>
+    <span class="nav-sep">|</span>
+    <a href="#events">事件</a>
+    <span class="nav-sep">|</span>
+    <a href="#example-data">示例数据</a>
+    <span class="nav-sep">|</span>
+    <a href="#scenarios">常见场景</a>
+  </nav>
+
+  <!-- ====== Feature 位图 ====== -->
+  <h2 id="features">Feature 位图</h2>
+  <p>
+    ThreadNetworkDiagnostics 通过 <code>FeatureMap</code>（0xFFFC）声明设备支持哪些计数器类别。
+    不同 Feature 控制不同分组的计数器属性是否可用。
+  </p>
+
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">Bit 0</span>
+      <div>
+        <span class="enum-name">PKTCNT（PacketCounts）</span>
+        <span class="enum-desc">收发包计数器 —— TX/RX 各类数据包的累计统计</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 1</span>
+      <div>
+        <span class="enum-name">ERRCNT（ErrorCounts）</span>
+        <span class="enum-desc">错误计数器 —— 接收错误（FCS/安全/源地址等）和缓冲区溢出统计</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 2</span>
+      <div>
+        <span class="enum-name">MLECNT（MLECounts）</span>
+        <span class="enum-desc">MLE 计数器 —— 角色变更、附着尝试、分区切换等 MLE 层事件统计</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">Bit 3</span>
+      <div>
+        <span class="enum-name">MACCNT（MACCounts）</span>
+        <span class="enum-desc">MAC 计数器 —— MAC 层重试、CCA 失败等底层链路统计</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">Feature 与属性的关系</div>
+    <p>
+      基础网络信息（Channel、RoutingRole、NeighborTable 等）所有 Thread 设备都支持，不需要任何 Feature。
+      计数器属性则按 Feature 分组 —— 例如只有启用了 PKTCNT 的设备才会上报 TxTotalCount 等收发统计。
+      读取前先检查 <code>FeatureMap</code>，避免读到不支持的属性返回错误。
+    </p>
+  </div>
+
+  <!-- ====== 命令（Commands）====== -->
+  <h2 id="commands">命令（Commands）</h2>
+  <p>
+    ThreadNetworkDiagnostics 只有一个命令，用于重置所有计数器。
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>说明</th>
+          <th>所需特性</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="cmd-0x00">
+          <td><code>0x00</code></td>
+          <td>ResetCounts</td>
+          <td>将所有可选计数器归零</td>
+          <td class="col-optional">ERRCNT 或 MACCNT</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>ResetCounts —— 重置计数器（0x00）</h3>
+  <p>
+    将设备上所有已启用 Feature 对应的计数器（包括 OverrunCount）归零。
+    不需要参数。执行后所有统计从 0 开始重新累计。
+  </p>
+  <details class="scenario">
+    <summary>使用场景</summary>
+    <div class="scenario-content">
+      <p>
+        诊断网络问题时，先调用 ResetCounts 清零，然后观察一段时间内的计数器增长情况，
+        用来判断当前的错误率和网络质量。避免历史累积数据干扰判断。
+      </p>
+    </div>
+  </details>
+
+  <!-- ====== 属性详解 ====== -->
+  <h2 id="attributes">属性详解</h2>
+  <p>
+    ThreadNetworkDiagnostics 有 60+ 个属性，按功能分为以下几组。
+    基础网络信息所有 Thread 设备都支持，计数器属性按 Feature 分组。
+  </p>
+
+  <!-- 属性汇总导航 -->
+  <nav class="quick-nav">
+    <a href="#group-network">网络标识</a>
+    <span class="nav-sep">|</span>
+    <a href="#group-topology">拓扑与路由</a>
+    <span class="nav-sep">|</span>
+    <a href="#group-dataset">数据集参数</a>
+    <span class="nav-sep">|</span>
+    <a href="#group-tx">发送计数器</a>
+    <span class="nav-sep">|</span>
+    <a href="#group-rx">接收计数器</a>
+    <span class="nav-sep">|</span>
+    <a href="#group-rxerr">接收错误计数器</a>
+    <span class="nav-sep">|</span>
+    <a href="#group-mle">MLE 计数器</a>
+  </nav>
+
+  <!-- ====== 网络标识 ====== -->
+  <h3 id="group-network">网络标识（0x0000 - 0x0005）</h3>
+  <p>Thread 网络的基本身份信息，标识设备所在的 Thread 网络。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0000">
+          <td><code>0x0000</code></td>
+          <td>Channel<br/><span class="attr-cn">信道</span></td>
+          <td>uint16</td>
+          <td>当前 Thread 网络使用的 IEEE 802.15.4 信道号。Thread 使用 2.4GHz 的 11~26 信道</td>
+        </tr>
+        <tr id="attr-0x0001">
+          <td><code>0x0001</code></td>
+          <td>RoutingRole<br/><span class="attr-cn">路由角色</span></td>
+          <td>RoutingRoleEnum / null</td>
+          <td>设备在 Thread 网络中的当前角色（见<a href="#enum-routing-role">枚举值</a>）。null 表示尚未确定</td>
+        </tr>
+        <tr id="attr-0x0002">
+          <td><code>0x0002</code></td>
+          <td>NetworkName<br/><span class="attr-cn">网络名称</span></td>
+          <td>string / null</td>
+          <td>Thread 网络名称，最长 16 字节的 UTF-8 字符串</td>
+        </tr>
+        <tr id="attr-0x0003">
+          <td><code>0x0003</code></td>
+          <td>PanId<br/><span class="attr-cn">PAN ID</span></td>
+          <td>uint16 / null</td>
+          <td>IEEE 802.15.4 的 16 位 PAN 标识符</td>
+        </tr>
+        <tr id="attr-0x0004">
+          <td><code>0x0004</code></td>
+          <td>ExtendedPanId<br/><span class="attr-cn">扩展 PAN ID</span></td>
+          <td>uint64 / null</td>
+          <td>64 位扩展 PAN 标识符，用于区分相同 PAN ID 的不同网络</td>
+        </tr>
+        <tr id="attr-0x0005">
+          <td><code>0x0005</code></td>
+          <td>MeshLocalPrefix<br/><span class="attr-cn">Mesh 本地前缀</span></td>
+          <td>octstr / null</td>
+          <td>Thread Mesh 本地 IPv6 前缀（fd00::/8 范围内的 /64 前缀）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性概览</a></p>
+
+  <!-- ====== 拓扑与路由 ====== -->
+  <h3 id="group-topology">拓扑与路由（0x0007 - 0x000D）</h3>
+  <p>Thread Mesh 网络的拓扑结构和路由信息，包括邻居表、路由表和分区数据。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0007">
+          <td><code>0x0007</code></td>
+          <td>NeighborTable<br/><span class="attr-cn">邻居表</span></td>
+          <td>list&lt;NeighborTableStruct&gt;</td>
+          <td>直接通信邻居的详细信息列表（见<a href="#struct-neighbor">结构体说明</a>）</td>
+        </tr>
+        <tr id="attr-0x0008">
+          <td><code>0x0008</code></td>
+          <td>RouteTable<br/><span class="attr-cn">路由表</span></td>
+          <td>list&lt;RouteTableStruct&gt;</td>
+          <td>网络路由条目列表（见<a href="#struct-route">结构体说明</a>）</td>
+        </tr>
+        <tr id="attr-0x0009">
+          <td><code>0x0009</code></td>
+          <td>PartitionId<br/><span class="attr-cn">分区 ID</span></td>
+          <td>uint32 / null</td>
+          <td>当前 Thread 网络分区的标识符。网络分裂时不同分区有不同 ID</td>
+        </tr>
+        <tr id="attr-0x000A">
+          <td><code>0x000A</code></td>
+          <td>Weighting<br/><span class="attr-cn">分区权重</span></td>
+          <td>uint16 / null</td>
+          <td>当前分区的权重，网络合并时优先保留权重高的分区</td>
+        </tr>
+        <tr id="attr-0x000B">
+          <td><code>0x000B</code></td>
+          <td>DataVersion<br/><span class="attr-cn">数据版本</span></td>
+          <td>uint16 / null</td>
+          <td>Thread 网络数据的版本号，每次网络数据变更时递增</td>
+        </tr>
+        <tr id="attr-0x000C">
+          <td><code>0x000C</code></td>
+          <td>StableDataVersion<br/><span class="attr-cn">稳定数据版本</span></td>
+          <td>uint16 / null</td>
+          <td>稳定网络数据的版本号（不含临时路由等易变数据）</td>
+        </tr>
+        <tr id="attr-0x000D">
+          <td><code>0x000D</code></td>
+          <td>LeaderRouterId<br/><span class="attr-cn">Leader 路由 ID</span></td>
+          <td>uint8 / null</td>
+          <td>当前 Thread 网络 Leader 的 Router ID</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- NeighborTable 结构体 -->
+  <h4 id="struct-neighbor">NeighborTableStruct 结构体</h4>
+  <p>邻居表中每个条目描述一个直接通信的邻居节点。信号质量（LQI/RSSI）和错误率是判断链路健康的关键字段。</p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>ExtAddress</td><td>uint64</td><td>邻居的 64 位扩展 MAC 地址</td></tr>
+        <tr><td>Age</td><td>uint32</td><td>最后一次通信以来的秒数</td></tr>
+        <tr><td>Rloc16</td><td>uint16</td><td>邻居的 16 位路由定位符</td></tr>
+        <tr><td>LinkFrameCounter</td><td>uint32</td><td>链路层帧计数器</td></tr>
+        <tr><td>MleFrameCounter</td><td>uint32</td><td>MLE 层帧计数器</td></tr>
+        <tr><td>LQI</td><td>uint8</td><td>链路质量指示（0-255，越高越好）</td></tr>
+        <tr><td>AverageRssi</td><td>int8 / null</td><td>平均 RSSI（dBm），典型范围 -100 到 0</td></tr>
+        <tr><td>LastRssi</td><td>int8 / null</td><td>最近一次收包的 RSSI（dBm）</td></tr>
+        <tr><td>FrameErrorRate</td><td>uint8</td><td>帧错误率（0-100%，缩放到 0-255）</td></tr>
+        <tr><td>MessageErrorRate</td><td>uint8</td><td>消息错误率（0-100%，缩放到 0-255）</td></tr>
+        <tr><td>RxOnWhenIdle</td><td>bool</td><td>空闲时是否保持接收（false = 嗜睡设备）</td></tr>
+        <tr><td>FullThreadDevice</td><td>bool</td><td>是否为全功能 Thread 设备（FTD）</td></tr>
+        <tr><td>FullNetworkData</td><td>bool</td><td>是否接收完整网络数据</td></tr>
+        <tr><td>IsChild</td><td>bool</td><td>该邻居是否为本节点的子节点</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- RouteTable 结构体 -->
+  <h4 id="struct-route">RouteTableStruct 结构体</h4>
+  <p>路由表中每个条目描述一条到目标 Router 的路由信息。</p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>ExtAddress</td><td>uint64</td><td>目标路由器的 64 位扩展 MAC 地址</td></tr>
+        <tr><td>Rloc16</td><td>uint16</td><td>目标路由器的 16 位路由定位符</td></tr>
+        <tr><td>RouterId</td><td>uint8</td><td>路由器 ID（0-62）</td></tr>
+        <tr><td>NextHop</td><td>uint8</td><td>下一跳的 Router ID</td></tr>
+        <tr><td>PathCost</td><td>uint8</td><td>到达目标的路径开销（越小越优）</td></tr>
+        <tr><td>LQIIn</td><td>uint8</td><td>入站链路质量指示</td></tr>
+        <tr><td>LQIOut</td><td>uint8</td><td>出站链路质量指示</td></tr>
+        <tr><td>Age</td><td>uint8</td><td>路由条目的存活时间</td></tr>
+        <tr><td>Allocated</td><td>bool</td><td>该 Router ID 是否已被分配</td></tr>
+        <tr><td>LinkEstablished</td><td>bool</td><td>与该路由器是否已建立双向链路</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性概览</a></p>
+
+  <!-- ====== 数据集参数 ====== -->
+  <h3 id="group-dataset">数据集参数（0x0006, 0x0038 - 0x003E）</h3>
+  <p>Thread 操作数据集（Operational Dataset）相关的参数，包括时间戳、安全策略和网络故障信息。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>类型</th><th>所需特性</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr id="attr-0x0006">
+          <td><code>0x0006</code></td>
+          <td>OverrunCount<br/><span class="attr-cn">溢出次数</span></td>
+          <td>uint64</td>
+          <td class="col-required">ERRCNT</td>
+          <td>接收缓冲区溢出的累计次数</td>
+        </tr>
+        <tr id="attr-0x0038">
+          <td><code>0x0038</code></td>
+          <td>ActiveTimestamp<br/><span class="attr-cn">活跃时间戳</span></td>
+          <td>uint64 / null</td>
+          <td class="col-optional">无</td>
+          <td>当前活跃操作数据集的时间戳</td>
+        </tr>
+        <tr id="attr-0x0039">
+          <td><code>0x0039</code></td>
+          <td>PendingTimestamp<br/><span class="attr-cn">待定时间戳</span></td>
+          <td>uint64 / null</td>
+          <td class="col-optional">无</td>
+          <td>待生效操作数据集的时间戳（用于延迟更新网络配置）</td>
+        </tr>
+        <tr id="attr-0x003A">
+          <td><code>0x003A</code></td>
+          <td>Delay<br/><span class="attr-cn">延迟</span></td>
+          <td>uint32 / null</td>
+          <td class="col-optional">无</td>
+          <td>待定数据集生效前的延迟时间（毫秒）</td>
+        </tr>
+        <tr id="attr-0x003B">
+          <td><code>0x003B</code></td>
+          <td>SecurityPolicy<br/><span class="attr-cn">安全策略</span></td>
+          <td>SecurityPolicy / null</td>
+          <td class="col-optional">无</td>
+          <td>网络安全策略，包括密钥轮换时间和安全标志位</td>
+        </tr>
+        <tr id="attr-0x003C">
+          <td><code>0x003C</code></td>
+          <td>ChannelPage0Mask<br/><span class="attr-cn">信道掩码</span></td>
+          <td>octstr / null</td>
+          <td class="col-optional">无</td>
+          <td>Page 0 的信道掩码，标识网络允许使用的信道集合</td>
+        </tr>
+        <tr id="attr-0x003D">
+          <td><code>0x003D</code></td>
+          <td>OperationalDatasetComponents<br/><span class="attr-cn">数据集组件</span></td>
+          <td>Struct / null</td>
+          <td class="col-optional">无</td>
+          <td>标识操作数据集中哪些组件存在（见<a href="#struct-dataset-components">结构体说明</a>）</td>
+        </tr>
+        <tr id="attr-0x003E">
+          <td><code>0x003E</code></td>
+          <td>ActiveNetworkFaults<br/><span class="attr-cn">活跃网络故障</span></td>
+          <td>list&lt;NetworkFaultEnum&gt;</td>
+          <td class="col-optional">无</td>
+          <td>当前活跃的网络故障列表（见<a href="#enum-network-fault">枚举值</a>），空列表表示无故障</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SecurityPolicy 结构体 -->
+  <h4>SecurityPolicy 结构体</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>RotationTime</td><td>uint16</td><td>安全密钥轮换周期（小时）</td></tr>
+        <tr><td>Flags</td><td>uint16</td><td>安全策略标志位（控制外部 Commissioner 接入、Native Commissioner 等）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- OperationalDatasetComponents 结构体 -->
+  <h4 id="struct-dataset-components">OperationalDatasetComponents 结构体</h4>
+  <p>每个字段为 bool，标识操作数据集中对应组件是否存在。</p>
+  <div class="table-wrap table-compact">
+    <table>
+      <thead>
+        <tr><th>字段</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>ActiveTimestampPresent</td><td>活跃时间戳</td></tr>
+        <tr><td>PendingTimestampPresent</td><td>待定时间戳</td></tr>
+        <tr><td>MasterKeyPresent</td><td>主密钥（Network Key）</td></tr>
+        <tr><td>NetworkNamePresent</td><td>网络名称</td></tr>
+        <tr><td>ExtendedPanIdPresent</td><td>扩展 PAN ID</td></tr>
+        <tr><td>MeshLocalPrefixPresent</td><td>Mesh 本地前缀</td></tr>
+        <tr><td>DelayPresent</td><td>延迟计时器</td></tr>
+        <tr><td>PanIdPresent</td><td>PAN ID</td></tr>
+        <tr><td>ChannelPresent</td><td>信道号</td></tr>
+        <tr><td>PskcPresent</td><td>PSKc（Commissioner 密钥）</td></tr>
+        <tr><td>SecurityPolicyPresent</td><td>安全策略</td></tr>
+        <tr><td>ChannelMaskPresent</td><td>信道掩码</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性概览</a></p>
+
+  <!-- ====== 发送计数器 ====== -->
+  <h3 id="group-tx">发送计数器 — TX Counters（0x000E - 0x001E）<span class="feature-tag">PKTCNT / MACCNT</span></h3>
+  <p>统计设备发送数据包的各类计数。所有字段均为 <code>uint32</code> 类型，需要 <strong>PKTCNT</strong> 或 <strong>MACCNT</strong> Feature。</p>
+
+  <div class="table-wrap table-compact">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>0x000E</code></td><td>TxTotalCount</td><td>发送的数据包总数</td></tr>
+        <tr><td><code>0x000F</code></td><td>TxUnicastCount</td><td>发送的单播包数量</td></tr>
+        <tr><td><code>0x0010</code></td><td>TxBroadcastCount</td><td>发送的广播包数量</td></tr>
+        <tr><td><code>0x0011</code></td><td>TxAckRequestedCount</td><td>请求 ACK 确认的发送包数量</td></tr>
+        <tr><td><code>0x0012</code></td><td>TxAckedCount</td><td>已收到 ACK 确认的发送包数量</td></tr>
+        <tr><td><code>0x0013</code></td><td>TxNoAckRequestedCount</td><td>不要求 ACK 确认的发送包数量</td></tr>
+        <tr><td><code>0x0014</code></td><td>TxDataCount</td><td>发送的数据帧数量</td></tr>
+        <tr><td><code>0x0015</code></td><td>TxDataPollCount</td><td>发送的数据轮询帧数量（嗜睡设备唤醒拉取数据）</td></tr>
+        <tr><td><code>0x0016</code></td><td>TxBeaconCount</td><td>发送的 Beacon 帧数量</td></tr>
+        <tr><td><code>0x0017</code></td><td>TxBeaconRequestCount</td><td>发送的 Beacon 请求帧数量</td></tr>
+        <tr><td><code>0x0018</code></td><td>TxOtherCount</td><td>发送的其他类型帧数量</td></tr>
+        <tr><td><code>0x0019</code></td><td>TxRetryCount</td><td>发送重试次数（重试率 = TxRetryCount / TxTotalCount）</td></tr>
+        <tr><td><code>0x001A</code></td><td>TxDirectMaxRetryExpiryCount</td><td>直接传输达到最大重试次数的包数量</td></tr>
+        <tr><td><code>0x001B</code></td><td>TxIndirectMaxRetryExpiryCount</td><td>间接传输达到最大重试次数的包数量</td></tr>
+        <tr><td><code>0x001C</code></td><td>TxErrCcaCount</td><td>CCA（信道空闲评估）失败导致的发送失败次数</td></tr>
+        <tr><td><code>0x001D</code></td><td>TxErrAbortCount</td><td>发送中止的次数</td></tr>
+        <tr><td><code>0x001E</code></td><td>TxErrBusyChannelCount</td><td>信道繁忙导致的发送失败次数</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">发送质量判断</div>
+    <p>
+      关注 <code>TxRetryCount / TxTotalCount</code> 比值 —— 重试率超过 10% 说明链路质量较差。
+      <code>TxErrCcaCount</code> 持续增长通常意味着信道拥挤，可能需要换信道。
+      <code>TxDirectMaxRetryExpiryCount</code> 非零说明有丢包，需要检查目标节点是否在线。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性概览</a></p>
+
+  <!-- ====== 接收计数器 ====== -->
+  <h3 id="group-rx">接收计数器 — RX Counters（0x001F - 0x0029）<span class="feature-tag">PKTCNT / MACCNT</span></h3>
+  <p>统计设备接收数据包的各类计数。所有字段均为 <code>uint32</code> 类型，需要 <strong>PKTCNT</strong> 或 <strong>MACCNT</strong> Feature。</p>
+
+  <div class="table-wrap table-compact">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>0x001F</code></td><td>RxTotalCount</td><td>接收的数据包总数</td></tr>
+        <tr><td><code>0x0020</code></td><td>RxUnicastCount</td><td>接收的单播包数量</td></tr>
+        <tr><td><code>0x0021</code></td><td>RxBroadcastCount</td><td>接收的广播包数量</td></tr>
+        <tr><td><code>0x0022</code></td><td>RxDataCount</td><td>接收的数据帧数量</td></tr>
+        <tr><td><code>0x0023</code></td><td>RxDataPollCount</td><td>接收的数据轮询帧数量</td></tr>
+        <tr><td><code>0x0024</code></td><td>RxBeaconCount</td><td>接收的 Beacon 帧数量</td></tr>
+        <tr><td><code>0x0025</code></td><td>RxBeaconRequestCount</td><td>接收的 Beacon 请求帧数量</td></tr>
+        <tr><td><code>0x0026</code></td><td>RxOtherCount</td><td>接收的其他类型帧数量</td></tr>
+        <tr><td><code>0x0027</code></td><td>RxAddressFilteredCount</td><td>被地址过滤丢弃的接收包数量</td></tr>
+        <tr><td><code>0x0028</code></td><td>RxDestAddrFilteredCount</td><td>因目的地址不匹配而过滤的包数量</td></tr>
+        <tr><td><code>0x0029</code></td><td>RxDuplicatedCount</td><td>接收到的重复包数量</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性概览</a></p>
+
+  <!-- ====== 接收错误计数器 ====== -->
+  <h3 id="group-rxerr">接收错误计数器（0x002A - 0x002F）<span class="feature-tag">ERRCNT</span></h3>
+  <p>统计各类接收错误。所有字段均为 <code>uint32</code> 类型，需要 <strong>ERRCNT</strong> Feature。</p>
+
+  <div class="table-wrap table-compact">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>0x002A</code></td><td>RxErrNoFrameCount</td><td>接收到无帧内容的错误包数量</td></tr>
+        <tr><td><code>0x002B</code></td><td>RxErrUnknownNeighborCount</td><td>来自未知邻居的包数量（可能是网络攻击或新节点）</td></tr>
+        <tr><td><code>0x002C</code></td><td>RxErrInvalidSrcAddrCount</td><td>源地址无效的包数量</td></tr>
+        <tr><td><code>0x002D</code></td><td>RxErrSecCount</td><td>安全校验失败的包数量（解密失败或 MIC 不匹配）</td></tr>
+        <tr><td><code>0x002E</code></td><td>RxErrFcsCount</td><td>FCS（帧校验序列）错误的包数量 —— 通常是射频干扰导致</td></tr>
+        <tr><td><code>0x002F</code></td><td>RxErrOtherCount</td><td>其他类型的接收错误</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">错误计数器排查指南</div>
+    <p>
+      <strong>RxErrFcsCount 持续增长</strong>：射频干扰严重，检查是否有 2.4GHz WiFi 或微波炉等干扰源，考虑换信道。<br/>
+      <strong>RxErrSecCount 非零</strong>：安全层失败，可能是网络密钥不一致或有未授权设备尝试通信。<br/>
+      <strong>RxErrUnknownNeighborCount 突增</strong>：有新设备加入或附近有其他 Thread 网络干扰。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性概览</a></p>
+
+  <!-- ====== MLE 计数器 ====== -->
+  <h3 id="group-mle">MLE 计数器（0x0030 - 0x0037）<span class="feature-tag">MLECNT</span></h3>
+  <p>
+    MLE（Mesh Link Establishment）层事件计数，反映设备在 Thread 网络中的角色变化和附着行为。
+    所有字段均为 <code>uint16</code> 类型，需要 <strong>MLECNT</strong> Feature。
+  </p>
+
+  <div class="table-wrap table-compact">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>0x0030</code></td><td>DetachedRoleChangeCount</td><td>进入 Detached（脱离）状态的次数</td></tr>
+        <tr><td><code>0x0031</code></td><td>ChildRoleChangeCount</td><td>变为 Child（子节点）角色的次数</td></tr>
+        <tr><td><code>0x0032</code></td><td>RouterRoleChangeCount</td><td>变为 Router（路由器）角色的次数</td></tr>
+        <tr><td><code>0x0033</code></td><td>LeaderRoleChangeCount</td><td>变为 Leader（领导者）角色的次数</td></tr>
+        <tr><td><code>0x0034</code></td><td>AttachAttemptCount</td><td>尝试附着到网络的次数</td></tr>
+        <tr><td><code>0x0035</code></td><td>PartitionIdChangeCount</td><td>分区 ID 变更的次数（网络分裂/合并）</td></tr>
+        <tr><td><code>0x0036</code></td><td>BetterPartitionAttachAttemptCount</td><td>尝试附着到更优分区的次数</td></tr>
+        <tr><td><code>0x0037</code></td><td>ParentChangeCount</td><td>父节点变更的次数</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">MLE 计数器解读</div>
+    <p>
+      <strong>DetachedRoleChangeCount 频繁增长</strong>：设备经常与网络断开，需检查信号强度或父节点稳定性。<br/>
+      <strong>ParentChangeCount 过高</strong>：设备频繁切换父节点，说明周围路由器不稳定或信号边界。<br/>
+      <strong>PartitionIdChangeCount 非零</strong>：网络曾发生分裂和重新合并，通常是部分节点通信中断导致。
+    </p>
+  </div>
+  <p class="back-link"><a href="#attributes">&#8593; 返回属性概览</a></p>
+
+  <!-- ====== 枚举值速查 ====== -->
+  <h2 id="enums">枚举值速查</h2>
+
+  <h3 id="enum-routing-role">RoutingRoleEnum —— 路由角色</h3>
+  <p>描述设备在 Thread Mesh 网络中担任的角色。</p>
+  <div class="enum-cards enum-cards-grid">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Unspecified</span>
+        <span class="enum-desc">未指定 —— 角色未确定</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">Unassigned</span>
+        <span class="enum-desc">未分配 —— 设备已加入但尚未获得角色</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">SleepyEndDevice</span>
+        <span class="enum-desc">嗜睡终端 —— 大部分时间处于休眠，定期唤醒拉取数据，省电但延迟高</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">EndDevice</span>
+        <span class="enum-desc">终端设备 —— 始终在线但不转发数据，不参与路由</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">4</span>
+      <div>
+        <span class="enum-name">REED</span>
+        <span class="enum-desc">路由器候选 —— 具备路由能力但当前未激活，网络需要时可自动升级为 Router</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">5</span>
+      <div>
+        <span class="enum-name">Router</span>
+        <span class="enum-desc">路由器 —— 为其他设备转发数据，维护路由表，是 Mesh 网络的骨干</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">6</span>
+      <div>
+        <span class="enum-name">Leader</span>
+        <span class="enum-desc">领导者 —— 管理 Router ID 分配、网络数据分发，每个分区有且只有一个</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">Thread 角色层级</div>
+    <p>
+      Thread 网络中的角色从低到高：SleepyEndDevice → EndDevice → REED → Router → Leader。
+      Leader 本质上也是一个 Router，只是额外承担了管理职责。当 Leader 离线时，其他 Router 会自动选举新的 Leader。
+    </p>
+  </div>
+
+  <h3 id="enum-connection-status">ConnectionStatusEnum —— 连接状态</h3>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Connected</span>
+        <span class="enum-desc">已连接到 Thread 网络</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">NotConnected</span>
+        <span class="enum-desc">未连接到 Thread 网络</span>
+      </div>
+    </div>
+  </div>
+
+  <h3 id="enum-network-fault">NetworkFaultEnum —— 网络故障类型</h3>
+  <div class="enum-cards enum-cards-row">
+    <div class="enum-card">
+      <span class="enum-badge">0</span>
+      <div>
+        <span class="enum-name">Unspecified</span>
+        <span class="enum-desc">未指定故障</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">1</span>
+      <div>
+        <span class="enum-name">LinkDown</span>
+        <span class="enum-desc">链路断开 —— 与 Thread 网络失去连接</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">2</span>
+      <div>
+        <span class="enum-name">HardwareFailure</span>
+        <span class="enum-desc">硬件故障 —— 射频模块或 Thread 芯片异常</span>
+      </div>
+    </div>
+    <div class="enum-card">
+      <span class="enum-badge">3</span>
+      <div>
+        <span class="enum-name">NetworkJammed</span>
+        <span class="enum-desc">网络干扰 —— 信道被持续占用，无法正常通信</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== 事件 ====== -->
+  <h2 id="events">事件（Events）</h2>
+  <p>ThreadNetworkDiagnostics 定义了 2 个事件，用于通知网络连接状态变化和故障发生。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>事件</th><th>优先级</th><th>字段</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>ConnectionStatus</strong></td>
+          <td>Info</td>
+          <td>ConnectionStatus: <a href="#enum-connection-status">ConnectionStatusEnum</a></td>
+          <td>Thread 网络连接状态变化时触发（连上或断开）</td>
+        </tr>
+        <tr>
+          <td><strong>NetworkFaultChange</strong></td>
+          <td>Info</td>
+          <td>
+            Current: list&lt;<a href="#enum-network-fault">NetworkFaultEnum</a>&gt;<br/>
+            Previous: list&lt;<a href="#enum-network-fault">NetworkFaultEnum</a>&gt;
+          </td>
+          <td>网络故障列表变化时触发，携带变化前后的故障列表</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <details class="scenario">
+    <summary>事件订阅用途</summary>
+    <div class="scenario-content">
+      <p>
+        <strong>ConnectionStatus 事件</strong>：App 可以订阅此事件来实时感知 Thread 设备的在线/离线状态变化，
+        比如在设备列表中显示连接状态图标、断开时弹出提示。
+      </p>
+      <p>
+        <strong>NetworkFaultChange 事件</strong>：用于监控网络健康状况。当 Current 列表从空变为非空时说明出现了故障；
+        从非空变为空表示故障已恢复。对比 Current 和 Previous 可以判断是新增故障还是故障恢复。
+      </p>
+    </div>
+  </details>
+
+  <!-- ====== 示例数据 ====== -->
+  <h2 id="example-data">示例数据</h2>
+  <p>一个 Thread Router 设备的 ThreadNetworkDiagnostics Cluster 典型读取结果（选取关键属性）：</p>
+
+  <pre><code set:html={exampleData} /></pre>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">开发提示</div>
+    <p>
+      实际使用中，通常不需要一次读取全部 60+ 个属性。根据诊断目的选择性读取：
+      排查连接问题读 RoutingRole + NeighborTable + ActiveNetworkFaults；
+      分析网络质量读各类计数器；了解网络配置读 Channel + NetworkName + SecurityPolicy。
+      读取前先检查 <code>FeatureMap</code>，避免请求设备不支持的计数器属性。
+    </p>
+  </div>
+
+  <!-- ====== 常见场景 ====== -->
+  <h2 id="scenarios">常见场景</h2>
+
+  <h3 id="scenario-connectivity">场景 1：排查 Thread 设备离线</h3>
+  <ol>
+    <li>读取 <code>RoutingRole (0x0001)</code> —— 如果为 <code>null</code> 或 <code>Unassigned</code>，设备未成功加入网络</li>
+    <li>读取 <code>ActiveNetworkFaults (0x003E)</code> —— 检查是否有 LinkDown 或 HardwareFailure</li>
+    <li>读取 <code>NeighborTable (0x0007)</code> —— 查看邻居列表中的 LQI 和 RSSI，判断信号质量</li>
+    <li>订阅 <strong>ConnectionStatus</strong> 事件，实时感知连接状态变化</li>
+  </ol>
+
+  <h3 id="scenario-quality">场景 2：评估网络通信质量</h3>
+  <ol>
+    <li>调用 <code>ResetCounts (0x00)</code> 清零所有计数器</li>
+    <li>等待一段时间（如 10 分钟），然后读取计数器</li>
+    <li>计算重试率：<code>TxRetryCount / TxTotalCount</code>，超过 10% 说明链路差</li>
+    <li>检查 <code>RxErrFcsCount</code> —— 非零说明有射频干扰</li>
+    <li>检查 <code>TxErrCcaCount</code> —— 持续增长说明信道拥挤，考虑换信道</li>
+  </ol>
+
+  <h3 id="scenario-topology">场景 3：了解网络拓扑</h3>
+  <ol>
+    <li>读取 <code>RoutingRole (0x0001)</code> —— 确认设备的网络角色</li>
+    <li>读取 <code>LeaderRouterId (0x000D)</code> —— 找到当前 Leader</li>
+    <li>读取 <code>NeighborTable (0x0007)</code> —— 获取邻居节点列表和链路质量</li>
+    <li>读取 <code>RouteTable (0x0008)</code> —— 查看路由拓扑和路径开销</li>
+    <li>读取 <code>PartitionId (0x0009)</code> —— 确认所有设备是否在同一分区</li>
+  </ol>
+
+  <h3 id="scenario-stability">场景 4：监控网络稳定性</h3>
+  <ol>
+    <li>读取 MLE 计数器（需 MLECNT Feature）：
+      <ul>
+        <li><code>DetachedRoleChangeCount (0x0030)</code> —— 频繁脱离说明连接不稳定</li>
+        <li><code>ParentChangeCount (0x0037)</code> —— 频繁换父节点说明周围路由器不稳定</li>
+        <li><code>PartitionIdChangeCount (0x0035)</code> —— 非零说明网络曾分裂</li>
+      </ul>
+    </li>
+    <li>订阅 <strong>NetworkFaultChange</strong> 事件，及时感知故障发生和恢复</li>
+    <li>定期对比计数器增量，建立网络质量基线</li>
+  </ol>
+
+  <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+          const href = row.dataset.href;
+          if (href) {
+            window.location.hash = href.replace('#', '');
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+</DocLayout>
+
+<style>
+  .col-required {
+    color: #dc2626;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-required {
+    color: #f87171;
+  }
+
+  .col-optional {
+    color: #16a34a;
+    font-size: 0.8125rem;
+  }
+
+  :global(.dark) .col-optional {
+    color: #4ade80;
+  }
+
+  .attr-cn {
+    font-size: 0.8125rem;
+    color: #6b7280;
+  }
+
+  :global(.dark) .attr-cn {
+    color: #9ca3af;
+  }
+
+  .feature-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.125rem 0.5rem;
+    margin-left: 0.5rem;
+    border-radius: 9999px;
+    background: #dbeafe;
+    color: #1d4ed8;
+    vertical-align: middle;
+  }
+
+  :global(.dark) .feature-tag {
+    background: #1e3a5f;
+    color: #93c5fd;
+  }
+
+  .table-compact table {
+    font-size: 0.875rem;
+  }
+
+  .table-compact td,
+  .table-compact th {
+    padding: 0.375rem 0.75rem;
+  }
+</style>
