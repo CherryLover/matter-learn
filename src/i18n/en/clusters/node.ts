@@ -27,6 +27,15 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <!-- ====== Attribute Overview ====== -->
+  <div class="callout callout-tip">
+    <div class="callout-title">Reading a device's identity after commissioning</div>
+    <p>
+      The vendor, model, firmware version and serial number an app shows all come from this cluster. Together with <a href="../descriptor/">Descriptor</a> (device types and cluster lists)
+      it is everything you need to identify a device after commissioning. See <a href="../../concepts/#device-discovery">Concepts · Reading a device's capabilities</a>.
+      To see real data, open the <a href="../../tools/json-parser/">JSON Parser</a> and pick the "Raw device data" sample.
+    </p>
+  </div>
+
   <h2 id="attributes">Attribute Overview</h2>
   <p>BasicInformation has 23 attributes organized into five groups. Click an attribute ID to jump to its detailed description.</p>
 
@@ -755,7 +764,7 @@ export const clusters: Record<string, ClusterContent> = {
 
   <!-- ====== Command ====== -->
   <h2 id="commands">Command</h2>
-  <p>BasicInformation has only one optional Command:</p>
+  <p>Early versions of BasicInformation had one optional Command; in newer versions (this site checks against v1.6) the cluster has no commands at all:</p>
 
   <div class="table-wrap">
     <table>
@@ -771,7 +780,7 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr>
           <td><code>0x00</code></td>
-          <td>MfgSpecificPing</td>
+          <td>MfgSpecificPing <span class="removed-tag">Removed in newer versions</span></td>
           <td>Client &rarr; Server</td>
           <td>Optional</td>
           <td>Vendor-specific Ping command for detecting device response. No parameters, no return value</td>
@@ -781,9 +790,9 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">Most Devices Do Not Implement MfgSpecificPing</div>
+    <div class="callout-title">MfgSpecificPing Was Removed in Newer Versions</div>
     <p>
-      This is an <strong>optional</strong> command that very few devices actually implement.
+      This command only appeared in early definitions, was <strong>optional</strong>, and very few devices ever implemented it; newer Matter versions no longer include it.
       To check if a device is online, simply read any attribute (e.g. <code>SoftwareVersion</code>) —
       a successful read means the device is online.
     </p>
@@ -1555,7 +1564,7 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-info">
     <div class="callout-title">Why No Commands?</div>
     <p>
-      Unlike BasicInformation (which has an optional <code>MfgSpecificPing</code>),
+      Unlike early versions of BasicInformation (which had an optional <code>MfgSpecificPing</code>, since removed),
       BridgedDeviceBasicInformation is purely an <strong>informational</strong> Cluster.
       All control operations on sub-devices (on/off, dimming, reading sensors, etc.) are done through their respective functional Clusters,
       not through the basic information Cluster. To check if a sub-device is online, simply read the <code>Reachable</code> attribute.
@@ -4212,8 +4221,8 @@ export const clusters: Record<string, ClusterContent> = {
           <td>Set DST offset list</td>
           <td class="col-required">TZ</td>
         </tr>
-        <tr class="clickable-row" data-href="#cmd-0x07">
-          <td><a href="#cmd-0x07"><code>0x07</code></a></td>
+        <tr class="clickable-row" data-href="#cmd-0x05">
+          <td><a href="#cmd-0x05"><code>0x05</code></a></td>
           <td>SetDefaultNTP</td>
           <td>Set default NTP server address</td>
           <td class="col-required">NTPC</td>
@@ -4481,7 +4490,7 @@ export const clusters: Record<string, ClusterContent> = {
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x07">SetDefaultNTP — Set Default NTP Server (0x07)</h3>
+  <h3 id="cmd-0x05">SetDefaultNTP — Set Default NTP Server (0x05)</h3>
   <p>
     Sets the default NTP server address for device time synchronization. Requires the device to have <strong>NTPC</strong> (NTP client) feature enabled.
     Set to <code>null</code> to clear the default NTP server.
@@ -4608,31 +4617,31 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0009">
           <td><a href="#attr-0x0009"><code>0x0009</code></a></td>
+          <td>NTPServerAvailable</td>
+          <td>bool</td>
+          <td><a href="#group-cap">Capabilities &amp; Limits</a></td>
+          <td>Whether device can serve as NTP server</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x000A">
+          <td><a href="#attr-0x000A"><code>0x000A</code></a></td>
           <td>TimeZoneListMaxSize</td>
           <td>uint8</td>
           <td><a href="#group-cap">Capabilities &amp; Limits</a></td>
           <td>Maximum timezone list entries</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x000A">
-          <td><a href="#attr-0x000A"><code>0x000A</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x000B">
+          <td><a href="#attr-0x000B"><code>0x000B</code></a></td>
           <td>DSTOffsetListMaxSize</td>
           <td>uint8</td>
           <td><a href="#group-cap">Capabilities &amp; Limits</a></td>
           <td>Maximum DST offset list entries</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x000B">
-          <td><a href="#attr-0x000B"><code>0x000B</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x000C">
+          <td><a href="#attr-0x000C"><code>0x000C</code></a></td>
           <td>SupportsDNSResolve</td>
           <td>bool</td>
           <td><a href="#group-cap">Capabilities &amp; Limits</a></td>
           <td>Whether DNS name resolution is supported</td>
-        </tr>
-        <tr class="clickable-row" data-href="#attr-0x000C">
-          <td><a href="#attr-0x000C"><code>0x000C</code></a></td>
-          <td>NTPServerAvailable</td>
-          <td>bool</td>
-          <td><a href="#group-cap">Capabilities &amp; Limits</a></td>
-          <td>Whether device can serve as NTP server</td>
         </tr>
       </tbody>
     </table>
@@ -4714,7 +4723,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td>string / null</td>
           <td>
             The default NTP server address used by the device (domain name or IPv6 address).
-            <code>null</code> means not configured. Set via the <a href="#cmd-0x07">SetDefaultNTP</a> command.
+            <code>null</code> means not configured. Set via the <a href="#cmd-0x05">SetDefaultNTP</a> command.
             <strong>Requires NTPC feature</strong>
           </td>
         </tr>
@@ -4797,6 +4806,16 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
         <tr id="attr-0x0009">
           <td><code>0x0009</code></td>
+          <td>NTPServerAvailable<br/><span class="attr-cn">NTP Server Available</span></td>
+          <td>bool</td>
+          <td>
+            Whether the device itself can serve as an NTP server to provide time to other nodes.
+            <code>true</code> means other devices can set this device as their TrustedTimeSource.
+            <strong>Requires NTPS feature</strong>
+          </td>
+        </tr>
+        <tr id="attr-0x000A">
+          <td><code>0x000A</code></td>
           <td>TimeZoneListMaxSize<br/><span class="attr-cn">Timezone List Max Size</span></td>
           <td>uint8</td>
           <td>
@@ -4804,8 +4823,8 @@ export const clusters: Record<string, ClusterContent> = {
             The list length of <a href="#cmd-0x02">SetTimeZone</a> cannot exceed this value. <strong>Requires TZ feature</strong>
           </td>
         </tr>
-        <tr id="attr-0x000A">
-          <td><code>0x000A</code></td>
+        <tr id="attr-0x000B">
+          <td><code>0x000B</code></td>
           <td>DSTOffsetListMaxSize<br/><span class="attr-cn">DST Offset List Max Size</span></td>
           <td>uint8</td>
           <td>
@@ -4813,24 +4832,14 @@ export const clusters: Record<string, ClusterContent> = {
             The list length of <a href="#cmd-0x04">SetDSTOffset</a> cannot exceed this value. <strong>Requires TZ feature</strong>
           </td>
         </tr>
-        <tr id="attr-0x000B">
-          <td><code>0x000B</code></td>
+        <tr id="attr-0x000C">
+          <td><code>0x000C</code></td>
           <td>SupportsDNSResolve<br/><span class="attr-cn">Supports DNS Resolve</span></td>
           <td>bool</td>
           <td>
             Whether the device supports resolving domain names to IP addresses.
-            If <code>false</code>, <a href="#cmd-0x07">SetDefaultNTP</a> can only accept IPv6 addresses, not domain names.
+            If <code>false</code>, <a href="#cmd-0x05">SetDefaultNTP</a> can only accept IPv6 addresses, not domain names.
             <strong>Requires NTPC feature</strong>
-          </td>
-        </tr>
-        <tr id="attr-0x000C">
-          <td><code>0x000C</code></td>
-          <td>NTPServerAvailable<br/><span class="attr-cn">NTP Server Available</span></td>
-          <td>bool</td>
-          <td>
-            Whether the device itself can serve as an NTP server to provide time to other nodes.
-            <code>true</code> means other devices can set this device as their TrustedTimeSource.
-            <strong>Requires NTPS feature</strong>
           </td>
         </tr>
       </tbody>
@@ -5166,10 +5175,10 @@ export const clusters: Record<string, ClusterContent> = {
 
   // --- Capabilities & Limits ---
   "0x0008": 1,                   // TimeZoneDatabase = Full
-  "0x0009": 2,                   // TimeZoneListMaxSize = 2
-  "0x000A": 2,                   // DSTOffsetListMaxSize = 2
-  "0x000B": true,                // SupportsDNSResolve = true
-  "0x000C": false                // NTPServerAvailable = false
+  "0x0009": false,               // NTPServerAvailable = false
+  "0x000A": 2,                   // TimeZoneListMaxSize = 2
+  "0x000B": 2,                   // DSTOffsetListMaxSize = 2
+  "0x000C": true                 // SupportsDNSResolve = true
 }</code></pre>
 
   <h3>SetUTCTime Interaction Example</h3>
@@ -5234,7 +5243,7 @@ export const clusters: Record<string, ClusterContent> = {
         <li>After commissioning (CommissioningComplete succeeded), read the device's <code>FeatureMap (0xFFFC)</code> to confirm time sync capabilities</li>
         <li>Send <a href="#cmd-0x00"><code>SetUTCTime (0x00)</code></a> to inject current UTC time with Granularity = <code>SecondsGranularity (2)</code>, TimeSource = <code>Admin (2)</code></li>
         <li>Send <a href="#cmd-0x01"><code>SetTrustedTimeSource (0x01)</code></a> to designate a Hub in the Fabric as the trusted time source</li>
-        <li>If the device supports NTPC, send <a href="#cmd-0x07"><code>SetDefaultNTP (0x07)</code></a> to configure the NTP server</li>
+        <li>If the device supports NTPC, send <a href="#cmd-0x05"><code>SetDefaultNTP (0x05)</code></a> to configure the NTP server</li>
         <li>Verify: read <code>UTCTime (0x0000)</code> to confirm time is set, <code>Granularity (0x0001)</code> is no longer 0</li>
       </ol>
       <p>The device will subsequently auto-sync time from NTP or TrustedTimeSource, with precision gradually improving.</p>
@@ -5246,7 +5255,7 @@ export const clusters: Record<string, ClusterContent> = {
     <div class="scenario-content">
       <ol>
         <li>Confirm device supports TZ feature (<code>FeatureMap</code> Bit 0 = 1)</li>
-        <li>Read <code>TimeZoneListMaxSize (0x0009)</code> to confirm list capacity</li>
+        <li>Read <code>TimeZoneListMaxSize (0x000A)</code> to confirm list capacity</li>
         <li>Send <a href="#cmd-0x02"><code>SetTimeZone (0x02)</code></a> with new timezone info:
           <ul>
             <li>Moving from Beijing to New York: Offset = <code>-18000</code> (UTC-5), Name = <code>"America/New_York"</code></li>
@@ -5268,13 +5277,13 @@ export const clusters: Record<string, ClusterContent> = {
     <div class="scenario-content">
       <ol>
         <li>Confirm device supports NTPC feature (<code>FeatureMap</code> Bit 1 = 1)</li>
-        <li>Check <code>SupportsDNSResolve (0x000B)</code>:
+        <li>Check <code>SupportsDNSResolve (0x000C)</code>:
           <ul>
             <li><code>true</code>: can pass domain names, e.g. <code>"pool.ntp.org"</code></li>
             <li><code>false</code>: can only pass IPv6 addresses</li>
           </ul>
         </li>
-        <li>Send <a href="#cmd-0x07"><code>SetDefaultNTP (0x07)</code></a> to set the NTP server address</li>
+        <li>Send <a href="#cmd-0x05"><code>SetDefaultNTP (0x05)</code></a> to set the NTP server address</li>
         <li>After waiting some time, read <code>Granularity (0x0001)</code> and <code>TimeSource (0x0002)</code>,
             to confirm successful NTP sync (Granularity should upgrade to MillisecondsGranularity, TimeSource changes to NTP-related value)</li>
       </ol>

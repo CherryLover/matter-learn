@@ -3311,7 +3311,7 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
         <tr id="attr-0x003E">
           <td><code>0x003E</code></td>
-          <td>ActiveNetworkFaults<br/><span class="attr-cn">活跃网络故障</span></td>
+          <td>ActiveNetworkFaultsList<br/><span class="attr-cn">活跃网络故障</span></td>
           <td>list&lt;NetworkFaultEnum&gt;</td>
           <td class="col-optional">无</td>
           <td>当前活跃的网络故障列表（见<a href="#enum-network-fault">枚举值</a>），空列表表示无故障</td>
@@ -3361,7 +3361,7 @@ export const clusters: Record<string, ClusterContent> = {
   <p class="back-link"><a href="#attributes">&#8593; 返回属性概览</a></p>
 
   <!-- ====== 发送计数器 ====== -->
-  <h3 id="group-tx">发送计数器 — TX Counters（0x000E - 0x001E）<span class="feature-tag">PKTCNT / MACCNT</span></h3>
+  <h3 id="group-tx">发送计数器 — TX Counters（0x0016 - 0x0026）<span class="feature-tag">PKTCNT / MACCNT</span></h3>
   <p>统计设备发送数据包的各类计数。所有字段均为 <code>uint32</code> 类型，需要 <strong>PKTCNT</strong> 或 <strong>MACCNT</strong> Feature。</p>
 
   <div class="table-wrap table-compact">
@@ -3370,23 +3370,23 @@ export const clusters: Record<string, ClusterContent> = {
         <tr><th>ID</th><th>名称</th><th>说明</th></tr>
       </thead>
       <tbody>
-        <tr><td><code>0x000E</code></td><td>TxTotalCount</td><td>发送的数据包总数</td></tr>
-        <tr><td><code>0x000F</code></td><td>TxUnicastCount</td><td>发送的单播包数量</td></tr>
-        <tr><td><code>0x0010</code></td><td>TxBroadcastCount</td><td>发送的广播包数量</td></tr>
-        <tr><td><code>0x0011</code></td><td>TxAckRequestedCount</td><td>请求 ACK 确认的发送包数量</td></tr>
-        <tr><td><code>0x0012</code></td><td>TxAckedCount</td><td>已收到 ACK 确认的发送包数量</td></tr>
-        <tr><td><code>0x0013</code></td><td>TxNoAckRequestedCount</td><td>不要求 ACK 确认的发送包数量</td></tr>
-        <tr><td><code>0x0014</code></td><td>TxDataCount</td><td>发送的数据帧数量</td></tr>
-        <tr><td><code>0x0015</code></td><td>TxDataPollCount</td><td>发送的数据轮询帧数量（嗜睡设备唤醒拉取数据）</td></tr>
-        <tr><td><code>0x0016</code></td><td>TxBeaconCount</td><td>发送的 Beacon 帧数量</td></tr>
-        <tr><td><code>0x0017</code></td><td>TxBeaconRequestCount</td><td>发送的 Beacon 请求帧数量</td></tr>
-        <tr><td><code>0x0018</code></td><td>TxOtherCount</td><td>发送的其他类型帧数量</td></tr>
-        <tr><td><code>0x0019</code></td><td>TxRetryCount</td><td>发送重试次数（重试率 = TxRetryCount / TxTotalCount）</td></tr>
-        <tr><td><code>0x001A</code></td><td>TxDirectMaxRetryExpiryCount</td><td>直接传输达到最大重试次数的包数量</td></tr>
-        <tr><td><code>0x001B</code></td><td>TxIndirectMaxRetryExpiryCount</td><td>间接传输达到最大重试次数的包数量</td></tr>
-        <tr><td><code>0x001C</code></td><td>TxErrCcaCount</td><td>CCA（信道空闲评估）失败导致的发送失败次数</td></tr>
-        <tr><td><code>0x001D</code></td><td>TxErrAbortCount</td><td>发送中止的次数</td></tr>
-        <tr><td><code>0x001E</code></td><td>TxErrBusyChannelCount</td><td>信道繁忙导致的发送失败次数</td></tr>
+        <tr><td><code>0x0016</code></td><td>TxTotalCount</td><td>发送的数据包总数</td></tr>
+        <tr><td><code>0x0017</code></td><td>TxUnicastCount</td><td>发送的单播包数量</td></tr>
+        <tr><td><code>0x0018</code></td><td>TxBroadcastCount</td><td>发送的广播包数量</td></tr>
+        <tr><td><code>0x0019</code></td><td>TxAckRequestedCount</td><td>请求 ACK 确认的发送包数量</td></tr>
+        <tr><td><code>0x001A</code></td><td>TxAckedCount</td><td>已收到 ACK 确认的发送包数量</td></tr>
+        <tr><td><code>0x001B</code></td><td>TxNoAckRequestedCount</td><td>不要求 ACK 确认的发送包数量</td></tr>
+        <tr><td><code>0x001C</code></td><td>TxDataCount</td><td>发送的数据帧数量</td></tr>
+        <tr><td><code>0x001D</code></td><td>TxDataPollCount</td><td>发送的数据轮询帧数量（嗜睡设备唤醒拉取数据）</td></tr>
+        <tr><td><code>0x001E</code></td><td>TxBeaconCount</td><td>发送的 Beacon 帧数量</td></tr>
+        <tr><td><code>0x001F</code></td><td>TxBeaconRequestCount</td><td>发送的 Beacon 请求帧数量</td></tr>
+        <tr><td><code>0x0020</code></td><td>TxOtherCount</td><td>发送的其他类型帧数量</td></tr>
+        <tr><td><code>0x0021</code></td><td>TxRetryCount</td><td>发送重试次数（重试率 = TxRetryCount / TxTotalCount）</td></tr>
+        <tr><td><code>0x0022</code></td><td>TxDirectMaxRetryExpiryCount</td><td>直接传输达到最大重试次数的包数量</td></tr>
+        <tr><td><code>0x0023</code></td><td>TxIndirectMaxRetryExpiryCount</td><td>间接传输达到最大重试次数的包数量</td></tr>
+        <tr><td><code>0x0024</code></td><td>TxErrCcaCount</td><td>CCA（信道空闲评估）失败导致的发送失败次数</td></tr>
+        <tr><td><code>0x0025</code></td><td>TxErrAbortCount</td><td>发送中止的次数</td></tr>
+        <tr><td><code>0x0026</code></td><td>TxErrBusyChannelCount</td><td>信道繁忙导致的发送失败次数</td></tr>
       </tbody>
     </table>
   </div>
@@ -3402,7 +3402,7 @@ export const clusters: Record<string, ClusterContent> = {
   <p class="back-link"><a href="#attributes">&#8593; 返回属性概览</a></p>
 
   <!-- ====== 接收计数器 ====== -->
-  <h3 id="group-rx">接收计数器 — RX Counters（0x001F - 0x0029）<span class="feature-tag">PKTCNT / MACCNT</span></h3>
+  <h3 id="group-rx">接收计数器 — RX Counters（0x0027 - 0x0031）<span class="feature-tag">PKTCNT / MACCNT</span></h3>
   <p>统计设备接收数据包的各类计数。所有字段均为 <code>uint32</code> 类型，需要 <strong>PKTCNT</strong> 或 <strong>MACCNT</strong> Feature。</p>
 
   <div class="table-wrap table-compact">
@@ -3411,24 +3411,24 @@ export const clusters: Record<string, ClusterContent> = {
         <tr><th>ID</th><th>名称</th><th>说明</th></tr>
       </thead>
       <tbody>
-        <tr><td><code>0x001F</code></td><td>RxTotalCount</td><td>接收的数据包总数</td></tr>
-        <tr><td><code>0x0020</code></td><td>RxUnicastCount</td><td>接收的单播包数量</td></tr>
-        <tr><td><code>0x0021</code></td><td>RxBroadcastCount</td><td>接收的广播包数量</td></tr>
-        <tr><td><code>0x0022</code></td><td>RxDataCount</td><td>接收的数据帧数量</td></tr>
-        <tr><td><code>0x0023</code></td><td>RxDataPollCount</td><td>接收的数据轮询帧数量</td></tr>
-        <tr><td><code>0x0024</code></td><td>RxBeaconCount</td><td>接收的 Beacon 帧数量</td></tr>
-        <tr><td><code>0x0025</code></td><td>RxBeaconRequestCount</td><td>接收的 Beacon 请求帧数量</td></tr>
-        <tr><td><code>0x0026</code></td><td>RxOtherCount</td><td>接收的其他类型帧数量</td></tr>
-        <tr><td><code>0x0027</code></td><td>RxAddressFilteredCount</td><td>被地址过滤丢弃的接收包数量</td></tr>
-        <tr><td><code>0x0028</code></td><td>RxDestAddrFilteredCount</td><td>因目的地址不匹配而过滤的包数量</td></tr>
-        <tr><td><code>0x0029</code></td><td>RxDuplicatedCount</td><td>接收到的重复包数量</td></tr>
+        <tr><td><code>0x0027</code></td><td>RxTotalCount</td><td>接收的数据包总数</td></tr>
+        <tr><td><code>0x0028</code></td><td>RxUnicastCount</td><td>接收的单播包数量</td></tr>
+        <tr><td><code>0x0029</code></td><td>RxBroadcastCount</td><td>接收的广播包数量</td></tr>
+        <tr><td><code>0x002A</code></td><td>RxDataCount</td><td>接收的数据帧数量</td></tr>
+        <tr><td><code>0x002B</code></td><td>RxDataPollCount</td><td>接收的数据轮询帧数量</td></tr>
+        <tr><td><code>0x002C</code></td><td>RxBeaconCount</td><td>接收的 Beacon 帧数量</td></tr>
+        <tr><td><code>0x002D</code></td><td>RxBeaconRequestCount</td><td>接收的 Beacon 请求帧数量</td></tr>
+        <tr><td><code>0x002E</code></td><td>RxOtherCount</td><td>接收的其他类型帧数量</td></tr>
+        <tr><td><code>0x002F</code></td><td>RxAddressFilteredCount</td><td>被地址过滤丢弃的接收包数量</td></tr>
+        <tr><td><code>0x0030</code></td><td>RxDestAddrFilteredCount</td><td>因目的地址不匹配而过滤的包数量</td></tr>
+        <tr><td><code>0x0031</code></td><td>RxDuplicatedCount</td><td>接收到的重复包数量</td></tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; 返回属性概览</a></p>
 
   <!-- ====== 接收错误计数器 ====== -->
-  <h3 id="group-rxerr">接收错误计数器（0x002A - 0x002F）<span class="feature-tag">ERRCNT</span></h3>
+  <h3 id="group-rxerr">接收错误计数器（0x0032 - 0x0037）<span class="feature-tag">ERRCNT</span></h3>
   <p>统计各类接收错误。所有字段均为 <code>uint32</code> 类型，需要 <strong>ERRCNT</strong> Feature。</p>
 
   <div class="table-wrap table-compact">
@@ -3437,12 +3437,12 @@ export const clusters: Record<string, ClusterContent> = {
         <tr><th>ID</th><th>名称</th><th>说明</th></tr>
       </thead>
       <tbody>
-        <tr><td><code>0x002A</code></td><td>RxErrNoFrameCount</td><td>接收到无帧内容的错误包数量</td></tr>
-        <tr><td><code>0x002B</code></td><td>RxErrUnknownNeighborCount</td><td>来自未知邻居的包数量（可能是网络攻击或新节点）</td></tr>
-        <tr><td><code>0x002C</code></td><td>RxErrInvalidSrcAddrCount</td><td>源地址无效的包数量</td></tr>
-        <tr><td><code>0x002D</code></td><td>RxErrSecCount</td><td>安全校验失败的包数量（解密失败或 MIC 不匹配）</td></tr>
-        <tr><td><code>0x002E</code></td><td>RxErrFcsCount</td><td>FCS（帧校验序列）错误的包数量 —— 通常是射频干扰导致</td></tr>
-        <tr><td><code>0x002F</code></td><td>RxErrOtherCount</td><td>其他类型的接收错误</td></tr>
+        <tr><td><code>0x0032</code></td><td>RxErrNoFrameCount</td><td>接收到无帧内容的错误包数量</td></tr>
+        <tr><td><code>0x0033</code></td><td>RxErrUnknownNeighborCount</td><td>来自未知邻居的包数量（可能是网络攻击或新节点）</td></tr>
+        <tr><td><code>0x0034</code></td><td>RxErrInvalidSrcAddrCount</td><td>源地址无效的包数量</td></tr>
+        <tr><td><code>0x0035</code></td><td>RxErrSecCount</td><td>安全校验失败的包数量（解密失败或 MIC 不匹配）</td></tr>
+        <tr><td><code>0x0036</code></td><td>RxErrFcsCount</td><td>FCS（帧校验序列）错误的包数量 —— 通常是射频干扰导致</td></tr>
+        <tr><td><code>0x0037</code></td><td>RxErrOtherCount</td><td>其他类型的接收错误</td></tr>
       </tbody>
     </table>
   </div>
@@ -3458,7 +3458,7 @@ export const clusters: Record<string, ClusterContent> = {
   <p class="back-link"><a href="#attributes">&#8593; 返回属性概览</a></p>
 
   <!-- ====== MLE 计数器 ====== -->
-  <h3 id="group-mle">MLE 计数器（0x0030 - 0x0037）<span class="feature-tag">MLECNT</span></h3>
+  <h3 id="group-mle">MLE 计数器（0x000E - 0x0015）<span class="feature-tag">MLECNT</span></h3>
   <p>
     MLE（Mesh Link Establishment）层事件计数，反映设备在 Thread 网络中的角色变化和附着行为。
     所有字段均为 <code>uint16</code> 类型，需要 <strong>MLECNT</strong> Feature。
@@ -3470,14 +3470,14 @@ export const clusters: Record<string, ClusterContent> = {
         <tr><th>ID</th><th>名称</th><th>说明</th></tr>
       </thead>
       <tbody>
-        <tr><td><code>0x0030</code></td><td>DetachedRoleChangeCount</td><td>进入 Detached（脱离）状态的次数</td></tr>
-        <tr><td><code>0x0031</code></td><td>ChildRoleChangeCount</td><td>变为 Child（子节点）角色的次数</td></tr>
-        <tr><td><code>0x0032</code></td><td>RouterRoleChangeCount</td><td>变为 Router（路由器）角色的次数</td></tr>
-        <tr><td><code>0x0033</code></td><td>LeaderRoleChangeCount</td><td>变为 Leader（领导者）角色的次数</td></tr>
-        <tr><td><code>0x0034</code></td><td>AttachAttemptCount</td><td>尝试附着到网络的次数</td></tr>
-        <tr><td><code>0x0035</code></td><td>PartitionIdChangeCount</td><td>分区 ID 变更的次数（网络分裂/合并）</td></tr>
-        <tr><td><code>0x0036</code></td><td>BetterPartitionAttachAttemptCount</td><td>尝试附着到更优分区的次数</td></tr>
-        <tr><td><code>0x0037</code></td><td>ParentChangeCount</td><td>父节点变更的次数</td></tr>
+        <tr><td><code>0x000E</code></td><td>DetachedRoleCount</td><td>进入 Detached（脱离）状态的次数</td></tr>
+        <tr><td><code>0x000F</code></td><td>ChildRoleCount</td><td>变为 Child（子节点）角色的次数</td></tr>
+        <tr><td><code>0x0010</code></td><td>RouterRoleCount</td><td>变为 Router（路由器）角色的次数</td></tr>
+        <tr><td><code>0x0011</code></td><td>LeaderRoleCount</td><td>变为 Leader（领导者）角色的次数</td></tr>
+        <tr><td><code>0x0012</code></td><td>AttachAttemptCount</td><td>尝试附着到网络的次数</td></tr>
+        <tr><td><code>0x0013</code></td><td>PartitionIdChangeCount</td><td>分区 ID 变更的次数（网络分裂/合并）</td></tr>
+        <tr><td><code>0x0014</code></td><td>BetterPartitionAttachAttemptCount</td><td>尝试附着到更优分区的次数</td></tr>
+        <tr><td><code>0x0015</code></td><td>ParentChangeCount</td><td>父节点变更的次数</td></tr>
       </tbody>
     </table>
   </div>
@@ -3485,7 +3485,7 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">MLE 计数器解读</div>
     <p>
-      <strong>DetachedRoleChangeCount 频繁增长</strong>：设备经常与网络断开，需检查信号强度或父节点稳定性。<br/>
+      <strong>DetachedRoleCount 频繁增长</strong>：设备经常与网络断开，需检查信号强度或父节点稳定性。<br/>
       <strong>ParentChangeCount 过高</strong>：设备频繁切换父节点，说明周围路由器不稳定或信号边界。<br/>
       <strong>PartitionIdChangeCount 非零</strong>：网络曾发生分裂和重新合并，通常是部分节点通信中断导致。
     </p>
@@ -3669,29 +3669,29 @@ export const clusters: Record<string, ClusterContent> = {
   "0x000D": 42,              // LeaderRouterId（Leader 路由 ID）
 
   // --- 发送计数器（PKTCNT）---
-  "0x000E": 158432,          // TxTotalCount（累计发送总数）
-  "0x000F": 120050,          // TxUnicastCount（单播发送）
-  "0x0010": 38382,           // TxBroadcastCount（广播发送）
-  "0x0019": 1024,            // TxRetryCount（重试次数）
+  "0x0016": 158432,          // TxTotalCount（累计发送总数）
+  "0x0017": 120050,          // TxUnicastCount（单播发送）
+  "0x0018": 38382,           // TxBroadcastCount（广播发送）
+  "0x0021": 1024,            // TxRetryCount（重试次数）
 
   // --- 接收计数器（PKTCNT）---
-  "0x001F": 203841,          // RxTotalCount（累计接收总数）
-  "0x0020": 185200,          // RxUnicastCount（单播接收）
-  "0x0021": 18641,           // RxBroadcastCount（广播接收）
+  "0x0027": 203841,          // RxTotalCount（累计接收总数）
+  "0x0028": 185200,          // RxUnicastCount（单播接收）
+  "0x0029": 18641,           // RxBroadcastCount（广播接收）
 
   // --- 错误计数器（ERRCNT）---
   "0x0006": 0,               // OverrunCount（缓冲区溢出次数）
-  "0x002E": 3,               // RxErrFcsCount（FCS 校验错误）
+  "0x0036": 3,               // RxErrFcsCount（FCS 校验错误）
 
   // --- 活跃网络故障 ---
-  "0x003E": []               // ActiveNetworkFaults = 空（当前无故障）
+  "0x003E": []               // ActiveNetworkFaultsList = 空（当前无故障）
 }</code></pre>
 
   <div class="callout callout-tip">
     <div class="callout-title">开发提示</div>
     <p>
       实际使用中，通常不需要一次读取全部 60+ 个属性。根据诊断目的选择性读取：
-      排查连接问题读 RoutingRole + NeighborTable + ActiveNetworkFaults；
+      排查连接问题读 RoutingRole + NeighborTable + ActiveNetworkFaultsList；
       分析网络质量读各类计数器；了解网络配置读 Channel + NetworkName + SecurityPolicy。
       读取前先检查 <code>FeatureMap</code>，避免请求设备不支持的计数器属性。
     </p>
@@ -3703,7 +3703,7 @@ export const clusters: Record<string, ClusterContent> = {
   <h3 id="scenario-connectivity">场景 1：排查 Thread 设备离线</h3>
   <ol>
     <li>读取 <code>RoutingRole (0x0001)</code> —— 如果为 <code>null</code> 或 <code>Unassigned</code>，设备未成功加入网络</li>
-    <li>读取 <code>ActiveNetworkFaults (0x003E)</code> —— 检查是否有 LinkDown 或 HardwareFailure</li>
+    <li>读取 <code>ActiveNetworkFaultsList (0x003E)</code> —— 检查是否有 LinkDown 或 HardwareFailure</li>
     <li>读取 <code>NeighborTable (0x0007)</code> —— 查看邻居列表中的 LQI 和 RSSI，判断信号质量</li>
     <li>订阅 <strong>ConnectionStatus</strong> 事件，实时感知连接状态变化</li>
   </ol>
@@ -3730,9 +3730,9 @@ export const clusters: Record<string, ClusterContent> = {
   <ol>
     <li>读取 MLE 计数器（需 MLECNT Feature）：
       <ul>
-        <li><code>DetachedRoleChangeCount (0x0030)</code> —— 频繁脱离说明连接不稳定</li>
-        <li><code>ParentChangeCount (0x0037)</code> —— 频繁换父节点说明周围路由器不稳定</li>
-        <li><code>PartitionIdChangeCount (0x0035)</code> —— 非零说明网络曾分裂</li>
+        <li><code>DetachedRoleCount (0x000E)</code> —— 频繁脱离说明连接不稳定</li>
+        <li><code>ParentChangeCount (0x0015)</code> —— 频繁换父节点说明周围路由器不稳定</li>
+        <li><code>PartitionIdChangeCount (0x0013)</code> —— 非零说明网络曾分裂</li>
       </ul>
     </li>
     <li>订阅 <strong>NetworkFaultChange</strong> 事件，及时感知故障发生和恢复</li>
@@ -4021,10 +4021,10 @@ export const clusters: Record<string, ClusterContent> = {
         <!-- 错误与速率 -->
         <tr class="clickable-row" data-href="#attr-0x000B">
           <td><a href="#attr-0x000B"><code>0x000B</code></a></td>
-          <td>AssociationFailureCause</td>
-          <td>enum</td>
+          <td>CurrentMaxRate</td>
+          <td>uint64 / null</td>
           <td><a href="#group-error">错误与速率</a></td>
-          <td>最近一次关联失败的原因</td>
+          <td>当前最大传输速率（bps）</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x000C">
           <td><a href="#attr-0x000C"><code>0x000C</code></a></td>
@@ -4032,13 +4032,6 @@ export const clusters: Record<string, ClusterContent> = {
           <td>uint64 / null</td>
           <td><a href="#group-error">错误与速率</a></td>
           <td>缓冲区溢出次数</td>
-        </tr>
-        <tr class="clickable-row" data-href="#attr-0x000D">
-          <td><a href="#attr-0x000D"><code>0x000D</code></a></td>
-          <td>CurrentMaxRate</td>
-          <td>uint64 / null</td>
-          <td><a href="#group-error">错误与速率</a></td>
-          <td>当前最大传输速率（bps）</td>
         </tr>
       </tbody>
     </table>
@@ -4176,9 +4169,9 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
 
-  <!-- ====== 错误与速率（0x000B ~ 0x000D）====== -->
-  <h3 id="group-error">错误与速率（0x000B ~ 0x000D）</h3>
-  <p>关联失败原因、缓冲区溢出统计和当前连接的最大传输速率。</p>
+  <!-- ====== 错误与速率（0x000B ~ 0x000C）====== -->
+  <h3 id="group-error">错误与速率（0x000B ~ 0x000C）</h3>
+  <p>当前连接的最大传输速率和缓冲区溢出统计。注意：关联失败原因不是属性，而是随 <a href="#event-0x01">AssociationFailure</a> 事件（0x01）上报。</p>
 
   <div class="table-wrap">
     <table>
@@ -4193,21 +4186,15 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x000B">
           <td><code>0x000B</code></td>
-          <td>AssociationFailureCause</td>
-          <td>AssociationFailureCauseEnum</td>
-          <td>最近一次 WiFi 关联失败的原因。见下方 <a href="#enum-assoc-failure">AssociationFailureCauseEnum</a></td>
+          <td>CurrentMaxRate</td>
+          <td>uint64 / null</td>
+          <td>当前连接协商的最大传输速率，单位 bps（比特/秒）。例如 866700000 = 866.7 Mbps（802.11ac 的典型速率）。未连接时为 <code>null</code></td>
         </tr>
         <tr id="attr-0x000C">
           <td><code>0x000C</code></td>
           <td>OverrunCount</td>
           <td>uint64 / null</td>
           <td>接收端因缓冲区满而丢弃的数据包数量。持续增长说明设备处理能力跟不上网络流量。<strong>需要 ERRCNT</strong></td>
-        </tr>
-        <tr id="attr-0x000D">
-          <td><code>0x000D</code></td>
-          <td>CurrentMaxRate</td>
-          <td>uint64 / null</td>
-          <td>当前连接协商的最大传输速率，单位 bps（比特/秒）。例如 866700000 = 866.7 Mbps（802.11ac 的典型速率）。未连接时为 <code>null</code></td>
         </tr>
       </tbody>
     </table>
@@ -4498,12 +4485,11 @@ export const clusters: Record<string, ClusterContent> = {
   "0x0009": 502310,                // PacketUnicastRxCount
   "0x000A": 389120,                // PacketUnicastTxCount
 
-  // --- 错误计数（需要 ERRCNT 特性）---
-  "0x000B": 0,                     // AssociationFailureCause = Unknown
-  "0x000C": 0,                     // OverrunCount = 0
+  // --- 速率 ---
+  "0x000B": 866700000,             // CurrentMaxRate = 866.7 Mbps
 
-  // --- 其他 ---
-  "0x000D": 866700000              // CurrentMaxRate = 866.7 Mbps
+  // --- 错误计数（需要 ERRCNT 特性）---
+  "0x000C": 0                      // OverrunCount = 0
 }</code></pre>
 
   <div class="callout callout-tip">
@@ -4539,7 +4525,7 @@ export const clusters: Record<string, ClusterContent> = {
       <ol>
         <li>读取 <code>RSSI (0x0004)</code>，判断信号强度是否充足</li>
         <li>读取 <code>WiFiVersion (0x0002)</code>，确认设备使用的协议版本（如仍在用 802.11b/g 说明设备能力有限）</li>
-        <li>读取 <code>CurrentMaxRate (0x000D)</code>，确认协商速率是否正常</li>
+        <li>读取 <code>CurrentMaxRate (0x000B)</code>，确认协商速率是否正常</li>
         <li>调用 <code>ResetCounts (0x00)</code> 清零计数器，等待 5~10 分钟后读取各包计数</li>
         <li>计算丢包率：如果 <code>BeaconLostCount</code> 增长很快，问题在无线环境（距离/干扰）；如果 <code>OverrunCount</code> 增长很快，问题在设备处理能力</li>
       </ol>

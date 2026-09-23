@@ -1897,7 +1897,7 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr class="clickable-row" data-href="#attr-0x0000">
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
-          <td>LastConfiguredBy</td>
+          <td>LastConfiguredBy <span class="removed-tag">Removed in newer versions</span></td>
           <td>node-id / null</td>
           <td>Node ID that last modified the scene table</td>
         </tr>
@@ -1917,7 +1917,11 @@ export const clusters: Record<string, ClusterContent> = {
     </table>
   </div>
 
-  <h3 id="attr-0x0000">LastConfiguredBy(0x0000)</h3>
+  <h3 id="attr-0x0000">LastConfiguredBy(0x0000) <span class="removed-tag">Removed in newer versions</span></h3>
+  <div class="callout callout-warning">
+    <div class="callout-title">Removed in newer Matter versions</div>
+    <p><code>LastConfiguredBy</code> is no longer part of newer Matter specifications (it is absent from the connectedhomeip v1.6 definitions this site checks against). Devices built to newer versions will not implement it; this section is kept only as a reference for older devices. Newer versions no longer expose a "last configured by" value; per-fabric scene details are provided through <code>FabricSceneInfo</code> instead.</p>
+  </div>
   <p>
     Records the Node ID that last modified the scene table.
     Useful for troubleshooting "who changed the scene configuration" issues.
@@ -1931,7 +1935,7 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-detail-0x0000">
           <td><code>0x0000</code></td>
-          <td>LastConfiguredBy</td>
+          <td>LastConfiguredBy <span class="removed-tag">Removed in newer versions</span></td>
           <td>node-id / null</td>
           <td>Nullable. Records the Node that last modified the scene table via AddScene / RemoveScene / StoreScene or similar commands. <code>null</code> = not recorded or never modified</td>
         </tr>
@@ -2110,7 +2114,6 @@ export const clusters: Record<string, ClusterContent> = {
   <p>Return data when reading SceneManagement Cluster attributes:</p>
   <pre><code>{
   // --- Scene table info ---
-  "0x0000": null,          // LastConfiguredBy = null (last configurator not recorded)
   "0x0001": 16,            // SceneTableSize = 16 (max 16 scenes)
 
   // --- Fabric scene info ---
@@ -2697,15 +2700,15 @@ export const clusters: Record<string, ClusterContent> = {
           <td>Maximum number of ACL entries per Fabric</td>
         </tr>
         <!-- MNGD Feature -->
-        <tr class="clickable-row" data-href="#attr-0x0400">
-          <td><a href="#attr-0x0400"><code>0x0400</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x0005">
+          <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
           <td>CommissioningARL</td>
           <td>list&lt;CommissioningAccessRestrictionEntryStruct&gt;</td>
           <td><a href="#group-arl">Access Restrictions</a></td>
           <td>Access restriction list during Commissioning phase</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x0401">
-          <td><a href="#attr-0x0401"><code>0x0401</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x0006">
+          <td><a href="#attr-0x0006"><code>0x0006</code></a></td>
           <td>ARL</td>
           <td>list&lt;AccessRestrictionEntryStruct&gt;</td>
           <td><a href="#group-arl">Access Restrictions</a></td>
@@ -2812,8 +2815,8 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== Access Restrictions (0x0400, 0x0401) ====== -->
-  <h3 id="group-arl">Access Restrictions (0x0400, 0x0401) — MNGD Feature</h3>
+  <!-- ====== Access Restrictions (0x0005, 0x0006) ====== -->
+  <h3 id="group-arl">Access Restrictions (0x0005, 0x0006) — MNGD Feature</h3>
   <p>
     The Access Restriction List (ARL) is an advanced feature introduced by the MNGD (Managed Device) feature,
     allowing device manufacturers to restrict access to certain resources even if the ACL permits it.
@@ -2831,14 +2834,14 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
       </thead>
       <tbody>
-        <tr id="attr-0x0400">
-          <td><code>0x0400</code></td>
+        <tr id="attr-0x0005">
+          <td><code>0x0005</code></td>
           <td>CommissioningARL</td>
           <td>list</td>
           <td>Access restrictions during the Commissioning phase. The device informs the Commissioner which resources are restricted during commissioning. <strong>Requires the MNGD feature</strong></td>
         </tr>
-        <tr id="attr-0x0401">
-          <td><code>0x0401</code></td>
+        <tr id="attr-0x0006">
+          <td><code>0x0006</code></td>
           <td>ARL</td>
           <td>list</td>
           <td>Runtime access restriction list. Even if the ACL grants permission, resources listed in the ARL remain inaccessible. <strong>Requires the MNGD feature</strong></td>

@@ -1327,13 +1327,13 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
-          <td>StartUpMode</td>
+          <td>StartUpMode <span class="removed-tag">Removed in newer versions</span></td>
           <td>uint8 / null</td>
           <td>Default mode on device startup</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
-          <td>OnMode</td>
+          <td>OnMode <span class="removed-tag">Removed in newer versions</span></td>
           <td>uint8 / null</td>
           <td>Mode automatically applied when device turns on</td>
         </tr>
@@ -1387,14 +1387,22 @@ export const clusters: Record<string, ClusterContent> = {
   </p>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0002">StartUpMode (0x0002)</h3>
+  <h3 id="attr-0x0002">StartUpMode (0x0002) <span class="removed-tag">Removed in newer versions</span></h3>
+  <div class="callout callout-warning">
+    <div class="callout-title">Removed in newer Matter versions</div>
+    <p><code>StartUpMode</code> is no longer part of newer Matter specifications (it is absent from the connectedhomeip v1.6 definitions this site checks against). Devices built to newer versions will not implement it; this section is kept only as a reference for older devices. In newer versions the device decides its power-up mode itself; controllers switch modes with the <code>ChangeToMode</code> command.</p>
+  </div>
   <p>
     Initial mode after device power-on or restart. Nullable — <code>null</code> means retain the mode from before power loss.
     When set to a specific value, it must exist in the SupportedModes list.
   </p>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0003">OnMode (0x0003)</h3>
+  <h3 id="attr-0x0003">OnMode (0x0003) <span class="removed-tag">Removed in newer versions</span></h3>
+  <div class="callout callout-warning">
+    <div class="callout-title">Removed in newer Matter versions</div>
+    <p><code>OnMode</code> is no longer part of newer Matter specifications (it is absent from the connectedhomeip v1.6 definitions this site checks against). Devices built to newer versions will not implement it; this section is kept only as a reference for older devices. The DEPONOFF (OnOff dependency) feature it relied on was removed as well; controllers switch modes with the <code>ChangeToMode</code> command.</p>
+  </div>
   <p>
     Mode automatically applied when the device switches from Off to On. Nullable — <code>null</code> means no override; CurrentMode is preserved.
     If OnMode has a value, CurrentMode is forced to that value on every power-on, overriding StartUpMode.
@@ -1506,11 +1514,9 @@ export const clusters: Record<string, ClusterContent> = {
   ],
 
   // --- Current Mode ---
-  "0x0001": 0,                   // CurrentMode = 0 (Normal)
+  "0x0001": 0                    // CurrentMode = 0 (Normal)
 
   // --- Startup and On Modes ---
-  "0x0002": null,                // StartUpMode = null (retain last mode)
-  "0x0003": null                 // OnMode = null (no override, keep CurrentMode)
 }</code></pre>
 
   <div class="callout callout-tip">
@@ -1542,13 +1548,13 @@ export const clusters: Record<string, ClusterContent> = {
   <h3 id="scenario-startup">Scenario 2: Configure Startup Mode</h3>
   <ol>
     <li>Read <code>SupportedModes (0x0000)</code> to get the available modes</li>
-    <li>Write <code>StartUpMode (0x0002)</code> to set the power-on default mode:
+    <li>Write <code>StartUpMode (0x0002)</code> <span class="removed-tag">Removed in newer versions</span> to set the power-on default mode:
       <ul>
         <li>Write a specific Mode number — automatically use that mode on every power-on (e.g., always default to Normal)</li>
         <li>Write <code>null</code> — retain the mode from before power loss (recommended)</li>
       </ul>
     </li>
-    <li>To force a specific mode on every power-on, set <code>OnMode (0x0003)</code>, which takes priority over StartUpMode</li>
+    <li>To force a specific mode on every power-on, set <code>OnMode (0x0003)</code> <span class="removed-tag">Removed in newer versions</span>, which takes priority over StartUpMode</li>
     <li>For most household use cases, it is recommended to set both to <code>null</code>, letting the user manually select a mode each time</li>
   </ol>
 
@@ -2079,13 +2085,13 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
-          <td>StartUpMode</td>
+          <td>StartUpMode <span class="removed-tag">Removed in newer versions</span></td>
           <td>uint8 / null</td>
           <td>Initial mode after power-on</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
-          <td>OnMode</td>
+          <td>OnMode <span class="removed-tag">Removed in newer versions</span></td>
           <td>uint8 / null</td>
           <td>Mode forced on power-on</td>
         </tr>
@@ -2139,14 +2145,22 @@ export const clusters: Record<string, ClusterContent> = {
   </p>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0002">StartUpMode (0x0002)</h3>
+  <h3 id="attr-0x0002">StartUpMode (0x0002) <span class="removed-tag">Removed in newer versions</span></h3>
+  <div class="callout callout-warning">
+    <div class="callout-title">Removed in newer Matter versions</div>
+    <p><code>StartUpMode</code> is no longer part of newer Matter specifications (it is absent from the connectedhomeip v1.6 definitions this site checks against). Devices built to newer versions will not implement it; this section is kept only as a reference for older devices. In newer versions the device decides its power-up mode itself; controllers switch modes with the <code>ChangeToMode</code> command.</p>
+  </div>
   <p>
     Initial mode used after device power-on (or restart). Nullable — <code>null</code> means unspecified;
     the device decides on its own (typically restores the mode from before power loss).
   </p>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0003">OnMode (0x0003)</h3>
+  <h3 id="attr-0x0003">OnMode (0x0003) <span class="removed-tag">Removed in newer versions</span></h3>
+  <div class="callout callout-warning">
+    <div class="callout-title">Removed in newer Matter versions</div>
+    <p><code>OnMode</code> is no longer part of newer Matter specifications (it is absent from the connectedhomeip v1.6 definitions this site checks against). Devices built to newer versions will not implement it; this section is kept only as a reference for older devices. The DEPONOFF (OnOff dependency) feature it relied on was removed as well; controllers switch modes with the <code>ChangeToMode</code> command.</p>
+  </div>
   <p>
     Mode forced when the device switches from Off to On. Nullable —
     <code>null</code> means no forced switch on power-on; CurrentMode is preserved.
@@ -2224,9 +2238,7 @@ export const clusters: Record<string, ClusterContent> = {
       "ModeTags": [{ "Value": 16386 }]
     }
   ],
-  "0x0001": 0,               // CurrentMode = 0 (currently Normal mode)
-  "0x0002": 0,               // StartUpMode = 0 (restore Normal on power-up)
-  "0x0003": null              // OnMode = null (no forced mode on power-on)
+  "0x0001": 0                // CurrentMode = 0 (currently Normal mode)
 }</code></pre>
 
   <!-- ====== Common Scenarios ====== -->
@@ -2244,7 +2256,7 @@ export const clusters: Record<string, ClusterContent> = {
   <h3 id="scenario-startup">Scenario 2: Configure Default Mode</h3>
   <ol>
     <li>The user selects "Default to Heavy mode on every power-on" in app settings</li>
-    <li>Write <code>OnMode (0x0003)</code> to the Heavy mode number (e.g., <code>1</code>)</li>
+    <li>Write <code>OnMode (0x0003)</code> <span class="removed-tag">Removed in newer versions</span> to the Heavy mode number (e.g., <code>1</code>)</li>
     <li>From then on, every time the dishwasher powers on, it automatically enters Heavy mode</li>
     <li>To cancel the forced mode, write OnMode back to <code>null</code></li>
   </ol>
@@ -2958,13 +2970,13 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
-          <td>StartUpMode</td>
+          <td>StartUpMode <span class="removed-tag">Removed in newer versions</span></td>
           <td>uint8 / null</td>
           <td>Default mode on device startup</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
-          <td>OnMode</td>
+          <td>OnMode <span class="removed-tag">Removed in newer versions</span></td>
           <td>uint8 / null</td>
           <td>Mode automatically applied when device turns on</td>
         </tr>
@@ -3018,7 +3030,11 @@ export const clusters: Record<string, ClusterContent> = {
   </p>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0002">StartUpMode -- Startup Mode (0x0002)</h3>
+  <h3 id="attr-0x0002">StartUpMode -- Startup Mode (0x0002) <span class="removed-tag">Removed in newer versions</span></h3>
+  <div class="callout callout-warning">
+    <div class="callout-title">Removed in newer Matter versions</div>
+    <p><code>StartUpMode</code> is no longer part of newer Matter specifications (it is absent from the connectedhomeip v1.6 definitions this site checks against). Devices built to newer versions will not implement it; this section is kept only as a reference for older devices. In newer versions the device decides its power-up mode itself; controllers switch modes with the <code>ChangeToMode</code> command.</p>
+  </div>
   <p>
     The initial mode after the device powers on or restarts. Nullable -- when <code>null</code>, the device retains the mode from before power loss.
     When setting a specific value, it must exist in the SupportedModes list.
@@ -3033,7 +3049,11 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0003">OnMode -- Power-On Mode (0x0003)</h3>
+  <h3 id="attr-0x0003">OnMode -- Power-On Mode (0x0003) <span class="removed-tag">Removed in newer versions</span></h3>
+  <div class="callout callout-warning">
+    <div class="callout-title">Removed in newer Matter versions</div>
+    <p><code>OnMode</code> is no longer part of newer Matter specifications (it is absent from the connectedhomeip v1.6 definitions this site checks against). Devices built to newer versions will not implement it; this section is kept only as a reference for older devices. The DEPONOFF (OnOff dependency) feature it relied on was removed as well; controllers switch modes with the <code>ChangeToMode</code> command.</p>
+  </div>
   <p>
     The mode automatically applied when the device switches from Off to On. Nullable -- when <code>null</code>, no override occurs and CurrentMode remains unchanged.
     If OnMode has a value, every power-on will force CurrentMode to that value, ignoring the StartUpMode setting.
@@ -3128,7 +3148,7 @@ export const clusters: Record<string, ClusterContent> = {
     <div class="enum-card">
       <span class="enum-badge">Bit 0</span>
       <div>
-        <span class="enum-name">DEPONOFF (OnOff Dependency)</span>
+        <span class="enum-name">DEPONOFF (OnOff Dependency) <span class="removed-tag">Removed in newer versions</span></span>
         <span class="enum-desc">The Cluster depends on the OnOff Cluster on the same Endpoint, supporting automatic mode switching via the OnMode attribute on power-on</span>
       </div>
     </div>
@@ -3164,11 +3184,9 @@ export const clusters: Record<string, ClusterContent> = {
   ],
 
   // --- Current mode ---
-  "0x0001": 0,                   // CurrentMode = 0（Normal）
+  "0x0001": 0                    // CurrentMode = 0（Normal）
 
   // --- Startup and power-on modes ---
-  "0x0002": null,                // StartUpMode = null (retain previous mode)
-  "0x0003": null                 // OnMode = null (no override, keep CurrentMode)
 }</code></pre>
 
   <h3>Freezer Compartment Endpoint</h3>
@@ -3188,11 +3206,9 @@ export const clusters: Record<string, ClusterContent> = {
   ],
 
   // --- Current mode ---
-  "0x0001": 1,                   // CurrentMode = 1 (Rapid Freeze active)
+  "0x0001": 1                    // CurrentMode = 1 (Rapid Freeze active)
 
   // --- Startup and power-on modes ---
-  "0x0002": 0,                   // StartUpMode = 0 (restore Normal on power-up)
-  "0x0003": null                 // OnMode = null (no override)
 }</code></pre>
 
   <div class="callout callout-tip">
@@ -3319,8 +3335,8 @@ export const clusters: Record<string, ClusterContent> = {
   <!-- ====== Commands ====== -->
   <h2 id="commands">Commands</h2>
   <p>
-    The MicrowaveOvenMode Cluster has only one command, ChangeToMode, for switching heating modes.
-    After execution, the device returns a ChangeToModeResponse indicating whether the switch was successful.
+    In older versions the MicrowaveOvenMode Cluster had one command, ChangeToMode, for switching heating modes,
+    and the device returned a ChangeToModeResponse indicating whether the switch was successful. <strong>Newer versions removed both commands</strong>; the mode can only be changed on the appliance itself.
   </p>
 
   <div class="table-wrap">
@@ -3336,13 +3352,13 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr class="clickable-row" data-href="#cmd-0x00">
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
-          <td>ChangeToMode</td>
+          <td>ChangeToMode <span class="removed-tag">Removed in newer versions</span></td>
           <td>Client &rarr; Server</td>
           <td>Switch to a specified heating mode</td>
         </tr>
         <tr>
           <td><code>0x01</code></td>
-          <td>ChangeToModeResponse</td>
+          <td>ChangeToModeResponse <span class="removed-tag">Removed in newer versions</span></td>
           <td>Server &rarr; Client</td>
           <td>Mode switch response (Status + StatusText)</td>
         </tr>
@@ -3351,7 +3367,11 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <!-- ====== Command Details ====== -->
-  <h3 id="cmd-0x00">ChangeToMode -- Switch Mode (0x00)</h3>
+  <h3 id="cmd-0x00">ChangeToMode -- Switch Mode (0x00) <span class="removed-tag">Removed in newer versions</span></h3>
+  <div class="callout callout-warning">
+    <div class="callout-title">Removed in newer Matter versions</div>
+    <p><code>ChangeToMode</code> is no longer part of newer Matter specifications (it is absent from the connectedhomeip v1.6 definitions this site checks against). Devices built to newer versions will not implement it; this section is kept only as a reference for older devices. In newer versions the Microwave Oven Mode cluster accepts no commands: the mode can only be changed on the appliance itself, and controllers can only read or subscribe to <code>CurrentMode</code>.</p>
+  </div>
   <p>
     Request the microwave to switch to a specified heating mode. The NewMode value must be the Mode field of a ModeOptionStruct in the SupportedModes list.
     The device returns a ChangeToModeResponse upon receipt.
@@ -3435,13 +3455,13 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
-          <td>StartUpMode</td>
+          <td>StartUpMode <span class="removed-tag">Removed in newer versions</span></td>
           <td>uint8 / null</td>
           <td>Default mode on device startup</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
-          <td>OnMode</td>
+          <td>OnMode <span class="removed-tag">Removed in newer versions</span></td>
           <td>uint8 / null</td>
           <td>Mode automatically applied when device turns on</td>
         </tr>
@@ -3495,14 +3515,22 @@ export const clusters: Record<string, ClusterContent> = {
   </p>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0002">StartUpMode -- Startup Mode (0x0002)</h3>
+  <h3 id="attr-0x0002">StartUpMode -- Startup Mode (0x0002) <span class="removed-tag">Removed in newer versions</span></h3>
+  <div class="callout callout-warning">
+    <div class="callout-title">Removed in newer Matter versions</div>
+    <p><code>StartUpMode</code> is no longer part of newer Matter specifications (it is absent from the connectedhomeip v1.6 definitions this site checks against). Devices built to newer versions will not implement it; this section is kept only as a reference for older devices. In newer versions the microwave mode can only be changed on the appliance itself; controllers can only read or subscribe to <code>CurrentMode</code>.</p>
+  </div>
   <p>
     The initial mode after the device powers on or restarts. Nullable -- when <code>null</code>, the device retains the mode from before power loss.
     When setting a specific value, it must exist in the SupportedModes list.
   </p>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0003">OnMode -- Power-On Mode (0x0003)</h3>
+  <h3 id="attr-0x0003">OnMode -- Power-On Mode (0x0003) <span class="removed-tag">Removed in newer versions</span></h3>
+  <div class="callout callout-warning">
+    <div class="callout-title">Removed in newer Matter versions</div>
+    <p><code>OnMode</code> is no longer part of newer Matter specifications (it is absent from the connectedhomeip v1.6 definitions this site checks against). Devices built to newer versions will not implement it; this section is kept only as a reference for older devices. In newer versions the microwave mode can only be changed on the appliance itself; controllers can only read or subscribe to <code>CurrentMode</code>.</p>
+  </div>
   <p>
     The mode automatically applied when the device switches from Off to On. Nullable -- when <code>null</code>, no override occurs and CurrentMode remains unchanged.
     If OnMode has a value, every power-on will force CurrentMode to that value, ignoring the StartUpMode setting.
@@ -3599,11 +3627,9 @@ export const clusters: Record<string, ClusterContent> = {
   ],
 
   // --- Current mode ---
-  "0x0001": 0,                   // CurrentMode = 0（Normal）
+  "0x0001": 0                    // CurrentMode = 0（Normal）
 
   // --- Startup and power-on modes ---
-  "0x0002": null,                // StartUpMode = null (retain previous mode)
-  "0x0003": null                 // OnMode = null (no override, keep CurrentMode)
 }</code></pre>
 
   <div class="callout callout-tip">
@@ -3625,7 +3651,7 @@ export const clusters: Record<string, ClusterContent> = {
       <ol>
         <li>Read <code>SupportedModes (0x0000)</code> to get all heating modes supported by the microwave</li>
         <li>Display the mode list in the app UI, showing corresponding icons and descriptions based on ModeTag values (e.g. show a "Normal Heating" icon for 0x4000, a "Defrost" icon for 0x4001)</li>
-        <li>The user selects "Defrost"; send <code>ChangeToMode (0x00)</code> with NewMode set to the corresponding Mode number</li>
+        <li>The user selects "Defrost"; send <code>ChangeToMode (0x00)</code> <span class="removed-tag">Removed in newer versions</span> with NewMode set to the corresponding Mode number</li>
         <li>Check the Status in ChangeToModeResponse:
           <ul>
             <li><code>0x00</code> (Success) -- switch successful; subscribe to CurrentMode to confirm the update</li>
@@ -3846,66 +3872,66 @@ export const clusters: Record<string, ClusterContent> = {
       </thead>
       <tbody>
         <!-- Cook Time -->
-        <tr class="clickable-row" data-href="#attr-0x0001">
-          <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x0000">
+          <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>CookTime</td>
           <td>uint32</td>
           <td><a href="#group-time">Cook Time</a></td>
           <td>Currently set cook time (seconds)</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x0002">
-          <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x0001">
+          <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>MaxCookTime</td>
           <td>uint32</td>
           <td><a href="#group-time">Cook Time</a></td>
           <td>Maximum allowed cook time (seconds)</td>
         </tr>
         <!-- Power Level -->
-        <tr class="clickable-row" data-href="#attr-0x0003">
-          <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x0002">
+          <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
           <td>PowerSetting</td>
           <td>uint8</td>
           <td><a href="#group-power">Power Level</a></td>
           <td>Current power level</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x0004">
-          <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x0003">
+          <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
           <td>MinPower</td>
           <td>uint8</td>
           <td><a href="#group-power">Power Level</a></td>
           <td>Minimum settable power</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x0005">
-          <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x0004">
+          <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
           <td>MaxPower</td>
           <td>uint8</td>
           <td><a href="#group-power">Power Level</a></td>
           <td>Maximum settable power</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x0006">
-          <td><a href="#attr-0x0006"><code>0x0006</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x0005">
+          <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
           <td>PowerStep</td>
           <td>uint8</td>
           <td><a href="#group-power">Power Level</a></td>
           <td>Power adjustment step size</td>
         </tr>
         <!-- Wattage Level -->
-        <tr class="clickable-row" data-href="#attr-0x0007">
-          <td><a href="#attr-0x0007"><code>0x0007</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x0006">
+          <td><a href="#attr-0x0006"><code>0x0006</code></a></td>
           <td>SupportedWatts</td>
           <td>list[uint16]</td>
           <td><a href="#group-watts">Wattage Level</a></td>
           <td>Supported wattage list</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x0008">
-          <td><a href="#attr-0x0008"><code>0x0008</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x0007">
+          <td><a href="#attr-0x0007"><code>0x0007</code></a></td>
           <td>SelectedWattIndex</td>
           <td>uint8</td>
           <td><a href="#group-watts">Wattage Level</a></td>
           <td>Currently selected wattage index</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x0009">
-          <td><a href="#attr-0x0009"><code>0x0009</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x0008">
+          <td><a href="#attr-0x0008"><code>0x0008</code></a></td>
           <td>WattRating</td>
           <td>uint16</td>
           <td><a href="#group-watts">Wattage Level</a></td>
@@ -3915,8 +3941,8 @@ export const clusters: Record<string, ClusterContent> = {
     </table>
   </div>
 
-  <!-- ====== Cook Time (0x0001, 0x0002) ====== -->
-  <h3 id="group-time">Cooking Time (0x0001, 0x0002)</h3>
+  <!-- ====== Cook Time (0x0000, 0x0001) ====== -->
+  <h3 id="group-time">Cooking Time (0x0000, 0x0001)</h3>
   <p>Cooking time is a basic attribute supported by all microwave ovens; no special Feature is required.</p>
 
   <div class="table-wrap">
@@ -3930,14 +3956,14 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
       </thead>
       <tbody>
-        <tr id="attr-0x0001">
-          <td><code>0x0001</code></td>
+        <tr id="attr-0x0000">
+          <td><code>0x0000</code></td>
           <td>CookTime<br/><span class="attr-cn">Cook Time</span></td>
           <td>uint32</td>
           <td>Currently set cooking time in seconds. Default: <code>30</code> (30 seconds). During cooking, this value counts down to reflect remaining time. Range: <code>1</code> to <code>MaxCookTime</code></td>
         </tr>
-        <tr id="attr-0x0002">
-          <td><code>0x0002</code></td>
+        <tr id="attr-0x0001">
+          <td><code>0x0001</code></td>
           <td>MaxCookTime<br/><span class="attr-cn">Max Cook Time</span></td>
           <td>uint32</td>
           <td>Maximum cooking time allowed by the device, in seconds, read-only. Used by the app for input validation and time picker limits. Typical value: <code>5400</code> (90 minutes)</td>
@@ -3956,8 +3982,8 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== Power Level (0x0003 ~ 0x0006) ====== -->
-  <h3 id="group-power">Power Level (0x0003-0x0006)</h3>
+  <!-- ====== Power Level (0x0002 ~ 0x0005) ====== -->
+  <h3 id="group-power">Power Level (0x0002-0x0005)</h3>
   <p>
     A group of attributes representing power level as a numeric value. These require the <strong>PWRNUM</strong> feature.
     Without PWRNUM, <code>PowerSetting</code> still exists but defaults to <code>100</code> (full power) and cannot be modified.
@@ -3974,26 +4000,26 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
       </thead>
       <tbody>
-        <tr id="attr-0x0003">
-          <td><code>0x0003</code></td>
+        <tr id="attr-0x0002">
+          <td><code>0x0002</code></td>
           <td>PowerSetting<br/><span class="attr-cn">Power Setting</span></td>
           <td>uint8</td>
           <td>Current power level. Without PWRNUM, fixed at <code>100</code>; with PWRNUM, range is <code>MinPower</code> to <code>MaxPower</code>, step size <code>PowerStep</code>. Default: <code>100</code> (full power)</td>
         </tr>
-        <tr id="attr-0x0004">
-          <td><code>0x0004</code></td>
+        <tr id="attr-0x0003">
+          <td><code>0x0003</code></td>
           <td>MinPower<br/><span class="attr-cn">Min Power</span></td>
           <td>uint8</td>
           <td>Minimum power value supported. Default: <code>10</code>. <strong>Requires PWRLMTS feature</strong> (fixed at 10 without PWRLMTS)</td>
         </tr>
-        <tr id="attr-0x0005">
-          <td><code>0x0005</code></td>
+        <tr id="attr-0x0004">
+          <td><code>0x0004</code></td>
           <td>MaxPower<br/><span class="attr-cn">Max Power</span></td>
           <td>uint8</td>
           <td>Maximum power value supported. Default: <code>100</code>. <strong>Requires PWRLMTS feature</strong> (fixed at 100 without PWRLMTS)</td>
         </tr>
-        <tr id="attr-0x0006">
-          <td><code>0x0006</code></td>
+        <tr id="attr-0x0005">
+          <td><code>0x0005</code></td>
           <td>PowerStep<br/><span class="attr-cn">Power Step</span></td>
           <td>uint8</td>
           <td>Power adjustment step size. Default: <code>10</code>. With step 10, power can only be 10, 20, 30...100. <strong>Requires PWRLMTS feature</strong> (fixed at 10 without PWRLMTS)</td>
@@ -4013,8 +4039,8 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== Wattage Level (0x0007 ~ 0x0009) ====== -->
-  <h3 id="group-watts">Wattage Level (0x0007-0x0009)</h3>
+  <!-- ====== Wattage Level (0x0006 ~ 0x0008) ====== -->
+  <h3 id="group-watts">Wattage Level (0x0006-0x0008)</h3>
   <p>
     A group of attributes representing power as actual wattage. These require the <strong>WATTS</strong> feature.
     Unlike PWRNUM's percentage approach, WATTS uses a discrete wattage list for user selection.
@@ -4031,20 +4057,20 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
       </thead>
       <tbody>
-        <tr id="attr-0x0007">
-          <td><code>0x0007</code></td>
+        <tr id="attr-0x0006">
+          <td><code>0x0006</code></td>
           <td>SupportedWatts<br/><span class="attr-cn">Supported Watts List</span></td>
           <td>list[uint16]</td>
           <td>All wattage levels supported by the device, in ascending order. E.g., <code>[100, 300, 500, 700, 900, 1100]</code>. Read-only</td>
         </tr>
-        <tr id="attr-0x0008">
-          <td><code>0x0008</code></td>
+        <tr id="attr-0x0007">
+          <td><code>0x0007</code></td>
           <td>SelectedWattIndex<br/><span class="attr-cn">Selected Watt Index</span></td>
           <td>uint8</td>
           <td>Index of the currently selected wattage in the <code>SupportedWatts</code> list (zero-based). Modified via the WattSettingIndex parameter of <code>SetCookingParameters</code></td>
         </tr>
-        <tr id="attr-0x0009">
-          <td><code>0x0009</code></td>
+        <tr id="attr-0x0008">
+          <td><code>0x0008</code></td>
           <td>WattRating<br/><span class="attr-cn">Watt Rating</span></td>
           <td>uint16</td>
           <td>The microwave's rated power (watts), read-only. This is the device's nominal maximum wattage, typically equal to the highest value in <code>SupportedWatts</code></td>
@@ -4106,19 +4132,19 @@ export const clusters: Record<string, ClusterContent> = {
 
   <pre><code>{
   // --- Cooking Time ---
-  "0x0001": 120,            // CookTime = 120 sec (currently set to cook 2 minutes)
-  "0x0002": 5400,           // MaxCookTime = 5400 sec (max 90 minutes)
+  "0x0000": 120,            // CookTime = 120 sec (currently set to cook 2 minutes)
+  "0x0001": 5400,           // MaxCookTime = 5400 sec (max 90 minutes)
 
   // --- Power Setting (PWRNUM Feature) ---
-  "0x0003": 80,             // PowerSetting = 80 (current power 80%)
-  "0x0004": 10,             // MinPower = 10 (minimum 10%)
-  "0x0005": 100,            // MaxPower = 100 (maximum 100%)
-  "0x0006": 10,             // PowerStep = 10 (step size 10%)
+  "0x0002": 80,             // PowerSetting = 80 (current power 80%)
+  "0x0003": 10,             // MinPower = 10 (minimum 10%)
+  "0x0004": 100,            // MaxPower = 100 (maximum 100%)
+  "0x0005": 10,             // PowerStep = 10 (step size 10%)
 
   // --- Wattage Setting (WATTS Feature) ---
-  "0x0007": [100, 300, 500, 700, 900, 1100],  // SupportedWatts (supported wattage list)
-  "0x0008": 4,              // SelectedWattIndex = 4 → corresponds to 900W
-  "0x0009": 900             // WattRating = 900 (current rated wattage)
+  "0x0006": [100, 300, 500, 700, 900, 1100],  // SupportedWatts (supported wattage list)
+  "0x0007": 4,              // SelectedWattIndex = 4 → corresponds to 900W
+  "0x0008": 900             // WattRating = 900 (current rated wattage)
 }</code></pre>
 
   <div class="callout callout-tip">
@@ -4138,16 +4164,16 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>Scenario 1: Set Cooking Parameters and Start Heating</summary>
     <div class="scenario-content">
       <ol>
-        <li>Read <code>MaxCookTime (0x0002)</code> to determine the time limit for the time picker range</li>
+        <li>Read <code>MaxCookTime (0x0001)</code> to determine the time limit for the time picker range</li>
         <li>Read <code>FeatureMap (0xFFFC)</code> to determine the power control method:
           <ul>
-            <li>PWRNUM → read <code>MinPower (0x0004)</code>, <code>MaxPower (0x0005)</code>, <code>PowerStep (0x0006)</code> to build the power selector</li>
-            <li>WATTS → read <code>SupportedWatts (0x0007)</code> list and display available wattages</li>
+            <li>PWRNUM → read <code>MinPower (0x0003)</code>, <code>MaxPower (0x0004)</code>, <code>PowerStep (0x0005)</code> to build the power selector</li>
+            <li>WATTS → read <code>SupportedWatts (0x0006)</code> list and display available wattages</li>
           </ul>
         </li>
         <li>After the user selects time and power, send <code>SetCookingParameters (0x00)</code> to write parameters</li>
         <li>Call the OperationalState Cluster's <code>Start</code> command to begin cooking</li>
-        <li>Subscribe to <code>CookTime (0x0001)</code> changes for real-time countdown updates</li>
+        <li>Subscribe to <code>CookTime (0x0000)</code> changes for real-time countdown updates</li>
       </ol>
     </div>
   </details>
@@ -4157,7 +4183,7 @@ export const clusters: Record<string, ClusterContent> = {
     <div class="scenario-content">
       <ol>
         <li>Read the current state from the OperationalState Cluster to confirm the device is running</li>
-        <li>Read <code>CookTime (0x0001)</code> to get the current remaining time</li>
+        <li>Read <code>CookTime (0x0000)</code> to get the current remaining time</li>
         <li>User taps "Add 30 seconds" → send <code>SetCookingParameters(CookTime=currentValue+30)</code></li>
         <li>User lowers power → send <code>SetCookingParameters(PowerSetting=50)</code> or <code>SetCookingParameters(WattSettingIndex=2)</code></li>
         <li>Note: whether parameters can be modified while running depends on the device implementation; some devices may require pausing first</li>
@@ -4399,7 +4425,7 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
-          <td>OnMode</td>
+          <td>OnMode <span class="removed-tag">Removed in newer versions</span></td>
           <td>uint8 / null</td>
           <td>Mode automatically entered when device wakes up</td>
         </tr>
@@ -4453,7 +4479,11 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0003">OnMode -- Wake-Up Mode (0x0003)</h3>
+  <h3 id="attr-0x0003">OnMode -- Wake-Up Mode (0x0003) <span class="removed-tag">Removed in newer versions</span></h3>
+  <div class="callout callout-warning">
+    <div class="callout-title">Removed in newer Matter versions</div>
+    <p><code>OnMode</code> is no longer part of newer Matter specifications (it is absent from the connectedhomeip v1.6 definitions this site checks against). Devices built to newer versions will not implement it; this section is kept only as a reference for older devices. In newer versions controllers switch modes with the <code>ChangeToMode</code> command.</p>
+  </div>
   <p>
     The mode the device automatically enters when waking from an inactive state. The value is the Mode field of a mode in SupportedModes,
     or <code>null</code> meaning no automatic mode switch.
@@ -4640,8 +4670,7 @@ export const clusters: Record<string, ClusterContent> = {
   ],
 
   // --- Current state ---
-  "0x0001": 1,              // CurrentMode = 1 (currently cleaning)
-  "0x0003": 0               // OnMode = 0 (device defaults to Idle mode after waking up)
+  "0x0001": 1               // CurrentMode = 1 (currently cleaning)
 }</code></pre>
 
   <div class="callout callout-tip">
@@ -4882,7 +4911,7 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
-          <td>OnMode</td>
+          <td>OnMode <span class="removed-tag">Removed in newer versions</span></td>
           <td>uint8 / null</td>
           <td>Mode automatically applied after power-on</td>
         </tr>
@@ -4929,7 +4958,11 @@ export const clusters: Record<string, ClusterContent> = {
   </p>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <h3 id="attr-0x0003">OnMode -- Power-On Mode (0x0003)</h3>
+  <h3 id="attr-0x0003">OnMode -- Power-On Mode (0x0003) <span class="removed-tag">Removed in newer versions</span></h3>
+  <div class="callout callout-warning">
+    <div class="callout-title">Removed in newer Matter versions</div>
+    <p><code>OnMode</code> is no longer part of newer Matter specifications (it is absent from the connectedhomeip v1.6 definitions this site checks against). Devices built to newer versions will not implement it; this section is kept only as a reference for older devices. In newer versions controllers switch modes with the <code>ChangeToMode</code> command.</p>
+  </div>
   <p>
     The cleaning mode the device automatically switches to after power-on. <strong>Nullable</strong> -- <code>null</code>
     indicates retaining the previously used mode after power-on. Writing requires operational privilege.
@@ -5068,8 +5101,7 @@ export const clusters: Record<string, ClusterContent> = {
   ],
 
   // --- Current mode ---
-  "0x0001": 3,                             // CurrentMode = 3 (Vacuum and Mop)
-  "0x0003": 3                              // OnMode = 3 (default to Vacuum and Mop on power-on)
+  "0x0001": 3                              // CurrentMode = 3 (Vacuum and Mop)
 }</code></pre>
 
   <div class="callout callout-tip">
@@ -5097,7 +5129,7 @@ export const clusters: Record<string, ClusterContent> = {
   <h3 id="scenario-onmode">Scenario 2: Set Default Power-On Cleaning Mode</h3>
   <ol>
     <li>The user selects "Default to Deep Clean on power-on" in the settings page</li>
-    <li>The app writes <code>OnMode (0x0003)</code> = 0 (the Mode value for Deep Clean)</li>
+    <li>The app writes <code>OnMode (0x0003)</code> <span class="removed-tag">Removed in newer versions</span> = 0 (the Mode value for Deep Clean)</li>
     <li>Next time the vacuum powers on or activates from the charging dock, it automatically switches to Deep Clean mode</li>
     <li>If the user selects "Keep previous mode", the app writes <code>OnMode = null</code></li>
   </ol>
@@ -5216,7 +5248,7 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x01">
           <td><a href="#cmd-0x01"><code>0x01</code></a></td>
-          <td>Stop</td>
+          <td>Stop <span class="removed-tag">Removed in newer versions</span></td>
           <td>Stop operation</td>
           <td>OperationalCommandResponse</td>
         </tr>
@@ -5267,7 +5299,11 @@ export const clusters: Record<string, ClusterContent> = {
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x01">Stop (0x01)</h3>
+  <h3 id="cmd-0x01">Stop (0x01) <span class="removed-tag">Removed in newer versions</span></h3>
+  <div class="callout callout-warning">
+    <div class="callout-title">Removed in newer Matter versions</div>
+    <p><code>Stop</code> is no longer part of newer Matter specifications (it is absent from the connectedhomeip v1.6 definitions this site checks against). Devices built to newer versions will not implement it; this section is kept only as a reference for older devices. In newer versions the RVC Operational State cluster only keeps Pause (0x00), Resume (0x03) and GoHome (0x80). To end a cleaning run, switch RvcRunMode back to an Idle mode.</p>
+  </div>
   <p>
     Completely stops the robot's current operation. On success, the <code>OperationalState</code> attribute changes to
     <code>Stopped (0)</code>. Unlike Pause, Stop terminates the current cleaning task,
@@ -5893,7 +5929,7 @@ export const clusters: Record<string, ClusterContent> = {
     </li>
     <li>The device triggers the <code>OperationalError</code> event (CRITICAL priority); the app shows a push notification</li>
     <li>The app displays corresponding action guidance based on error code 0x41 (Stuck): "Please move the robot to an open area"</li>
-    <li>After the user resolves the issue, send <code>Stop (0x01)</code> to clear the error state</li>
+    <li>After the user resolves the issue, send <code>Stop (0x01)</code> <span class="removed-tag">Removed in newer versions</span> to clear the error state</li>
     <li>Restart the cleaning task via RvcRunMode</li>
   </ol>
 

@@ -1897,7 +1897,7 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr class="clickable-row" data-href="#attr-0x0000">
           <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
-          <td>LastConfiguredBy</td>
+          <td>LastConfiguredBy <span class="removed-tag">新版已移除</span></td>
           <td>node-id / null</td>
           <td>最后修改场景表的节点 ID</td>
         </tr>
@@ -1917,7 +1917,11 @@ export const clusters: Record<string, ClusterContent> = {
     </table>
   </div>
 
-  <h3 id="attr-0x0000">LastConfiguredBy（0x0000）</h3>
+  <h3 id="attr-0x0000">LastConfiguredBy（0x0000） <span class="removed-tag">新版已移除</span></h3>
+  <div class="callout callout-warning">
+    <div class="callout-title">新版 Matter 已移除</div>
+    <p><code>LastConfiguredBy</code> 已不在较新版本的 Matter 规范中（本站对照的 connectedhomeip v1.6 官方定义里已没有它）。按新版本开发的设备不会实现它，这里保留说明仅供对接旧设备时参考。新版本不再提供「最后配置者」信息，场景概况改由 <code>FabricSceneInfo</code> 按 Fabric 分别提供。</p>
+  </div>
   <p>
     记录最后一次修改场景表的节点 ID（Node ID）。
     可以用来排查「是谁改了场景配置」的问题。
@@ -1931,7 +1935,7 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-detail-0x0000">
           <td><code>0x0000</code></td>
-          <td>LastConfiguredBy</td>
+          <td>LastConfiguredBy <span class="removed-tag">新版已移除</span></td>
           <td>node-id / null</td>
           <td>Nullable。记录最后一次通过 AddScene / RemoveScene / StoreScene 等命令修改场景表的节点。<code>null</code> = 未记录或从未修改</td>
         </tr>
@@ -2110,7 +2114,6 @@ export const clusters: Record<string, ClusterContent> = {
   <p>读取 SceneManagement Cluster 属性时的返回数据：</p>
   <pre><code>{
   // --- 场景表信息 ---
-  "0x0000": null,          // LastConfiguredBy = null（未记录最后配置者）
   "0x0001": 16,            // SceneTableSize = 16（最多存储 16 个场景）
 
   // --- Fabric 场景信息 ---
@@ -2697,15 +2700,15 @@ export const clusters: Record<string, ClusterContent> = {
           <td>每个 Fabric 最多有多少条 ACL</td>
         </tr>
         <!-- MNGD Feature -->
-        <tr class="clickable-row" data-href="#attr-0x0400">
-          <td><a href="#attr-0x0400"><code>0x0400</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x0005">
+          <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
           <td>CommissioningARL</td>
           <td>list&lt;CommissioningAccessRestrictionEntryStruct&gt;</td>
           <td><a href="#group-arl">访问限制</a></td>
           <td>Commissioning 阶段的访问限制列表</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x0401">
-          <td><a href="#attr-0x0401"><code>0x0401</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x0006">
+          <td><a href="#attr-0x0006"><code>0x0006</code></a></td>
           <td>ARL</td>
           <td>list&lt;AccessRestrictionEntryStruct&gt;</td>
           <td><a href="#group-arl">访问限制</a></td>
@@ -2812,8 +2815,8 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
 
-  <!-- ====== 访问限制（0x0400, 0x0401）====== -->
-  <h3 id="group-arl">访问限制（0x0400, 0x0401）— MNGD 特性</h3>
+  <!-- ====== 访问限制（0x0005, 0x0006）====== -->
+  <h3 id="group-arl">访问限制（0x0005, 0x0006）— MNGD 特性</h3>
   <p>
     Access Restriction List（ARL）是 MNGD（Managed Device）特性引入的高级功能，
     允许设备制造商限制某些资源的访问权限，即使 ACL 允许也不行。
@@ -2831,14 +2834,14 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
       </thead>
       <tbody>
-        <tr id="attr-0x0400">
-          <td><code>0x0400</code></td>
+        <tr id="attr-0x0005">
+          <td><code>0x0005</code></td>
           <td>CommissioningARL</td>
           <td>list</td>
           <td>Commissioning 阶段的访问限制。设备在配网时告知 Commissioner 哪些资源受限。<strong>需要 MNGD 特性</strong></td>
         </tr>
-        <tr id="attr-0x0401">
-          <td><code>0x0401</code></td>
+        <tr id="attr-0x0006">
+          <td><code>0x0006</code></td>
           <td>ARL</td>
           <td>list</td>
           <td>运行时的访问限制列表。即使 ACL 授予了权限，ARL 中列出的资源仍然不可访问。<strong>需要 MNGD 特性</strong></td>

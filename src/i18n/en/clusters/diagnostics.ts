@@ -3311,7 +3311,7 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
         <tr id="attr-0x003E">
           <td><code>0x003E</code></td>
-          <td>ActiveNetworkFaults<br/><span class="attr-cn">Active Network Faults</span></td>
+          <td>ActiveNetworkFaultsList<br/><span class="attr-cn">Active Network Faults</span></td>
           <td>list&lt;NetworkFaultEnum&gt;</td>
           <td class="col-optional">None</td>
           <td>List of currently active network faults (see <a href="#enum-network-fault">enum values</a>), empty list means no faults</td>
@@ -3361,7 +3361,7 @@ export const clusters: Record<string, ClusterContent> = {
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
   <!-- ====== TX Counters ====== -->
-  <h3 id="group-tx">TX Counters (0x000E - 0x001E) <span class="feature-tag">PKTCNT / MACCNT</span></h3>
+  <h3 id="group-tx">TX Counters (0x0016 - 0x0026) <span class="feature-tag">PKTCNT / MACCNT</span></h3>
   <p>Statistics for various types of transmitted packets. All fields are <code>uint32</code>, requiring <strong>PKTCNT</strong> or <strong>MACCNT</strong> Feature.</p>
 
   <div class="table-wrap table-compact">
@@ -3370,23 +3370,23 @@ export const clusters: Record<string, ClusterContent> = {
         <tr><th>ID</th><th>Name</th><th>Description</th></tr>
       </thead>
       <tbody>
-        <tr><td><code>0x000E</code></td><td>TxTotalCount</td><td>Total transmitted packets</td></tr>
-        <tr><td><code>0x000F</code></td><td>TxUnicastCount</td><td>Unicast packets transmitted</td></tr>
-        <tr><td><code>0x0010</code></td><td>TxBroadcastCount</td><td>Broadcast packets transmitted</td></tr>
-        <tr><td><code>0x0011</code></td><td>TxAckRequestedCount</td><td>Packets transmitted with ACK requested</td></tr>
-        <tr><td><code>0x0012</code></td><td>TxAckedCount</td><td>Packets transmitted with ACK received</td></tr>
-        <tr><td><code>0x0013</code></td><td>TxNoAckRequestedCount</td><td>Packets transmitted without ACK requested</td></tr>
-        <tr><td><code>0x0014</code></td><td>TxDataCount</td><td>Data frames transmitted</td></tr>
-        <tr><td><code>0x0015</code></td><td>TxDataPollCount</td><td>Data poll frames transmitted (sleepy device wakeup data pulls)</td></tr>
-        <tr><td><code>0x0016</code></td><td>TxBeaconCount</td><td>Beacon frames transmitted</td></tr>
-        <tr><td><code>0x0017</code></td><td>TxBeaconRequestCount</td><td>Beacon request frames transmitted</td></tr>
-        <tr><td><code>0x0018</code></td><td>TxOtherCount</td><td>Other frame types transmitted</td></tr>
-        <tr><td><code>0x0019</code></td><td>TxRetryCount</td><td>Transmission retry count (retry rate = TxRetryCount / TxTotalCount)</td></tr>
-        <tr><td><code>0x001A</code></td><td>TxDirectMaxRetryExpiryCount</td><td>Packets that reached max retry count for direct transmission</td></tr>
-        <tr><td><code>0x001B</code></td><td>TxIndirectMaxRetryExpiryCount</td><td>Packets that reached max retry count for indirect transmission</td></tr>
-        <tr><td><code>0x001C</code></td><td>TxErrCcaCount</td><td>Transmission failures due to CCA (Clear Channel Assessment) failure</td></tr>
-        <tr><td><code>0x001D</code></td><td>TxErrAbortCount</td><td>Transmission abort count</td></tr>
-        <tr><td><code>0x001E</code></td><td>TxErrBusyChannelCount</td><td>Transmission failures due to busy channel</td></tr>
+        <tr><td><code>0x0016</code></td><td>TxTotalCount</td><td>Total transmitted packets</td></tr>
+        <tr><td><code>0x0017</code></td><td>TxUnicastCount</td><td>Unicast packets transmitted</td></tr>
+        <tr><td><code>0x0018</code></td><td>TxBroadcastCount</td><td>Broadcast packets transmitted</td></tr>
+        <tr><td><code>0x0019</code></td><td>TxAckRequestedCount</td><td>Packets transmitted with ACK requested</td></tr>
+        <tr><td><code>0x001A</code></td><td>TxAckedCount</td><td>Packets transmitted with ACK received</td></tr>
+        <tr><td><code>0x001B</code></td><td>TxNoAckRequestedCount</td><td>Packets transmitted without ACK requested</td></tr>
+        <tr><td><code>0x001C</code></td><td>TxDataCount</td><td>Data frames transmitted</td></tr>
+        <tr><td><code>0x001D</code></td><td>TxDataPollCount</td><td>Data poll frames transmitted (sleepy device wakeup data pulls)</td></tr>
+        <tr><td><code>0x001E</code></td><td>TxBeaconCount</td><td>Beacon frames transmitted</td></tr>
+        <tr><td><code>0x001F</code></td><td>TxBeaconRequestCount</td><td>Beacon request frames transmitted</td></tr>
+        <tr><td><code>0x0020</code></td><td>TxOtherCount</td><td>Other frame types transmitted</td></tr>
+        <tr><td><code>0x0021</code></td><td>TxRetryCount</td><td>Transmission retry count (retry rate = TxRetryCount / TxTotalCount)</td></tr>
+        <tr><td><code>0x0022</code></td><td>TxDirectMaxRetryExpiryCount</td><td>Packets that reached max retry count for direct transmission</td></tr>
+        <tr><td><code>0x0023</code></td><td>TxIndirectMaxRetryExpiryCount</td><td>Packets that reached max retry count for indirect transmission</td></tr>
+        <tr><td><code>0x0024</code></td><td>TxErrCcaCount</td><td>Transmission failures due to CCA (Clear Channel Assessment) failure</td></tr>
+        <tr><td><code>0x0025</code></td><td>TxErrAbortCount</td><td>Transmission abort count</td></tr>
+        <tr><td><code>0x0026</code></td><td>TxErrBusyChannelCount</td><td>Transmission failures due to busy channel</td></tr>
       </tbody>
     </table>
   </div>
@@ -3402,7 +3402,7 @@ export const clusters: Record<string, ClusterContent> = {
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
   <!-- ====== RX Counters ====== -->
-  <h3 id="group-rx">RX Counters (0x001F - 0x0029) <span class="feature-tag">PKTCNT / MACCNT</span></h3>
+  <h3 id="group-rx">RX Counters (0x0027 - 0x0031) <span class="feature-tag">PKTCNT / MACCNT</span></h3>
   <p>Statistics for various types of received packets. All fields are <code>uint32</code>, requiring <strong>PKTCNT</strong> or <strong>MACCNT</strong> Feature.</p>
 
   <div class="table-wrap table-compact">
@@ -3411,24 +3411,24 @@ export const clusters: Record<string, ClusterContent> = {
         <tr><th>ID</th><th>Name</th><th>Description</th></tr>
       </thead>
       <tbody>
-        <tr><td><code>0x001F</code></td><td>RxTotalCount</td><td>Total received packets</td></tr>
-        <tr><td><code>0x0020</code></td><td>RxUnicastCount</td><td>Unicast packets received</td></tr>
-        <tr><td><code>0x0021</code></td><td>RxBroadcastCount</td><td>Broadcast packets received</td></tr>
-        <tr><td><code>0x0022</code></td><td>RxDataCount</td><td>Data frames received</td></tr>
-        <tr><td><code>0x0023</code></td><td>RxDataPollCount</td><td>Data poll frames received</td></tr>
-        <tr><td><code>0x0024</code></td><td>RxBeaconCount</td><td>Beacon frames received</td></tr>
-        <tr><td><code>0x0025</code></td><td>RxBeaconRequestCount</td><td>Beacon request frames received</td></tr>
-        <tr><td><code>0x0026</code></td><td>RxOtherCount</td><td>Other frame types received</td></tr>
-        <tr><td><code>0x0027</code></td><td>RxAddressFilteredCount</td><td>Received packets discarded by address filtering</td></tr>
-        <tr><td><code>0x0028</code></td><td>RxDestAddrFilteredCount</td><td>Packets filtered due to destination address mismatch</td></tr>
-        <tr><td><code>0x0029</code></td><td>RxDuplicatedCount</td><td>Duplicate received packets</td></tr>
+        <tr><td><code>0x0027</code></td><td>RxTotalCount</td><td>Total received packets</td></tr>
+        <tr><td><code>0x0028</code></td><td>RxUnicastCount</td><td>Unicast packets received</td></tr>
+        <tr><td><code>0x0029</code></td><td>RxBroadcastCount</td><td>Broadcast packets received</td></tr>
+        <tr><td><code>0x002A</code></td><td>RxDataCount</td><td>Data frames received</td></tr>
+        <tr><td><code>0x002B</code></td><td>RxDataPollCount</td><td>Data poll frames received</td></tr>
+        <tr><td><code>0x002C</code></td><td>RxBeaconCount</td><td>Beacon frames received</td></tr>
+        <tr><td><code>0x002D</code></td><td>RxBeaconRequestCount</td><td>Beacon request frames received</td></tr>
+        <tr><td><code>0x002E</code></td><td>RxOtherCount</td><td>Other frame types received</td></tr>
+        <tr><td><code>0x002F</code></td><td>RxAddressFilteredCount</td><td>Received packets discarded by address filtering</td></tr>
+        <tr><td><code>0x0030</code></td><td>RxDestAddrFilteredCount</td><td>Packets filtered due to destination address mismatch</td></tr>
+        <tr><td><code>0x0031</code></td><td>RxDuplicatedCount</td><td>Duplicate received packets</td></tr>
       </tbody>
     </table>
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
   <!-- ====== RX Error Counters ====== -->
-  <h3 id="group-rxerr">RX Error Counters (0x002A - 0x002F) <span class="feature-tag">ERRCNT</span></h3>
+  <h3 id="group-rxerr">RX Error Counters (0x0032 - 0x0037) <span class="feature-tag">ERRCNT</span></h3>
   <p>Statistics for various receive errors. All fields are <code>uint32</code>, requiring <strong>ERRCNT</strong> Feature.</p>
 
   <div class="table-wrap table-compact">
@@ -3437,12 +3437,12 @@ export const clusters: Record<string, ClusterContent> = {
         <tr><th>ID</th><th>Name</th><th>Description</th></tr>
       </thead>
       <tbody>
-        <tr><td><code>0x002A</code></td><td>RxErrNoFrameCount</td><td>Received error packets with no frame content</td></tr>
-        <tr><td><code>0x002B</code></td><td>RxErrUnknownNeighborCount</td><td>Packets from unknown neighbors (possibly network attack or new node)</td></tr>
-        <tr><td><code>0x002C</code></td><td>RxErrInvalidSrcAddrCount</td><td>Packets with invalid source address</td></tr>
-        <tr><td><code>0x002D</code></td><td>RxErrSecCount</td><td>Packets that failed security verification (decryption failure or MIC mismatch)</td></tr>
-        <tr><td><code>0x002E</code></td><td>RxErrFcsCount</td><td>Packets with FCS (Frame Check Sequence) errors — typically caused by radio interference</td></tr>
-        <tr><td><code>0x002F</code></td><td>RxErrOtherCount</td><td>Other types of receive errors</td></tr>
+        <tr><td><code>0x0032</code></td><td>RxErrNoFrameCount</td><td>Received error packets with no frame content</td></tr>
+        <tr><td><code>0x0033</code></td><td>RxErrUnknownNeighborCount</td><td>Packets from unknown neighbors (possibly network attack or new node)</td></tr>
+        <tr><td><code>0x0034</code></td><td>RxErrInvalidSrcAddrCount</td><td>Packets with invalid source address</td></tr>
+        <tr><td><code>0x0035</code></td><td>RxErrSecCount</td><td>Packets that failed security verification (decryption failure or MIC mismatch)</td></tr>
+        <tr><td><code>0x0036</code></td><td>RxErrFcsCount</td><td>Packets with FCS (Frame Check Sequence) errors — typically caused by radio interference</td></tr>
+        <tr><td><code>0x0037</code></td><td>RxErrOtherCount</td><td>Other types of receive errors</td></tr>
       </tbody>
     </table>
   </div>
@@ -3458,7 +3458,7 @@ export const clusters: Record<string, ClusterContent> = {
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
   <!-- ====== MLE Counters ====== -->
-  <h3 id="group-mle">MLE Counters (0x0030 - 0x0037) <span class="feature-tag">MLECNT</span></h3>
+  <h3 id="group-mle">MLE Counters (0x000E - 0x0015) <span class="feature-tag">MLECNT</span></h3>
   <p>
     MLE (Mesh Link Establishment) layer event counts, reflecting device role changes and attach behavior in the Thread network.
     All fields are <code>uint16</code>, requiring <strong>MLECNT</strong> Feature.
@@ -3470,14 +3470,14 @@ export const clusters: Record<string, ClusterContent> = {
         <tr><th>ID</th><th>Name</th><th>Description</th></tr>
       </thead>
       <tbody>
-        <tr><td><code>0x0030</code></td><td>DetachedRoleChangeCount</td><td>Times entered Detached state</td></tr>
-        <tr><td><code>0x0031</code></td><td>ChildRoleChangeCount</td><td>Times changed to Child role</td></tr>
-        <tr><td><code>0x0032</code></td><td>RouterRoleChangeCount</td><td>Times changed to Router role</td></tr>
-        <tr><td><code>0x0033</code></td><td>LeaderRoleChangeCount</td><td>Times changed to Leader role</td></tr>
-        <tr><td><code>0x0034</code></td><td>AttachAttemptCount</td><td>Network attach attempts</td></tr>
-        <tr><td><code>0x0035</code></td><td>PartitionIdChangeCount</td><td>Partition ID change count (network split/merge)</td></tr>
-        <tr><td><code>0x0036</code></td><td>BetterPartitionAttachAttemptCount</td><td>Attempts to attach to a better partition</td></tr>
-        <tr><td><code>0x0037</code></td><td>ParentChangeCount</td><td>Parent node change count</td></tr>
+        <tr><td><code>0x000E</code></td><td>DetachedRoleCount</td><td>Times entered Detached state</td></tr>
+        <tr><td><code>0x000F</code></td><td>ChildRoleCount</td><td>Times changed to Child role</td></tr>
+        <tr><td><code>0x0010</code></td><td>RouterRoleCount</td><td>Times changed to Router role</td></tr>
+        <tr><td><code>0x0011</code></td><td>LeaderRoleCount</td><td>Times changed to Leader role</td></tr>
+        <tr><td><code>0x0012</code></td><td>AttachAttemptCount</td><td>Network attach attempts</td></tr>
+        <tr><td><code>0x0013</code></td><td>PartitionIdChangeCount</td><td>Partition ID change count (network split/merge)</td></tr>
+        <tr><td><code>0x0014</code></td><td>BetterPartitionAttachAttemptCount</td><td>Attempts to attach to a better partition</td></tr>
+        <tr><td><code>0x0015</code></td><td>ParentChangeCount</td><td>Parent node change count</td></tr>
       </tbody>
     </table>
   </div>
@@ -3485,7 +3485,7 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">MLE Counter Interpretation</div>
     <p>
-      <strong>DetachedRoleChangeCount frequently increasing</strong>: Device frequently disconnects from the network, check signal strength or parent node stability.<br/>
+      <strong>DetachedRoleCount frequently increasing</strong>: Device frequently disconnects from the network, check signal strength or parent node stability.<br/>
       <strong>ParentChangeCount too high</strong>: Device frequently switches parent nodes, indicating unstable nearby routers or signal boundaries.<br/>
       <strong>PartitionIdChangeCount non-zero</strong>: The network has experienced splits and merges, usually caused by communication interruptions between some nodes.
     </p>
@@ -3669,29 +3669,29 @@ export const clusters: Record<string, ClusterContent> = {
   "0x000D": 42,              // LeaderRouterId (Leader router ID)
 
   // --- TX Counters (PKTCNT) ---
-  "0x000E": 158432,          // TxTotalCount (total transmitted)
-  "0x000F": 120050,          // TxUnicastCount (unicast transmitted)
-  "0x0010": 38382,           // TxBroadcastCount (broadcast transmitted)
-  "0x0019": 1024,            // TxRetryCount (retry count)
+  "0x0016": 158432,          // TxTotalCount (total transmitted)
+  "0x0017": 120050,          // TxUnicastCount (unicast transmitted)
+  "0x0018": 38382,           // TxBroadcastCount (broadcast transmitted)
+  "0x0021": 1024,            // TxRetryCount (retry count)
 
   // --- RX Counters (PKTCNT) ---
-  "0x001F": 203841,          // RxTotalCount (total received)
-  "0x0020": 185200,          // RxUnicastCount (unicast received)
-  "0x0021": 18641,           // RxBroadcastCount (broadcast received)
+  "0x0027": 203841,          // RxTotalCount (total received)
+  "0x0028": 185200,          // RxUnicastCount (unicast received)
+  "0x0029": 18641,           // RxBroadcastCount (broadcast received)
 
   // --- Error Counters (ERRCNT) ---
   "0x0006": 0,               // OverrunCount (buffer overrun count)
-  "0x002E": 3,               // RxErrFcsCount (FCS check errors)
+  "0x0036": 3,               // RxErrFcsCount (FCS check errors)
 
   // --- Active Network Faults ---
-  "0x003E": []               // ActiveNetworkFaults = empty (no current faults)
+  "0x003E": []               // ActiveNetworkFaultsList = empty (no current faults)
 }</code></pre>
 
   <div class="callout callout-tip">
     <div class="callout-title">Developer Tip</div>
     <p>
       In practice, you typically do not need to read all 60+ attributes at once. Read selectively based on diagnostic purpose:
-      For connection issues: read RoutingRole + NeighborTable + ActiveNetworkFaults;
+      For connection issues: read RoutingRole + NeighborTable + ActiveNetworkFaultsList;
       For network quality: read various counters; for network config: read Channel + NetworkName + SecurityPolicy.
       Check <code>FeatureMap</code> before reading to avoid requesting unsupported counter attributes.
     </p>
@@ -3703,7 +3703,7 @@ export const clusters: Record<string, ClusterContent> = {
   <h3 id="scenario-connectivity">Scenario 1: Troubleshooting Thread Device Offline</h3>
   <ol>
     <li>Read <code>RoutingRole (0x0001)</code> — if <code>null</code> or <code>Unassigned</code>, the device has not successfully joined the network</li>
-    <li>Read <code>ActiveNetworkFaults (0x003E)</code> — check for LinkDown or HardwareFailure</li>
+    <li>Read <code>ActiveNetworkFaultsList (0x003E)</code> — check for LinkDown or HardwareFailure</li>
     <li>Read <code>NeighborTable (0x0007)</code> — check LQI and RSSI in the neighbor list to assess signal quality</li>
     <li>Subscribe to <strong>ConnectionStatus</strong> events for real-time awareness of connection status changes</li>
   </ol>
@@ -3730,9 +3730,9 @@ export const clusters: Record<string, ClusterContent> = {
   <ol>
     <li>Read MLE counters (requires MLECNT Feature):
       <ul>
-        <li><code>DetachedRoleChangeCount (0x0030)</code> — frequent detachment indicates unstable connection</li>
-        <li><code>ParentChangeCount (0x0037)</code> — frequent parent changes indicate unstable nearby routers</li>
-        <li><code>PartitionIdChangeCount (0x0035)</code> — non-zero means the network has split</li>
+        <li><code>DetachedRoleCount (0x000E)</code> — frequent detachment indicates unstable connection</li>
+        <li><code>ParentChangeCount (0x0015)</code> — frequent parent changes indicate unstable nearby routers</li>
+        <li><code>PartitionIdChangeCount (0x0013)</code> — non-zero means the network has split</li>
       </ul>
     </li>
     <li>Subscribe to <strong>NetworkFaultChange</strong> events for timely awareness of fault occurrences and recoveries</li>
@@ -4021,10 +4021,10 @@ export const clusters: Record<string, ClusterContent> = {
         <!-- Errors & Rate -->
         <tr class="clickable-row" data-href="#attr-0x000B">
           <td><a href="#attr-0x000B"><code>0x000B</code></a></td>
-          <td>AssociationFailureCause</td>
-          <td>enum</td>
+          <td>CurrentMaxRate</td>
+          <td>uint64 / null</td>
           <td><a href="#group-error">Errors & Rate</a></td>
-          <td>Cause of the most recent association failure</td>
+          <td>Current maximum transmission rate (bps)</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x000C">
           <td><a href="#attr-0x000C"><code>0x000C</code></a></td>
@@ -4032,13 +4032,6 @@ export const clusters: Record<string, ClusterContent> = {
           <td>uint64 / null</td>
           <td><a href="#group-error">Errors & Rate</a></td>
           <td>Buffer overrun count</td>
-        </tr>
-        <tr class="clickable-row" data-href="#attr-0x000D">
-          <td><a href="#attr-0x000D"><code>0x000D</code></a></td>
-          <td>CurrentMaxRate</td>
-          <td>uint64 / null</td>
-          <td><a href="#group-error">Errors & Rate</a></td>
-          <td>Current maximum transmission rate (bps)</td>
         </tr>
       </tbody>
     </table>
@@ -4176,9 +4169,9 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- ====== Errors & Rate (0x000B ~ 0x000D) ====== -->
-  <h3 id="group-error">Errors & Rate (0x000B ~ 0x000D)</h3>
-  <p>Association failure cause, buffer overrun statistics, and current connection maximum transmission rate.</p>
+  <!-- ====== Errors & Rate (0x000B ~ 0x000C) ====== -->
+  <h3 id="group-error">Errors & Rate (0x000B ~ 0x000C)</h3>
+  <p>Current connection maximum transmission rate and buffer overrun statistics. Note: the association failure cause is not an attribute; it is reported in the <a href="#event-0x01">AssociationFailure</a> event (0x01).</p>
 
   <div class="table-wrap">
     <table>
@@ -4193,21 +4186,15 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr id="attr-0x000B">
           <td><code>0x000B</code></td>
-          <td>AssociationFailureCause</td>
-          <td>AssociationFailureCauseEnum</td>
-          <td>Cause of the most recent WiFi association failure. See <a href="#enum-assoc-failure">AssociationFailureCauseEnum</a> below</td>
+          <td>CurrentMaxRate</td>
+          <td>uint64 / null</td>
+          <td>Maximum transmission rate negotiated for the current connection, in bps (bits per second). For example, 866700000 = 866.7 Mbps (typical 802.11ac rate). <code>null</code> when not connected</td>
         </tr>
         <tr id="attr-0x000C">
           <td><code>0x000C</code></td>
           <td>OverrunCount</td>
           <td>uint64 / null</td>
           <td>Packets dropped by the receiver due to full buffers. Continuous growth indicates the device's processing capacity cannot keep up with network traffic. <strong>Requires ERRCNT</strong></td>
-        </tr>
-        <tr id="attr-0x000D">
-          <td><code>0x000D</code></td>
-          <td>CurrentMaxRate</td>
-          <td>uint64 / null</td>
-          <td>Maximum transmission rate negotiated for the current connection, in bps (bits per second). For example, 866700000 = 866.7 Mbps (typical 802.11ac rate). <code>null</code> when not connected</td>
         </tr>
       </tbody>
     </table>
@@ -4498,12 +4485,11 @@ export const clusters: Record<string, ClusterContent> = {
   "0x0009": 502310,                // PacketUnicastRxCount
   "0x000A": 389120,                // PacketUnicastTxCount
 
-  // --- Error Counts (requires ERRCNT feature) ---
-  "0x000B": 0,                     // AssociationFailureCause = Unknown
-  "0x000C": 0,                     // OverrunCount = 0
+  // --- Rate ---
+  "0x000B": 866700000,             // CurrentMaxRate = 866.7 Mbps
 
-  // --- Other ---
-  "0x000D": 866700000              // CurrentMaxRate = 866.7 Mbps
+  // --- Error Counts (requires ERRCNT feature) ---
+  "0x000C": 0                      // OverrunCount = 0
 }</code></pre>
 
   <div class="callout callout-tip">
@@ -4539,7 +4525,7 @@ export const clusters: Record<string, ClusterContent> = {
       <ol>
         <li>Read <code>RSSI (0x0004)</code> to determine if signal strength is sufficient</li>
         <li>Read <code>WiFiVersion (0x0002)</code> to confirm the protocol version in use (still using 802.11b/g indicates limited device capability)</li>
-        <li>Read <code>CurrentMaxRate (0x000D)</code> to confirm if the negotiated rate is normal</li>
+        <li>Read <code>CurrentMaxRate (0x000B)</code> to confirm if the negotiated rate is normal</li>
         <li>Call <code>ResetCounts (0x00)</code> to reset counters, wait 5-10 minutes, then read packet counts</li>
         <li>Calculate packet loss rate: if <code>BeaconLostCount</code> grows rapidly, the problem is the wireless environment (distance/interference); if <code>OverrunCount</code> grows rapidly, the problem is device processing capacity</li>
       </ol>

@@ -3694,7 +3694,7 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
         <tr>
           <td><code>0x10</code></td>
-          <td>TurbineFlow</td>
+          <td>TurbineOperation</td>
           <td class="col-event-warning">WARNING</td>
           <td>Turbine flow anomaly — turbine flow meter detected abnormal flow</td>
         </tr>

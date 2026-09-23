@@ -72,50 +72,50 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x1A">
           <td><a href="#cmd-0x1A"><code>0x1A</code></a></td>
-          <td>SetCredential</td>
-          <td>Add or modify a credential (PIN code, fingerprint, etc.)</td>
-          <td class="col-required">Required</td>
-        </tr>
-        <tr class="clickable-row" data-href="#cmd-0x1B">
-          <td><a href="#cmd-0x1B"><code>0x1B</code></a></td>
-          <td>GetCredentialStatus</td>
-          <td>Query the status of a specific credential slot</td>
-          <td class="col-optional">Not required</td>
-        </tr>
-        <tr class="clickable-row" data-href="#cmd-0x1D">
-          <td><a href="#cmd-0x1D"><code>0x1D</code></a></td>
-          <td>ClearCredential</td>
-          <td>Delete a credential</td>
-          <td class="col-required">Required</td>
-        </tr>
-        <tr class="clickable-row" data-href="#cmd-0x22">
-          <td><a href="#cmd-0x22"><code>0x22</code></a></td>
-          <td>SetAliroReaderConfig</td>
-          <td>Configure Aliro NFC reader parameters</td>
-          <td class="col-required">Required</td>
-        </tr>
-        <tr class="clickable-row" data-href="#cmd-0x24">
-          <td><a href="#cmd-0x24"><code>0x24</code></a></td>
-          <td>ClearAliroReaderConfig</td>
-          <td>Clear Aliro NFC configuration</td>
-          <td class="col-required">Required</td>
-        </tr>
-        <tr class="clickable-row" data-href="#cmd-0x26">
-          <td><a href="#cmd-0x26"><code>0x26</code></a></td>
           <td>SetUser</td>
           <td>Add or modify a user (with permissions, validity period, etc.)</td>
           <td class="col-required">Required</td>
         </tr>
-        <tr class="clickable-row" data-href="#cmd-0x28">
-          <td><a href="#cmd-0x28"><code>0x28</code></a></td>
+        <tr class="clickable-row" data-href="#cmd-0x1B">
+          <td><a href="#cmd-0x1B"><code>0x1B</code></a></td>
           <td>GetUser</td>
           <td>Query a specific user's information</td>
           <td class="col-optional">Not required</td>
         </tr>
-        <tr class="clickable-row" data-href="#cmd-0x29">
-          <td><a href="#cmd-0x29"><code>0x29</code></a></td>
+        <tr class="clickable-row" data-href="#cmd-0x1D">
+          <td><a href="#cmd-0x1D"><code>0x1D</code></a></td>
           <td>ClearUser</td>
           <td>Delete a user (along with all associated credentials)</td>
+          <td class="col-required">Required</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x22">
+          <td><a href="#cmd-0x22"><code>0x22</code></a></td>
+          <td>SetCredential</td>
+          <td>Add or modify a credential (PIN code, fingerprint, etc.)</td>
+          <td class="col-required">Required</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x24">
+          <td><a href="#cmd-0x24"><code>0x24</code></a></td>
+          <td>GetCredentialStatus</td>
+          <td>Query the status of a specific credential slot</td>
+          <td class="col-optional">Not required</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x26">
+          <td><a href="#cmd-0x26"><code>0x26</code></a></td>
+          <td>ClearCredential</td>
+          <td>Delete a credential</td>
+          <td class="col-required">Required</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x28">
+          <td><a href="#cmd-0x28"><code>0x28</code></a></td>
+          <td>SetAliroReaderConfig</td>
+          <td>Configure Aliro NFC reader parameters</td>
+          <td class="col-required">Required</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x29">
+          <td><a href="#cmd-0x29"><code>0x29</code></a></td>
+          <td>ClearAliroReaderConfig</td>
+          <td>Clear Aliro NFC configuration</td>
           <td class="col-required">Required</td>
         </tr>
       </tbody>
@@ -221,7 +221,7 @@ export const clusters: Record<string, ClusterContent> = {
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x1A">SetCredential &mdash; Set Credential (0x1A)</h3>
+  <h3 id="cmd-0x22">SetCredential &mdash; Set Credential (0x22)</h3>
   <p>
     Adds or modifies a credential for a user. Credentials are the "keys" users use to unlock the door &mdash; they can be PIN codes, fingerprints, RFID cards, etc.
     Each credential must be bound to an existing user (created via <code>SetUser</code>).
@@ -244,28 +244,28 @@ export const clusters: Record<string, ClusterContent> = {
   <details class="scenario">
     <summary>Usage Scenarios & Parameters</summary>
     <div class="scenario-content">
-      <p>Called when the user adds a new password or enrolls a fingerprint in the app. Before adding, validate the PIN code length via <code>MinPINCodeLength (0x17)</code> / <code>MaxPINCodeLength (0x16)</code>, and check credential capacity via <code>NumberOfCredentialsSupportedPerUser (0x1B)</code>.</p>
+      <p>Called when the user adds a new password or enrolls a fingerprint in the app. Before adding, validate the PIN code length via <code>MinPINCodeLength (0x18)</code> / <code>MaxPINCodeLength (0x17)</code>, and check credential capacity via <code>NumberOfCredentialsSupportedPerUser (0x1C)</code>.</p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x1B">GetCredentialStatus &mdash; Query Credential Status (0x1B)</h3>
+  <h3 id="cmd-0x24">GetCredentialStatus &mdash; Query Credential Status (0x24)</h3>
   <p>Queries whether a specific credential slot is occupied and which user it is bound to. Does not require a Timed Interaction; this is a read-only query operation.</p>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x1D">ClearCredential &mdash; Delete Credential (0x1D)</h3>
+  <h3 id="cmd-0x26">ClearCredential &mdash; Delete Credential (0x26)</h3>
   <p>Deletes a specified credential. If a specific CredentialType and CredentialIndex are provided, the exact credential is removed; it can also batch-clear all credentials of a given type or all credentials entirely.</p>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x22">SetAliroReaderConfig &mdash; Configure Aliro Reader (0x22)</h3>
+  <h3 id="cmd-0x28">SetAliroReaderConfig &mdash; Configure Aliro Reader (0x28)</h3>
   <p>Configures the Aliro NFC reader's signing key, group key, supported protocol versions, and other parameters. Aliro is a new NFC tap-to-unlock standard introduced by Matter for door locks.</p>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x24">ClearAliroReaderConfig &mdash; Clear Aliro Config (0x24)</h3>
+  <h3 id="cmd-0x29">ClearAliroReaderConfig &mdash; Clear Aliro Config (0x29)</h3>
   <p>Resets all Aliro NFC reader configuration, restoring the device to an unconfigured state.</p>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x26">SetUser &mdash; Set User (0x26)</h3>
+  <h3 id="cmd-0x1A">SetUser &mdash; Set User (0x1A)</h3>
   <p>
     Creates or modifies a user on the door lock. Users are "containers" for credentials &mdash; each user can have multiple bound credentials (passwords, fingerprints, etc.),
     and can be assigned a permission level and validity period. User management and credential management are the two most complex operations for door locks.
@@ -294,11 +294,11 @@ export const clusters: Record<string, ClusterContent> = {
   </details>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x28">GetUser &mdash; Query User (0x28)</h3>
+  <h3 id="cmd-0x1B">GetUser &mdash; Query User (0x1B)</h3>
   <p>Queries detailed user information by UserIndex, including name, status, type, bound credentials list, etc. Does not require a Timed Interaction.</p>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x29">ClearUser &mdash; Delete User (0x29)</h3>
+  <h3 id="cmd-0x1D">ClearUser &mdash; Delete User (0x1D)</h3>
   <p>Deletes the specified user along with <strong>all associated credentials</strong>. This is a "cascading delete" operation &mdash; no additional ClearCredential calls are needed.</p>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
@@ -387,171 +387,171 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-core">Lock Core State</a></td>
           <td>Door open duration (seconds)</td>
         </tr>
-        <!-- 用户与凭据 0x10-0x1B -->
-        <tr class="clickable-row" data-href="#attr-0x10">
-          <td><a href="#attr-0x10"><code>0x10</code></a></td>
+        <!-- 用户与凭据 0x11-0x1C -->
+        <tr class="clickable-row" data-href="#attr-0x11">
+          <td><a href="#attr-0x11"><code>0x11</code></a></td>
           <td>NumberOfTotalUsersSupported</td>
           <td>uint16</td>
           <td><a href="#attr-credential">Users & Credentials</a></td>
           <td>Maximum total users supported</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x11">
-          <td><a href="#attr-0x11"><code>0x11</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x12">
+          <td><a href="#attr-0x12"><code>0x12</code></a></td>
           <td>NumberOfPINUsersSupported</td>
           <td>uint16</td>
           <td><a href="#attr-credential">Users & Credentials</a></td>
           <td>Maximum PIN code users supported</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x12">
-          <td><a href="#attr-0x12"><code>0x12</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x13">
+          <td><a href="#attr-0x13"><code>0x13</code></a></td>
           <td>NumberOfRFIDUsersSupported</td>
           <td>uint16</td>
           <td><a href="#attr-credential">Users & Credentials</a></td>
           <td>Maximum RFID users supported</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x13">
-          <td><a href="#attr-0x13"><code>0x13</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x14">
+          <td><a href="#attr-0x14"><code>0x14</code></a></td>
           <td>NumberOfWeekDaySchedulesSupportedPerUser</td>
           <td>uint8</td>
           <td><a href="#attr-credential">Users & Credentials</a></td>
           <td>Week day schedules per user</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x14">
-          <td><a href="#attr-0x14"><code>0x14</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x15">
+          <td><a href="#attr-0x15"><code>0x15</code></a></td>
           <td>NumberOfYearDaySchedulesSupportedPerUser</td>
           <td>uint8</td>
           <td><a href="#attr-credential">Users & Credentials</a></td>
           <td>Year day schedules per user</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x15">
-          <td><a href="#attr-0x15"><code>0x15</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x16">
+          <td><a href="#attr-0x16"><code>0x16</code></a></td>
           <td>NumberOfHolidaySchedulesSupported</td>
           <td>uint8</td>
           <td><a href="#attr-credential">Users & Credentials</a></td>
           <td>Total holiday schedules</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x16">
-          <td><a href="#attr-0x16"><code>0x16</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x17">
+          <td><a href="#attr-0x17"><code>0x17</code></a></td>
           <td>MaxPINCodeLength</td>
           <td>uint8</td>
           <td><a href="#attr-credential">Users & Credentials</a></td>
           <td>Maximum PIN code length</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x17">
-          <td><a href="#attr-0x17"><code>0x17</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x18">
+          <td><a href="#attr-0x18"><code>0x18</code></a></td>
           <td>MinPINCodeLength</td>
           <td>uint8</td>
           <td><a href="#attr-credential">Users & Credentials</a></td>
           <td>Minimum PIN code length</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x18">
-          <td><a href="#attr-0x18"><code>0x18</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x19">
+          <td><a href="#attr-0x19"><code>0x19</code></a></td>
           <td>MaxRFIDCodeLength</td>
           <td>uint8</td>
           <td><a href="#attr-credential">Users & Credentials</a></td>
           <td>Maximum RFID code length</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x19">
-          <td><a href="#attr-0x19"><code>0x19</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x1A">
+          <td><a href="#attr-0x1A"><code>0x1A</code></a></td>
           <td>MinRFIDCodeLength</td>
           <td>uint8</td>
           <td><a href="#attr-credential">Users & Credentials</a></td>
           <td>Minimum RFID code length</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x1A">
-          <td><a href="#attr-0x1A"><code>0x1A</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x1B">
+          <td><a href="#attr-0x1B"><code>0x1B</code></a></td>
           <td>CredentialRulesSupport</td>
           <td>bitmap8</td>
           <td><a href="#attr-credential">Users & Credentials</a></td>
           <td>Credential rules support bitmap</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x1B">
-          <td><a href="#attr-0x1B"><code>0x1B</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x1C">
+          <td><a href="#attr-0x1C"><code>0x1C</code></a></td>
           <td>NumberOfCredentialsSupportedPerUser</td>
           <td>uint8</td>
           <td><a href="#attr-credential">Users & Credentials</a></td>
           <td>Maximum credentials per user</td>
         </tr>
-        <!-- 操作与显示 0x1C-0x27 -->
-        <tr class="clickable-row" data-href="#attr-0x1C">
-          <td><a href="#attr-0x1C"><code>0x1C</code></a></td>
+        <!-- 操作与显示 0x21-0x2C -->
+        <tr class="clickable-row" data-href="#attr-0x21">
+          <td><a href="#attr-0x21"><code>0x21</code></a></td>
           <td>Language</td>
           <td>string</td>
           <td><a href="#attr-operating">Operation & Display</a></td>
           <td>Lock interface language (ISO 639-1)</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x1D">
-          <td><a href="#attr-0x1D"><code>0x1D</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x22">
+          <td><a href="#attr-0x22"><code>0x22</code></a></td>
           <td>LEDSettings</td>
           <td>uint8</td>
           <td><a href="#attr-operating">Operation & Display</a></td>
           <td>LED indicator settings</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x1E">
-          <td><a href="#attr-0x1E"><code>0x1E</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x23">
+          <td><a href="#attr-0x23"><code>0x23</code></a></td>
           <td>AutoRelockTime</td>
           <td>uint32</td>
           <td><a href="#attr-operating">Operation & Display</a></td>
           <td>Auto re-lock time (seconds)</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x1F">
-          <td><a href="#attr-0x1F"><code>0x1F</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x24">
+          <td><a href="#attr-0x24"><code>0x24</code></a></td>
           <td>SoundVolume</td>
           <td>uint8</td>
           <td><a href="#attr-operating">Operation & Display</a></td>
           <td>Operating sound volume</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x20">
-          <td><a href="#attr-0x20"><code>0x20</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x25">
+          <td><a href="#attr-0x25"><code>0x25</code></a></td>
           <td>OperatingMode</td>
           <td>enum8</td>
           <td><a href="#attr-operating">Operation & Display</a></td>
           <td>Current operating mode</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x21">
-          <td><a href="#attr-0x21"><code>0x21</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x26">
+          <td><a href="#attr-0x26"><code>0x26</code></a></td>
           <td>SupportedOperatingModes</td>
           <td>bitmap16</td>
           <td><a href="#attr-operating">Operation & Display</a></td>
           <td>Supported operating modes bitmap</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x22">
-          <td><a href="#attr-0x22"><code>0x22</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x27">
+          <td><a href="#attr-0x27"><code>0x27</code></a></td>
           <td>DefaultConfigurationRegister</td>
           <td>bitmap16</td>
           <td><a href="#attr-operating">Operation & Display</a></td>
           <td>Default configuration register</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x23">
-          <td><a href="#attr-0x23"><code>0x23</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x28">
+          <td><a href="#attr-0x28"><code>0x28</code></a></td>
           <td>EnableLocalProgramming</td>
           <td>bool</td>
           <td><a href="#attr-operating">Operation & Display</a></td>
           <td>Whether local programming is allowed</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x24">
-          <td><a href="#attr-0x24"><code>0x24</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x29">
+          <td><a href="#attr-0x29"><code>0x29</code></a></td>
           <td>EnableOneTouchLocking</td>
           <td>bool</td>
           <td><a href="#attr-operating">Operation & Display</a></td>
           <td>Whether one-touch locking is enabled</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x25">
-          <td><a href="#attr-0x25"><code>0x25</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x2A">
+          <td><a href="#attr-0x2A"><code>0x2A</code></a></td>
           <td>EnableInsideStatusLED</td>
           <td>bool</td>
           <td><a href="#attr-operating">Operation & Display</a></td>
           <td>Whether inside status LED is enabled</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x26">
-          <td><a href="#attr-0x26"><code>0x26</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x2B">
+          <td><a href="#attr-0x2B"><code>0x2B</code></a></td>
           <td>EnablePrivacyModeButton</td>
           <td>bool</td>
           <td><a href="#attr-operating">Operation & Display</a></td>
           <td>Whether privacy mode button is enabled</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x27">
-          <td><a href="#attr-0x27"><code>0x27</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x2C">
+          <td><a href="#attr-0x2C"><code>0x2C</code></a></td>
           <td>LocalProgrammingFeatures</td>
           <td>bitmap8</td>
           <td><a href="#attr-operating">Operation & Display</a></td>
@@ -891,8 +891,8 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- 用户与凭据 0x10-0x1B -->
-  <h3 id="attr-credential">Users & Credentials (0x10-0x1B)</h3>
+  <!-- 用户与凭据 0x11-0x1C -->
+  <h3 id="attr-credential">Users & Credentials (0x11-0x1C)</h3>
   <p>Describes the number of users supported by the door lock, credential type capacities, and schedule capabilities.</p>
 
   <div class="table-wrap">
@@ -901,74 +901,74 @@ export const clusters: Record<string, ClusterContent> = {
         <tr><th>ID</th><th>Name</th><th>Type</th><th>Description</th></tr>
       </thead>
       <tbody>
-        <tr id="attr-0x10">
-          <td><code>0x10</code></td>
+        <tr id="attr-0x11">
+          <td><code>0x11</code></td>
           <td>NumberOfTotalUsersSupported<br/><span class="attr-cn">Total Users Supported</span></td>
           <td>uint16</td>
           <td>Maximum total number of users supported by the device</td>
         </tr>
-        <tr id="attr-0x11">
-          <td><code>0x11</code></td>
+        <tr id="attr-0x12">
+          <td><code>0x12</code></td>
           <td>NumberOfPINUsersSupported<br/><span class="attr-cn">PIN Users</span></td>
           <td>uint16</td>
           <td>Maximum number of users with PIN codes</td>
         </tr>
-        <tr id="attr-0x12">
-          <td><code>0x12</code></td>
+        <tr id="attr-0x13">
+          <td><code>0x13</code></td>
           <td>NumberOfRFIDUsersSupported<br/><span class="attr-cn">RFID Users</span></td>
           <td>uint16</td>
           <td>Maximum number of users with RFID credentials</td>
         </tr>
-        <tr id="attr-0x13">
-          <td><code>0x13</code></td>
+        <tr id="attr-0x14">
+          <td><code>0x14</code></td>
           <td>NumberOfWeekDaySchedulesSupportedPerUser<br/><span class="attr-cn">Week Day Schedules</span></td>
           <td>uint8</td>
           <td>Number of week day schedules per user (e.g., specific time slots on Monday through Friday when unlocking is allowed)</td>
         </tr>
-        <tr id="attr-0x14">
-          <td><code>0x14</code></td>
+        <tr id="attr-0x15">
+          <td><code>0x15</code></td>
           <td>NumberOfYearDaySchedulesSupportedPerUser<br/><span class="attr-cn">Year Day Schedules</span></td>
           <td>uint8</td>
           <td>Number of year day schedules per user (specified date ranges when unlocking is allowed)</td>
         </tr>
-        <tr id="attr-0x15">
-          <td><code>0x15</code></td>
+        <tr id="attr-0x16">
+          <td><code>0x16</code></td>
           <td>NumberOfHolidaySchedulesSupported<br/><span class="attr-cn">Holiday Schedules</span></td>
           <td>uint8</td>
           <td>Total number of holiday schedules supported by the device (applies globally, overrides regular schedules)</td>
         </tr>
-        <tr id="attr-0x16">
-          <td><code>0x16</code></td>
+        <tr id="attr-0x17">
+          <td><code>0x17</code></td>
           <td>MaxPINCodeLength<br/><span class="attr-cn">Max PIN Length</span></td>
           <td>uint8</td>
           <td>Maximum number of characters for a PIN code</td>
         </tr>
-        <tr id="attr-0x17">
-          <td><code>0x17</code></td>
+        <tr id="attr-0x18">
+          <td><code>0x18</code></td>
           <td>MinPINCodeLength<br/><span class="attr-cn">Min PIN Length</span></td>
           <td>uint8</td>
           <td>Minimum number of characters required for a PIN code</td>
         </tr>
-        <tr id="attr-0x18">
-          <td><code>0x18</code></td>
+        <tr id="attr-0x19">
+          <td><code>0x19</code></td>
           <td>MaxRFIDCodeLength<br/><span class="attr-cn">Max RFID Length</span></td>
           <td>uint8</td>
           <td>Maximum number of bytes for an RFID code</td>
         </tr>
-        <tr id="attr-0x19">
-          <td><code>0x19</code></td>
+        <tr id="attr-0x1A">
+          <td><code>0x1A</code></td>
           <td>MinRFIDCodeLength<br/><span class="attr-cn">Min RFID Length</span></td>
           <td>uint8</td>
           <td>Minimum number of bytes required for an RFID code</td>
         </tr>
-        <tr id="attr-0x1A">
-          <td><code>0x1A</code></td>
+        <tr id="attr-0x1B">
+          <td><code>0x1B</code></td>
           <td>CredentialRulesSupport<br/><span class="attr-cn">Credential Rules</span></td>
           <td>bitmap8</td>
           <td>Supported credential verification rules (see bitmap below)</td>
         </tr>
-        <tr id="attr-0x1B">
-          <td><code>0x1B</code></td>
+        <tr id="attr-0x1C">
+          <td><code>0x1C</code></td>
           <td>NumberOfCredentialsSupportedPerUser<br/><span class="attr-cn">Credentials Per User</span></td>
           <td>uint8</td>
           <td>Maximum number of credentials that can be bound to each user</td>
@@ -1011,8 +1011,8 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
-  <!-- 操作与显示 0x1C-0x27 -->
-  <h3 id="attr-operating">Operation & Display (0x1C-0x27)</h3>
+  <!-- 操作与显示 0x21-0x2C -->
+  <h3 id="attr-operating">Operation & Display (0x21-0x2C)</h3>
   <p>Controls the door lock's operating behavior, display settings, and local programming features.</p>
 
   <div class="table-wrap">
@@ -1021,74 +1021,74 @@ export const clusters: Record<string, ClusterContent> = {
         <tr><th>ID</th><th>Name</th><th>Type</th><th>Description</th></tr>
       </thead>
       <tbody>
-        <tr id="attr-0x1C">
-          <td><code>0x1C</code></td>
+        <tr id="attr-0x21">
+          <td><code>0x21</code></td>
           <td>Language<br/><span class="attr-cn">Interface Language</span></td>
           <td>string</td>
           <td>Lock interface display language, 2-character ISO 639-1 code (e.g., "en", "zh")</td>
         </tr>
-        <tr id="attr-0x1D">
-          <td><code>0x1D</code></td>
+        <tr id="attr-0x22">
+          <td><code>0x22</code></td>
           <td>LEDSettings<br/><span class="attr-cn">LED Settings</span></td>
           <td>uint8</td>
           <td>Which operations cause the LED indicator to light up (see enum below)</td>
         </tr>
-        <tr id="attr-0x1E">
-          <td><code>0x1E</code></td>
+        <tr id="attr-0x23">
+          <td><code>0x23</code></td>
           <td>AutoRelockTime<br/><span class="attr-cn">Auto Re-lock Time</span></td>
           <td>uint32</td>
           <td>Wait time before automatic re-locking after unlock, in seconds. <code>0</code> means no automatic re-locking</td>
         </tr>
-        <tr id="attr-0x1F">
-          <td><code>0x1F</code></td>
+        <tr id="attr-0x24">
+          <td><code>0x24</code></td>
           <td>SoundVolume<br/><span class="attr-cn">Sound Volume</span></td>
           <td>uint8</td>
           <td>Volume level of the door lock's operation notification sound (see enum below)</td>
         </tr>
-        <tr id="attr-0x20">
-          <td><code>0x20</code></td>
+        <tr id="attr-0x25">
+          <td><code>0x25</code></td>
           <td>OperatingMode<br/><span class="attr-cn">Operating Mode</span></td>
           <td>enum8</td>
           <td>The door lock's current operating mode (see enum below)</td>
         </tr>
-        <tr id="attr-0x21">
-          <td><code>0x21</code></td>
+        <tr id="attr-0x26">
+          <td><code>0x26</code></td>
           <td>SupportedOperatingModes<br/><span class="attr-cn">Supported Operating Modes</span></td>
           <td>bitmap16</td>
           <td>Which operating modes the device supports (bitmask corresponding to OperatingMode enum values)</td>
         </tr>
-        <tr id="attr-0x22">
-          <td><code>0x22</code></td>
+        <tr id="attr-0x27">
+          <td><code>0x27</code></td>
           <td>DefaultConfigurationRegister<br/><span class="attr-cn">Default Config Register</span></td>
           <td>bitmap16</td>
           <td>Indicates which configuration items have been modified from factory defaults</td>
         </tr>
-        <tr id="attr-0x23">
-          <td><code>0x23</code></td>
+        <tr id="attr-0x28">
+          <td><code>0x28</code></td>
           <td>EnableLocalProgramming<br/><span class="attr-cn">Local Programming</span></td>
           <td>bool</td>
           <td>Whether local adding/modifying of users and credentials via the lock panel is allowed</td>
         </tr>
-        <tr id="attr-0x24">
-          <td><code>0x24</code></td>
+        <tr id="attr-0x29">
+          <td><code>0x29</code></td>
           <td>EnableOneTouchLocking<br/><span class="attr-cn">One-Touch Locking</span></td>
           <td>bool</td>
           <td>Whether one-touch locking is enabled (touch the panel to lock the door)</td>
         </tr>
-        <tr id="attr-0x25">
-          <td><code>0x25</code></td>
+        <tr id="attr-0x2A">
+          <td><code>0x2A</code></td>
           <td>EnableInsideStatusLED<br/><span class="attr-cn">Inside Status LED</span></td>
           <td>bool</td>
           <td>Whether the status indicator LED on the inside of the door lock is enabled</td>
         </tr>
-        <tr id="attr-0x26">
-          <td><code>0x26</code></td>
+        <tr id="attr-0x2B">
+          <td><code>0x2B</code></td>
           <td>EnablePrivacyModeButton<br/><span class="attr-cn">Privacy Mode Button</span></td>
           <td>bool</td>
           <td>Whether the physical privacy mode button is enabled (when pressed, remote operations are rejected)</td>
         </tr>
-        <tr id="attr-0x27">
-          <td><code>0x27</code></td>
+        <tr id="attr-0x2C">
+          <td><code>0x2C</code></td>
           <td>LocalProgrammingFeatures<br/><span class="attr-cn">Local Programming Features</span></td>
           <td>bitmap8</td>
           <td>Specific features allowed via local programming (adding users, modifying schedules, etc.)</td>
@@ -1325,17 +1325,17 @@ export const clusters: Record<string, ClusterContent> = {
   "0x03": 1,           // DoorState = Closed
 
   // --- Users & Credentials ---
-  "0x10": 10,          // NumberOfTotalUsersSupported = 10
-  "0x11": 10,          // NumberOfPINUsersSupported = 10
-  "0x16": 8,           // MaxPINCodeLength = 8 digits
-  "0x17": 4,           // MinPINCodeLength = 4 digits
-  "0x1B": 5,           // NumberOfCredentialsSupportedPerUser = 5
+  "0x11": 10,          // NumberOfTotalUsersSupported = 10
+  "0x12": 10,          // NumberOfPINUsersSupported = 10
+  "0x17": 8,           // MaxPINCodeLength = 8 digits
+  "0x18": 4,           // MinPINCodeLength = 4 digits
+  "0x1C": 5,           // NumberOfCredentialsSupportedPerUser = 5
 
   // --- Operation & Display ---
-  "0x1E": 30,          // AutoRelockTime = 30 seconds
-  "0x1F": 2,           // SoundVolume = High
-  "0x20": 0,           // OperatingMode = Normal
-  "0x21": 65535,       // SupportedOperatingModes (all modes supported)
+  "0x23": 30,          // AutoRelockTime = 30 seconds
+  "0x24": 2,           // SoundVolume = High
+  "0x25": 0,           // OperatingMode = Normal
+  "0x26": 65535,       // SupportedOperatingModes (all modes supported)
 
   // --- Remote Operation ---
   "0x30": 5,           // WrongCodeEntryLimit = 5 attempts
@@ -1363,17 +1363,17 @@ export const clusters: Record<string, ClusterContent> = {
 
   <h3 id="scenario-add-user">Scenario 2: Add New User and PIN Code</h3>
   <ol>
-    <li>Read <code>NumberOfTotalUsersSupported (0x10)</code> to check user capacity</li>
-    <li>Send <code>SetUser (0x26)</code> to create the user</li>
-    <li>Read <code>MinPINCodeLength (0x17)</code> and <code>MaxPINCodeLength (0x16)</code> to verify PIN length requirements</li>
-    <li>Send <code>SetCredential (0x1A)</code> to bind a PIN code to that user</li>
-    <li>Optionally use <code>GetCredentialStatus (0x1B)</code> to verify the credential was set successfully</li>
+    <li>Read <code>NumberOfTotalUsersSupported (0x11)</code> to check user capacity</li>
+    <li>Send <code>SetUser (0x1A)</code> to create the user</li>
+    <li>Read <code>MinPINCodeLength (0x18)</code> and <code>MaxPINCodeLength (0x17)</code> to verify PIN length requirements</li>
+    <li>Send <code>SetCredential (0x22)</code> to bind a PIN code to that user</li>
+    <li>Optionally use <code>GetCredentialStatus (0x24)</code> to verify the credential was set successfully</li>
   </ol>
 
   <h3 id="scenario-check-state">Scenario 3: Display Lock Status on Home Screen</h3>
   <ol>
     <li>Read <code>LockState (0x00)</code> &mdash; handle the <code>null</code> value properly</li>
-    <li>Read <code>OperatingMode (0x20)</code> &mdash; if not Normal, the UI may need to show a notice</li>
+    <li>Read <code>OperatingMode (0x25)</code> &mdash; if not Normal, the UI may need to show a notice</li>
     <li>Read battery level from the PowerSource Cluster alongside lock status</li>
   </ol>
 
@@ -2899,9 +2899,23 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#group-level">Level Control</a></td>
           <td>Target opening percentage</td>
         </tr>
-        <!-- 故障状态 -->
         <tr class="clickable-row" data-href="#attr-0x0008">
           <td><a href="#attr-0x0008"><code>0x0008</code></a></td>
+          <td>DefaultOpenLevel</td>
+          <td>percent</td>
+          <td><a href="#group-level">Level Control</a></td>
+          <td>Default opening used when Open has no TargetLevel</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x000A">
+          <td><a href="#attr-0x000A"><code>0x000A</code></a></td>
+          <td>LevelStep</td>
+          <td>uint8</td>
+          <td><a href="#group-level">Level Control</a></td>
+          <td>Opening adjustment step size</td>
+        </tr>
+        <!-- 故障状态 -->
+        <tr class="clickable-row" data-href="#attr-0x0009">
+          <td><a href="#attr-0x0009"><code>0x0009</code></a></td>
           <td>ValveFault</td>
           <td>ValveFaultBitmap</td>
           <td><a href="#group-fault">Fault Status</a></td>
@@ -3009,7 +3023,7 @@ export const clusters: Record<string, ClusterContent> = {
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
   <!-- ====== 开度控制（0x0006 ~ 0x0007）====== -->
-  <h3 id="group-level">Level Control (0x0006 ~ 0x0007)</h3>
+  <h3 id="group-level">Level Control (0x0006 ~ 0x0008, 0x000A)</h3>
   <p>
     Controls the valve's precise opening percentage. Requires the device to support the <strong>Level (LVL)</strong> Feature.
     Valves without LVL support only have fully open/fully closed states.
@@ -3038,6 +3052,18 @@ export const clusters: Record<string, ClusterContent> = {
           <td>percent / null</td>
           <td>Target opening percentage of the valve, 1~100. Set by the Open command's TargetLevel parameter. Nullable &mdash; <code>null</code> means no pending target level. <strong>Requires LVL Feature</strong></td>
         </tr>
+        <tr id="attr-0x0008">
+          <td><code>0x0008</code></td>
+          <td>DefaultOpenLevel<br/><span class="attr-cn">Default Open Level</span></td>
+          <td>percent</td>
+          <td>Default target opening, 1~100, used when the Open command is sent without a TargetLevel field. Default: <code>100</code> (fully open). <strong>Requires LVL Feature</strong>, optional</td>
+        </tr>
+        <tr id="attr-0x000A">
+          <td><code>0x000A</code></td>
+          <td>LevelStep<br/><span class="attr-cn">Level Step</span></td>
+          <td>uint8</td>
+          <td>Smallest step the valve opening can be adjusted by, 1~50. For example, with <code>10</code> only 10%, 20%, … can be set. Default: <code>1</code>. <strong>Requires LVL Feature</strong>, optional</td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -3054,7 +3080,7 @@ export const clusters: Record<string, ClusterContent> = {
   <p class="back-link"><a href="#attributes">&#8593; Back to Attributes</a></p>
 
   <!-- ====== 故障状态（0x0008）====== -->
-  <h3 id="group-fault">Fault Status (0x0008)</h3>
+  <h3 id="group-fault">Fault Status (0x0009)</h3>
   <p>Records valve fault information. ValveFault is a bitmap attribute; multiple faults can exist simultaneously.</p>
 
   <div class="table-wrap">
@@ -3068,8 +3094,8 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
       </thead>
       <tbody>
-        <tr id="attr-0x0008">
-          <td><code>0x0008</code></td>
+        <tr id="attr-0x0009">
+          <td><code>0x0009</code></td>
           <td>ValveFault<br/><span class="attr-cn">Valve Fault</span></td>
           <td>ValveFaultBitmap</td>
           <td>Valve fault bitmap; each bit represents a fault type. <code>0</code> = no fault. See the <a href="#valve-fault-bitmap">ValveFaultBitmap</a> section below</td>
@@ -3113,7 +3139,7 @@ export const clusters: Record<string, ClusterContent> = {
   <!-- ValveFaultBitmap -->
   <h3 id="valve-fault-bitmap">ValveFaultBitmap (Valve Fault Bitmap)</h3>
   <p>
-    Bitmap definition for the <code>ValveFault (0x0008)</code> attribute. Each bit represents a fault type; multiple bits can be set simultaneously.
+    Bitmap definition for the <code>ValveFault (0x0009)</code> attribute. Each bit represents a fault type; multiple bits can be set simultaneously.
     When any bit changes from 0 to 1, the device reports a <code>ValveFault</code> event.
   </p>
 
@@ -3265,9 +3291,11 @@ export const clusters: Record<string, ClusterContent> = {
   // --- Level Control (LVL Feature) ---
   "0x0006": 75,              // CurrentLevel = 75% (current opening 75%)
   "0x0007": 75,              // TargetLevel = 75% (target opening 75%)
+  "0x0008": 100,             // DefaultOpenLevel = 100% (Open without a level opens fully)
+  "0x000A": 1,               // LevelStep = 1% (opening step size)
 
   // --- Fault Status ---
-  "0x0008": 0                // ValveFault = 0 (no fault)
+  "0x0009": 0                // ValveFault = 0 (no fault)
 }</code></pre>
 
   <div class="callout callout-tip">
@@ -3307,7 +3335,7 @@ export const clusters: Record<string, ClusterContent> = {
         <li>An automation rule triggers, sending <code>Close (0x01)</code> to the water valve for an emergency close</li>
         <li>Read <code>CurrentState (0x0004)</code> to confirm the valve is closed (<code>Closed = 0</code>)</li>
         <li>If CurrentState is <code>Transitioning (2)</code>, wait a few seconds and check again</li>
-        <li>Check the <code>ValveFault (0x0008)</code> bitmap for the <code>Leaking (Bit 2)</code> bit &mdash; if the valve is closed but leaking is still detected, the valve seal has failed and manual intervention is needed</li>
+        <li>Check the <code>ValveFault (0x0009)</code> bitmap for the <code>Leaking (Bit 2)</code> bit &mdash; if the valve is closed but leaking is still detected, the valve seal has failed and manual intervention is needed</li>
         <li>Send an alert notification to the user: "Water leak detected. The water valve has been automatically closed. Please check the area."</li>
         <li>After the leak is resolved, the user manually sends an <code>Open</code> command to restore water supply</li>
       </ol>

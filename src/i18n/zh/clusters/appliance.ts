@@ -1327,13 +1327,13 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
-          <td>StartUpMode</td>
+          <td>StartUpMode <span class="removed-tag">新版已移除</span></td>
           <td>uint8 / null</td>
           <td>设备启动时的默认模式</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
-          <td>OnMode</td>
+          <td>OnMode <span class="removed-tag">新版已移除</span></td>
           <td>uint8 / null</td>
           <td>设备开机时自动切换到的模式</td>
         </tr>
@@ -1387,14 +1387,22 @@ export const clusters: Record<string, ClusterContent> = {
   </p>
   <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
 
-  <h3 id="attr-0x0002">StartUpMode -- 启动模式（0x0002）</h3>
+  <h3 id="attr-0x0002">StartUpMode -- 启动模式（0x0002） <span class="removed-tag">新版已移除</span></h3>
+  <div class="callout callout-warning">
+    <div class="callout-title">新版 Matter 已移除</div>
+    <p><code>StartUpMode</code> 已不在较新版本的 Matter 规范中（本站对照的 connectedhomeip v1.6 官方定义里已没有它）。按新版本开发的设备不会实现它，这里保留说明仅供对接旧设备时参考。新版本中上电后的模式由设备自行决定，控制端改用 <code>ChangeToMode</code> 命令切换模式。</p>
+  </div>
   <p>
     设备上电或重启后的初始模式。Nullable -- 值为 <code>null</code> 时表示保持上次断电前的模式。
     设置具体值时，该值必须存在于 SupportedModes 列表中。
   </p>
   <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
 
-  <h3 id="attr-0x0003">OnMode -- 开机模式（0x0003）</h3>
+  <h3 id="attr-0x0003">OnMode -- 开机模式（0x0003） <span class="removed-tag">新版已移除</span></h3>
+  <div class="callout callout-warning">
+    <div class="callout-title">新版 Matter 已移除</div>
+    <p><code>OnMode</code> 已不在较新版本的 Matter 规范中（本站对照的 connectedhomeip v1.6 官方定义里已没有它）。按新版本开发的设备不会实现它，这里保留说明仅供对接旧设备时参考。它依赖的 DEPONOFF（OnOff 依赖）特性也一并被移除；控制端改用 <code>ChangeToMode</code> 命令切换模式。</p>
+  </div>
   <p>
     当设备从 Off 切换到 On 时自动应用的模式。Nullable -- 值为 <code>null</code> 时不覆盖，保持 CurrentMode 不变。
     如果 OnMode 有值，每次开机都会将 CurrentMode 强制设为该值，忽略 StartUpMode 的设置。
@@ -1506,11 +1514,9 @@ export const clusters: Record<string, ClusterContent> = {
   ],
 
   // --- 当前模式 ---
-  "0x0001": 0,                   // CurrentMode = 0（Normal）
+  "0x0001": 0                    // CurrentMode = 0（Normal）
 
   // --- 启动与开机模式 ---
-  "0x0002": null,                // StartUpMode = null（保持上次模式）
-  "0x0003": null                 // OnMode = null（不覆盖，保持 CurrentMode）
 }</code></pre>
 
   <div class="callout callout-tip">
@@ -1542,13 +1548,13 @@ export const clusters: Record<string, ClusterContent> = {
   <h3 id="scenario-startup">场景 2：配置启动模式</h3>
   <ol>
     <li>读取 <code>SupportedModes (0x0000)</code> 获取可选模式列表</li>
-    <li>写入 <code>StartUpMode (0x0002)</code> 设置上电默认模式：
+    <li>写入 <code>StartUpMode (0x0002)</code> <span class="removed-tag">新版已移除</span> 设置上电默认模式：
       <ul>
         <li>写入具体 Mode 编号 -- 每次上电自动使用该模式（如始终默认标准洗）</li>
         <li>写入 <code>null</code> -- 保持断电前的模式（推荐）</li>
       </ul>
     </li>
-    <li>如需每次开机强制使用某个模式，可设置 <code>OnMode (0x0003)</code>，其优先级高于 StartUpMode</li>
+    <li>如需每次开机强制使用某个模式，可设置 <code>OnMode (0x0003)</code> <span class="removed-tag">新版已移除</span>，其优先级高于 StartUpMode</li>
     <li>大多数家用场景建议两者都设为 <code>null</code>，让用户每次手动选择模式</li>
   </ol>
 
@@ -2079,13 +2085,13 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
-          <td>StartUpMode</td>
+          <td>StartUpMode <span class="removed-tag">新版已移除</span></td>
           <td>uint8 / null</td>
           <td>上电后的初始模式</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
-          <td>OnMode</td>
+          <td>OnMode <span class="removed-tag">新版已移除</span></td>
           <td>uint8 / null</td>
           <td>开机时强制切换到的模式</td>
         </tr>
@@ -2139,14 +2145,22 @@ export const clusters: Record<string, ClusterContent> = {
   </p>
   <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
 
-  <h3 id="attr-0x0002">StartUpMode —— 上电模式（0x0002）</h3>
+  <h3 id="attr-0x0002">StartUpMode —— 上电模式（0x0002） <span class="removed-tag">新版已移除</span></h3>
+  <div class="callout callout-warning">
+    <div class="callout-title">新版 Matter 已移除</div>
+    <p><code>StartUpMode</code> 已不在较新版本的 Matter 规范中（本站对照的 connectedhomeip v1.6 官方定义里已没有它）。按新版本开发的设备不会实现它，这里保留说明仅供对接旧设备时参考。新版本中上电后的模式由设备自行决定，控制端改用 <code>ChangeToMode</code> 命令切换模式。</p>
+  </div>
   <p>
     设备上电（或重启）后使用的初始模式。Nullable —— <code>null</code> 表示不指定，
     由设备自行决定（通常恢复断电前的模式）。
   </p>
   <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
 
-  <h3 id="attr-0x0003">OnMode —— 开机模式（0x0003）</h3>
+  <h3 id="attr-0x0003">OnMode —— 开机模式（0x0003） <span class="removed-tag">新版已移除</span></h3>
+  <div class="callout callout-warning">
+    <div class="callout-title">新版 Matter 已移除</div>
+    <p><code>OnMode</code> 已不在较新版本的 Matter 规范中（本站对照的 connectedhomeip v1.6 官方定义里已没有它）。按新版本开发的设备不会实现它，这里保留说明仅供对接旧设备时参考。它依赖的 DEPONOFF（OnOff 依赖）特性也一并被移除；控制端改用 <code>ChangeToMode</code> 命令切换模式。</p>
+  </div>
   <p>
     设备从 Off 切换到 On 时强制切换到的模式。Nullable ——
     <code>null</code> 表示开机时不强制切换，保持 CurrentMode 不变。
@@ -2224,9 +2238,7 @@ export const clusters: Record<string, ClusterContent> = {
       "ModeTags": [{ "Value": 16386 }]
     }
   ],
-  "0x0001": 0,               // CurrentMode = 0（当前为 Normal 模式）
-  "0x0002": 0,               // StartUpMode = 0（上电恢复 Normal）
-  "0x0003": null              // OnMode = null（开机不强制切换模式）
+  "0x0001": 0                // CurrentMode = 0（当前为 Normal 模式）
 }</code></pre>
 
   <!-- ====== 常见场景 ====== -->
@@ -2244,7 +2256,7 @@ export const clusters: Record<string, ClusterContent> = {
   <h3 id="scenario-startup">场景 2：配置默认模式</h3>
   <ol>
     <li>用户在 App 设置页选择「每次开机默认使用强力模式」</li>
-    <li>写入 <code>OnMode (0x0003)</code> 为 Heavy 模式对应的编号（例如 <code>1</code>）</li>
+    <li>写入 <code>OnMode (0x0003)</code> <span class="removed-tag">新版已移除</span> 为 Heavy 模式对应的编号（例如 <code>1</code>）</li>
     <li>之后每次洗碗机从关闭切换到开启，都会自动进入强力模式</li>
     <li>如需取消强制模式，将 OnMode 写回 <code>null</code></li>
   </ol>
@@ -2958,13 +2970,13 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
-          <td>StartUpMode</td>
+          <td>StartUpMode <span class="removed-tag">新版已移除</span></td>
           <td>uint8 / null</td>
           <td>设备启动时的默认模式</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
-          <td>OnMode</td>
+          <td>OnMode <span class="removed-tag">新版已移除</span></td>
           <td>uint8 / null</td>
           <td>设备开机时自动切换到的模式</td>
         </tr>
@@ -3018,7 +3030,11 @@ export const clusters: Record<string, ClusterContent> = {
   </p>
   <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
 
-  <h3 id="attr-0x0002">StartUpMode -- 启动模式（0x0002）</h3>
+  <h3 id="attr-0x0002">StartUpMode -- 启动模式（0x0002） <span class="removed-tag">新版已移除</span></h3>
+  <div class="callout callout-warning">
+    <div class="callout-title">新版 Matter 已移除</div>
+    <p><code>StartUpMode</code> 已不在较新版本的 Matter 规范中（本站对照的 connectedhomeip v1.6 官方定义里已没有它）。按新版本开发的设备不会实现它，这里保留说明仅供对接旧设备时参考。新版本中上电后的模式由设备自行决定，控制端改用 <code>ChangeToMode</code> 命令切换模式。</p>
+  </div>
   <p>
     设备上电或重启后的初始模式。Nullable -- 值为 <code>null</code> 时表示保持上次断电前的模式。
     设置具体值时，该值必须存在于 SupportedModes 列表中。
@@ -3033,7 +3049,11 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
 
-  <h3 id="attr-0x0003">OnMode -- 开机模式（0x0003）</h3>
+  <h3 id="attr-0x0003">OnMode -- 开机模式（0x0003） <span class="removed-tag">新版已移除</span></h3>
+  <div class="callout callout-warning">
+    <div class="callout-title">新版 Matter 已移除</div>
+    <p><code>OnMode</code> 已不在较新版本的 Matter 规范中（本站对照的 connectedhomeip v1.6 官方定义里已没有它）。按新版本开发的设备不会实现它，这里保留说明仅供对接旧设备时参考。它依赖的 DEPONOFF（OnOff 依赖）特性也一并被移除；控制端改用 <code>ChangeToMode</code> 命令切换模式。</p>
+  </div>
   <p>
     当设备从 Off 切换到 On 时自动应用的模式。Nullable -- 值为 <code>null</code> 时不覆盖，保持 CurrentMode 不变。
     如果 OnMode 有值，每次开机都会将 CurrentMode 强制设为该值，忽略 StartUpMode 的设置。
@@ -3128,7 +3148,7 @@ export const clusters: Record<string, ClusterContent> = {
     <div class="enum-card">
       <span class="enum-badge">Bit 0</span>
       <div>
-        <span class="enum-name">DEPONOFF（OnOff 依赖）</span>
+        <span class="enum-name">DEPONOFF（OnOff 依赖） <span class="removed-tag">新版已移除</span></span>
         <span class="enum-desc">Cluster 依赖同一 Endpoint 上的 OnOff Cluster，支持通过 OnMode 属性在开机时自动切换模式</span>
       </div>
     </div>
@@ -3164,11 +3184,9 @@ export const clusters: Record<string, ClusterContent> = {
   ],
 
   // --- 当前模式 ---
-  "0x0001": 0,                   // CurrentMode = 0（Normal）
+  "0x0001": 0                    // CurrentMode = 0（Normal）
 
   // --- 启动与开机模式 ---
-  "0x0002": null,                // StartUpMode = null（保持上次模式）
-  "0x0003": null                 // OnMode = null（不覆盖，保持 CurrentMode）
 }</code></pre>
 
   <h3>冷冻室 Endpoint</h3>
@@ -3188,11 +3206,9 @@ export const clusters: Record<string, ClusterContent> = {
   ],
 
   // --- 当前模式 ---
-  "0x0001": 1,                   // CurrentMode = 1（Rapid Freeze 急冻中）
+  "0x0001": 1                    // CurrentMode = 1（Rapid Freeze 急冻中）
 
   // --- 启动与开机模式 ---
-  "0x0002": 0,                   // StartUpMode = 0（上电后恢复普通模式）
-  "0x0003": null                 // OnMode = null（不覆盖）
 }</code></pre>
 
   <div class="callout callout-tip">
@@ -3319,8 +3335,8 @@ export const clusters: Record<string, ClusterContent> = {
   <!-- ====== 命令（Commands）====== -->
   <h2 id="commands">命令（Commands）</h2>
   <p>
-    MicrowaveOvenMode Cluster 只有一个命令 ChangeToMode，用于切换加热模式。
-    命令执行后设备返回 ChangeToModeResponse，告知切换是否成功。
+    旧版本的 MicrowaveOvenMode Cluster 有一个命令 ChangeToMode，用于切换加热模式，
+    命令执行后设备返回 ChangeToModeResponse，告知切换是否成功。<strong>新版本已移除这两个命令</strong>，模式只能在微波炉本机上切换。
   </p>
 
   <div class="table-wrap">
@@ -3336,13 +3352,13 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr class="clickable-row" data-href="#cmd-0x00">
           <td><a href="#cmd-0x00"><code>0x00</code></a></td>
-          <td>ChangeToMode</td>
+          <td>ChangeToMode <span class="removed-tag">新版已移除</span></td>
           <td>Client &rarr; Server</td>
           <td>切换到指定加热模式</td>
         </tr>
         <tr>
           <td><code>0x01</code></td>
-          <td>ChangeToModeResponse</td>
+          <td>ChangeToModeResponse <span class="removed-tag">新版已移除</span></td>
           <td>Server &rarr; Client</td>
           <td>切换结果响应（Status + StatusText）</td>
         </tr>
@@ -3351,7 +3367,11 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <!-- ====== 命令详解 ====== -->
-  <h3 id="cmd-0x00">ChangeToMode -- 切换模式（0x00）</h3>
+  <h3 id="cmd-0x00">ChangeToMode -- 切换模式（0x00） <span class="removed-tag">新版已移除</span></h3>
+  <div class="callout callout-warning">
+    <div class="callout-title">新版 Matter 已移除</div>
+    <p><code>ChangeToMode</code> 已不在较新版本的 Matter 规范中（本站对照的 connectedhomeip v1.6 官方定义里已没有它）。按新版本开发的设备不会实现它，这里保留说明仅供对接旧设备时参考。新版本的微波炉模式 Cluster 不接受任何命令：模式只能在微波炉本机上切换，控制端只能读取或订阅 <code>CurrentMode</code>。</p>
+  </div>
   <p>
     请求微波炉切换到指定的加热模式。NewMode 的值必须是 SupportedModes 列表中某个 ModeOptionStruct 的 Mode 字段。
     设备收到后返回 ChangeToModeResponse。
@@ -3435,13 +3455,13 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0002">
           <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
-          <td>StartUpMode</td>
+          <td>StartUpMode <span class="removed-tag">新版已移除</span></td>
           <td>uint8 / null</td>
           <td>设备启动时的默认模式</td>
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
-          <td>OnMode</td>
+          <td>OnMode <span class="removed-tag">新版已移除</span></td>
           <td>uint8 / null</td>
           <td>设备开机时自动切换到的模式</td>
         </tr>
@@ -3495,14 +3515,22 @@ export const clusters: Record<string, ClusterContent> = {
   </p>
   <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
 
-  <h3 id="attr-0x0002">StartUpMode -- 启动模式（0x0002）</h3>
+  <h3 id="attr-0x0002">StartUpMode -- 启动模式（0x0002） <span class="removed-tag">新版已移除</span></h3>
+  <div class="callout callout-warning">
+    <div class="callout-title">新版 Matter 已移除</div>
+    <p><code>StartUpMode</code> 已不在较新版本的 Matter 规范中（本站对照的 connectedhomeip v1.6 官方定义里已没有它）。按新版本开发的设备不会实现它，这里保留说明仅供对接旧设备时参考。新版本中微波炉模式只能在设备本机上切换，控制端只能读取或订阅 <code>CurrentMode</code>。</p>
+  </div>
   <p>
     设备上电或重启后的初始模式。Nullable -- 值为 <code>null</code> 时表示保持上次断电前的模式。
     设置具体值时，该值必须存在于 SupportedModes 列表中。
   </p>
   <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
 
-  <h3 id="attr-0x0003">OnMode -- 开机模式（0x0003）</h3>
+  <h3 id="attr-0x0003">OnMode -- 开机模式（0x0003） <span class="removed-tag">新版已移除</span></h3>
+  <div class="callout callout-warning">
+    <div class="callout-title">新版 Matter 已移除</div>
+    <p><code>OnMode</code> 已不在较新版本的 Matter 规范中（本站对照的 connectedhomeip v1.6 官方定义里已没有它）。按新版本开发的设备不会实现它，这里保留说明仅供对接旧设备时参考。新版本中微波炉模式只能在设备本机上切换，控制端只能读取或订阅 <code>CurrentMode</code>。</p>
+  </div>
   <p>
     当设备从 Off 切换到 On 时自动应用的模式。Nullable -- 值为 <code>null</code> 时不覆盖，保持 CurrentMode 不变。
     如果 OnMode 有值，每次开机都会将 CurrentMode 强制设为该值，忽略 StartUpMode 的设置。
@@ -3599,11 +3627,9 @@ export const clusters: Record<string, ClusterContent> = {
   ],
 
   // --- 当前模式 ---
-  "0x0001": 0,                   // CurrentMode = 0（Normal）
+  "0x0001": 0                    // CurrentMode = 0（Normal）
 
   // --- 启动与开机模式 ---
-  "0x0002": null,                // StartUpMode = null（保持上次模式）
-  "0x0003": null                 // OnMode = null（不覆盖，保持 CurrentMode）
 }</code></pre>
 
   <div class="callout callout-tip">
@@ -3625,7 +3651,7 @@ export const clusters: Record<string, ClusterContent> = {
       <ol>
         <li>读取 <code>SupportedModes (0x0000)</code> 获取微波炉支持的所有加热模式</li>
         <li>在 App 界面展示模式列表，根据 ModeTag 值显示对应图标和说明（如 0x4000 显示「常规加热」图标，0x4001 显示「解冻」图标）</li>
-        <li>用户选择「解冻」，发送 <code>ChangeToMode (0x00)</code>，NewMode 填入对应的 Mode 编号</li>
+        <li>用户选择「解冻」，发送 <code>ChangeToMode (0x00)</code> <span class="removed-tag">新版已移除</span>，NewMode 填入对应的 Mode 编号</li>
         <li>检查 ChangeToModeResponse 的 Status：
           <ul>
             <li><code>0x00</code>（Success）-- 切换成功，订阅 CurrentMode 确认更新</li>
@@ -3846,66 +3872,66 @@ export const clusters: Record<string, ClusterContent> = {
       </thead>
       <tbody>
         <!-- 烹饪时间 -->
-        <tr class="clickable-row" data-href="#attr-0x0001">
-          <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x0000">
+          <td><a href="#attr-0x0000"><code>0x0000</code></a></td>
           <td>CookTime</td>
           <td>uint32</td>
           <td><a href="#group-time">烹饪时间</a></td>
           <td>当前设定的烹饪时间（秒）</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x0002">
-          <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x0001">
+          <td><a href="#attr-0x0001"><code>0x0001</code></a></td>
           <td>MaxCookTime</td>
           <td>uint32</td>
           <td><a href="#group-time">烹饪时间</a></td>
           <td>允许的最大烹饪时间（秒）</td>
         </tr>
         <!-- 功率数值 -->
-        <tr class="clickable-row" data-href="#attr-0x0003">
-          <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x0002">
+          <td><a href="#attr-0x0002"><code>0x0002</code></a></td>
           <td>PowerSetting</td>
           <td>uint8</td>
           <td><a href="#group-power">功率数值</a></td>
           <td>当前功率等级</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x0004">
-          <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x0003">
+          <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
           <td>MinPower</td>
           <td>uint8</td>
           <td><a href="#group-power">功率数值</a></td>
           <td>最低可设功率</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x0005">
-          <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x0004">
+          <td><a href="#attr-0x0004"><code>0x0004</code></a></td>
           <td>MaxPower</td>
           <td>uint8</td>
           <td><a href="#group-power">功率数值</a></td>
           <td>最高可设功率</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x0006">
-          <td><a href="#attr-0x0006"><code>0x0006</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x0005">
+          <td><a href="#attr-0x0005"><code>0x0005</code></a></td>
           <td>PowerStep</td>
           <td>uint8</td>
           <td><a href="#group-power">功率数值</a></td>
           <td>功率调节步长</td>
         </tr>
         <!-- 瓦数等级 -->
-        <tr class="clickable-row" data-href="#attr-0x0007">
-          <td><a href="#attr-0x0007"><code>0x0007</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x0006">
+          <td><a href="#attr-0x0006"><code>0x0006</code></a></td>
           <td>SupportedWatts</td>
           <td>list[uint16]</td>
           <td><a href="#group-watts">瓦数等级</a></td>
           <td>设备支持的瓦数列表</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x0008">
-          <td><a href="#attr-0x0008"><code>0x0008</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x0007">
+          <td><a href="#attr-0x0007"><code>0x0007</code></a></td>
           <td>SelectedWattIndex</td>
           <td>uint8</td>
           <td><a href="#group-watts">瓦数等级</a></td>
           <td>当前选中的瓦数索引</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x0009">
-          <td><a href="#attr-0x0009"><code>0x0009</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x0008">
+          <td><a href="#attr-0x0008"><code>0x0008</code></a></td>
           <td>WattRating</td>
           <td>uint16</td>
           <td><a href="#group-watts">瓦数等级</a></td>
@@ -3915,8 +3941,8 @@ export const clusters: Record<string, ClusterContent> = {
     </table>
   </div>
 
-  <!-- ====== 烹饪时间（0x0001, 0x0002）====== -->
-  <h3 id="group-time">烹饪时间（0x0001, 0x0002）</h3>
+  <!-- ====== 烹饪时间（0x0000, 0x0001）====== -->
+  <h3 id="group-time">烹饪时间（0x0000, 0x0001）</h3>
   <p>烹饪时间是所有微波炉都支持的基础属性，不需要特殊 Feature 门控。</p>
 
   <div class="table-wrap">
@@ -3930,14 +3956,14 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
       </thead>
       <tbody>
-        <tr id="attr-0x0001">
-          <td><code>0x0001</code></td>
+        <tr id="attr-0x0000">
+          <td><code>0x0000</code></td>
           <td>CookTime<br/><span class="attr-cn">烹饪时间</span></td>
           <td>uint32</td>
           <td>当前设定的烹饪时间，单位秒。默认值 <code>30</code>（30 秒）。烹饪过程中此值会倒计时递减，实时反映剩余时间。范围 <code>1</code> ~ <code>MaxCookTime</code></td>
         </tr>
-        <tr id="attr-0x0002">
-          <td><code>0x0002</code></td>
+        <tr id="attr-0x0001">
+          <td><code>0x0001</code></td>
           <td>MaxCookTime<br/><span class="attr-cn">最大烹饪时间</span></td>
           <td>uint32</td>
           <td>设备允许的最大烹饪时间，单位秒，只读。用于 App 端校验用户输入和限制时间选择器的上限。典型值如 <code>5400</code>（90 分钟）</td>
@@ -3956,8 +3982,8 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
 
-  <!-- ====== 功率数值（0x0003 ~ 0x0006）====== -->
-  <h3 id="group-power">功率数值（0x0003 ~ 0x0006）</h3>
+  <!-- ====== 功率数值（0x0002 ~ 0x0005）====== -->
+  <h3 id="group-power">功率数值（0x0002 ~ 0x0005）</h3>
   <p>
     用数值表示功率等级的一组属性。这组属性需要 <strong>PWRNUM</strong> 特性支持。
     无 PWRNUM 特性时，<code>PowerSetting</code> 仍然存在但默认值固定为 <code>100</code>（满功率），不可修改。
@@ -3974,26 +4000,26 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
       </thead>
       <tbody>
-        <tr id="attr-0x0003">
-          <td><code>0x0003</code></td>
+        <tr id="attr-0x0002">
+          <td><code>0x0002</code></td>
           <td>PowerSetting<br/><span class="attr-cn">功率设置</span></td>
           <td>uint8</td>
           <td>当前功率等级。无 PWRNUM 时固定为 <code>100</code>；有 PWRNUM 时范围为 <code>MinPower</code> ~ <code>MaxPower</code>，步长 <code>PowerStep</code>。默认值 <code>100</code>（满功率）</td>
         </tr>
-        <tr id="attr-0x0004">
-          <td><code>0x0004</code></td>
+        <tr id="attr-0x0003">
+          <td><code>0x0003</code></td>
           <td>MinPower<br/><span class="attr-cn">最低功率</span></td>
           <td>uint8</td>
           <td>设备支持的最低功率值。默认 <code>10</code>。<strong>需要 PWRLMTS 特性</strong>（无 PWRLMTS 时固定为 10）</td>
         </tr>
-        <tr id="attr-0x0005">
-          <td><code>0x0005</code></td>
+        <tr id="attr-0x0004">
+          <td><code>0x0004</code></td>
           <td>MaxPower<br/><span class="attr-cn">最高功率</span></td>
           <td>uint8</td>
           <td>设备支持的最高功率值。默认 <code>100</code>。<strong>需要 PWRLMTS 特性</strong>（无 PWRLMTS 时固定为 100）</td>
         </tr>
-        <tr id="attr-0x0006">
-          <td><code>0x0006</code></td>
+        <tr id="attr-0x0005">
+          <td><code>0x0005</code></td>
           <td>PowerStep<br/><span class="attr-cn">功率步长</span></td>
           <td>uint8</td>
           <td>功率调节的步进值。默认 <code>10</code>。例如步长为 10 时，功率只能是 10、20、30...100。<strong>需要 PWRLMTS 特性</strong>（无 PWRLMTS 时固定为 10）</td>
@@ -4013,8 +4039,8 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
 
-  <!-- ====== 瓦数等级（0x0007 ~ 0x0009）====== -->
-  <h3 id="group-watts">瓦数等级（0x0007 ~ 0x0009）</h3>
+  <!-- ====== 瓦数等级（0x0006 ~ 0x0008）====== -->
+  <h3 id="group-watts">瓦数等级（0x0006 ~ 0x0008）</h3>
   <p>
     用实际瓦数表示功率的一组属性。这组属性需要 <strong>WATTS</strong> 特性支持。
     与 PWRNUM 的百分比方式不同，WATTS 用离散的瓦数列表让用户选择。
@@ -4031,20 +4057,20 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
       </thead>
       <tbody>
-        <tr id="attr-0x0007">
-          <td><code>0x0007</code></td>
+        <tr id="attr-0x0006">
+          <td><code>0x0006</code></td>
           <td>SupportedWatts<br/><span class="attr-cn">支持的瓦数列表</span></td>
           <td>list[uint16]</td>
           <td>设备支持的所有瓦数等级列表，升序排列。例如 <code>[100, 300, 500, 700, 900, 1100]</code>。只读</td>
         </tr>
-        <tr id="attr-0x0008">
-          <td><code>0x0008</code></td>
+        <tr id="attr-0x0007">
+          <td><code>0x0007</code></td>
           <td>SelectedWattIndex<br/><span class="attr-cn">选中的瓦数索引</span></td>
           <td>uint8</td>
           <td>当前选中的瓦数在 <code>SupportedWatts</code> 列表中的索引（从 0 开始）。通过 <code>SetCookingParameters</code> 的 WattSettingIndex 参数修改</td>
         </tr>
-        <tr id="attr-0x0009">
-          <td><code>0x0009</code></td>
+        <tr id="attr-0x0008">
+          <td><code>0x0008</code></td>
           <td>WattRating<br/><span class="attr-cn">瓦数额定值</span></td>
           <td>uint16</td>
           <td>微波炉的额定功率（瓦），只读。这是设备的标称最大瓦数，通常等于 <code>SupportedWatts</code> 列表中的最大值</td>
@@ -4106,19 +4132,19 @@ export const clusters: Record<string, ClusterContent> = {
 
   <pre><code>{
   // --- 烹饪时间 ---
-  "0x0001": 120,            // CookTime = 120 秒（当前设定烹饪 2 分钟）
-  "0x0002": 5400,           // MaxCookTime = 5400 秒（最大可设 90 分钟）
+  "0x0000": 120,            // CookTime = 120 秒（当前设定烹饪 2 分钟）
+  "0x0001": 5400,           // MaxCookTime = 5400 秒（最大可设 90 分钟）
 
   // --- 功率设置（PWRNUM 特性）---
-  "0x0003": 80,             // PowerSetting = 80（当前功率 80%）
-  "0x0004": 10,             // MinPower = 10（最低功率 10%）
-  "0x0005": 100,            // MaxPower = 100（最高功率 100%）
-  "0x0006": 10,             // PowerStep = 10（功率调节步长 10%）
+  "0x0002": 80,             // PowerSetting = 80（当前功率 80%）
+  "0x0003": 10,             // MinPower = 10（最低功率 10%）
+  "0x0004": 100,            // MaxPower = 100（最高功率 100%）
+  "0x0005": 10,             // PowerStep = 10（功率调节步长 10%）
 
   // --- 瓦数设置（WATTS 特性）---
-  "0x0007": [100, 300, 500, 700, 900, 1100],  // SupportedWatts（支持的瓦数列表）
-  "0x0008": 4,              // SelectedWattIndex = 4 → 对应 900W
-  "0x0009": 900             // WattRating = 900（当前瓦数额定值）
+  "0x0006": [100, 300, 500, 700, 900, 1100],  // SupportedWatts（支持的瓦数列表）
+  "0x0007": 4,              // SelectedWattIndex = 4 → 对应 900W
+  "0x0008": 900             // WattRating = 900（当前瓦数额定值）
 }</code></pre>
 
   <div class="callout callout-tip">
@@ -4138,16 +4164,16 @@ export const clusters: Record<string, ClusterContent> = {
     <summary>场景 1：App 设置烹饪参数并启动加热</summary>
     <div class="scenario-content">
       <ol>
-        <li>读取 <code>MaxCookTime (0x0002)</code> 确定时间上限，用于限制时间选择器范围</li>
+        <li>读取 <code>MaxCookTime (0x0001)</code> 确定时间上限，用于限制时间选择器范围</li>
         <li>读取 <code>FeatureMap (0xFFFC)</code> 判断功率控制方式：
           <ul>
-            <li>PWRNUM → 读取 <code>MinPower (0x0004)</code>、<code>MaxPower (0x0005)</code>、<code>PowerStep (0x0006)</code> 构建功率选择器</li>
-            <li>WATTS → 读取 <code>SupportedWatts (0x0007)</code> 列表，展示可选瓦数</li>
+            <li>PWRNUM → 读取 <code>MinPower (0x0003)</code>、<code>MaxPower (0x0004)</code>、<code>PowerStep (0x0005)</code> 构建功率选择器</li>
+            <li>WATTS → 读取 <code>SupportedWatts (0x0006)</code> 列表，展示可选瓦数</li>
           </ul>
         </li>
         <li>用户选好时间和功率后，发送 <code>SetCookingParameters (0x00)</code> 写入参数</li>
         <li>调用 OperationalState Cluster 的 <code>Start</code> 命令启动烹饪</li>
-        <li>订阅 <code>CookTime (0x0001)</code> 属性变化，实时更新倒计时显示</li>
+        <li>订阅 <code>CookTime (0x0000)</code> 属性变化，实时更新倒计时显示</li>
       </ol>
     </div>
   </details>
@@ -4157,7 +4183,7 @@ export const clusters: Record<string, ClusterContent> = {
     <div class="scenario-content">
       <ol>
         <li>通过 OperationalState Cluster 读取当前状态，确认设备正在运行</li>
-        <li>读取 <code>CookTime (0x0001)</code> 获取当前剩余时间</li>
+        <li>读取 <code>CookTime (0x0000)</code> 获取当前剩余时间</li>
         <li>用户点击「加 30 秒」→ 发送 <code>SetCookingParameters(CookTime=当前值+30)</code></li>
         <li>用户调低功率 → 发送 <code>SetCookingParameters(PowerSetting=50)</code> 或 <code>SetCookingParameters(WattSettingIndex=2)</code></li>
         <li>注意：能否在运行中修改参数取决于设备实现，部分设备可能要求先暂停再修改</li>
@@ -4399,7 +4425,7 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
-          <td>OnMode</td>
+          <td>OnMode <span class="removed-tag">新版已移除</span></td>
           <td>uint8 / null</td>
           <td>设备唤醒时自动进入的模式</td>
         </tr>
@@ -4453,7 +4479,11 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
 
-  <h3 id="attr-0x0003">OnMode —— 唤醒模式（0x0003）</h3>
+  <h3 id="attr-0x0003">OnMode —— 唤醒模式（0x0003） <span class="removed-tag">新版已移除</span></h3>
+  <div class="callout callout-warning">
+    <div class="callout-title">新版 Matter 已移除</div>
+    <p><code>OnMode</code> 已不在较新版本的 Matter 规范中（本站对照的 connectedhomeip v1.6 官方定义里已没有它）。按新版本开发的设备不会实现它，这里保留说明仅供对接旧设备时参考。新版本中控制端通过 <code>ChangeToMode</code> 命令切换模式。</p>
+  </div>
   <p>
     设备从非活跃状态唤醒时自动进入的模式。值为 SupportedModes 中某个模式的 Mode 字段，
     或 <code>null</code> 表示不自动切换模式。
@@ -4640,8 +4670,7 @@ export const clusters: Record<string, ClusterContent> = {
   ],
 
   // --- 当前状态 ---
-  "0x0001": 1,              // CurrentMode = 1（当前正在清扫）
-  "0x0003": 0               // OnMode = 0（设备唤醒后默认进入空闲模式）
+  "0x0001": 1               // CurrentMode = 1（当前正在清扫）
 }</code></pre>
 
   <div class="callout callout-tip">
@@ -4882,7 +4911,7 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0003">
           <td><a href="#attr-0x0003"><code>0x0003</code></a></td>
-          <td>OnMode</td>
+          <td>OnMode <span class="removed-tag">新版已移除</span></td>
           <td>uint8 / null</td>
           <td>开机后自动切换到的模式</td>
         </tr>
@@ -4929,7 +4958,11 @@ export const clusters: Record<string, ClusterContent> = {
   </p>
   <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
 
-  <h3 id="attr-0x0003">OnMode —— 开机模式（0x0003）</h3>
+  <h3 id="attr-0x0003">OnMode —— 开机模式（0x0003） <span class="removed-tag">新版已移除</span></h3>
+  <div class="callout callout-warning">
+    <div class="callout-title">新版 Matter 已移除</div>
+    <p><code>OnMode</code> 已不在较新版本的 Matter 规范中（本站对照的 connectedhomeip v1.6 官方定义里已没有它）。按新版本开发的设备不会实现它，这里保留说明仅供对接旧设备时参考。新版本中控制端通过 <code>ChangeToMode</code> 命令切换模式。</p>
+  </div>
   <p>
     设备开机后自动切换到的清洁模式。<strong>Nullable</strong> —— <code>null</code>
     表示开机后保持上次使用的模式。写入需要操作权限。
@@ -5068,8 +5101,7 @@ export const clusters: Record<string, ClusterContent> = {
   ],
 
   // --- 当前模式 ---
-  "0x0001": 3,                             // CurrentMode = 3（吸拖一体）
-  "0x0003": 3                              // OnMode = 3（开机默认吸拖一体）
+  "0x0001": 3                              // CurrentMode = 3（吸拖一体）
 }</code></pre>
 
   <div class="callout callout-tip">
@@ -5097,7 +5129,7 @@ export const clusters: Record<string, ClusterContent> = {
   <h3 id="scenario-onmode">场景 2：设置开机默认清洁模式</h3>
   <ol>
     <li>用户在设置页选择「开机默认使用深度清洁」</li>
-    <li>App 写入 <code>OnMode (0x0003)</code> = 0（深度清洁的 Mode 值）</li>
+    <li>App 写入 <code>OnMode (0x0003)</code> <span class="removed-tag">新版已移除</span> = 0（深度清洁的 Mode 值）</li>
     <li>下次扫地机开机或从充电桩激活时，自动切换到深度清洁模式</li>
     <li>如果用户选择「保持上次模式」，App 写入 <code>OnMode = null</code></li>
   </ol>
@@ -5216,7 +5248,7 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x01">
           <td><a href="#cmd-0x01"><code>0x01</code></a></td>
-          <td>Stop</td>
+          <td>Stop <span class="removed-tag">新版已移除</span></td>
           <td>停止操作</td>
           <td>OperationalCommandResponse</td>
         </tr>
@@ -5267,7 +5299,11 @@ export const clusters: Record<string, ClusterContent> = {
   </details>
   <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
 
-  <h3 id="cmd-0x01">Stop —— 停止（0x01）</h3>
+  <h3 id="cmd-0x01">Stop —— 停止（0x01） <span class="removed-tag">新版已移除</span></h3>
+  <div class="callout callout-warning">
+    <div class="callout-title">新版 Matter 已移除</div>
+    <p><code>Stop</code> 已不在较新版本的 Matter 规范中（本站对照的 connectedhomeip v1.6 官方定义里已没有它）。按新版本开发的设备不会实现它，这里保留说明仅供对接旧设备时参考。新版本的扫地机状态 Cluster 只保留 Pause（0x00）、Resume（0x03）和 GoHome（0x80）三个命令。要结束清扫，应通过 RvcRunMode 把运行模式切回空闲（Idle）模式。</p>
+  </div>
   <p>
     完全停止机器人的当前操作。执行成功后，<code>OperationalState</code> 属性变为
     <code>Stopped (0)</code>。与 Pause 不同，Stop 会结束本次清扫任务，
@@ -5893,7 +5929,7 @@ export const clusters: Record<string, ClusterContent> = {
     </li>
     <li>设备触发 <code>OperationalError</code> 事件（CRITICAL 优先级），App 弹出推送通知</li>
     <li>App 根据错误码 0x41（Stuck）展示对应的操作指引：「请将机器人搬到开阔位置」</li>
-    <li>用户处理完毕后，发送 <code>Stop (0x01)</code> 清除错误状态</li>
+    <li>用户处理完毕后，发送 <code>Stop (0x01)</code> <span class="removed-tag">新版已移除</span> 清除错误状态</li>
     <li>通过 RvcRunMode 重新启动清扫任务</li>
   </ol>
 

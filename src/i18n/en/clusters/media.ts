@@ -2152,14 +2152,14 @@ export const clusters: Record<string, ClusterContent> = {
           <td>Query the Electronic Program Guide (EPG)</td>
           <td class="col-required">EG</td>
         </tr>
-        <tr class="clickable-row" data-href="#cmd-0x05">
-          <td><a href="#cmd-0x05"><code>0x05</code></a></td>
+        <tr class="clickable-row" data-href="#cmd-0x06">
+          <td><a href="#cmd-0x06"><code>0x06</code></a></td>
           <td>RecordProgram</td>
           <td>Schedule recording of a specified program</td>
           <td class="col-required">RP</td>
         </tr>
-        <tr class="clickable-row" data-href="#cmd-0x06">
-          <td><a href="#cmd-0x06"><code>0x06</code></a></td>
+        <tr class="clickable-row" data-href="#cmd-0x07">
+          <td><a href="#cmd-0x07"><code>0x07</code></a></td>
           <td>CancelRecordProgram</td>
           <td>Cancel a scheduled recording</td>
           <td class="col-required">RP</td>
@@ -2187,7 +2187,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td>Returns the match result status code and optional additional data</td>
         </tr>
         <tr>
-          <td><code>0x02</code></td>
+          <td><code>0x05</code></td>
           <td>ProgramGuideResponse</td>
           <td>GetProgramGuide</td>
           <td>Returns the program list and pagination info</td>
@@ -2389,7 +2389,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x05">RecordProgram — Schedule Recording (0x05)</h3>
+  <h3 id="cmd-0x06">RecordProgram — Schedule Recording (0x06)</h3>
   <p>
     Schedules recording of a specified program. Locates the program to record via its unique identifier (ProgramIdentifier) or external ID.
     This command requires the device to enable the <strong>RP (RecordProgram)</strong> feature.
@@ -2426,7 +2426,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#commands">&#8593; Back to Commands</a></p>
 
-  <h3 id="cmd-0x06">CancelRecordProgram — Cancel Recording (0x06)</h3>
+  <h3 id="cmd-0x07">CancelRecordProgram — Cancel Recording (0x07)</h3>
   <p>
     Cancels a previously scheduled recording via RecordProgram. The parameter structure is the same as RecordProgram,
     identifying the recording to cancel via ProgramIdentifier. Requires the <strong>RP</strong> feature.
@@ -6301,9 +6301,9 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
         <tr>
           <td><code>0xFFFA</code></td>
-          <td>EventList</td>
+          <td>EventList <span class="removed-tag">Removed in newer versions</span></td>
           <td>list&lt;event-id&gt;</td>
-          <td>This Cluster defines no events, always an empty list</td>
+          <td>In older versions, listed the event IDs this cluster supports. Newer Matter versions removed EventList from the global attributes, so devices no longer report it</td>
         </tr>
         <tr>
           <td><code>0xFFFB</code></td>
@@ -6387,9 +6387,8 @@ export const clusters: Record<string, ClusterContent> = {
   // --- Global Attributes ---
   "0xFFF8": [0, 1],            // GeneratedCommandList = [GetSetupPINResponse]
   "0xFFF9": [0, 2, 3],         // AcceptedCommandList = [GetSetupPIN, Login, Logout]
-  "0xFFFA": [],                 // EventList = [] (no events)
   "0xFFFB": [                   // AttributeList
-    0xFFF8, 0xFFF9, 0xFFFA,
+    0xFFF8, 0xFFF9,
     0xFFFB, 0xFFFC, 0xFFFD
   ],
   "0xFFFC": 0,                  // FeatureMap = 0 (no optional features)

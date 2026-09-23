@@ -72,50 +72,50 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
         <tr class="clickable-row" data-href="#cmd-0x1A">
           <td><a href="#cmd-0x1A"><code>0x1A</code></a></td>
-          <td>SetCredential</td>
-          <td>添加或修改凭据（PIN 码、指纹等）</td>
-          <td class="col-required">必须</td>
-        </tr>
-        <tr class="clickable-row" data-href="#cmd-0x1B">
-          <td><a href="#cmd-0x1B"><code>0x1B</code></a></td>
-          <td>GetCredentialStatus</td>
-          <td>查询指定凭据槽位的状态</td>
-          <td class="col-optional">不需要</td>
-        </tr>
-        <tr class="clickable-row" data-href="#cmd-0x1D">
-          <td><a href="#cmd-0x1D"><code>0x1D</code></a></td>
-          <td>ClearCredential</td>
-          <td>删除凭据</td>
-          <td class="col-required">必须</td>
-        </tr>
-        <tr class="clickable-row" data-href="#cmd-0x22">
-          <td><a href="#cmd-0x22"><code>0x22</code></a></td>
-          <td>SetAliroReaderConfig</td>
-          <td>配置 Aliro NFC 读卡器参数</td>
-          <td class="col-required">必须</td>
-        </tr>
-        <tr class="clickable-row" data-href="#cmd-0x24">
-          <td><a href="#cmd-0x24"><code>0x24</code></a></td>
-          <td>ClearAliroReaderConfig</td>
-          <td>清除 Aliro NFC 配置</td>
-          <td class="col-required">必须</td>
-        </tr>
-        <tr class="clickable-row" data-href="#cmd-0x26">
-          <td><a href="#cmd-0x26"><code>0x26</code></a></td>
           <td>SetUser</td>
           <td>添加或修改用户（可设置权限、有效期等）</td>
           <td class="col-required">必须</td>
         </tr>
-        <tr class="clickable-row" data-href="#cmd-0x28">
-          <td><a href="#cmd-0x28"><code>0x28</code></a></td>
+        <tr class="clickable-row" data-href="#cmd-0x1B">
+          <td><a href="#cmd-0x1B"><code>0x1B</code></a></td>
           <td>GetUser</td>
           <td>查询指定用户信息</td>
           <td class="col-optional">不需要</td>
         </tr>
-        <tr class="clickable-row" data-href="#cmd-0x29">
-          <td><a href="#cmd-0x29"><code>0x29</code></a></td>
+        <tr class="clickable-row" data-href="#cmd-0x1D">
+          <td><a href="#cmd-0x1D"><code>0x1D</code></a></td>
           <td>ClearUser</td>
           <td>删除用户（同时删除其关联的所有凭据）</td>
+          <td class="col-required">必须</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x22">
+          <td><a href="#cmd-0x22"><code>0x22</code></a></td>
+          <td>SetCredential</td>
+          <td>添加或修改凭据（PIN 码、指纹等）</td>
+          <td class="col-required">必须</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x24">
+          <td><a href="#cmd-0x24"><code>0x24</code></a></td>
+          <td>GetCredentialStatus</td>
+          <td>查询指定凭据槽位的状态</td>
+          <td class="col-optional">不需要</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x26">
+          <td><a href="#cmd-0x26"><code>0x26</code></a></td>
+          <td>ClearCredential</td>
+          <td>删除凭据</td>
+          <td class="col-required">必须</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x28">
+          <td><a href="#cmd-0x28"><code>0x28</code></a></td>
+          <td>SetAliroReaderConfig</td>
+          <td>配置 Aliro NFC 读卡器参数</td>
+          <td class="col-required">必须</td>
+        </tr>
+        <tr class="clickable-row" data-href="#cmd-0x29">
+          <td><a href="#cmd-0x29"><code>0x29</code></a></td>
+          <td>ClearAliroReaderConfig</td>
+          <td>清除 Aliro NFC 配置</td>
           <td class="col-required">必须</td>
         </tr>
       </tbody>
@@ -221,7 +221,7 @@ export const clusters: Record<string, ClusterContent> = {
   </details>
   <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
 
-  <h3 id="cmd-0x1A">SetCredential —— 设置凭据（0x1A）</h3>
+  <h3 id="cmd-0x22">SetCredential —— 设置凭据（0x22）</h3>
   <p>
     为用户添加或修改凭据。凭据是用户用来开锁的「钥匙」—— 可以是 PIN 码、指纹、RFID 卡等。
     每个凭据需要绑定到一个已存在的用户（通过 <code>SetUser</code> 创建）。
@@ -244,28 +244,28 @@ export const clusters: Record<string, ClusterContent> = {
   <details class="scenario">
     <summary>使用场景与参数</summary>
     <div class="scenario-content">
-      <p>用户在 App 上添加新密码或录入指纹时调用。添加前需通过 <code>MinPINCodeLength (0x17)</code> / <code>MaxPINCodeLength (0x16)</code> 校验 PIN 码长度，通过 <code>NumberOfCredentialsSupportedPerUser (0x1B)</code> 检查凭据容量。</p>
+      <p>用户在 App 上添加新密码或录入指纹时调用。添加前需通过 <code>MinPINCodeLength (0x18)</code> / <code>MaxPINCodeLength (0x17)</code> 校验 PIN 码长度，通过 <code>NumberOfCredentialsSupportedPerUser (0x1C)</code> 检查凭据容量。</p>
     </div>
   </details>
   <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
 
-  <h3 id="cmd-0x1B">GetCredentialStatus —— 查询凭据状态（0x1B）</h3>
+  <h3 id="cmd-0x24">GetCredentialStatus —— 查询凭据状态（0x24）</h3>
   <p>查询指定凭据槽位是否已被占用、绑定在哪个用户上。不需要 Timed Interaction，是只读查询操作。</p>
   <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
 
-  <h3 id="cmd-0x1D">ClearCredential —— 删除凭据（0x1D）</h3>
+  <h3 id="cmd-0x26">ClearCredential —— 删除凭据（0x26）</h3>
   <p>删除指定的凭据。如果传入特定的 CredentialType 和 CredentialIndex，则精确删除对应凭据；也可以批量清除某类凭据或全部凭据。</p>
   <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
 
-  <h3 id="cmd-0x22">SetAliroReaderConfig —— 配置 Aliro 读卡器（0x22）</h3>
+  <h3 id="cmd-0x28">SetAliroReaderConfig —— 配置 Aliro 读卡器（0x28）</h3>
   <p>配置 Aliro NFC 读卡器的签名密钥、群组密钥、支持的协议版本等参数。Aliro 是 Matter 为门锁新增的 NFC 无感开锁标准。</p>
   <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
 
-  <h3 id="cmd-0x24">ClearAliroReaderConfig —— 清除 Aliro 配置（0x24）</h3>
+  <h3 id="cmd-0x29">ClearAliroReaderConfig —— 清除 Aliro 配置（0x29）</h3>
   <p>重置 Aliro NFC 读卡器的所有配置，恢复到未配置状态。</p>
   <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
 
-  <h3 id="cmd-0x26">SetUser —— 设置用户（0x26）</h3>
+  <h3 id="cmd-0x1A">SetUser —— 设置用户（0x1A）</h3>
   <p>
     创建或修改门锁上的用户。用户是凭据的「容器」—— 每个用户可以绑定多个凭据（密码、指纹等），
     并且可以设置权限级别和有效期。用户管理和凭据管理是门锁最复杂的两个操作。
@@ -294,11 +294,11 @@ export const clusters: Record<string, ClusterContent> = {
   </details>
   <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
 
-  <h3 id="cmd-0x28">GetUser —— 查询用户（0x28）</h3>
+  <h3 id="cmd-0x1B">GetUser —— 查询用户（0x1B）</h3>
   <p>按 UserIndex 查询用户的详细信息，包括名称、状态、类型、绑定的凭据列表等。不需要 Timed Interaction。</p>
   <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
 
-  <h3 id="cmd-0x29">ClearUser —— 删除用户（0x29）</h3>
+  <h3 id="cmd-0x1D">ClearUser —— 删除用户（0x1D）</h3>
   <p>删除指定用户及其关联的<strong>所有凭据</strong>。这是一个「级联删除」操作 —— 不需要额外调用 ClearCredential。</p>
   <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
 
@@ -387,171 +387,171 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#attr-core">锁核心状态</a></td>
           <td>门打开持续时间（秒）</td>
         </tr>
-        <!-- 用户与凭据 0x10-0x1B -->
-        <tr class="clickable-row" data-href="#attr-0x10">
-          <td><a href="#attr-0x10"><code>0x10</code></a></td>
+        <!-- 用户与凭据 0x11-0x1C -->
+        <tr class="clickable-row" data-href="#attr-0x11">
+          <td><a href="#attr-0x11"><code>0x11</code></a></td>
           <td>NumberOfTotalUsersSupported</td>
           <td>uint16</td>
           <td><a href="#attr-credential">用户与凭据</a></td>
           <td>支持的最大用户总数</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x11">
-          <td><a href="#attr-0x11"><code>0x11</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x12">
+          <td><a href="#attr-0x12"><code>0x12</code></a></td>
           <td>NumberOfPINUsersSupported</td>
           <td>uint16</td>
           <td><a href="#attr-credential">用户与凭据</a></td>
           <td>支持 PIN 码的最大用户数</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x12">
-          <td><a href="#attr-0x12"><code>0x12</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x13">
+          <td><a href="#attr-0x13"><code>0x13</code></a></td>
           <td>NumberOfRFIDUsersSupported</td>
           <td>uint16</td>
           <td><a href="#attr-credential">用户与凭据</a></td>
           <td>支持 RFID 的最大用户数</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x13">
-          <td><a href="#attr-0x13"><code>0x13</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x14">
+          <td><a href="#attr-0x14"><code>0x14</code></a></td>
           <td>NumberOfWeekDaySchedulesSupportedPerUser</td>
           <td>uint8</td>
           <td><a href="#attr-credential">用户与凭据</a></td>
           <td>每用户工作日时间表数</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x14">
-          <td><a href="#attr-0x14"><code>0x14</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x15">
+          <td><a href="#attr-0x15"><code>0x15</code></a></td>
           <td>NumberOfYearDaySchedulesSupportedPerUser</td>
           <td>uint8</td>
           <td><a href="#attr-credential">用户与凭据</a></td>
           <td>每用户年度时间表数</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x15">
-          <td><a href="#attr-0x15"><code>0x15</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x16">
+          <td><a href="#attr-0x16"><code>0x16</code></a></td>
           <td>NumberOfHolidaySchedulesSupported</td>
           <td>uint8</td>
           <td><a href="#attr-credential">用户与凭据</a></td>
           <td>假日时间表总数</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x16">
-          <td><a href="#attr-0x16"><code>0x16</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x17">
+          <td><a href="#attr-0x17"><code>0x17</code></a></td>
           <td>MaxPINCodeLength</td>
           <td>uint8</td>
           <td><a href="#attr-credential">用户与凭据</a></td>
           <td>PIN 码最大长度</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x17">
-          <td><a href="#attr-0x17"><code>0x17</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x18">
+          <td><a href="#attr-0x18"><code>0x18</code></a></td>
           <td>MinPINCodeLength</td>
           <td>uint8</td>
           <td><a href="#attr-credential">用户与凭据</a></td>
           <td>PIN 码最小长度</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x18">
-          <td><a href="#attr-0x18"><code>0x18</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x19">
+          <td><a href="#attr-0x19"><code>0x19</code></a></td>
           <td>MaxRFIDCodeLength</td>
           <td>uint8</td>
           <td><a href="#attr-credential">用户与凭据</a></td>
           <td>RFID 码最大长度</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x19">
-          <td><a href="#attr-0x19"><code>0x19</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x1A">
+          <td><a href="#attr-0x1A"><code>0x1A</code></a></td>
           <td>MinRFIDCodeLength</td>
           <td>uint8</td>
           <td><a href="#attr-credential">用户与凭据</a></td>
           <td>RFID 码最小长度</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x1A">
-          <td><a href="#attr-0x1A"><code>0x1A</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x1B">
+          <td><a href="#attr-0x1B"><code>0x1B</code></a></td>
           <td>CredentialRulesSupport</td>
           <td>bitmap8</td>
           <td><a href="#attr-credential">用户与凭据</a></td>
           <td>凭据规则支持位图</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x1B">
-          <td><a href="#attr-0x1B"><code>0x1B</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x1C">
+          <td><a href="#attr-0x1C"><code>0x1C</code></a></td>
           <td>NumberOfCredentialsSupportedPerUser</td>
           <td>uint8</td>
           <td><a href="#attr-credential">用户与凭据</a></td>
           <td>每用户最大凭据数</td>
         </tr>
-        <!-- 操作与显示 0x1C-0x27 -->
-        <tr class="clickable-row" data-href="#attr-0x1C">
-          <td><a href="#attr-0x1C"><code>0x1C</code></a></td>
+        <!-- 操作与显示 0x21-0x2C -->
+        <tr class="clickable-row" data-href="#attr-0x21">
+          <td><a href="#attr-0x21"><code>0x21</code></a></td>
           <td>Language</td>
           <td>string</td>
           <td><a href="#attr-operating">操作与显示</a></td>
           <td>锁界面语言（ISO 639-1）</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x1D">
-          <td><a href="#attr-0x1D"><code>0x1D</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x22">
+          <td><a href="#attr-0x22"><code>0x22</code></a></td>
           <td>LEDSettings</td>
           <td>uint8</td>
           <td><a href="#attr-operating">操作与显示</a></td>
           <td>LED 指示灯设置</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x1E">
-          <td><a href="#attr-0x1E"><code>0x1E</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x23">
+          <td><a href="#attr-0x23"><code>0x23</code></a></td>
           <td>AutoRelockTime</td>
           <td>uint32</td>
           <td><a href="#attr-operating">操作与显示</a></td>
           <td>自动回锁时间（秒）</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x1F">
-          <td><a href="#attr-0x1F"><code>0x1F</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x24">
+          <td><a href="#attr-0x24"><code>0x24</code></a></td>
           <td>SoundVolume</td>
           <td>uint8</td>
           <td><a href="#attr-operating">操作与显示</a></td>
           <td>操作音量</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x20">
-          <td><a href="#attr-0x20"><code>0x20</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x25">
+          <td><a href="#attr-0x25"><code>0x25</code></a></td>
           <td>OperatingMode</td>
           <td>enum8</td>
           <td><a href="#attr-operating">操作与显示</a></td>
           <td>当前操作模式</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x21">
-          <td><a href="#attr-0x21"><code>0x21</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x26">
+          <td><a href="#attr-0x26"><code>0x26</code></a></td>
           <td>SupportedOperatingModes</td>
           <td>bitmap16</td>
           <td><a href="#attr-operating">操作与显示</a></td>
           <td>支持的操作模式位图</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x22">
-          <td><a href="#attr-0x22"><code>0x22</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x27">
+          <td><a href="#attr-0x27"><code>0x27</code></a></td>
           <td>DefaultConfigurationRegister</td>
           <td>bitmap16</td>
           <td><a href="#attr-operating">操作与显示</a></td>
           <td>默认配置寄存器</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x23">
-          <td><a href="#attr-0x23"><code>0x23</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x28">
+          <td><a href="#attr-0x28"><code>0x28</code></a></td>
           <td>EnableLocalProgramming</td>
           <td>bool</td>
           <td><a href="#attr-operating">操作与显示</a></td>
           <td>是否允许本地编程</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x24">
-          <td><a href="#attr-0x24"><code>0x24</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x29">
+          <td><a href="#attr-0x29"><code>0x29</code></a></td>
           <td>EnableOneTouchLocking</td>
           <td>bool</td>
           <td><a href="#attr-operating">操作与显示</a></td>
           <td>是否启用一键上锁</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x25">
-          <td><a href="#attr-0x25"><code>0x25</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x2A">
+          <td><a href="#attr-0x2A"><code>0x2A</code></a></td>
           <td>EnableInsideStatusLED</td>
           <td>bool</td>
           <td><a href="#attr-operating">操作与显示</a></td>
           <td>是否启用内侧状态 LED</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x26">
-          <td><a href="#attr-0x26"><code>0x26</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x2B">
+          <td><a href="#attr-0x2B"><code>0x2B</code></a></td>
           <td>EnablePrivacyModeButton</td>
           <td>bool</td>
           <td><a href="#attr-operating">操作与显示</a></td>
           <td>是否启用隐私模式按钮</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x27">
-          <td><a href="#attr-0x27"><code>0x27</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x2C">
+          <td><a href="#attr-0x2C"><code>0x2C</code></a></td>
           <td>LocalProgrammingFeatures</td>
           <td>bitmap8</td>
           <td><a href="#attr-operating">操作与显示</a></td>
@@ -891,8 +891,8 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
 
-  <!-- 用户与凭据 0x10-0x1B -->
-  <h3 id="attr-credential">用户与凭据（0x10-0x1B）</h3>
+  <!-- 用户与凭据 0x11-0x1C -->
+  <h3 id="attr-credential">用户与凭据（0x11-0x1C）</h3>
   <p>描述门锁支持的用户数量、凭据类型容量以及时间表调度能力。</p>
 
   <div class="table-wrap">
@@ -901,74 +901,74 @@ export const clusters: Record<string, ClusterContent> = {
         <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
       </thead>
       <tbody>
-        <tr id="attr-0x10">
-          <td><code>0x10</code></td>
+        <tr id="attr-0x11">
+          <td><code>0x11</code></td>
           <td>NumberOfTotalUsersSupported<br/><span class="attr-cn">最大用户总数</span></td>
           <td>uint16</td>
           <td>设备支持的最大用户总数</td>
         </tr>
-        <tr id="attr-0x11">
-          <td><code>0x11</code></td>
+        <tr id="attr-0x12">
+          <td><code>0x12</code></td>
           <td>NumberOfPINUsersSupported<br/><span class="attr-cn">PIN 用户数</span></td>
           <td>uint16</td>
           <td>支持 PIN 码的最大用户数</td>
         </tr>
-        <tr id="attr-0x12">
-          <td><code>0x12</code></td>
+        <tr id="attr-0x13">
+          <td><code>0x13</code></td>
           <td>NumberOfRFIDUsersSupported<br/><span class="attr-cn">RFID 用户数</span></td>
           <td>uint16</td>
           <td>支持 RFID 的最大用户数</td>
         </tr>
-        <tr id="attr-0x13">
-          <td><code>0x13</code></td>
+        <tr id="attr-0x14">
+          <td><code>0x14</code></td>
           <td>NumberOfWeekDaySchedulesSupportedPerUser<br/><span class="attr-cn">工作日时间表数</span></td>
           <td>uint8</td>
           <td>每个用户支持的工作日时间表数量（如周一至周五特定时段可开锁）</td>
         </tr>
-        <tr id="attr-0x14">
-          <td><code>0x14</code></td>
+        <tr id="attr-0x15">
+          <td><code>0x15</code></td>
           <td>NumberOfYearDaySchedulesSupportedPerUser<br/><span class="attr-cn">年度时间表数</span></td>
           <td>uint8</td>
           <td>每个用户支持的年度时间表数量（指定日期范围可开锁）</td>
         </tr>
-        <tr id="attr-0x15">
-          <td><code>0x15</code></td>
+        <tr id="attr-0x16">
+          <td><code>0x16</code></td>
           <td>NumberOfHolidaySchedulesSupported<br/><span class="attr-cn">假日时间表数</span></td>
           <td>uint8</td>
           <td>设备支持的假日时间表总数（全局生效，覆盖常规时间表）</td>
         </tr>
-        <tr id="attr-0x16">
-          <td><code>0x16</code></td>
+        <tr id="attr-0x17">
+          <td><code>0x17</code></td>
           <td>MaxPINCodeLength<br/><span class="attr-cn">PIN 码最大长度</span></td>
           <td>uint8</td>
           <td>设备支持的 PIN 码最大字符数</td>
         </tr>
-        <tr id="attr-0x17">
-          <td><code>0x17</code></td>
+        <tr id="attr-0x18">
+          <td><code>0x18</code></td>
           <td>MinPINCodeLength<br/><span class="attr-cn">PIN 码最小长度</span></td>
           <td>uint8</td>
           <td>设备要求的 PIN 码最小字符数</td>
         </tr>
-        <tr id="attr-0x18">
-          <td><code>0x18</code></td>
+        <tr id="attr-0x19">
+          <td><code>0x19</code></td>
           <td>MaxRFIDCodeLength<br/><span class="attr-cn">RFID 码最大长度</span></td>
           <td>uint8</td>
           <td>设备支持的 RFID 码最大字节数</td>
         </tr>
-        <tr id="attr-0x19">
-          <td><code>0x19</code></td>
+        <tr id="attr-0x1A">
+          <td><code>0x1A</code></td>
           <td>MinRFIDCodeLength<br/><span class="attr-cn">RFID 码最小长度</span></td>
           <td>uint8</td>
           <td>设备要求的 RFID 码最小字节数</td>
         </tr>
-        <tr id="attr-0x1A">
-          <td><code>0x1A</code></td>
+        <tr id="attr-0x1B">
+          <td><code>0x1B</code></td>
           <td>CredentialRulesSupport<br/><span class="attr-cn">凭据规则支持</span></td>
           <td>bitmap8</td>
           <td>设备支持的凭据验证规则（见下方位图）</td>
         </tr>
-        <tr id="attr-0x1B">
-          <td><code>0x1B</code></td>
+        <tr id="attr-0x1C">
+          <td><code>0x1C</code></td>
           <td>NumberOfCredentialsSupportedPerUser<br/><span class="attr-cn">每用户凭据数</span></td>
           <td>uint8</td>
           <td>每个用户可绑定的最大凭据数量</td>
@@ -1011,8 +1011,8 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
 
-  <!-- 操作与显示 0x1C-0x27 -->
-  <h3 id="attr-operating">操作与显示（0x1C-0x27）</h3>
+  <!-- 操作与显示 0x21-0x2C -->
+  <h3 id="attr-operating">操作与显示（0x21-0x2C）</h3>
   <p>控制门锁的操作行为、界面显示和本地编程功能。</p>
 
   <div class="table-wrap">
@@ -1021,74 +1021,74 @@ export const clusters: Record<string, ClusterContent> = {
         <tr><th>ID</th><th>名称</th><th>类型</th><th>说明</th></tr>
       </thead>
       <tbody>
-        <tr id="attr-0x1C">
-          <td><code>0x1C</code></td>
+        <tr id="attr-0x21">
+          <td><code>0x21</code></td>
           <td>Language<br/><span class="attr-cn">界面语言</span></td>
           <td>string</td>
           <td>锁界面显示语言，2 字符 ISO 639-1 编码（如 "en"、"zh"）</td>
         </tr>
-        <tr id="attr-0x1D">
-          <td><code>0x1D</code></td>
+        <tr id="attr-0x22">
+          <td><code>0x22</code></td>
           <td>LEDSettings<br/><span class="attr-cn">LED 设置</span></td>
           <td>uint8</td>
           <td>LED 指示灯在什么操作下点亮（见下方枚举）</td>
         </tr>
-        <tr id="attr-0x1E">
-          <td><code>0x1E</code></td>
+        <tr id="attr-0x23">
+          <td><code>0x23</code></td>
           <td>AutoRelockTime<br/><span class="attr-cn">自动回锁时间</span></td>
           <td>uint32</td>
           <td>解锁后自动回锁的等待时间，单位秒。<code>0</code> 表示不自动回锁</td>
         </tr>
-        <tr id="attr-0x1F">
-          <td><code>0x1F</code></td>
+        <tr id="attr-0x24">
+          <td><code>0x24</code></td>
           <td>SoundVolume<br/><span class="attr-cn">操作音量</span></td>
           <td>uint8</td>
           <td>门锁操作提示音的音量级别（见下方枚举）</td>
         </tr>
-        <tr id="attr-0x20">
-          <td><code>0x20</code></td>
+        <tr id="attr-0x25">
+          <td><code>0x25</code></td>
           <td>OperatingMode<br/><span class="attr-cn">操作模式</span></td>
           <td>enum8</td>
           <td>门锁当前的操作模式（见下方枚举）</td>
         </tr>
-        <tr id="attr-0x21">
-          <td><code>0x21</code></td>
+        <tr id="attr-0x26">
+          <td><code>0x26</code></td>
           <td>SupportedOperatingModes<br/><span class="attr-cn">支持的操作模式</span></td>
           <td>bitmap16</td>
           <td>设备支持哪些操作模式（位掩码，对应 OperatingMode 枚举值）</td>
         </tr>
-        <tr id="attr-0x22">
-          <td><code>0x22</code></td>
+        <tr id="attr-0x27">
+          <td><code>0x27</code></td>
           <td>DefaultConfigurationRegister<br/><span class="attr-cn">默认配置寄存器</span></td>
           <td>bitmap16</td>
           <td>标识哪些配置项已从出厂默认值被修改过</td>
         </tr>
-        <tr id="attr-0x23">
-          <td><code>0x23</code></td>
+        <tr id="attr-0x28">
+          <td><code>0x28</code></td>
           <td>EnableLocalProgramming<br/><span class="attr-cn">本地编程</span></td>
           <td>bool</td>
           <td>是否允许通过门锁面板本地添加/修改用户和凭据</td>
         </tr>
-        <tr id="attr-0x24">
-          <td><code>0x24</code></td>
+        <tr id="attr-0x29">
+          <td><code>0x29</code></td>
           <td>EnableOneTouchLocking<br/><span class="attr-cn">一键上锁</span></td>
           <td>bool</td>
           <td>是否启用一键上锁功能（触摸面板即可锁门）</td>
         </tr>
-        <tr id="attr-0x25">
-          <td><code>0x25</code></td>
+        <tr id="attr-0x2A">
+          <td><code>0x2A</code></td>
           <td>EnableInsideStatusLED<br/><span class="attr-cn">内侧状态 LED</span></td>
           <td>bool</td>
           <td>是否启用门锁内侧的状态指示 LED</td>
         </tr>
-        <tr id="attr-0x26">
-          <td><code>0x26</code></td>
+        <tr id="attr-0x2B">
+          <td><code>0x2B</code></td>
           <td>EnablePrivacyModeButton<br/><span class="attr-cn">隐私模式按钮</span></td>
           <td>bool</td>
           <td>是否启用物理隐私模式按钮（按下后拒绝远程操作）</td>
         </tr>
-        <tr id="attr-0x27">
-          <td><code>0x27</code></td>
+        <tr id="attr-0x2C">
+          <td><code>0x2C</code></td>
           <td>LocalProgrammingFeatures<br/><span class="attr-cn">本地编程功能</span></td>
           <td>bitmap8</td>
           <td>允许通过本地编程执行的具体功能（添加用户、修改时间表等）</td>
@@ -1325,17 +1325,17 @@ export const clusters: Record<string, ClusterContent> = {
   "0x03": 1,           // DoorState = Closed（门已关闭）
 
   // --- 用户与凭据 ---
-  "0x10": 10,          // NumberOfTotalUsersSupported = 10
-  "0x11": 10,          // NumberOfPINUsersSupported = 10
-  "0x16": 8,           // MaxPINCodeLength = 8 位
-  "0x17": 4,           // MinPINCodeLength = 4 位
-  "0x1B": 5,           // NumberOfCredentialsSupportedPerUser = 5
+  "0x11": 10,          // NumberOfTotalUsersSupported = 10
+  "0x12": 10,          // NumberOfPINUsersSupported = 10
+  "0x17": 8,           // MaxPINCodeLength = 8 位
+  "0x18": 4,           // MinPINCodeLength = 4 位
+  "0x1C": 5,           // NumberOfCredentialsSupportedPerUser = 5
 
   // --- 操作与显示 ---
-  "0x1E": 30,          // AutoRelockTime = 30 秒
-  "0x1F": 2,           // SoundVolume = High
-  "0x20": 0,           // OperatingMode = Normal
-  "0x21": 65535,       // SupportedOperatingModes（支持所有模式）
+  "0x23": 30,          // AutoRelockTime = 30 秒
+  "0x24": 2,           // SoundVolume = High
+  "0x25": 0,           // OperatingMode = Normal
+  "0x26": 65535,       // SupportedOperatingModes（支持所有模式）
 
   // --- 远程操作 ---
   "0x30": 5,           // WrongCodeEntryLimit = 5 次
@@ -1363,17 +1363,17 @@ export const clusters: Record<string, ClusterContent> = {
 
   <h3 id="scenario-add-user">场景 2：添加新用户和 PIN 码</h3>
   <ol>
-    <li>读取 <code>NumberOfTotalUsersSupported (0x10)</code> 确认用户容量</li>
-    <li>发送 <code>SetUser (0x26)</code> 创建用户</li>
-    <li>读取 <code>MinPINCodeLength (0x17)</code> 和 <code>MaxPINCodeLength (0x16)</code> 确认 PIN 长度要求</li>
-    <li>发送 <code>SetCredential (0x1A)</code> 为该用户绑定 PIN 码</li>
-    <li>可通过 <code>GetCredentialStatus (0x1B)</code> 验证凭据是否设置成功</li>
+    <li>读取 <code>NumberOfTotalUsersSupported (0x11)</code> 确认用户容量</li>
+    <li>发送 <code>SetUser (0x1A)</code> 创建用户</li>
+    <li>读取 <code>MinPINCodeLength (0x18)</code> 和 <code>MaxPINCodeLength (0x17)</code> 确认 PIN 长度要求</li>
+    <li>发送 <code>SetCredential (0x22)</code> 为该用户绑定 PIN 码</li>
+    <li>可通过 <code>GetCredentialStatus (0x24)</code> 验证凭据是否设置成功</li>
   </ol>
 
   <h3 id="scenario-check-state">场景 3：首页展示锁状态</h3>
   <ol>
     <li>读取 <code>LockState (0x00)</code> —— 注意处理 <code>null</code> 值</li>
-    <li>读取 <code>OperatingMode (0x20)</code> —— 如果不是 Normal，界面上可能需要提示</li>
+    <li>读取 <code>OperatingMode (0x25)</code> —— 如果不是 Normal，界面上可能需要提示</li>
     <li>配合 PowerSource Cluster 读取电池电量</li>
   </ol>
 
@@ -2899,9 +2899,23 @@ export const clusters: Record<string, ClusterContent> = {
           <td><a href="#group-level">开度控制</a></td>
           <td>目标开度百分比</td>
         </tr>
-        <!-- 故障状态 -->
         <tr class="clickable-row" data-href="#attr-0x0008">
           <td><a href="#attr-0x0008"><code>0x0008</code></a></td>
+          <td>DefaultOpenLevel</td>
+          <td>percent</td>
+          <td><a href="#group-level">开度控制</a></td>
+          <td>Open 命令未带 TargetLevel 时使用的默认开度</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x000A">
+          <td><a href="#attr-0x000A"><code>0x000A</code></a></td>
+          <td>LevelStep</td>
+          <td>uint8</td>
+          <td><a href="#group-level">开度控制</a></td>
+          <td>开度调节步长</td>
+        </tr>
+        <!-- 故障状态 -->
+        <tr class="clickable-row" data-href="#attr-0x0009">
+          <td><a href="#attr-0x0009"><code>0x0009</code></a></td>
           <td>ValveFault</td>
           <td>ValveFaultBitmap</td>
           <td><a href="#group-fault">故障状态</a></td>
@@ -3008,8 +3022,8 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
 
-  <!-- ====== 开度控制（0x0006 ~ 0x0007）====== -->
-  <h3 id="group-level">开度控制（0x0006 ~ 0x0007）</h3>
+  <!-- ====== 开度控制（0x0006 ~ 0x0008, 0x000A）====== -->
+  <h3 id="group-level">开度控制（0x0006 ~ 0x0008, 0x000A）</h3>
   <p>
     控制阀门的精确开度百分比。需要设备支持 <strong>Level（LVL）</strong> Feature。
     不支持 LVL 的阀门只有全开/全关两种状态。
@@ -3038,6 +3052,18 @@ export const clusters: Record<string, ClusterContent> = {
           <td>percent / null</td>
           <td>阀门的目标开度百分比，1~100。由 Open 命令的 TargetLevel 参数设置。Nullable —— <code>null</code> 表示无待执行的目标开度。<strong>需要 LVL Feature</strong></td>
         </tr>
+        <tr id="attr-0x0008">
+          <td><code>0x0008</code></td>
+          <td>DefaultOpenLevel<br/><span class="attr-cn">默认开度</span></td>
+          <td>percent</td>
+          <td>Open 命令未携带 TargetLevel 参数时，阀门使用的默认目标开度，1~100。默认值 <code>100</code>（全开）。<strong>需要 LVL Feature</strong>，可选属性</td>
+        </tr>
+        <tr id="attr-0x000A">
+          <td><code>0x000A</code></td>
+          <td>LevelStep<br/><span class="attr-cn">开度步长</span></td>
+          <td>uint8</td>
+          <td>阀门开度可调节的最小步长，1~50。例如为 <code>10</code> 时只能设置 10%、20%…… 默认值 <code>1</code>。<strong>需要 LVL Feature</strong>，可选属性</td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -3053,8 +3079,8 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#attributes">&#8593; 返回属性列表</a></p>
 
-  <!-- ====== 故障状态（0x0008）====== -->
-  <h3 id="group-fault">故障状态（0x0008）</h3>
+  <!-- ====== 故障状态（0x0009）====== -->
+  <h3 id="group-fault">故障状态（0x0009）</h3>
   <p>记录阀门的故障信息。ValveFault 是一个位图属性，多个故障可以同时存在。</p>
 
   <div class="table-wrap">
@@ -3068,8 +3094,8 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
       </thead>
       <tbody>
-        <tr id="attr-0x0008">
-          <td><code>0x0008</code></td>
+        <tr id="attr-0x0009">
+          <td><code>0x0009</code></td>
           <td>ValveFault<br/><span class="attr-cn">阀门故障</span></td>
           <td>ValveFaultBitmap</td>
           <td>阀门故障位图，每个位代表一种故障类型。<code>0</code> = 无故障。详见下方 <a href="#valve-fault-bitmap">ValveFaultBitmap</a> 章节</td>
@@ -3113,7 +3139,7 @@ export const clusters: Record<string, ClusterContent> = {
   <!-- ValveFaultBitmap -->
   <h3 id="valve-fault-bitmap">ValveFaultBitmap（阀门故障位图）</h3>
   <p>
-    <code>ValveFault (0x0008)</code> 属性的位图定义。每个位代表一种故障类型，多个位可以同时置位。
+    <code>ValveFault (0x0009)</code> 属性的位图定义。每个位代表一种故障类型，多个位可以同时置位。
     当任意位从 0 变为 1 时，设备会上报 <code>ValveFault</code> 事件。
   </p>
 
@@ -3265,9 +3291,11 @@ export const clusters: Record<string, ClusterContent> = {
   // --- 开度控制（LVL Feature）---
   "0x0006": 75,              // CurrentLevel = 75%（当前开度 75%）
   "0x0007": 75,              // TargetLevel = 75%（目标开度 75%）
+  "0x0008": 100,             // DefaultOpenLevel = 100%（Open 命令不带开度时默认全开）
+  "0x000A": 1,               // LevelStep = 1%（开度调节步长）
 
   // --- 故障状态 ---
-  "0x0008": 0                // ValveFault = 0（无故障）
+  "0x0009": 0                // ValveFault = 0（无故障）
 }</code></pre>
 
   <div class="callout callout-tip">
@@ -3307,7 +3335,7 @@ export const clusters: Record<string, ClusterContent> = {
         <li>自动化规则触发，向水阀发送 <code>Close (0x01)</code> 命令紧急关阀</li>
         <li>读取 <code>CurrentState (0x0004)</code> 确认阀门已关闭（<code>Closed = 0</code>）</li>
         <li>如果 CurrentState 为 <code>Transitioning (2)</code>，等待几秒后再次确认</li>
-        <li>检查 <code>ValveFault (0x0008)</code> 位图中的 <code>Leaking (Bit 2)</code> 位 —— 如果阀门关闭后仍检测到泄漏，说明阀门密封失效，需要人工干预</li>
+        <li>检查 <code>ValveFault (0x0009)</code> 位图中的 <code>Leaking (Bit 2)</code> 位 —— 如果阀门关闭后仍检测到泄漏，说明阀门密封失效，需要人工干预</li>
         <li>向用户推送告警通知：「检测到漏水，已自动关闭水阀。请检查现场。」</li>
         <li>漏水解除后，用户手动发送 <code>Open</code> 命令恢复供水</li>
       </ol>

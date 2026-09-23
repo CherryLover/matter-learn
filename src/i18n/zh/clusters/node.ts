@@ -26,6 +26,15 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
   </div>
 
+  <div class="callout callout-tip">
+    <div class="callout-title">配网后读设备身份，就读这里</div>
+    <p>
+      App 里显示的厂商、型号、固件版本、序列号都来自这个 Cluster。它和 <a href="../descriptor/">Descriptor</a>（设备类型与 Cluster 列表）一起，
+      构成了配网后识别一台设备的完整信息，见 <a href="../../concepts/#device-discovery">概念总览 · 配网后怎么读出设备能力</a>。
+      想看真实数据长什么样，打开 <a href="../../tools/json-parser/">JSON 解析器</a> 点“设备原始数据”示例。
+    </p>
+  </div>
+
   <!-- ====== 属性总览 ====== -->
   <h2 id="attributes">属性总览</h2>
   <p>BasicInformation 共有 23 个属性，按功能分为五组。点击属性 ID 可跳转到对应的详细说明。</p>
@@ -755,7 +764,7 @@ export const clusters: Record<string, ClusterContent> = {
 
   <!-- ====== Command ====== -->
   <h2 id="commands">Command</h2>
-  <p>BasicInformation 只有一个可选的 Command：</p>
+  <p>早期版本的 BasicInformation 有一个可选的 Command；较新版本（本站对照 v1.6）中这个 Cluster 已经没有任何命令：</p>
 
   <div class="table-wrap">
     <table>
@@ -771,7 +780,7 @@ export const clusters: Record<string, ClusterContent> = {
       <tbody>
         <tr>
           <td><code>0x00</code></td>
-          <td>MfgSpecificPing</td>
+          <td>MfgSpecificPing <span class="removed-tag">新版已移除</span></td>
           <td>Client &rarr; Server</td>
           <td>可选</td>
           <td>厂商自定义的 Ping 命令，用于检测设备响应。无参数，无返回值</td>
@@ -781,9 +790,9 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <div class="callout callout-info">
-    <div class="callout-title">大部分设备不实现 MfgSpecificPing</div>
+    <div class="callout-title">MfgSpecificPing 已在新版中移除</div>
     <p>
-      这是一个<strong>可选</strong>命令，实际上很少有设备实现。
+      这个命令只出现在早期的定义里，而且是<strong>可选</strong>的，实际上很少有设备实现；较新版本的 Matter 已经没有它。
       如果需要检测设备是否在线，通常直接读取任意属性（如 <code>SoftwareVersion</code>）即可 ——
       能读成功就说明设备在线。
     </p>
@@ -1555,7 +1564,7 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-info">
     <div class="callout-title">为什么没有 Command？</div>
     <p>
-      与 BasicInformation 不同（它有一个可选的 <code>MfgSpecificPing</code>），
+      与早期版本的 BasicInformation 不同（它曾有一个可选的 <code>MfgSpecificPing</code>，新版已移除），
       BridgedDeviceBasicInformation 纯粹是一个<strong>信息展示</strong> Cluster。
       所有对子设备的控制操作（开关、调光、读传感器等）通过各自的功能 Cluster 完成，
       而不是通过基本信息 Cluster。如果需要检测子设备是否在线，直接读取 <code>Reachable</code> 属性即可。
@@ -4212,8 +4221,8 @@ export const clusters: Record<string, ClusterContent> = {
           <td>设置夏令时偏移列表</td>
           <td class="col-required">TZ</td>
         </tr>
-        <tr class="clickable-row" data-href="#cmd-0x07">
-          <td><a href="#cmd-0x07"><code>0x07</code></a></td>
+        <tr class="clickable-row" data-href="#cmd-0x05">
+          <td><a href="#cmd-0x05"><code>0x05</code></a></td>
           <td>SetDefaultNTP</td>
           <td>设置默认 NTP 服务器地址</td>
           <td class="col-required">NTPC</td>
@@ -4481,7 +4490,7 @@ export const clusters: Record<string, ClusterContent> = {
   </details>
   <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
 
-  <h3 id="cmd-0x07">SetDefaultNTP —— 设置默认 NTP 服务器（0x07）</h3>
+  <h3 id="cmd-0x05">SetDefaultNTP —— 设置默认 NTP 服务器（0x05）</h3>
   <p>
     设置设备用于时间同步的默认 NTP 服务器地址。需要设备启用 <strong>NTPC</strong>（NTP 客户端）特性。
     设为 <code>null</code> 可清除默认 NTP 服务器。
@@ -4608,31 +4617,31 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
         <tr class="clickable-row" data-href="#attr-0x0009">
           <td><a href="#attr-0x0009"><code>0x0009</code></a></td>
+          <td>NTPServerAvailable</td>
+          <td>bool</td>
+          <td><a href="#group-cap">能力与限制</a></td>
+          <td>设备是否可用作 NTP 服务器</td>
+        </tr>
+        <tr class="clickable-row" data-href="#attr-0x000A">
+          <td><a href="#attr-0x000A"><code>0x000A</code></a></td>
           <td>TimeZoneListMaxSize</td>
           <td>uint8</td>
           <td><a href="#group-cap">能力与限制</a></td>
           <td>时区列表最大条目数</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x000A">
-          <td><a href="#attr-0x000A"><code>0x000A</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x000B">
+          <td><a href="#attr-0x000B"><code>0x000B</code></a></td>
           <td>DSTOffsetListMaxSize</td>
           <td>uint8</td>
           <td><a href="#group-cap">能力与限制</a></td>
           <td>夏令时偏移列表最大条目数</td>
         </tr>
-        <tr class="clickable-row" data-href="#attr-0x000B">
-          <td><a href="#attr-0x000B"><code>0x000B</code></a></td>
+        <tr class="clickable-row" data-href="#attr-0x000C">
+          <td><a href="#attr-0x000C"><code>0x000C</code></a></td>
           <td>SupportsDNSResolve</td>
           <td>bool</td>
           <td><a href="#group-cap">能力与限制</a></td>
           <td>是否支持 DNS 域名解析</td>
-        </tr>
-        <tr class="clickable-row" data-href="#attr-0x000C">
-          <td><a href="#attr-0x000C"><code>0x000C</code></a></td>
-          <td>NTPServerAvailable</td>
-          <td>bool</td>
-          <td><a href="#group-cap">能力与限制</a></td>
-          <td>设备是否可用作 NTP 服务器</td>
         </tr>
       </tbody>
     </table>
@@ -4714,7 +4723,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td>string / null</td>
           <td>
             设备使用的默认 NTP 服务器地址（域名或 IPv6 地址）。
-            <code>null</code> 表示未配置。通过 <a href="#cmd-0x07">SetDefaultNTP</a> 命令设置。
+            <code>null</code> 表示未配置。通过 <a href="#cmd-0x05">SetDefaultNTP</a> 命令设置。
             <strong>需要 NTPC 特性</strong>
           </td>
         </tr>
@@ -4797,6 +4806,16 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
         <tr id="attr-0x0009">
           <td><code>0x0009</code></td>
+          <td>NTPServerAvailable<br/><span class="attr-cn">NTP 服务器可用</span></td>
+          <td>bool</td>
+          <td>
+            设备自身是否可作为 NTP 服务器向其他节点提供时间。
+            <code>true</code> 表示其他设备可以将此设备设为 TrustedTimeSource。
+            <strong>需要 NTPS 特性</strong>
+          </td>
+        </tr>
+        <tr id="attr-0x000A">
+          <td><code>0x000A</code></td>
           <td>TimeZoneListMaxSize<br/><span class="attr-cn">时区列表上限</span></td>
           <td>uint8</td>
           <td>
@@ -4804,8 +4823,8 @@ export const clusters: Record<string, ClusterContent> = {
             <a href="#cmd-0x02">SetTimeZone</a> 的列表长度不能超过此值。<strong>需要 TZ 特性</strong>
           </td>
         </tr>
-        <tr id="attr-0x000A">
-          <td><code>0x000A</code></td>
+        <tr id="attr-0x000B">
+          <td><code>0x000B</code></td>
           <td>DSTOffsetListMaxSize<br/><span class="attr-cn">夏令时列表上限</span></td>
           <td>uint8</td>
           <td>
@@ -4813,24 +4832,14 @@ export const clusters: Record<string, ClusterContent> = {
             <a href="#cmd-0x04">SetDSTOffset</a> 的列表长度不能超过此值。<strong>需要 TZ 特性</strong>
           </td>
         </tr>
-        <tr id="attr-0x000B">
-          <td><code>0x000B</code></td>
+        <tr id="attr-0x000C">
+          <td><code>0x000C</code></td>
           <td>SupportsDNSResolve<br/><span class="attr-cn">支持 DNS 解析</span></td>
           <td>bool</td>
           <td>
             设备是否支持将域名解析为 IP 地址。
-            如果为 <code>false</code>，<a href="#cmd-0x07">SetDefaultNTP</a> 只能接受 IPv6 地址，不能传域名。
+            如果为 <code>false</code>，<a href="#cmd-0x05">SetDefaultNTP</a> 只能接受 IPv6 地址，不能传域名。
             <strong>需要 NTPC 特性</strong>
-          </td>
-        </tr>
-        <tr id="attr-0x000C">
-          <td><code>0x000C</code></td>
-          <td>NTPServerAvailable<br/><span class="attr-cn">NTP 服务器可用</span></td>
-          <td>bool</td>
-          <td>
-            设备自身是否可作为 NTP 服务器向其他节点提供时间。
-            <code>true</code> 表示其他设备可以将此设备设为 TrustedTimeSource。
-            <strong>需要 NTPS 特性</strong>
           </td>
         </tr>
       </tbody>
@@ -5166,10 +5175,10 @@ export const clusters: Record<string, ClusterContent> = {
 
   // --- 能力与限制 ---
   "0x0008": 1,                   // TimeZoneDatabase = Full
-  "0x0009": 2,                   // TimeZoneListMaxSize = 2
-  "0x000A": 2,                   // DSTOffsetListMaxSize = 2
-  "0x000B": true,                // SupportsDNSResolve = true
-  "0x000C": false                // NTPServerAvailable = false
+  "0x0009": false,               // NTPServerAvailable = false
+  "0x000A": 2,                   // TimeZoneListMaxSize = 2
+  "0x000B": 2,                   // DSTOffsetListMaxSize = 2
+  "0x000C": true                 // SupportsDNSResolve = true
 }</code></pre>
 
   <h3>SetUTCTime 交互示例</h3>
@@ -5234,7 +5243,7 @@ export const clusters: Record<string, ClusterContent> = {
         <li>配网完成（CommissioningComplete 成功）后，读取设备的 <code>FeatureMap (0xFFFC)</code> 确认时间同步能力</li>
         <li>发送 <a href="#cmd-0x00"><code>SetUTCTime (0x00)</code></a>，注入当前 UTC 时间，Granularity = <code>SecondsGranularity (2)</code>，TimeSource = <code>Admin (2)</code></li>
         <li>发送 <a href="#cmd-0x01"><code>SetTrustedTimeSource (0x01)</code></a>，指定 Fabric 中的 Hub 作为可信时间源</li>
-        <li>如果设备支持 NTPC，发送 <a href="#cmd-0x07"><code>SetDefaultNTP (0x07)</code></a> 配置 NTP 服务器</li>
+        <li>如果设备支持 NTPC，发送 <a href="#cmd-0x05"><code>SetDefaultNTP (0x05)</code></a> 配置 NTP 服务器</li>
         <li>验证：读取 <code>UTCTime (0x0000)</code> 确认时间已设置，<code>Granularity (0x0001)</code> 不再是 0</li>
       </ol>
       <p>设备后续会自动从 NTP 或 TrustedTimeSource 同步时间，精度会逐步提升。</p>
@@ -5246,7 +5255,7 @@ export const clusters: Record<string, ClusterContent> = {
     <div class="scenario-content">
       <ol>
         <li>确认设备支持 TZ 特性（<code>FeatureMap</code> Bit 0 = 1）</li>
-        <li>读取 <code>TimeZoneListMaxSize (0x0009)</code> 确认列表容量</li>
+        <li>读取 <code>TimeZoneListMaxSize (0x000A)</code> 确认列表容量</li>
         <li>发送 <a href="#cmd-0x02"><code>SetTimeZone (0x02)</code></a>，传入新时区信息：
           <ul>
             <li>从北京搬到纽约：Offset = <code>-18000</code>（UTC-5），Name = <code>"America/New_York"</code></li>
@@ -5268,13 +5277,13 @@ export const clusters: Record<string, ClusterContent> = {
     <div class="scenario-content">
       <ol>
         <li>确认设备支持 NTPC 特性（<code>FeatureMap</code> Bit 1 = 1）</li>
-        <li>检查 <code>SupportsDNSResolve (0x000B)</code>：
+        <li>检查 <code>SupportsDNSResolve (0x000C)</code>：
           <ul>
             <li><code>true</code>：可以传域名，如 <code>"pool.ntp.org"</code></li>
             <li><code>false</code>：只能传 IPv6 地址</li>
           </ul>
         </li>
-        <li>发送 <a href="#cmd-0x07"><code>SetDefaultNTP (0x07)</code></a>，设置 NTP 服务器地址</li>
+        <li>发送 <a href="#cmd-0x05"><code>SetDefaultNTP (0x05)</code></a>，设置 NTP 服务器地址</li>
         <li>等待一段时间后，读取 <code>Granularity (0x0001)</code> 和 <code>TimeSource (0x0002)</code>，
             确认已从 NTP 成功同步（Granularity 应提升到 MillisecondsGranularity，TimeSource 变为 NTP 相关值）</li>
       </ol>

@@ -2153,14 +2153,14 @@ export const clusters: Record<string, ClusterContent> = {
           <td>查询电子节目单（EPG）</td>
           <td class="col-required">EG</td>
         </tr>
-        <tr class="clickable-row" data-href="#cmd-0x05">
-          <td><a href="#cmd-0x05"><code>0x05</code></a></td>
+        <tr class="clickable-row" data-href="#cmd-0x06">
+          <td><a href="#cmd-0x06"><code>0x06</code></a></td>
           <td>RecordProgram</td>
           <td>预约录制指定节目</td>
           <td class="col-required">RP</td>
         </tr>
-        <tr class="clickable-row" data-href="#cmd-0x06">
-          <td><a href="#cmd-0x06"><code>0x06</code></a></td>
+        <tr class="clickable-row" data-href="#cmd-0x07">
+          <td><a href="#cmd-0x07"><code>0x07</code></a></td>
           <td>CancelRecordProgram</td>
           <td>取消已预约的录制</td>
           <td class="col-required">RP</td>
@@ -2188,7 +2188,7 @@ export const clusters: Record<string, ClusterContent> = {
           <td>返回匹配结果的状态码和可选附加信息</td>
         </tr>
         <tr>
-          <td><code>0x02</code></td>
+          <td><code>0x05</code></td>
           <td>ProgramGuideResponse</td>
           <td>GetProgramGuide</td>
           <td>返回节目列表和分页信息</td>
@@ -2390,7 +2390,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
 
-  <h3 id="cmd-0x05">RecordProgram —— 预约录制（0x05）</h3>
+  <h3 id="cmd-0x06">RecordProgram —— 预约录制（0x06）</h3>
   <p>
     预约录制指定节目。通过节目的唯一标识符（ProgramIdentifier）或外部 ID 定位要录制的节目。
     此命令需要设备启用 <strong>RP（RecordProgram）</strong> 特性。
@@ -2427,7 +2427,7 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
   <p class="back-link"><a href="#commands">&#8593; 返回命令列表</a></p>
 
-  <h3 id="cmd-0x06">CancelRecordProgram —— 取消录制（0x06）</h3>
+  <h3 id="cmd-0x07">CancelRecordProgram —— 取消录制（0x07）</h3>
   <p>
     取消之前通过 RecordProgram 预约的录制任务。参数结构与 RecordProgram 相同，
     通过 ProgramIdentifier 定位要取消的录制。需要 <strong>RP</strong> 特性。
@@ -6303,9 +6303,9 @@ export const clusters: Record<string, ClusterContent> = {
         </tr>
         <tr>
           <td><code>0xFFFA</code></td>
-          <td>EventList</td>
+          <td>EventList <span class="removed-tag">新版已移除</span></td>
           <td>list&lt;event-id&gt;</td>
-          <td>此 Cluster 不定义事件，固定为空列表</td>
+          <td>旧版本中列出本 Cluster 支持的事件 ID。新版 Matter 已从全局属性中移除 EventList，设备不再上报它</td>
         </tr>
         <tr>
           <td><code>0xFFFB</code></td>
@@ -6389,9 +6389,8 @@ export const clusters: Record<string, ClusterContent> = {
   // --- 全局属性 ---
   "0xFFF8": [0, 1],            // GeneratedCommandList = [GetSetupPINResponse]
   "0xFFF9": [0, 2, 3],         // AcceptedCommandList = [GetSetupPIN, Login, Logout]
-  "0xFFFA": [],                 // EventList = []（无事件）
   "0xFFFB": [                   // AttributeList
-    0xFFF8, 0xFFF9, 0xFFFA,
+    0xFFF8, 0xFFF9,
     0xFFFB, 0xFFFC, 0xFFFD
   ],
   "0xFFFC": 0,                  // FeatureMap = 0（无可选特性）
