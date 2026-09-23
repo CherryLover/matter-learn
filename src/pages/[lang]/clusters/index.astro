@@ -2,6 +2,7 @@
 import DocLayout from '../../../layouts/DocLayout.astro';
 import { SUPPORTED_LANGS, localePath, type Lang } from '../../../i18n/config';
 import { t } from '../../../i18n/ui';
+import MatterIdLookup from '../../../components/MatterIdLookup';
 
 export function getStaticPaths() {
   return SUPPORTED_LANGS.map(lang => ({ params: { lang } }));
@@ -33,6 +34,12 @@ const prevText = lang === 'en'
   <p>
     <Fragment set:html={introText} />
   </p>
+
+  <section class="cluster-lookup" id="lookup">
+    <div class="cluster-lookup-title">{text.lookupTitle}</div>
+    <p class="cluster-lookup-desc" set:html={text.lookupDesc} />
+    <MatterIdLookup lang={lang} mode="cluster" client:load />
+  </section>
 
   <nav class="category-nav">
     {text.categories.map((cat: any) => (
@@ -74,6 +81,28 @@ const prevText = lang === 'en'
 </DocLayout>
 
 <style is:global>
+  .cluster-lookup {
+    margin: 1.5rem 0 0.5rem;
+    padding: 1rem 1.25rem 0.25rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+  }
+
+  .cluster-lookup-title {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .cluster-lookup-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0.25rem 0 0;
+  }
+
+  .cluster-lookup .idl {
+    margin-top: 0.75rem;
+  }
+
   .category-nav {
     display: flex;
     flex-wrap: wrap;

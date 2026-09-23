@@ -1,0 +1,82 @@
+---
+import DocLayout from '../../../layouts/DocLayout.astro';
+import MatterIdLookup from '../../../components/MatterIdLookup';
+import { SUPPORTED_LANGS, type Lang } from '../../../i18n/config';
+import { SPEC_DEVICE_TYPES, SPEC_SOURCE, deviceTypeZhName } from '../../../data/matter-spec';
+
+export function getStaticPaths() {
+  return SUPPORTED_LANGS.map(lang => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+
+const text = lang === 'en'
+  ? (await import('../../../i18n/en/pages/id-lookup')).default
+  : (await import('../../../i18n/zh/pages/id-lookup')).default;
+
+const deviceTypesIntro = text.deviceTypesIntro.replace('{count}', String(SPEC_DEVICE_TYPES.length));
+---
+
+<DocLayout
+  title={text.title}
+  description={text.description}
+  lang={lang}
+>
+  <h1>{text.heading}</h1>
+  <p set:html={text.intro} />
+
+  <h2 id="lookup">{text.lookupHeading}</h2>
+  <MatterIdLookup lang={lang} client:load />
+
+  <h2 id="cluster-id-format">{text.formatHeading}</h2>
+  <Fragment set:html={text.formatBody} />
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>{text.formatTable.headers.map((h: string) => <th>{h}</th>)}</tr>
+      </thead>
+      <tbody>
+        {text.formatTable.rows.map((row: string[]) => (
+          <tr>{row.map((cell) => <td set:html={cell} />)}</tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <Fragment set:html={text.formatNote} />
+
+  <h2 id="device-types">{text.deviceTypesHeading}</h2>
+  <p set:html={deviceTypesIntro} />
+  <ul>
+    {text.deviceTypeClasses.map((c: { label: string; desc: string }) => (
+      <li><code>{c.label}</code> — {c.desc}</li>
+    ))}
+  </ul>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>{text.deviceTypesHeaders.map((h: string) => <th>{h}</th>)}</tr>
+      </thead>
+      <tbody>
+        {SPEC_DEVICE_TYPES.map((d) => (
+          <tr>
+            <td><code>{d.id}</code></td>
+            {lang === 'zh' && <td>{deviceTypeZhName(d.id) ?? '—'}</td>}
+            <td>{d.name}</td>
+            <td>{d.class}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <p class="spec-source">{lang === 'zh' ? '数据来源：' : 'Data source: '}{SPEC_SOURCE}</p>
+
+  <h2 id="next">{text.nextHeading}</h2>
+  <Fragment set:html={text.nextBody} />
+</DocLayout>
+
+<style>
+  .spec-source {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+  }
+</style>

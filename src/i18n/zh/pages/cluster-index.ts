@@ -6,9 +6,12 @@ export default {
   description:
     'Matter Cluster 速查手册 — 按官方分类组织的 82 个 Cluster 完整参考，包含字段定义、枚举值和实际设备数据示例，开发调试必备。',
   intro: 'Cluster 是 Matter 协议的核心构建单元，每个 Cluster 定义了一组相关的 Attribute（状态字段）和 Command（操作命令）。本手册按 Matter 规范分类收录了 {totalCount} 个 Cluster，点击卡片查看详情。',
+  lookupTitle: '按 ID 查 Cluster',
+  lookupDesc: '手上有一个 Cluster ID（比如日志里的 <code>0x0101</code> 或 <code>257</code>）？输入就能查到它是哪个 Cluster，并跳到对应的手册页。Cluster ID 完整是 4 个字节，标准 Cluster 省略了前面的厂商前缀 <code>0x0000</code>，详见 <a href="../tools/id-lookup/#cluster-id-format">ID 结构说明</a>。',
   howToReadTitle: '如何阅读 Cluster 详情页',
   howToReadIntro: '每个 Cluster 详情页按照以下结构组织：',
   howToReadItems: [
+    { label: 'Cluster ID', desc: '标题里的十六进制编号。完整是 32 位，前 16 位是厂商前缀（标准 Cluster 为 0x0000，通常省略），可用上方查询框反查' },
     { label: '概述', desc: 'Cluster 是干什么的、通常出现在哪个 Endpoint' },
     { label: 'Attributes', desc: '所有状态字段，按功能分组，标注类型和枚举值' },
     { label: 'Commands', desc: '支持的操作命令，标注参数和安全要求' },

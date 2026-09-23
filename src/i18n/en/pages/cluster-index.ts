@@ -6,9 +6,12 @@ export default {
   description:
     'Matter Cluster quick-reference manual — a complete reference of 82 Clusters organized by official categories, with field definitions, enum values, and real device data examples for development and debugging.',
   intro: 'Clusters are the core building blocks of the Matter protocol. Each Cluster defines a set of related Attributes (state fields) and Commands (operations). This manual covers {totalCount} Clusters organized by Matter specification categories. Click a card to view details.',
+  lookupTitle: 'Look up a Cluster by ID',
+  lookupDesc: 'Have a Cluster ID (e.g. <code>0x0101</code> or <code>257</code> from a log)? Type it in to see which cluster it is and jump to its manual page. A Cluster ID is 4 bytes in full; standard clusters omit the vendor prefix <code>0x0000</code>. See <a href="../tools/id-lookup/#cluster-id-format">ID structure</a>.',
   howToReadTitle: 'How to Read Cluster Detail Pages',
   howToReadIntro: 'Each Cluster detail page is organized as follows:',
   howToReadItems: [
+    { label: 'Cluster ID', desc: 'the hex number in the title. It is 32-bit in full; the upper 16 bits are a vendor prefix (0x0000 for standard clusters, usually omitted). Use the lookup box above to reverse-search' },
     { label: 'Overview', desc: 'What the Cluster does and which Endpoint it typically appears on' },
     { label: 'Attributes', desc: 'All state fields, grouped by function, with types and enum values annotated' },
     { label: 'Commands', desc: 'Supported operations, with parameters and security requirements annotated' },

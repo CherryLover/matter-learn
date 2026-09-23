@@ -23,10 +23,10 @@ if (!cluster) {
 }
 
 const prevLink = cluster.prev
-  ? { title: cluster.prev.title, href: lp(`/clusters/${cluster.prev.slug}/`) }
+  ? { title: cluster.prev.title, href: lp(cluster.prev.slug === 'clusters' ? '/clusters/' : `/clusters/${cluster.prev.slug}/`) }
   : undefined;
 const nextLink = cluster.next
-  ? { title: cluster.next.title, href: lp(`/clusters/${cluster.next.slug}/`) }
+  ? { title: cluster.next.title, href: lp(cluster.next.slug === 'clusters' ? '/clusters/' : `/clusters/${cluster.next.slug}/`) }
   : undefined;
 ---
 
