@@ -65,6 +65,16 @@ const ui = {
   // ── Resources navigation ───────────────────────────────────────────
   'nav.resources': { zh: '生态资源', en: 'Resources' },
 
+  // ── SDK navigation ────────────────────────────────────────────────
+  'nav.sdkGuides': { zh: 'SDK 指南', en: 'SDK Guides' },
+  'nav.sdk.android': { zh: 'Android SDK', en: 'Android SDK' },
+  'nav.sdk.ios': { zh: 'iOS SDK', en: 'iOS SDK' },
+  'nav.sdk.web': { zh: 'Web / Node.js', en: 'Web / Node.js' },
+  'nav.sdk.overview': { zh: '全部 SDK 指南', en: 'All SDK Guides' },
+
+  // ── Roadmap navigation ────────────────────────────────────────────
+  'nav.roadmap': { zh: '版本路线', en: 'Roadmap' },
+
   // ── Header buttons ────────────────────────────────────────────────
   'header.toggleTheme': { zh: '切换主题', en: 'Toggle theme' },
   'header.toggleMenu': { zh: '展开菜单', en: 'Toggle menu' },
@@ -86,6 +96,11 @@ const ui = {
   'footer.resources.platforms': { zh: '开发平台', en: 'Dev Platforms' },
   'footer.resources.openSource': { zh: '开源项目', en: 'Open Source' },
   'footer.resources.community': { zh: '社区站点', en: 'Community Sites' },
+  'footer.devGuides': { zh: '开发指南', en: 'Dev Guides' },
+  'footer.devGuides.android': { zh: 'Android SDK', en: 'Android SDK' },
+  'footer.devGuides.ios': { zh: 'iOS SDK', en: 'iOS SDK' },
+  'footer.devGuides.web': { zh: 'Web / Node.js', en: 'Web / Node.js' },
+  'footer.devGuides.roadmap': { zh: '版本路线图', en: 'Version Roadmap' },
   'footer.more': { zh: '更多', en: 'More' },
   'footer.dataSourceLabel': { zh: '数据来源说明', en: 'Data Source' },
   'footer.dataSourceText': {

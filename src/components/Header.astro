@@ -82,6 +82,16 @@ const navigation: NavItem[] = [
       { title: t(lang, 'nav.jsonParser'), href: lp('/tools/json-parser/') },
     ],
   },
+  {
+    title: t(lang, 'nav.sdkGuides'),
+    children: [
+      { title: t(lang, 'nav.sdk.android'), href: lp('/sdk/android/') },
+      { title: t(lang, 'nav.sdk.ios'), href: lp('/sdk/ios/') },
+      { title: t(lang, 'nav.sdk.web'), href: lp('/sdk/web/') },
+      { title: t(lang, 'nav.sdk.overview'), href: lp('/sdk/'), dividerBefore: true },
+    ],
+  },
+  { title: t(lang, 'nav.roadmap'), href: lp('/roadmap/') },
   { title: t(lang, 'nav.resources'), href: lp('/resources/') },
   {
     title: t(lang, 'nav.officialStandards'),

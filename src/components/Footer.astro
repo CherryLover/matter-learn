@@ -44,7 +44,18 @@ const lp = (path: string) => localePath(lang, path);
         </ul>
       </div>
 
-      <!-- Column 3: Resources -->
+      <!-- Column 3: Dev Guides -->
+      <div class="footer-col">
+        <h3 class="footer-heading">{t(lang, 'footer.devGuides')}</h3>
+        <ul class="footer-links">
+          <li><a href={lp('/sdk/android/')}>{t(lang, 'footer.devGuides.android')}</a></li>
+          <li><a href={lp('/sdk/ios/')}>{t(lang, 'footer.devGuides.ios')}</a></li>
+          <li><a href={lp('/sdk/web/')}>{t(lang, 'footer.devGuides.web')}</a></li>
+          <li><a href={lp('/roadmap/')}>{t(lang, 'footer.devGuides.roadmap')}</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 4: Resources -->
       <div class="footer-col">
         <h3 class="footer-heading">{t(lang, 'footer.resources')}</h3>
         <ul class="footer-links">
@@ -55,7 +66,7 @@ const lp = (path: string) => localePath(lang, path);
         </ul>
       </div>
 
-      <!-- Column 4: Official resources -->
+      <!-- Column 5: Official resources -->
       <div class="footer-col">
         <h3 class="footer-heading">{t(lang, 'footer.officialResources')}</h3>
         <ul class="footer-links">
@@ -123,7 +134,7 @@ const lp = (path: string) => localePath(lang, path);
 
   .footer-grid {
     display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr 1fr 1.2fr;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 1.2fr;
     gap: 2.5rem;
     padding-bottom: 2.5rem;
   }

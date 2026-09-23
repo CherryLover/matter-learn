@@ -1,0 +1,138 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { ArrowUpRight } from 'lucide-astro';
+import SdkPlatformIcon from '../../../components/SdkPlatformIcon.astro';
+import { SUPPORTED_LANGS, localePath, type Lang } from '../../../i18n/config';
+import '../../../styles/sdk-detail.css';
+
+export function getStaticPaths() {
+  return SUPPORTED_LANGS.map(lang => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const lp = (path: string) => localePath(lang, path);
+
+const sdk = lang === 'en'
+  ? (await import('../../../i18n/en/pages/sdk')).default
+  : (await import('../../../i18n/zh/pages/sdk')).default;
+
+const page = sdk.web;
+---
+
+<BaseLayout title={page.title} description={page.description} lang={lang}>
+  <!-- Breadcrumb -->
+  <nav class="sdk-breadcrumb">
+    <a href={lp('/sdk/')}>{sdk.title}</a>
+    <span class="sdk-breadcrumb-sep">/</span>
+    <span>Web / Node.js</span>
+  </nav>
+
+  <!-- Hero -->
+  <div class="sdk-detail-hero">
+    <div class="sdk-detail-icon"><SdkPlatformIcon platform="web" size={48} /></div>
+    <h1 class="sdk-detail-title">{page.heroTitle}</h1>
+    <p class="sdk-detail-desc">{page.heroDesc}</p>
+    <div class="sdk-detail-badges">
+      <span class="sdk-badge">Matter 1.4.2 — 1.6</span>
+      <span class="sdk-badge">Node.js 20.19+</span>
+      <span class="sdk-badge sdk-badge-prod">{lang === 'zh' ? '生产可用' : 'Production'}</span>
+    </div>
+  </div>
+
+  <!-- Section Nav -->
+  <nav class="sdk-nav" aria-label="Section navigation">
+    {page.sections.map((s: any) => (
+      <a href={`#${s.id}`} class="sdk-nav-chip">{s.title}</a>
+    ))}
+  </nav>
+
+  <!-- Sections -->
+  <div class="sdk-sections">
+    {page.sections.map((s: any) => (
+      <section id={s.id} class="sdk-section">
+        <h2 class="sdk-section-title">{s.title}</h2>
+
+        {s.content && <div class="sdk-section-content" set:html={s.content} />}
+
+        {s.table && (
+          <div class="sdk-table-wrap">
+            <table class="sdk-table">
+              <thead>
+                <tr>
+                  {s.table.headers.map((h: string) => <th>{h}</th>)}
+                </tr>
+              </thead>
+              <tbody>
+                {s.table.rows.map((row: string[]) => (
+                  <tr>
+                    {row.map((cell: string, i: number) => (
+                      i === 0 ? <td class="sdk-table-feature">{cell}</td> : <td>{cell}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {s.flow && (
+          <div class="sdk-flow">
+            {s.flow.map((step: string, i: number) => (
+              <div class="sdk-flow-step">
+                <span class="sdk-flow-num">{i + 1}</span>
+                <span class="sdk-flow-text">{step}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {s.codeExample && (
+          <div class="sdk-code-block">
+            <div class="sdk-code-header">
+              <span class="sdk-code-lang">{s.codeExample.language}</span>
+              <span class="sdk-code-title">{s.codeExample.title}</span>
+            </div>
+            <pre><code>{s.codeExample.code}</code></pre>
+          </div>
+        )}
+
+        {s.items && (
+          <div class="sdk-items">
+            {s.items.map((item: any) => (
+              <div class="sdk-item">
+                <h3 class="sdk-item-title">{item.title}</h3>
+                <p class="sdk-item-desc">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {s.links && (
+          <div class="sdk-links">
+            {s.links.map((link: any) => (
+              <a href={link.url} target="_blank" rel="noopener noreferrer" class="sdk-link">
+                <div class="sdk-link-head">
+                  <span class="sdk-link-name">{link.name}</span>
+                  <ArrowUpRight class="sdk-link-arrow" size={14} strokeWidth={2} />
+                </div>
+                <p class="sdk-link-desc">{link.desc}</p>
+              </a>
+            ))}
+          </div>
+        )}
+      </section>
+    ))}
+  </div>
+</BaseLayout>
+
+<style is:global>
+  .sdk-badge-prod {
+    background: rgba(168, 85, 247, 0.1);
+    color: #7c3aed;
+  }
+
+  .dark .sdk-badge-prod {
+    background: rgba(168, 85, 247, 0.15);
+    color: #a78bfa;
+  }
+</style>

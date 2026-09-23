@@ -1,0 +1,1307 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { SUPPORTED_LANGS, localePath, type Lang } from '../../../i18n/config';
+
+export function getStaticPaths() {
+  return SUPPORTED_LANGS.map(lang => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const lp = (path: string) => localePath(lang, path);
+
+const res = lang === 'en'
+  ? (await import('../../../i18n/en/pages/roadmap')).default
+  : (await import('../../../i18n/zh/pages/roadmap')).default;
+
+const significantTypes = new Set(['latest', 'milestone', 'mainstream', 'major', 'initial']);
+const allVersionKeys = ['1.0', '1.1', '1.2', '1.3', '1.4', '1.5', '1.6'];
+
+function getVersionColor(version: string): string {
+  const colors: Record<string, string> = {
+    '1.0': 'slate',
+    '1.1': 'gray',
+    '1.2': 'blue',
+    '1.3': 'emerald',
+    '1.4': 'amber',
+    '1.5': 'rose',
+    '1.6': 'indigo',
+  };
+  const base = version.split('.').slice(0, 2).join('.');
+  return colors[base] || 'slate';
+}
+
+function getEcoPlatformColor(logo: string): string {
+  const colors: Record<string, string> = {
+    ha: '#51bdf3',
+    amazon: '#ff9900',
+    samsung: '#1428a0',
+    apple: '#555555',
+    google: '#4285f4',
+  };
+  return colors[logo] || '#6366f1';
+}
+
+function getEcoProgress(version: string): number {
+  const map: Record<string, number> = {
+    '~1.0': 16,
+    '~1.1': 28,
+    '~1.2': 40,
+    '~1.3': 52,
+    '~1.4': 64,
+    '~1.5': 78,
+    '~1.6': 92,
+  };
+  return map[version] || 10;
+}
+---
+
+<BaseLayout title={res.title} description={res.description} lang={lang}>
+  <!-- Hero Section -->
+  <div class="rm-hero">
+    <div class="rm-hero-badge">
+      <span class="rm-hero-badge-dot"></span>
+      Matter {res.currentVersion.version}
+      <span class="rm-hero-badge-label">{res.labels.currentVersion}</span>
+    </div>
+    <h1 class="rm-hero-title">{res.heroTitle}</h1>
+    <p class="rm-hero-desc">{res.heroDesc}</p>
+    <div class="rm-hero-stats">
+      <div class="rm-stat-card">
+        <span class="rm-stat-value">{res.currentVersion.stats.members}</span>
+        <span class="rm-stat-label">{res.labels.members}</span>
+      </div>
+      <div class="rm-stat-divider"></div>
+      <div class="rm-stat-card">
+        <span class="rm-stat-value">{res.currentVersion.stats.certified}</span>
+        <span class="rm-stat-label">{res.labels.certified}</span>
+      </div>
+      <div class="rm-stat-divider"></div>
+      <div class="rm-stat-card">
+        <span class="rm-stat-value">{res.currentVersion.stats.deviceTypes}</span>
+        <span class="rm-stat-label">{res.labels.deviceTypes}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick nav -->
+  <nav class="rm-nav" aria-label="Section navigation">
+    <a href="#timeline" class="rm-nav-chip">{res.labels.versionHistory}</a>
+    <a href="#device-evolution" class="rm-nav-chip">{res.deviceEvolution.title}</a>
+    <a href="#ecosystem" class="rm-nav-chip">{res.labels.ecosystem}</a>
+    <a href="#future" class="rm-nav-chip">{res.labels.futureDirection}</a>
+  </nav>
+
+  <!-- Timeline Section -->
+  <section id="timeline" class="rm-section">
+    <h2 class="rm-section-title">{res.labels.versionHistory}</h2>
+
+    {/* Context banner */}
+    <div class="rm-context-banner">
+      <div class="rm-context-item">
+        <span class="rm-context-label">{res.labels.latestSpec}</span>
+        <span class="rm-context-value">{res.timelineContext.latestSpec}</span>
+        <span class="rm-context-note">{res.timelineContext.latestSpecNote}</span>
+      </div>
+      <div class="rm-context-sep"></div>
+      <div class="rm-context-item">
+        <span class="rm-context-label">{res.labels.ecoMainstream}</span>
+        <span class="rm-context-value">{res.timelineContext.ecoMainstream}</span>
+        <span class="rm-context-note">{res.timelineContext.ecoMainstreamNote}</span>
+      </div>
+      <div class="rm-context-sep"></div>
+      <div class="rm-context-item">
+        <span class="rm-context-label">{res.labels.widestAdoption}</span>
+        <span class="rm-context-value">{res.timelineContext.widestAdoption}</span>
+        <span class="rm-context-note">{res.timelineContext.widestAdoptionNote}</span>
+      </div>
+    </div>
+
+    <div class="rm-timeline">
+      {res.versions.map((ver: any, idx: number) => {
+        const isSignificant = significantTypes.has(ver.type);
+        const colorName = getVersionColor(ver.version);
+        const badgeLabel = (res.labels as any)[`badge_${ver.type}`] || ver.type;
+        return (
+          <div class:list={['rm-tl-item', { 'rm-tl-major': isSignificant, 'rm-tl-minor': !isSignificant }]} data-color={colorName}>
+            {/* Timeline connector */}
+            <div class="rm-tl-spine">
+              <div class:list={['rm-tl-dot', { 'rm-tl-dot-major': isSignificant }]}></div>
+              {idx < res.versions.length - 1 && <div class="rm-tl-line"></div>}
+            </div>
+
+            {/* Card */}
+            <div class:list={['rm-tl-card', { 'rm-tl-card-major': isSignificant }]}>
+              <div class="rm-tl-card-header">
+                <div class="rm-tl-version-row">
+                  <span class:list={['rm-tl-version', { 'rm-tl-version-lg': isSignificant }]}>
+                    {ver.version}
+                  </span>
+                  <span class:list={['rm-tl-badge', `rm-tl-badge-${ver.type}`]}>
+                    {badgeLabel}
+                  </span>
+                </div>
+                <time class="rm-tl-date">{ver.date}</time>
+              </div>
+
+              <h3 class="rm-tl-title">{ver.title}</h3>
+              <p class="rm-tl-tagline">{ver.tagline}</p>
+
+              {/* Highlights chips */}
+              <div class="rm-tl-highlights">
+                {ver.highlights.map((h: string) => (
+                  <span class="rm-tl-chip">{h}</span>
+                ))}
+              </div>
+
+              {/* Expandable detail */}
+              <details class="rm-tl-details">
+                <summary class="rm-tl-summary">{res.labels.viewDetails}</summary>
+
+                <div class="rm-tl-detail-body">
+                  {/* New device types */}
+                  {ver.deviceTypes.length > 0 ? (
+                    <div class="rm-tl-block">
+                      <h4 class="rm-tl-block-title">
+                        <span class="rm-tl-block-icon">+</span>
+                        {res.labels.newDeviceTypes}
+                        <span class="rm-tl-block-count">{ver.deviceTypes.length}</span>
+                      </h4>
+                      <div class="rm-tl-device-list">
+                        {ver.deviceTypes.map((dt: string) => (
+                          <span class="rm-tl-device-tag">{dt}</span>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div class="rm-tl-no-devices">
+                      <span class="rm-tl-no-devices-icon">~</span>
+                      {res.labels.noNewDeviceTypes}
+                    </div>
+                  )}
+
+                  {/* Key features */}
+                  <div class="rm-tl-block">
+                    <h4 class="rm-tl-block-title">
+                      <span class="rm-tl-block-icon">*</span>
+                      {res.labels.keyFeatures}
+                    </h4>
+                    <div class="rm-tl-features">
+                      {ver.keyFeatures.map((kf: any) => (
+                        <div class="rm-tl-feature">
+                          <span class="rm-tl-feature-name">{kf.name}</span>
+                          <span class="rm-tl-feature-desc">{kf.desc}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* SDK version + official link */}
+                  <div class="rm-tl-sdk">
+                    <span class="rm-tl-sdk-label">{res.labels.sdkVersion}:</span>
+                    <code class="rm-tl-sdk-value">{ver.sdkVersion}</code>
+                    {ver.officialUrl && (
+                      <a href={ver.officialUrl} target="_blank" rel="noopener noreferrer" class="rm-tl-official-link">
+                        {res.labels.officialRelease}
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </details>
+            </div>
+          </div>
+        );
+      })}
+
+      {/* Future versions */}
+      {res.futureVersions && res.futureVersions.map((fv: any) => (
+        <div class="rm-tl-item rm-tl-minor">
+          <div class="rm-tl-spine">
+            <div class="rm-tl-dot rm-tl-dot-future"></div>
+            <div class="rm-tl-line rm-tl-line-dashed"></div>
+          </div>
+          <div class="rm-tl-card rm-tl-card-future">
+            <div class="rm-tl-card-header">
+              <div class="rm-tl-version-row">
+                <span class="rm-tl-version">{fv.version}</span>
+                <span class="rm-tl-badge rm-tl-badge-future">{res.labels.expectedDate}</span>
+              </div>
+              <time class="rm-tl-date">{fv.expectedDate}</time>
+            </div>
+            <h3 class="rm-tl-title">{fv.title}</h3>
+            <div class="rm-tl-highlights">
+              {fv.possibleFeatures.map((f: string) => (
+                <span class="rm-tl-chip">{f}</span>
+              ))}
+            </div>
+            <p class="rm-tl-future-disclaimer">{res.labels.futureDisclaimer}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Device Type Evolution -->
+  <section id="device-evolution" class="rm-section">
+    <h2 class="rm-section-title">{res.deviceEvolution.title}</h2>
+    <p class="rm-section-desc">{res.deviceEvolution.desc}</p>
+
+    <div class="rm-evo-grid">
+      {res.deviceEvolution.categories.map((cat: any) => (
+        <div class="rm-evo-card">
+          <div class="rm-evo-card-header">
+            <span class="rm-evo-icon">{cat.icon}</span>
+            <span class="rm-evo-cat-name">{cat.name}</span>
+          </div>
+          <div class="rm-evo-versions">
+            {allVersionKeys.map((vk: string) => {
+              const items = cat.versions[vk] || [];
+              return (
+                <div class:list={['rm-evo-row', { 'rm-evo-row-empty': items.length === 0 }]}>
+                  <span class="rm-evo-vk">{vk}</span>
+                  {items.length > 0 ? (
+                    <div class="rm-evo-items">
+                      {items.map((item: string) => (
+                        <span class="rm-evo-item">{item}</span>
+                      ))}
+                    </div>
+                  ) : (
+                    <span class="rm-evo-empty">-</span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Ecosystem Adoption -->
+  <section id="ecosystem" class="rm-section">
+    <h2 class="rm-section-title">{res.ecosystem.title}</h2>
+    <p class="rm-section-desc">{res.ecosystem.desc}</p>
+
+    <div class="rm-eco-grid">
+      {res.ecosystem.platforms.map((plat: any) => {
+        const pColor = getEcoPlatformColor(plat.logo);
+        const progress = getEcoProgress(plat.currentVersion);
+        return (
+          <div class="rm-eco-card">
+            <div class="rm-eco-header">
+              <span class="rm-eco-name">{plat.name}</span>
+              <span class="rm-eco-version" style={`background: ${pColor}15; color: ${pColor}; border: 1px solid ${pColor}30;`}>
+                {plat.currentVersion}
+              </span>
+            </div>
+            <p class="rm-eco-status">{plat.status}</p>
+            <div class="rm-eco-progress-track">
+              <div class="rm-eco-progress-labels">
+                <span>1.0</span>
+                <span>1.6</span>
+              </div>
+              <div class="rm-eco-progress-bar">
+                <div class="rm-eco-progress-fill" style={`width: ${progress}%; background: ${pColor};`}></div>
+              </div>
+            </div>
+            <ul class="rm-eco-highlights">
+              {plat.highlights.map((h: string) => (
+                <li class="rm-eco-highlight">{h}</li>
+              ))}
+            </ul>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- Future Direction -->
+  <section id="future" class="rm-section">
+    <h2 class="rm-section-title">{res.future.title}</h2>
+    <p class="rm-section-desc">{res.future.desc}</p>
+
+    <div class="rm-future-grid">
+      {res.future.priorities.map((p: any, i: number) => (
+        <div class="rm-future-card">
+          <span class="rm-future-num">{String(i + 1).padStart(2, '0')}</span>
+          <h3 class="rm-future-name">{p.name}</h3>
+          <p class="rm-future-desc">{p.desc}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style is:global>
+  /* ================================================================
+     ROADMAP PAGE STYLES
+     ================================================================ */
+
+  /* ── Hero ──────────────────────────────────────────────────────── */
+  .rm-hero {
+    text-align: center;
+    padding: 2.5rem 0 1.5rem;
+  }
+
+  .rm-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 1rem;
+    border-radius: 9999px;
+    background: var(--color-primary-50, #eef2ff);
+    color: var(--color-primary-700, #4338ca);
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+  }
+
+  .dark .rm-hero-badge {
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--color-primary-300, #a5b4fc);
+  }
+
+  .rm-hero-badge-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-primary-500, #6366f1);
+    animation: rm-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes rm-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .rm-hero-badge-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    opacity: 0.7;
+  }
+
+  .rm-hero-title {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0 0 0.75rem;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+  }
+
+  .rm-hero-desc {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    max-width: 44rem;
+    margin: 0 auto 1.5rem;
+    line-height: 1.7;
+  }
+
+  .rm-hero-stats {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1rem 1.75rem;
+    border-radius: 0.75rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+  }
+
+  .rm-stat-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .rm-stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-primary-600, #4f46e5);
+    letter-spacing: -0.02em;
+  }
+
+  .dark .rm-stat-value {
+    color: var(--color-primary-400, #818cf8);
+  }
+
+  .rm-stat-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .rm-stat-divider {
+    width: 1px;
+    height: 2.5rem;
+    background: var(--border-color);
+  }
+
+  /* ── Quick nav ─────────────────────────────────────────────────── */
+  .rm-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 2.5rem;
+    padding: 0 0.5rem;
+  }
+
+  .rm-nav-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.375rem 0.875rem;
+    border: 1px solid var(--border-color);
+    border-radius: 9999px;
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+
+  .rm-nav-chip:hover {
+    border-color: var(--color-primary-400, #818cf8);
+    color: var(--color-primary-600, #4f46e5);
+    background: var(--bg-hover);
+  }
+
+  .dark .rm-nav-chip:hover {
+    color: var(--color-primary-400, #818cf8);
+  }
+
+  /* ── Section ───────────────────────────────────────────────────── */
+  .rm-section {
+    margin-bottom: 3.5rem;
+  }
+
+  .rm-section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem;
+    letter-spacing: -0.015em;
+  }
+
+  .rm-section-desc {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    margin: 0 0 2rem;
+    line-height: 1.6;
+    max-width: 48rem;
+  }
+
+  /* ── Context Banner ─────────────────────────────────────────────── */
+  .rm-context-banner {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    background: var(--bg-primary);
+    margin-bottom: 2rem;
+  }
+
+  .rm-context-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.125rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .rm-context-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+  }
+
+  .rm-context-value {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .rm-context-note {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+    max-width: 14rem;
+  }
+
+  .rm-context-sep {
+    width: 1px;
+    background: var(--border-color);
+    flex-shrink: 0;
+  }
+
+  /* ── Timeline ──────────────────────────────────────────────────── */
+  .rm-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding-left: 0;
+  }
+
+  .rm-tl-item {
+    display: flex;
+    gap: 1.25rem;
+    position: relative;
+  }
+
+  /* Spine (vertical line + dot) */
+  .rm-tl-spine {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    width: 2rem;
+    position: relative;
+  }
+
+  .rm-tl-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--border-color);
+    border: 2px solid var(--bg-primary);
+    box-shadow: 0 0 0 2px var(--border-color);
+    z-index: 2;
+    flex-shrink: 0;
+    margin-top: 1.5rem;
+  }
+
+  .rm-tl-dot-major {
+    width: 16px;
+    height: 16px;
+    background: var(--color-primary-500, #6366f1);
+    box-shadow: 0 0 0 3px var(--color-primary-100, #e0e7ff);
+  }
+
+  .dark .rm-tl-dot-major {
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  }
+
+  .rm-tl-line {
+    width: 2px;
+    flex: 1;
+    background: var(--border-color);
+    min-height: 1rem;
+  }
+
+  /* Card */
+  .rm-tl-card {
+    flex: 1;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    margin-bottom: 1rem;
+    background: var(--bg-primary);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .rm-tl-card:hover {
+    border-color: var(--color-primary-300, #a5b4fc);
+    box-shadow: 0 2px 12px rgba(99, 102, 241, 0.06);
+  }
+
+  .rm-tl-card-major {
+    border-left: 3px solid var(--color-primary-500, #6366f1);
+  }
+
+  /* Card header */
+  .rm-tl-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.625rem;
+  }
+
+  .rm-tl-version-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .rm-tl-version {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .rm-tl-version-lg {
+    font-size: 1.625rem;
+  }
+
+  .rm-tl-badge {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    background: var(--bg-secondary);
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+  }
+
+  .rm-tl-badge-latest {
+    background: rgba(34, 197, 94, 0.1);
+    color: #16a34a;
+    border-color: rgba(34, 197, 94, 0.3);
+  }
+
+  .dark .rm-tl-badge-latest {
+    background: rgba(34, 197, 94, 0.15);
+    color: #4ade80;
+    border-color: rgba(34, 197, 94, 0.25);
+  }
+
+  .rm-tl-badge-milestone {
+    background: rgba(168, 85, 247, 0.1);
+    color: #7c3aed;
+    border-color: rgba(168, 85, 247, 0.3);
+  }
+
+  .dark .rm-tl-badge-milestone {
+    background: rgba(168, 85, 247, 0.15);
+    color: #a78bfa;
+    border-color: rgba(168, 85, 247, 0.25);
+  }
+
+  .rm-tl-badge-mainstream {
+    background: rgba(245, 158, 11, 0.1);
+    color: #d97706;
+    border-color: rgba(245, 158, 11, 0.3);
+  }
+
+  .dark .rm-tl-badge-mainstream {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.25);
+  }
+
+  .rm-tl-badge-major {
+    background: var(--color-primary-50, #eef2ff);
+    color: var(--color-primary-600, #4f46e5);
+    border-color: var(--color-primary-200, #c7d2fe);
+  }
+
+  .dark .rm-tl-badge-major {
+    background: rgba(99, 102, 241, 0.12);
+    color: var(--color-primary-400, #818cf8);
+    border-color: rgba(99, 102, 241, 0.25);
+  }
+
+  .rm-tl-badge-patch,
+  .rm-tl-badge-maintenance {
+    background: var(--bg-secondary);
+    color: var(--text-muted);
+    border-color: var(--border-color);
+  }
+
+  .rm-tl-badge-initial {
+    background: rgba(100, 116, 139, 0.1);
+    color: #475569;
+    border-color: rgba(100, 116, 139, 0.3);
+  }
+
+  .dark .rm-tl-badge-initial {
+    background: rgba(148, 163, 184, 0.1);
+    color: #94a3b8;
+    border-color: rgba(148, 163, 184, 0.2);
+  }
+
+  .rm-tl-badge-future {
+    background: rgba(99, 102, 241, 0.06);
+    color: var(--text-muted);
+    border: 1px dashed var(--border-color);
+  }
+
+  .rm-tl-date {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .rm-tl-title {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.25rem;
+    line-height: 1.4;
+  }
+
+  .rm-tl-tagline {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0 0 0.75rem;
+    line-height: 1.5;
+  }
+
+  /* Highlight chips */
+  .rm-tl-highlights {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .rm-tl-chip {
+    display: inline-block;
+    padding: 0.1875rem 0.625rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+  }
+
+  /* Details expand */
+  .rm-tl-details {
+    border-top: 1px solid var(--border-color);
+    padding-top: 0.5rem;
+  }
+
+  .rm-tl-summary {
+    font-size: 0.8125rem;
+    color: var(--color-primary-600, #4f46e5);
+    cursor: pointer;
+    padding: 0.375rem 0;
+    font-weight: 500;
+    transition: color 0.15s ease;
+    user-select: none;
+    list-style: none;
+  }
+
+  .rm-tl-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .rm-tl-summary::before {
+    content: '+ ';
+  }
+
+  details[open] > .rm-tl-summary::before {
+    content: '- ';
+  }
+
+  .dark .rm-tl-summary {
+    color: var(--color-primary-400, #818cf8);
+  }
+
+  .rm-tl-summary:hover {
+    color: var(--color-primary-700, #4338ca);
+  }
+
+  .dark .rm-tl-summary:hover {
+    color: var(--color-primary-300, #a5b4fc);
+  }
+
+  .rm-tl-detail-body {
+    padding: 0.75rem 0 0.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  /* Block: device types / key features */
+  .rm-tl-block-title {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  .rm-tl-block-icon {
+    font-size: 0.875rem;
+    color: var(--color-primary-500, #6366f1);
+    font-weight: 700;
+    width: 1rem;
+    text-align: center;
+  }
+
+  .rm-tl-block-count {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    padding: 0.0625rem 0.4375rem;
+    border-radius: 9999px;
+    background: var(--color-primary-50, #eef2ff);
+    color: var(--color-primary-600, #4f46e5);
+  }
+
+  .dark .rm-tl-block-count {
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--color-primary-400, #818cf8);
+  }
+
+  .rm-tl-device-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    padding-left: 1.375rem;
+  }
+
+  .rm-tl-device-tag {
+    display: inline-block;
+    padding: 0.25rem 0.625rem;
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    background: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+  }
+
+  .dark .rm-tl-device-tag {
+    background: rgba(16, 185, 129, 0.1);
+    color: #6ee7b7;
+    border-color: rgba(16, 185, 129, 0.2);
+  }
+
+  .rm-tl-no-devices {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding-left: 0.25rem;
+  }
+
+  .rm-tl-no-devices-icon {
+    font-style: normal;
+    opacity: 0.5;
+  }
+
+  /* Features list */
+  .rm-tl-features {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    padding-left: 1.375rem;
+  }
+
+  .rm-tl-feature {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .rm-tl-feature-name {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .rm-tl-feature-desc {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* SDK */
+  .rm-tl-sdk {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--bg-secondary);
+    border-radius: 0.375rem;
+    font-size: 0.8125rem;
+  }
+
+  .rm-tl-sdk-label {
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .rm-tl-sdk-value {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    padding: 0.125rem 0.375rem;
+    background: var(--bg-hover);
+    border-radius: 0.25rem;
+  }
+
+  /* Official link */
+  .rm-tl-official-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    margin-left: auto;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-primary-600, #4f46e5);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .rm-tl-official-link:hover {
+    color: var(--color-primary-500, #6366f1);
+    text-decoration: underline;
+  }
+
+  .dark .rm-tl-official-link {
+    color: var(--color-primary-400, #818cf8);
+  }
+
+  /* ── Future Versions ───────────────────────────────────────────── */
+  .rm-tl-dot-future {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: transparent;
+    border: 2px dashed var(--border-color);
+    box-shadow: none;
+    z-index: 2;
+    flex-shrink: 0;
+    margin-top: 1.5rem;
+  }
+
+  .rm-tl-line-dashed {
+    border-left: 2px dashed var(--border-color);
+    background: none;
+    width: 0;
+  }
+
+  .rm-tl-card-future {
+    border-style: dashed;
+    opacity: 0.8;
+  }
+
+  .rm-tl-card-future:hover {
+    opacity: 1;
+  }
+
+  .rm-tl-future-disclaimer {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-style: italic;
+    margin: 0.75rem 0 0;
+    line-height: 1.5;
+  }
+
+  /* ── Device Evolution ──────────────────────────────────────────── */
+  .rm-evo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+    gap: 1rem;
+  }
+
+  .rm-evo-card {
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    background: var(--bg-primary);
+    transition: border-color 0.15s ease;
+  }
+
+  .rm-evo-card:hover {
+    border-color: var(--color-primary-300, #a5b4fc);
+  }
+
+  .rm-evo-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+  }
+
+  .rm-evo-icon {
+    font-size: 1.25rem;
+  }
+
+  .rm-evo-cat-name {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .rm-evo-versions {
+    padding: 0.5rem 0;
+  }
+
+  .rm-evo-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.375rem 1rem;
+    min-height: 2rem;
+  }
+
+  .rm-evo-row:not(:last-child) {
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .rm-evo-row-empty {
+    opacity: 0.5;
+  }
+
+  .rm-evo-vk {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+    width: 2rem;
+    flex-shrink: 0;
+    padding-top: 0.125rem;
+  }
+
+  .rm-evo-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    flex: 1;
+  }
+
+  .rm-evo-item {
+    display: inline-block;
+    padding: 0.125rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.6875rem;
+    background: var(--color-primary-50, #eef2ff);
+    color: var(--color-primary-700, #4338ca);
+    font-weight: 500;
+  }
+
+  .dark .rm-evo-item {
+    background: rgba(99, 102, 241, 0.12);
+    color: var(--color-primary-300, #a5b4fc);
+  }
+
+  .rm-evo-empty {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    opacity: 0.4;
+  }
+
+  /* ── Ecosystem ─────────────────────────────────────────────────── */
+  .rm-eco-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: 1rem;
+  }
+
+  .rm-eco-card {
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    background: var(--bg-primary);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .rm-eco-card:hover {
+    border-color: var(--color-primary-300, #a5b4fc);
+    box-shadow: 0 2px 12px rgba(99, 102, 241, 0.06);
+  }
+
+  .rm-eco-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.625rem;
+  }
+
+  .rm-eco-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .rm-eco-version {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.1875rem 0.5rem;
+    border-radius: 9999px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .rm-eco-status {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    margin: 0 0 0.875rem;
+    line-height: 1.5;
+  }
+
+  /* Progress bar */
+  .rm-eco-progress-track {
+    margin-bottom: 0.875rem;
+  }
+
+  .rm-eco-progress-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.6875rem;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .rm-eco-progress-bar {
+    height: 6px;
+    background: var(--bg-secondary);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .rm-eco-progress-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.6s ease;
+  }
+
+  /* Highlights list */
+  .rm-eco-highlights {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .rm-eco-highlight {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    padding-left: 1rem;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .rm-eco-highlight::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--text-muted);
+  }
+
+  /* ── Future ────────────────────────────────────────────────────── */
+  .rm-future-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: 1rem;
+  }
+
+  .rm-future-card {
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    background: var(--bg-primary);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .rm-future-card:hover {
+    border-color: var(--color-primary-300, #a5b4fc);
+    box-shadow: 0 2px 12px rgba(99, 102, 241, 0.06);
+  }
+
+  .rm-future-num {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-primary-500, #6366f1);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.05em;
+  }
+
+  .rm-future-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0.375rem 0 0.5rem;
+    line-height: 1.3;
+  }
+
+  .rm-future-desc {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  /* ── Mobile ────────────────────────────────────────────────────── */
+  @media (max-width: 640px) {
+    .rm-hero-title {
+      font-size: 1.625rem;
+    }
+
+    .rm-hero-desc {
+      font-size: 0.9375rem;
+    }
+
+    .rm-hero-stats {
+      flex-direction: column;
+      gap: 0.75rem;
+      padding: 1rem 1.5rem;
+    }
+
+    .rm-stat-divider {
+      width: 3rem;
+      height: 1px;
+    }
+
+    .rm-tl-item {
+      gap: 0.75rem;
+    }
+
+    .rm-tl-spine {
+      width: 1.5rem;
+    }
+
+    .rm-tl-card {
+      padding: 1rem;
+    }
+
+    .rm-tl-card-header {
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .rm-tl-version-lg {
+      font-size: 1.375rem;
+    }
+
+    .rm-evo-grid,
+    .rm-eco-grid,
+    .rm-future-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .rm-context-banner {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .rm-context-sep {
+      width: 100%;
+      height: 1px;
+    }
+
+    .rm-context-item {
+      padding: 0.625rem 0.5rem;
+    }
+
+    .rm-section-title {
+      font-size: 1.25rem;
+    }
+  }
+</style>

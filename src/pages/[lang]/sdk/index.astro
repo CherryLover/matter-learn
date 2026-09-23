@@ -1,0 +1,324 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SdkPlatformIcon from '../../../components/SdkPlatformIcon.astro';
+import { SUPPORTED_LANGS, localePath, type Lang } from '../../../i18n/config';
+
+export function getStaticPaths() {
+  return SUPPORTED_LANGS.map(lang => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const lp = (path: string) => localePath(lang, path);
+
+const sdk = lang === 'en'
+  ? (await import('../../../i18n/en/pages/sdk')).default
+  : (await import('../../../i18n/zh/pages/sdk')).default;
+
+---
+
+<BaseLayout title={sdk.title} description={sdk.description} lang={lang}>
+  <!-- Hero -->
+  <div class="sdk-hero">
+    <h1 class="sdk-hero-title">{sdk.heroTitle}</h1>
+    <p class="sdk-hero-desc">{sdk.heroDesc}</p>
+    <div class="sdk-hero-stats">
+      <span class="sdk-stat">{sdk.heroCount}</span>
+      <span class="sdk-stat-sep">&middot;</span>
+      <span class="sdk-stat">{sdk.heroCategoryCount}</span>
+    </div>
+  </div>
+
+  <!-- Platform Cards -->
+  <div class="sdk-cards">
+    {sdk.platforms.map((p: any) => (
+      <a href={lp(p.href)} class="sdk-card">
+        <div class="sdk-card-icon"><SdkPlatformIcon platform={p.icon} size={32} /></div>
+        <h2 class="sdk-card-name">{p.name}</h2>
+        <p class="sdk-card-tagline">{p.tagline}</p>
+        <div class="sdk-card-meta">
+          <div class="sdk-meta-row">
+            <span class="sdk-meta-label">SDK</span>
+            <span class="sdk-meta-value">{p.sdk}</span>
+          </div>
+          <div class="sdk-meta-row">
+            <span class="sdk-meta-label">{lang === 'zh' ? '成熟度' : 'Maturity'}</span>
+            <span class="sdk-meta-value">{p.maturity}</span>
+          </div>
+          <div class="sdk-meta-row">
+            <span class="sdk-meta-label">{lang === 'zh' ? '规范版本' : 'Spec'}</span>
+            <span class="sdk-meta-value">{p.specVersion}</span>
+          </div>
+          <div class="sdk-meta-row">
+            <span class="sdk-meta-label">{lang === 'zh' ? '最低版本' : 'Min Version'}</span>
+            <span class="sdk-meta-value">{p.minVersion}</span>
+          </div>
+        </div>
+        <p class="sdk-card-feature">{p.keyFeature}</p>
+        <span class="sdk-card-cta">
+          {lang === 'zh' ? '查看详情' : 'View Details'}
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </span>
+      </a>
+    ))}
+  </div>
+
+  <!-- Comparison Table -->
+  <section class="sdk-comparison">
+    <h2 class="sdk-comparison-title">{sdk.comparisonTitle}</h2>
+    <figure class="diagram">
+      <img src={`/images/diagrams/sdk-compare-${lang}.webp`} alt={lang === 'zh' ? '三个平台的 Matter 接入链路：Android 经 Home APIs 和 connectedhomeip，iOS 经 MatterSupport 和 Matter.framework，Web 经 WebSocket 和 Node.js 上的 matter.js，最终都到达 Matter 设备' : 'Matter integration path on each platform: Android via Home APIs and connectedhomeip, iOS via MatterSupport and Matter.framework, Web via WebSocket and matter.js on Node.js, all reaching the Matter device'} width="1536" height="1024" loading="lazy" decoding="async" />
+      <figcaption>{lang === 'zh' ? '从 App 到设备，三个平台各经过哪些软件层' : 'Which software layers sit between the app and the device on each platform'}</figcaption>
+    </figure>
+    <div class="sdk-table-wrap">
+      <table class="sdk-table">
+        <thead>
+          <tr>
+            {sdk.comparisonHeaders.map((h: string) => (
+              <th>{h}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {sdk.comparisonRows.map((row: string[]) => (
+            <tr>
+              {row.map((cell: string, i: number) => (
+                i === 0 ? <td class="sdk-table-feature">{cell}</td> : <td>{cell}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</BaseLayout>
+
+<style is:global>
+  /* ── Hero ───────────────────────────────────────────── */
+  .sdk-hero {
+    text-align: center;
+    padding: 2rem 0 1.5rem;
+  }
+
+  .sdk-hero-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0 0 0.75rem;
+    letter-spacing: -0.02em;
+  }
+
+  .sdk-hero-desc {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    max-width: 40rem;
+    margin: 0 auto 1rem;
+    line-height: 1.7;
+  }
+
+  .sdk-hero-stats {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+
+  .sdk-stat {
+    background: var(--bg-secondary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-weight: 500;
+  }
+
+  .sdk-stat-sep {
+    color: var(--text-muted);
+    opacity: 0.4;
+  }
+
+  /* ── Platform Cards ────────────────────────────────── */
+  .sdk-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+
+  /* Subgrid: icon / name / tagline / meta / feature / CTA rows line up across all cards */
+  .sdk-card {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span 6;
+    row-gap: 0;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    text-decoration: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+    background: var(--bg-primary);
+  }
+
+  .sdk-card:hover {
+    border-color: var(--color-primary-400, #818cf8);
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .sdk-card-icon {
+    display: flex;
+    margin-bottom: 0.75rem;
+  }
+
+  .sdk-card-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem;
+  }
+
+  .sdk-card-tagline {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0 0 1rem;
+  }
+
+  .sdk-card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+  }
+
+  .sdk-meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+  }
+
+  .sdk-meta-label {
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+
+  .sdk-meta-value {
+    color: var(--text-primary);
+    text-align: right;
+    font-weight: 500;
+  }
+
+  .sdk-card-feature {
+    font-size: 0.8125rem;
+    color: var(--color-primary-600, #4f46e5);
+    margin: 0 0 0.75rem;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+
+  .dark .sdk-card-feature {
+    color: var(--color-primary-400, #818cf8);
+  }
+
+  .sdk-card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: color 0.15s ease;
+  }
+
+  .sdk-card:hover .sdk-card-cta {
+    color: var(--color-primary-600, #4f46e5);
+  }
+
+  .dark .sdk-card:hover .sdk-card-cta {
+    color: var(--color-primary-400, #818cf8);
+  }
+
+  /* ── Comparison Table ──────────────────────────────── */
+  .sdk-comparison {
+    margin-bottom: 2rem;
+  }
+
+  .sdk-comparison-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 1rem;
+  }
+
+  .sdk-table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 0.625rem;
+  }
+
+  .sdk-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8125rem;
+  }
+
+  .sdk-table th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    white-space: nowrap;
+  }
+
+  .sdk-table td {
+    padding: 0.625rem 1rem;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border-color);
+    line-height: 1.5;
+  }
+
+  .sdk-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .sdk-table-feature {
+    font-weight: 600;
+    color: var(--text-primary) !important;
+    white-space: nowrap;
+  }
+
+  /* ── Mobile ────────────────────────────────────────── */
+  @media (max-width: 900px) {
+    .sdk-cards {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .sdk-hero-title {
+      font-size: 1.5rem;
+    }
+
+    .sdk-hero-desc {
+      font-size: 0.9375rem;
+    }
+
+    .sdk-table {
+      font-size: 0.75rem;
+    }
+
+    .sdk-table th,
+    .sdk-table td {
+      padding: 0.5rem 0.625rem;
+    }
+  }
+</style>
