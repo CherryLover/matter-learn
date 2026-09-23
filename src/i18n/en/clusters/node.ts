@@ -876,7 +876,7 @@ export const clusters: Record<string, ClusterContent> = {
     <strong>Endpoint</strong>: Bridged sub-device's Endpoint (<code>Endpoint 1+</code>)
   </p>
   <p>
-    BridgedDeviceBasicInformation is a subset version of <a href="/clusters/basic-information/">BasicInformation (0x0028)</a>,
+    BridgedDeviceBasicInformation is a subset version of <a href="../basic-information/">BasicInformation (0x0028)</a>,
     specifically for describing <strong>non-native devices connected to the Matter network through a Bridge</strong> —
     such as Zigbee temperature sensors, Z-Wave door locks, Bluetooth light bulbs, etc.
     These devices lack native Matter capabilities; the Bridge acts as their proxy to expose them as Matter nodes.
@@ -1672,7 +1672,7 @@ export const clusters: Record<string, ClusterContent> = {
       After discovering a Bridge device, the App needs to enumerate all bridged sub-devices and retrieve their information:
     </p>
     <ol>
-      <li>Read the <code>PartsList</code> from the <a href="/clusters/descriptor/"><code>Descriptor</code> Cluster</a> on Bridge's Endpoint 0 to get the list of all sub-device Endpoints</li>
+      <li>Read the <code>PartsList</code> from the <a href="../descriptor/"><code>Descriptor</code> Cluster</a> on Bridge's Endpoint 0 to get the list of all sub-device Endpoints</li>
       <li>For each sub-device Endpoint, read <code>BridgedDeviceBasicInformation</code>:
         <ul>
           <li><code>ProductName (0x03)</code> + <code>NodeLabel (0x05)</code> as the device display name</li>
@@ -2661,7 +2661,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
     <ul>
       <li><strong>PowerSourceConfiguration</strong> (this page) — on Endpoint 0, answers "where is the power information": which Endpoints host a PowerSource Cluster and their priority order</li>
-      <li><strong>PowerSource</strong> (<a href="/clusters/power-source/">0x002F</a>) — on functional Endpoints, answers "what is the power status": battery level, charging state, voltage, etc.</li>
+      <li><strong>PowerSource</strong> (<a href="../power-source/">0x002F</a>) — on functional Endpoints, answers "what is the power status": battery level, charging state, voltage, etc.</li>
     </ul>
     <p>
       Typical App flow: first read PowerSourceConfiguration to get the endpoint list → then read PowerSource on each corresponding Endpoint for actual data.

@@ -1626,7 +1626,7 @@ export const clusters: Record<string, ClusterContent> = {
   <p>
     AudioOutput 负责管理设备的音频输出目的地 —— HDMI ARC、蓝牙、光纤、耳机、内置扬声器等。
     用户可以通过它查询设备有哪些音频输出、当前正在使用哪个、切换到指定输出，以及为输出源自定义名称。
-    它是智能电视、AV 接收器、Soundbar 等媒体设备的常见 Cluster 之一，与 <a href="/clusters/media-input/">MediaInput</a> 互为输入/输出的对应关系。
+    它是智能电视、AV 接收器、Soundbar 等媒体设备的常见 Cluster 之一，与 <a href="../media-input/">MediaInput</a> 互为输入/输出的对应关系。
   </p>
 
   <div class="callout callout-info">
@@ -2078,7 +2078,7 @@ export const clusters: Record<string, ClusterContent> = {
   </p>
   <p>
     Channel 负责频道的导航和频道线路（Lineup）管理 —— 切台、跳台、按名称搜台、查询频道列表和电子节目单（EPG）。
-    它是智能电视和机顶盒等媒体设备的核心 Cluster 之一，与 <a href="/clusters/media-input/">MediaInput</a> 分工不同：
+    它是智能电视和机顶盒等媒体设备的核心 Cluster 之一，与 <a href="../media-input/">MediaInput</a> 分工不同：
     MediaInput 管理物理输入源（HDMI、USB），Channel 管理逻辑频道（CCTV-1、HBO）。
   </p>
 
@@ -4533,7 +4533,7 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-info">
     <div class="callout-title">与 MediaInput 的区别</div>
     <p>
-      <a href="/clusters/media-input/">MediaInput（0x0507）</a>管理的是物理/虚拟输入源（如 HDMI 1、USB），
+      <a href="../media-input/">MediaInput（0x0507）</a>管理的是物理/虚拟输入源（如 HDMI 1、USB），
       而 TargetNavigator 管理的是软件层面的内容目标（如 Netflix、YouTube、设置页面）。
       一台智能电视可能同时拥有两个 Cluster：MediaInput 切换输入接口，TargetNavigator 切换应用。
     </p>
@@ -4778,7 +4778,7 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-info">
     <div class="callout-title">与 MediaInput.InputInfoStruct 的对比</div>
     <p>
-      TargetInfoStruct 比 <a href="/clusters/media-input/#struct-input-info">InputInfoStruct</a> 更简洁 ——
+      TargetInfoStruct 比 <a href="../media-input/#struct-input-info">InputInfoStruct</a> 更简洁 ——
       只有 Identifier 和 Name 两个字段，没有类型枚举和描述字段。
       这是因为导航目标的性质由应用自身决定，不像物理输入接口那样有固定的分类（HDMI、USB 等）。
     </p>
@@ -5411,13 +5411,13 @@ export const clusters: Record<string, ClusterContent> = {
     是语音助手「打开 Netflix」「关闭当前应用」等指令的底层实现。
     它管理的是应用的生命周期（启动/停止/隐藏），而不是应用内的内容播放。
     通常部署在智能电视或机顶盒的媒体端点上，与
-    <a href="/clusters/application-basic/">ApplicationBasic</a>（应用信息查询）配合使用。
+    <a href="../application-basic/">ApplicationBasic</a>（应用信息查询）配合使用。
   </p>
 
   <div class="callout callout-info">
     <div class="callout-title">与 ApplicationBasic 的分工</div>
     <p>
-      <a href="/clusters/application-basic/">ApplicationBasic</a>（0x050D）负责<strong>只读的信息查询</strong> —— 告诉 Controller「这个应用是什么、当前什么状态」。
+      <a href="../application-basic/">ApplicationBasic</a>（0x050D）负责<strong>只读的信息查询</strong> —— 告诉 Controller「这个应用是什么、当前什么状态」。
       ApplicationLauncher（0x050C）负责<strong>操作</strong> —— 启动、停止、隐藏应用。
       两者通常部署在同一个 Endpoint 上：先通过 ApplicationBasic 获取应用信息，再通过 ApplicationLauncher 控制应用生命周期。
     </p>
@@ -5746,7 +5746,7 @@ export const clusters: Record<string, ClusterContent> = {
     <div class="callout-title">CurrentApp 与 ApplicationBasic.Status 的区别</div>
     <p>
       <code>CurrentApp</code> 是从设备全局视角看「谁在前台」，而
-      <a href="/clusters/application-basic/">ApplicationBasic</a> 的 <code>Status</code> 属性是每个应用各自报告自己的运行状态。
+      <a href="../application-basic/">ApplicationBasic</a> 的 <code>Status</code> 属性是每个应用各自报告自己的运行状态。
       一台电视上同时有多个应用的 Status 为 ActiveHidden（后台运行），但 CurrentApp 只指向一个前台应用（或 null）。
     </p>
   </div>
@@ -5794,7 +5794,7 @@ export const clusters: Record<string, ClusterContent> = {
   <h3 id="struct-application">ApplicationStruct（应用标识结构体）</h3>
   <p>
     通过目录体系唯一标识一个内容应用。这个结构体在 LaunchApp / StopApp / HideApp 命令和 CurrentApp 属性中都会用到，
-    也与 <a href="/clusters/application-basic/">ApplicationBasic</a> Cluster 的 Application（0x0004）属性共用同一结构。
+    也与 <a href="../application-basic/">ApplicationBasic</a> Cluster 的 Application（0x0004）属性共用同一结构。
   </p>
 
   <div class="table-wrap">
@@ -5954,7 +5954,7 @@ export const clusters: Record<string, ClusterContent> = {
         <li>用户对语音助手说「在电视上打开 Netflix」</li>
         <li>检查设备 <code>FeatureMap (0xFFFC)</code>，确认支持 <strong>AP</strong> 特性</li>
         <li>读取 <code>CatalogList (0x0000)</code>，确认设备支持 CSA 官方目录（24742）</li>
-        <li>遍历设备的各个 Endpoint，读取 <a href="/clusters/application-basic/">ApplicationBasic</a> 的 <code>Application (0x0004)</code> 属性，找到 Netflix 对应的 ApplicationStruct</li>
+        <li>遍历设备的各个 Endpoint，读取 <a href="../application-basic/">ApplicationBasic</a> 的 <code>Application (0x0004)</code> 属性，找到 Netflix 对应的 ApplicationStruct</li>
         <li>发送 <code>LaunchApp (0x00)</code>，传入 Netflix 的 ApplicationStruct</li>
         <li>检查 <a href="#cmd-0x03">LauncherResponse</a> 的 Status：
           <ul>
@@ -5975,9 +5975,9 @@ export const clusters: Record<string, ClusterContent> = {
         <li>用户设置了「睡眠模式」自动化规则：每晚 11 点自动关闭电视上的所有应用</li>
         <li>读取 <code>CurrentApp (0x0001)</code> 获取当前前台应用信息</li>
         <li>如果 CurrentApp 不为 <code>null</code>，发送 <code>StopApp (0x01)</code> 停止该应用</li>
-        <li>遍历设备上所有应用 Endpoint，检查各自的 <a href="/clusters/application-basic/">ApplicationBasic</a> 的 <code>Status</code> 属性</li>
+        <li>遍历设备上所有应用 Endpoint，检查各自的 <a href="../application-basic/">ApplicationBasic</a> 的 <code>Status</code> 属性</li>
         <li>对所有 Status 不为 Stopped（0）的应用，逐个发送 <code>StopApp (0x01)</code></li>
-        <li>全部停止后，可配合 <a href="/clusters/on-off/">OnOff Cluster</a> 将电视关闭或进入待机模式</li>
+        <li>全部停止后，可配合 <a href="../on-off/">OnOff Cluster</a> 将电视关闭或进入待机模式</li>
       </ol>
     </div>
   </details>
@@ -6030,7 +6030,7 @@ export const clusters: Record<string, ClusterContent> = {
     AccountLogin 负责在<strong>智能电视或流媒体设备</strong>上完成内容提供商的账户认证。
     当用户的手机 App 已登录某个视频服务（如 Netflix、YouTube），
     想让电视上的对应内容应用也获得该账户的访问权限时，就需要通过这个 Cluster 完成认证。
-    它不负责播放控制（那是 <a href="/clusters/media-playback/">MediaPlayback</a> 的事），
+    它不负责播放控制（那是 <a href="../media-playback/">MediaPlayback</a> 的事），
     而是解决「电视怎么知道你是谁」这个问题。
   </p>
 
@@ -6499,7 +6499,7 @@ export const clusters: Record<string, ClusterContent> = {
         <li>电视端 Netflix 应用验证标识，生成临时 PIN 并返回</li>
         <li>手机自动使用标识和 PIN 发送 <a href="#cmd-0x02"><code>Login (0x02)</code></a></li>
         <li>登录成功 —— 电视上的 Netflix 现在可以访问用户的观看历史、收藏列表和订阅内容</li>
-        <li>用户在电视上选择内容播放，通过 <a href="/clusters/media-playback/">MediaPlayback</a> 控制播放</li>
+        <li>用户在电视上选择内容播放，通过 <a href="../media-playback/">MediaPlayback</a> 控制播放</li>
       </ol>
       <p>
         整个过程对用户来说是无感的：点击「投射」后，电视自动切换到已登录状态。
@@ -6891,7 +6891,7 @@ AA BB CC DD EE FF</code></pre>
     它的职责非常单一：让媒体设备进入低功耗待机（Standby / Sleep）模式。
   </p>
   <p>
-    这个 Cluster 通常和 <a href="/clusters/wake-on-lan/"><strong>WakeOnLan Cluster（0x0503）</strong></a> 配合使用：
+    这个 Cluster 通常和 <a href="../wake-on-lan/"><strong>WakeOnLan Cluster（0x0503）</strong></a> 配合使用：
     LowPower 负责「让设备睡下去」，WakeOnLan 提供「把设备叫醒」所需的网络地址。
     两者是媒体设备电源管理的一对搭档。
   </p>
@@ -7038,13 +7038,13 @@ AA BB CC DD EE FF</code></pre>
       </thead>
       <tbody>
         <tr>
-          <td><a href="/clusters/wake-on-lan/"><strong>WakeOnLan</strong></a></td>
+          <td><a href="../wake-on-lan/"><strong>WakeOnLan</strong></a></td>
           <td><code>0x0503</code></td>
           <td>提供设备 MAC 地址用于 WoL 唤醒</td>
           <td>互补关系：LowPower 让设备睡下，WakeOnLan 帮你把它叫醒</td>
         </tr>
         <tr>
-          <td><a href="/clusters/on-off/"><strong>OnOff</strong></a></td>
+          <td><a href="../on-off/"><strong>OnOff</strong></a></td>
           <td><code>0x0006</code></td>
           <td>设备的开/关/切换控制</td>
           <td>语义区分：Off = 关闭功能，Sleep = 进入待机（设备仍可被远程唤醒）</td>
@@ -7098,7 +7098,7 @@ AA BB CC DD EE FF</code></pre>
     <p>
       LowPower Cluster 的存在本身就是一种能力声明 —— 如果设备的某个 Endpoint 上有这个 Cluster，
       说明该设备支持通过 Matter 进入待机模式。
-      你可以通过 <a href="/clusters/descriptor/">Descriptor Cluster</a> 的 ServerList 属性
+      你可以通过 <a href="../descriptor/">Descriptor Cluster</a> 的 ServerList 属性
       来检查设备是否实现了 LowPower（<code>0x0508</code>），从而决定是否在 UI 上显示「待机」按钮。
     </p>
   </div>

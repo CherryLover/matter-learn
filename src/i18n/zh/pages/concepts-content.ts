@@ -291,27 +291,27 @@ export default {
       <tbody>
         <tr>
           <td><code>0x0101</code></td>
-          <td>DoorLock</td>
+          <td><a href="../clusters/door-lock/">DoorLock</a></td>
           <td>门锁系统 —— 开锁、关锁、管理用户</td>
         </tr>
         <tr>
           <td><code>0x002F</code></td>
-          <td>PowerSource</td>
+          <td><a href="../clusters/power-source/">PowerSource</a></td>
           <td>供电系统 —— 电池电量、充电状态</td>
         </tr>
         <tr>
           <td><code>0x0006</code></td>
-          <td>OnOff</td>
+          <td><a href="../clusters/on-off/">OnOff</a></td>
           <td>开关系统 —— 开、关、切换</td>
         </tr>
         <tr>
           <td><code>0x0028</code></td>
-          <td>BasicInformation</td>
+          <td><a href="../clusters/basic-information/">BasicInformation</a></td>
           <td>铭牌信息 —— 厂商、产品名、固件版本</td>
         </tr>
         <tr>
           <td><code>0x001D</code></td>
-          <td>Descriptor</td>
+          <td><a href="../clusters/descriptor/">Descriptor</a></td>
           <td>目录清单 —— 列出端点里有哪些 Cluster</td>
         </tr>
       </tbody>
@@ -322,9 +322,9 @@ export default {
     <div class="callout-title">门锁示例</div>
     <p>一把 Matter 门锁的 Endpoint 1 上通常有这些 Cluster：</p>
     <ul>
-      <li><strong>DoorLock (0x0101)</strong> —— 核心功能：开锁、关锁、管理用户和凭据</li>
-      <li><strong>PowerSource (0x002F)</strong> —— 电池信息：电量、充电状态</li>
-      <li><strong>Identify (0x0003)</strong> —— 标识功能：让门锁闪灯或响铃，方便用户找到它</li>
+      <li><a href="../clusters/door-lock/"><strong>DoorLock (0x0101)</strong></a> —— 核心功能：开锁、关锁、管理用户和凭据</li>
+      <li><a href="../clusters/power-source/"><strong>PowerSource (0x002F)</strong></a> —— 电池信息：电量、充电状态</li>
+      <li><a href="../clusters/identify/"><strong>Identify (0x0003)</strong></a> —— 标识功能：让门锁闪灯或响铃，方便用户找到它</li>
     </ul>
   </div>
 
@@ -536,15 +536,15 @@ export default {
         </tr>
       </thead>
       <tbody>
-        <tr><td><code>0x001D</code></td><td>Descriptor</td><td>描述端点包含的 Cluster 列表</td></tr>
-        <tr><td><code>0x0028</code></td><td>BasicInformation</td><td>设备基本信息（厂商、产品名、固件版本）</td></tr>
-        <tr><td><code>0x002F</code></td><td>PowerSource</td><td>电源/电池状态</td></tr>
-        <tr><td><code>0x0031</code></td><td>NetworkCommissioning</td><td>网络配置（WiFi/Thread）</td></tr>
-        <tr><td><code>0x0003</code></td><td>Identify</td><td>设备标识（闪灯/响铃）</td></tr>
-        <tr><td><code>0x0006</code></td><td>OnOff</td><td>开关控制</td></tr>
-        <tr><td><code>0x0008</code></td><td>LevelControl</td><td>亮度/级别控制</td></tr>
-        <tr><td><code>0x0101</code></td><td>DoorLock</td><td>门锁控制</td></tr>
-        <tr><td><code>0x0300</code></td><td>ColorControl</td><td>颜色控制（色温、HSV）</td></tr>
+        <tr><td><code>0x001D</code></td><td><a href="../clusters/descriptor/">Descriptor</a></td><td>描述端点包含的 Cluster 列表</td></tr>
+        <tr><td><code>0x0028</code></td><td><a href="../clusters/basic-information/">BasicInformation</a></td><td>设备基本信息（厂商、产品名、固件版本）</td></tr>
+        <tr><td><code>0x002F</code></td><td><a href="../clusters/power-source/">PowerSource</a></td><td>电源/电池状态</td></tr>
+        <tr><td><code>0x0031</code></td><td><a href="../clusters/network-commissioning/">NetworkCommissioning</a></td><td>网络配置（WiFi/Thread）</td></tr>
+        <tr><td><code>0x0003</code></td><td><a href="../clusters/identify/">Identify</a></td><td>设备标识（闪灯/响铃）</td></tr>
+        <tr><td><code>0x0006</code></td><td><a href="../clusters/on-off/">OnOff</a></td><td>开关控制</td></tr>
+        <tr><td><code>0x0008</code></td><td><a href="../clusters/level-control/">LevelControl</a></td><td>亮度/级别控制</td></tr>
+        <tr><td><code>0x0101</code></td><td><a href="../clusters/door-lock/">DoorLock</a></td><td>门锁控制</td></tr>
+        <tr><td><code>0x0300</code></td><td><a href="../clusters/color-control/">ColorControl</a></td><td>颜色控制（色温、HSV）</td></tr>
       </tbody>
     </table>
   </div>

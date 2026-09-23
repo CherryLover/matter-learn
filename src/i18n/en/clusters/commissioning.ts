@@ -1341,7 +1341,7 @@ export const clusters: Record<string, ClusterContent> = {
   </p>
   <p>
     GeneralCommissioning is the master control Cluster for the Matter commissioning flow — responsible for managing the entire commissioning lifecycle.
-    It does not handle specific network credentials (that is <a href="/clusters/network-commissioning/">NetworkCommissioning</a>'s job),
+    It does not handle specific network credentials (that is <a href="../network-commissioning/">NetworkCommissioning</a>'s job),
     but rather controls the "start," "progress," and "end" of the commissioning flow, and ensures the device can safely roll back on failure through the Fail-Safe mechanism.
   </p>
 
@@ -2021,7 +2021,7 @@ export const clusters: Record<string, ClusterContent> = {
         <li>Read <code>BasicCommissioningInfo (0x0001)</code> to get Fail-Safe timeout parameters</li>
         <li>Send <a href="#cmd-0x00"><code>ArmFailSafe (0x00)</code></a> with ExpiryLengthSeconds = 60, Breadcrumb = 1</li>
         <li>Send <a href="#cmd-0x02"><code>SetRegulatoryConfig (0x02)</code></a> to set country code and regulatory area, Breadcrumb = 2</li>
-        <li>Configure network credentials and connect via <a href="/clusters/network-commissioning/">NetworkCommissioning (0x0031)</a></li>
+        <li>Configure network credentials and connect via <a href="../network-commissioning/">NetworkCommissioning (0x0031)</a></li>
         <li>Install NOC certificate (OperationalCredentials Cluster)</li>
         <li>Set ACL permissions (AccessControl Cluster)</li>
         <li>Send <a href="#cmd-0x04"><code>CommissioningComplete (0x04)</code></a> to commit all changes</li>
@@ -2126,7 +2126,7 @@ export const clusters: Record<string, ClusterContent> = {
     AdministratorCommissioning controls the opening and closing of the device's <strong>Commissioning Window</strong>.
     When a device has already joined a Fabric (been commissioned), and you want <em>new</em> administrators to also commission this device,
     you need to open a commissioning window through this Cluster. It does not handle the commissioning flow itself (that is
-    <a href="/clusters/general-commissioning/">GeneralCommissioning</a>'s job),
+    <a href="../general-commissioning/">GeneralCommissioning</a>'s job),
     but rather controls the "whether the device accepts new commissioning requests" switch.
   </p>
 

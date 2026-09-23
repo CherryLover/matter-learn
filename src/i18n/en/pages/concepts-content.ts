@@ -291,27 +291,27 @@ export default {
       <tbody>
         <tr>
           <td><code>0x0101</code></td>
-          <td>DoorLock</td>
+          <td><a href="../clusters/door-lock/">DoorLock</a></td>
           <td>Door lock system -- lock, unlock, manage users</td>
         </tr>
         <tr>
           <td><code>0x002F</code></td>
-          <td>PowerSource</td>
+          <td><a href="../clusters/power-source/">PowerSource</a></td>
           <td>Power system -- battery level, charging status</td>
         </tr>
         <tr>
           <td><code>0x0006</code></td>
-          <td>OnOff</td>
+          <td><a href="../clusters/on-off/">OnOff</a></td>
           <td>Switch system -- on, off, toggle</td>
         </tr>
         <tr>
           <td><code>0x0028</code></td>
-          <td>BasicInformation</td>
+          <td><a href="../clusters/basic-information/">BasicInformation</a></td>
           <td>Nameplate info -- vendor, product name, firmware version</td>
         </tr>
         <tr>
           <td><code>0x001D</code></td>
-          <td>Descriptor</td>
+          <td><a href="../clusters/descriptor/">Descriptor</a></td>
           <td>Directory -- lists which Clusters an endpoint has</td>
         </tr>
       </tbody>
@@ -322,9 +322,9 @@ export default {
     <div class="callout-title">Door lock example</div>
     <p>A Matter door lock's Endpoint 1 typically has these Clusters:</p>
     <ul>
-      <li><strong>DoorLock (0x0101)</strong> -- core functionality: lock, unlock, manage users and credentials</li>
-      <li><strong>PowerSource (0x002F)</strong> -- battery info: charge level, charging status</li>
-      <li><strong>Identify (0x0003)</strong> -- identification: makes the lock flash or beep so the user can locate it</li>
+      <li><a href="../clusters/door-lock/"><strong>DoorLock (0x0101)</strong></a> -- core functionality: lock, unlock, manage users and credentials</li>
+      <li><a href="../clusters/power-source/"><strong>PowerSource (0x002F)</strong></a> -- battery info: charge level, charging status</li>
+      <li><a href="../clusters/identify/"><strong>Identify (0x0003)</strong></a> -- identification: makes the lock flash or beep so the user can locate it</li>
     </ul>
   </div>
 
@@ -536,15 +536,15 @@ export default {
         </tr>
       </thead>
       <tbody>
-        <tr><td><code>0x001D</code></td><td>Descriptor</td><td>Describes the list of Clusters on an endpoint</td></tr>
-        <tr><td><code>0x0028</code></td><td>BasicInformation</td><td>Device basic info (vendor, product name, firmware version)</td></tr>
-        <tr><td><code>0x002F</code></td><td>PowerSource</td><td>Power / battery status</td></tr>
-        <tr><td><code>0x0031</code></td><td>NetworkCommissioning</td><td>Network configuration (WiFi/Thread)</td></tr>
-        <tr><td><code>0x0003</code></td><td>Identify</td><td>Device identification (flash/beep)</td></tr>
-        <tr><td><code>0x0006</code></td><td>OnOff</td><td>On/off control</td></tr>
-        <tr><td><code>0x0008</code></td><td>LevelControl</td><td>Brightness / level control</td></tr>
-        <tr><td><code>0x0101</code></td><td>DoorLock</td><td>Door lock control</td></tr>
-        <tr><td><code>0x0300</code></td><td>ColorControl</td><td>Color control (color temperature, HSV)</td></tr>
+        <tr><td><code>0x001D</code></td><td><a href="../clusters/descriptor/">Descriptor</a></td><td>Describes the list of Clusters on an endpoint</td></tr>
+        <tr><td><code>0x0028</code></td><td><a href="../clusters/basic-information/">BasicInformation</a></td><td>Device basic info (vendor, product name, firmware version)</td></tr>
+        <tr><td><code>0x002F</code></td><td><a href="../clusters/power-source/">PowerSource</a></td><td>Power / battery status</td></tr>
+        <tr><td><code>0x0031</code></td><td><a href="../clusters/network-commissioning/">NetworkCommissioning</a></td><td>Network configuration (WiFi/Thread)</td></tr>
+        <tr><td><code>0x0003</code></td><td><a href="../clusters/identify/">Identify</a></td><td>Device identification (flash/beep)</td></tr>
+        <tr><td><code>0x0006</code></td><td><a href="../clusters/on-off/">OnOff</a></td><td>On/off control</td></tr>
+        <tr><td><code>0x0008</code></td><td><a href="../clusters/level-control/">LevelControl</a></td><td>Brightness / level control</td></tr>
+        <tr><td><code>0x0101</code></td><td><a href="../clusters/door-lock/">DoorLock</a></td><td>Door lock control</td></tr>
+        <tr><td><code>0x0300</code></td><td><a href="../clusters/color-control/">ColorControl</a></td><td>Color control (color temperature, HSV)</td></tr>
       </tbody>
     </table>
   </div>

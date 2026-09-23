@@ -792,7 +792,7 @@ val display = voltageV?.let { String.format("%.1f V", it) } ?: "--"\`}</code></p
   </p>
   <p>
     ElectricalEnergyMeasurement 负责记录设备随时间累积的电能消耗（或输出）。
-    与实时测量瞬时功率的 <a href="/clusters/electrical-power-measurement/">ElectricalPowerMeasurement（0x0090）</a> 不同，
+    与实时测量瞬时功率的 <a href="../electrical-power-measurement/">ElectricalPowerMeasurement（0x0090）</a> 不同，
     这个 Cluster 关注的是<strong>「一共用了多少电」</strong>和<strong>「这段时间用了多少电」</strong>。
     两者通常共存于同一个 Endpoint，前者像车速表，后者像里程表。
   </p>

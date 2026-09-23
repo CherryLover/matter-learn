@@ -1341,7 +1341,7 @@ export const clusters: Record<string, ClusterContent> = {
   </p>
   <p>
     GeneralCommissioning 是 Matter 配网（Commissioning）流程的总控 Cluster —— 负责管理整个配网过程的生命周期。
-    它不处理具体的网络凭据（那是 <a href="/clusters/network-commissioning/">NetworkCommissioning</a> 的事），
+    它不处理具体的网络凭据（那是 <a href="../network-commissioning/">NetworkCommissioning</a> 的事），
     而是控制配网流程的「开始」「推进」和「结束」，并通过 Fail-Safe 机制保证配网失败时设备能安全回滚。
   </p>
 
@@ -2021,7 +2021,7 @@ export const clusters: Record<string, ClusterContent> = {
         <li>读取 <code>BasicCommissioningInfo (0x0001)</code> 获取 Fail-Safe 超时参数</li>
         <li>发送 <a href="#cmd-0x00"><code>ArmFailSafe (0x00)</code></a>，ExpiryLengthSeconds = 60，Breadcrumb = 1</li>
         <li>发送 <a href="#cmd-0x02"><code>SetRegulatoryConfig (0x02)</code></a>，设置国家代码和法规区域，Breadcrumb = 2</li>
-        <li>通过 <a href="/clusters/network-commissioning/">NetworkCommissioning (0x0031)</a> 配置网络凭据并连接</li>
+        <li>通过 <a href="../network-commissioning/">NetworkCommissioning (0x0031)</a> 配置网络凭据并连接</li>
         <li>安装 NOC 证书（OperationalCredentials Cluster）</li>
         <li>设置 ACL 权限（AccessControl Cluster）</li>
         <li>发送 <a href="#cmd-0x04"><code>CommissioningComplete (0x04)</code></a> 提交所有变更</li>
@@ -2126,7 +2126,7 @@ export const clusters: Record<string, ClusterContent> = {
     AdministratorCommissioning 负责控制设备的<strong>配网窗口</strong>（Commissioning Window）的开启与关闭。
     当一个设备已经加入了某个 Fabric（已被配网），想要让<em>新的</em>管理员也能配网这台设备时，
     就需要通过这个 Cluster 打开配网窗口。它不负责配网流程本身（那是
-    <a href="/clusters/general-commissioning/">GeneralCommissioning</a> 的事），
+    <a href="../general-commissioning/">GeneralCommissioning</a> 的事），
     而是控制「设备是否接受新的配网请求」这个开关。
   </p>
 

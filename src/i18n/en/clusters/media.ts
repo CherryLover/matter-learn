@@ -1626,7 +1626,7 @@ export const clusters: Record<string, ClusterContent> = {
   <p>
     AudioOutput manages the audio output destinations of a device — HDMI ARC, Bluetooth, optical, headphones, built-in speakers, etc.
     Users can query available audio outputs, check which one is currently in use, switch to a specified output, and customize output source names.
-    It is a common Cluster for media devices such as smart TVs, AV receivers, and Soundbars, serving as the output counterpart to <a href="/clusters/media-input/">MediaInput</a>.
+    It is a common Cluster for media devices such as smart TVs, AV receivers, and Soundbars, serving as the output counterpart to <a href="../media-input/">MediaInput</a>.
   </p>
 
   <div class="callout callout-info">
@@ -2078,7 +2078,7 @@ export const clusters: Record<string, ClusterContent> = {
   </p>
   <p>
     Channel handles channel navigation and lineup management — channel switching, skipping, name-based search, querying the channel list, and the Electronic Program Guide (EPG).
-    It is one of the core Clusters for media devices such as smart TVs and set-top boxes. Unlike <a href="/clusters/media-input/">MediaInput</a> which manages physical input sources (HDMI, USB), Channel manages logical channels (CCTV-1, HBO).
+    It is one of the core Clusters for media devices such as smart TVs and set-top boxes. Unlike <a href="../media-input/">MediaInput</a> which manages physical input sources (HDMI, USB), Channel manages logical channels (CCTV-1, HBO).
   </p>
 
   <div class="callout callout-info">
@@ -4532,7 +4532,7 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-info">
     <div class="callout-title">Difference from MediaInput</div>
     <p>
-      <a href="/clusters/media-input/">MediaInput (0x0507)</a> manages physical/virtual input sources (e.g., HDMI 1, USB),
+      <a href="../media-input/">MediaInput (0x0507)</a> manages physical/virtual input sources (e.g., HDMI 1, USB),
       while TargetNavigator manages software-level content targets (e.g., Netflix, YouTube, settings page).
       A smart TV may have both Clusters: MediaInput for switching input interfaces, TargetNavigator for switching apps.
     </p>
@@ -4777,7 +4777,7 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-info">
     <div class="callout-title">Comparison with MediaInput.InputInfoStruct</div>
     <p>
-      TargetInfoStruct is more concise than <a href="/clusters/media-input/#struct-input-info">InputInfoStruct</a> —
+      TargetInfoStruct is more concise than <a href="../media-input/#struct-input-info">InputInfoStruct</a> —
       it has only two fields, Identifier and Name, without type enum or description fields.
       This is because the nature of navigation targets is determined by the applications themselves, unlike physical input interfaces which have fixed categories (HDMI, USB, etc.).
     </p>
@@ -5409,13 +5409,13 @@ export const clusters: Record<string, ClusterContent> = {
     it is the underlying implementation for voice assistant commands like "Open Netflix" and "Close the current app".
     It manages the app lifecycle (launch/stop/hide), not in-app content playback.
     Typically deployed on the media endpoint of smart TVs or set-top boxes, used in conjunction with
-    <a href="/clusters/application-basic/">ApplicationBasic</a> (app information queries).
+    <a href="../application-basic/">ApplicationBasic</a> (app information queries).
   </p>
 
   <div class="callout callout-info">
     <div class="callout-title">Division of Labor with ApplicationBasic</div>
     <p>
-      <a href="/clusters/application-basic/">ApplicationBasic</a> (0x050D) handles <strong>read-only information queries</strong> — tells the Controller "what this app is and its current status".
+      <a href="../application-basic/">ApplicationBasic</a> (0x050D) handles <strong>read-only information queries</strong> — tells the Controller "what this app is and its current status".
       ApplicationLauncher (0x050C) handles <strong>operations</strong> — launching, stopping, and hiding apps.
       Both are typically deployed on the same Endpoint: first use ApplicationBasic to get app info, then use ApplicationLauncher to control the app lifecycle.
     </p>
@@ -5744,7 +5744,7 @@ export const clusters: Record<string, ClusterContent> = {
     <div class="callout-title">Difference Between CurrentApp and ApplicationBasic.Status</div>
     <p>
       <code>CurrentApp</code> provides a device-global view of "which app is in the foreground", while
-      <a href="/clusters/application-basic/">ApplicationBasic</a>'s <code>Status</code> attribute is each app's own report of its runtime status.
+      <a href="../application-basic/">ApplicationBasic</a>'s <code>Status</code> attribute is each app's own report of its runtime status.
       A TV may have multiple apps with Status = ActiveHidden (running in background), but CurrentApp points to only one foreground app (or null).
     </p>
   </div>
@@ -5792,7 +5792,7 @@ export const clusters: Record<string, ClusterContent> = {
   <h3 id="struct-application">ApplicationStruct (App Identifier Struct)</h3>
   <p>
     Uniquely identifies a content app through the catalog system. This struct is used in LaunchApp / StopApp / HideApp commands and the CurrentApp attribute,
-    and shares the same structure as the <a href="/clusters/application-basic/">ApplicationBasic</a> Cluster's Application (0x0004) attribute.
+    and shares the same structure as the <a href="../application-basic/">ApplicationBasic</a> Cluster's Application (0x0004) attribute.
   </p>
 
   <div class="table-wrap">
@@ -5952,7 +5952,7 @@ export const clusters: Record<string, ClusterContent> = {
         <li>The user tells the voice assistant "Open Netflix on the TV"</li>
         <li>Check the device <code>FeatureMap (0xFFFC)</code> to confirm <strong>AP</strong> support</li>
         <li>Read <code>CatalogList (0x0000)</code> to confirm the device supports the CSA official catalog (24742)</li>
-        <li>Iterate through the device's Endpoints, read <a href="/clusters/application-basic/">ApplicationBasic</a>'s <code>Application (0x0004)</code> attribute, and find Netflix's ApplicationStruct</li>
+        <li>Iterate through the device's Endpoints, read <a href="../application-basic/">ApplicationBasic</a>'s <code>Application (0x0004)</code> attribute, and find Netflix's ApplicationStruct</li>
         <li>Send <code>LaunchApp (0x00)</code> with Netflix's ApplicationStruct</li>
         <li>Check <a href="#cmd-0x03">LauncherResponse</a> Status:
           <ul>
@@ -5973,9 +5973,9 @@ export const clusters: Record<string, ClusterContent> = {
         <li>The user set up a "Sleep Mode" automation rule: automatically close all apps on the TV every night at 11 PM</li>
         <li>Read <code>CurrentApp (0x0001)</code> to get the current foreground app info</li>
         <li>If CurrentApp is not <code>null</code>, send <code>StopApp (0x01)</code> to stop that app</li>
-        <li>Iterate through all app Endpoints on the device and check each <a href="/clusters/application-basic/">ApplicationBasic</a>'s <code>Status</code> attribute</li>
+        <li>Iterate through all app Endpoints on the device and check each <a href="../application-basic/">ApplicationBasic</a>'s <code>Status</code> attribute</li>
         <li>For all apps with Status not Stopped (0), send <code>StopApp (0x01)</code> one by one</li>
-        <li>After all apps are stopped, optionally use <a href="/clusters/on-off/">OnOff Cluster</a> to turn off the TV or put it in standby mode</li>
+        <li>After all apps are stopped, optionally use <a href="../on-off/">OnOff Cluster</a> to turn off the TV or put it in standby mode</li>
       </ol>
     </div>
   </details>
@@ -6028,7 +6028,7 @@ export const clusters: Record<string, ClusterContent> = {
     AccountLogin handles content provider account authentication on <strong>smart TVs or streaming devices</strong>.
     When a user's phone app is already logged into a video service (e.g., Netflix, YouTube)
     and wants the corresponding content app on the TV to also gain access to that account, this Cluster handles the authentication.
-    It does not handle playback control (that's <a href="/clusters/media-playback/">MediaPlayback</a>'s job),
+    It does not handle playback control (that's <a href="../media-playback/">MediaPlayback</a>'s job),
     but rather solves the problem of "how does the TV know who you are".
   </p>
 
@@ -6497,7 +6497,7 @@ export const clusters: Record<string, ClusterContent> = {
         <li>The TV-side Netflix app validates the identifier, generates a temporary PIN, and returns it</li>
         <li>The phone automatically sends <a href="#cmd-0x02"><code>Login (0x02)</code></a> with the identifier and PIN</li>
         <li>Login successful — Netflix on the TV can now access the user's watch history, favorites, and subscribed content</li>
-        <li>The user selects content on the TV for playback, controlled via <a href="/clusters/media-playback/">MediaPlayback</a></li>
+        <li>The user selects content on the TV for playback, controlled via <a href="../media-playback/">MediaPlayback</a></li>
       </ol>
       <p>
         The entire process is seamless for the user: after tapping "Cast", the TV automatically switches to a logged-in state.
@@ -6889,7 +6889,7 @@ AA BB CC DD EE FF</code></pre>
     Its responsibility is singular: put the media device into low-power standby (Standby / Sleep) mode.
   </p>
   <p>
-    This Cluster is typically used in conjunction with <a href="/clusters/wake-on-lan/"><strong>WakeOnLan Cluster (0x0503)</strong></a>:
+    This Cluster is typically used in conjunction with <a href="../wake-on-lan/"><strong>WakeOnLan Cluster (0x0503)</strong></a>:
     LowPower handles "putting the device to sleep", while WakeOnLan provides the network address needed to "wake it up".
     Together they form a pair for media device power management.
   </p>
@@ -7036,13 +7036,13 @@ AA BB CC DD EE FF</code></pre>
       </thead>
       <tbody>
         <tr>
-          <td><a href="/clusters/wake-on-lan/"><strong>WakeOnLan</strong></a></td>
+          <td><a href="../wake-on-lan/"><strong>WakeOnLan</strong></a></td>
           <td><code>0x0503</code></td>
           <td>Provides device MAC address for WoL wake-up</td>
           <td>Complementary: LowPower puts the device to sleep, WakeOnLan helps wake it up</td>
         </tr>
         <tr>
-          <td><a href="/clusters/on-off/"><strong>OnOff</strong></a></td>
+          <td><a href="../on-off/"><strong>OnOff</strong></a></td>
           <td><code>0x0006</code></td>
           <td>Device's on/off/toggle control</td>
           <td>Semantic distinction: Off = turn off the function, Sleep = enter standby (device can still be remotely woken)</td>
@@ -7096,7 +7096,7 @@ AA BB CC DD EE FF</code></pre>
     <p>
       The existence of the LowPower Cluster itself is a capability declaration — if a device has this Cluster on an Endpoint,
       it means the device supports entering standby mode via Matter.
-      You can check whether the device implements LowPower (<code>0x0508</code>) through the <a href="/clusters/descriptor/">Descriptor Cluster</a>'s ServerList attribute,
+      You can check whether the device implements LowPower (<code>0x0508</code>) through the <a href="../descriptor/">Descriptor Cluster</a>'s ServerList attribute,
       to decide whether to display a "Standby" button in the UI.
     </p>
   </div>

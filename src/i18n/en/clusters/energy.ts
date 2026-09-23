@@ -792,7 +792,7 @@ val display = voltageV?.let { String.format("%.1f V", it) } ?: "--"\`}</code></p
   </p>
   <p>
     ElectricalEnergyMeasurement is responsible for recording the cumulative energy consumption (or output) of a device over time.
-    Unlike <a href="/clusters/electrical-power-measurement/">ElectricalPowerMeasurement (0x0090)</a> which measures instantaneous power,
+    Unlike <a href="../electrical-power-measurement/">ElectricalPowerMeasurement (0x0090)</a> which measures instantaneous power,
     this Cluster focuses on <strong>"how much total energy has been used"</strong> and <strong>"how much energy was used during this period"</strong>.
     Both typically coexist on the same Endpoint — the former is like a speedometer, the latter like an odometer.
   </p>

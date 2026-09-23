@@ -1579,7 +1579,7 @@ export const clusters: Record<string, ClusterContent> = {
   <p>
     LaundryWasherControls manages the operational parameters of a washing machine -- spin speed and rinse count.
     It is a purely <strong>attribute-driven</strong> Cluster (no commands); all operations are performed by directly writing attributes.
-    It works in conjunction with <a href="/clusters/laundry-washer-mode/">LaundryWasherMode (0x0051)</a>:
+    It works in conjunction with <a href="../laundry-washer-mode/">LaundryWasherMode (0x0051)</a>:
     Mode handles wash mode selection (Normal, Delicate, Heavy, etc.), while Controls handles fine-tuning of operational parameters.
   </p>
 
@@ -5145,10 +5145,10 @@ export const clusters: Record<string, ClusterContent> = {
   <p>
     <strong>Cluster ID</strong>: <code>0x0061</code> &nbsp;|&nbsp;
     <strong>Endpoint</strong>: Typically on <code>Endpoint 1</code> (application endpoint) &nbsp;|&nbsp;
-    <strong>Derived from</strong>: <a href="/clusters/operational-state/">OperationalState (0x0060)</a>
+    <strong>Derived from</strong>: <a href="../operational-state/">OperationalState (0x0060)</a>
   </p>
   <p>
-    RvcOperationalState is a <a href="/clusters/operational-state/">OperationalState (0x0060)</a>
+    RvcOperationalState is a <a href="../operational-state/">OperationalState (0x0060)</a>
     <strong>robot vacuum-specific derived Cluster</strong>. It inherits all attributes and event structures from the base state machine,
     but with important adjustments based on the actual usage scenarios of robot vacuums:
   </p>

@@ -1167,10 +1167,10 @@ export const clusters: Record<string, ClusterContent> = {
     content: `<h1>BooleanStateConfiguration Cluster</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x0080</code> &nbsp;|&nbsp;
-    <strong>Endpoint</strong>: Same Endpoint as <a href="/clusters/boolean-state/">BooleanState</a> (application endpoint)
+    <strong>Endpoint</strong>: Same Endpoint as <a href="../boolean-state/">BooleanState</a> (application endpoint)
   </p>
   <p>
-    BooleanStateConfiguration is the companion Cluster to <a href="/clusters/boolean-state/">BooleanState (0x0045)</a> —
+    BooleanStateConfiguration is the companion Cluster to <a href="../boolean-state/">BooleanState (0x0045)</a> —
     BooleanState is responsible for reporting the sensor's binary state (true/false), while BooleanStateConfiguration is responsible for <strong>configuring sensor behavior</strong>:
     managing alarm outputs (visual flashing, audible buzzer) and adjusting sensor sensitivity.
   </p>

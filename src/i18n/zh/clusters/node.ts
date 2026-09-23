@@ -876,7 +876,7 @@ export const clusters: Record<string, ClusterContent> = {
     <strong>所在 Endpoint</strong>: 桥接子设备的 Endpoint（<code>Endpoint 1+</code>）
   </p>
   <p>
-    BridgedDeviceBasicInformation 是 <a href="/clusters/basic-information/">BasicInformation（0x0028）</a> 的子集版本，
+    BridgedDeviceBasicInformation 是 <a href="../basic-information/">BasicInformation（0x0028）</a> 的子集版本，
     专门用于描述<strong>通过 Bridge 接入 Matter 网络的非原生设备</strong> ——
     比如 Zigbee 温度传感器、Z-Wave 门锁、蓝牙灯泡等。
     这些设备本身不具备 Matter 能力，由 Bridge 代理它们暴露为 Matter 节点。
@@ -1672,7 +1672,7 @@ export const clusters: Record<string, ClusterContent> = {
       当发现一个 Bridge 设备后，App 需要枚举所有桥接子设备并获取其信息：
     </p>
     <ol>
-      <li>读取 Bridge 的 Endpoint 0 上的 <a href="/clusters/descriptor/"><code>Descriptor</code> Cluster</a> 的 <code>PartsList</code>，获取所有子设备 Endpoint 列表</li>
+      <li>读取 Bridge 的 Endpoint 0 上的 <a href="../descriptor/"><code>Descriptor</code> Cluster</a> 的 <code>PartsList</code>，获取所有子设备 Endpoint 列表</li>
       <li>对每个子设备 Endpoint，读取 <code>BridgedDeviceBasicInformation</code>：
         <ul>
           <li><code>ProductName (0x03)</code> + <code>NodeLabel (0x05)</code> 作为设备显示名</li>
@@ -2661,7 +2661,7 @@ export const clusters: Record<string, ClusterContent> = {
     </p>
     <ul>
       <li><strong>PowerSourceConfiguration</strong>（本页）—— 在 Endpoint 0，回答「电源信息在哪」：哪些 Endpoint 承载了 PowerSource Cluster，优先级怎么排</li>
-      <li><strong>PowerSource</strong>（<a href="/clusters/power-source/">0x002F</a>）—— 在各功能 Endpoint 上，回答「电源状态是什么」：电量多少、在不在充电、电压多少</li>
+      <li><strong>PowerSource</strong>（<a href="../power-source/">0x002F</a>）—— 在各功能 Endpoint 上，回答「电源状态是什么」：电量多少、在不在充电、电压多少</li>
     </ul>
     <p>
       App 的典型流程：先读 PowerSourceConfiguration 拿到端点列表 → 再逐个去对应 Endpoint 读 PowerSource 拿实际数据。

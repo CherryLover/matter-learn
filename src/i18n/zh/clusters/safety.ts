@@ -1167,10 +1167,10 @@ export const clusters: Record<string, ClusterContent> = {
     content: `<h1>布尔状态配置 Cluster（BooleanStateConfiguration）</h1>
   <p>
     <strong>Cluster ID</strong>: <code>0x0080</code> &nbsp;|&nbsp;
-    <strong>所在 Endpoint</strong>: 与 <a href="/clusters/boolean-state/">BooleanState</a> 同一 Endpoint（功能端点）
+    <strong>所在 Endpoint</strong>: 与 <a href="../boolean-state/">BooleanState</a> 同一 Endpoint（功能端点）
   </p>
   <p>
-    BooleanStateConfiguration 是 <a href="/clusters/boolean-state/">BooleanState（0x0045）</a>的配套 Cluster ——
+    BooleanStateConfiguration 是 <a href="../boolean-state/">BooleanState（0x0045）</a>的配套 Cluster ——
     BooleanState 负责报告传感器的二值状态（true/false），而 BooleanStateConfiguration 则负责<strong>配置传感器的行为</strong>：
     管理告警输出（视觉闪烁、蜂鸣声）以及调节传感器灵敏度。
   </p>

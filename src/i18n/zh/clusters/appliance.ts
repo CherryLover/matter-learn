@@ -1579,7 +1579,7 @@ export const clusters: Record<string, ClusterContent> = {
   <p>
     LaundryWasherControls 用于管理洗衣机的操作参数 —— 脱水转速和漂洗次数。
     它是一个<strong>纯属性驱动</strong>的 Cluster（没有命令），所有操作通过直接写属性完成。
-    与 <a href="/clusters/laundry-washer-mode/">LaundryWasherMode（0x0051）</a> 配合使用：
+    与 <a href="../laundry-washer-mode/">LaundryWasherMode（0x0051）</a> 配合使用：
     Mode 负责选择洗涤模式（标准、轻柔、强力等），Controls 负责调整具体的运行参数。
   </p>
 
@@ -5145,10 +5145,10 @@ export const clusters: Record<string, ClusterContent> = {
   <p>
     <strong>Cluster ID</strong>: <code>0x0061</code> &nbsp;|&nbsp;
     <strong>所在 Endpoint</strong>: 通常在 <code>Endpoint 1</code>（功能端点）&nbsp;|&nbsp;
-    <strong>继承自</strong>: <a href="/clusters/operational-state/">OperationalState（0x0060）</a>
+    <strong>继承自</strong>: <a href="../operational-state/">OperationalState（0x0060）</a>
   </p>
   <p>
-    RvcOperationalState 是 <a href="/clusters/operational-state/">OperationalState（0x0060）</a>
+    RvcOperationalState 是 <a href="../operational-state/">OperationalState（0x0060）</a>
     的<strong>扫地机器人专用派生 Cluster</strong>。它继承了基础状态机的所有属性和事件结构，
     但根据扫地机器人的实际使用场景做了重要调整：
   </p>

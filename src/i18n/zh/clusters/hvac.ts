@@ -1624,7 +1624,7 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-info">
     <div class="callout-title">与 Thermostat Cluster 的关系</div>
     <p>
-      <a href="/clusters/thermostat/">Thermostat（0x0201）</a> 负责温控的核心逻辑 —— 温度读取、设定点、运行模式、命令控制。
+      <a href="../thermostat/">Thermostat（0x0201）</a> 负责温控的核心逻辑 —— 温度读取、设定点、运行模式、命令控制。
       ThermostatUserInterfaceConfiguration（0x0204）则只管<strong>用户界面</strong> —— 面板显示什么、用户能操作什么。
       两者在同一个 Endpoint 上共存，各司其职。
     </p>
@@ -1633,7 +1633,7 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">与 Unit Localization 的区别</div>
     <p>
-      <a href="/clusters/unit-localization/">Unit Localization（0x002D）</a> 在 Endpoint 0 上，控制的是<strong>全设备的温度显示偏好</strong>。
+      <a href="../unit-localization/">Unit Localization（0x002D）</a> 在 Endpoint 0 上，控制的是<strong>全设备的温度显示偏好</strong>。
       而这里的 TemperatureDisplayMode 控制的是<strong>温控器自身面板的温度显示</strong>。
       两者可以独立设置，但通常建议保持一致以免造成用户困惑。
     </p>
@@ -1914,7 +1914,7 @@ export const clusters: Record<string, ClusterContent> = {
       <ol>
         <li>读取手机 Locale：如果是 <code>en_US</code>（美国）或 <code>en_LR</code>（利比里亚）等，温度偏好为华氏度</li>
         <li>向 Endpoint 1 写入 <code>TemperatureDisplayMode = 1</code>（Fahrenheit）</li>
-        <li>同时向 Endpoint 0 的 <a href="/clusters/unit-localization/">Unit Localization（0x002D）</a> 写入 <code>TemperatureUnit = 0</code>（Fahrenheit），保持全设备显示一致</li>
+        <li>同时向 Endpoint 0 的 <a href="../unit-localization/">Unit Localization（0x002D）</a> 写入 <code>TemperatureUnit = 0</code>（Fahrenheit），保持全设备显示一致</li>
         <li>App 界面也同步以 °F 显示温度</li>
       </ol>
       <p>

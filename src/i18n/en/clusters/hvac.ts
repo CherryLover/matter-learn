@@ -1624,7 +1624,7 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-info">
     <div class="callout-title">Relationship with Thermostat Cluster</div>
     <p>
-      <a href="/clusters/thermostat/">Thermostat (0x0201)</a> handles core thermostat logic — temperature reading, setpoints, operating modes, command control.
+      <a href="../thermostat/">Thermostat (0x0201)</a> handles core thermostat logic — temperature reading, setpoints, operating modes, command control.
       ThermostatUserInterfaceConfiguration (0x0204) only manages the <strong>user interface</strong> — what the panel displays and what the user can operate.
       Both coexist on the same Endpoint, each with its own responsibilities.
     </p>
@@ -1633,7 +1633,7 @@ export const clusters: Record<string, ClusterContent> = {
   <div class="callout callout-tip">
     <div class="callout-title">Difference from Unit Localization</div>
     <p>
-      <a href="/clusters/unit-localization/">Unit Localization (0x002D)</a> is on Endpoint 0 and controls <strong>device-wide temperature display preferences</strong>.
+      <a href="../unit-localization/">Unit Localization (0x002D)</a> is on Endpoint 0 and controls <strong>device-wide temperature display preferences</strong>.
       TemperatureDisplayMode here controls <strong>the thermostat's own panel temperature display</strong>.
       Both can be set independently, but it is recommended to keep them consistent to avoid confusing users.
     </p>
@@ -1914,7 +1914,7 @@ export const clusters: Record<string, ClusterContent> = {
       <ol>
         <li>Read phone Locale: if it is <code>en_US</code> (United States) or <code>en_LR</code> (Liberia), etc., temperature preference is Fahrenheit</li>
         <li>Write <code>TemperatureDisplayMode = 1</code> (Fahrenheit) to Endpoint 1</li>
-        <li>Also write <code>TemperatureUnit = 0</code> (Fahrenheit) to <a href="/clusters/unit-localization/">Unit Localization (0x002D)</a> on Endpoint 0, keeping device-wide display consistent</li>
+        <li>Also write <code>TemperatureUnit = 0</code> (Fahrenheit) to <a href="../unit-localization/">Unit Localization (0x002D)</a> on Endpoint 0, keeping device-wide display consistent</li>
         <li>The App interface also synchronizes to display temperature in °F</li>
       </ol>
       <p>
