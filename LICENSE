@@ -19,15 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
--------------------------------------------------------------------------------
-
-Scope: this MIT license covers the source code of this repository only.
-
-The written content and diagrams — everything under src/i18n/zh/,
-src/i18n/en/ and public/images/ — are licensed separately under
-CC BY-NC-SA 4.0. See LICENSE-CONTENT.
-
-src/data/matter-spec.json is generated from the connectedhomeip project
-(https://github.com/project-chip/connectedhomeip), which is licensed under
-the Apache License 2.0.
