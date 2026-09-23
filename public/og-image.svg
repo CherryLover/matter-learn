@@ -23,15 +23,15 @@
   <circle cx="1000" cy="150" r="140" fill="none" stroke="#818cf8" stroke-width="1" opacity="0.1"/>
 
   <!-- Logo: Hex M with nodes -->
-  <g transform="translate(100, 160)">
-    <polygon points="60,0 110,28 110,84 60,112 10,84 10,28" fill="none" stroke="#6366f1" stroke-width="3.5"/>
-    <text x="60" y="72" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="52" font-weight="700" fill="#a5b4fc" letter-spacing="-2">M</text>
-    <circle cx="60" cy="0" r="5" fill="#818cf8"/>
-    <circle cx="110" cy="28" r="5" fill="#818cf8"/>
-    <circle cx="110" cy="84" r="5" fill="#818cf8"/>
-    <circle cx="60" cy="112" r="5" fill="#818cf8"/>
-    <circle cx="10" cy="84" r="5" fill="#818cf8"/>
-    <circle cx="10" cy="28" r="5" fill="#818cf8"/>
+  <g transform="translate(80, 145)">
+    <polygon points="70,6 123,36 123,96 70,126 17,96 17,36" fill="none" stroke="#818cf8" stroke-width="4.5"/>
+    <text x="70" y="90" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="58" font-weight="700" fill="#c7d2fe" letter-spacing="-2">M</text>
+    <circle cx="70" cy="6" r="6" fill="#a5b4fc"/>
+    <circle cx="123" cy="36" r="6" fill="#a5b4fc"/>
+    <circle cx="123" cy="96" r="6" fill="#a5b4fc"/>
+    <circle cx="70" cy="126" r="6" fill="#a5b4fc"/>
+    <circle cx="17" cy="96" r="6" fill="#a5b4fc"/>
+    <circle cx="17" cy="36" r="6" fill="#a5b4fc"/>
   </g>
 
   <text x="100" y="340" font-family="system-ui, -apple-system, sans-serif" font-size="64" font-weight="800" fill="white" letter-spacing="-1">Matter 协议学习中心</text>
