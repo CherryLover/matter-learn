@@ -123,6 +123,51 @@ cluster.toggle(object : ChipClusters.DefaultClusterCallback {
         },
       },
       {
+        id: 'device-discovery',
+        title: "读取设备类型与能力",
+        content: "<p>配网完成后，读 <strong>Descriptor</strong>（<code>0x001D</code>）就能知道设备有哪些端点、每个端点是什么类型、有哪些 Cluster；再读各 Cluster 的 <code>FeatureMap</code> / <code>AcceptedCommandList</code> 就知道具体能力。字段含义见 <a href=\"../../concepts/#device-discovery\">概念总览 · 配网后怎么读出设备能力</a>，读到的数字可以用 <a href=\"../../tools/id-lookup/\">Matter ID 查询</a> 翻译。</p>",
+        codeExample: {
+          language: 'kotlin',
+          title: "读 Descriptor 与 FeatureMap",
+          code: `// 1. 端点 0 的 PartsList：设备有哪些端点
+val root = ChipClusters.DescriptorCluster(devicePtr, 0)
+root.readPartsListAttribute(object :
+    ChipClusters.DescriptorCluster.PartsListAttributeCallback {
+    override fun onSuccess(endpoints: List<Int>) {
+        endpoints.forEach { ep -> readEndpoint(devicePtr, ep) }
+    }
+    override fun onError(ex: Exception) { /* 处理错误 */ }
+})
+
+// 2. 每个端点的 DeviceTypeList / ServerList：是什么、有哪些 Cluster
+fun readEndpoint(devicePtr: Long, ep: Int) {
+    val descriptor = ChipClusters.DescriptorCluster(devicePtr, ep)
+    descriptor.readDeviceTypeListAttribute(object :
+        ChipClusters.DescriptorCluster.DeviceTypeListAttributeCallback {
+        override fun onSuccess(types: List<ChipStructs.DescriptorClusterDeviceTypeStruct>) {
+            // 门锁端点会得到 0x000A（门锁）和 0x0011（电源）
+            types.forEach { Log.d(TAG, "EP$ep type=0x%04X rev=%d".format(it.deviceType, it.revision)) }
+        }
+        override fun onError(ex: Exception) {}
+    })
+    descriptor.readServerListAttribute(object :
+        ChipClusters.DescriptorCluster.ServerListAttributeCallback {
+        override fun onSuccess(clusters: List<Long>) { /* 例如 [3, 29, 47, 257] */ }
+        override fun onError(ex: Exception) {}
+    })
+}
+
+// 3. 某个 Cluster 开了哪些可选功能：FeatureMap（全局属性 0xFFFC）
+ChipClusters.DoorLockCluster(devicePtr, 1).readFeatureMapAttribute(object :
+    ChipClusters.LongAttributeCallback {
+    override fun onSuccess(value: Long) {
+        val supportsFingerprint = (value and (1L shl 2)) != 0L  // bit 2 = FGP
+    }
+    override fun onError(ex: Exception) {}
+})`,
+        },
+      },
+      {
         id: 'limitations',
         title: '限制与注意事项',
         content: '<p>Android Matter 开发中最需要注意的几个问题：</p>',
@@ -230,6 +275,40 @@ try await onOff.toggle()
 
 // 读取当前状态
 let isOn = try await onOff.readAttributeOnOff()`,
+        },
+      },
+      {
+        id: 'device-discovery',
+        title: "读取设备类型与能力",
+        content: "<p>用 <code>MTRBaseClusterDescriptor</code> 读 Descriptor（<code>0x001D</code>）拿到端点、设备类型和 Cluster 列表；也可以用 <code>readAttributes</code> 做通配读取，一次拿回全部原始属性。字段含义见 <a href=\"../../concepts/#device-discovery\">概念总览 · 配网后怎么读出设备能力</a>，读到的数字可以用 <a href=\"../../tools/id-lookup/\">Matter ID 查询</a> 翻译。</p>",
+        codeExample: {
+          language: 'swift',
+          title: "读 Descriptor 与通配读取",
+          code: `import Matter
+
+let device = MTRBaseDevice(nodeID: nodeID, controller: controller)
+
+// 1. 端点 0 的 PartsList：设备有哪些端点
+let root = MTRBaseClusterDescriptor(device: device, endpointID: 0, queue: .main)
+let endpoints = try await root.readAttributePartsList() as? [NSNumber] ?? []
+
+for ep in endpoints {
+    let descriptor = MTRBaseClusterDescriptor(device: device, endpointID: ep, queue: .main)
+
+    // 2. 这个端点是什么设备（门锁端点：0x000A 门锁 + 0x0011 电源）
+    let types = try await descriptor.readAttributeDeviceTypeList()
+        as? [MTRDescriptorClusterDeviceTypeStruct] ?? []
+    for t in types {
+        print("EP\(ep) type=0x\(String(t.deviceType.uint32Value, radix: 16)) rev=\(t.revision)")
+    }
+
+    // 3. 这个端点有哪些 Cluster
+    let servers = try await descriptor.readAttributeServerList() as? [NSNumber] ?? []
+}
+
+// 或者：通配读取，一次拿回设备全部原始属性（三个参数都传 nil）
+let all = try await device.readAttributes(withEndpointID: nil, clusterID: nil,
+                                          attributeID: nil, params: nil, queue: .main)`,
         },
       },
       {
@@ -379,6 +458,33 @@ const endpoint = node.getEndpoint(1);
 // 通过 Cluster API 控制设备
 const onOffCluster = endpoint.getClusterClient(OnOff.Cluster);
 await onOffCluster.toggle();`,
+        },
+      },
+      {
+        id: 'device-discovery',
+        title: "读取设备类型与能力",
+        content: "<p>matterjs-server 在配网后已经把设备的全部属性读好了，浏览器端直接从节点数据里按 <code>端点/Cluster/属性</code> 取值即可。这份数据粘进 <a href=\"../../tools/json-parser/\">JSON 解析器</a> 就能看到整理好的设备画像；字段含义见 <a href=\"../../concepts/#device-discovery\">概念总览 · 配网后怎么读出设备能力</a>。</p>",
+        codeExample: {
+          language: 'typescript',
+          title: "从节点数据读设备类型与能力",
+          code: `import { MatterClient } from "@matter-server/ws-client";
+
+const client = new MatterClient("ws://localhost:5580/ws");
+await client.startListening();
+
+// 服务端在配网后会对设备做一次通配读取，节点数据里就是全部原始属性
+// 键名为 "端点/Cluster/属性"（十进制），与 Home Assistant 诊断导出格式相同
+const attrs = client.nodes[nodeId].attributes;
+
+const endpoints = attrs["0/29/3"];          // Descriptor.PartsList → [1]
+for (const ep of endpoints) {
+  const types = attrs[\`\${ep}/29/0\`];        // DeviceTypeList → [{ "0": 10, "1": 3 }]  10 = 0x000A 门锁
+  const servers = attrs[\`\${ep}/29/1\`];      // ServerList → [3, 29, 47, 257]
+  console.log(ep, types, servers);
+}
+
+const vendorName = attrs["0/40/1"];         // BasicInformation.VendorName
+const lockFeatures = attrs["1/257/65532"];  // DoorLock.FeatureMap`,
         },
       },
       {

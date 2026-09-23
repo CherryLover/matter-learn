@@ -602,6 +602,14 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <!-- ====== 示例数据 ====== -->
+  <div class="callout callout-tip">
+    <div class="callout-title">动手试试：从原始数据里读出设备类型</div>
+    <p>
+      打开 <a href="../../tools/json-parser/">JSON 解析器</a>，点“设备原始数据”示例再点解析，就能看到一把门锁的 DeviceTypeList、ServerList、PartsList 被逐项翻译成设备类型和 Cluster 名称。
+      DeviceTypeList 里的数字（如 <code>10</code> = <code>0x000A</code> 门锁）可以在 <a href="../../tools/id-lookup/#device-types">Matter ID 查询</a> 里查到。
+    </p>
+  </div>
+
   <h2 id="example-data">示例数据</h2>
 
   <h3>场景一：普通设备（门锁）</h3>

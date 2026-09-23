@@ -602,6 +602,14 @@ export const clusters: Record<string, ClusterContent> = {
   </div>
 
   <!-- ====== Example Data ====== -->
+  <div class="callout callout-tip">
+    <div class="callout-title">Try it: read device types from raw data</div>
+    <p>
+      Open the <a href="../../tools/json-parser/">JSON Parser</a>, pick the "Raw device data" sample and click Parse to see a door lock's DeviceTypeList, ServerList and PartsList translated into device types and cluster names.
+      The numbers in DeviceTypeList (e.g. <code>10</code> = <code>0x000A</code> Door Lock) can be looked up in the <a href="../../tools/id-lookup/#device-types">Matter ID Lookup</a>.
+    </p>
+  </div>
+
   <h2 id="example-data">Example Data</h2>
 
   <h3>Scenario 1: Standard Device (Door Lock)</h3>

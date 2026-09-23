@@ -461,6 +461,20 @@ export default {
     Analogy: just as a hotel must have a gym, pool, and 24-hour front desk to earn a five-star rating, a device must have the capabilities specified by Matter to claim a certain device type.
   </p>
 
+  <p>
+    Every device type has a number: Door Lock is <code>0x000A</code>, Dimmable Light is <code>0x0101</code>, and the Root Node that every device has is <code>0x0016</code>.
+    A device declares its types in the <a href="../clusters/descriptor/#attr-0x00">Descriptor.DeviceTypeList</a> of each endpoint, and one endpoint can declare several (e.g. "Door Lock + Power Source").
+    See the full list in <a href="../tools/id-lookup/#device-types">Matter ID Lookup · Device Type IDs</a>.
+  </p>
+  <div class="callout callout-warning">
+    <div class="callout-title">A device type only tells you the minimum</div>
+    <p>
+      Two locks can both declare Door Lock <code>0x000A</code> while one supports fingerprints and user management and the other only PIN codes. Both are compliant.
+      The device type only fixes the mandatory part; optional capabilities are in each cluster's <code>FeatureMap</code>, <code>AttributeList</code> and <code>AcceptedCommandList</code>.
+      See <a href="#device-discovery">Reading a device's capabilities after commissioning</a> below.
+    </p>
+  </div>
+
   <h2 id="fabric">Fabric</h2>
   <p>
     A Fabric is a <strong>trust domain</strong> in a Matter network. Devices within the same Fabric trust each other and can communicate and control one another directly.
@@ -501,18 +515,85 @@ export default {
     <p>The <strong>Commissioner</strong> is the role during commissioning (responsible for bringing the device in), while the <strong>Controller</strong> is the role for everyday control. A phone app typically plays both roles.</p>
   </div>
 
-  <!-- ====== ID conventions ====== -->
-  <h2 id="id-conventions">ID Numbering Conventions</h2>
+  <!-- ====== Device capability discovery ====== -->
+  <h2 id="device-discovery">After commissioning: what is this device and what can it do?</h2>
   <p>
-    Nearly everything in Matter is identified by a <strong>hexadecimal ID</strong>. Knowing the ID ranges helps you quickly determine what an ID represents.
+    Commissioning only brings the device onto the network. Next the app needs to answer two questions: <strong>what device is this, and which features does it support?</strong>
+    Matter has no separate "device manual" file. The answers live in a few <strong>standard fields</strong> that every device must provide and any Controller can read.
   </p>
 
   <div class="table-wrap">
     <table>
       <thead>
         <tr>
+          <th>To find out</th>
+          <th>Read this field</th>
+          <th>Where (cluster / attribute)</th>
+          <th>Door lock example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Which endpoints exist</td><td><a href="../clusters/descriptor/#attr-0x03">Descriptor.PartsList</a></td><td>Endpoint 0 · <code>0x001D</code> / <code>0x0003</code></td><td><code>[1]</code></td></tr>
+        <tr><td>What each endpoint is</td><td><a href="../clusters/descriptor/#attr-0x00">Descriptor.DeviceTypeList</a></td><td>Every endpoint · <code>0x001D</code> / <code>0x0000</code></td><td><code>0x000A</code> Door Lock + <code>0x0011</code> Power Source</td></tr>
+        <tr><td>Which clusters each endpoint has</td><td><a href="../clusters/descriptor/#attr-0x01">Descriptor.ServerList</a></td><td>Every endpoint · <code>0x001D</code> / <code>0x0001</code></td><td><code>0x0003</code> <code>0x001D</code> <code>0x002F</code> <code>0x0101</code></td></tr>
+        <tr><td>Which optional features a cluster enables</td><td>FeatureMap (global attribute)</td><td>Every cluster · <code>0xFFFC</code></td><td><code>389</code> = PIN + fingerprint + remote PIN + users</td></tr>
+        <tr><td>Which commands it accepts</td><td>AcceptedCommandList (global attribute)</td><td>Every cluster · <code>0xFFF9</code></td><td>LockDoor, UnlockDoor, SetUser…</td></tr>
+        <tr><td>Which attributes it implements</td><td>AttributeList (global attribute)</td><td>Every cluster · <code>0xFFFB</code></td><td>LockState, AutoRelockTime…</td></tr>
+        <tr><td>Vendor, model, versions, serial</td><td><a href="../clusters/basic-information/">BasicInformation</a></td><td>Endpoint 0 · <code>0x0028</code></td><td>VendorName, ProductName, SoftwareVersionString</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>The standard reading order for a Controller:</p>
+  <ol>
+    <li>Read PartsList on <strong>endpoint 0</strong> to get every endpoint number</li>
+    <li>Read <strong>DeviceTypeList</strong> on each endpoint to learn what it is</li>
+    <li>Read <strong>ServerList</strong> on each endpoint to learn which clusters it has</li>
+    <li>Read <strong>FeatureMap / AcceptedCommandList / AttributeList</strong> on each cluster to learn exactly what it can do</li>
+    <li>Read BasicInformation on <strong>endpoint 0</strong> for vendor, model and firmware version</li>
+  </ol>
+
+  <h3 id="raw-capabilities">Can I get the device's raw capability set?</h3>
+  <p>
+    Yes. Matter supports a <strong>wildcard read</strong>: set endpoint, cluster and attribute all to "any" and every attribute on the device comes back in one go, including all the fields above.
+    This is the most complete, unprocessed description of a device. Whatever device info an app shows is interpreted from it.
+  </p>
+  <ul>
+    <li><strong>chip-tool</strong> (the official CLI): <code>chip-tool any read-by-id 0xFFFFFFFF 0xFFFFFFFF &lt;node-id&gt; 0xFFFF</code>. The three wildcards mean all clusters, all attributes, all endpoints</li>
+    <li><strong>A single field</strong>: <code>chip-tool descriptor read device-type-list &lt;node-id&gt; 1</code> reads the device types of endpoint 1</li>
+    <li><strong>Platform SDKs</strong>: Android, iOS and Web all have equivalents, see <a href="../sdk/android/#device-discovery">SDK Guides · Reading device types and capabilities</a></li>
+    <li><strong>Home Assistant</strong>: device page → Download diagnostics. Its <code>attributes</code> object is the wildcard read result, keyed as <code>endpoint/cluster/attribute</code> (decimal)</li>
+  </ul>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">Try it</div>
+    <p>
+      Open the <a href="../tools/json-parser/">JSON Parser</a>, pick the "Raw device data" sample and click Parse. It turns a door lock's wildcard read into a device profile
+      and labels every item with the field it came from. For any unfamiliar ID, use the <a href="../tools/id-lookup/">Matter ID Lookup</a>.
+    </p>
+  </div>
+
+  <!-- ====== ID conventions ====== -->
+  <h2 id="id-conventions">ID Numbering Conventions</h2>
+  <p>
+    Nearly everything in Matter is identified by a <strong>hexadecimal ID</strong>. Knowing the ID ranges helps you quickly determine what an ID represents.
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">A Cluster ID is actually 4 bytes</div>
+    <p>
+      In the specification, cluster, attribute, command, event and device type IDs are all <strong>32-bit</strong>: the upper 16 bits are a <strong>vendor prefix</strong> and the lower 16 bits are the <strong>number</strong>.
+      Standard definitions all use the prefix <code>0x0000</code>, which is normally omitted. So the Door Lock cluster is <code>0x0000_0101</code> in full and <code>0x0101</code> for short.
+      A vendor's private extension must carry its vendor ID, e.g. <code>0x1234_FC00</code>.
+    </p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
           <th>Type</th>
-          <th>ID Range</th>
+          <th>Number range (lower 16 bits)</th>
           <th>Description</th>
         </tr>
       </thead>
@@ -520,12 +601,12 @@ export default {
         <tr>
           <td>Standard Cluster</td>
           <td><code>0x0000</code> ~ <code>0x7FFF</code></td>
-          <td>Defined by CSA, used uniformly by all vendors</td>
+          <td>Defined by CSA; the prefix is always <code>0x0000</code></td>
         </tr>
         <tr>
           <td>Vendor-specific Cluster</td>
           <td><code>0xFC00</code> ~ <code>0xFFFE</code></td>
-          <td>Vendor private extensions, used with VendorID</td>
+          <td>The prefix must be the vendor ID, e.g. <code>0x1234_FC00</code></td>
         </tr>
         <tr>
           <td>Standard Attribute</td>
@@ -534,17 +615,27 @@ export default {
         </tr>
         <tr>
           <td>Global Attribute</td>
-          <td><code>0xFFF8</code> ~ <code>0xFFFE</code></td>
-          <td>Common attributes every Cluster has (e.g. ClusterRevision)</td>
+          <td><code>0xF000</code> ~ <code>0xFFFE</code></td>
+          <td>Present in every cluster: FeatureMap <code>0xFFFC</code>, AttributeList <code>0xFFFB</code>, AcceptedCommandList <code>0xFFF9</code>, ClusterRevision <code>0xFFFD</code>, etc.</td>
         </tr>
         <tr>
           <td>Standard Command</td>
           <td><code>0x00</code> ~ <code>0xFF</code></td>
           <td>Standard commands within a Cluster</td>
         </tr>
+        <tr>
+          <td>Standard Device Type</td>
+          <td><code>0x0000</code> ~ <code>0xBFFF</code></td>
+          <td>Device types, e.g. <code>0x000A</code> Door Lock, <code>0x0016</code> Root Node</td>
+        </tr>
       </tbody>
     </table>
   </div>
+
+  <p>
+    Found an ID you don't recognise? Look it up in the <a href="../tools/id-lookup/">Matter ID Lookup</a>. Hex and decimal both work.
+    Note that the same number means different things in different fields: <code>0x0101</code> is Door Lock as a cluster but Dimmable Light as a device type.
+  </p>
 
   <h3 id="common-cluster-ids">Common Cluster ID Quick Reference</h3>
   <div class="table-wrap">

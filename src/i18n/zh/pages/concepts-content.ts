@@ -461,6 +461,20 @@ export default {
     类比：就像酒店要被评为"五星级"，就必须有健身房、泳池、24 小时前台等设施。设备要声称自己是"门锁"类型，就必须具备 Matter 规定的那些能力。
   </p>
 
+  <p>
+    每种设备类型都有一个编号，例如门锁是 <code>0x000A</code>、可调光灯是 <code>0x0101</code>、每台设备都有的根节点是 <code>0x0016</code>。
+    设备在每个端点的 <a href="../clusters/descriptor/#attr-0x00">Descriptor.DeviceTypeList</a> 里声明自己是什么类型，一个端点可以同时声明多个（比如“门锁 + 电源”）。
+    全部编号见 <a href="../tools/id-lookup/#device-types">Matter ID 查询 · 设备类型速查</a>。
+  </p>
+  <div class="callout callout-warning">
+    <div class="callout-title">设备类型只说明“至少有什么”</div>
+    <p>
+      同样声明为门锁 <code>0x000A</code>，一把支持指纹和用户管理，另一把只支持密码，这完全合规。设备类型只规定必须有的部分，
+      可选能力要看每个 Cluster 的 <code>FeatureMap</code>、<code>AttributeList</code>、<code>AcceptedCommandList</code>，见下文
+      <a href="#device-discovery">配网后怎么读出设备能力</a>。
+    </p>
+  </div>
+
   <h2 id="fabric">Fabric（信任域）</h2>
   <p>
     Fabric 是 Matter 网络中的<strong>信任域</strong>。同一个 Fabric 里的设备互相信任，可以直接通信和控制。
@@ -501,18 +515,85 @@ export default {
     <p><strong>Commissioner</strong> 是配网时的角色（负责把设备拉进来），<strong>Controller</strong> 是日常控制的角色。手机 App 通常同时扮演这两个角色。</p>
   </div>
 
-  <!-- ====== ID 规范 ====== -->
-  <h2 id="id-conventions">ID 编号规范</h2>
+  <!-- ====== 设备能力发现 ====== -->
+  <h2 id="device-discovery">配网后：怎么知道设备是什么、能做什么</h2>
   <p>
-    Matter 中几乎所有东西都用<strong>十六进制 ID</strong> 标识。了解编号范围有助于你快速判断一个 ID 的含义。
+    配网只是把设备拉进网络。接下来 App 要回答两个问题：<strong>这是什么设备？它支持哪些功能？</strong>
+    Matter 没有单独的“设备说明书”文件，答案就在几个<strong>标准字段</strong>里。每台设备都必须提供这些字段，任何 Controller 都能读。
   </p>
 
   <div class="table-wrap">
     <table>
       <thead>
         <tr>
+          <th>想知道</th>
+          <th>读哪个字段</th>
+          <th>在哪里（Cluster / 属性）</th>
+          <th>门锁的例子</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>设备有哪些端点</td><td><a href="../clusters/descriptor/#attr-0x03">Descriptor.PartsList</a></td><td>端点 0 · <code>0x001D</code> / <code>0x0003</code></td><td><code>[1]</code></td></tr>
+        <tr><td>每个端点是什么设备</td><td><a href="../clusters/descriptor/#attr-0x00">Descriptor.DeviceTypeList</a></td><td>每个端点 · <code>0x001D</code> / <code>0x0000</code></td><td><code>0x000A</code> 门锁 + <code>0x0011</code> 电源</td></tr>
+        <tr><td>每个端点有哪些功能模块</td><td><a href="../clusters/descriptor/#attr-0x01">Descriptor.ServerList</a></td><td>每个端点 · <code>0x001D</code> / <code>0x0001</code></td><td><code>0x0003</code> <code>0x001D</code> <code>0x002F</code> <code>0x0101</code></td></tr>
+        <tr><td>某个模块开了哪些可选功能</td><td>FeatureMap（全局属性）</td><td>每个 Cluster · <code>0xFFFC</code></td><td><code>389</code> = 密码 + 指纹 + 远程密码 + 用户管理</td></tr>
+        <tr><td>能对它发哪些命令</td><td>AcceptedCommandList（全局属性）</td><td>每个 Cluster · <code>0xFFF9</code></td><td>LockDoor、UnlockDoor、SetUser…</td></tr>
+        <tr><td>实现了哪些属性</td><td>AttributeList（全局属性）</td><td>每个 Cluster · <code>0xFFFB</code></td><td>LockState、AutoRelockTime…</td></tr>
+        <tr><td>厂商、型号、版本、序列号</td><td><a href="../clusters/basic-information/">BasicInformation</a></td><td>端点 0 · <code>0x0028</code></td><td>VendorName、ProductName、SoftwareVersionString</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Controller 的标准读取顺序：</p>
+  <ol>
+    <li>读<strong>端点 0</strong> 的 PartsList，拿到所有端点编号</li>
+    <li>逐个端点读 <strong>DeviceTypeList</strong>，知道每个端点“是什么”</li>
+    <li>逐个端点读 <strong>ServerList</strong>，知道每个端点“有哪些 Cluster”</li>
+    <li>逐个 Cluster 读 <strong>FeatureMap / AcceptedCommandList / AttributeList</strong>，知道具体“能做什么”</li>
+    <li>读<strong>端点 0</strong> 的 BasicInformation，拿到厂商、型号、固件版本</li>
+  </ol>
+
+  <h3 id="raw-capabilities">能不能直接拿到设备的原始功能集？</h3>
+  <p>
+    能。Matter 支持<strong>通配读取（Wildcard Read）</strong>：端点、Cluster、属性都填“全部”，一次把设备上所有属性读回来，上表里的字段全在里面。
+    这就是一台设备最原始、最完整的能力描述，各家 App 显示的设备信息都是从这里解读出来的。
+  </p>
+  <ul>
+    <li><strong>chip-tool</strong>（官方命令行工具）：<code>chip-tool any read-by-id 0xFFFFFFFF 0xFFFFFFFF &lt;节点ID&gt; 0xFFFF</code>，三个 F 分别代表全部 Cluster、全部属性、全部端点</li>
+    <li><strong>只读某一项</strong>：<code>chip-tool descriptor read device-type-list &lt;节点ID&gt; 1</code> 读端点 1 的设备类型</li>
+    <li><strong>各平台 SDK</strong>：Android、iOS、Web 都有对应接口，见 <a href="../sdk/android/#device-discovery">SDK 指南 · 读取设备类型与能力</a></li>
+    <li><strong>Home Assistant</strong>：设备页面 → 下载诊断数据，其中 <code>attributes</code> 就是通配读取的结果，键名是 <code>端点/Cluster/属性</code>（十进制）</li>
+  </ul>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">动手试试</div>
+    <p>
+      打开 <a href="../tools/json-parser/">JSON 解析器</a>，点“设备原始数据”示例再点解析。它会把一台门锁的通配读取结果整理成设备画像，
+      并在每一项旁边标出它来自哪个字段。遇到不认识的 ID，用 <a href="../tools/id-lookup/">Matter ID 查询</a> 查。
+    </p>
+  </div>
+
+  <!-- ====== ID 规范 ====== -->
+  <h2 id="id-conventions">ID 编号规范</h2>
+  <p>
+    Matter 中几乎所有东西都用<strong>十六进制 ID</strong> 标识。了解编号范围有助于你快速判断一个 ID 的含义。
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">Cluster ID 其实是 4 个字节</div>
+    <p>
+      规范里 Cluster、属性、命令、事件、设备类型的 ID 都是 <strong>32 位</strong>：前 16 位是<strong>厂商前缀</strong>，后 16 位是<strong>编号</strong>。
+      标准定义的前缀都是 <code>0x0000</code>，平时省略不写，所以门锁 Cluster 完整写法是 <code>0x0000_0101</code>，简写成 <code>0x0101</code>。
+      厂商私有扩展必须带上自己的厂商 ID，例如 <code>0x1234_FC00</code>。
+    </p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
           <th>类型</th>
-          <th>ID 范围</th>
+          <th>编号范围（后 16 位）</th>
           <th>说明</th>
         </tr>
       </thead>
@@ -520,12 +601,12 @@ export default {
         <tr>
           <td>标准 Cluster</td>
           <td><code>0x0000</code> ~ <code>0x7FFF</code></td>
-          <td>CSA 官方定义，所有厂商统一使用</td>
+          <td>CSA 官方定义，前缀固定为 <code>0x0000</code></td>
         </tr>
         <tr>
           <td>厂商自定义 Cluster</td>
           <td><code>0xFC00</code> ~ <code>0xFFFE</code></td>
-          <td>厂商私有扩展，需搭配 VendorID 使用</td>
+          <td>前缀必须是厂商 ID，完整写法如 <code>0x1234_FC00</code></td>
         </tr>
         <tr>
           <td>标准 Attribute</td>
@@ -534,17 +615,27 @@ export default {
         </tr>
         <tr>
           <td>全局 Attribute</td>
-          <td><code>0xFFF8</code> ~ <code>0xFFFE</code></td>
-          <td>每个 Cluster 都有的公共属性（如 ClusterRevision）</td>
+          <td><code>0xF000</code> ~ <code>0xFFFE</code></td>
+          <td>每个 Cluster 都有：FeatureMap <code>0xFFFC</code>、AttributeList <code>0xFFFB</code>、AcceptedCommandList <code>0xFFF9</code>、ClusterRevision <code>0xFFFD</code> 等</td>
         </tr>
         <tr>
           <td>标准 Command</td>
           <td><code>0x00</code> ~ <code>0xFF</code></td>
           <td>Cluster 内的标准命令</td>
         </tr>
+        <tr>
+          <td>标准 Device Type</td>
+          <td><code>0x0000</code> ~ <code>0xBFFF</code></td>
+          <td>设备类型，如 <code>0x000A</code> 门锁、<code>0x0016</code> 根节点</td>
+        </tr>
       </tbody>
     </table>
   </div>
+
+  <p>
+    拿到一个不认识的 ID？用 <a href="../tools/id-lookup/">Matter ID 查询</a> 直接查，十六进制、十进制都能认。
+    注意同一个数字在不同字段里含义不同：<code>0x0101</code> 作为 Cluster 是门锁，作为设备类型却是可调光灯。
+  </p>
 
   <h3 id="common-cluster-ids">常见 Cluster ID 速查</h3>
   <div class="table-wrap">

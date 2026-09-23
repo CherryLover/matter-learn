@@ -123,6 +123,51 @@ cluster.toggle(object : ChipClusters.DefaultClusterCallback {
         },
       },
       {
+        id: 'device-discovery',
+        title: "Reading device types and capabilities",
+        content: "<p>After commissioning, read the <strong>Descriptor</strong> cluster (<code>0x001D</code>) to learn which endpoints the device has, what type each endpoint is and which clusters it contains. Then read each cluster's <code>FeatureMap</code> / <code>AcceptedCommandList</code> for the exact capabilities. See <a href=\"../../concepts/#device-discovery\">Concepts · Reading a device's capabilities</a> for what each field means, and translate the numbers with the <a href=\"../../tools/id-lookup/\">Matter ID Lookup</a>.</p>",
+        codeExample: {
+          language: 'kotlin',
+          title: "Reading Descriptor and FeatureMap",
+          code: `// 1. PartsList on endpoint 0: which endpoints exist
+val root = ChipClusters.DescriptorCluster(devicePtr, 0)
+root.readPartsListAttribute(object :
+    ChipClusters.DescriptorCluster.PartsListAttributeCallback {
+    override fun onSuccess(endpoints: List<Int>) {
+        endpoints.forEach { ep -> readEndpoint(devicePtr, ep) }
+    }
+    override fun onError(ex: Exception) { /* handle error */ }
+})
+
+// 2. DeviceTypeList / ServerList on each endpoint: what it is, which clusters
+fun readEndpoint(devicePtr: Long, ep: Int) {
+    val descriptor = ChipClusters.DescriptorCluster(devicePtr, ep)
+    descriptor.readDeviceTypeListAttribute(object :
+        ChipClusters.DescriptorCluster.DeviceTypeListAttributeCallback {
+        override fun onSuccess(types: List<ChipStructs.DescriptorClusterDeviceTypeStruct>) {
+            // A lock endpoint returns 0x000A (Door Lock) and 0x0011 (Power Source)
+            types.forEach { Log.d(TAG, "EP$ep type=0x%04X rev=%d".format(it.deviceType, it.revision)) }
+        }
+        override fun onError(ex: Exception) {}
+    })
+    descriptor.readServerListAttribute(object :
+        ChipClusters.DescriptorCluster.ServerListAttributeCallback {
+        override fun onSuccess(clusters: List<Long>) { /* e.g. [3, 29, 47, 257] */ }
+        override fun onError(ex: Exception) {}
+    })
+}
+
+// 3. Optional features of a cluster: FeatureMap (global attribute 0xFFFC)
+ChipClusters.DoorLockCluster(devicePtr, 1).readFeatureMapAttribute(object :
+    ChipClusters.LongAttributeCallback {
+    override fun onSuccess(value: Long) {
+        val supportsFingerprint = (value and (1L shl 2)) != 0L  // bit 2 = FGP
+    }
+    override fun onError(ex: Exception) {}
+})`,
+        },
+      },
+      {
         id: 'limitations',
         title: 'Limitations & Caveats',
         content: '<p>Key issues to watch out for in Android Matter development:</p>',
@@ -230,6 +275,40 @@ try await onOff.toggle()
 
 // Read current state
 let isOn = try await onOff.readAttributeOnOff()`,
+        },
+      },
+      {
+        id: 'device-discovery',
+        title: "Reading device types and capabilities",
+        content: "<p>Use <code>MTRBaseClusterDescriptor</code> to read the Descriptor cluster (<code>0x001D</code>) for endpoints, device types and cluster lists, or call <code>readAttributes</code> with wildcards to fetch every raw attribute at once. See <a href=\"../../concepts/#device-discovery\">Concepts · Reading a device's capabilities</a> for what each field means, and translate the numbers with the <a href=\"../../tools/id-lookup/\">Matter ID Lookup</a>.</p>",
+        codeExample: {
+          language: 'swift',
+          title: "Reading Descriptor and a wildcard read",
+          code: `import Matter
+
+let device = MTRBaseDevice(nodeID: nodeID, controller: controller)
+
+// 1. PartsList on endpoint 0: which endpoints exist
+let root = MTRBaseClusterDescriptor(device: device, endpointID: 0, queue: .main)
+let endpoints = try await root.readAttributePartsList() as? [NSNumber] ?? []
+
+for ep in endpoints {
+    let descriptor = MTRBaseClusterDescriptor(device: device, endpointID: ep, queue: .main)
+
+    // 2. What this endpoint is (lock endpoint: 0x000A Door Lock + 0x0011 Power Source)
+    let types = try await descriptor.readAttributeDeviceTypeList()
+        as? [MTRDescriptorClusterDeviceTypeStruct] ?? []
+    for t in types {
+        print("EP\(ep) type=0x\(String(t.deviceType.uint32Value, radix: 16)) rev=\(t.revision)")
+    }
+
+    // 3. Which clusters this endpoint has
+    let servers = try await descriptor.readAttributeServerList() as? [NSNumber] ?? []
+}
+
+// Or: a wildcard read returns every raw attribute at once (pass nil for all three)
+let all = try await device.readAttributes(withEndpointID: nil, clusterID: nil,
+                                          attributeID: nil, params: nil, queue: .main)`,
         },
       },
       {
@@ -379,6 +458,33 @@ const endpoint = node.getEndpoint(1);
 // Control device via Cluster API
 const onOffCluster = endpoint.getClusterClient(OnOff.Cluster);
 await onOffCluster.toggle();`,
+        },
+      },
+      {
+        id: 'device-discovery',
+        title: "Reading device types and capabilities",
+        content: "<p>matterjs-server has already read every attribute after commissioning, so the browser just picks values from the node data by <code>endpoint/cluster/attribute</code>. Paste that data into the <a href=\"../../tools/json-parser/\">JSON Parser</a> to see a ready-made device profile; see <a href=\"../../concepts/#device-discovery\">Concepts · Reading a device's capabilities</a> for what each field means.</p>",
+        codeExample: {
+          language: 'typescript',
+          title: "Reading device types and capabilities from node data",
+          code: `import { MatterClient } from "@matter-server/ws-client";
+
+const client = new MatterClient("ws://localhost:5580/ws");
+await client.startListening();
+
+// After commissioning the server does a wildcard read; the node data holds every raw attribute
+// Keys are "endpoint/cluster/attribute" (decimal), the same format as Home Assistant diagnostics
+const attrs = client.nodes[nodeId].attributes;
+
+const endpoints = attrs["0/29/3"];          // Descriptor.PartsList → [1]
+for (const ep of endpoints) {
+  const types = attrs[\`\${ep}/29/0\`];        // DeviceTypeList → [{ "0": 10, "1": 3 }]  10 = 0x000A Door Lock
+  const servers = attrs[\`\${ep}/29/1\`];      // ServerList → [3, 29, 47, 257]
+  console.log(ep, types, servers);
+}
+
+const vendorName = attrs["0/40/1"];         // BasicInformation.VendorName
+const lockFeatures = attrs["1/257/65532"];  // DoorLock.FeatureMap`,
         },
       },
       {

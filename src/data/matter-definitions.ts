@@ -1,3 +1,5 @@
+import { findCluster, attributeName as specAttributeName, commandName as specCommandName } from "./matter-spec";
+
 // Cluster ID → name mapping
 export const CLUSTER_NAMES: Record<string, string> = {
   "0x3": "Identify",
@@ -9,8 +11,8 @@ export const CLUSTER_NAMES: Record<string, string> = {
   "0x2f": "PowerSource",
   "0x30": "GeneralCommissioning",
   "0x31": "NetworkCommissioning",
-  "0x32": "DiagnosticsGeneral",
-  "0x33": "SoftwareDiagnostics",
+  "0x33": "GeneralDiagnostics",
+  "0x34": "SoftwareDiagnostics",
   "0x35": "ThreadNetworkDiagnostics",
   "0x3c": "AdministratorCommissioning",
   "0x3e": "OperationalCredentials",
@@ -31,8 +33,8 @@ export const CLUSTER_DESCRIPTIONS: Record<string, string> = {
   "0x2f": "电源管理",
   "0x30": "通用配网",
   "0x31": "网络配网",
-  "0x32": "通用诊断",
-  "0x33": "软件诊断",
+  "0x33": "通用诊断",
+  "0x34": "软件诊断",
   "0x35": "Thread 网络诊断",
   "0x3c": "管理员配网",
   "0x3e": "操作凭据",
@@ -42,19 +44,20 @@ export const CLUSTER_DESCRIPTIONS: Record<string, string> = {
   "0x300": "色彩控制",
 };
 
-// DoorLock command ID → name
+// DoorLock command ID → name（与 connectedhomeip door-lock-cluster.xml 一致）
 export const DOOR_LOCK_COMMANDS: Record<string, string> = {
   "0x0": "LockDoor",
   "0x1": "UnlockDoor",
   "0x3": "UnlockWithTimeout",
-  "0x1a": "SetCredential",
-  "0x1b": "GetCredentialStatus",
-  "0x1d": "ClearCredential",
-  "0x22": "SetAliroReaderConfig",
-  "0x24": "ClearAliroReaderConfig",
-  "0x26": "SetUser",
-  "0x28": "GetUser",
-  "0x29": "ClearUser",
+  "0x1a": "SetUser",
+  "0x1b": "GetUser",
+  "0x1d": "ClearUser",
+  "0x22": "SetCredential",
+  "0x24": "GetCredentialStatus",
+  "0x26": "ClearCredential",
+  "0x27": "UnboltDoor",
+  "0x28": "SetAliroReaderConfig",
+  "0x29": "ClearAliroReaderConfig",
 };
 
 // General command names for common clusters
@@ -66,17 +69,17 @@ export const GENERAL_COMMANDS: Record<string, Record<string, string>> = {
   },
   "0x31": { // NetworkCommissioning
     "0x0": "ScanNetworks",
-    "0x3": "AddOrUpdateWiFiNetwork",
-    "0x4": "AddOrUpdateThreadNetwork",
-    "0x6": "RemoveNetwork",
-    "0x8": "ConnectNetwork",
+    "0x2": "AddOrUpdateWiFiNetwork",
+    "0x3": "AddOrUpdateThreadNetwork",
+    "0x4": "RemoveNetwork",
+    "0x6": "ConnectNetwork",
+    "0x8": "ReorderNetwork",
   },
-  "0x32": { // DiagnosticsGeneral
+  "0x33": { // GeneralDiagnostics
     "0x0": "TestEventTrigger",
   },
-  "0x33": { // SoftwareDiagnostics
+  "0x34": { // SoftwareDiagnostics
     "0x0": "ResetWatermarks",
-    "0x1": "TestEventTrigger",
   },
   "0x35": { // ThreadNetworkDiagnostics
     "0x0": "ResetCounts",
@@ -299,7 +302,7 @@ export function normalizeHexId(id: string): string {
  */
 export function getClusterName(clusterId: string): string {
   const normalized = normalizeHexId(clusterId);
-  return CLUSTER_NAMES[normalized] || `Unknown (${clusterId})`;
+  return CLUSTER_NAMES[normalized] || findCluster(clusterId)?.name || `Unknown (${clusterId})`;
 }
 
 /**
@@ -311,6 +314,9 @@ export function getCommandName(
 ): string {
   const normalizedCluster = normalizeHexId(clusterId);
   const normalizedCommand = normalizeHexId(commandId);
+
+  const fromSpec = specCommandName(clusterId, commandId);
+  if (fromSpec) return fromSpec;
 
   if (normalizedCluster === "0x101") {
     return DOOR_LOCK_COMMANDS[normalizedCommand] || commandId;
@@ -336,12 +342,14 @@ export function getAttributeInfo(
   const attrMap =
     CLUSTER_ATTRIBUTE_MAP[normalizedCluster] ||
     CLUSTER_ATTRIBUTE_MAP[normalizedCluster.toLowerCase()];
-  if (!attrMap) return undefined;
-
   const normalizedAttr = normalizeHexId(attributeId);
   // Try both original and uppercase for attribute lookup
-  return (
-    attrMap[normalizedAttr] ||
-    attrMap[normalizedAttr.toUpperCase().replace("0X", "0x")]
-  );
+  const known =
+    attrMap?.[normalizedAttr] ||
+    attrMap?.[normalizedAttr.toUpperCase().replace("0X", "0x")];
+  if (known) return known;
+
+  // 没有专门解读的属性，至少从官方数据表里给出名字
+  const name = specAttributeName(clusterId, attributeId);
+  return name ? { name } : undefined;
 }

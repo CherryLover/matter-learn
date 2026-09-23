@@ -8,6 +8,8 @@ export default {
   intro: 'Parse Matter device standard data formats, automatically identify data types, translate Cluster IDs and Attribute IDs to readable names, and provide explanations for key status values.',
   parserHeading: 'Parser Tool',
   formatsHeading: 'Supported Data Formats',
+  format0: 'Raw device data',
+  format0Desc: '<code>attributes</code> keyed as <code>"endpoint/cluster/attribute"</code> (decimal), e.g. a Home Assistant "Download diagnostics" file or matter-server node data. It produces a device profile: device types, vendor and model, the features and accepted commands of every cluster, each labelled with the standard field it came from',
   format1: 'Device Capability Declaration',
   format1Desc: 'Contains <code>endpoints</code> with Cluster <code>commands</code>, describing the endpoints, Clusters and commands a device supports',
   format2: 'Attribute State',
