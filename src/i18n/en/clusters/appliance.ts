@@ -2799,7 +2799,7 @@ export const clusters: Record<string, ClusterContent> = {
 </style>`,
   },
   'refrigerator-mode': {
-    title: 'RefrigeratorAndTemperatureControlledCabinetMode Cluster (0x0052)',
+    title: 'RefrigeratorMode Cluster (0x0052)',
     description: 'Complete reference for the Matter RefrigeratorAndTemperatureControlledCabinetMode Cluster (0x0052) — derived from ModeBase, supports RapidCool/RapidFreeze mode switching, with independent refrigerator and freezer compartment control in multi-Endpoint architecture.',
     prev: undefined,
     next: undefined,

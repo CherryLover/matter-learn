@@ -1,0 +1,5 @@
+# Old cluster prev/next links pointed to /clusters/clusters/ (already indexed by search engines); 301 them to the cluster index
+/zh/clusters/clusters/ /zh/clusters/ 301
+/en/clusters/clusters/ /en/clusters/ 301
+/zh/clusters/clusters /zh/clusters/ 301
+/en/clusters/clusters /en/clusters/ 301

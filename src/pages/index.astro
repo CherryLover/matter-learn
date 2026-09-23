@@ -1,41 +1,116 @@
 ---
 /**
- * Root path (/) — redirect to language-prefixed path
- * Uses client-side detection: localStorage preference > navigator.language > default zh
+ * Site root (/).
+ *
+ * Renders the Chinese home page directly (no redirect, no meta refresh) so the
+ * root URL is a real, indexable page with a title, description and <h1>.
+ * Because its content duplicates /zh/, the canonical points to /zh/; the
+ * hreflang set (zh → /zh/, en → /en/, x-default → /zh/) matches every other
+ * page on the site. English-preferring visitors get a small, dismissible hint
+ * linking to /en/ instead of an automatic redirect.
  */
+import HomePage from '../components/HomePage.astro';
 ---
 
-<!doctype html>
-<html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Matter Learn</title>
-    <meta name="robots" content="noindex" />
-    <link rel="canonical" href={`${Astro.site}zh/`} />
-    <script is:inline>
-      (function() {
-        try {
-          var saved = localStorage.getItem('preferredLang');
-          if (saved === 'en') { window.location.replace('/en/'); return; }
-          if (saved === 'zh') { window.location.replace('/zh/'); return; }
-        } catch(e) {}
-        // Detect browser language preference
-        var langs = (navigator.languages || [navigator.language || '']);
-        var prefersEn = false;
-        for (var i = 0; i < langs.length; i++) {
-          var l = (langs[i] || '').toLowerCase();
-          if (l.indexOf('zh') === 0) break;    // Chinese found first
-          if (l.indexOf('en') === 0) { prefersEn = true; break; }
+<HomePage lang="zh" canonical="/zh/">
+  <div class="lang-hint" id="lang-hint" lang="en" hidden>
+    <span>Prefer English? This site is also available in English.</span>
+    <a href="/en/" class="lang-hint-link" data-lang-switch>Read in English →</a>
+    <button type="button" class="lang-hint-close" aria-label="Dismiss">×</button>
+  </div>
+</HomePage>
+
+<script is:inline>
+  (function () {
+    function init() {
+      var hint = document.getElementById('lang-hint');
+      if (!hint) return;
+      var show = false;
+      try {
+        var saved = localStorage.getItem('preferredLang');
+        if (localStorage.getItem('langHintDismissed') === '1') saved = 'zh';
+        if (saved === 'en') show = true;
+        else if (!saved) {
+          var langs = navigator.languages || [navigator.language || ''];
+          for (var i = 0; i < langs.length; i++) {
+            var l = (langs[i] || '').toLowerCase();
+            if (l.indexOf('zh') === 0) break;
+            if (l.indexOf('en') === 0) { show = true; break; }
+          }
         }
-        window.location.replace(prefersEn ? '/en/' : '/zh/');
-      })();
-    </script>
-    <!-- Fallback for no-JS: default to Chinese -->
-    <noscript>
-      <meta http-equiv="refresh" content="0;url=/zh/" />
-    </noscript>
-  </head>
-  <body>
-    <p>Redirecting...</p>
-  </body>
-</html>
+      } catch (e) {}
+      if (!show) return;
+      hint.hidden = false;
+      var link = hint.querySelector('.lang-hint-link');
+      if (link) link.addEventListener('click', function () {
+        try { localStorage.setItem('preferredLang', 'en'); } catch (e) {}
+      });
+      var close = hint.querySelector('.lang-hint-close');
+      if (close) close.addEventListener('click', function () {
+        hint.hidden = true;
+        try { localStorage.setItem('langHintDismissed', '1'); } catch (e) {}
+      });
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
+  })();
+</script>
+
+<style>
+  .lang-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.75rem;
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: 0.625rem 2.5rem 0.625rem 1rem;
+    position: relative;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+  }
+
+  .lang-hint[hidden] {
+    display: none;
+  }
+
+  .lang-hint-link {
+    font-weight: 600;
+    color: var(--color-primary-600, #4f46e5);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .lang-hint-link:hover {
+    text-decoration: underline;
+  }
+
+  :global(.dark) .lang-hint-link {
+    color: var(--color-primary-400, #818cf8);
+  }
+
+  .lang-hint-close {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.75rem;
+    height: 1.75rem;
+    border: none;
+    background: none;
+    color: var(--text-muted);
+    font-size: 1.125rem;
+    line-height: 1;
+    cursor: pointer;
+    border-radius: 0.25rem;
+  }
+
+  .lang-hint-close:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+  }
+</style>

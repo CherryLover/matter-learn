@@ -11,7 +11,10 @@ interface Props {
 
 const { currentPath = '', lang = 'zh' } = Astro.props;
 const altLang = getAlternateLang(lang);
-const altPath = localePath(altLang, currentPath);
+// 404 页没有对应的语言版本（/en/404/ 不存在），切换语言时回到对方语言首页
+const altPath = stripLangPrefix(currentPath) === '/404/'
+  ? localePath(altLang, '/')
+  : localePath(altLang, currentPath);
 
 interface NavItem {
   title: string;

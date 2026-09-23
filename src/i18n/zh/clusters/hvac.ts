@@ -1606,7 +1606,7 @@ export const clusters: Record<string, ClusterContent> = {
 </style>`,
   },
   'thermostat-ui-configuration': {
-    title: '温控器界面配置 Cluster · ThermostatUserInterfaceConfiguration（0x0204）',
+    title: '温控器界面配置 Cluster · ThermostatUIConfiguration（0x0204）',
     description: 'Matter ThermostatUserInterfaceConfiguration Cluster（0x0204）完整参考 — TemperatureDisplayMode 温度显示单位、KeypadLockout 按键锁定级别、ScheduleProgrammingVisibility 日程可见性，温控器物理面板行为配置。',
     prev: { title: '温控（Thermostat）', slug: 'thermostat' },
     next: undefined,

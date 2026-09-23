@@ -875,7 +875,7 @@ export const clusters: Record<string, ClusterContent> = {
   </script>`,
   },
   'bridged-device-basic-information': {
-    title: '桥接设备基本信息 Cluster · BridgedDeviceBasicInformation（0x0039）',
+    title: '桥接设备基本信息 · BridgedDeviceBasicInformation（0x0039）',
     description: 'Matter BridgedDeviceBasicInformation Cluster（0x0039）完整参考 — 桥接设备的厂商信息、产品标识、Reachable 可达状态、ReachableChanged 事件等属性定义与使用场景。',
     prev: { title: '基本信息（BasicInformation）', slug: 'basic-information' },
     next: undefined,

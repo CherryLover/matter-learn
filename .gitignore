@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # claude code
 .claude/
+
+# Cloudflare wrangler 本地缓存
+.wrangler/

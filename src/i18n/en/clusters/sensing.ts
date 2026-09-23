@@ -2132,7 +2132,7 @@ val display = flowRate?.let { String.format("%.1f m³/h", it) } ?: "--"\`}</code
   </script>`,
   },
   'carbon-dioxide-concentration-measurement': {
-    title: 'CarbonDioxideConcentrationMeasurement Cluster (0x040D)',
+    title: 'CarbonDioxideConcentration Cluster (0x040D)',
     description: 'Matter CarbonDioxideConcentrationMeasurement Cluster (0x040D) complete reference — CO2 concentration measurement attributes, Feature Map (MEA/LEV/PEA/AVG), MeasurementUnit/MeasurementMedium/LevelValue enum quick reference, and the shared Concentration Measurement Cluster pattern.',
     prev: { title: 'Cluster Reference', slug: 'clusters' },
     next: undefined,
@@ -3521,7 +3521,7 @@ val level: Int? = readAttribute(0x000A)  // LevelValueEnum\`}</code></pre>
   </script>`,
   },
   'carbon-monoxide-concentration-measurement': {
-    title: 'CarbonMonoxideConcentrationMeasurement Cluster (0x040C)',
+    title: 'CarbonMonoxideConcentration Cluster (0x040C)',
     description: 'Matter CarbonMonoxideConcentrationMeasurement Cluster (0x040C) reference — CO concentration, safety thresholds, level classification, Feature bitmap, enum quick reference and typical usage scenarios.',
     prev: { title: 'SmokeCOAlarm', slug: 'smoke-co-alarm' },
     next: undefined,

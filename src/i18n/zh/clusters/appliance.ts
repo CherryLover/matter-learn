@@ -2799,7 +2799,7 @@ export const clusters: Record<string, ClusterContent> = {
 </style>`,
   },
   'refrigerator-mode': {
-    title: '冰箱模式 Cluster · RefrigeratorAndTemperatureControlledCabinetMode（0x0052）',
+    title: '冰箱模式 Cluster · RefrigeratorMode（0x0052）',
     description: 'Matter RefrigeratorAndTemperatureControlledCabinetMode Cluster（0x0052）完整参考 — 基于 ModeBase 派生，支持 RapidCool/RapidFreeze 模式切换，多 Endpoint 架构下冷藏室与冷冻室独立控制。',
     prev: undefined,
     next: undefined,
@@ -6476,7 +6476,7 @@ export const clusters: Record<string, ClusterContent> = {
   </script>`,
   },
   'activated-carbon-filter-monitoring': {
-    title: '活性炭滤芯监测 Cluster · ActivatedCarbonFilterMonitoring（0x0072）',
+    title: '活性炭滤芯监测 · ActivatedCarbonFilterMonitoring（0x0072）',
     description: 'Matter ActivatedCarbonFilterMonitoring Cluster（0x0072）完整参考 — 滤芯寿命、更换提醒、ResetCondition 命令，用于监测活性炭滤芯状态的 Cluster。',
     prev: undefined,
     next: undefined,

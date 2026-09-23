@@ -2132,7 +2132,7 @@ val display = flowRate?.let { String.format("%.1f m³/h", it) } ?: "--"\`}</code
   </script>`,
   },
   'carbon-dioxide-concentration-measurement': {
-    title: 'CO2 浓度测量 Cluster · CarbonDioxideConcentrationMeasurement（0x040D）',
+    title: 'CO2 浓度测量 Cluster · CarbonDioxideConcentration（0x040D）',
     description: 'Matter CarbonDioxideConcentrationMeasurement Cluster（0x040D）完整参考 — CO2 浓度测量属性、Feature Map（MEA/LEV/PEA/AVG）、MeasurementUnit/MeasurementMedium/LevelValue 枚举值速查、浓度测量 Cluster 通用模式说明。',
     prev: { title: 'Cluster 手册', slug: 'clusters' },
     next: undefined,
@@ -2795,7 +2795,7 @@ val display = flowRate?.let { String.format("%.1f m³/h", it) } ?: "--"\`}</code
   </script>`,
   },
   'pm25-concentration-measurement': {
-    title: 'PM2.5 浓度测量 Cluster · Pm25ConcentrationMeasurement（0x042A）',
+    title: 'PM2.5 浓度测量 · Pm25ConcentrationMeasurement（0x042A）',
     description: 'Matter Pm25ConcentrationMeasurement Cluster（0x042A）完整参考 — Feature Map（MEA/LEV/MED/CRI/PEA/AVG）、MeasuredValue / PeakMeasuredValue / AverageMeasuredValue 属性、MeasurementUnit / MeasurementMedium / LevelValue 枚举、PM2.5 AQI 对照表及场景应用。',
     prev: { title: 'Cluster 手册', slug: 'clusters' },
     next: undefined,
@@ -3521,7 +3521,7 @@ val level: Int? = readAttribute(0x000A)  // LevelValueEnum\`}</code></pre>
   </script>`,
   },
   'carbon-monoxide-concentration-measurement': {
-    title: '一氧化碳浓度测量 Cluster · CarbonMonoxideConcentrationMeasurement（0x040C）',
+    title: '一氧化碳浓度测量 Cluster · CarbonMonoxideConcentration（0x040C）',
     description: 'Matter CarbonMonoxideConcentrationMeasurement Cluster（0x040C）参考 — CO 浓度、安全阈值、等级判定、Feature 位图、枚举值速查及典型应用场景。',
     prev: { title: '烟雾/CO 报警（SmokeCOAlarm）', slug: 'smoke-co-alarm' },
     next: undefined,

@@ -20,7 +20,14 @@ export default defineConfig({
       redirectToDefaultLocale: false,
     },
   },
-  integrations: [react(), sitemap()],
+  integrations: [
+    react(),
+    sitemap({
+      // "/" renders the Chinese home page but its canonical is /zh/, so only
+      // list the canonical language URLs.
+      filter: (page) => new URL(page).pathname !== '/',
+    }),
+  ],
   vite: {
     plugins: [tailwindcss()],
   },

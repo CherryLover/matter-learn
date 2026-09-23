@@ -12,6 +12,10 @@ interface Props {
   fullWidth?: boolean;
   type?: 'website' | 'article';
   lang?: Lang;
+  /** Absolute or site-relative canonical URL; defaults to the current page */
+  canonical?: string;
+  /** Error pages etc.: emit robots noindex and skip canonical/hreflang */
+  noindex?: boolean;
 }
 
 const currentPath = Astro.url.pathname;
@@ -19,8 +23,8 @@ const lang = Astro.props.lang ?? getLangFromPath(currentPath);
 const altLang = getAlternateLang(lang);
 const defaultDescription = t(lang, 'meta.defaultDescription');
 
-const { title, description = defaultDescription, fullWidth = false, type = 'website' } = Astro.props;
-const canonicalURL = new URL(currentPath, Astro.site);
+const { title, description = defaultDescription, fullWidth = false, type = 'website', canonical, noindex = false } = Astro.props;
+const canonicalURL = new URL(canonical ?? currentPath, Astro.site);
 const altURL = new URL(localePath(altLang, currentPath), Astro.site);
 const fullTitle = `${title} | Matter Learn`;
 
@@ -50,12 +54,18 @@ const jsonLd = {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonicalURL.href} />
+    {noindex ? (
+      <meta name="robots" content="noindex" />
+    ) : (
+      <>
+        <link rel="canonical" href={canonicalURL.href} />
 
-    <!-- hreflang alternates -->
-    <link rel="alternate" hreflang="zh" href={new URL(localePath('zh', currentPath), Astro.site).href} />
-    <link rel="alternate" hreflang="en" href={new URL(localePath('en', currentPath), Astro.site).href} />
-    <link rel="alternate" hreflang="x-default" href={new URL(localePath('zh', currentPath), Astro.site).href} />
+        <!-- hreflang alternates -->
+        <link rel="alternate" hreflang="zh" href={new URL(localePath('zh', currentPath), Astro.site).href} />
+        <link rel="alternate" hreflang="en" href={new URL(localePath('en', currentPath), Astro.site).href} />
+        <link rel="alternate" hreflang="x-default" href={new URL(localePath('zh', currentPath), Astro.site).href} />
+      </>
+    )}
 
     <!-- Open Graph -->
     <meta property="og:type" content={type} />
