@@ -62,6 +62,9 @@ const ui = {
   'nav.cluster.generalDiag': { zh: '通用诊断 GeneralDiag', en: 'GeneralDiagnostics' },
   'nav.cluster.elecPower': { zh: '电功率 ElecPower', en: 'ElectricalPower' },
 
+  // ── Resources navigation ───────────────────────────────────────────
+  'nav.resources': { zh: '生态资源', en: 'Resources' },
+
   // ── Header buttons ────────────────────────────────────────────────
   'header.toggleTheme': { zh: '切换主题', en: 'Toggle theme' },
   'header.toggleMenu': { zh: '展开菜单', en: 'Toggle menu' },
@@ -78,6 +81,11 @@ const ui = {
   'footer.clusterManual': { zh: 'Cluster 手册', en: 'Cluster Manual' },
   'footer.jsonParser': { zh: 'JSON 解析器', en: 'JSON Parser' },
   'footer.officialResources': { zh: '官方资源', en: 'Official Resources' },
+  'footer.resources': { zh: '生态资源', en: 'Resources' },
+  'footer.resources.official': { zh: '官方标准', en: 'Official Standards' },
+  'footer.resources.platforms': { zh: '开发平台', en: 'Dev Platforms' },
+  'footer.resources.openSource': { zh: '开源项目', en: 'Open Source' },
+  'footer.resources.community': { zh: '社区站点', en: 'Community Sites' },
   'footer.more': { zh: '更多', en: 'More' },
   'footer.dataSourceLabel': { zh: '数据来源说明', en: 'Data Source' },
   'footer.dataSourceText': {

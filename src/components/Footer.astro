@@ -35,7 +35,18 @@ const lp = (path: string) => localePath(lang, path);
         </ul>
       </div>
 
-      <!-- Column 3: Official resources -->
+      <!-- Column 3: Resources -->
+      <div class="footer-col">
+        <h3 class="footer-heading">{t(lang, 'footer.resources')}</h3>
+        <ul class="footer-links">
+          <li><a href={`${lp('/resources/')}#official`}>{t(lang, 'footer.resources.official')}</a></li>
+          <li><a href={`${lp('/resources/')}#platforms`}>{t(lang, 'footer.resources.platforms')}</a></li>
+          <li><a href={`${lp('/resources/')}#open-source`}>{t(lang, 'footer.resources.openSource')}</a></li>
+          <li><a href={`${lp('/resources/')}#knowledge`}>{t(lang, 'footer.resources.community')}</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 4: Official resources -->
       <div class="footer-col">
         <h3 class="footer-heading">{t(lang, 'footer.officialResources')}</h3>
         <ul class="footer-links">
@@ -103,7 +114,7 @@ const lp = (path: string) => localePath(lang, path);
 
   .footer-grid {
     display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr 1.2fr;
     gap: 2.5rem;
     padding-bottom: 2.5rem;
   }
