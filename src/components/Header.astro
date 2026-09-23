@@ -1,5 +1,5 @@
 ---
-import { Layers, ChevronDown, ArrowUpRight, Sun, Moon, Menu, X, Globe } from 'lucide-astro';
+import { ChevronDown, ArrowUpRight, Sun, Moon, Menu, X, Globe } from 'lucide-astro';
 import { type Lang, localePath, getAlternateLang, stripLangPrefix } from '../i18n/config';
 import { t } from '../i18n/ui';
 
@@ -116,7 +116,16 @@ function isDropdownActive(item: NavItem, current: string): boolean {
   <div class="header-inner">
     <!-- Logo -->
     <a href={lp('/')} class="logo">
-      <Layers size={24} class="logo-icon" />
+      <svg class="logo-icon" width="24" height="24" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="60,18 92,36 92,72 60,90 28,72 28,36" stroke="currentColor" stroke-width="3"/>
+        <text x="60" y="68" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="36" font-weight="700" fill="currentColor" letter-spacing="-2">M</text>
+        <circle cx="60" cy="18" r="4" fill="currentColor" opacity="0.7"/>
+        <circle cx="92" cy="36" r="4" fill="currentColor" opacity="0.7"/>
+        <circle cx="92" cy="72" r="4" fill="currentColor" opacity="0.7"/>
+        <circle cx="60" cy="90" r="4" fill="currentColor" opacity="0.7"/>
+        <circle cx="28" cy="72" r="4" fill="currentColor" opacity="0.7"/>
+        <circle cx="28" cy="36" r="4" fill="currentColor" opacity="0.7"/>
+      </svg>
       <span class="logo-text">Matter Learn</span>
     </a>
 

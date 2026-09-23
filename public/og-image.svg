@@ -10,10 +10,8 @@
     </linearGradient>
   </defs>
 
-  <!-- Background -->
   <rect width="1200" height="630" fill="url(#bg)"/>
 
-  <!-- Decorative grid dots -->
   <g opacity="0.06">
     <pattern id="dots" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
       <circle cx="20" cy="20" r="1.5" fill="white"/>
@@ -21,26 +19,25 @@
     <rect width="1200" height="630" fill="url(#dots)"/>
   </g>
 
-  <!-- Decorative circles -->
   <circle cx="950" cy="120" r="200" fill="none" stroke="#6366f1" stroke-width="1" opacity="0.15"/>
   <circle cx="1000" cy="150" r="140" fill="none" stroke="#818cf8" stroke-width="1" opacity="0.1"/>
 
-  <!-- Icon: layers (simplified Matter/protocol icon) -->
-  <g transform="translate(100, 180)" stroke="#a5b4fc" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M24.83 2.18a4 4 0 0 0-3.66 0L2.6 12.08a2 2 0 0 0 0 3.83l18.58 9.91a4 4 0 0 0 3.66 0l18.58-9.9a2 2 0 0 0 0-3.83z" transform="scale(1.5)"/>
-    <path d="M2 24a2 2 0 0 0 1.16 1.82l18.6 9.91a4 4 0 0 0 3.65 0l18.58-9.9A2 2 0 0 0 46 24" transform="scale(1.5)"/>
-    <path d="M2 34a2 2 0 0 0 1.16 1.82l18.6 9.91a4 4 0 0 0 3.65 0l18.58-9.9A2 2 0 0 0 46 34" transform="scale(1.5)"/>
+  <!-- Logo: Hex M with nodes -->
+  <g transform="translate(100, 160)">
+    <polygon points="60,0 110,28 110,84 60,112 10,84 10,28" fill="none" stroke="#6366f1" stroke-width="3.5"/>
+    <text x="60" y="72" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="52" font-weight="700" fill="#a5b4fc" letter-spacing="-2">M</text>
+    <circle cx="60" cy="0" r="5" fill="#818cf8"/>
+    <circle cx="110" cy="28" r="5" fill="#818cf8"/>
+    <circle cx="110" cy="84" r="5" fill="#818cf8"/>
+    <circle cx="60" cy="112" r="5" fill="#818cf8"/>
+    <circle cx="10" cy="84" r="5" fill="#818cf8"/>
+    <circle cx="10" cy="28" r="5" fill="#818cf8"/>
   </g>
 
-  <!-- Title -->
-  <text x="100" y="320" font-family="system-ui, -apple-system, sans-serif" font-size="64" font-weight="800" fill="white" letter-spacing="-1">Matter 协议学习中心</text>
+  <text x="100" y="340" font-family="system-ui, -apple-system, sans-serif" font-size="64" font-weight="800" fill="white" letter-spacing="-1">Matter 协议学习中心</text>
+  <text x="100" y="400" font-family="system-ui, -apple-system, sans-serif" font-size="26" fill="#c7d2fe" opacity="0.9">智能家居统一标准 · 核心概念 · Cluster 速查 · 数据解析</text>
 
-  <!-- Subtitle -->
-  <text x="100" y="380" font-family="system-ui, -apple-system, sans-serif" font-size="26" fill="#c7d2fe" opacity="0.9">智能家居统一标准 · 核心概念 · Cluster 速查 · 数据解析</text>
+  <rect x="100" y="450" width="80" height="4" rx="2" fill="url(#accent)"/>
 
-  <!-- Bottom accent bar -->
-  <rect x="100" y="440" width="80" height="4" rx="2" fill="url(#accent)"/>
-
-  <!-- URL -->
-  <text x="100" y="530" font-family="system-ui, -apple-system, sans-serif" font-size="20" fill="#818cf8" opacity="0.7">matter-learn.flyooo.uk</text>
+  <text x="100" y="540" font-family="system-ui, -apple-system, sans-serif" font-size="20" fill="#818cf8" opacity="0.7">matter-learn.flyooo.uk</text>
 </svg>

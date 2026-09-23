@@ -1,5 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-  <path d="M16 2L2 9.5l14 7.5 14-7.5L16 2z" fill="#6366f1" opacity="0.9"/>
-  <path d="M2 22.5l14 7.5 14-7.5" stroke="#6366f1" stroke-width="2.5" fill="none"/>
-  <path d="M2 16l14 7.5 14-7.5" stroke="#6366f1" stroke-width="2.5" fill="none"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 120 120">
+  <rect width="120" height="120" rx="20" fill="#1e1b4b"/>
+  <polygon points="60,18 92,36 92,72 60,90 28,72 28,36" fill="none" stroke="#6366f1" stroke-width="2.5"/>
+  <text x="60" y="68" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="36" font-weight="700" fill="#a5b4fc" letter-spacing="-2">M</text>
+  <circle cx="60" cy="18" r="3" fill="#818cf8"/>
+  <circle cx="92" cy="36" r="3" fill="#818cf8"/>
+  <circle cx="92" cy="72" r="3" fill="#818cf8"/>
+  <circle cx="60" cy="90" r="3" fill="#818cf8"/>
+  <circle cx="28" cy="72" r="3" fill="#818cf8"/>
+  <circle cx="28" cy="36" r="3" fill="#818cf8"/>
 </svg>
