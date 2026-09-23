@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { getLangFromPath, localePath, getAlternateLang, type Lang } from '../i18n/config';
@@ -79,6 +80,21 @@ const jsonLd = {
 
     <!-- JSON-LD -->
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+    <ClientRouter />
+
+    <!-- Theme persistence: runs once in head, persists across client-side navigations -->
+    <script is:inline>
+    (function() {
+      function applyTheme() {
+        var theme = localStorage.getItem('theme') ||
+          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.classList.toggle('dark', theme === 'dark');
+      }
+      applyTheme();
+      document.addEventListener('astro:after-swap', applyTheme);
+    })();
+    </script>
   </head>
   <body>
     <Header currentPath={currentPath} lang={lang} />
@@ -93,24 +109,25 @@ const jsonLd = {
       </svg>
     </button>
 
-    <script is:inline>
-    (function() {
-      var btn = document.getElementById('back-to-top');
+    <script>
+    let scrollAc: AbortController | undefined;
+    document.addEventListener('astro:page-load', () => {
+      if (scrollAc) scrollAc.abort();
+      scrollAc = new AbortController();
+      const btn = document.getElementById('back-to-top');
       if (!btn) return;
-      var shown = false;
+      let shown = false;
       function toggle() {
-        var shouldShow = window.scrollY > 400;
+        const shouldShow = window.scrollY > 400;
         if (shouldShow !== shown) {
           shown = shouldShow;
-          btn.classList.toggle('visible', shown);
+          btn!.classList.toggle('visible', shown);
         }
       }
-      window.addEventListener('scroll', toggle, { passive: true });
-      btn.addEventListener('click', function() {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
+      window.addEventListener('scroll', toggle, { passive: true, signal: scrollAc.signal });
+      btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
       toggle();
-    })();
+    });
     </script>
   </body>
 </html>
