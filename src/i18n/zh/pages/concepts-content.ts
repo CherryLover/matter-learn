@@ -36,6 +36,13 @@ export default {
     打个比方：Matter 就像 USB-C 接口。以前每家手机一个充电口，现在统一成 USB-C，线和设备都可以互换。
     Matter 做的事一样 —— 给智能家居设备定义了一个"统一接口"。
   </p>
+  <p>
+    从技术上看，Matter 是一个<strong>应用层协议</strong>：它只定义上面几层（设备能做什么、怎么交互、怎么加密），下面直接跑在现有的 Wi-Fi、Thread、以太网这些 IP 网络上；蓝牙只在配网阶段临时用一下。
+  </p>
+  <figure class="diagram">
+    <img src="/images/diagrams/stack-zh.webp" alt="Matter 协议分层：应用层（Cluster 数据模型）、交互模型、安全层、传输层由 Matter 定义，网络层 IPv6 和链路层 Wi-Fi / Thread / 以太网复用现有技术，蓝牙 BLE 仅用于配网" width="1536" height="1024" loading="lazy" decoding="async" />
+    <figcaption>Matter 只定义上面四层，下面复用现有 IP 网络；蓝牙 BLE 只在配网时用</figcaption>
+  </figure>
 
   <!-- ====== 四层数据模型 ====== -->
   <h2 id="data-model">Matter 的四层数据模型</h2>
@@ -446,6 +453,10 @@ export default {
     比如 "DoorLock" 这个 Device Type 要求设备至少实现 DoorLock Cluster、Identify Cluster 等。
     "Dimmable Light" 则要求实现 OnOff Cluster 和 LevelControl Cluster。
   </p>
+  <figure class="diagram">
+    <img src="/images/diagrams/device-type-zh.webp" alt="Device Type 示意：门锁类型必须实现 DoorLock 和 Identify Cluster；可调光灯类型必须实现 OnOff、LevelControl、Identify 和 Groups Cluster" width="1536" height="1024" loading="lazy" decoding="async" />
+    <figcaption>两个 Device Type 各自要求的 Cluster 清单</figcaption>
+  </figure>
   <p>
     类比：就像酒店要被评为"五星级"，就必须有健身房、泳池、24 小时前台等设施。设备要声称自己是"门锁"类型，就必须具备 Matter 规定的那些能力。
   </p>
@@ -460,6 +471,10 @@ export default {
   <p>
     一个设备可以同时加入多个 Fabric。比如一个门锁可以同时被 Apple Home 和 Google Home 控制 —— 它在两个 Fabric 里各有一个身份。
   </p>
+  <figure class="diagram">
+    <img src="/images/diagrams/fabric-zh.webp" alt="Fabric 示意：一把智能门锁同时处于 Apple Home Fabric 和 Google Home Fabric 中，在每个 Fabric 里持有独立的证书" width="1536" height="1024" loading="lazy" decoding="async" />
+    <figcaption>同一把门锁同时加入两个 Fabric，各持一份独立证书</figcaption>
+  </figure>
 
   <h2 id="commissioning">Commissioner 与配网</h2>
   <p>
@@ -470,10 +485,16 @@ export default {
   </p>
   <ol>
     <li>Commissioner（通常是手机 App）扫描设备的二维码或输入配对码</li>
+    <li>通过蓝牙 BLE 发现设备（设备还没进网络，只能靠蓝牙沟通）</li>
     <li>通过 PASE（Passcode-Authenticated Session Establishment）建立安全会话</li>
     <li>Commissioner 给设备分配证书（NOC），设备正式加入 Fabric</li>
+    <li>把 Wi-Fi 或 Thread 的网络凭据发给设备，让它接入家庭网络</li>
     <li>配网完成后，手机 App 或智能音箱作为 <strong>Controller</strong> 就可以读取 Attribute、发送 Command 来控制设备了</li>
   </ol>
+  <figure class="diagram">
+    <img src="/images/diagrams/commissioning-zh.webp" alt="Matter 配网流程六步：扫描二维码、蓝牙发现设备、PASE 建立安全会话、颁发证书 NOC 加入 Fabric、配置 Wi-Fi/Thread 网络、配网完成由 Controller 控制" width="1536" height="1024" loading="lazy" decoding="async" />
+    <figcaption>配网的六个步骤：前半段靠蓝牙和配对码建立信任，后半段把设备接进家庭网络</figcaption>
+  </figure>
 
   <div class="callout callout-info">
     <div class="callout-title">角色说明</div>

@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { BookOpen, Wrench, Code, MessageSquare, Users, SearchCode } from 'lucide-astro';
+import { BookOpen, Wrench, Code, MessageSquare, Users, SearchCode, Smartphone, Milestone, Library } from 'lucide-astro';
 import { SUPPORTED_LANGS, localePath, type Lang } from '../../i18n/config';
 
 export function getStaticPaths() {
@@ -14,6 +14,20 @@ const lp = (path: string) => localePath(lang, path);
 const homeText = lang === 'en'
   ? (await import('../../i18n/en/pages/home')).default
   : (await import('../../i18n/zh/pages/home')).default;
+
+// Site-wide numbers, derived from the data files so they never go stale
+const clusterIndex = (await import('../../i18n/zh/pages/cluster-index')).default;
+const sdkText = (await import('../../i18n/zh/pages/sdk')).default;
+const roadmapText = (await import('../../i18n/zh/pages/roadmap')).default;
+const stats = {
+  clusters: clusterIndex.categories.reduce((n: number, c: any) => n + c.clusters.length, 0),
+  categories: clusterIndex.categories.length,
+  platforms: sdkText.platforms.length,
+  versionRange: `${roadmapText.versions[roadmapText.versions.length - 1].version} – ${roadmapText.timelineContext.latestSpec}`,
+};
+const clusterDesc = homeText.featureClusterDesc
+  .replace('{count}', String(stats.clusters))
+  .replace('{categories}', String(stats.categories));
 ---
 
 <BaseLayout title={homeText.title} description={homeText.description} lang={lang}>
@@ -24,6 +38,29 @@ const homeText = lang === 'en'
     <div class="hero-actions">
       <a href={lp('/concepts/')} class="btn btn-primary">{homeText.heroStartLearning}</a>
       <a href={lp('/clusters/')} class="btn btn-secondary">{homeText.heroClusterManual}</a>
+    </div>
+  </div>
+
+  <figure class="diagram hero-diagram">
+    <img src={`/images/diagrams/interop-${lang}.webp`} alt={homeText.heroDiagramAlt} width="1536" height="1024" fetchpriority="high" decoding="async" />
+  </figure>
+
+  <div class="stats">
+    <div class="stat">
+      <span class="stat-value">{stats.clusters}</span>
+      <span class="stat-label">{homeText.statClusters}</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">{stats.categories}</span>
+      <span class="stat-label">{homeText.statCategories}</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">{stats.platforms}</span>
+      <span class="stat-label">{homeText.statPlatforms}</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">{stats.versionRange}</span>
+      <span class="stat-label">{homeText.statVersions}</span>
     </div>
   </div>
 
@@ -41,7 +78,7 @@ const homeText = lang === 'en'
         <Wrench size={24} />
       </div>
       <h3 class="feature-title">{homeText.featureClusterTitle}</h3>
-      <p class="feature-desc">{homeText.featureClusterDesc}</p>
+      <p class="feature-desc">{clusterDesc}</p>
     </a>
 
     <a href={lp('/tools/json-parser/')} class="feature-card">
@@ -50,6 +87,30 @@ const homeText = lang === 'en'
       </div>
       <h3 class="feature-title">{homeText.featureToolsTitle}</h3>
       <p class="feature-desc">{homeText.featureToolsDesc}</p>
+    </a>
+
+    <a href={lp('/sdk/')} class="feature-card">
+      <div class="feature-icon">
+        <Smartphone size={24} />
+      </div>
+      <h3 class="feature-title">{homeText.featureSdkTitle}</h3>
+      <p class="feature-desc">{homeText.featureSdkDesc}</p>
+    </a>
+
+    <a href={lp('/roadmap/')} class="feature-card">
+      <div class="feature-icon">
+        <Milestone size={24} />
+      </div>
+      <h3 class="feature-title">{homeText.featureRoadmapTitle}</h3>
+      <p class="feature-desc">{homeText.featureRoadmapDesc}</p>
+    </a>
+
+    <a href={lp('/resources/')} class="feature-card">
+      <div class="feature-icon">
+        <Library size={24} />
+      </div>
+      <h3 class="feature-title">{homeText.featureResourcesTitle}</h3>
+      <p class="feature-desc">{homeText.featureResourcesDesc}</p>
     </a>
   </div>
 
@@ -104,6 +165,24 @@ const homeText = lang === 'en'
           <a href={lp('/clusters/')} class="rm-link">{homeText.step5Link}</a>
         </div>
       </div>
+
+      <div class="roadmap-step">
+        <div class="step-circle">6</div>
+        <div class="step-content">
+          <h4>{homeText.step6Title}</h4>
+          <p>{homeText.step6Desc}</p>
+          <a href={lp('/sdk/')} class="rm-link">{homeText.step6Link}</a>
+        </div>
+      </div>
+
+      <div class="roadmap-step">
+        <div class="step-circle">7</div>
+        <div class="step-content">
+          <h4>{homeText.step7Title}</h4>
+          <p>{homeText.step7Desc}</p>
+          <a href={lp('/roadmap/')} class="rm-link">{homeText.step7Link}</a>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -131,6 +210,18 @@ const homeText = lang === 'en'
       <a href={lp('/tools/json-parser/')} class="qr-row">
         <span class="qr-want">{homeText.qr5Want}</span>
         <span class="qr-go">{homeText.qr5Go}</span>
+      </a>
+      <a href={lp('/sdk/')} class="qr-row">
+        <span class="qr-want">{homeText.qr7Want}</span>
+        <span class="qr-go">{homeText.qr7Go}</span>
+      </a>
+      <a href={lp('/roadmap/')} class="qr-row">
+        <span class="qr-want">{homeText.qr8Want}</span>
+        <span class="qr-go">{homeText.qr8Go}</span>
+      </a>
+      <a href={lp('/resources/')} class="qr-row">
+        <span class="qr-want">{homeText.qr9Want}</span>
+        <span class="qr-go">{homeText.qr9Go}</span>
       </a>
       <a href="https://csa-iot.org/developer-resource/specifications-download-request/" class="qr-row" target="_blank" rel="noopener noreferrer">
         <span class="qr-want">{homeText.qr6Want}</span>
@@ -242,6 +333,56 @@ const homeText = lang === 'en'
 
   .btn-secondary:hover {
     background: var(--bg-hover);
+  }
+
+  .hero-diagram {
+    max-width: 44rem;
+    margin: 0 auto;
+  }
+
+  .stats {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 0;
+    max-width: 44rem;
+    margin: 1.5rem auto 0;
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    background: var(--bg-secondary);
+    overflow: hidden;
+  }
+
+  .stat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.125rem;
+    padding: 0.875rem 0.5rem;
+  }
+
+  .stat + .stat {
+    border-left: 1px solid var(--border-color);
+  }
+
+  .stat-value {
+    font-size: 1.375rem;
+    font-weight: 800;
+    color: var(--color-primary-600, #4f46e5);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+
+  :global(.dark) .stat-value {
+    color: var(--color-primary-400, #818cf8);
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    white-space: nowrap;
   }
 
   .features {
@@ -534,6 +675,31 @@ const homeText = lang === 'en'
       align-items: flex-start;
       gap: 0.25rem;
       padding: 0.75rem 1rem;
+    }
+
+    .stats {
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      flex: 1 1 50%;
+      padding: 0.75rem 0.25rem;
+    }
+
+    .stat + .stat {
+      border-left: none;
+    }
+
+    .stat:nth-child(even) {
+      border-left: 1px solid var(--border-color);
+    }
+
+    .stat:nth-child(n + 3) {
+      border-top: 1px solid var(--border-color);
+    }
+
+    .stat-value {
+      font-size: 1.125rem;
     }
   }
 </style>

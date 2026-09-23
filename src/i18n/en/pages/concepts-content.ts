@@ -36,6 +36,13 @@ export default {
     Think of it this way: Matter is like USB-C. Every phone used to have its own charging port; now they are all USB-C, and cables and devices are interchangeable.
     Matter does the same thing -- it defines a "universal interface" for smart home devices.
   </p>
+  <p>
+    Technically, Matter is an <strong>application-layer protocol</strong>: it only defines the upper layers (what a device can do, how to interact with it, how traffic is encrypted) and runs on top of the IP networks you already have -- Wi-Fi, Thread, Ethernet. Bluetooth LE is used only briefly during commissioning.
+  </p>
+  <figure class="diagram">
+    <img src="/images/diagrams/stack-en.webp" alt="Matter protocol layers: Application (Cluster data model), Interaction Model, Security and Transport are defined by Matter; the IPv6 Network layer and the Wi-Fi / Thread / Ethernet Link layer reuse existing technology; Bluetooth LE is used only for commissioning" width="1536" height="1024" loading="lazy" decoding="async" />
+    <figcaption>Matter defines only the top four layers and reuses existing IP networking below; Bluetooth LE is used only for commissioning</figcaption>
+  </figure>
 
   <!-- ====== Four-layer data model ====== -->
   <h2 id="data-model">Matter's Four-Layer Data Model</h2>
@@ -446,6 +453,10 @@ export default {
     For example, the "DoorLock" Device Type requires a device to implement at least the DoorLock Cluster, Identify Cluster, etc.
     "Dimmable Light" requires the OnOff Cluster and the LevelControl Cluster.
   </p>
+  <figure class="diagram">
+    <img src="/images/diagrams/device-type-en.webp" alt="Device Type illustration: the Door Lock type must implement the DoorLock and Identify Clusters; the Dimmable Light type must implement the OnOff, LevelControl, Identify and Groups Clusters" width="1536" height="1024" loading="lazy" decoding="async" />
+    <figcaption>The Cluster checklist required by two different Device Types</figcaption>
+  </figure>
   <p>
     Analogy: just as a hotel must have a gym, pool, and 24-hour front desk to earn a five-star rating, a device must have the capabilities specified by Matter to claim a certain device type.
   </p>
@@ -460,6 +471,10 @@ export default {
   <p>
     A device can join multiple Fabrics simultaneously. For example, a door lock can be controlled by both Apple Home and Google Home at the same time -- it has a separate identity in each Fabric.
   </p>
+  <figure class="diagram">
+    <img src="/images/diagrams/fabric-en.webp" alt="Fabric illustration: one smart lock sits in both the Apple Home Fabric and the Google Home Fabric, holding a separate certificate in each" width="1536" height="1024" loading="lazy" decoding="async" />
+    <figcaption>The same lock joins two Fabrics at once, with its own certificate in each</figcaption>
+  </figure>
 
   <h2 id="commissioning">Commissioner and Commissioning</h2>
   <p>
@@ -470,10 +485,16 @@ export default {
   </p>
   <ol>
     <li>The Commissioner (typically a phone app) scans the device's QR code or enters a setup code</li>
+    <li>The device is discovered over Bluetooth LE (it is not on the network yet, so Bluetooth is the only way to reach it)</li>
     <li>A secure session is established via PASE (Passcode-Authenticated Session Establishment)</li>
     <li>The Commissioner assigns a certificate (NOC) to the device, officially adding it to the Fabric</li>
+    <li>The Commissioner sends the Wi-Fi or Thread network credentials to the device so it can join the home network</li>
     <li>After commissioning, the phone app or smart speaker acts as a <strong>Controller</strong> and can read Attributes and send Commands to control the device</li>
   </ol>
+  <figure class="diagram">
+    <img src="/images/diagrams/commissioning-en.webp" alt="The six steps of Matter commissioning: scan the QR code, discover the device over Bluetooth LE, establish a PASE secure session, issue the NOC certificate and join the Fabric, configure the Wi-Fi/Thread network, done and the Controller takes over" width="1536" height="1024" loading="lazy" decoding="async" />
+    <figcaption>Six commissioning steps: trust is established over Bluetooth and the setup code first, then the device is brought onto the home network</figcaption>
+  </figure>
 
   <div class="callout callout-info">
     <div class="callout-title">Role clarification</div>
