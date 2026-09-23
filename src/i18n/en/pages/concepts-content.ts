@@ -43,6 +43,9 @@ export default {
     <img src="/images/diagrams/stack-en.webp" alt="Matter protocol layers: Application (Cluster data model), Interaction Model, Security and Transport are defined by Matter; the IPv6 Network layer and the Wi-Fi / Thread / Ethernet Link layer reuse existing technology; Bluetooth LE is used only for commissioning" width="1536" height="1024" loading="lazy" decoding="async" />
     <figcaption>Matter defines only the top four layers and reuses existing IP networking below; Bluetooth LE is used only for commissioning</figcaption>
   </figure>
+  <p>
+    To see which layers Matter, Zigbee, Z-Wave and Bluetooth Mesh each cover and how they compare, see the <a href="../compare/">Protocol Comparison</a>.
+  </p>
 
   <!-- ====== Four-layer data model ====== -->
   <h2 id="data-model">Matter's Four-Layer Data Model</h2>

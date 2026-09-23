@@ -43,6 +43,9 @@ export default {
     <img src="/images/diagrams/stack-zh.webp" alt="Matter 协议分层：应用层（Cluster 数据模型）、交互模型、安全层、传输层由 Matter 定义，网络层 IPv6 和链路层 Wi-Fi / Thread / 以太网复用现有技术，蓝牙 BLE 仅用于配网" width="1536" height="1024" loading="lazy" decoding="async" />
     <figcaption>Matter 只定义上面四层，下面复用现有 IP 网络；蓝牙 BLE 只在配网时用</figcaption>
   </figure>
+  <p>
+    想知道 Matter 和 Zigbee、Z-Wave、蓝牙 Mesh 这些协议各管哪几层、有什么异同，见 <a href="../compare/">协议对比</a>。
+  </p>
 
   <!-- ====== 四层数据模型 ====== -->
   <h2 id="data-model">Matter 的四层数据模型</h2>

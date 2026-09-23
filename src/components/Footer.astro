@@ -1,14 +1,16 @@
 ---
 import { ArrowUpRight } from 'lucide-astro';
-import { type Lang, localePath } from '../i18n/config';
+import { type Lang } from '../i18n/config';
 import { t } from '../i18n/ui';
+import { getSiteNav } from '../i18n/site-nav';
 
 interface Props {
   lang?: Lang;
 }
 
 const { lang = 'zh' } = Astro.props;
-const lp = (path: string) => localePath(lang, path);
+const nav = getSiteNav(lang);
+
 ---
 
 <footer class="footer">
@@ -32,80 +34,32 @@ const lp = (path: string) => localePath(lang, path);
         <p class="footer-about">
           {t(lang, 'footer.about')}
         </p>
-      </div>
-
-      <!-- Column 2: Site nav -->
-      <div class="footer-col">
-        <h3 class="footer-heading">{t(lang, 'footer.siteNav')}</h3>
-        <ul class="footer-links">
-          <li><a href={lp('/concepts/')}>{t(lang, 'footer.concepts')}</a></li>
-          <li><a href={lp('/clusters/')}>{t(lang, 'footer.clusterManual')}</a></li>
-          <li><a href={lp('/tools/json-parser/')}>{t(lang, 'footer.jsonParser')}</a></li>
-          <li><a href={lp('/tools/id-lookup/')}>{t(lang, 'footer.idLookup')}</a></li>
-        </ul>
-      </div>
-
-      <!-- Column 3: Dev Guides -->
-      <div class="footer-col">
-        <h3 class="footer-heading">{t(lang, 'footer.devGuides')}</h3>
-        <ul class="footer-links">
-          <li><a href={lp('/sdk/android/')}>{t(lang, 'footer.devGuides.android')}</a></li>
-          <li><a href={lp('/sdk/ios/')}>{t(lang, 'footer.devGuides.ios')}</a></li>
-          <li><a href={lp('/sdk/web/')}>{t(lang, 'footer.devGuides.web')}</a></li>
-          <li><a href={lp('/roadmap/')}>{t(lang, 'footer.devGuides.roadmap')}</a></li>
-        </ul>
-      </div>
-
-      <!-- Column 4: Resources -->
-      <div class="footer-col">
-        <h3 class="footer-heading">{t(lang, 'footer.resources')}</h3>
-        <ul class="footer-links">
-          <li><a href={`${lp('/resources/')}#official`}>{t(lang, 'footer.resources.official')}</a></li>
-          <li><a href={`${lp('/resources/')}#platforms`}>{t(lang, 'footer.resources.platforms')}</a></li>
-          <li><a href={`${lp('/resources/')}#open-source`}>{t(lang, 'footer.resources.openSource')}</a></li>
-          <li><a href={`${lp('/resources/')}#knowledge`}>{t(lang, 'footer.resources.community')}</a></li>
-        </ul>
-      </div>
-
-      <!-- Column 5: Official resources -->
-      <div class="footer-col">
-        <h3 class="footer-heading">{t(lang, 'footer.officialResources')}</h3>
-        <ul class="footer-links">
-          <li>
-            <a href="https://csa-iot.org/" target="_blank" rel="noopener noreferrer">
-              {t(lang, 'nav.csaWebsite')}
-              <ArrowUpRight class="ext-icon" size={11} strokeWidth={1.5} />
-            </a>
-          </li>
-          <li>
-            <a href="https://csa-iot.org/all-solutions/matter/" target="_blank" rel="noopener noreferrer">
-              {t(lang, 'nav.matterSpec')}
-              <ArrowUpRight class="ext-icon" size={11} strokeWidth={1.5} />
-            </a>
-          </li>
-          <li>
-            <a href="https://github.com/project-chip/connectedhomeip" target="_blank" rel="noopener noreferrer">
-              {t(lang, 'nav.matterGithub')}
-              <ArrowUpRight class="ext-icon" size={11} strokeWidth={1.5} />
-            </a>
-          </li>
-          <li>
-            <a href="https://csa-iot.org/csa-iot/csa-device-library/" target="_blank" rel="noopener noreferrer">
-              Matter {t(lang, 'nav.deviceLibrary')}
-              <ArrowUpRight class="ext-icon" size={11} strokeWidth={1.5} />
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Column 4: More -->
-      <div class="footer-col">
-        <h3 class="footer-heading">{t(lang, 'footer.more')}</h3>
         <p class="footer-note">
           <span class="footer-note-label">{t(lang, 'footer.dataSourceLabel')}</span>
           {t(lang, 'footer.dataSourceText')}
         </p>
       </div>
+
+      <!-- Columns 2–5：与顶部导航同一份数据（getSiteNav） -->
+      {nav.map((group) => (
+        <div class="footer-col">
+          <h3 class="footer-heading">{group.title}</h3>
+          <ul class="footer-links">
+            {group.links.map((link) => (
+              <li>
+                {link.external ? (
+                  <a href={link.href} target="_blank" rel="noopener noreferrer">
+                    {link.title}
+                    <ArrowUpRight class="ext-icon" size={11} strokeWidth={1.5} />
+                  </a>
+                ) : (
+                  <a href={link.href}>{link.title}</a>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </div>
 
     <!-- Bottom bar -->
@@ -133,10 +87,13 @@ const lp = (path: string) => localePath(lang, path);
     padding: 3rem 1.5rem 0;
   }
 
+  /* 各栏按内容宽度排列，栏间空白平均分配，避免短栏右侧留出大片空白 */
   .footer-grid {
     display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 1.2fr;
-    gap: 2.5rem;
+    grid-template-columns: minmax(14rem, 18rem) repeat(4, max-content);
+    justify-content: space-between;
+    column-gap: 2.5rem;
+    row-gap: 2rem;
     padding-bottom: 2.5rem;
   }
 
@@ -207,6 +164,10 @@ const lp = (path: string) => localePath(lang, path);
     opacity: 0.8;
   }
 
+  .footer-about + .footer-note {
+    margin-top: 1rem;
+  }
+
   .footer-note {
     font-size: 0.8125rem;
     color: #94a3b8;
@@ -237,10 +198,24 @@ const lp = (path: string) => localePath(lang, path);
     margin: 0;
   }
 
+  /* 中等宽度：介绍独占一行，四个链接栏排在下面一行 */
   @media (max-width: 1024px) {
     .footer-grid {
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
+      grid-template-columns: repeat(4, max-content);
+    }
+
+    .footer-col:first-child {
+      grid-column: 1 / -1;
+      max-width: 36rem;
+    }
+  }
+
+  /* 平板：链接栏改为两列 */
+  @media (max-width: 768px) {
+    .footer-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      justify-content: stretch;
+      column-gap: 1.5rem;
     }
   }
 
@@ -250,8 +225,9 @@ const lp = (path: string) => localePath(lang, path);
     }
 
     .footer-grid {
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 1rem;
+      row-gap: 1.5rem;
       padding-bottom: 1.5rem;
     }
   }

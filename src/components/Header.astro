@@ -2,6 +2,7 @@
 import { ChevronDown, ArrowUpRight, Sun, Moon, Menu, X, Globe } from 'lucide-astro';
 import { type Lang, localePath, getAlternateLang, stripLangPrefix } from '../i18n/config';
 import { t } from '../i18n/ui';
+import { getSiteNav } from '../i18n/site-nav';
 
 interface Props {
   currentPath?: string;
@@ -24,86 +25,11 @@ interface NavItem {
 
 const lp = (path: string) => localePath(lang, path);
 
-const navigation: NavItem[] = [
-  { title: t(lang, 'nav.home'), href: lp('/') },
-  { title: t(lang, 'nav.concepts'), href: lp('/concepts/') },
-  {
-    title: t(lang, 'nav.clusterManual'),
-    megaMenu: true,
-    children: [
-      { title: t(lang, 'nav.group.lighting'), group: true },
-      { title: t(lang, 'nav.cluster.onOff'), href: lp('/clusters/on-off/') },
-      { title: t(lang, 'nav.cluster.levelControl'), href: lp('/clusters/level-control/') },
-      { title: t(lang, 'nav.cluster.colorControl'), href: lp('/clusters/color-control/') },
-      { title: t(lang, 'nav.group.closure'), group: true },
-      { title: t(lang, 'nav.cluster.doorLock'), href: lp('/clusters/door-lock/') },
-      { title: t(lang, 'nav.cluster.windowCovering'), href: lp('/clusters/window-covering/') },
-      { title: t(lang, 'nav.cluster.valveConfig'), href: lp('/clusters/valve-configuration-and-control/') },
-      { title: t(lang, 'nav.group.hvac'), group: true },
-      { title: t(lang, 'nav.cluster.thermostat'), href: lp('/clusters/thermostat/') },
-      { title: t(lang, 'nav.cluster.fanControl'), href: lp('/clusters/fan-control/') },
-      { title: t(lang, 'nav.group.sensing'), group: true },
-      { title: t(lang, 'nav.cluster.temperature'), href: lp('/clusters/temperature-measurement/') },
-      { title: t(lang, 'nav.cluster.humidity'), href: lp('/clusters/relative-humidity-measurement/') },
-      { title: t(lang, 'nav.cluster.occupancy'), href: lp('/clusters/occupancy-sensing/') },
-      { title: t(lang, 'nav.cluster.airQuality'), href: lp('/clusters/air-quality/') },
-      { title: t(lang, 'nav.group.safety'), group: true },
-      { title: t(lang, 'nav.cluster.smokeCOAlarm'), href: lp('/clusters/smoke-co-alarm/') },
-      { title: t(lang, 'nav.cluster.booleanState'), href: lp('/clusters/boolean-state/') },
-      { title: t(lang, 'nav.group.appliance'), group: true },
-      { title: t(lang, 'nav.cluster.operationalState'), href: lp('/clusters/operational-state/') },
-      { title: t(lang, 'nav.cluster.laundryWasher'), href: lp('/clusters/laundry-washer-mode/') },
-      { title: t(lang, 'nav.cluster.rvcRunMode'), href: lp('/clusters/rvc-run-mode/') },
-      { title: t(lang, 'nav.group.media'), group: true },
-      { title: t(lang, 'nav.cluster.mediaPlayback'), href: lp('/clusters/media-playback/') },
-      { title: t(lang, 'nav.cluster.channel'), href: lp('/clusters/channel/') },
-      { title: t(lang, 'nav.group.general'), group: true },
-      { title: t(lang, 'nav.cluster.identify'), href: lp('/clusters/identify/') },
-      { title: t(lang, 'nav.cluster.descriptor'), href: lp('/clusters/descriptor/') },
-      { title: t(lang, 'nav.cluster.accessControl'), href: lp('/clusters/access-control/') },
-      { title: t(lang, 'nav.group.node'), group: true },
-      { title: t(lang, 'nav.cluster.basicInfo'), href: lp('/clusters/basic-information/') },
-      { title: t(lang, 'nav.cluster.powerSource'), href: lp('/clusters/power-source/') },
-      { title: t(lang, 'nav.cluster.timeSync'), href: lp('/clusters/time-synchronization/') },
-      { title: t(lang, 'nav.group.commissioning'), group: true },
-      { title: t(lang, 'nav.cluster.networkComm'), href: lp('/clusters/network-commissioning/') },
-      { title: t(lang, 'nav.cluster.opCred'), href: lp('/clusters/operational-credentials/') },
-      { title: t(lang, 'nav.group.diagnostics'), group: true },
-      { title: t(lang, 'nav.cluster.otaProvider'), href: lp('/clusters/ota-software-update-provider/') },
-      { title: t(lang, 'nav.cluster.generalDiag'), href: lp('/clusters/general-diagnostics/') },
-      { title: t(lang, 'nav.group.energy'), group: true },
-      { title: t(lang, 'nav.cluster.elecPower'), href: lp('/clusters/electrical-power-measurement/') },
-      { title: t(lang, 'nav.viewAll82'), href: lp('/clusters/'), dividerBefore: true },
-    ],
-  },
-  {
-    title: t(lang, 'nav.dataTools'),
-    children: [
-      { title: t(lang, 'nav.jsonParser'), href: lp('/tools/json-parser/') },
-      { title: t(lang, 'nav.idLookup'), href: lp('/tools/id-lookup/') },
-    ],
-  },
-  {
-    title: t(lang, 'nav.sdkGuides'),
-    children: [
-      { title: t(lang, 'nav.sdk.android'), href: lp('/sdk/android/') },
-      { title: t(lang, 'nav.sdk.ios'), href: lp('/sdk/ios/') },
-      { title: t(lang, 'nav.sdk.web'), href: lp('/sdk/web/') },
-      { title: t(lang, 'nav.sdk.overview'), href: lp('/sdk/'), dividerBefore: true },
-    ],
-  },
-  { title: t(lang, 'nav.roadmap'), href: lp('/roadmap/') },
-  { title: t(lang, 'nav.resources'), href: lp('/resources/') },
-  {
-    title: t(lang, 'nav.officialStandards'),
-    children: [
-      { title: t(lang, 'nav.csaWebsite'), href: 'https://csa-iot.org/', external: true },
-      { title: t(lang, 'nav.matterSpec'), href: 'https://csa-iot.org/all-solutions/matter/', external: true },
-      { title: t(lang, 'nav.matterGithub'), href: 'https://github.com/project-chip/connectedhomeip', external: true },
-      { title: t(lang, 'nav.deviceLibrary'), href: 'https://csa-iot.org/csa-iot/csa-device-library/', external: true },
-    ],
-  },
-];
+// 顶部导航与底部栏共用 getSiteNav：4 个大类，每类 4–5 个入口
+const navigation: NavItem[] = getSiteNav(lang).map((group) => ({
+  title: group.title,
+  children: group.links,
+}));
 
 // Strip lang prefix for matching active state
 const pathForActive = stripLangPrefix(currentPath);
