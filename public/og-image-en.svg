@@ -1,0 +1,43 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e1b4b"/>
+      <stop offset="100%" style="stop-color:#312e81"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#818cf8"/>
+      <stop offset="100%" style="stop-color:#6366f1"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <g opacity="0.06">
+    <pattern id="dots" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+      <circle cx="20" cy="20" r="1.5" fill="white"/>
+    </pattern>
+    <rect width="1200" height="630" fill="url(#dots)"/>
+  </g>
+
+  <circle cx="950" cy="120" r="200" fill="none" stroke="#6366f1" stroke-width="1" opacity="0.15"/>
+  <circle cx="1000" cy="150" r="140" fill="none" stroke="#818cf8" stroke-width="1" opacity="0.1"/>
+
+  <!-- Logo: Hex M with nodes -->
+  <g transform="translate(80, 145)">
+    <polygon points="70,6 123,36 123,96 70,126 17,96 17,36" fill="none" stroke="#818cf8" stroke-width="4.5"/>
+    <text x="70" y="90" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="58" font-weight="700" fill="#c7d2fe" letter-spacing="-2">M</text>
+    <circle cx="70" cy="6" r="6" fill="#a5b4fc"/>
+    <circle cx="123" cy="36" r="6" fill="#a5b4fc"/>
+    <circle cx="123" cy="96" r="6" fill="#a5b4fc"/>
+    <circle cx="70" cy="126" r="6" fill="#a5b4fc"/>
+    <circle cx="17" cy="96" r="6" fill="#a5b4fc"/>
+    <circle cx="17" cy="36" r="6" fill="#a5b4fc"/>
+  </g>
+
+  <text x="100" y="340" font-family="system-ui, -apple-system, sans-serif" font-size="64" font-weight="800" fill="white" letter-spacing="-1">Matter Protocol Learning Hub</text>
+  <text x="100" y="400" font-family="system-ui, -apple-system, sans-serif" font-size="26" fill="#c7d2fe" opacity="0.9">Unified Smart Home Standard · Core Concepts · Cluster Reference · Data Parser</text>
+
+  <rect x="100" y="450" width="80" height="4" rx="2" fill="url(#accent)"/>
+
+  <text x="100" y="540" font-family="system-ui, -apple-system, sans-serif" font-size="20" fill="#818cf8" opacity="0.7">matter-learn.flyooo.uk</text>
+</svg>
