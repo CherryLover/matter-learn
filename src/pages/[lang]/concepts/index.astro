@@ -95,39 +95,39 @@ const text = lang === 'en'
   .d-text-analogy-sub   { fill: var(--text-secondary); }
 
   /* ===== Dark-mode overrides ===== */
-  :global(.dark) .d-node-fill   { fill: rgba(99,102,241,0.08); stroke: var(--color-indigo-500, #6366f1); }
-  :global(.dark) .d-ep-fill     { fill: rgba(14,165,233,0.08); stroke: var(--color-sky-500, #0ea5e9); }
-  :global(.dark) .d-ep1-fill    { fill: rgba(14,165,233,0.10); stroke: var(--color-sky-400, #38bdf8); }
-  :global(.dark) .d-ep1-highlight { fill: rgba(14,165,233,0.10); stroke: var(--color-sky-400, #38bdf8); }
-  :global(.dark) .d-cl-fill     { fill: rgba(52,211,153,0.08); stroke: var(--color-emerald-500, #10b981); }
-  :global(.dark) .d-at-fill     { fill: rgba(251,191,36,0.08); stroke: var(--color-amber-500, #f59e0b); }
-  :global(.dark) .d-cm-fill     { fill: rgba(251,113,133,0.08); stroke: var(--color-rose-500, #f43f5e); }
+  .dark .d-node-fill   { fill: rgba(99,102,241,0.08); stroke: var(--color-indigo-500, #6366f1); }
+  .dark .d-ep-fill     { fill: rgba(14,165,233,0.08); stroke: var(--color-sky-500, #0ea5e9); }
+  .dark .d-ep1-fill    { fill: rgba(14,165,233,0.10); stroke: var(--color-sky-400, #38bdf8); }
+  .dark .d-ep1-highlight { fill: rgba(14,165,233,0.10); stroke: var(--color-sky-400, #38bdf8); }
+  .dark .d-cl-fill     { fill: rgba(52,211,153,0.08); stroke: var(--color-emerald-500, #10b981); }
+  .dark .d-at-fill     { fill: rgba(251,191,36,0.08); stroke: var(--color-amber-500, #f59e0b); }
+  .dark .d-cm-fill     { fill: rgba(251,113,133,0.08); stroke: var(--color-rose-500, #f43f5e); }
 
-  :global(.dark) .d-text-ep     { fill: var(--color-sky-300, #7dd3fc); }
-  :global(.dark) .d-text-ep-sub { fill: var(--color-sky-400, #38bdf8); }
-  :global(.dark) .d-text-cl     { fill: var(--color-emerald-300, #6ee7b7); }
+  .dark .d-text-ep     { fill: var(--color-sky-300, #7dd3fc); }
+  .dark .d-text-ep-sub { fill: var(--color-sky-400, #38bdf8); }
+  .dark .d-text-cl     { fill: var(--color-emerald-300, #6ee7b7); }
 
-  :global(.dark) .d-ep0-fill { fill: rgba(255,255,255,0.04); stroke: var(--border-color); }
-  :global(.dark) .d-ep0-tag  { fill: rgba(255,255,255,0.06); }
-  :global(.dark) .d-text-ep0 { fill: var(--text-muted); }
+  .dark .d-ep0-fill { fill: rgba(255,255,255,0.04); stroke: var(--border-color); }
+  .dark .d-ep0-tag  { fill: rgba(255,255,255,0.06); }
+  .dark .d-text-ep0 { fill: var(--text-muted); }
 
-  :global(.dark) .d-ep1-tag  { fill: rgba(14,165,233,0.15); }
-  :global(.dark) .d-text-ep1-accent { fill: var(--color-sky-300, #7dd3fc); }
+  .dark .d-ep1-tag  { fill: rgba(14,165,233,0.15); }
+  .dark .d-text-ep1-accent { fill: var(--color-sky-300, #7dd3fc); }
 
-  :global(.dark) .d-device-fill { fill: rgba(99,102,241,0.12); stroke: var(--color-indigo-500, #6366f1); }
-  :global(.dark) .d-text-device { fill: var(--color-indigo-300, #a5b4fc); }
+  .dark .d-device-fill { fill: rgba(99,102,241,0.12); stroke: var(--color-indigo-500, #6366f1); }
+  .dark .d-text-device { fill: var(--color-indigo-300, #a5b4fc); }
 
-  :global(.dark) .d-node-swatch { fill: rgba(99,102,241,0.15); stroke: var(--color-indigo-500, #6366f1); }
-  :global(.dark) .d-ep-swatch   { fill: rgba(14,165,233,0.15); stroke: var(--color-sky-500, #0ea5e9); }
-  :global(.dark) .d-cl-swatch   { fill: rgba(52,211,153,0.15); stroke: var(--color-emerald-500, #10b981); }
-  :global(.dark) .d-at-swatch   { fill: rgba(251,191,36,0.15); stroke: var(--color-amber-500, #f59e0b); }
-  :global(.dark) .d-cm-swatch   { fill: rgba(251,113,133,0.15); stroke: var(--color-rose-500, #f43f5e); }
+  .dark .d-node-swatch { fill: rgba(99,102,241,0.15); stroke: var(--color-indigo-500, #6366f1); }
+  .dark .d-ep-swatch   { fill: rgba(14,165,233,0.15); stroke: var(--color-sky-500, #0ea5e9); }
+  .dark .d-cl-swatch   { fill: rgba(52,211,153,0.15); stroke: var(--color-emerald-500, #10b981); }
+  .dark .d-at-swatch   { fill: rgba(251,191,36,0.15); stroke: var(--color-amber-500, #f59e0b); }
+  .dark .d-cm-swatch   { fill: rgba(251,113,133,0.15); stroke: var(--color-rose-500, #f43f5e); }
 
-  :global(.dark) .d-analogy-left  { fill: rgba(99,102,241,0.08); stroke: var(--color-indigo-500, #6366f1); }
-  :global(.dark) .d-analogy-right { fill: rgba(251,191,36,0.08); stroke: var(--color-amber-500, #f59e0b); }
-  :global(.dark) .d-text-analogy-header-left  { fill: var(--color-indigo-300, #a5b4fc); }
-  :global(.dark) .d-text-analogy-header-right { fill: var(--color-amber-300, #fcd34d); }
-  :global(.dark) .d-text-analogy-left  { fill: var(--color-indigo-300, #a5b4fc); }
-  :global(.dark) .d-text-analogy-right { fill: var(--color-amber-300, #fcd34d); }
-  :global(.dark) .d-legend-bg { fill: rgba(255,255,255,0.04); stroke: var(--border-color); }
+  .dark .d-analogy-left  { fill: rgba(99,102,241,0.08); stroke: var(--color-indigo-500, #6366f1); }
+  .dark .d-analogy-right { fill: rgba(251,191,36,0.08); stroke: var(--color-amber-500, #f59e0b); }
+  .dark .d-text-analogy-header-left  { fill: var(--color-indigo-300, #a5b4fc); }
+  .dark .d-text-analogy-header-right { fill: var(--color-amber-300, #fcd34d); }
+  .dark .d-text-analogy-left  { fill: var(--color-indigo-300, #a5b4fc); }
+  .dark .d-text-analogy-right { fill: var(--color-amber-300, #fcd34d); }
+  .dark .d-legend-bg { fill: rgba(255,255,255,0.04); stroke: var(--border-color); }
 </style>

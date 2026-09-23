@@ -1356,7 +1356,7 @@ export const clusters: Record<string, ClusterContent> = {
     font-size: 0.8125rem;
   }
 
-  :global(.dark) .col-required {
+  .dark .col-required {
     color: #f87171;
   }
 
@@ -1365,7 +1365,7 @@ export const clusters: Record<string, ClusterContent> = {
     font-size: 0.8125rem;
   }
 
-  :global(.dark) .col-optional {
+  .dark .col-optional {
     color: #4ade80;
   }
 </style>`,
@@ -2263,7 +2263,7 @@ export const clusters: Record<string, ClusterContent> = {
     font-size: 0.8125rem;
   }
 
-  :global(.dark) .col-required {
+  .dark .col-required {
     color: #f87171;
   }
 
@@ -2272,7 +2272,7 @@ export const clusters: Record<string, ClusterContent> = {
     font-size: 0.8125rem;
   }
 
-  :global(.dark) .col-optional {
+  .dark .col-optional {
     color: #4ade80;
   }
 </style>`,
@@ -3286,7 +3286,7 @@ export const clusters: Record<string, ClusterContent> = {
     font-size: 0.8125rem;
   }
 
-  :global(.dark) .col-required {
+  .dark .col-required {
     color: #f87171;
   }
 
@@ -3295,7 +3295,7 @@ export const clusters: Record<string, ClusterContent> = {
     font-size: 0.8125rem;
   }
 
-  :global(.dark) .col-optional {
+  .dark .col-optional {
     color: #4ade80;
   }
 </style>`,

@@ -766,7 +766,7 @@ val display = voltageV?.let { String.format("%.1f V", it) } ?: "--"\`}</code></p
     font-size: 0.8125rem;
   }
 
-  :global(.dark) .col-required {
+  .dark .col-required {
     color: #f87171;
   }
 
@@ -775,7 +775,7 @@ val display = voltageV?.let { String.format("%.1f V", it) } ?: "--"\`}</code></p
     font-size: 0.8125rem;
   }
 
-  :global(.dark) .col-optional {
+  .dark .col-optional {
     color: #4ade80;
   }
 </style>`,
@@ -1374,7 +1374,7 @@ val display = kilowattHours?.let {
     font-size: 0.8125rem;
   }
 
-  :global(.dark) .col-required {
+  .dark .col-required {
     color: #f87171;
   }
 
@@ -1383,7 +1383,7 @@ val display = kilowattHours?.let {
     font-size: 0.8125rem;
   }
 
-  :global(.dark) .col-optional {
+  .dark .col-optional {
     color: #4ade80;
   }
 </style>`,
@@ -2303,7 +2303,7 @@ val display = kilowattHours?.let {
     font-size: 0.8125rem;
   }
 
-  :global(.dark) .col-required {
+  .dark .col-required {
     color: #f87171;
   }
 
@@ -2312,7 +2312,7 @@ val display = kilowattHours?.let {
     font-size: 0.8125rem;
   }
 
-  :global(.dark) .col-optional {
+  .dark .col-optional {
     color: #4ade80;
   }
 
@@ -2322,7 +2322,7 @@ val display = kilowattHours?.let {
     font-size: 0.8125rem;
   }
 
-  :global(.dark) .col-feature {
+  .dark .col-feature {
     color: #60a5fa;
   }
 
@@ -2331,7 +2331,7 @@ val display = kilowattHours?.let {
     color: #6b7280;
   }
 
-  :global(.dark) .attr-cn {
+  .dark .attr-cn {
     color: #9ca3af;
   }
 </style>`,

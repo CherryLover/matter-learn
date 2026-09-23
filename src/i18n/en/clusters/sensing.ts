@@ -264,7 +264,7 @@ val display = tempCelsius?.let { String.format("%.1f°C", it) } ?: "--"\`}</code
     margin-top: 0.25rem;
   }
 
-  :global(.dark) .scenario-temp-note {
+  .dark .scenario-temp-note {
     color: #9ca3af;
   }
 </style>`,
@@ -462,7 +462,7 @@ val display = tempCelsius?.let { String.format("%.1f°C", it) } ?: "--"\`}</code
     color: #6b7280;
   }
 
-  :global(.dark) .attr-cn {
+  .dark .attr-cn {
     color: #9ca3af;
   }
 </style>`,
