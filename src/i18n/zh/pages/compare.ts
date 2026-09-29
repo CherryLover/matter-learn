@@ -176,6 +176,8 @@ export default {
     ['只做 Apple 生态', 'HomeKit 仍可用，但新产品建议直接做 Matter，Apple 家庭原生支持'],
     ['摄像头等大流量设备', 'Wi-Fi。Matter 1.5 起已有摄像头设备类型'],
   ],
+  chooseNote:
+    '同样是 Matter 设备，Thread 和 Wi-Fi 具体怎么选，见 <a href="../thread-vs-wifi/">Thread 还是 Wi-Fi</a>；控制器、边界路由器、桥接器分别是什么、家里需要哪几样，见 <a href="../hub-bridge-border-router/">要不要网关</a>。',
 
   othersHeading: '其他常被拿来比较的协议',
   othersIntro: '下面这些也常出现在物联网讨论里，但和上面的协议不在同一条赛道：',

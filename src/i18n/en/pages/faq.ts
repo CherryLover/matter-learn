@@ -4,9 +4,9 @@
  * link.href is relative to /en/faq/.
  */
 export default {
-  title: 'FAQ',
+  title: 'Matter FAQ: Hubs, Thread vs Wi-Fi, Matter vs Zigbee',
   description:
-    'Matter FAQ — concise answers to common questions: how many bytes a Cluster ID has, how to read a device\'s type and features after commissioning, Matter vs Zigbee, bringing old devices into Matter, and more, each with a link to the full explanation.',
+    'Matter FAQ: short answers on hubs, Thread vs Wi-Fi, Matter vs Zigbee, adding older devices, Cluster IDs and device types, each linked to a full explanation.',
   heading: 'Frequently Asked Questions',
   intro: 'The questions people ask most when learning and building with Matter. Each has a short answer; follow "Read more" for the details.',
   expandAll: 'Expand all',
@@ -122,14 +122,14 @@ export default {
         {
           id: 'need-hub',
           q: 'Do Matter devices need a hub?',
-          a: 'Wi-Fi and Ethernet devices don\'t; they just join the home router. Thread devices need a Thread border router (built into HomePod mini, Apple TV, Nest Hub and many other speakers and hubs) to connect the Thread network to the home IP network.',
-          link: { href: '../compare/#comparison', label: 'Protocol Comparison · Side by side' },
+          a: 'Wi-Fi and Ethernet devices don\'t; they just join the home router. Thread devices need a Thread border router (built into HomePod mini, Apple TV, Nest Hub and many other speakers and hubs) to connect the Thread network to the home IP network. That said, the Apple, Google and Amazon apps generally require one of their own hubs (a speaker or TV box) to run automations and remote access.',
+          link: { href: '../hub-bridge-border-router/', label: 'Hubs, Border Routers and Bridges Explained' },
         },
         {
           id: 'thread-or-wifi',
           q: 'Should I pick Thread or Wi-Fi Matter devices?',
-          a: 'Battery-powered, low-traffic devices (sensors, locks, buttons) suit Thread: low power and a stable mesh. Mains-powered, high-traffic devices (plugs, lights, cameras, appliances) suit Wi-Fi. At the Matter layer they are identical.',
-          link: { href: '../compare/#choosing', label: 'Protocol Comparison · Which one to choose' },
+          a: 'Battery-powered, low-traffic devices (sensors, locks, buttons) suit Thread: low power and a stable mesh. High-traffic devices such as cameras and appliances suit Wi-Fi, and small mains-powered devices like lights and plugs work well either way. At the Matter layer they are identical.',
+          link: { href: '../thread-vs-wifi/', label: 'Thread or Wi-Fi: Choosing a Network' },
         },
         {
           id: 'commissioning-steps',

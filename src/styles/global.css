@@ -239,6 +239,16 @@ body {
   border-top-right-radius: 0.5rem;
 }
 
+/* Tables whose cells hold full sentences: let every column wrap */
+.prose table.wrap-table tbody td {
+  white-space: normal;
+}
+
+/* Keep CJK words in the label column intact; break only at spaces and punctuation */
+.prose table.wrap-table tbody td:first-child {
+  word-break: keep-all;
+}
+
 /* Pre / code blocks */
 .prose pre {
   background: var(--bg-code);

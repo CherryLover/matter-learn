@@ -28,7 +28,7 @@ interface NavItem {
 
 const lp = (path: string) => localePath(lang, path);
 
-// 顶部导航与底部栏共用 getSiteNav：4 个大类，每类 4–5 个入口
+// 顶部导航与底部栏共用 getSiteNav：4 个大类，每类 4–6 个入口
 const navigation: NavItem[] = getSiteNav(lang).map((group) => ({
   title: group.title,
   children: group.links,

@@ -2,7 +2,7 @@
  * Concepts page FULL content — Chinese (original)
  */
 export default {
-  title: '概念总览',
+  title: 'Matter 协议入门：核心概念与数据模型',
   description: '零基础理解 Matter 协议 — Node、Endpoint、Cluster、Attribute、Command 五个核心概念，用智能大楼类比一次讲清楚四层数据模型。',
   nextTitle: 'Cluster 手册',
   content: `
@@ -45,6 +45,7 @@ export default {
   </figure>
   <p>
     想知道 Matter 和 Zigbee、Z-Wave、蓝牙 Mesh 这些协议各管哪几层、有什么异同，见 <a href="../compare/">协议对比</a>。
+    设备该走 Thread 还是 Wi-Fi、家里要不要网关，见 <a href="../thread-vs-wifi/">Thread 还是 Wi-Fi</a> 和 <a href="../hub-bridge-border-router/">要不要网关</a>。
   </p>
 
   <!-- ====== 四层数据模型 ====== -->

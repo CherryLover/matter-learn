@@ -1,6 +1,6 @@
 /**
  * 全站导航分类：顶部导航栏和底部栏共用这一份数据，保证两处结构完全一致。
- * 4 个大类，每类 4–5 个入口。
+ * 4 个大类，每类 4–6 个入口。
  */
 import { type Lang, localePath } from './config';
 import { t } from './ui';
@@ -24,6 +24,8 @@ export function getSiteNav(lang: Lang): SiteNavGroup[] {
       links: [
         { title: t(lang, 'nav.concepts'), href: lp('/concepts/') },
         { title: t(lang, 'nav.faq'), href: lp('/faq/') },
+        { title: t(lang, 'nav.threadVsWifi'), href: lp('/thread-vs-wifi/') },
+        { title: t(lang, 'nav.hubs'), href: lp('/hub-bridge-border-router/') },
         { title: t(lang, 'nav.compare'), href: lp('/compare/') },
         { title: t(lang, 'nav.roadmap'), href: lp('/roadmap/') },
       ],

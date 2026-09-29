@@ -35,6 +35,8 @@ const ui = {
   'nav.compare': { zh: '协议对比', en: 'Protocol Comparison' },
   'nav.getStarted': { zh: '入门', en: 'Get Started' },
   'nav.faq': { zh: '常见问题', en: 'FAQ' },
+  'nav.threadVsWifi': { zh: 'Thread 还是 Wi-Fi', en: 'Thread vs Wi-Fi' },
+  'nav.hubs': { zh: '网关与边界路由器', en: 'Hubs & Border Routers' },
 
   // ── Header buttons ────────────────────────────────────────────────
   'header.toggleTheme': { zh: '切换主题', en: 'Toggle theme' },

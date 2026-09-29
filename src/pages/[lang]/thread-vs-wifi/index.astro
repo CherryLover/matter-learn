@@ -1,0 +1,26 @@
+---
+import DocLayout from '../../../layouts/DocLayout.astro';
+import { SUPPORTED_LANGS, localePath, type Lang } from '../../../i18n/config';
+
+export function getStaticPaths() {
+  return SUPPORTED_LANGS.map(lang => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const lp = (path: string) => localePath(lang, path);
+
+const text = lang === 'en'
+  ? (await import('../../../i18n/en/pages/thread-vs-wifi')).default
+  : (await import('../../../i18n/zh/pages/thread-vs-wifi')).default;
+---
+
+<DocLayout
+  title={text.title}
+  description={text.description}
+  type="article"
+  prev={{ title: text.prev.title, href: lp(text.prev.path) }}
+  next={{ title: text.next.title, href: lp(text.next.path) }}
+  lang={lang}
+>
+  <Fragment set:html={text.content} />
+</DocLayout>

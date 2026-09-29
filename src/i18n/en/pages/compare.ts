@@ -2,7 +2,7 @@
  * Protocol comparison page — English
  */
 export default {
-  title: 'Protocol Comparison: Matter, Zigbee, Z-Wave and More',
+  title: 'Matter vs Zigbee vs Z-Wave: Protocol Comparison',
   description:
     'A full comparison of Matter with Zigbee, Z-Wave, Thread, Bluetooth Mesh, HomeKit and proprietary Wi-Fi solutions: each protocol placed on the OSI seven-layer model, compared on band, topology, scale, security, onboarding, power, interoperability and ecosystem, with a side-by-side data model mapping.',
   heading: 'Protocol Comparison: Matter, Zigbee, Z-Wave and More',
@@ -175,6 +175,8 @@ export default {
     ['Apple ecosystem only', 'HomeKit still works, but new products should go straight to Matter, which Apple Home supports natively'],
     ['High-bandwidth devices such as cameras', 'Wi-Fi. Matter has a camera device type since 1.5'],
   ],
+  chooseNote:
+    'For choosing between Thread and Wi-Fi for a Matter device in detail, see <a href="../thread-vs-wifi/">Thread vs Wi-Fi</a>; for what controllers, border routers and bridges each do and which ones your home needs, see <a href="../hub-bridge-border-router/">Hubs, Border Routers and Bridges</a>.',
 
   othersHeading: 'Other protocols often brought into the comparison',
   othersIntro: 'These also come up in IoT discussions, but they run in a different race from the protocols above:',

@@ -4,9 +4,9 @@
  * link.href 相对于 /zh/faq/ 页面。
  */
 export default {
-  title: '常见问题',
+  title: 'Matter 常见问题：要不要网关、Thread 还是 Wi-Fi、和 Zigbee 怎么选',
   description:
-    'Matter 常见问题 — Cluster ID 是几个字节、配网后怎么读出设备类型和功能、Matter 和 Zigbee 选哪个、旧设备能否接入 Matter 等高频问题的简明回答，每题附详细讲解链接。',
+    'Matter 常见问题 — 设备要不要网关、选 Thread 还是 Wi-Fi、Matter 和 Zigbee 选哪个、旧设备能否接入 Matter、Cluster ID 是几个字节、配网后怎么读出设备类型等高频问题的简明回答，每题附详细讲解链接。',
   heading: '常见问题',
   intro: '学习和开发 Matter 时最常被问到的问题。每题先给简短回答，想深入了解点“详细讲解”。',
   expandAll: '全部展开',
@@ -122,14 +122,14 @@ export default {
         {
           id: 'need-hub',
           q: 'Matter 设备必须要网关吗？',
-          a: 'Wi-Fi 和以太网设备不需要网关，连上家里路由器就行。Thread 设备需要一个 Thread 边界路由器（HomePod mini、Apple TV、Nest Hub 等很多音箱和网关都内置），把 Thread 网络接到家里的 IP 网络上。',
-          link: { href: '../compare/#comparison', label: '协议对比 · 核心参数对比' },
+          a: 'Wi-Fi 和以太网设备不需要网关，连上家里路由器就行。Thread 设备需要一个 Thread 边界路由器（HomePod mini、Apple TV、Nest Hub 等很多音箱和网关都内置），把 Thread 网络接到家里的 IP 网络上。不过苹果、谷歌、亚马逊的 App 一般要求家里有一台自家的中枢（音箱或电视盒子），用来跑自动化和远程控制。',
+          link: { href: '../hub-bridge-border-router/', label: '要不要网关：控制器、边界路由器、桥接器' },
         },
         {
           id: 'thread-or-wifi',
           q: 'Thread 版和 Wi-Fi 版 Matter 设备怎么选？',
-          a: '电池供电、数据量小的设备（传感器、门锁、按键）选 Thread，省电且组网稳定；插电、数据量大的设备（插座、灯、摄像头、家电）选 Wi-Fi。两种设备在 Matter 层面完全一样。',
-          link: { href: '../compare/#choosing', label: '协议对比 · 怎么选' },
+          a: '电池供电、数据量小的设备（传感器、门锁、按键）选 Thread，省电且组网稳定；摄像头、家电等数据量大的设备选 Wi-Fi；灯、插座这类插电小设备两种都行。两种设备在 Matter 层面完全一样。',
+          link: { href: '../thread-vs-wifi/', label: 'Thread 还是 Wi-Fi：Matter 设备怎么选' },
         },
         {
           id: 'commissioning-steps',

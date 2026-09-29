@@ -2,7 +2,7 @@
  * Concepts page FULL content — English (translated)
  */
 export default {
-  title: 'Concepts Overview',
+  title: 'Matter Protocol Explained: Core Concepts',
   description: 'Understand the Matter protocol from scratch — Node, Endpoint, Cluster, Attribute, and Command explained with a smart building analogy for the four-layer data model.',
   nextTitle: 'Cluster Manual',
   content: `
@@ -45,6 +45,7 @@ export default {
   </figure>
   <p>
     To see which layers Matter, Zigbee, Z-Wave and Bluetooth Mesh each cover and how they compare, see the <a href="../compare/">Protocol Comparison</a>.
+    Whether a device should use Thread or Wi-Fi, and whether your home needs a hub, are covered in <a href="../thread-vs-wifi/">Thread vs Wi-Fi</a> and <a href="../hub-bridge-border-router/">Hubs, Border Routers and Bridges</a>.
   </p>
 
   <!-- ====== Four-layer data model ====== -->
