@@ -2,3 +2,7 @@ User-agent: *
 Allow: /
 
 Sitemap: https://matter-learn.flyooo.uk/sitemap-index.xml
+
+# Machine-readable site overview for AI assistants and search systems.
+# This is informational; crawlers remain governed by the rules above.
+# See: https://matter-learn.flyooo.uk/llms.txt
