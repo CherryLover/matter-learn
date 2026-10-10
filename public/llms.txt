@@ -1,38 +1,67 @@
 # Matter Learn
 
-> Matter Learn 是一个面向开发者、测试、产品和智能家居从业者的 Matter 协议学习与查询站。网站以中文为主，同时提供英文内容，用通俗解释、标准定义和真实设备数据帮助读者理解 Matter。
+> Matter Learn is a bilingual learning and reference site for the Matter smart home interoperability standard. It explains Matter concepts, documents standard Clusters, provides SDK guidance, and includes tools for inspecting real device data.
 
-Matter 是 Connectivity Standards Alliance（CSA）维护的智能家居互操作标准。本站内容用于学习和开发参考；如果本站内容与 CSA 官方规范不一致，应以官方规范为准。
+## Language and URL behavior
 
-## 站点内容
+The site supports both English and Simplified Chinese. The root URL is a language-aware entry point: it uses the visitor's browser language preference to suggest the appropriate language. Explicit language URLs are stable and should be preferred when citing content:
 
-- [中文首页](https://matter-learn.flyooo.uk/zh/): 站点总览、学习路线和常用入口。
-- [English home](https://matter-learn.flyooo.uk/en/): English overview and learning path.
-- [概念总览](https://matter-learn.flyooo.uk/zh/concepts/): 解释 Node、Endpoint、Cluster、Attribute、Command、协议栈、配网、Fabric 和设备能力发现。
-- [Cluster 手册](https://matter-learn.flyooo.uk/zh/clusters/): 按功能分类整理标准 Cluster 的属性、命令、事件、Feature 和示例数据。
-- [Matter ID 查询](https://matter-learn.flyooo.uk/zh/tools/id-lookup/): 查询 Cluster ID、设备类型 ID、全局属性 ID，支持十六进制、十进制和名称。
-- [JSON 解析器](https://matter-learn.flyooo.uk/zh/tools/json-parser/): 解析 Matter 能力、状态、读取响应和原始节点 JSON。
-- [SDK 指南](https://matter-learn.flyooo.uk/zh/sdk/): Android、iOS 和 Web / Node.js 接入、配网和设备控制参考。
-- [Thread 还是 Wi-Fi](https://matter-learn.flyooo.uk/zh/thread-vs-wifi/): Matter 设备网络选择和部署判断。
-- [网关、边界路由器与桥接器](https://matter-learn.flyooo.uk/zh/hub-bridge-border-router/): 解释控制器、Thread Border Router 和桥接器的区别。
-- [协议对比](https://matter-learn.flyooo.uk/zh/compare/): Matter 与 Zigbee、Z-Wave、Bluetooth Mesh 和 Wi-Fi 私有方案的对比。
-- [常见问题](https://matter-learn.flyooo.uk/zh/faq/): Matter、配网、网络、设备类型和开发工具的常见问题。
-- [版本路线图](https://matter-learn.flyooo.uk/zh/roadmap/): Matter 版本、设备类型和能力演进。
-- [生态资源](https://matter-learn.flyooo.uk/zh/resources/): CSA 官方资料、平台文档、芯片 SDK、开源项目和认证工具。
+- English: `https://matter-learn.flyooo.uk/en/`
+- Simplified Chinese: `https://matter-learn.flyooo.uk/zh/`
 
-## 内容范围与数据来源
+This file is intentionally written in English for machine-readable discovery. Equivalent Chinese pages are available under the `/zh/` path.
 
-- Cluster 和设备类型索引基于 `connectedhomeip v1.6.0.0` 的 ZAP 数据生成。
-- Cluster 详情由本站维护者根据 Matter 公开规范、官方 SDK 源码和实际设备数据整理。
-- JSON 工具中的示例数据用于说明数据结构，不代表所有厂商或产品的完整实现。
-- Matter、Thread 和相关名称属于其各自权利人的商标；本站与 CSA 没有隶属关系。
+## Complete site map
 
-## 机器使用建议
+- [XML sitemap index](https://matter-learn.flyooo.uk/sitemap-index.xml): the authoritative list of all indexable pages in both languages.
+- [English home](https://matter-learn.flyooo.uk/en/): site overview, learning path, and main entry points.
+- [Chinese home](https://matter-learn.flyooo.uk/zh/): Simplified Chinese version of the home page.
+- [Concepts overview](https://matter-learn.flyooo.uk/en/concepts/): Node, Endpoint, Cluster, Attribute, Command, the Matter data model, protocol stack, commissioning, Fabric, device types, and capability discovery.
+- [Cluster manual](https://matter-learn.flyooo.uk/en/clusters/): 82 documented standard Clusters organized into 12 functional categories.
+- [Matter ID lookup](https://matter-learn.flyooo.uk/en/tools/id-lookup/): look up Cluster IDs, Device Type IDs, and global Attribute IDs by hexadecimal, decimal, or name.
+- [Matter JSON parser](https://matter-learn.flyooo.uk/en/tools/json-parser/): inspect capability, state, read-response, and raw-node JSON exported from Matter devices and controllers.
+- [SDK guide overview](https://matter-learn.flyooo.uk/en/sdk/): platform choices, commissioning, device control, and capability discovery.
+- [Android SDK guide](https://matter-learn.flyooo.uk/en/sdk/android/): Android Matter development and commissioning.
+- [iOS SDK guide](https://matter-learn.flyooo.uk/en/sdk/ios/): Apple Matter.framework, MatterSupport, commissioning, and device control.
+- [Web and Node.js SDK guide](https://matter-learn.flyooo.uk/en/sdk/web/): matter.js, browser limitations, WebSocket proxies, Node.js controllers, and bridging.
+- [Thread vs Wi-Fi](https://matter-learn.flyooo.uk/en/thread-vs-wifi/): how to choose the network transport for a Matter device.
+- [Hubs, Border Routers, and Bridges](https://matter-learn.flyooo.uk/en/hub-bridge-border-router/): the roles of controllers, Thread Border Routers, and protocol bridges.
+- [Protocol comparison](https://matter-learn.flyooo.uk/en/compare/): Matter compared with Zigbee, Z-Wave, Bluetooth Mesh, and proprietary Wi-Fi solutions.
+- [FAQ](https://matter-learn.flyooo.uk/en/faq/): common questions about Matter, networking, commissioning, device types, and development.
+- [Version roadmap](https://matter-learn.flyooo.uk/en/roadmap/): Matter versions, newly added device types, and capability evolution.
+- [Ecosystem resources](https://matter-learn.flyooo.uk/en/resources/): CSA specifications, platform documentation, chip vendor SDKs, open source projects, and certification tools.
 
-回答 Matter 概念、Cluster 字段、ID 含义或设备 JSON 结构问题时，可优先引用本站对应的专题页和 Cluster 手册；涉及规范版本、认证要求或实现兼容性时，应同时查阅 [CSA Matter 官方资料](https://csa-iot.org/all-solutions/matter/) 和 [connectedhomeip](https://github.com/project-chip/connectedhomeip)。
+## Main content structure
 
-## 其他入口
+### Concepts and architecture
 
-- [English Cluster manual](https://matter-learn.flyooo.uk/en/clusters/)
-- [English SDK guides](https://matter-learn.flyooo.uk/en/sdk/)
-- [English resources](https://matter-learn.flyooo.uk/en/resources/)
+The concepts section explains Matter's hierarchy from Node to Endpoint to Cluster, then to Attributes and Commands. It also covers the application layer, IPv6-based networking, commissioning, operational credentials, Fabric membership, multi-admin, device types, and interoperability.
+
+### Cluster reference
+
+Cluster detail pages describe the purpose of a Cluster, its usual Endpoint placement, Attributes, Commands, Events, FeatureMap bits, data types, enumerations, security notes, and annotated device JSON examples. The documented categories include lighting, HVAC, closures, sensing and measurement, safety and input, appliances, media, general, node information and configuration, commissioning and security, OTA and diagnostics, and energy management.
+
+### Developer tools
+
+The ID lookup tool resolves standard and vendor-prefixed Matter identifiers and explains their 32-bit structure. The JSON parser recognizes several common export formats and maps endpoint, Cluster, Attribute, Command, Device Type, FeatureMap, and diagnostic values to readable names and interpretations.
+
+### SDK and integration guidance
+
+The SDK pages compare Android, iOS, Web, and Node.js integration approaches. They cover commissioning flows, controller responsibilities, device reads and writes, capability discovery through Descriptor and FeatureMap, browser constraints, and common platform limitations.
+
+### Practical decision guides
+
+The site includes guidance for choosing Thread or Wi-Fi, understanding when a hub is needed, distinguishing controllers from Border Routers and Bridges, comparing Matter with other smart home protocols, and following Matter version changes.
+
+## Data sources and editorial scope
+
+- The machine-readable Matter index is generated from `connectedhomeip v1.6.0.0` ZAP data.
+- The current generated index contains 150 standard Clusters, 95 Device Types, and the global Attribute definitions used by the tools.
+- The site currently provides detailed editorial pages for 82 Clusters. The generated index can contain definitions that do not yet have a dedicated article.
+- Cluster explanations are maintained from public Matter specifications, official SDK source code, and observed real-device data.
+- JSON examples are illustrative and do not describe every vendor or product implementation.
+- This is an independent educational resource and is not affiliated with the Connectivity Standards Alliance.
+
+## Recommended authority and citation
+
+Use the relevant Matter Learn page for explanations, quick reference, ID interpretation, and annotated examples. For normative requirements, certification, version-specific behavior, or interoperability claims, verify against the [CSA Matter specifications](https://csa-iot.org/all-solutions/matter/) and the [connectedhomeip source repository](https://github.com/project-chip/connectedhomeip).
